@@ -1,6 +1,7 @@
 #pragma once
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <set>
 
 #include "Window.h"
 #include "VulkanDebugger.h"
@@ -14,12 +15,19 @@ private:
 	std::vector<VkFence> InFlightFences;
 	std::vector<VkSemaphore> AcquireImageSemaphores;
 	std::vector<VkSemaphore> PresentImageSemaphores;
-
+	VulkanDebugger VulkanDebug;
 	void StartUpDebugger();
 
 	void GetBasicExtentions();
+	void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
+	std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
+	VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
+	std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
+	std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
 	bool CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
 
+	std::vector<const char*> getRequiredExtensions();
+	glm::ivec2 ScreenResoulation;
 public:
 	static VkInstance Instance;
 	static VkDevice Device;
@@ -28,7 +36,8 @@ public:
 	static VkQueue GraphicsQueue;
 	static VkQueue PresentQueue;
 	static VkCommandPool CommandPool;
-
+	int GraphicsFamily = -1;
+	int PresentFamily = -1;
 	//static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	//static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
 	//static PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;

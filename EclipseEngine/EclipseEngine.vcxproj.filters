@@ -27,6 +27,9 @@
     <ClCompile Include="VulkanRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="VulkanDebugger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -45,7 +48,7 @@
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="VulkanDebugger.h">
-      <Filter>Header Files\Renderer</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
