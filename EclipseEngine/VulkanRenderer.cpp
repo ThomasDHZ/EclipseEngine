@@ -34,76 +34,16 @@ VkQueue VulkanRenderer::GraphicsQueue = VK_NULL_HANDLE;
 VkQueue VulkanRenderer::PresentQueue = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
 
-//PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
-//PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;
-//PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR = VK_NULL_HANDLE;
-//PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR = VK_NULL_HANDLE;
-//PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR = VK_NULL_HANDLE;
-//PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
-//PFN_vkBuildAccelerationStructuresKHR vkBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
-//PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR = VK_NULL_HANDLE;
-//PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR = VK_NULL_HANDLE;
-//PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR = VK_NULL_HANDLE;
-
-void VulkanRenderer::StartUpDebugger()
-{
-}
-
-void VulkanRenderer::GetBasicExtentions()
-{
-	//uint32_t glfwExtensionCount = 0;
-	//const char** glfwExtensions;
-	//glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-	//std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-	//for (auto extension : extensions)
-	//{
-	//	DeviceExtensions.emplace_back(extension);
-	//}
-	//DeviceExtensions.emplace_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-}
-
-bool VulkanRenderer::CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice)
-{/*
-	if (!RayTracingFeatureCompatible)
-	{
-		VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
-		AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-
-		VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
-		RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-		RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
-
-		VkPhysicalDeviceFeatures2 DeviceFeatures2{};
-		DeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-		DeviceFeatures2.pNext = &RayTracingPipelineFeatures;
-		vkGetPhysicalDeviceFeatures2(GPUDevice, &DeviceFeatures2);
-
-		if (RayTracingPipelineFeatures.rayTracingPipeline == VK_TRUE &&
-			AccelerationStructureFeatures.accelerationStructure == VK_TRUE)
-		{
-			if (std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) != FeatureList.end() &&
-				std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME) != FeatureList.end())
-			{
-				RayTracingFeatureCompatible = true;
-				DeviceExtensions.emplace_back(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
-				DeviceExtensions.emplace_back(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
-			}
-			else
-			{
-				RayTracingFeatureCompatible = false;
-			}
-		}
-		else
-		{
-			std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
-		}
-	}*/
-
-	//return RayTracingFeatureCompatible;
-
-	return false;
-}
+PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
+PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;
+PFN_vkDestroyAccelerationStructureKHR VulkanRenderer::vkDestroyAccelerationStructureKHR = VK_NULL_HANDLE;
+PFN_vkGetAccelerationStructureBuildSizesKHR VulkanRenderer::vkGetAccelerationStructureBuildSizesKHR = VK_NULL_HANDLE;
+PFN_vkGetAccelerationStructureDeviceAddressKHR VulkanRenderer::vkGetAccelerationStructureDeviceAddressKHR = VK_NULL_HANDLE;
+PFN_vkCmdBuildAccelerationStructuresKHR VulkanRenderer::vkCmdBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
+PFN_vkBuildAccelerationStructuresKHR VulkanRenderer::vkBuildAccelerationStructuresKHR = VK_NULL_HANDLE;
+PFN_vkCmdTraceRaysKHR VulkanRenderer::vkCmdTraceRaysKHR = VK_NULL_HANDLE;
+PFN_vkGetRayTracingShaderGroupHandlesKHR VulkanRenderer::vkGetRayTracingShaderGroupHandlesKHR = VK_NULL_HANDLE;
+PFN_vkCreateRayTracingPipelinesKHR VulkanRenderer::vkCreateRayTracingPipelinesKHR = VK_NULL_HANDLE;
 
 std::vector<const char*> VulkanRenderer::getRequiredExtensions()
 {
@@ -149,10 +89,46 @@ void VulkanRenderer::FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfac
 	}
 }
 
+void VulkanRenderer::CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice)
+{
+	if (!RayTracingFeature)
+	{
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
+		AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+
+		VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
+		RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+		RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
+
+		VkPhysicalDeviceFeatures2 DeviceFeatures2{};
+		DeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+		DeviceFeatures2.pNext = &RayTracingPipelineFeatures;
+		vkGetPhysicalDeviceFeatures2(GPUDevice, &DeviceFeatures2);
+
+		if (RayTracingPipelineFeatures.rayTracingPipeline == VK_TRUE &&
+			AccelerationStructureFeatures.accelerationStructure == VK_TRUE)
+		{
+			if (std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) != FeatureList.end() &&
+				std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME) != FeatureList.end())
+			{
+				RayTracingFeature = true;
+				DeviceExtensions.emplace_back(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+				DeviceExtensions.emplace_back(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
+			}
+			else
+			{
+				RayTracingFeature = false;
+			}
+		}
+		else
+		{
+			std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
+		}
+	}
+}
+
 std::set<std::string> VulkanRenderer::CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice)
 {
-	std::vector<std::string> FeatureList;
-
 	uint32_t extensionCount;
 	vkEnumerateDeviceExtensionProperties(GPUDevice, nullptr, &extensionCount, nullptr);
 
@@ -308,6 +284,7 @@ VulkanRenderer::VulkanRenderer(Window& window)
 			PresentModeList.size() != 0 &&
 			supportedFeatures.samplerAnisotropy)
 		{
+			CheckRayTracingCompatiblity(gpudevice);
 			PhysicalDevice = gpudevice;
 		}
 	}
@@ -407,18 +384,55 @@ VulkanRenderer::VulkanRenderer(Window& window)
 	vkGetDeviceQueue(Device, PresentFamily, 0, &PresentQueue);
 
 	GPULimitsandFeatures::GetGPULimitsandFeatures(PhysicalDevice);
+	SwapChain = VulkanSwapChain(window.GetWindowPtr(), Device, PhysicalDevice, Surface);
 
-	auto a = 34;
-	//vkGetBufferDeviceAddressKHR = reinterpret_cast<PFN_vkGetBufferDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetBufferDeviceAddressKHR"));
-	//vkCmdBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkCmdBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkCmdBuildAccelerationStructuresKHR"));
-	//vkBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkBuildAccelerationStructuresKHR"));
-	//vkCreateAccelerationStructureKHR = reinterpret_cast<PFN_vkCreateAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkCreateAccelerationStructureKHR"));
-	//vkDestroyAccelerationStructureKHR = reinterpret_cast<PFN_vkDestroyAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkDestroyAccelerationStructureKHR"));
-	//vkGetAccelerationStructureBuildSizesKHR = reinterpret_cast<PFN_vkGetAccelerationStructureBuildSizesKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureBuildSizesKHR"));
-	//vkGetAccelerationStructureDeviceAddressKHR = reinterpret_cast<PFN_vkGetAccelerationStructureDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureDeviceAddressKHR"));
-	//vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(Device, "vkCmdTraceRaysKHR"));
-	//vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(Device, "vkGetRayTracingShaderGroupHandlesKHR"));
-	//vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
+	VkCommandPoolCreateInfo CommandPoolCreateInfo{};
+	CommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+	CommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	CommandPoolCreateInfo.queueFamilyIndex = GraphicsFamily;
+
+	if (vkCreateCommandPool(Device, &CommandPoolCreateInfo, nullptr, &CommandPool) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to create graphics command pool.");
+	}
+
+	InFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+	AcquireImageSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+	PresentImageSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+
+	VkSemaphoreTypeCreateInfo timelineCreateInfo;
+	timelineCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO;
+	timelineCreateInfo.pNext = NULL;
+	timelineCreateInfo.semaphoreType = VK_SEMAPHORE_TYPE_BINARY;
+	timelineCreateInfo.initialValue = 0;
+
+	VkSemaphoreCreateInfo semaphoreInfo{};
+	semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+	semaphoreInfo.pNext = &timelineCreateInfo;
+
+	VkFenceCreateInfo fenceInfo{};
+	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+	fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+	for (size_t x = 0; x < MAX_FRAMES_IN_FLIGHT; x++)
+	{
+		if (vkCreateSemaphore(Device, &semaphoreInfo, nullptr, &AcquireImageSemaphores[x]) != VK_SUCCESS ||
+			vkCreateSemaphore(Device, &semaphoreInfo, nullptr, &PresentImageSemaphores[x]) != VK_SUCCESS ||
+			vkCreateFence(Device, &fenceInfo, nullptr, &InFlightFences[x]) != VK_SUCCESS)
+		{
+			throw std::runtime_error("Failed to create synchronization objects for a frame.");
+		}
+	}
+
+	vkGetBufferDeviceAddressKHR = reinterpret_cast<PFN_vkGetBufferDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetBufferDeviceAddressKHR"));
+	vkCmdBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkCmdBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkCmdBuildAccelerationStructuresKHR"));
+	vkBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkBuildAccelerationStructuresKHR"));
+	vkCreateAccelerationStructureKHR = reinterpret_cast<PFN_vkCreateAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkCreateAccelerationStructureKHR"));
+	vkDestroyAccelerationStructureKHR = reinterpret_cast<PFN_vkDestroyAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkDestroyAccelerationStructureKHR"));
+	vkGetAccelerationStructureBuildSizesKHR = reinterpret_cast<PFN_vkGetAccelerationStructureBuildSizesKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureBuildSizesKHR"));
+	vkGetAccelerationStructureDeviceAddressKHR = reinterpret_cast<PFN_vkGetAccelerationStructureDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureDeviceAddressKHR"));
+	vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(Device, "vkCmdTraceRaysKHR"));
+	vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(Device, "vkGetRayTracingShaderGroupHandlesKHR"));
+	vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
 }
 
 VulkanRenderer::~VulkanRenderer()

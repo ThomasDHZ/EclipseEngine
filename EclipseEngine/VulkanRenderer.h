@@ -6,32 +6,35 @@
 #include "Window.h"
 #include "VulkanDebugger.h"
 #include "LimitsandFeatures.h"
+#include "VulkanSwapChain.h"
 
 class VulkanRenderer
 {
 private:
+	static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+	int GraphicsFamily = -1;
+	int PresentFamily = -1;
+	bool RayTracingFeature = false;
+
 	std::vector<const char*> ValidationLayers;
 	std::vector<const char*> DeviceExtensions;
+	std::vector<std::string> FeatureList;
 
 	std::vector<VkFence> InFlightFences;
 	std::vector<VkSemaphore> AcquireImageSemaphores;
 	std::vector<VkSemaphore> PresentImageSemaphores;
 	VulkanDebugger VulkanDebug;
-	void StartUpDebugger();
+	VulkanSwapChain SwapChain;
 
-	void GetBasicExtentions();
-	void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
 	std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
 	VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
 	std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
 	std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
-	bool CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
-
 	std::vector<const char*> getRequiredExtensions();
-	glm::ivec2 ScreenResoulation;
 
-	int GraphicsFamily = -1;
-	int PresentFamily = -1;
+	void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
+	void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
+
 public:
 	static VkInstance Instance;
 	static VkDevice Device;
