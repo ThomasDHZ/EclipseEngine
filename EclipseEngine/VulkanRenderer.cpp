@@ -1,6 +1,11 @@
 #include "VulkanRenderer.h"
 #include <GLFW/glfw3.h>
 
+VkPhysicalDeviceFeatures GPULimitsandFeatures::PhysicalDeviceFeatures;
+VkPhysicalDeviceProperties GPULimitsandFeatures::PhysicalDeviceProperties;
+VkPhysicalDeviceLimits GPULimitsandFeatures::PhysicalDeviceLimits;
+VkPhysicalDeviceAccelerationStructureFeaturesKHR GPULimitsandFeatures::AccelerationStructureFeatures;
+VkPhysicalDeviceRayTracingPipelineFeaturesKHR GPULimitsandFeatures::RayTracingPipelineFeatures;
 
 std::unique_ptr<GameController> GameController::Controller = nullptr;
 GLFWgamepadstate GameController::ControllerState;
@@ -59,41 +64,41 @@ void VulkanRenderer::GetBasicExtentions()
 }
 
 bool VulkanRenderer::CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice)
-{
-	//if (!RayTracingFeatureCompatible)
-	//{
-	//	VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
-	//	AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+{/*
+	if (!RayTracingFeatureCompatible)
+	{
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
+		AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
 
-	//	VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
-	//	RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	//	RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
+		VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
+		RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+		RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
 
-	//	VkPhysicalDeviceFeatures2 DeviceFeatures2{};
-	//	DeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-	//	DeviceFeatures2.pNext = &RayTracingPipelineFeatures;
-	//	vkGetPhysicalDeviceFeatures2(GPUDevice, &DeviceFeatures2);
+		VkPhysicalDeviceFeatures2 DeviceFeatures2{};
+		DeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+		DeviceFeatures2.pNext = &RayTracingPipelineFeatures;
+		vkGetPhysicalDeviceFeatures2(GPUDevice, &DeviceFeatures2);
 
-	//	if (RayTracingPipelineFeatures.rayTracingPipeline == VK_TRUE &&
-	//		AccelerationStructureFeatures.accelerationStructure == VK_TRUE)
-	//	{
-	//		if (std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) != FeatureList.end() &&
-	//			std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME) != FeatureList.end())
-	//		{
-	//			RayTracingFeatureCompatible = true;
-	//			DeviceExtensions.emplace_back(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
-	//			DeviceExtensions.emplace_back(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
-	//		}
-	//		else
-	//		{
-	//			RayTracingFeatureCompatible = false;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
-	//	}
-	//}
+		if (RayTracingPipelineFeatures.rayTracingPipeline == VK_TRUE &&
+			AccelerationStructureFeatures.accelerationStructure == VK_TRUE)
+		{
+			if (std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME) != FeatureList.end() &&
+				std::find(FeatureList.begin(), FeatureList.end(), VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME) != FeatureList.end())
+			{
+				RayTracingFeatureCompatible = true;
+				DeviceExtensions.emplace_back(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+				DeviceExtensions.emplace_back(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
+			}
+			else
+			{
+				RayTracingFeatureCompatible = false;
+			}
+		}
+		else
+		{
+			std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
+		}
+	}*/
 
 	//return RayTracingFeatureCompatible;
 
@@ -400,6 +405,20 @@ VulkanRenderer::VulkanRenderer(Window& window)
 
 	vkGetDeviceQueue(Device, GraphicsFamily, 0, &GraphicsQueue);
 	vkGetDeviceQueue(Device, PresentFamily, 0, &PresentQueue);
+
+	GPULimitsandFeatures::GetGPULimitsandFeatures(PhysicalDevice);
+
+	auto a = 34;
+	//vkGetBufferDeviceAddressKHR = reinterpret_cast<PFN_vkGetBufferDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetBufferDeviceAddressKHR"));
+	//vkCmdBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkCmdBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkCmdBuildAccelerationStructuresKHR"));
+	//vkBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkBuildAccelerationStructuresKHR"));
+	//vkCreateAccelerationStructureKHR = reinterpret_cast<PFN_vkCreateAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkCreateAccelerationStructureKHR"));
+	//vkDestroyAccelerationStructureKHR = reinterpret_cast<PFN_vkDestroyAccelerationStructureKHR>(vkGetDeviceProcAddr(Device, "vkDestroyAccelerationStructureKHR"));
+	//vkGetAccelerationStructureBuildSizesKHR = reinterpret_cast<PFN_vkGetAccelerationStructureBuildSizesKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureBuildSizesKHR"));
+	//vkGetAccelerationStructureDeviceAddressKHR = reinterpret_cast<PFN_vkGetAccelerationStructureDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetAccelerationStructureDeviceAddressKHR"));
+	//vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(Device, "vkCmdTraceRaysKHR"));
+	//vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(Device, "vkGetRayTracingShaderGroupHandlesKHR"));
+	//vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
 }
 
 VulkanRenderer::~VulkanRenderer()

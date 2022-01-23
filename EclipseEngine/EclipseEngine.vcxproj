@@ -148,13 +148,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameController.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="LimitsandFeatures.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="SwapChain.h" />
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="Window.h" />

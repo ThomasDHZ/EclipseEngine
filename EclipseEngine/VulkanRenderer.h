@@ -5,6 +5,7 @@
 
 #include "Window.h"
 #include "VulkanDebugger.h"
+#include "LimitsandFeatures.h"
 
 class VulkanRenderer
 {
@@ -28,6 +29,9 @@ private:
 
 	std::vector<const char*> getRequiredExtensions();
 	glm::ivec2 ScreenResoulation;
+
+	int GraphicsFamily = -1;
+	int PresentFamily = -1;
 public:
 	static VkInstance Instance;
 	static VkDevice Device;
@@ -36,18 +40,17 @@ public:
 	static VkQueue GraphicsQueue;
 	static VkQueue PresentQueue;
 	static VkCommandPool CommandPool;
-	int GraphicsFamily = -1;
-	int PresentFamily = -1;
-	//static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
-	//static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
-	//static PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
-	//static PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
-	//static PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR;
-	//static PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
-	//static PFN_vkBuildAccelerationStructuresKHR vkBuildAccelerationStructuresKHR;
-	//static PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR;
-	//static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
-	//static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
+
+	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
+	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
+	static PFN_vkDestroyAccelerationStructureKHR vkDestroyAccelerationStructureKHR;
+	static PFN_vkGetAccelerationStructureBuildSizesKHR vkGetAccelerationStructureBuildSizesKHR;
+	static PFN_vkGetAccelerationStructureDeviceAddressKHR vkGetAccelerationStructureDeviceAddressKHR;
+	static PFN_vkCmdBuildAccelerationStructuresKHR vkCmdBuildAccelerationStructuresKHR;
+	static PFN_vkBuildAccelerationStructuresKHR vkBuildAccelerationStructuresKHR;
+	static PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR;
+	static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
+	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
 
 	VulkanRenderer(Window& window);
 	~VulkanRenderer();
