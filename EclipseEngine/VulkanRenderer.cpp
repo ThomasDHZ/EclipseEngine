@@ -1,6 +1,12 @@
 #include "VulkanRenderer.h"
 #include <GLFW/glfw3.h>
 
+Window* Window::window;
+GLFWwindow* Window::GLFWindow;
+uint32_t Window::Width;
+uint32_t Window::Height;
+bool Window::FramebufferResized;
+
 VkPhysicalDeviceFeatures GPULimitsandFeatures::PhysicalDeviceFeatures;
 VkPhysicalDeviceProperties GPULimitsandFeatures::PhysicalDeviceProperties;
 VkPhysicalDeviceLimits GPULimitsandFeatures::PhysicalDeviceLimits;
@@ -25,6 +31,22 @@ bool Keyboard::KeyPressed[350];
 
 //VkDebugUtilsMessengerEXT VulkanDebugger::DebugMessenger;
 //VkDebugUtilsMessengerCreateInfoEXT VulkanDebugger::DebugUtilsMessengerCreateInfoEXT;
+
+int VulkanRenderer::GraphicsFamily = -1;
+int VulkanRenderer::PresentFamily = -1;
+uint32_t VulkanRenderer::ImageIndex = 0;
+uint32_t VulkanRenderer::CMDIndex = 0;
+bool VulkanRenderer::RayTracingFeature = false;
+
+std::vector<const char*> VulkanRenderer::ValidationLayers;
+std::vector<const char*> VulkanRenderer::DeviceExtensions;
+std::vector<std::string> VulkanRenderer::FeatureList;
+
+std::vector<VkFence> VulkanRenderer::InFlightFences;
+std::vector<VkSemaphore> VulkanRenderer::AcquireImageSemaphores;
+std::vector<VkSemaphore> VulkanRenderer::PresentImageSemaphores;
+VulkanDebugger VulkanRenderer::VulkanDebug;
+VulkanSwapChain VulkanRenderer::SwapChain;
 
 VkInstance VulkanRenderer::Instance = VK_NULL_HANDLE;
 VkDevice VulkanRenderer::Device = VK_NULL_HANDLE;
@@ -191,7 +213,7 @@ std::vector<VkPresentModeKHR> VulkanRenderer::GetPresentModeList(VkPhysicalDevic
 	return GPUPresentModesList;
 }
 
-VulkanRenderer::VulkanRenderer(Window& window)
+void VulkanRenderer::StartUp()
 {
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 
@@ -256,14 +278,14 @@ VulkanRenderer::VulkanRenderer(Window& window)
 
 	VulkanDebug.SetUpDebugger(Instance);
 
-	if (glfwCreateWindowSurface(Instance, window.GetWindowPtr(), nullptr, &Surface) != VK_SUCCESS)
+	if (glfwCreateWindowSurface(Instance, Window::GetWindowPtr(), nullptr, &Surface) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create window surface.");
 	}
 
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(Instance, &deviceCount, nullptr);
-	if (deviceCount == 0) 
+	if (deviceCount == 0)
 	{
 		throw std::runtime_error("Failed to find GPUs with Vulkan support.");
 	}
@@ -384,7 +406,7 @@ VulkanRenderer::VulkanRenderer(Window& window)
 	vkGetDeviceQueue(Device, PresentFamily, 0, &PresentQueue);
 
 	GPULimitsandFeatures::GetGPULimitsandFeatures(PhysicalDevice);
-	SwapChain = VulkanSwapChain(window.GetWindowPtr(), Device, PhysicalDevice, Surface);
+	SwapChain = VulkanSwapChain(Window::GetWindowPtr(), Device, PhysicalDevice, Surface);
 
 	VkCommandPoolCreateInfo CommandPoolCreateInfo{};
 	CommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -433,20 +455,171 @@ VulkanRenderer::VulkanRenderer(Window& window)
 	vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(Device, "vkCmdTraceRaysKHR"));
 	vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(Device, "vkGetRayTracingShaderGroupHandlesKHR"));
 	vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
-}
 
-VulkanRenderer::~VulkanRenderer()
-{
-}
-
-void VulkanRenderer::StartUp()
-{
 }
 
 void VulkanRenderer::Update()
 {
 }
 
+void VulkanRenderer::StartDraw()
+{
+	CMDIndex = (CMDIndex + 1) % MAX_FRAMES_IN_FLIGHT;
+
+	vkWaitForFences(Device, 1, &InFlightFences[CMDIndex], VK_TRUE, UINT64_MAX);
+	vkResetFences(Device, 1, &InFlightFences[CMDIndex]);
+
+	VkResult result = vkAcquireNextImageKHR(Device, SwapChain.GetSwapChain(), UINT64_MAX, AcquireImageSemaphores[CMDIndex], VK_NULL_HANDLE, &ImageIndex);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	{
+		RebuildSwapChain();
+		return;
+	}
+	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	{
+		throw std::runtime_error("Failed to acquire swap chain image.");
+	}
+}
+
+
+void VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+{
+	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+	Update();
+
+	VkSubmitInfo SubmitInfo{};
+	SubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	SubmitInfo.waitSemaphoreCount = 1;
+	SubmitInfo.pWaitSemaphores = &AcquireImageSemaphores[CMDIndex];
+	SubmitInfo.pWaitDstStageMask = waitStages;
+	SubmitInfo.commandBufferCount = static_cast<uint32_t>(CommandBufferSubmitList.size());
+	SubmitInfo.pCommandBuffers = CommandBufferSubmitList.data();
+	SubmitInfo.signalSemaphoreCount = 1;
+	SubmitInfo.pSignalSemaphores = &PresentImageSemaphores[ImageIndex];
+	VkResult QueueSubmit = vkQueueSubmit(GraphicsQueue, 1, &SubmitInfo, InFlightFences[CMDIndex]);
+	if (QueueSubmit != VK_SUCCESS) {
+		throw std::runtime_error("Failed to submit draw command buffer.");
+	}
+
+	VkPresentInfoKHR PresentInfoKHR{};
+	PresentInfoKHR.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+	PresentInfoKHR.waitSemaphoreCount = 1;
+	PresentInfoKHR.pWaitSemaphores = &PresentImageSemaphores[ImageIndex];
+	PresentInfoKHR.swapchainCount = 1;
+	PresentInfoKHR.pSwapchains = &SwapChain.Swapchain;
+	PresentInfoKHR.pImageIndices = &ImageIndex;
+	VkResult result = vkQueuePresentKHR(PresentQueue, &PresentInfoKHR);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	{
+		RebuildSwapChain();
+		return;
+	}
+	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+	{
+		throw std::runtime_error("Failed to present swap chain image.");
+	}
+}
+
+void VulkanRenderer::RebuildSwapChain()
+{
+	for (auto imageView : SwapChain.GetSwapChainImageViews()) {
+		vkDestroyImageView(Device, imageView, nullptr);
+	}
+
+	vkDestroySwapchainKHR(Device, SwapChain.GetSwapChain(), nullptr);
+	SwapChain.RebuildSwapChain(Window::GetWindowPtr(), Device, PhysicalDevice, Surface);
+}
+
 void VulkanRenderer::Destroy()
 {
+	SwapChain.Destroy(Device);
+
+	vkDestroyCommandPool(Device, CommandPool, nullptr);
+	CommandPool = VK_NULL_HANDLE;
+
+	for (size_t x = 0; x < MAX_FRAMES_IN_FLIGHT; x++)
+	{
+		vkDestroySemaphore(Device, AcquireImageSemaphores[x], nullptr);
+		vkDestroySemaphore(Device, PresentImageSemaphores[x], nullptr);
+		vkDestroyFence(Device, InFlightFences[x], nullptr);
+
+		AcquireImageSemaphores[x] = VK_NULL_HANDLE;
+		PresentImageSemaphores[x] = VK_NULL_HANDLE;
+		InFlightFences[x] = VK_NULL_HANDLE;
+	}
+
+	vkDestroyDevice(Device, nullptr);
+	Device = VK_NULL_HANDLE;
+
+	VulkanDebug.CleanUp(Instance);
+
+	vkDestroySurfaceKHR(Instance, Surface, nullptr);
+	vkDestroyInstance(Instance, nullptr);
+}
+
+VkCommandBuffer  VulkanRenderer::BeginSingleTimeCommands() {
+	VkCommandBufferAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandPool = CommandPool;
+	allocInfo.commandBufferCount = 1;
+
+	VkCommandBuffer commandBuffer;
+	vkAllocateCommandBuffers(Device, &allocInfo, &commandBuffer);
+
+	VkCommandBufferBeginInfo beginInfo{};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(commandBuffer, &beginInfo);
+
+	return commandBuffer;
+}
+
+VkCommandBuffer  VulkanRenderer::BeginSingleTimeCommands(VkCommandPool& commandPool) {
+	VkCommandBufferAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+	allocInfo.commandPool = commandPool;
+	allocInfo.commandBufferCount = 1;
+
+	VkCommandBuffer commandBuffer;
+	vkAllocateCommandBuffers(Device, &allocInfo, &commandBuffer);
+
+	VkCommandBufferBeginInfo beginInfo{};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+	vkBeginCommandBuffer(commandBuffer, &beginInfo);
+
+	return commandBuffer;
+}
+
+void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer) {
+	vkEndCommandBuffer(commandBuffer);
+
+	VkSubmitInfo submitInfo{};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &commandBuffer;
+
+	vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+	vkQueueWaitIdle(GraphicsQueue);
+
+	vkFreeCommandBuffers(Device, CommandPool, 1, &commandBuffer);
+}
+
+void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool) {
+	vkEndCommandBuffer(commandBuffer);
+
+	VkSubmitInfo submitInfo{};
+	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+	submitInfo.commandBufferCount = 1;
+	submitInfo.pCommandBuffers = &commandBuffer;
+
+	vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+	vkQueueWaitIdle(GraphicsQueue);
+
+	vkFreeCommandBuffers(Device, commandPool, 1, &commandBuffer);
 }

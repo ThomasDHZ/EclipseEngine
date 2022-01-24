@@ -1,18 +1,29 @@
 #include <iostream>
 #include "VulkanRenderer.h"
+#include "Scene.h"
 
 int main()
 {
-    Window window = Window();
-    window.CreateWindow(1920, 1080, "Eclipse Engine");
+    Window::CreateWindow(1920, 1080, "Eclipse Engine");
+    VulkanRenderer::StartUp();
 
-    VulkanRenderer renderer = VulkanRenderer(window);
-    while (!glfwWindowShouldClose(window.GetWindowPtr()))
+    Scene scene;
+
+    while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {
         glfwPollEvents();
-        GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
-        GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
-        GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Render();
+        scene.Update();
+        //GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
+        //GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
+        //GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);
     }
+    vkDeviceWaitIdle(VulkanRenderer::Device);
+
+    VulkanRenderer::Destroy();
 }
 

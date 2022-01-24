@@ -13,15 +13,15 @@
 class Window
 {
 private:
-
-	GLFWwindow* GLFWindow;
-	uint32_t Width;
-	uint32_t Height;
-	bool FramebufferResized;
+	static Window* window;
+	static GLFWwindow* GLFWindow;
+	static uint32_t Width;
+	static uint32_t Height;
+	static bool FramebufferResized;
 
 public:
 
-	void CreateWindow(uint32_t width, uint32_t height, const char* WindowName)
+	static void CreateWindow(uint32_t width, uint32_t height, const char* WindowName)
 	{
 		FramebufferResized = false;
 		Width = width;
@@ -31,7 +31,7 @@ public:
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		GLFWindow = glfwCreateWindow(width, height, WindowName, nullptr, nullptr);
-		glfwSetWindowUserPointer(GLFWindow, this);
+		glfwSetWindowUserPointer(GLFWindow, nullptr);
 		glfwSetFramebufferSizeCallback(GLFWindow, frameBufferResizeCallBack);
 		glfwSetCursorPosCallback(GLFWindow, Mouse::MousePosCallback);
 		glfwSetMouseButtonCallback(GLFWindow, Mouse::MouseButtonCallback);
@@ -44,23 +44,30 @@ public:
 	{
 		auto app = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
 		app->FramebufferResized = true;
+
+		glfwGetFramebufferSize(window, &width, &height);
+		while (width == 0 || height == 0) 
+		{
+			glfwGetFramebufferSize(window, &width, &height);
+			glfwWaitEvents();
+		}
 	}
 
-	void Update()
+	static void Update()
 	{
 
 	}
 
-	void Destroy()
+	static void Destroy()
 	{
 		glfwDestroyWindow(GLFWindow);
 		glfwTerminate();
 	}
 	
-	 GLFWwindow* GetWindowPtr() { return GLFWindow; }
-	 unsigned int GetWindowWidth() { return Width; }
-	 unsigned int GetWindowHeight() { return Height; }
-	 glm::ivec2 GetWindowResolution() { return glm::ivec2(Width, Height); }
-	 bool GetFrameBufferResizedFlag() { return FramebufferResized; }
+	 static GLFWwindow* GetWindowPtr() { return GLFWindow; }
+	 static unsigned int GetWindowWidth() { return Width; }
+	 static unsigned int GetWindowHeight() { return Height; }
+	 static glm::ivec2 GetWindowResolution() { return glm::ivec2(Width, Height); }
+	 static bool GetFrameBufferResizedFlag() { return FramebufferResized; }
 };
 #endif

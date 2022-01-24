@@ -2,6 +2,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <set>
+#include <array>
 
 #include "Window.h"
 #include "VulkanDebugger.h"
@@ -12,28 +13,31 @@ class VulkanRenderer
 {
 private:
 	static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
-	int GraphicsFamily = -1;
-	int PresentFamily = -1;
-	bool RayTracingFeature = false;
+	static int GraphicsFamily;
+	static int PresentFamily;
+	static uint32_t ImageIndex;
+	static uint32_t CMDIndex;
+	static bool RayTracingFeature;
 
-	std::vector<const char*> ValidationLayers;
-	std::vector<const char*> DeviceExtensions;
-	std::vector<std::string> FeatureList;
+	static std::vector<const char*> ValidationLayers;
+	static std::vector<const char*> DeviceExtensions;
+	static std::vector<std::string> FeatureList;
 
-	std::vector<VkFence> InFlightFences;
-	std::vector<VkSemaphore> AcquireImageSemaphores;
-	std::vector<VkSemaphore> PresentImageSemaphores;
-	VulkanDebugger VulkanDebug;
-	VulkanSwapChain SwapChain;
+	static std::vector<VkFence> InFlightFences;
+	static std::vector<VkSemaphore> AcquireImageSemaphores;
+	static std::vector<VkSemaphore> PresentImageSemaphores;
+	static VulkanDebugger VulkanDebug;
+	static VulkanSwapChain SwapChain;
 
-	std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
-	VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
-	std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
-	std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
-	std::vector<const char*> getRequiredExtensions();
+	static std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
+	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
+	static std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
+	static std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
+	static std::vector<const char*> getRequiredExtensions();
 
-	void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
-	void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
+	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
+	static void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
+
 
 public:
 	static VkInstance Instance;
@@ -55,9 +59,24 @@ public:
 	static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
 	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
 
-	VulkanRenderer(Window& window);
-	~VulkanRenderer();
-	void StartUp();
-	void Update();
-	void Destroy();
+	static void StartUp();
+	static void Update();
+	static void RebuildSwapChain();
+	static void StartDraw();
+	static void SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
+	static void Destroy();
+
+	static VkCommandBuffer  BeginSingleTimeCommands();
+	static VkCommandBuffer  BeginSingleTimeCommands(VkCommandPool& commandPool);
+	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
+	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
+
+	static uint32_t GetImageIndex() { return ImageIndex; }
+	static uint32_t GetCMDIndex() { return CMDIndex; }
+	static std::vector<VkImage> GetSwapChainImages() { return SwapChain.GetSwapChainImages(); }
+	static std::vector<VkImageView> GetSwapChainImageViews() { return SwapChain.GetSwapChainImageViews(); }
+	static VkExtent2D GetSwapChainResolution() { return SwapChain.GetSwapChainResolution(); }
+	static VkSurfaceFormatKHR GetSwapChainImageFormat() { return SwapChain.GetSwapChainImageFormat(); }
+	static uint32_t GetSwapChainMinImageCount() { return SwapChain.GetSwapChainMinImageCount(); }
+	static uint32_t GetSwapChainImageCount() { return SwapChain.GetSwapChainImageCount(); }
 };
