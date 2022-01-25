@@ -14,6 +14,7 @@ public:
 
 	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;
 
+	void StartUp();
 	void RebuildSwapChain();
 	void Draw();
 	void Destroy();

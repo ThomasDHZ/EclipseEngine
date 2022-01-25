@@ -2,12 +2,6 @@
 
 FrameBufferRenderPass::FrameBufferRenderPass() : BaseRenderPass()
 {
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    CreateRenderPass();
-    CreateRendererFramebuffers();
-    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(RenderPass));
-    SetUpCommandBuffers();
 }
 
 FrameBufferRenderPass::~FrameBufferRenderPass()
@@ -82,6 +76,16 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
     }
 
 
+}
+
+void FrameBufferRenderPass::StartUp()
+{
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    CreateRenderPass();
+    CreateRendererFramebuffers();
+    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(RenderPass));
+    SetUpCommandBuffers();
 }
 
 void FrameBufferRenderPass::RebuildSwapChain()
