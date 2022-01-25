@@ -76,6 +76,7 @@ public:
 	static std::vector<VkImage> GetSwapChainImages() { return SwapChain.GetSwapChainImages(); }
 	static std::vector<VkImageView> GetSwapChainImageViews() { return SwapChain.GetSwapChainImageViews(); }
 	static VkExtent2D GetSwapChainResolution() { return SwapChain.GetSwapChainResolution(); }
+	static glm::ivec2 GetSwapChainResolutionVec2() { return glm::ivec2((int)SwapChain.GetSwapChainResolution().width, (int)SwapChain.GetSwapChainResolution().height); }
 	static VkSurfaceFormatKHR GetSwapChainImageFormat() { return SwapChain.GetSwapChainImageFormat(); }
 	static uint32_t GetSwapChainMinImageCount() { return SwapChain.GetSwapChainMinImageCount(); }
 	static uint32_t GetSwapChainImageCount() { return SwapChain.GetSwapChainImageCount(); }

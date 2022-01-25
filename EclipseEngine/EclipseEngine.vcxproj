@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseRenderPass.cpp" />
+    <ClCompile Include="FrameBufferPipeline.cpp" />
+    <ClCompile Include="FrameBufferRenderPass.cpp" />
+    <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -163,7 +167,11 @@
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseRenderPass.h" />
+    <ClInclude Include="FrameBufferPipeline.h" />
+    <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_glfw.h" />
