@@ -52,17 +52,17 @@ void VulkanSwapChain::FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfa
 	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
 	vkGetPhysicalDeviceQueueFamilyProperties(PhysicalDevice, &queueFamilyCount, queueFamilies.data());
 
-	int i = 0;
+	int x = 0;
 	for (const auto& queueFamily : queueFamilies) {
 		if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-			GraphicsFamily = i;
+			GraphicsFamily = x;
 		}
 
 		VkBool32 presentSupport = false;
-		vkGetPhysicalDeviceSurfaceSupportKHR(PhysicalDevice, i, Surface, &presentSupport);
+		vkGetPhysicalDeviceSurfaceSupportKHR(PhysicalDevice, x, Surface, &presentSupport);
 
 		if (presentSupport) {
-			PresentFamily = i;
+			PresentFamily = x;
 		}
 
 		if (GraphicsFamily != -1 &&
