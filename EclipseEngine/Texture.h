@@ -18,7 +18,7 @@ private:
     VkFormat TextureByteFormat = VK_FORMAT_UNDEFINED;
     VkImageLayout TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
-
+    void TransitionImageLayout(VkImageLayout newImageLayout);
     void CopyBufferToImage(VkBuffer buffer);
     void LoadTexture(std::string TextureLocation, VkFormat format);
     void CreateTextureImage(VkImageCreateInfo TextureInfo);
