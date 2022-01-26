@@ -3,19 +3,27 @@
 
 InterfaceRenderPass::InterfaceRenderPass()
 {
+}
+
+InterfaceRenderPass::~InterfaceRenderPass()
+{
+}
+
+void InterfaceRenderPass::StartUp()
+{
     CreateRenderPass();
     CreateRendererFramebuffers();
 
     ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = VulkanRenderer::Instance;
-    init_info.PhysicalDevice = VulkanRenderer::PhysicalDevice;
-    init_info.Device = VulkanRenderer::Device;
+    init_info.Instance = VulkanRenderer::GetInstance();
+    init_info.PhysicalDevice = VulkanRenderer::GetPhysicalDevice();
+    init_info.Device = VulkanRenderer::GetDevice();
     init_info.QueueFamily = 0;
-    init_info.Queue = VulkanRenderer::GraphicsQueue;
+    init_info.Queue = VulkanRenderer::GetGraphicsQueue();
     init_info.PipelineCache = VK_NULL_HANDLE;
     init_info.Allocator = nullptr;
-    init_info.MinImageCount = VulkanRenderer::GetSwapChainMinImageCount();
-    init_info.ImageCount = VulkanRenderer::GetSwapChainImageCount();
+    init_info.MinImageCount = 3;
+    init_info.ImageCount = 3;
 
 
     VkCommandPoolCreateInfo poolInfo{};
@@ -55,8 +63,8 @@ InterfaceRenderPass::InterfaceRenderPass()
     }
 
 
-    ImGuiCommandBuffers.resize(3);
-    for (size_t i = 0; i < 3; i++)
+    ImGuiCommandBuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
     {
         VkCommandBufferAllocateInfo allocInfo2{};
         allocInfo2.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -64,7 +72,7 @@ InterfaceRenderPass::InterfaceRenderPass()
         allocInfo2.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo2.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(init_info.Device, &allocInfo2, &ImGuiCommandBuffers[i]) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(init_info.Device, &allocInfo2, &ImGuiCommandBuffers[x]) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate command buffers!");
         }
     }
@@ -83,10 +91,6 @@ InterfaceRenderPass::InterfaceRenderPass()
     VkCommandBuffer command_buffer = VulkanRenderer::BeginSingleTimeCommands(ImGuiCommandPool);
     ImGui_ImplVulkan_CreateFontsTexture(command_buffer);
     VulkanRenderer::EndSingleTimeCommands(command_buffer, ImGuiCommandPool);
-}
-
-InterfaceRenderPass::~InterfaceRenderPass()
-{
 }
 
 void InterfaceRenderPass::CreateRenderPass()
@@ -127,18 +131,17 @@ void InterfaceRenderPass::CreateRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(VulkanRenderer::Device, &renderPassInfo, nullptr, &RenderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &RenderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
     }
 }
 
 void InterfaceRenderPass::CreateRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(3);
-
-    for (size_t i = 0; i < 3; i++) {
+    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) {
         std::array<VkImageView, 1> attachments = {
-            VulkanRenderer::GetSwapChainImageViews()[i]
+            VulkanRenderer::GetSwapChainImageViews()[x]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};
@@ -150,22 +153,17 @@ void InterfaceRenderPass::CreateRendererFramebuffers()
         framebufferInfo.height = VulkanRenderer::GetSwapChainResolution().height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::Device, &framebufferInfo, nullptr, &SwapChainFramebuffers[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create framebuffer!");
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create framebuffer.");
         }
     }
 }
-
 
 void InterfaceRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-    if (vkBeginCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
 
     std::array<VkClearValue, 2> ClearValueList{};
     ClearValueList[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -180,6 +178,10 @@ void InterfaceRenderPass::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(ClearValueList.size());
     renderPassInfo.pClearValues = ClearValueList.data();
 
+    if (vkBeginCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()], &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
     vkCmdBeginRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()]);
     vkCmdEndRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()]);
@@ -191,12 +193,12 @@ void InterfaceRenderPass::Draw()
 
 void InterfaceRenderPass::RebuildSwapChain()
 {
-    vkDestroyRenderPass(VulkanRenderer::Device, RenderPass, nullptr);
+    vkDestroyRenderPass(VulkanRenderer::GetDevice(), RenderPass, nullptr);
     RenderPass = VK_NULL_HANDLE;
 
     for (auto& framebuffer : SwapChainFramebuffers)
     {
-        vkDestroyFramebuffer(VulkanRenderer::Device, framebuffer, nullptr);
+        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
     }
 
@@ -206,18 +208,18 @@ void InterfaceRenderPass::RebuildSwapChain()
 
 void InterfaceRenderPass::Destroy()
 {
-    vkDestroyRenderPass(VulkanRenderer::Device, RenderPass, nullptr);
+    vkDestroyRenderPass(VulkanRenderer::GetDevice(), RenderPass, nullptr);
     RenderPass = VK_NULL_HANDLE;
 
     for (auto& framebuffer : SwapChainFramebuffers)
     {
-        vkDestroyFramebuffer(VulkanRenderer::Device, framebuffer, nullptr);
+        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
     }
 
-    vkDestroyDescriptorPool(VulkanRenderer::Device, ImGuiDescriptorPool, nullptr);
-    vkFreeCommandBuffers(VulkanRenderer::Device, ImGuiCommandPool, 1, &ImGuiCommandBuffers[0]);
-    vkDestroyCommandPool(VulkanRenderer::Device, ImGuiCommandPool, nullptr);
+    vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), ImGuiDescriptorPool, nullptr);
+    vkFreeCommandBuffers(VulkanRenderer::GetDevice(), ImGuiCommandPool, 1, &ImGuiCommandBuffers[0]);
+    vkDestroyCommandPool(VulkanRenderer::GetDevice(), ImGuiCommandPool, nullptr);
 
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();

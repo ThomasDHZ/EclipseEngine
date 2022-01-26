@@ -11,12 +11,12 @@ BaseRenderPass::~BaseRenderPass()
 
 void BaseRenderPass::Destroy()
 {
-    vkDestroyRenderPass(VulkanRenderer::Device, RenderPass, nullptr);
+    vkDestroyRenderPass(VulkanRenderer::GetDevice(), RenderPass, nullptr);
     RenderPass = VK_NULL_HANDLE;
 
     for (auto& framebuffer : SwapChainFramebuffers)
     {
-        vkDestroyFramebuffer(VulkanRenderer::Device, framebuffer, nullptr);
+        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
     }
 }
@@ -33,25 +33,25 @@ void BaseRenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)
     fenceCreateInfo.flags = 0;
 
     VkFence fence;
-    vkCreateFence(VulkanRenderer::Device, &fenceCreateInfo, nullptr, &fence);
-    vkQueueSubmit(VulkanRenderer::GraphicsQueue, 1, &submitInfo, fence);
-    vkWaitForFences(VulkanRenderer::Device, 1, &fence, VK_TRUE, UINT64_MAX);
-    vkDestroyFence(VulkanRenderer::Device, fence, nullptr);
+    vkCreateFence(VulkanRenderer::GetDevice(), &fenceCreateInfo, nullptr, &fence);
+    vkQueueSubmit(VulkanRenderer::GetGraphicsQueue(), 1, &submitInfo, fence);
+    vkWaitForFences(VulkanRenderer::GetDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
+    vkDestroyFence(VulkanRenderer::GetDevice(), fence, nullptr);
 }
 
 void BaseRenderPass::SetUpCommandBuffers()
 {
     CommandBuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-    for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
     {
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = VulkanRenderer::CommandPool;
+        allocInfo.commandPool = VulkanRenderer::GetCommandPool();
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(VulkanRenderer::Device, &allocInfo, &CommandBuffer[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate command buffers!");
+        if (vkAllocateCommandBuffers(VulkanRenderer::GetDevice(), &allocInfo, &CommandBuffer[x]) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to allocate command buffers.");
         }
     }
 }

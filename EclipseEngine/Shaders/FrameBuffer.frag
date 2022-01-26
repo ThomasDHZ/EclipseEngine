@@ -11,5 +11,5 @@ const float Exposure = 1.0f;
 
 void main() 
 {
-    outColor = vec4(1.0f, 0.0f, 1.0f, 1.0f);
+    outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }

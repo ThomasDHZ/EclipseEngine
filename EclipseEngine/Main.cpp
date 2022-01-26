@@ -12,10 +12,13 @@ int main()
     while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {
         glfwPollEvents();
+        glfwPollEvents();
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        {
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
         ImGui::Render();
         scene.Update();
         scene.Draw();
@@ -23,7 +26,7 @@ int main()
         //GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
         //GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);
     }
-    vkDeviceWaitIdle(VulkanRenderer::Device);
+    vkDeviceWaitIdle(VulkanRenderer::GetDevice());
 
     VulkanRenderer::Destroy();
 }

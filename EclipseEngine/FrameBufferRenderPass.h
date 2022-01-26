@@ -5,14 +5,14 @@
 class FrameBufferRenderPass : public BaseRenderPass
 {
 private:
+	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;
+
 	void CreateRenderPass();
 	void CreateRendererFramebuffers();
 
 public:
 	FrameBufferRenderPass();
 	~FrameBufferRenderPass();
-
-	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;
 
 	void StartUp();
 	void RebuildSwapChain();

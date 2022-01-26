@@ -67,7 +67,7 @@ PFN_vkCmdTraceRaysKHR VulkanRenderer::vkCmdTraceRaysKHR = VK_NULL_HANDLE;
 PFN_vkGetRayTracingShaderGroupHandlesKHR VulkanRenderer::vkGetRayTracingShaderGroupHandlesKHR = VK_NULL_HANDLE;
 PFN_vkCreateRayTracingPipelinesKHR VulkanRenderer::vkCreateRayTracingPipelinesKHR = VK_NULL_HANDLE;
 
-std::vector<const char*> VulkanRenderer::getRequiredExtensions()
+std::vector<const char*> VulkanRenderer::GetRequiredExtensions()
 {
 	{
 		uint32_t glfwExtensionCount = 0;
@@ -225,7 +225,7 @@ void VulkanRenderer::StartUp()
 	DeviceExtensions.emplace_back(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
 
-	std::vector<const char*> ExtensionList = getRequiredExtensions();
+	std::vector<const char*> ExtensionList = GetRequiredExtensions();
 
 	VkDebugUtilsMessengerCreateInfoEXT DebugInfo;
 	VulkanDebug.CreateDebugMessengerInfo(DebugInfo);
@@ -622,4 +622,19 @@ void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCom
 	vkQueueWaitIdle(GraphicsQueue);
 
 	vkFreeCommandBuffers(Device, commandPool, 1, &commandBuffer);
+}
+
+uint32_t VulkanRenderer::GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
+{
+	VkPhysicalDeviceMemoryProperties memProperties;
+	vkGetPhysicalDeviceMemoryProperties(PhysicalDevice, &memProperties);
+
+	for (uint32_t x = 0; x < memProperties.memoryTypeCount; x++)
+	{
+		if ((typeFilter & (1 << x)) && (memProperties.memoryTypes[x].propertyFlags & properties) == properties) {
+			return x;
+		}
+	}
+
+	throw std::runtime_error("Failed to find suitable memory type.");
 }

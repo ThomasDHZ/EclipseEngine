@@ -1,73 +1,6 @@
 #pragma once
 #include "VulkanRenderer.h"
-
-struct ConstMeshBase
-{
-	alignas(4) uint32_t MeshIndex;
-};
-
-struct RayTraceConstants
-{
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
-	alignas(4) uint32_t frame = 0;
-	alignas(4) int      AntiAliasingCount = 100;
-	alignas(4) int      MaxRefeflectCount = 15;
-	alignas(4) int	    ApplyAntiAliasing = 0;
-	alignas(4) float TestRoughness = 0.000000001f;
-	alignas(4) float SampleRate = .025;
-};
-
-struct ConstMeshInfo
-{
-	alignas(4) uint32_t MeshIndex;
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
-};
-
-struct ConstPBRMeshInfo
-{
-	alignas(4) uint32_t BRDFTextureId;
-	alignas(4) uint32_t IrradianceTextureId;
-	alignas(4) uint32_t PrefilterTextureId;
-	alignas(4) uint32_t MeshIndex;
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
-};
-
-struct PrefilterConst
-{
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-	alignas(4) float MipLevel = 0.0f;
-	alignas(4) uint32_t SampleCount = 1024;
-	alignas(4) float FaceSize = 0.0f;
-};
-
-struct ConstSkyBoxView
-{
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-};
-
-struct PrefilterSkybox
-{
-	alignas(4) uint32_t SkyboxSize = 0.0f;
-	alignas(4) float roughness = 0.0f;
-};
-
-struct ConstBloomProperites
-{
-	alignas(4) uint32_t BloomPass = 0;
-};
-
-struct LightSceneInfo : public ConstMeshBase
-{
-	alignas(16) glm::mat4 lightSpaceMatrix = glm::mat4(1.0f);
-};
+#include "VulkanBuffer.h"
 
 struct DescriptorSetBindingStruct
 {
@@ -105,6 +38,13 @@ private:
 	VkWriteDescriptorSet AddBufferDescriptorSet(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType);
 
 protected:
+	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
+	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
+	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
+	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
+	VkPipelineCache PipelineCache = VK_NULL_HANDLE;
+
 	VkSampler NullSampler = VK_NULL_HANDLE;
 	VkDescriptorImageInfo nullBufferInfo;
 
@@ -113,9 +53,9 @@ protected:
 	VkDescriptorPoolSize AddDsecriptorPoolBinding(VkDescriptorType descriptorType, uint32_t descriptorCount);
 	VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo);
 	VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo);
-	//VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo, VkDescriptorSetLayoutBindingFlagsCreateInfoEXT& DescriptorSetLayoutBindingFlags);
+	VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo, VkDescriptorSetLayoutBindingFlagsCreateInfoEXT& DescriptorSetLayoutBindingFlags);
 	VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);
-	//VkDescriptorBufferInfo AddBufferDescriptor(VulkanBuffer& buffer);
+	VkDescriptorBufferInfo AddBufferDescriptor(VulkanBuffer& buffer);
 
 	VkWriteDescriptorSet AddAccelerationBuffer(uint32_t BindingNumber, VkDescriptorSet& DescriptorSet, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure);
 	VkWriteDescriptorSet AddStorageImageBuffer(uint32_t BindingNumber, VkDescriptorSet& DescriptorSet, VkDescriptorImageInfo& TextureImageInfo);
@@ -128,12 +68,6 @@ protected:
 	VkDescriptorImageInfo AddTextureDescriptor(VkImageView view, VkSampler sampler);
 
 public:
-	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
-	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
-	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
-	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
-	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
-	VkPipelineCache PipelineCache = VK_NULL_HANDLE;
 
 	GraphicsPipeline();
 	~GraphicsPipeline();
@@ -151,5 +85,10 @@ public:
 
 	virtual void UpdateGraphicsPipeLine();
 	virtual void Destroy();
+
+	VkPipelineLayout GetShaderPipelineLayout() { return ShaderPipelineLayout; }
+	VkPipeline GetShaderPipeline() { return ShaderPipeline; }
+	VkDescriptorSet GetDescriptorSet() { return DescriptorSet; }
+	VkDescriptorSet* GetDescriptorSetPtr() { return &DescriptorSet; }
 };
 

@@ -96,7 +96,7 @@ void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     PipelineLayoutInfo.setLayoutCount = 1;
     PipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
 
-    if (vkCreatePipelineLayout(VulkanRenderer::Device, &PipelineLayoutInfo, nullptr, &ShaderPipelineLayout) != VK_SUCCESS)
+    if (vkCreatePipelineLayout(VulkanRenderer::GetDevice(), &PipelineLayoutInfo, nullptr, &ShaderPipelineLayout) != VK_SUCCESS)
     {
         throw std::runtime_error("Failed to create FrameBuffer Pipeline Layout.");
     }
@@ -117,14 +117,14 @@ void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     PipelineInfo.subpass = 0;
     PipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(VulkanRenderer::Device, VK_NULL_HANDLE, 1, &PipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS)
+    if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &PipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS)
     {
         throw std::runtime_error("Failed to create FrameBuffer Pipeline.");
     }
 
     for (auto& shader : PipelineShaderStageList)
     {
-        vkDestroyShaderModule(VulkanRenderer::Device, shader.module, nullptr);
+        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
     }
 }
 

@@ -13,6 +13,7 @@ public:
 	Scene();
 	~Scene();
 
+	void StartUp();
 	void Update();
 	void Draw();
 };

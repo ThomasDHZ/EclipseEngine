@@ -47,7 +47,7 @@ void FrameBufferRenderPass::CreateRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(VulkanRenderer::Device, &renderPassInfo, nullptr, &RenderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &RenderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
     }
 }
@@ -56,9 +56,9 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
-    for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++) {
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) {
         std::array<VkImageView, 1> attachments = {
-            VulkanRenderer::GetSwapChainImageViews()[i]
+            VulkanRenderer::GetSwapChainImageViews()[x]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};
@@ -70,7 +70,7 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
         framebufferInfo.height = RenderPassResolution.y;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::Device, &framebufferInfo, nullptr, &SwapChainFramebuffers[i]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]) != VK_SUCCESS) {
             throw std::runtime_error("failed to create framebuffer!");
         }
     }
@@ -93,12 +93,12 @@ void FrameBufferRenderPass::RebuildSwapChain()
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     frameBufferPipeline->Destroy();
 
-    vkDestroyRenderPass(VulkanRenderer::Device, RenderPass, nullptr);
+    vkDestroyRenderPass(VulkanRenderer::GetDevice(), RenderPass, nullptr);
     RenderPass = VK_NULL_HANDLE;
 
     for (auto& framebuffer : SwapChainFramebuffers)
     {
-        vkDestroyFramebuffer(VulkanRenderer::Device, framebuffer, nullptr);
+        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
     }
 
@@ -110,34 +110,34 @@ void FrameBufferRenderPass::RebuildSwapChain()
 
 void FrameBufferRenderPass::Draw()
 {
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
+    VkCommandBufferBeginInfo CommandBufferBeginInfo{};
+    CommandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    CommandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
     std::array<VkClearValue, 2> clearValues{};
     clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
     clearValues[1].depthStencil = { 1.0f, 0 };
 
-    VkRect2D rect{};
-    rect.offset.x = 0;
-    rect.offset.y = 0;
+    VkRect2D Rect2D{};
+    Rect2D.offset.x = 0;
+    Rect2D.offset.y = 0;
+
+    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &CommandBufferBeginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = RenderPass;
     renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
-    renderPassInfo.renderArea.offset = rect.offset;
+    renderPassInfo.renderArea.offset = Rect2D.offset;
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->ShaderPipeline);
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->ShaderPipelineLayout, 0, 1, &frameBufferPipeline->DescriptorSet, 0, nullptr);
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->GetShaderPipelineLayout(), 0, 1, frameBufferPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 4, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {

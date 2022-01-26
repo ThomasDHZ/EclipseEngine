@@ -13,6 +13,15 @@ class VulkanRenderer
 {
 private:
 	static constexpr int MAX_FRAMES_IN_FLIGHT = 3;
+
+	static VkInstance Instance;
+	static VkDevice Device;
+	static VkPhysicalDevice PhysicalDevice;
+	static VkSurfaceKHR Surface;
+	static VkQueue GraphicsQueue;
+	static VkQueue PresentQueue;
+	static VkCommandPool CommandPool;
+
 	static int GraphicsFamily;
 	static int PresentFamily;
 	static uint32_t ImageIndex;
@@ -33,20 +42,13 @@ private:
 	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
 	static std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
 	static std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
-	static std::vector<const char*> getRequiredExtensions();
+	static std::vector<const char*> GetRequiredExtensions();
 
 	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
 	static void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
 
 
 public:
-	static VkInstance Instance;
-	static VkDevice Device;
-	static VkPhysicalDevice PhysicalDevice;
-	static VkSurfaceKHR Surface;
-	static VkQueue GraphicsQueue;
-	static VkQueue PresentQueue;
-	static VkCommandPool CommandPool;
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
@@ -70,7 +72,15 @@ public:
 	static VkCommandBuffer  BeginSingleTimeCommands(VkCommandPool& commandPool);
 	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
 	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
+	static uint32_t GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
+	static VkInstance GetInstance() { return Instance; };
+	static VkDevice GetDevice() { return Device; };
+	static VkPhysicalDevice GetPhysicalDevice() { return PhysicalDevice; };
+	static VkSurfaceKHR GetSurface() { return Surface; };
+	static VkQueue GetGraphicsQueue() { return GraphicsQueue; };
+	static VkQueue GetPresentQueue() { return PresentQueue; };
+	static VkCommandPool GetCommandPool() { return CommandPool; };
 	static uint32_t GetImageIndex() { return ImageIndex; }
 	static uint32_t GetCMDIndex() { return CMDIndex; }
 	static std::vector<VkImage> GetSwapChainImages() { return SwapChain.GetSwapChainImages(); }

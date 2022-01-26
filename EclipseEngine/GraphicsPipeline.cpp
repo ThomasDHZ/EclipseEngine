@@ -20,7 +20,7 @@ GraphicsPipeline::GraphicsPipeline()
     NullSamplerInfo.minLod = 0;
     NullSamplerInfo.maxLod = 0;
     NullSamplerInfo.mipLodBias = 0;
-    if (vkCreateSampler(VulkanRenderer::Device, &NullSamplerInfo, nullptr, &NullSampler))
+    if (vkCreateSampler(VulkanRenderer::GetDevice(), &NullSamplerInfo, nullptr, &NullSampler))
     {
         throw std::runtime_error("Failed to create Sampler.");
     }
@@ -30,7 +30,7 @@ GraphicsPipeline::GraphicsPipeline()
     nullBufferInfo.sampler = NullSampler;
 
     DescriptorPoolList.clear();
-   // LayoutBindingInfo.clear();
+    LayoutBindingInfo.clear();
     DescriptorList.clear();
     DescriptorBindingList.clear();
 }
@@ -41,51 +41,51 @@ GraphicsPipeline::~GraphicsPipeline()
 
 void GraphicsPipeline::SubmitDescriptorSet()
 {
-    //if (DescriptorBindingList.size() > 0)
-    //{
-    //    {
-    //        std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
-    //        for (auto& DescriptorBinding : DescriptorBindingList)
-    //        {
-    //            DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
-    //        }
-    //        DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
-    //    }
-    //    {
-    //        std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
-    //        for (auto& DescriptorBinding : DescriptorBindingList)
-    //        {
-    //            LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
-    //        }
-    //        DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
-    //    }
-    //    {
-    //        DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+    if (DescriptorBindingList.size() > 0)
+    {
+        {
+            std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
+            for (auto& DescriptorBinding : DescriptorBindingList)
+            {
+                DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
+            }
+            DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+        }
+        {
+            std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
+            for (auto& DescriptorBinding : DescriptorBindingList)
+            {
+                LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
+            }
+            DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+        }
+        {
+            DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
-    //        std::vector<VkWriteDescriptorSet> DescriptorList;
+            std::vector<VkWriteDescriptorSet> DescriptorList;
 
-    //        for (auto& DescriptorBinding : DescriptorBindingList)
-    //        {
+            for (auto& DescriptorBinding : DescriptorBindingList)
+            {
 
 
-    //            if (DescriptorBinding.BufferDescriptor.size() > 0)
-    //            {
-    //                DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
-    //            }
-    //            else if (DescriptorBinding.TextureDescriptor.size() > 0)
-    //            {
-    //                DescriptorList.emplace_back(AddTextureDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
-    //            }
-    //            else
-    //            {
-    //                DescriptorList.emplace_back(AddAccelerationBuffer(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
-    //            }
-    //        }
-    //        vkUpdateDescriptorSets(VulkanPtr::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
-    //    }
-    //}
-    //else
-    //{
+                if (DescriptorBinding.BufferDescriptor.size() > 0)
+                {
+                    DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else if (DescriptorBinding.TextureDescriptor.size() > 0)
+                {
+                    DescriptorList.emplace_back(AddTextureDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else
+                {
+                    DescriptorList.emplace_back(AddAccelerationBuffer(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+                }
+            }
+            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
+        }
+    }
+    else
+    {
         DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1));
         DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
 
@@ -93,22 +93,22 @@ void GraphicsPipeline::SubmitDescriptorSet()
         DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
 
         DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
-        vkUpdateDescriptorSets(VulkanRenderer::Device, static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
-    //}
+        vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
+    }
 }
 
 void GraphicsPipeline::UpdateGraphicsPipeLine()
 {
     DescriptorPoolList.clear();
-    //LayoutBindingInfo.clear();
+    LayoutBindingInfo.clear();
     DescriptorList.clear();
     DescriptorBindingList.clear();
 
-    vkDestroyPipeline(VulkanRenderer::Device, ShaderPipeline, nullptr);
-    vkDestroyPipelineLayout(VulkanRenderer::Device, ShaderPipelineLayout, nullptr);
-    vkDestroyDescriptorPool(VulkanRenderer::Device, DescriptorPool, nullptr);
-    vkDestroyDescriptorSetLayout(VulkanRenderer::Device, DescriptorSetLayout, nullptr);
-    vkDestroyPipelineCache(VulkanRenderer::Device, PipelineCache, nullptr);
+    vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
+    vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
+    vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), DescriptorPool, nullptr);
+    vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
+    vkDestroyPipelineCache(VulkanRenderer::GetDevice(), PipelineCache, nullptr);
 
     ShaderPipeline = VK_NULL_HANDLE;
     ShaderPipelineLayout = VK_NULL_HANDLE;
@@ -119,12 +119,12 @@ void GraphicsPipeline::UpdateGraphicsPipeLine()
 
 void GraphicsPipeline::Destroy()
 {
-    vkDestroySampler(VulkanRenderer::Device, NullSampler, nullptr);
-    vkDestroyPipeline(VulkanRenderer::Device, ShaderPipeline, nullptr);
-    vkDestroyPipelineLayout(VulkanRenderer::Device, ShaderPipelineLayout, nullptr);
-    vkDestroyDescriptorPool(VulkanRenderer::Device, DescriptorPool, nullptr);
-    vkDestroyDescriptorSetLayout(VulkanRenderer::Device, DescriptorSetLayout, nullptr);
-    vkDestroyPipelineCache(VulkanRenderer::Device, PipelineCache, nullptr);
+    vkDestroySampler(VulkanRenderer::GetDevice(), NullSampler, nullptr);
+    vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
+    vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
+    vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), DescriptorPool, nullptr);
+    vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
+    vkDestroyPipelineCache(VulkanRenderer::GetDevice(), PipelineCache, nullptr);
 
     NullSampler = VK_NULL_HANDLE;
     ShaderPipeline = VK_NULL_HANDLE;
@@ -314,7 +314,7 @@ VkDescriptorPool GraphicsPipeline::CreateDescriptorPool(std::vector<VkDescriptor
     poolInfo.maxSets = static_cast<uint32_t>(VulkanRenderer::GetSwapChainImageCount());
 
     VkDescriptorPool descriptorPool;
-    if (vkCreateDescriptorPool(VulkanRenderer::Device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
+    if (vkCreateDescriptorPool(VulkanRenderer::GetDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor pool!");
     }
 
@@ -343,42 +343,42 @@ VkDescriptorSetLayout GraphicsPipeline::CreateDescriptorSetLayout(std::vector<De
     layoutInfo.pBindings = LayoutBindingList.data();
 
     VkDescriptorSetLayout descriptorSet;
-    if (vkCreateDescriptorSetLayout(VulkanRenderer::Device, &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
+    if (vkCreateDescriptorSetLayout(VulkanRenderer::GetDevice(), &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
         throw std::runtime_error("failed to create descriptor set layout!");
     }
 
     return descriptorSet;
 }
 
-//VkDescriptorSetLayout GraphicsPipeline::CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo, VkDescriptorSetLayoutBindingFlagsCreateInfoEXT& DescriptorSetLayoutBindingFlags)
-//{
-//    std::vector<VkDescriptorSetLayoutBinding> LayoutBindingList = {};
-//
-//    for (auto Binding : LayoutBindingInfo)
-//    {
-//        VkDescriptorSetLayoutBinding LayoutBinding = {};
-//        LayoutBinding.binding = Binding.Binding;
-//        LayoutBinding.descriptorCount = Binding.Count;
-//        LayoutBinding.descriptorType = Binding.DescriptorType;
-//        LayoutBinding.pImmutableSamplers = nullptr;
-//        LayoutBinding.stageFlags = Binding.StageFlags;
-//
-//        LayoutBindingList.emplace_back(LayoutBinding);
-//    }
-//
-//    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
-//    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-//    layoutInfo.bindingCount = static_cast<uint32_t>(LayoutBindingList.size());
-//    layoutInfo.pBindings = LayoutBindingList.data();
-//    layoutInfo.pNext = &DescriptorSetLayoutBindingFlags;
-//
-//    VkDescriptorSetLayout descriptorSet;
-//    if (vkCreateDescriptorSetLayout(VulkanRenderer::Device, &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
-//        throw std::runtime_error("failed to create descriptor set layout!");
-//    }
-//
-//    return descriptorSet;
-//}
+VkDescriptorSetLayout GraphicsPipeline::CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo, VkDescriptorSetLayoutBindingFlagsCreateInfoEXT& DescriptorSetLayoutBindingFlags)
+{
+    std::vector<VkDescriptorSetLayoutBinding> LayoutBindingList = {};
+
+    for (auto Binding : LayoutBindingInfo)
+    {
+        VkDescriptorSetLayoutBinding LayoutBinding = {};
+        LayoutBinding.binding = Binding.Binding;
+        LayoutBinding.descriptorCount = Binding.Count;
+        LayoutBinding.descriptorType = Binding.DescriptorType;
+        LayoutBinding.pImmutableSamplers = nullptr;
+        LayoutBinding.stageFlags = Binding.StageFlags;
+
+        LayoutBindingList.emplace_back(LayoutBinding);
+    }
+
+    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layoutInfo.bindingCount = static_cast<uint32_t>(LayoutBindingList.size());
+    layoutInfo.pBindings = LayoutBindingList.data();
+    layoutInfo.pNext = &DescriptorSetLayoutBindingFlags;
+
+    VkDescriptorSetLayout descriptorSet;
+    if (vkCreateDescriptorSetLayout(VulkanRenderer::GetDevice(), &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create descriptor set layout!");
+    }
+
+    return descriptorSet;
+}
 
 VkDescriptorSet GraphicsPipeline::CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout)
 {
@@ -398,21 +398,21 @@ VkDescriptorSet GraphicsPipeline::CreateDescriptorSets(VkDescriptorPool descript
     allocInfo.pNext = &VariableDescriptorCountAllocateInfo;
 
     VkDescriptorSet DescriptorSets;
-    if (vkAllocateDescriptorSets(VulkanRenderer::Device, &allocInfo, &DescriptorSets) != VK_SUCCESS) {
+    if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate descriptor sets!");
     }
 
     return DescriptorSets;
 }
-//
-//VkDescriptorBufferInfo GraphicsPipeline::AddBufferDescriptor(VulkanBuffer& buffer)
-//{
-//    VkDescriptorBufferInfo BufferInfo = {};
-//    BufferInfo.buffer = buffer.Buffer;
-//    BufferInfo.offset = 0;
-//    BufferInfo.range = buffer.BufferSize;
-//    return BufferInfo;
-//}
+
+VkDescriptorBufferInfo GraphicsPipeline::AddBufferDescriptor(VulkanBuffer& buffer)
+{
+    VkDescriptorBufferInfo BufferInfo = {};
+    BufferInfo.buffer = buffer.GetBuffer();
+    BufferInfo.offset = 0;
+    BufferInfo.range = buffer.GetBufferSize();
+    return BufferInfo;
+}
 
 VkWriteDescriptorSet GraphicsPipeline::AddBufferDescriptorSet(uint32_t BindingNumber, VkDescriptorSet& DescriptorSet, VkDescriptorBufferInfo& BufferInfo, VkDescriptorType descriptorType)
 {
@@ -521,7 +521,7 @@ VkShaderModule GraphicsPipeline::ReadShaderFile(const std::string& filename)
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
     if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!");
+        throw std::runtime_error("Failed to open file: " + filename);
     }
 
     size_t fileSize = (size_t)file.tellg();
@@ -538,7 +538,7 @@ VkShaderModule GraphicsPipeline::ReadShaderFile(const std::string& filename)
     createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
 
     VkShaderModule shaderModule;
-    if (vkCreateShaderModule(VulkanRenderer::Device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+    if (vkCreateShaderModule(VulkanRenderer::GetDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
         throw std::runtime_error("failed to create shader module!");
     }
 
