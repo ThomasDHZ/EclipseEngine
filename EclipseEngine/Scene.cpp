@@ -2,6 +2,7 @@
 
 Scene::Scene()
 {
+    texture = Texture("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/gold/albedo.png", VK_FORMAT_R8G8B8A8_SRGB);
     imGuiRenderPass.StartUp();
 	frameBufferRenderPass.StartUp();
 }

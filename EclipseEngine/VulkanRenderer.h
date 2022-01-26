@@ -8,6 +8,7 @@
 #include "VulkanDebugger.h"
 #include "LimitsandFeatures.h"
 #include "VulkanSwapChain.h"
+#include "Pixel.h"
 
 class VulkanRenderer
 {
@@ -70,8 +71,8 @@ public:
 
 	static VkCommandBuffer  BeginSingleTimeCommands();
 	static VkCommandBuffer  BeginSingleTimeCommands(VkCommandPool& commandPool);
-	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
-	static void  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
+	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
+	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
 	static uint32_t GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 
 	static VkInstance GetInstance() { return Instance; };

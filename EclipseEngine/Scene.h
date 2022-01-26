@@ -4,6 +4,7 @@
 #include "InterfaceRenderPass.h"
 #include "FrameBufferRenderPass.h"
 #include "UniformBuffer.h"
+#include "Texture.h"
 
 class Scene
 {
@@ -13,6 +14,7 @@ private:
 		float Timer;
 	};
 
+	Texture texture;
 	UniformBuffer<SceneProperties> SceneDataUniformBuffer;
 	InterfaceRenderPass imGuiRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;

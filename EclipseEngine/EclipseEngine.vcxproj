@@ -163,6 +163,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="RenderBatch2D.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
@@ -187,8 +188,10 @@
     <ClInclude Include="LimitsandFeatures.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Pixel.h" />
     <ClInclude Include="RenderBatch2D.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VulkanBuffer.h" />

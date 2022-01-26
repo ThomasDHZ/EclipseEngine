@@ -596,7 +596,7 @@ VkCommandBuffer  VulkanRenderer::BeginSingleTimeCommands(VkCommandPool& commandP
 	return commandBuffer;
 }
 
-void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer) {
+VkResult  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer) {
 	vkEndCommandBuffer(commandBuffer);
 
 	VkSubmitInfo submitInfo{};
@@ -604,13 +604,15 @@ void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer) {
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &commandBuffer;
 
-	vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-	vkQueueWaitIdle(GraphicsQueue);
+	VkResult result = vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+	result = vkQueueWaitIdle(GraphicsQueue);
 
 	vkFreeCommandBuffers(Device, CommandPool, 1, &commandBuffer);
+
+	return result;
 }
 
-void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool) {
+VkResult  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool) {
 	vkEndCommandBuffer(commandBuffer);
 
 	VkSubmitInfo submitInfo{};
@@ -618,10 +620,12 @@ void  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCom
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &commandBuffer;
 
-	vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-	vkQueueWaitIdle(GraphicsQueue);
+	VkResult result = vkQueueSubmit(GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+	result = vkQueueWaitIdle(GraphicsQueue);
 
 	vkFreeCommandBuffers(Device, commandPool, 1, &commandBuffer);
+
+	return result;
 }
 
 uint32_t VulkanRenderer::GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
