@@ -12,15 +12,16 @@ private:
 
 public:
 	VulkanBuffer();
-	VulkanBuffer(VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, void* BufferData = nullptr);
+	VulkanBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 	~VulkanBuffer();
 
-	VkResult CreateBuffer(VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, void* BufferData = nullptr);
+	VkResult CreateBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 	void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	void CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize);
 	void DestoryBuffer();
 
 	VkBuffer GetBuffer() { return Buffer; }
+	VkBuffer* GetBufferPtr() { return &Buffer; }
 	VkDeviceMemory GetBufferMemory() { return BufferMemory; }
 	VkDeviceSize GetBufferSize() { return BufferSize; }
 	uint64_t GetBufferDeviceAddress() { return BufferDeviceAddress; }

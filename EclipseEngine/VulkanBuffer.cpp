@@ -6,16 +6,16 @@ VulkanBuffer::VulkanBuffer()
 {
 }
 
-VulkanBuffer::VulkanBuffer(VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, void* BufferData)
+VulkanBuffer::VulkanBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 {
-	CreateBuffer(BufferSize, usage, properties, BufferData);
+	CreateBuffer(BufferData, BufferSize, usage, properties);
 }
 
 VulkanBuffer::~VulkanBuffer()
 {
 }
 
-VkResult VulkanBuffer::CreateBuffer(VkDeviceSize bufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, void* BufferData)
+VkResult VulkanBuffer::CreateBuffer(void* BufferData, VkDeviceSize bufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 {
 	BufferSize = bufferSize;
 

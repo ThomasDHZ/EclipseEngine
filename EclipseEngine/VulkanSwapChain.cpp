@@ -71,7 +71,7 @@ void VulkanSwapChain::FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfa
 			break;
 		}
 
-		i++;
+		x++;
 	}
 }
 
