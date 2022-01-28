@@ -3,6 +3,7 @@
 #include "Scene.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <json.hpp>
 
 int main()
 {
@@ -10,6 +11,7 @@ int main()
     VulkanRenderer::StartUp();
 
     Scene scene;
+
 
     while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {

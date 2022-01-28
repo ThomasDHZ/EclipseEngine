@@ -1,6 +1,5 @@
 #include "Texture.h"
 #include "VulkanBuffer.h"
-
 Texture::Texture()
 {
 }
@@ -12,8 +11,16 @@ Texture::Texture(std::string TextureLocation, VkFormat format)
 	Depth = 1;
 	TextureByteFormat = format;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
 	LoadTexture(TextureLocation, format);
+
+	Texture temp;
+	nlohmann::json json;
+
+	to_json(json, *this);
+	std::cout << json << std::endl;
+	from_json(json, temp);
 }
 
 Texture::~Texture()
@@ -253,4 +260,17 @@ void Texture::UpdateImageLayout(VkImageLayout newImageLayout)
 	{
 		TextureImageLayout = newImageLayout;
 	}
+}
+
+void Texture::Destroy()
+{
+	vkDestroyImageView(VulkanRenderer::GetDevice(), View, nullptr);
+	vkDestroyImage(VulkanRenderer::GetDevice(), Image, nullptr);
+	vkFreeMemory(VulkanRenderer::GetDevice(), Memory, nullptr);
+	vkDestroySampler(VulkanRenderer::GetDevice(), Sampler, nullptr);
+
+	View = VK_NULL_HANDLE;
+	Image = VK_NULL_HANDLE;
+	Memory = VK_NULL_HANDLE;
+	Sampler = VK_NULL_HANDLE;
 }
