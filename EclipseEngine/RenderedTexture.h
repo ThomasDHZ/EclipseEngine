@@ -9,8 +9,8 @@ private:
     void CreateTextureSampler();
 public:
     RenderedTexture();
-    RenderedTexture(glm::ivec2 TextureResolution, RenderedTextureType type);
-    RenderedTexture(glm::ivec2 TextureResolution, RenderedTextureType type, VkSampleCountFlagBits sampleCount);
+    RenderedTexture(glm::ivec2 TextureResolution);
+    RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount);
     ~RenderedTexture();
 
     void RecreateRendererTexture(glm::vec2 TextureResolution);

@@ -7,7 +7,7 @@
 
 int main()
 {
-    Window::CreateWindow(1920, 1080, "Eclipse Engine");
+    Window::CreateWindow(1280, 720, "Eclipse Engine");
     VulkanRenderer::StartUp();
 
     Scene scene;

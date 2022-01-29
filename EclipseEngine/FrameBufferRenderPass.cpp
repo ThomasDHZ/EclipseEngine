@@ -80,7 +80,7 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 
 }
 
-void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedTexture> RenderedTexture)
+void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -90,7 +90,7 @@ void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedTexture> RenderedTex
     SetUpCommandBuffers();
 }
 
-void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedTexture> RenderedTexture)
+void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     frameBufferPipeline->Destroy();

@@ -14,8 +14,8 @@ public:
 	FrameBufferRenderPass();
 	~FrameBufferRenderPass();
 
-	void StartUp(std::shared_ptr<RenderedTexture> RenderedTexture);
-	void RebuildSwapChain(std::shared_ptr<RenderedTexture> RenderedTexture);
+	void StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture);
+	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture);
 	void Draw();
 	void Destroy();
 };

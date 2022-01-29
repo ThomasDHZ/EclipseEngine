@@ -12,8 +12,8 @@ void RenderPass2D::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    renderedTexture = std::make_shared<RenderedTexture>(RenderedTexture(RenderPassResolution, RenderedTextureType::RenderedColorTexture));
-    depthTexture = std::make_shared<RenderedTexture>(RenderedTexture(RenderPassResolution, RenderedTextureType::RenderedDepthTexture));
+    renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
+    depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
 
     CreateRenderPass();
     CreateRendererFramebuffers();
@@ -33,7 +33,7 @@ void RenderPass2D::CreateRenderPass()
     AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     AlebdoAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     AlebdoAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     AttachmentDescriptionList.emplace_back(AlebdoAttachment);
 
     VkAttachmentDescription DepthAttachment = {};

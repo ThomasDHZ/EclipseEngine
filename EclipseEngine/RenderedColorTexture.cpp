@@ -1,45 +1,43 @@
-#include "RenderedTexture.h"
+#include "RenderedColorTexture.h"
 
-RenderedTexture::RenderedTexture()
+RenderedColorTexture::RenderedColorTexture()
 {
 
 }
 
-RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution) : Texture()
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Texture()
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
-
+	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
 }
 
-RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = sampleCount;
-
+	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
 }
 
-RenderedTexture::~RenderedTexture()
+RenderedColorTexture::~RenderedColorTexture()
 {
 }
 
-void RenderedTexture::CreateTextureImage()
+void RenderedColorTexture::CreateTextureImage()
 {
 	VkImageCreateInfo TextureInfo = {};
 	TextureInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -52,15 +50,13 @@ void RenderedTexture::CreateTextureImage()
 	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	TextureInfo.samples = SampleCount;
 	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-	TextureInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-	
-		TextureInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-
+	TextureInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+	TextureInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
 
 	Texture::CreateTextureImage(TextureInfo);
 }
 
-void RenderedTexture::CreateTextureView()
+void RenderedColorTexture::CreateTextureView()
 {
 	VkImageViewCreateInfo TextureImageViewInfo = {};
 	TextureImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -71,16 +67,15 @@ void RenderedTexture::CreateTextureView()
 	TextureImageViewInfo.subresourceRange.baseArrayLayer = 0;
 	TextureImageViewInfo.subresourceRange.layerCount = 1;
 	TextureImageViewInfo.image = Image;
-		TextureImageViewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
-		TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-
+	TextureImageViewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 
 	if (vkCreateImageView(VulkanRenderer::GetDevice(), &TextureImageViewInfo, nullptr, &View)) {
 		throw std::runtime_error("Failed to create Image View.");
 	}
 }
 
-void RenderedTexture::CreateTextureSampler()
+void RenderedColorTexture::CreateTextureSampler()
 {
 	VkSamplerCreateInfo TextureImageSamplerInfo = {};
 	TextureImageSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -102,7 +97,7 @@ void RenderedTexture::CreateTextureSampler()
 	}
 }
 
-void RenderedTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
+void RenderedColorTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;

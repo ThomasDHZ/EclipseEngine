@@ -3,12 +3,6 @@
 #include "stb_image.h"
 #include <json.hpp>
 
-enum RenderedTextureType
-{
-    RenderedColorTexture,
-    RenderedDepthTexture
-};
-
 class Texture
 {
 private:
@@ -26,7 +20,6 @@ protected:
     VkFormat TextureByteFormat = VK_FORMAT_UNDEFINED;
     VkImageLayout TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderedTextureType TextureType = RenderedColorTexture;
 
     VkImage Image = VK_NULL_HANDLE;
     VkDeviceMemory Memory = VK_NULL_HANDLE;

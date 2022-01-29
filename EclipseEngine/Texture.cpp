@@ -12,7 +12,6 @@ Texture::Texture(std::string TextureLocation, VkFormat format)
 	TextureByteFormat = format;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
-	TextureType = RenderedColorTexture;
 
 	LoadTexture(TextureLocation, format);
 

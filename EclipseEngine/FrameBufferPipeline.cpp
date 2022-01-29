@@ -4,7 +4,7 @@ FrameBufferPipeline::FrameBufferPipeline() : GraphicsPipeline()
 {
 }
 
-FrameBufferPipeline::FrameBufferPipeline(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture) : GraphicsPipeline()
+FrameBufferPipeline::FrameBufferPipeline(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture) : GraphicsPipeline()
 {
     SetUpDescriptorBindings(RenderedTexture);
     SetUpShaderPipeLine(renderPass, RenderedTexture);
@@ -14,7 +14,7 @@ FrameBufferPipeline::~FrameBufferPipeline()
 {
 }
 
-void FrameBufferPipeline::SetUpDescriptorBindings(std::shared_ptr<RenderedTexture> RenderedTexture)
+void FrameBufferPipeline::SetUpDescriptorBindings(std::shared_ptr<RenderedColorTexture> RenderedTexture)
 {
     VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
     AddTextureDescriptorSetBinding(0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
@@ -22,7 +22,7 @@ void FrameBufferPipeline::SetUpDescriptorBindings(std::shared_ptr<RenderedTextur
     SubmitDescriptorSet();
 }
 
-void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture)
+void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -131,7 +131,7 @@ void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, st
     }
 }
 
-void FrameBufferPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture)
+void FrameBufferPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
     SetUpDescriptorBindings(RenderedTexture);
