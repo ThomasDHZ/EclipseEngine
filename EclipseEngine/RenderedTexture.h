@@ -1,16 +1,9 @@
 #pragma once
 #include "Texture.h"
 
-enum RenderedTextureType
-{
-    RenderedColorTexture,
-    RenderedDepthTexture
-};
-
 class RenderedTexture : public Texture
 {
 private:
-    RenderedTextureType renderedTexture;
     void CreateTextureImage();
     void CreateTextureView();
     void CreateTextureSampler();

@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Renderer\Pipelines">
       <UniqueIdentifier>{694e9ec6-f3da-4165-b899-12571c75cf53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Renderer\Pipelines">
+      <UniqueIdentifier>{ef239eea-81e2-4408-841f-9fb0d30d2156}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -105,6 +108,12 @@
     <ClCompile Include="RenderedTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RenderPass2D.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer2DPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -164,18 +173,6 @@
     <ClInclude Include="InterfaceRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="BaseRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameBufferRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameBufferPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VulkanBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -200,8 +197,23 @@
     <ClInclude Include="RenderedTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2019\nlohmann\json.hpp">
+    <ClInclude Include="RenderPass2D.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBufferPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBufferRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer2DPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +225,12 @@
     </None>
     <None Include="Shaders\compile.bat">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Shaders\Renderer2D.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Renderer2D.vert">
+      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

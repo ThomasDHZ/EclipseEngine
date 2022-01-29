@@ -3,6 +3,8 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_debug_printf : enable
 
+layout(binding = 0) uniform sampler2D FrameBufferTexture;
+
 layout(location = 0) in vec2 TexCoords;
 layout(location = 0) out vec4 outColor;
 
@@ -11,5 +13,9 @@ const float Exposure = 1.0f;
 
 void main() 
 {
-    outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    vec3 Color = texture(FrameBufferTexture, TexCoords).rgb;
+
+    vec3 finalResult = vec3(1.0) - exp(-Color * Exposure);
+    finalResult = pow(finalResult, vec3(1.0 / Gamma));
+    outColor = texture(FrameBufferTexture, TexCoords);
 }

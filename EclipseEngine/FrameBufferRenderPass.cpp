@@ -56,8 +56,10 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) {
-        std::array<VkImageView, 1> attachments = {
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) 
+    {
+        std::array<VkImageView, 1> attachments =
+        {
             VulkanRenderer::GetSwapChainImageViews()[x]
         };
 
@@ -78,17 +80,17 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 
 }
 
-void FrameBufferRenderPass::StartUp()
+void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedTexture> RenderedTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(RenderPass));
+    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(RenderPass, RenderedTexture));
     SetUpCommandBuffers();
 }
 
-void FrameBufferRenderPass::RebuildSwapChain()
+void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedTexture> RenderedTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     frameBufferPipeline->Destroy();
@@ -104,7 +106,7 @@ void FrameBufferRenderPass::RebuildSwapChain()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    frameBufferPipeline->UpdateGraphicsPipeLine(RenderPass);
+    frameBufferPipeline->UpdateGraphicsPipeLine(RenderPass, RenderedTexture);
     SetUpCommandBuffers();
 }
 

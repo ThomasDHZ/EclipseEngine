@@ -12,6 +12,7 @@ VkPhysicalDeviceProperties GPULimitsandFeatures::PhysicalDeviceProperties;
 VkPhysicalDeviceLimits GPULimitsandFeatures::PhysicalDeviceLimits;
 VkPhysicalDeviceAccelerationStructureFeaturesKHR GPULimitsandFeatures::AccelerationStructureFeatures;
 VkPhysicalDeviceRayTracingPipelineFeaturesKHR GPULimitsandFeatures::RayTracingPipelineFeatures;
+VkSampleCountFlagBits GPULimitsandFeatures::MaxSampleCount;
 
 std::unique_ptr<GameController> GameController::Controller = nullptr;
 GLFWgamepadstate GameController::ControllerState;

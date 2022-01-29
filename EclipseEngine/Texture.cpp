@@ -12,15 +12,16 @@ Texture::Texture(std::string TextureLocation, VkFormat format)
 	TextureByteFormat = format;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	TextureType = RenderedColorTexture;
 
 	LoadTexture(TextureLocation, format);
 
-	Texture temp;
-	nlohmann::json json;
+	//Texture temp;
+	//nlohmann::json json;
 
-	to_json(json, *this);
-	std::cout << json << std::endl;
-	from_json(json, temp);
+	//to_json(json, *this);
+	//std::cout << json << std::endl;
+	//from_json(json, temp);
 }
 
 Texture::~Texture()
@@ -148,7 +149,7 @@ void Texture::TransitionImageLayout(VkImageLayout newImageLayout)
 	}
 	else
 	{
-		throw std::invalid_argument("unsupported layout transition!");
+		throw std::invalid_argument("Unsupported layout transition.");
 	}
 
 	vkCmdPipelineBarrier(commandBuffer, sourceStage, destinationStage, 0, 0, nullptr, 0, nullptr, 1, &barrier);

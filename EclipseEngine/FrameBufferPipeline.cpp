@@ -4,22 +4,25 @@ FrameBufferPipeline::FrameBufferPipeline() : GraphicsPipeline()
 {
 }
 
-FrameBufferPipeline::FrameBufferPipeline(const VkRenderPass& renderPass) : GraphicsPipeline()
+FrameBufferPipeline::FrameBufferPipeline(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings();
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(RenderedTexture);
+    SetUpShaderPipeLine(renderPass, RenderedTexture);
 }
 
 FrameBufferPipeline::~FrameBufferPipeline()
 {
 }
 
-void FrameBufferPipeline::SetUpDescriptorBindings()
+void FrameBufferPipeline::SetUpDescriptorBindings(std::shared_ptr<RenderedTexture> RenderedTexture)
 {
+    VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
+    AddTextureDescriptorSetBinding(0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
     SubmitDescriptorSet();
 }
 
-void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
+void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -128,9 +131,9 @@ void FrameBufferPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     }
 }
 
-void FrameBufferPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass)
+void FrameBufferPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedTexture> RenderedTexture)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings();
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(RenderedTexture);
+    SetUpShaderPipeLine(renderPass, RenderedTexture);
 }

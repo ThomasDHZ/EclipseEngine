@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.h"
 #include "VulkanRenderer.h"
+#include "RenderPass2D.h"
 #include "InterfaceRenderPass.h"
 #include "FrameBufferRenderPass.h"
 #include "UniformBuffer.h"
@@ -17,6 +18,7 @@ private:
 	Texture texture;
 	UniformBuffer<SceneProperties> SceneDataUniformBuffer;
 	InterfaceRenderPass imGuiRenderPass;
+	RenderPass2D renderPass2D;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:

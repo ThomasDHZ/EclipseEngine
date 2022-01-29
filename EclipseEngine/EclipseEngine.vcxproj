@@ -163,6 +163,8 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="RenderBatch2D.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
+    <ClCompile Include="Renderer2DPipeline.cpp" />
+    <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -172,7 +174,6 @@
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Documents\Visual Studio 2019\nlohmann\json.hpp" />
     <ClInclude Include="BaseRenderPass.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
@@ -194,6 +195,8 @@
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RenderBatch2D.h" />
     <ClInclude Include="RenderedTexture.h" />
+    <ClInclude Include="Renderer2DPipeline.h" />
+    <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
@@ -209,6 +212,8 @@
     <None Include="Shaders\compile.bat" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
+    <None Include="Shaders\Renderer2D.frag" />
+    <None Include="Shaders\Renderer2D.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

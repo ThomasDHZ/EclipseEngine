@@ -9,6 +9,7 @@ private:
 	static VkPhysicalDeviceLimits PhysicalDeviceLimits;
 	static VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures;
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
+	static VkSampleCountFlagBits MaxSampleCount;
 
 public:
 
@@ -27,11 +28,20 @@ public:
 
 		vkGetPhysicalDeviceProperties(GPUDevice, &PhysicalDeviceProperties);
 		PhysicalDeviceLimits = PhysicalDeviceProperties.limits;
+
+		VkSampleCountFlags counts = GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferColorSampleCounts & GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferDepthSampleCounts;
+		if (counts & VK_SAMPLE_COUNT_64_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_64_BIT; }
+		if (counts & VK_SAMPLE_COUNT_32_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_32_BIT; }
+		if (counts & VK_SAMPLE_COUNT_16_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_16_BIT; }
+		if (counts & VK_SAMPLE_COUNT_8_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_8_BIT; }
+		if (counts & VK_SAMPLE_COUNT_4_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_4_BIT; }
+		if (counts & VK_SAMPLE_COUNT_2_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_2_BIT; }
 	}
 
+	static VkSampleCountFlagBits GetMaxSampleCount() { return MaxSampleCount; };
 	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures() { return PhysicalDeviceFeatures; }
 	static VkPhysicalDeviceProperties GetPhysicalDeviceProperties() { return PhysicalDeviceProperties; }
-	static VkPhysicalDeviceLimits GetPhysicalDeviceFeaPhysicalDeviceLimitstures() { return PhysicalDeviceLimits; }
+	static VkPhysicalDeviceLimits GetPhysicalDeviceFeaPhysicalDeviceLimits() { return PhysicalDeviceLimits; }
 	static VkPhysicalDeviceAccelerationStructureFeaturesKHR GetAccelerationStructureFeatures() { return AccelerationStructureFeatures; }
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR GetRayTracingPipelineFeatures() { return RayTracingPipelineFeatures; }
 };
