@@ -1,5 +1,6 @@
 #pragma once
 #include "GraphicsPipeline.h"
+#include "UniformBuffer.h"
 
 struct ConstMeshInfo
 {

@@ -4,6 +4,7 @@
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
+#include "Mesh.h"
 
 class RenderPass2D : public BaseRenderPass
 {
@@ -23,7 +24,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw();
+	void Draw(Mesh mesh, SceneProperties sceneProperties);
 	void Destroy();
 };
 

@@ -6,6 +6,7 @@
 
 class Mesh
 {
+
 private:
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer VertexBuffer;
@@ -22,7 +23,7 @@ public:
 	~Mesh();
 
 	void Update();
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout& ShaderLayout);
+	void Draw(VkCommandBuffer& commandBuffer);
 	void Destory();
 };
 

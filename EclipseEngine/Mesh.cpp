@@ -2,10 +2,13 @@
 
 Mesh::Mesh()
 {
+
 }
 
 Mesh::Mesh(std::vector<Vertex>& VertexList, std::vector<uint32_t>& IndexList)
 {
+	VertexCount = VertexList.size();
+	IndexCount = IndexList.size();
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
@@ -24,7 +27,7 @@ void Mesh::Update()
 	MeshTransform = glm::scale(MeshTransform, MeshScale);
 }
 
-void Mesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout& ShaderLayout)
+void Mesh::Draw(VkCommandBuffer& commandBuffer)
 {
 	//ConstMeshInfo meshInfo;
 	//meshInfo.MeshIndex = MeshBufferIndex;
@@ -33,17 +36,17 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout& ShaderLayout)
 	//meshInfo.proj = CameraView->GetProjectionMatrix();
 
 	VkDeviceSize offsets[] = { 0 };
-	//vkCmdBindVertexBuffers(commandBuffer, 0, 1, VertexBuffer.GetBufferPtr(), offsets);
 	//vkCmdPushConstants(commandBuffer, ShaderLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ConstMeshInfo), &meshInfo);
-	//if (IndexCount == 0)
-	//{
-	//	vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
-	//}
-	//else
-	//{
-	//	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
-	//	vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
-	//}
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, VertexBuffer.GetBufferPtr(), offsets);
+	if (IndexCount == 0)
+	{
+		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
+	}
+	else
+	{
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
+		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
+	}
 }
 
 void Mesh::Destory()

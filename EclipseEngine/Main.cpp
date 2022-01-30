@@ -16,7 +16,6 @@ int main()
     while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {
         glfwPollEvents();
-        glfwPollEvents();
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

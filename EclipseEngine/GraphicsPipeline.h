@@ -89,6 +89,8 @@ public:
 	VkPipelineLayout GetShaderPipelineLayout() { return ShaderPipelineLayout; }
 	VkPipeline GetShaderPipeline() { return ShaderPipeline; }
 	VkDescriptorSet GetDescriptorSet() { return DescriptorSet; }
+	VkPipelineLayout* GetShaderPipelineLayoutPtr() { return &ShaderPipelineLayout; }
+	VkPipeline* GetShaderPipelinePtr() { return &ShaderPipeline; }
 	VkDescriptorSet* GetDescriptorSetPtr() { return &DescriptorSet; }
 };
 

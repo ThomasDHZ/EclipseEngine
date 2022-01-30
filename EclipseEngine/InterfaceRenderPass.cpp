@@ -33,7 +33,7 @@ void InterfaceRenderPass::StartUp()
 
     if (vkCreateCommandPool(init_info.Device, &poolInfo, nullptr, &ImGuiCommandPool) != VK_SUCCESS)
     {
-        throw std::runtime_error("failed to create graphics command pool!");
+        throw std::runtime_error("Failed to create graphics command pool.");
     }
 
     VkDescriptorPoolSize pool_sizes[] =
@@ -95,7 +95,7 @@ void InterfaceRenderPass::StartUp()
 
 void InterfaceRenderPass::CreateRenderPass()
 {
-    VkAttachmentDescription colorAttachment{};
+  VkAttachmentDescription colorAttachment{};
     colorAttachment.format = VK_FORMAT_B8G8R8A8_SRGB;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

@@ -4,65 +4,32 @@
 #include <array>
 #include <glm/glm.hpp>
 
-struct Vertex
-{
-	glm::vec3 Position = glm::vec3(0.0f);
-	float	  Padding1 = 0.0f;
-	glm::vec3 Normal = glm::vec3(0.0f);
-	float	  Padding2 = 0.0f;
-	glm::vec2 TexureCoord = glm::vec2(0.0f);
-	glm::vec2 Padding3 = glm::vec2(0.0f);
-	glm::vec3 Tangant = glm::vec3(0.0f);
-	float	  Padding4 = 0.0f;
-	glm::vec3 BiTangant = glm::vec3(0.0f);
-	float	  Padding5 = 0.0f;
+struct Vertex {
+    glm::vec2 pos;
+    glm::vec3 color;
 
-	static VkVertexInputBindingDescription GetBindingDescription()
-	{
-		VkVertexInputBindingDescription BindingDescription = {};
-		BindingDescription.binding = 0;
-		BindingDescription.stride = sizeof(Vertex);
-		BindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{};
+        bindingDescription.binding = 0;
+        bindingDescription.stride = sizeof(Vertex);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-		return BindingDescription;
-	}
+        return bindingDescription;
+    }
 
-	static std::vector<VkVertexInputAttributeDescription> GetAttributeDescriptions()
-	{
-		std::vector<VkVertexInputAttributeDescription> AttributeDescriptions = {};
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
 
-		VkVertexInputAttributeDescription AttributeDescription;
+        attributeDescriptions[0].binding = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-		AttributeDescription.binding = 0;
-		AttributeDescription.location = 0;
-		AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-		AttributeDescription.offset = offsetof(Vertex, Position);
-		AttributeDescriptions.emplace_back(AttributeDescription);
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(Vertex, color);
 
-		AttributeDescription.binding = 0;
-		AttributeDescription.location = 1;
-		AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-		AttributeDescription.offset = offsetof(Vertex, Normal);
-		AttributeDescriptions.emplace_back(AttributeDescription);
-
-		AttributeDescription.binding = 0;
-		AttributeDescription.location = 2;
-		AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
-		AttributeDescription.offset = offsetof(Vertex, TexureCoord);
-		AttributeDescriptions.emplace_back(AttributeDescription);
-
-		AttributeDescription.binding = 0;
-		AttributeDescription.location = 3;
-		AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-		AttributeDescription.offset = offsetof(Vertex, Tangant);
-		AttributeDescriptions.emplace_back(AttributeDescription);
-
-		AttributeDescription.binding = 0;
-		AttributeDescription.location = 4;
-		AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-		AttributeDescription.offset = offsetof(Vertex, BiTangant);
-		AttributeDescriptions.emplace_back(AttributeDescription);
-
-		return AttributeDescriptions;
-	}
+        return attributeDescriptions;
+    }
 };
