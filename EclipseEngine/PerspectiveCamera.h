@@ -6,7 +6,8 @@ class PerspectiveCamera : public Camera
 protected:
     float YAW = -90.0f;
     float PITCH = 0.0f;
-
+    float ZNear = 0.1f;
+    float ZFar = 10000.0f;
     float Yaw;
     float Pitch;
 
@@ -26,8 +27,7 @@ public:
 
     void Update(float deltaTime) override;
     void UpdateKeyboard(float deltaTime) override;
-    void UpdateMouse(glm::vec2 mouseCoords, bool constrainPitch = true) override;
-    virtual void MouseScroll(float yoffset);
+    void UpdateMouse() override;
 
     glm::vec3 GetFront() { return Front; }
 };

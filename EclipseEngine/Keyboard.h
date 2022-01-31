@@ -23,7 +23,7 @@ public:
         }
 	}
 
-   static bool IsKeyPressed(int key) { return KeyPressed[key] = GLFW_PRESS; }
+   static bool IsKeyPressed(int key) { return KeyPressed[key] == GLFW_PRESS; }
 };
 
 #endif

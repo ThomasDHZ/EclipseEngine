@@ -26,7 +26,6 @@ int main()
         scene.Update();
         scene.Draw();
 
-        Mouse::EndFrame();
         //GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
         //GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
         //GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);

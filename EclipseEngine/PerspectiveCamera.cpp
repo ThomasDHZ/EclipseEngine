@@ -13,7 +13,7 @@ PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm
     Front = glm::vec3(0.0f, 0.0f, -1.0f);
     cameraType = CameraType::Perspective_Camera;
 
-    MovementSpeed = 0.5f;
+    MovementSpeed = 0.005f;
     MouseSensitivity = 0.1f;
 
     Position = position;
@@ -50,77 +50,64 @@ PerspectiveCamera::~PerspectiveCamera()
 
 void PerspectiveCamera::UpdateKeyboard(float deltaTime)
 {
-    //float velocity = MovementSpeed * deltaTime;
-//if(Keyboard::IsKeyPressed(GLFW_KEY_E))
-//{
-//    Zoom += 5.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_E))
-//{
-//    Zoom -= 5.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_W))
-//{
-//    Position.y += 1.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_S))
-//{
-//    Position.y -= Right * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_A))
-//{
-//    Position.x -= Right * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_D))
-//{
-//    Position.x += 1.0f ;
-//}
-}
-
-void PerspectiveCamera::UpdateMouse(glm::vec2 mouseCoords ,bool constrainPitch)
-{
-    double XPos = 0;
-    double YPos = 0;
-    if(Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+    float velocity = MovementSpeed * deltaTime;
+    if (Keyboard::IsKeyPressed(GLFW_KEY_W))
     {
-        XPos = Mouse::GetMouseCoords().x;
-        YPos = Mouse::GetMouseCoords().y;
-
-        float xoffset = XPos - Mouse::LastX;
-        float yoffset = Mouse::LastY - YPos;
-
-        Mouse::LastX = XPos;
-        Mouse::LastY = YPos;
-
-        mouseCoords.x *= MouseSensitivity;
-        mouseCoords.y *= MouseSensitivity;
-
-        Yaw += mouseCoords.x;
-        Pitch += mouseCoords.y;
-
-        if (constrainPitch)
-        {
-            if (Pitch > 89.0f)
-                Pitch = 89.0f;
-            if (Pitch < -89.0f)
-                Pitch = -89.0f;
-        }
+        Position += Front * velocity;
+    }
+    if (Keyboard::IsKeyPressed(GLFW_KEY_S))
+    {
+        Position -= Front * velocity;
+    }
+    if (Keyboard::IsKeyPressed(GLFW_KEY_A))
+    {
+        Position -= Right * velocity;
+    }
+    if (Keyboard::IsKeyPressed(GLFW_KEY_D))
+    {
+        Position += Right * velocity;
     }
 }
 
-void PerspectiveCamera::MouseScroll(float yoffset)
+void PerspectiveCamera::UpdateMouse()
 {
-    Zoom -= (float)yoffset;
-    if (Zoom < 1.0f)
-        Zoom = 1.0f;
-    if (Zoom > 45.0f)
-        Zoom = 45.0f;
+    float xoffset = 0.0f;
+    float yoffset = 0.0f;
+
+    if (glfwGetMouseButton(Window::GetWindowPtr(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+    {
+        double XPos = Mouse::GetMouseCoords().x;
+        double YPos = Mouse::GetMouseCoords().y;
+
+        xoffset = XPos - Mouse::GetLastMouseCoords().x;
+        yoffset = Mouse::GetLastMouseCoords().y - YPos;
+
+        Mouse::SetLastMouseCoords(glm::vec2(XPos, YPos));
+    }
+
+    xoffset *= MouseSensitivity;
+    yoffset *= MouseSensitivity;
+
+    Yaw += xoffset;
+    Pitch += yoffset;
+
+ 
+    if (Pitch > 89.9999f)
+    {
+        Pitch = 89.9999f;
+    }
+    if (Pitch < -89.9999f)
+    {
+        Pitch = -89.9999f;
+    }
+    
 }
 
 void PerspectiveCamera::Update(float deltaTime)
 {
     UpdateKeyboard(deltaTime);
-    UpdateMouse(Mouse::GetMouseCoords());
+    UpdateMouse();
+    UpdateMouseScroll();
 
     glm::vec3 front;
     front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
@@ -134,6 +121,6 @@ void PerspectiveCamera::Update(float deltaTime)
     ViewMatrix = glm::lookAt(Position, Position + Front, Up);
 
     const auto 	Aspect = Width / Height;
-    ProjectionMatrix = glm::perspective(glm::radians(Zoom), Aspect, 0.1f, 10000.0f);
+    ProjectionMatrix = glm::perspective(glm::radians(Zoom), Aspect, ZNear, ZFar);
     ProjectionMatrix[1][1] *= -1;
 }

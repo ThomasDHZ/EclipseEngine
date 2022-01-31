@@ -16,6 +16,19 @@ void Camera::UpdateScreenSize(int NewWidth, int NewHeight)
 {
 }
 
+void Camera::UpdateMouseScroll()
+{
+    Zoom -= Mouse::GetMouseScrollBar().y * .05f;
+    if (Zoom < 1.0f)
+    {
+        Zoom = 1.0f;
+    }
+    if (Zoom > 45.0f)
+    {
+        Zoom = 45.0f;
+    }
+}
+
 
 void Camera::SetPosition(const glm::vec2& position)
 {

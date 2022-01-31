@@ -23,11 +23,11 @@ void Scene::StartUp()
 void Scene::Update()
 {
     auto time = glfwGetTime();
-    camera2.Update(time);
+    camera.Update(time);
 
-    sceneProperites.CameraPos = camera2.GetPosition();
-    sceneProperites.view = camera2.GetViewMatrix();
-    sceneProperites.proj = camera2.GetProjectionMatrix();
+    sceneProperites.CameraPos = camera.GetPosition();
+    sceneProperites.view = camera.GetViewMatrix();
+    sceneProperites.proj = camera.GetProjectionMatrix();
     sceneProperites.Timer = time;
 }
 

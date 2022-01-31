@@ -15,6 +15,6 @@ public:
 
 	virtual void Update(float deltaTime) override;
 	virtual void UpdateKeyboard(float deltaTime) override;
-	virtual void UpdateMouse(glm::vec2 mouseCoords, bool constrainPitch = true) override;
+	virtual void UpdateMouse() override;
 };
 

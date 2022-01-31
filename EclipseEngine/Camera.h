@@ -26,7 +26,7 @@ protected:
     glm::vec2 ViewScreenSize;
 
     float Zoom;
-    float MovementSpeed = 5.0f;
+    float MovementSpeed = 1.0f;
 
 public:
     Camera();
@@ -35,7 +35,8 @@ public:
 
     virtual void Update(float deltaTime) = 0;
     virtual void UpdateKeyboard(float deltaTime) = 0;
-    virtual void UpdateMouse(glm::vec2 mouseCoords, bool constrainPitch = true) = 0;
+    virtual void UpdateMouse() = 0;
+    void UpdateMouseScroll();
 
     void UpdateScreenSize(int NewWidth, int NewHeight);
     void UpdateScreenSize(glm::vec2& ScreenSize);

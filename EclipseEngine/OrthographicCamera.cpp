@@ -100,7 +100,8 @@ OrthographicCamera::OrthographicCamera(std::string Name, glm::vec2 viewScreenSiz
 void OrthographicCamera::Update(float deltaTime)
 {
 	UpdateKeyboard(deltaTime);
-	UpdateMouse(Mouse::GetMouseCoords());
+	UpdateMouse();
+	UpdateMouseScroll();
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), Position) * glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0, 0, 1));
 	ViewMatrix = glm::inverse(transform);
@@ -113,35 +114,27 @@ void OrthographicCamera::Update(float deltaTime)
 }
 
 
-void OrthographicCamera::UpdateMouse(glm::vec2 mouseCoords, bool constrainPitch)
+void OrthographicCamera::UpdateMouse()
 {
 }
 
 void OrthographicCamera::UpdateKeyboard(float deltaTime)
 {
-	//float velocity = MovementSpeed * deltaTime;
-//if(Keyboard::IsKeyPressed(GLFW_KEY_E))
-//{
-//    Zoom += 5.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_E))
-//{
-//    Zoom -= 5.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_W))
-//{
-//    Position.y += 1.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_S))
-//{
-//    Position.y -= 1.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_A))
-//{
-//    Position.x -= 1.0f * velocity;
-//}
-//if (Keyboard::IsKeyPressed(GLFW_KEY_D))
-//{
-//    Position.x += 1.0f ;
-//}
+	float velocity = 0.0005f * deltaTime;
+	if (Keyboard::IsKeyPressed(GLFW_KEY_W))
+	{
+		Position.y += 1.0f * 0.0005f;
+	}
+	if (Keyboard::IsKeyPressed(GLFW_KEY_S))
+	{
+		Position.y -= 1.0f * 0.0005f;
+	}
+	if (Keyboard::IsKeyPressed(GLFW_KEY_A))
+	{
+		Position.x -= 1.0f * 0.0005f;
+	}
+	if (Keyboard::IsKeyPressed(GLFW_KEY_D))
+	{
+		Position.x += 1.0f * 0.0005f;
+	}
 }
