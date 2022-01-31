@@ -8,7 +8,8 @@
 #include "Texture.h"
 #include "Vertex.h"
 #include "Mesh.h"
-#include "Camera.h"
+#include "OrthographicCamera.h"
+#include "PerspectiveCamera.h"
 
 
 
@@ -29,7 +30,8 @@ private:
 
 	Mesh mesh;
 	Texture texture;
-	Camera camera;
+	OrthographicCamera camera;
+	PerspectiveCamera camera2;
 	SceneProperties sceneProperites{};
 	InterfaceRenderPass imGuiRenderPass;
 	RenderPass2D renderPass2D;

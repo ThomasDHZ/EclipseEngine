@@ -14,12 +14,14 @@ private:
 	static double ScrollY;
 	static double XPos;
 	static double YPos;
-	static double LastX;
-	static double LastY;
+
 	static bool MouseButtonPressed[3];
 	static bool IsDragging;
 
 public:
+	static double LastX;
+	static double LastY;
+
 	static void MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 	{
 		mouse->LastX = mouse->XPos;
@@ -27,6 +29,14 @@ public:
 		mouse->XPos = xpos;
 		mouse->YPos = ypos;
 		mouse->IsDragging = mouse->MouseButtonPressed[0] || mouse->MouseButtonPressed[1] || mouse->MouseButtonPressed[2];
+	}
+
+	static void EndFrame()
+	{
+		mouse->LastX = mouse->XPos;
+		mouse->LastY = mouse->YPos;
+		mouse->ScrollX = 0;
+		mouse->ScrollY = 0;
 	}
 
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -52,6 +62,21 @@ public:
 	{
 		mouse->ScrollX = Xoffset;
 		mouse->ScrollY = Yoffset;
+	}
+
+	static glm::vec2 GetMouseCoords()
+	{
+		return glm::vec2(XPos, YPos);
+	}
+
+	static glm::vec2 GetLastMouseCoords()
+	{
+		return glm::vec2(LastX, LastY);
+	}
+
+	static bool GetMouseButtonPressed(int button)
+	{
+		return MouseButtonPressed[button];
 	}
 };
 

@@ -4,11 +4,18 @@
 
 #include "VulkanRenderer.h"
 
+enum CameraType
+{
+    Perspective_Camera,
+    Orthographic_Camera
+};
+
 class Camera
 {
 protected:
     std::string CameraName;
     glm::vec3 Position;
+    CameraType cameraType;
 
     float Width;
     float Height;
@@ -23,13 +30,15 @@ protected:
 
 public:
     Camera();
-    Camera(std::string Name, float width, float height, float zoom);
+    Camera(std::string Name);
     ~Camera();
 
-    void Update(float deltaTime);
+    virtual void Update(float deltaTime) = 0;
+    virtual void UpdateKeyboard(float deltaTime) = 0;
+    virtual void UpdateMouse(glm::vec2 mouseCoords, bool constrainPitch = true) = 0;
+
     void UpdateScreenSize(int NewWidth, int NewHeight);
     void UpdateScreenSize(glm::vec2& ScreenSize);
-    void ProcessKeyboard(float deltaTime);
 
     void SetPosition(const glm::vec2& position);
     void SetPosition(const glm::vec3& position);

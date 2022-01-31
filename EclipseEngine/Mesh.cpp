@@ -29,14 +29,7 @@ void Mesh::Update()
 
 void Mesh::Draw(VkCommandBuffer& commandBuffer)
 {
-	//ConstMeshInfo meshInfo;
-	//meshInfo.MeshIndex = MeshBufferIndex;
-	//meshInfo.CameraPos = CameraView->GetPosition();
-	//meshInfo.view = CameraView->GetViewMatrix();
-	//meshInfo.proj = CameraView->GetProjectionMatrix();
-
 	VkDeviceSize offsets[] = { 0 };
-	//vkCmdPushConstants(commandBuffer, ShaderLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ConstMeshInfo), &meshInfo);
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, VertexBuffer.GetBufferPtr(), offsets);
 	if (IndexCount == 0)
 	{
