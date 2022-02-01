@@ -6,7 +6,7 @@ Scene::Scene()
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
     GameObject obj = GameObject();
-    obj.AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
+    obj.AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
     objList.emplace_back(obj);
 
     texture = Texture("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/gold/albedo.png", VK_FORMAT_R8G8B8A8_SRGB);
@@ -32,11 +32,11 @@ void Scene::Update()
         obj.Update(time);
     }
 
-    camera.Update(time);
+    camera2.Update(time);
 
-    sceneProperites.CameraPos = camera.GetPosition();
-    sceneProperites.view = camera.GetViewMatrix();
-    sceneProperites.proj = camera.GetProjectionMatrix();
+    sceneProperites.CameraPos = camera2.GetPosition();
+    sceneProperites.view = camera2.GetViewMatrix();
+    sceneProperites.proj = camera2.GetProjectionMatrix();
     sceneProperites.Timer = time;
 }
 

@@ -31,6 +31,14 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 					spriteRenderer->Draw(commandBuffer);
 				}
 			}
+			else if(comp->GetComponentType() == ComponentType::kMeshRenderer)
+			{
+				auto meshRenderer = static_cast<MeshRenderer*>(comp.get());
+				if (meshRenderer)
+				{
+					meshRenderer->Draw(commandBuffer);
+				}
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@
 #include "VulkanRenderer.h"
 #include "Component.h"
 #include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 
 class GameObject
 {
