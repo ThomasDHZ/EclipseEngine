@@ -4,14 +4,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <json.hpp>
-
+#include "GameObject.h"
+#include "SpriteRenderer.h"
 int main()
 {
     Window::CreateWindow(1280, 720, "Eclipse Engine");
     VulkanRenderer::StartUp();
-
     Scene scene;
-
 
     while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {

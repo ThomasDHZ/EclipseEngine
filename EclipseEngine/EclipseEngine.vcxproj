@@ -149,8 +149,10 @@
   <ItemGroup>
     <ClCompile Include="BaseRenderPass.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -171,6 +173,7 @@
     <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
@@ -181,9 +184,11 @@
   <ItemGroup>
     <ClInclude Include="BaseRenderPass.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -208,6 +213,7 @@
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="UniformBuffer.h" />

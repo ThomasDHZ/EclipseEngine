@@ -4,7 +4,7 @@
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "Mesh.h"
+#include "GameObject.h"
 
 class RenderPass2D : public BaseRenderPass
 {
@@ -24,7 +24,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(Mesh mesh, SceneProperties sceneProperties);
+	void Draw(std::vector<GameObject>& GameObjectList, SceneProperties sceneProperties);
 	void Destroy();
 };
 

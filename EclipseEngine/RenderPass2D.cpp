@@ -145,7 +145,7 @@ void RenderPass2D::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void RenderPass2D::Draw(Mesh mesh, SceneProperties sceneProperties)
+void RenderPass2D::Draw(std::vector<GameObject>& GameObjectList, SceneProperties sceneProperties)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -156,7 +156,7 @@ void RenderPass2D::Draw(Mesh mesh, SceneProperties sceneProperties)
     clearValues[1].depthStencil = { 1.0f, 0 };
 
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
+        throw std::runtime_error("Failed to begin recording command buffer.");
     }
 
     VkRenderPassBeginInfo renderPassInfo{};
@@ -172,10 +172,13 @@ void RenderPass2D::Draw(Mesh mesh, SceneProperties sceneProperties)
     vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
-    mesh.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    for (auto obj : GameObjectList)
+    {
+        obj.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
+        throw std::runtime_error("Failed to record command buffer.");
     }
 }
 
