@@ -17,6 +17,8 @@ RenderedDepthTexture::RenderedDepthTexture(glm::ivec2 TextureResolution) : Textu
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 RenderedDepthTexture::RenderedDepthTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
@@ -31,6 +33,8 @@ RenderedDepthTexture::RenderedDepthTexture(glm::ivec2 TextureResolution, VkSampl
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 RenderedDepthTexture::~RenderedDepthTexture()

@@ -5,10 +5,6 @@ InterfaceRenderPass::InterfaceRenderPass()
 {
 }
 
-InterfaceRenderPass::~InterfaceRenderPass()
-{
-}
-
 void InterfaceRenderPass::StartUp()
 {
     CreateRenderPass();
@@ -33,7 +29,7 @@ void InterfaceRenderPass::StartUp()
 
     if (vkCreateCommandPool(init_info.Device, &poolInfo, nullptr, &ImGuiCommandPool) != VK_SUCCESS)
     {
-        throw std::runtime_error("Failed to create graphics command pool.");
+        throw std::runtime_error("failed to create graphics command pool!");
     }
 
     VkDescriptorPoolSize pool_sizes[] =
@@ -63,8 +59,8 @@ void InterfaceRenderPass::StartUp()
     }
 
 
-    ImGuiCommandBuffers.resize(VulkanRenderer::GetSwapChainImageCount());
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
+    ImGuiCommandBuffers.resize(3);
+    for (size_t i = 0; i < 3; i++)
     {
         VkCommandBufferAllocateInfo allocInfo2{};
         allocInfo2.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -72,7 +68,7 @@ void InterfaceRenderPass::StartUp()
         allocInfo2.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo2.commandBufferCount = 1;
 
-        if (vkAllocateCommandBuffers(init_info.Device, &allocInfo2, &ImGuiCommandBuffers[x]) != VK_SUCCESS) {
+        if (vkAllocateCommandBuffers(init_info.Device, &allocInfo2, &ImGuiCommandBuffers[i]) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate command buffers!");
         }
     }
@@ -93,9 +89,13 @@ void InterfaceRenderPass::StartUp()
     VulkanRenderer::EndSingleTimeCommands(command_buffer, ImGuiCommandPool);
 }
 
+InterfaceRenderPass::~InterfaceRenderPass()
+{
+}
+
 void InterfaceRenderPass::CreateRenderPass()
 {
-  VkAttachmentDescription colorAttachment{};
+    VkAttachmentDescription colorAttachment{};
     colorAttachment.format = VK_FORMAT_B8G8R8A8_SRGB;
     colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -138,10 +138,11 @@ void InterfaceRenderPass::CreateRenderPass()
 
 void InterfaceRenderPass::CreateRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) {
+    SwapChainFramebuffers.resize(3);
+
+    for (size_t i = 0; i < 3; i++) {
         std::array<VkImageView, 1> attachments = {
-            VulkanRenderer::GetSwapChainImageViews()[x]
+            VulkanRenderer::GetSwapChainImageViews()[i]
         };
 
         VkFramebufferCreateInfo framebufferInfo{};
@@ -153,11 +154,12 @@ void InterfaceRenderPass::CreateRendererFramebuffers()
         framebufferInfo.height = VulkanRenderer::GetSwapChainResolution().height;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create framebuffer.");
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create framebuffer!");
         }
     }
 }
+
 
 void InterfaceRenderPass::Draw()
 {
@@ -165,9 +167,9 @@ void InterfaceRenderPass::Draw()
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 
-    std::array<VkClearValue, 2> ClearValueList{};
-    ClearValueList[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    ClearValueList[1].depthStencil = { 1.0f, 0 };
+    if (vkBeginCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -175,18 +177,19 @@ void InterfaceRenderPass::Draw()
     renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
-    renderPassInfo.clearValueCount = static_cast<uint32_t>(ClearValueList.size());
-    renderPassInfo.pClearValues = ClearValueList.data();
 
-    if (vkBeginCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
+    clearValues[1].depthStencil = { 1.0f, 0 };
 
-    vkCmdBeginRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()]);
-    vkCmdEndRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()]);
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
 
-    if (vkEndCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetImageIndex()]) != VK_SUCCESS) {
+    vkCmdBeginRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
+    vkCmdEndRenderPass(ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
+
+    if (vkEndCommandBuffer(ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
 }

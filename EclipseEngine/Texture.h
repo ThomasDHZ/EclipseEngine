@@ -1,5 +1,6 @@
 #pragma once
 #include "VulkanRenderer.h"
+#include "ImGui/imgui_impl_vulkan.h"
 #include "stb_image.h"
 #include <json.hpp>
 
@@ -23,7 +24,6 @@ protected:
 
     VkImage Image = VK_NULL_HANDLE;
     VkDeviceMemory Memory = VK_NULL_HANDLE;
-    VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
 
     void CreateTextureImage(VkImageCreateInfo TextureInfo);
 
@@ -36,6 +36,7 @@ public:
     void UpdateImageLayout(VkImageLayout newImageLayout);
     void Destroy();
 
+    VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
     VkImageView View = VK_NULL_HANDLE;
     VkSampler Sampler = VK_NULL_HANDLE;
 

@@ -524,6 +524,8 @@ void VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmi
 
 void VulkanRenderer::RebuildSwapChain()
 {
+	vkDeviceWaitIdle(Device);
+
 	for (auto imageView : SwapChain.GetSwapChainImageViews()) {
 		vkDestroyImageView(Device, imageView, nullptr);
 	}

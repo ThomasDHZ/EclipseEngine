@@ -1,4 +1,5 @@
 #include "RenderedTexture.h"
+#include "ImGui/imgui_impl_vulkan.h"
 
 RenderedTexture::RenderedTexture()
 {
@@ -18,6 +19,8 @@ RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution) : Texture()
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
@@ -29,10 +32,11 @@ RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlag
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = sampleCount;
 
-
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 RenderedTexture::~RenderedTexture()
@@ -111,4 +115,6 @@ void RenderedTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }

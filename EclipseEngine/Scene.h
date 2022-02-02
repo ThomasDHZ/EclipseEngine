@@ -12,15 +12,15 @@
 #include "PerspectiveCamera.h"
 #include "GameObject.h"
 #include "SpriteRenderer.h"
-
-
+#include "RenderedTexture.h"
+#include "Texture2D.h"
 
 class Scene
 {
 private:
 
 	std::vector<GameObject> objList;
-	Texture texture;
+	Texture2D texture;
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;
 	SceneProperties sceneProperites{};
@@ -34,6 +34,8 @@ public:
 
 	void StartUp();
 	void Update();
+	void ImGuiUpdate();
+	void RebuildRenderers();
 	void Draw();
 };
 
