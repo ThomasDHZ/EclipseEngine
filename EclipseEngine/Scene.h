@@ -14,6 +14,7 @@
 #include "RenderedTexture.h"
 #include "Texture2D.h"
 #include "GameObjectManager.h"
+#include "BlinnPhongRenderer.h"
 
 class Scene
 {
@@ -25,6 +26,7 @@ private:
 	SceneProperties sceneProperites{};
 	InterfaceRenderPass imGuiRenderPass;
 	RenderPass2D renderPass2D;
+	BlinnPhongRasterRenderer blinnPhongRenderer;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:

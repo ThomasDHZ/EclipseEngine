@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -148,6 +148,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseRenderPass.cpp" />
+    <ClCompile Include="BlinnPhongPipeline.cpp" />
+    <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentRenderer.cpp" />
@@ -189,6 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderPass.h" />
+    <ClInclude Include="BlinnPhongPipeline.h" />
+    <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />

@@ -14,7 +14,6 @@ struct ConstMeshInfo
 class Renderer2DPipeline : public GraphicsPipeline
 {
 private:
-	UniformBuffer<MeshProperties> meshproperties;
 	void SetUpDescriptorBindings();
 	void SetUpShaderPipeLine(const VkRenderPass& renderPass);
 public:

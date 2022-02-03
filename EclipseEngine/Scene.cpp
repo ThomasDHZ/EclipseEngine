@@ -23,6 +23,7 @@ Scene::Scene()
 
     imGuiRenderPass.StartUp();
     renderPass2D.StartUp();
+    blinnPhongRenderer.StartUp();
 	frameBufferRenderPass.StartUp(renderPass2D.renderedTexture);
 
     texture = Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/forrest_ground_01_ao_4k.jpg", VK_FORMAT_R8G8B8A8_SRGB);
@@ -91,6 +92,7 @@ void Scene::RebuildRenderers()
     auto objList = GameObjectManager::GetGameObjectList();
 
     renderPass2D.RebuildSwapChain();
+    blinnPhongRenderer.RebuildSwapChain();
     frameBufferRenderPass.RebuildSwapChain(renderPass2D.renderedTexture);
     imGuiRenderPass.RebuildSwapChain();
 }
@@ -106,8 +108,11 @@ void Scene::Draw()
         return;
     }
 
-    renderPass2D.Draw(sceneProperites);
-    CommandBufferSubmitList.emplace_back(renderPass2D.GetCommandBuffer());
+    //renderPass2D.Draw(sceneProperites);
+    //CommandBufferSubmitList.emplace_back(renderPass2D.GetCommandBuffer());
+
+    blinnPhongRenderer.Draw(sceneProperites);
+    CommandBufferSubmitList.emplace_back(blinnPhongRenderer.GetCommandBuffer());
 
     frameBufferRenderPass.Draw();
     CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
