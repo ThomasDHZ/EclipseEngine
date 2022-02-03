@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::StartUp(GameObject obj, GameObject obj2)
+void RenderPass2D::StartUp(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -121,7 +121,7 @@ void RenderPass2D::CreateRendererFramebuffers()
     }
 }
 
-void RenderPass2D::RebuildSwapChain(GameObject obj, GameObject obj2)
+void RenderPass2D::RebuildSwapChain(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -145,7 +145,7 @@ void RenderPass2D::RebuildSwapChain(GameObject obj, GameObject obj2)
     SetUpCommandBuffers();
 }
 
-void RenderPass2D::Draw(std::vector<GameObject>& GameObjectList, SceneProperties sceneProperties)
+void RenderPass2D::Draw(SceneProperties sceneProperties)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -171,12 +171,12 @@ void RenderPass2D::Draw(std::vector<GameObject>& GameObjectList, SceneProperties
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
-    for (auto obj : GameObjectList)
+    for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        sceneProperties.MeshIndex = obj.GetGameObjectID() - 1;
+        sceneProperties.MeshIndex = obj->GetGameObjectID() - 1;
         vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
         
-        obj.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {

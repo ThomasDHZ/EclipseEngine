@@ -24,10 +24,10 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
- if(gl_VertexIndex == 0)
-	{
-		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
-	}
+// if(gl_VertexIndex == 0)
+//	{
+//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
+//	}
     gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 0.0, 1.0);
     fragColor = inColor;
 }

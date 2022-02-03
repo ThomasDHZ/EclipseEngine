@@ -5,7 +5,7 @@ Renderer2DPipeline::Renderer2DPipeline() : GraphicsPipeline()
 {
 }
 
-Renderer2DPipeline::Renderer2DPipeline(const VkRenderPass& renderPass, GameObject obj, GameObject obj2) : GraphicsPipeline()
+Renderer2DPipeline::Renderer2DPipeline(const VkRenderPass& renderPass, std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2) : GraphicsPipeline()
 {
     SetUpDescriptorBindings(obj, obj2);
     SetUpShaderPipeLine(renderPass);
@@ -15,52 +15,30 @@ Renderer2DPipeline::~Renderer2DPipeline()
 {
 }
 
-void Renderer2DPipeline::SetUpDescriptorBindings(GameObject obj, GameObject obj2)
+void Renderer2DPipeline::SetUpDescriptorBindings(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};
-    auto spriteRenderer = obj.GetComponentByType(ComponentType::kSpriteRenderer);
-    auto transform2D = obj.GetComponentByType(ComponentType::kTransform2D);
-    if (spriteRenderer != nullptr &&
-        transform2D != nullptr)
+
+    for (auto object : GameObjectManager::GetGameObjectList())
     {
-        SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
-        Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
+        auto spriteRenderer = object->GetComponentByType(ComponentType::kSpriteRenderer);
+        if (spriteRenderer)
+        {
+            SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
 
-        MeshProperties2 meshProps = {};
-        meshProps.MeshTransform = transform->Transform;
-        sprite->MeshProperties.Update(meshProps);
-        VkBuffer buffer = sprite->MeshProperties.GetVulkanBufferData().GetBuffer();
+            MeshProperties meshProps = {};
+            sprite->mesh.MeshProperties.Update(meshProps);
+            VkBuffer buffer = sprite->mesh.MeshProperties.GetVulkanBufferData().GetBuffer();
 
-        VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-        MeshPropertiesmBufferBufferInfo.buffer = buffer;
-        MeshPropertiesmBufferBufferInfo.offset = 0;
-        MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-        MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+            VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+            MeshPropertiesmBufferBufferInfo.buffer = buffer;
+            MeshPropertiesmBufferBufferInfo.offset = 0;
+            MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+            MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+        }
     }
 
-     auto spriteRenderer2 = obj2.GetComponentByType(ComponentType::kSpriteRenderer);
-    auto transform2D2 = obj2.GetComponentByType(ComponentType::kTransform2D);
-    if (spriteRenderer2 != nullptr &&
-        transform2D2 != nullptr)
-    {
-        SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer2.get());
-        Transform2D* transform = static_cast<Transform2D*>(transform2D2.get());
-
-        MeshProperties2 meshProps = {};
-        meshProps.MeshTransform = transform->Transform;
-        sprite->MeshProperties.Update(meshProps);
-        VkBuffer buffer = sprite->MeshProperties.GetVulkanBufferData().GetBuffer();
-
-        VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-        MeshPropertiesmBufferBufferInfo.buffer = buffer;
-        MeshPropertiesmBufferBufferInfo.offset = 0;
-        MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-        MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
-
-    }
-
-    std::vector<VkDescriptorBufferInfo> MeshPropertyDataBufferInfo = MeshPropertiesmBufferList;
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertyDataBufferInfo, 2);
+    AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
     SubmitDescriptorSet();
 }
@@ -192,7 +170,7 @@ void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     }
 }
 
-void Renderer2DPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, GameObject obj, GameObject obj2)
+void Renderer2DPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
     SetUpDescriptorBindings(obj, obj2);

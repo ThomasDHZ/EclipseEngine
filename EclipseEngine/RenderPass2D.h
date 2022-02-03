@@ -4,7 +4,7 @@
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "GameObject.h"
+#include "GameObjectManager.h"
 
 class RenderPass2D : public BaseRenderPass
 {
@@ -21,10 +21,10 @@ public:
 
 	std::shared_ptr<Renderer2DPipeline> renderer2DPipeline;
 
-	void StartUp(GameObject obj, GameObject obj2);
-	void RebuildSwapChain(GameObject obj, GameObject obj2);
+	void StartUp(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2);
+	void RebuildSwapChain(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2);
 
-	void Draw(std::vector<GameObject>& GameObjectList, SceneProperties sceneProperties);
+	void Draw(SceneProperties sceneProperties);
 	void Destroy();
 };
 

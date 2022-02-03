@@ -1,24 +1,27 @@
 #pragma once
-#include "Component.h"
-#include "UniformBuffer.h"
+#include "ComponentRenderer.h"
+#include "Mesh.h"
 
-class SpriteRenderer : public Component
+class SpriteRenderer : public ComponentRenderer
 {
 private:
-	VulkanBuffer IndexBuffer;
-	VulkanBuffer VertexBuffer;
-	uint32_t VertexCount = 0;
-	uint32_t IndexCount = 0;
+	std::vector<Vertex> vertices = {
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	};
+
+	std::vector<uint32_t> indices = {
+	   0, 1, 2, 2, 3, 0
+	};
 
 
 public:
-	UniformBuffer<MeshProperties2>  MeshProperties;
 	SpriteRenderer();
 	virtual ~SpriteRenderer();
 
 	void Update(float DeltaTime) override;
 	void Destroy() override;
-
-	void Draw(VkCommandBuffer& commandBuffer);
 };
 

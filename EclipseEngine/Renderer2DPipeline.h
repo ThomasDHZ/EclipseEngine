@@ -1,7 +1,7 @@
 #pragma once
 #include "GraphicsPipeline.h"
 #include "UniformBuffer.h"
-#include "GameObject.h"
+#include "GameObjectManager.h"
 
 struct ConstMeshInfo
 {
@@ -14,14 +14,14 @@ struct ConstMeshInfo
 class Renderer2DPipeline : public GraphicsPipeline
 {
 private:
-	UniformBuffer<MeshProperties2> meshproperties;
-	void SetUpDescriptorBindings(GameObject obj, GameObject obj2);
+	UniformBuffer<MeshProperties> meshproperties;
+	void SetUpDescriptorBindings(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2);
 	void SetUpShaderPipeLine(const VkRenderPass& renderPass);
 public:
 	Renderer2DPipeline();
-	Renderer2DPipeline(const VkRenderPass& renderPass, GameObject obj, GameObject obj2);
+	Renderer2DPipeline(const VkRenderPass& renderPass, std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2);
 	~Renderer2DPipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, GameObject obj, GameObject obj2);
+	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2);
 };
 

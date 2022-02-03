@@ -13,12 +13,12 @@
 #include "SpriteRenderer.h"
 #include "RenderedTexture.h"
 #include "Texture2D.h"
+#include "GameObjectManager.h"
 
 class Scene
 {
 private:
 
-	std::vector<GameObject> objList;
 	Texture2D texture;
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;

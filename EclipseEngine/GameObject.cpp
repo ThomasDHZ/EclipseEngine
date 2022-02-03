@@ -16,6 +16,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zInd
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, zIndex)));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
 	GenerateID();
 }
 
@@ -23,6 +24,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, zIndex)));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
 	GenerateID();
 }
 
@@ -30,6 +32,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, scale, zIndex)));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
 	GenerateID();
 }
 
@@ -37,6 +40,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position)));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
 	GenerateID();
 }
 
@@ -44,6 +48,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation)));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
 	GenerateID();
 }
 
@@ -51,6 +56,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation, scale)));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
 	GenerateID();
 }
 
@@ -78,7 +84,7 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 				auto spriteRenderer = static_cast<SpriteRenderer*>(comp.get());
 				if (spriteRenderer)
 				{
-					spriteRenderer->Draw(commandBuffer);
+					spriteRenderer->mesh.Draw(commandBuffer);
 				}
 			}
 			else if(comp->GetComponentType() == ComponentType::kMeshRenderer)
@@ -86,7 +92,7 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 				auto meshRenderer = static_cast<MeshRenderer*>(comp.get());
 				if (meshRenderer)
 				{
-					meshRenderer->Draw(commandBuffer);
+					meshRenderer->mesh.Draw(commandBuffer);
 				}
 			}
 		}

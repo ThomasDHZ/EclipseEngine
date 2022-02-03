@@ -10,7 +10,7 @@ struct SceneProperties
 	alignas(4)  float Timer;
 };
 
-struct MeshProperties2
+struct MeshProperties
 {
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 };
@@ -50,3 +50,5 @@ public:
 
 	VulkanBuffer GetVulkanBufferData() { return VulkanBufferData; }
 };
+
+typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;
