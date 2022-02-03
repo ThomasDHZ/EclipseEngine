@@ -88,8 +88,6 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
-	//auto a = this;
-	//static_cast
 	ComponentList.emplace_back(component);
 }
 

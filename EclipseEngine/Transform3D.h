@@ -6,7 +6,7 @@
 class Transform3D : public Component
 {
 private:
-	glm::mat4 Transform = glm::mat4(1.0f);
+
 public:
 	Transform3D();
 	Transform3D(glm::vec3 position);
@@ -20,5 +20,6 @@ public:
 	glm::vec3 Position = glm::vec3(0.0f);
 	glm::vec3 Rotation = glm::vec3(0.0f);
 	glm::vec3 Scale = glm::vec3(1.0f);
+	glm::mat4 Transform = glm::mat4(1.0f);
 };
 

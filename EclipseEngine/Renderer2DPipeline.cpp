@@ -17,11 +17,19 @@ Renderer2DPipeline::~Renderer2DPipeline()
 
 void Renderer2DPipeline::SetUpDescriptorBindings(GameObject obj)
 {
- /*   VkBuffer buffer = VK_NULL_HANDLE;
-    auto a = obj.GetComponentByType(ComponentType::kTransform2D);
-    if (a != nullptr)
+    VkBuffer buffer = VK_NULL_HANDLE;
+    auto spriteRenderer = obj.GetComponentByType(ComponentType::kSpriteRenderer);
+    auto transform2D = obj.GetComponentByType(ComponentType::kTransform2D);
+    if (spriteRenderer != nullptr &&
+        transform2D != nullptr)
     {
-        buffer = static_cast<Transform2D*>(a.get())->MeshProperties.GetVulkanBufferData().GetBuffer();
+        SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+        Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
+
+        MeshProperties2 meshProps = {};
+        meshProps.MeshTransform = transform->Transform;
+        sprite->MeshProperties.Update(meshProps);
+        buffer = sprite->MeshProperties.GetVulkanBufferData().GetBuffer();
     }
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};
@@ -32,7 +40,7 @@ void Renderer2DPipeline::SetUpDescriptorBindings(GameObject obj)
     MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
     std::vector<VkDescriptorBufferInfo> MeshPropertyDataBufferInfo = MeshPropertiesmBufferList;
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertyDataBufferInfo, 1);*/
+    AddStorageBufferDescriptorSetBinding(0, MeshPropertyDataBufferInfo, 1);
 
     SubmitDescriptorSet();
 }

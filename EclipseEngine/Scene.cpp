@@ -5,7 +5,7 @@ Scene::Scene()
     camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
-    GameObject obj = GameObject("Testobject", glm::vec3(0.0f));
+    GameObject obj = GameObject("Testobject", glm::vec2(0.0f), 0);
     obj.AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
     objList.emplace_back(obj);
 
