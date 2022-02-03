@@ -27,6 +27,7 @@ public:
 
 	virtual void Update(float DeltaTime);
 	void Draw(VkCommandBuffer& commandBuffer);
+	void Destory();
 
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);

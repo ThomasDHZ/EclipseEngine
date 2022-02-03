@@ -99,6 +99,14 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 	}
 }
 
+void GameObject::Destory()
+{
+	for (auto& comp : ComponentList)
+	{
+		comp->Destroy();
+	}
+}
+
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
 	ComponentList.emplace_back(component);
@@ -110,6 +118,7 @@ void GameObject::RemoveComponent(std::shared_ptr<Component> component)
 	{
 		if (component->GetComponentType() == ComponentList[x]->GetComponentType())
 		{
+			ComponentList[x]->Destroy();
 			ComponentList.erase(ComponentList.begin() + x);
 			break;
 		}

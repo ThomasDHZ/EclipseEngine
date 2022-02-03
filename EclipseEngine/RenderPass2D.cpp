@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::StartUp(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
+void RenderPass2D::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -17,7 +17,7 @@ void RenderPass2D::StartUp(std::shared_ptr<GameObject> obj, std::shared_ptr<Game
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, obj, obj2));
+    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass));
     SetUpCommandBuffers();
 }
 
@@ -121,7 +121,7 @@ void RenderPass2D::CreateRendererFramebuffers()
     }
 }
 
-void RenderPass2D::RebuildSwapChain(std::shared_ptr<GameObject> obj, std::shared_ptr<GameObject> obj2)
+void RenderPass2D::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -141,7 +141,7 @@ void RenderPass2D::RebuildSwapChain(std::shared_ptr<GameObject> obj, std::shared
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass, obj, obj2);
+    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass);
     SetUpCommandBuffers();
 }
 
