@@ -33,6 +33,9 @@ public:
 
 	void GenerateID();
 
+	std::string GetObjectName() { return ObjectName; }
+	uint64_t GetGameObjectID() { return GameObjectID; }
+
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
 

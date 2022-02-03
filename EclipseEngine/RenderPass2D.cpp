@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::StartUp(GameObject obj)
+void RenderPass2D::StartUp(GameObject obj, GameObject obj2)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -17,7 +17,7 @@ void RenderPass2D::StartUp(GameObject obj)
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, obj));
+    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, obj, obj2));
     SetUpCommandBuffers();
 }
 
@@ -121,7 +121,7 @@ void RenderPass2D::CreateRendererFramebuffers()
     }
 }
 
-void RenderPass2D::RebuildSwapChain(GameObject obj)
+void RenderPass2D::RebuildSwapChain(GameObject obj, GameObject obj2)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -141,7 +141,7 @@ void RenderPass2D::RebuildSwapChain(GameObject obj)
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass, obj);
+    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass, obj, obj2);
     SetUpCommandBuffers();
 }
 
@@ -173,7 +173,7 @@ void RenderPass2D::Draw(std::vector<GameObject>& GameObjectList, SceneProperties
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectList)
     {
-        sceneProperties.MeshIndex = 0;
+        sceneProperties.MeshIndex = obj.GetGameObjectID() - 1;
         vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
         
         obj.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);

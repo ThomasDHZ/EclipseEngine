@@ -1,7 +1,6 @@
 #pragma once
 #include "Component.h"
 #include "UniformBuffer.h"
-#include "Mesh.h"
 
 class MeshRenderer : public Component
 {

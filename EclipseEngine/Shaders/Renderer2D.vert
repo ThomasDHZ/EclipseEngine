@@ -1,5 +1,9 @@
 #version 460
+#extension GL_ARB_separate_shader_objects : enable
+#extension GL_EXT_nonuniform_qualifier : enable
+#extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
+
 #include "MeshProperties.glsl"
 
 layout(location = 0) in vec2 inPosition;
@@ -20,10 +24,10 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-// if(gl_VertexIndex == 0)
-//	{
-//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
-//	}
+ if(gl_VertexIndex == 0)
+	{
+		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
+	}
     gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 0.0, 1.0);
     fragColor = inColor;
 }

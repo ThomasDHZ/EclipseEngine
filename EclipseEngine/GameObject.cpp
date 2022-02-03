@@ -9,42 +9,49 @@ GameObject::GameObject()
 GameObject::GameObject(const std::string Name)
 {
 	ObjectName = Name;
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, zIndex)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t zIndex)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, zIndex)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t zIndex)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, scale, zIndex)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation, scale)));
+	GenerateID();
 }
 
 GameObject::~GameObject()

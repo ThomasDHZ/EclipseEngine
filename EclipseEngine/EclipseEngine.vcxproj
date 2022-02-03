@@ -163,7 +163,6 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -204,7 +203,6 @@
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="LimitsandFeatures.h" />
-    <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />

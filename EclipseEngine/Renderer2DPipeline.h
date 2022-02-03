@@ -15,13 +15,13 @@ class Renderer2DPipeline : public GraphicsPipeline
 {
 private:
 	UniformBuffer<MeshProperties2> meshproperties;
-	void SetUpDescriptorBindings(GameObject obj);
+	void SetUpDescriptorBindings(GameObject obj, GameObject obj2);
 	void SetUpShaderPipeLine(const VkRenderPass& renderPass);
 public:
 	Renderer2DPipeline();
-	Renderer2DPipeline(const VkRenderPass& renderPass, GameObject obj);
+	Renderer2DPipeline(const VkRenderPass& renderPass, GameObject obj, GameObject obj2);
 	~Renderer2DPipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, GameObject obj);
+	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, GameObject obj, GameObject obj2);
 };
 

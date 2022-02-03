@@ -1,4 +1,5 @@
 #include "MeshRenderer.h"
+#include "Vertex.h"
 
 MeshRenderer::MeshRenderer() : Component(ComponentType::kSpriteRenderer)
 {

@@ -7,7 +7,6 @@
 #include "UniformBuffer.h"
 #include "Texture.h"
 #include "Vertex.h"
-#include "Mesh.h"
 #include "OrthographicCamera.h"
 #include "PerspectiveCamera.h"
 #include "GameObject.h"

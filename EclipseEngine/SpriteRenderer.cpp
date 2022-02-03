@@ -1,4 +1,5 @@
 #include "SpriteRenderer.h"
+#include "Vertex.h"
 
 SpriteRenderer::SpriteRenderer() : Component(ComponentType::kSpriteRenderer)
 {
