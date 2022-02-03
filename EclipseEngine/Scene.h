@@ -37,5 +37,6 @@ public:
 	void ImGuiUpdate();
 	void RebuildRenderers();
 	void Draw();
+	void Destroy();
 };
 

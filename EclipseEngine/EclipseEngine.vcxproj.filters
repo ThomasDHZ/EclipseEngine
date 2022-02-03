@@ -43,6 +43,9 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{97337bc2-e46c-4edf-98fe-e1745c1a65c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Include">
+      <UniqueIdentifier>{f6cdc130-742c-4249-a076-407576bf962c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -146,6 +149,12 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform2D.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform3D.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +284,12 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Transform2D.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform3D.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\FrameBuffer.frag">
@@ -291,6 +306,9 @@
     </None>
     <None Include="Shaders\Renderer2D.vert">
       <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\MeshProperties.glsl">
+      <Filter>Shader\Include</Filter>
     </None>
   </ItemGroup>
 </Project>

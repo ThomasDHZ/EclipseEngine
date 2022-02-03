@@ -463,7 +463,7 @@ void VulkanRenderer::Update()
 {
 }
 
-void VulkanRenderer::StartDraw()
+VkResult VulkanRenderer::StartDraw()
 {
 	CMDIndex = (CMDIndex + 1) % MAX_FRAMES_IN_FLIGHT;
 
@@ -474,16 +474,18 @@ void VulkanRenderer::StartDraw()
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		RebuildSwapChain();
-		return;
+		return result;
 	}
 	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 	{
 		throw std::runtime_error("Failed to acquire swap chain image.");
 	}
+
+	return result;
 }
 
 
-void VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+VkResult VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
@@ -514,12 +516,14 @@ void VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmi
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		RebuildSwapChain();
-		return;
+		return result;
 	}
 	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 	{
 		throw std::runtime_error("Failed to present swap chain image.");
 	}
+
+	return result;
 }
 
 void VulkanRenderer::RebuildSwapChain()

@@ -65,8 +65,8 @@ public:
 	static void StartUp();
 	static void Update();
 	static void RebuildSwapChain();
-	static void StartDraw();
-	static void SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
+	static VkResult StartDraw();
+	static VkResult SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	static void Destroy();
 
 	static VkCommandBuffer  BeginSingleTimeCommands();

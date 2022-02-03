@@ -19,12 +19,6 @@ Mesh::~Mesh()
 
 void Mesh::Update()
 {
-	MeshTransform = glm::mat4(1.0f);
-	MeshTransform = glm::translate(MeshTransform, MeshPosition);
-	MeshTransform = glm::rotate(MeshTransform, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	MeshTransform = glm::rotate(MeshTransform, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	MeshTransform = glm::rotate(MeshTransform, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	MeshTransform = glm::scale(MeshTransform, MeshScale);
 }
 
 void Mesh::Draw(VkCommandBuffer& commandBuffer)

@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::StartUp()
+void RenderPass2D::StartUp(GameObject obj)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -17,7 +17,7 @@ void RenderPass2D::StartUp()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass));
+    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, obj));
     SetUpCommandBuffers();
 }
 
@@ -121,7 +121,7 @@ void RenderPass2D::CreateRendererFramebuffers()
     }
 }
 
-void RenderPass2D::RebuildSwapChain()
+void RenderPass2D::RebuildSwapChain(GameObject obj)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -141,7 +141,7 @@ void RenderPass2D::RebuildSwapChain()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass);
+    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass, obj);
     SetUpCommandBuffers();
 }
 
@@ -169,11 +169,13 @@ void RenderPass2D::Draw(std::vector<GameObject>& GameObjectList, SceneProperties
     renderPassInfo.pClearValues = clearValues.data();
 
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectList)
     {
+        sceneProperties.MeshIndex = 0;
+        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+        
         obj.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);

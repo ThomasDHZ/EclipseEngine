@@ -21,8 +21,8 @@ public:
 
 	std::shared_ptr<Renderer2DPipeline> renderer2DPipeline;
 
-	void StartUp();
-	void RebuildSwapChain();
+	void StartUp(GameObject obj);
+	void RebuildSwapChain(GameObject obj);
 
 	void Draw(std::vector<GameObject>& GameObjectList, SceneProperties sceneProperties);
 	void Destroy();

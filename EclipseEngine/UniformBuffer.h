@@ -3,10 +3,16 @@
 
 struct SceneProperties
 {
+	alignas(4) uint32_t MeshIndex;
 	alignas(16) glm::mat4 proj;
 	alignas(16) glm::mat4 view;
 	alignas(16) glm::vec3 CameraPos;
 	alignas(4)  float Timer;
+};
+
+struct MeshProperties2
+{
+	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 };
 
 template <class T>

@@ -31,6 +31,7 @@ int main()
     }
     vkDeviceWaitIdle(VulkanRenderer::GetDevice());
 
+    scene.Destroy();
     VulkanRenderer::Destroy();
 }
 

@@ -110,4 +110,6 @@ void RenderedColorTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
