@@ -20,5 +20,6 @@ public:
 	Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
 	~Mesh();
 	void Draw(VkCommandBuffer& commandBuffer);
+	void Destory();
 };
 

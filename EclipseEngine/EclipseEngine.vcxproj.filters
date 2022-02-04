@@ -340,5 +340,11 @@
     <None Include="Shaders\MeshProperties.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="Shaders\Renderer3D.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shaders\Renderer3D.vert">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

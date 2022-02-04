@@ -1,7 +1,7 @@
 #include "MeshRenderer.h"
 #include "Vertex.h"
 
-MeshRenderer::MeshRenderer() : ComponentRenderer(ComponentType::kSpriteRenderer)
+MeshRenderer::MeshRenderer() : ComponentRenderer(ComponentType::kMeshRenderer)
 {
 	mesh = Mesh(vertices, indices);
 }
@@ -16,4 +16,5 @@ void MeshRenderer::Update(float DeltaTime)
 
 void MeshRenderer::Destroy()
 {
+	mesh.Destory();
 }

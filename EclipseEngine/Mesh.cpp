@@ -30,3 +30,10 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 	}
 }
+
+void Mesh::Destory()
+{
+	VertexBuffer.DestoryBuffer();
+	IndexBuffer.DestoryBuffer();
+	MeshProperties.Destroy();
+}

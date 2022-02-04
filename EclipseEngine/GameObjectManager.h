@@ -137,6 +137,14 @@ public:
 	{
 		return objList;
 	}
+
+	static void Destory()
+	{
+		for (auto& obj : objList)
+		{
+			obj->Destory();
+		}
+	}
 };
 
 

@@ -11,6 +11,19 @@ private:
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
 	static VkSampleCountFlagBits MaxSampleCount;
 
+	static VkSampleCountFlagBits GetMaxUsableSampleCount(VkPhysicalDevice GPUDevice)
+	{
+		VkSampleCountFlags counts = GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferColorSampleCounts & GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferDepthSampleCounts;
+		if (counts & VK_SAMPLE_COUNT_64_BIT) { return VK_SAMPLE_COUNT_64_BIT; }
+		if (counts & VK_SAMPLE_COUNT_32_BIT) { return VK_SAMPLE_COUNT_32_BIT; }
+		if (counts & VK_SAMPLE_COUNT_16_BIT) { return VK_SAMPLE_COUNT_16_BIT; }
+		if (counts & VK_SAMPLE_COUNT_8_BIT) { return VK_SAMPLE_COUNT_8_BIT; }
+		if (counts & VK_SAMPLE_COUNT_4_BIT) { return VK_SAMPLE_COUNT_4_BIT; }
+		if (counts & VK_SAMPLE_COUNT_2_BIT) { return VK_SAMPLE_COUNT_2_BIT; }
+
+		return VK_SAMPLE_COUNT_1_BIT;
+	}
+
 public:
 
 	static void GetGPULimitsandFeatures(VkPhysicalDevice GPUDevice)
@@ -29,13 +42,7 @@ public:
 		vkGetPhysicalDeviceProperties(GPUDevice, &PhysicalDeviceProperties);
 		PhysicalDeviceLimits = PhysicalDeviceProperties.limits;
 
-		VkSampleCountFlags counts = GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferColorSampleCounts & GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferDepthSampleCounts;
-		if (counts & VK_SAMPLE_COUNT_64_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_64_BIT; }
-		if (counts & VK_SAMPLE_COUNT_32_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_32_BIT; }
-		if (counts & VK_SAMPLE_COUNT_16_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_16_BIT; }
-		if (counts & VK_SAMPLE_COUNT_8_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_8_BIT; }
-		if (counts & VK_SAMPLE_COUNT_4_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_4_BIT; }
-		if (counts & VK_SAMPLE_COUNT_2_BIT) { MaxSampleCount = VK_SAMPLE_COUNT_2_BIT; }
+		MaxSampleCount = GetMaxUsableSampleCount(GPUDevice);
 	}
 
 	static VkSampleCountFlagBits GetMaxSampleCount() { return MaxSampleCount; };

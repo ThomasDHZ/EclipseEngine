@@ -16,5 +16,5 @@ void SpriteRenderer::Update(float DeltaTime)
 
 void SpriteRenderer::Destroy()
 {
-
+	mesh.Destory();
 }
