@@ -219,69 +219,67 @@ void VulkanRenderer::StartUp()
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 
 	DeviceExtensions.emplace_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	DeviceExtensions.emplace_back(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+	DeviceExtensions.emplace_back(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_MAINTENANCE3_EXTENSION_NAME);
+	DeviceExtensions.emplace_back(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME);
+	DeviceExtensions.emplace_back(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
 	DeviceExtensions.emplace_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
 
-	std::vector<const char*> ExtensionList = GetRequiredExtensions();
+	VkApplicationInfo VulkanInfo = {};
+	VulkanInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	VulkanInfo.pApplicationName = "Vulkan Graphics";
+	VulkanInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+	VulkanInfo.pEngineName = "No Engine";
+	VulkanInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+	VulkanInfo.apiVersion = VK_API_VERSION_1_2;
 
+
+	std::vector<const char*> ExtensionList = GetRequiredExtensions();
+	VkInstanceCreateInfo VulkanCreateInfo = {};
+	VulkanCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	VulkanCreateInfo.pApplicationInfo = &VulkanInfo;
+	VulkanCreateInfo.enabledExtensionCount = static_cast<uint32_t>(ExtensionList.size());
+	VulkanCreateInfo.ppEnabledExtensionNames = ExtensionList.data();
+
+#ifdef NDEBUG
+	VulkanCreateInfo.enabledLayerCount = 0;
+	VulkanCreateInfo.pNext = nullptr;
+#else
 	VkDebugUtilsMessengerCreateInfoEXT DebugInfo;
 	VulkanDebug.CreateDebugMessengerInfo(DebugInfo);
 
-	std::vector<VkValidationFeatureEnableEXT> EnabledList;
-	EnabledList.emplace_back(VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT);
-	EnabledList.emplace_back(VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT);
-	EnabledList.emplace_back(VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT);
-
-	std::vector<VkValidationFeatureDisableEXT> DisabledList;
-	DisabledList.emplace_back(VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT);
-	DisabledList.emplace_back(VK_VALIDATION_FEATURE_DISABLE_API_PARAMETERS_EXT);
-	DisabledList.emplace_back(VK_VALIDATION_FEATURE_DISABLE_OBJECT_LIFETIMES_EXT);
-	DisabledList.emplace_back(VK_VALIDATION_FEATURE_DISABLE_CORE_CHECKS_EXT);
+	std::vector<VkValidationFeatureEnableEXT> enabledList = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT, VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT };
+	std::vector<VkValidationFeatureDisableEXT> disabledList = {
+	VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT, VK_VALIDATION_FEATURE_DISABLE_API_PARAMETERS_EXT,
+		VK_VALIDATION_FEATURE_DISABLE_OBJECT_LIFETIMES_EXT, VK_VALIDATION_FEATURE_DISABLE_CORE_CHECKS_EXT };
 
 	VkValidationFeaturesEXT ValidationFeatures{};
 	ValidationFeatures.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
-	ValidationFeatures.disabledValidationFeatureCount = static_cast<uint32_t>(EnabledList.size());
-	ValidationFeatures.enabledValidationFeatureCount = static_cast<uint32_t>(DisabledList.size());
-	ValidationFeatures.pEnabledValidationFeatures = EnabledList.data();
-	ValidationFeatures.pDisabledValidationFeatures = DisabledList.data();
+	ValidationFeatures.disabledValidationFeatureCount = static_cast<uint32_t>(enabledList.size());
+	ValidationFeatures.enabledValidationFeatureCount = static_cast<uint32_t>(disabledList.size());
+	ValidationFeatures.pEnabledValidationFeatures = enabledList.data();
+	ValidationFeatures.pDisabledValidationFeatures = disabledList.data();
 	ValidationFeatures.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
 
-	VkApplicationInfo VulkanApplicationInfo{};
-	VulkanApplicationInfo.pApplicationName = "Vulkan Graphics";
-	VulkanApplicationInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	VulkanApplicationInfo.pEngineName = "No Engine";
-	VulkanApplicationInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	VulkanApplicationInfo.apiVersion = VK_API_VERSION_1_2;
+	VulkanCreateInfo.enabledLayerCount = static_cast<unsigned int>(ValidationLayers.size());
+	VulkanCreateInfo.ppEnabledLayerNames = ValidationLayers.data();
+	VulkanCreateInfo.pNext = &ValidationFeatures;
+	//VulkanCreateInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
 
-	VkInstanceCreateInfo InstanceCreateInfo{};
-	InstanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	InstanceCreateInfo.pApplicationInfo = &VulkanApplicationInfo;
-	InstanceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(ExtensionList.size());
-	InstanceCreateInfo.ppEnabledExtensionNames = ExtensionList.data();
-
-#ifdef NDEBUG
-	InstanceCreateInfo.enabledLayerCount = 0;
-	InstanceCreateInfo.pNext = nullptr;
-#else
-	InstanceCreateInfo.enabledLayerCount = static_cast<unsigned int>(ValidationLayers.size());
-	InstanceCreateInfo.ppEnabledLayerNames = ValidationLayers.data();
-	InstanceCreateInfo.pNext = &ValidationFeatures;
 #endif
 
-	if (vkCreateInstance(&InstanceCreateInfo, nullptr, &Instance) != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to start vulkan instance.");
+	if (vkCreateInstance(&VulkanCreateInfo, nullptr, &Instance) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create instance!");
 	}
-
 	VulkanDebug.SetUpDebugger(Instance);
 
-	if (glfwCreateWindowSurface(Instance, Window::GetWindowPtr(), nullptr, &Surface) != VK_SUCCESS)
-	{
-		throw std::runtime_error("Failed to create window surface.");
+	if (glfwCreateWindowSurface(Instance, Window::GetWindowPtr(), nullptr, &Surface) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create window surface!");
 	}
 
 	uint32_t deviceCount = 0;
