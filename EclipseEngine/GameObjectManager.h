@@ -9,6 +9,7 @@ public:
 	static void AddGameObject(std::shared_ptr<GameObject> obj)
 	{
 		objList.emplace_back(obj);
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	static void RemoveGameObject(std::shared_ptr<GameObject> obj)
@@ -19,6 +20,7 @@ public:
 			{
 				obj->Destory();
 				objList.erase(objList.begin() + x);
+				VulkanRenderer::UpdateRendererFlag = true;
 				break;
 			}
 		}

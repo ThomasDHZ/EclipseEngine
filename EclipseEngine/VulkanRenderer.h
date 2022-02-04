@@ -48,8 +48,9 @@ private:
 	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
 	static void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
 
-
 public:
+
+	static bool UpdateRendererFlag;
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;

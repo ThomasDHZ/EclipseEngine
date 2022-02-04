@@ -56,6 +56,7 @@ VkSurfaceKHR VulkanRenderer::Surface = VK_NULL_HANDLE;
 VkQueue VulkanRenderer::GraphicsQueue = VK_NULL_HANDLE;
 VkQueue VulkanRenderer::PresentQueue = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
+bool VulkanRenderer::UpdateRendererFlag = false;
 
 PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
 PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;

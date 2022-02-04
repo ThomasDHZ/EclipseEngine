@@ -39,6 +39,11 @@ void Scene::StartUp()
 
 void Scene::Update()
 {
+    if (VulkanRenderer::UpdateRendererFlag)
+    {
+        RebuildRenderers();
+    }
+
     auto time = glfwGetTime();
     GameObjectManager::Update(time);
 
@@ -78,7 +83,7 @@ void Scene::ImGuiUpdate()
 
     if (objList.size() == 4)
     {
-        GameObjectManager::RemoveGameObject(objList[2]);
+        GameObjectManager::RemoveGameObject(objList[3]);
     }
 
  /*   if (renderPass2D.renderedTexture->ImGuiDescriptorSet != nullptr)
@@ -95,6 +100,8 @@ void Scene::RebuildRenderers()
     blinnPhongRenderer.RebuildSwapChain();
     frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderer.RenderedTexture);
     imGuiRenderPass.RebuildSwapChain();
+
+    VulkanRenderer::UpdateRendererFlag = false;
 }
 
 void Scene::Draw()
