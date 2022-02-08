@@ -165,11 +165,17 @@
     <ClCompile Include="BlinnPhongPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="BlinnPhongRenderer.cpp">
+    <ClCompile Include="BlinnPhongRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="ComponentRenderer.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer2D.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinnPhongRenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,7 +320,7 @@
     <ClInclude Include="BlinnPhongPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BlinnPhongRenderer.h">
+    <ClInclude Include="BlinnPhongRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="glmExtension.h">
@@ -322,6 +328,12 @@
     </ClInclude>
     <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongRenderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

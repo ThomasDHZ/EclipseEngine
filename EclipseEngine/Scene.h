@@ -16,7 +16,8 @@
 #include "GameObjectManager.h"
 #include "BlinnPhongRenderer.h"
 #include "glmExtension.h";
-
+#include "Renderer2D.h"
+#include "BlinnPhongRenderer.h"
 class Scene
 {
 private:
@@ -26,9 +27,8 @@ private:
 	PerspectiveCamera camera2;
 	SceneProperties sceneProperites;
 	InterfaceRenderPass imGuiRenderPass;
-	RenderPass2D renderPass2D;
-	BlinnPhongRasterRenderer blinnPhongRenderer;
-	FrameBufferRenderPass frameBufferRenderPass;
+	//Renderer2D renderer2D;
+	BlinnPhongRenderer blinnPhongRenderer;
 
 public:
 	Scene();

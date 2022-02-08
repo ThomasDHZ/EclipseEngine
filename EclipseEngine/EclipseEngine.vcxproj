@@ -150,6 +150,7 @@
     <ClCompile Include="BaseRenderPass.cpp" />
     <ClCompile Include="BlinnPhongPipeline.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
+    <ClCompile Include="BlinnPhongRenderPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentRenderer.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="RenderedColorTexture.cpp" />
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
+    <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="BaseRenderPass.h" />
     <ClInclude Include="BlinnPhongPipeline.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
+    <ClInclude Include="BlinnPhongRenderPass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="RenderedColorTexture.h" />
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
+    <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="Scene.h" />

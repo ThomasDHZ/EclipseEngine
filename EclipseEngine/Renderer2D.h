@@ -1,15 +1,15 @@
 #pragma once
-#include "BlinnPhongRenderPass.h"
+#include "RenderPass2D.h"
 #include "FrameBufferRenderPass.h"
 #include "InterfaceRenderPass.h"
-class BlinnPhongRenderer
+class Renderer2D
 {
 private:
-	BlinnPhongRenderPass blinnPhongRenderPass;
+	RenderPass2D renderPass2D;
 	FrameBufferRenderPass frameBufferRenderPass;
 public:
-	BlinnPhongRenderer();
-	~BlinnPhongRenderer();
+	Renderer2D();
+	~Renderer2D();
 
 	void StartUp();
 	void Update();
