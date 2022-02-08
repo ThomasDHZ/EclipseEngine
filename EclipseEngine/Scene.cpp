@@ -4,6 +4,13 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
+  /*  nlohmann::json json;
+    Vec4 a = Vec4()*/
+
+//to_json(json, *this);
+//std::cout << json << std::endl;
+//from_json(json, temp);
+
     camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
@@ -11,10 +18,19 @@ Scene::Scene()
     //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 0));
     //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
     //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 0));
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(0.0f)));
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
+   // obj->AddComponent(std::make_shared<Transform2D>(Transform2D(glm::vec2(1.234f, 1.4321), 23)));
     std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
     std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
     std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
+
+    //Transform3D temp;
+    //nlohmann::json json;
+
+    //obj->ToJson(json);
+    //std::cout << json << std::endl;
+    //GameObject asdf = GameObject(json);
+    //temp = Transform3D(json);
 
     GameObjectManager::AddGameObject(obj);
     GameObjectManager::AddGameObject(obj2);

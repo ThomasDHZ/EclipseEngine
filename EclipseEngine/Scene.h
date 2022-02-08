@@ -15,6 +15,7 @@
 #include "Texture2D.h"
 #include "GameObjectManager.h"
 #include "BlinnPhongRenderer.h"
+#include "glmExtension.h";
 
 class Scene
 {

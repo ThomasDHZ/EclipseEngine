@@ -72,7 +72,7 @@ public:
 
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;
-				sprite->mesh.MeshProperties.Update(meshProps);
+				sprite->UpdateMeshProperties(meshProps);
 			}
 
 			auto meshRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -85,7 +85,7 @@ public:
 
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;
-				mesh->mesh.MeshProperties.Update(meshProps);
+				mesh->UpdateMeshProperties(meshProps);
 			}
 		}
 	}
@@ -101,8 +101,8 @@ public:
 				SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
 
 				MeshProperties meshProps = {};
-				sprite->mesh.MeshProperties.Update(meshProps);
-				VkBuffer buffer = sprite->mesh.MeshProperties.GetVulkanBufferData().GetBuffer();
+				sprite->UpdateMeshProperties(meshProps);
+				VkBuffer buffer = sprite->GetMeshPropertiesBuffer();
 
 				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 				MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -110,7 +110,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				sprite->mesh.BufferIndex = MeshPropertiesmBufferList.size();
+				sprite->SetBufferIndex(MeshPropertiesmBufferList.size());
 			}
 
 			auto meshRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -119,8 +119,8 @@ public:
 				MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
 
 				MeshProperties meshProps = {};
-				mesh->mesh.MeshProperties.Update(meshProps);
-				VkBuffer buffer = mesh->mesh.MeshProperties.GetVulkanBufferData().GetBuffer();
+				mesh->UpdateMeshProperties(meshProps);
+				VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 				MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -128,7 +128,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				mesh->mesh.BufferIndex = MeshPropertiesmBufferList.size();
+				mesh->SetBufferIndex(MeshPropertiesmBufferList.size());
 			}
 		}
 

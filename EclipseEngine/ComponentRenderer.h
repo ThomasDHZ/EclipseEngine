@@ -4,12 +4,30 @@
 
 class ComponentRenderer : public Component
 {
-protected:
-public:
-	Mesh mesh;
-	ComponentRenderer(ComponentType componentType);
+private:
 
-	void Update(float DeltaTime) override;
-	void Destroy() override;
+protected:
+    Mesh mesh;
+    void FromJson(const nlohmann::json& json) override
+    {
+
+    }
+
+public:
+    ComponentRenderer(ComponentType componentType);
+
+    void Draw(VkCommandBuffer& commandBuffer);
+    void Update(float DeltaTime) override;
+    void UpdateMeshProperties(MeshProperties& meshProperties);
+    void Destroy() override;
+
+    void SetBufferIndex(int bufferIndex);
+
+    VkBuffer GetMeshPropertiesBuffer() { return mesh.GetMeshPropertiesBuffer(); }
+
+    void ToJson(nlohmann::json& j) override
+    {
+
+    }
 };
 

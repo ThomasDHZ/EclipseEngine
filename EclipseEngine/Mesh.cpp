@@ -16,6 +16,11 @@ Mesh::~Mesh()
 {
 }
 
+void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
+{
+	meshProperties.Update(meshProps);
+}
+
 void Mesh::Draw(VkCommandBuffer& commandBuffer)
 {
 	VkDeviceSize offsets[] = { 0 };
@@ -35,5 +40,10 @@ void Mesh::Destory()
 {
 	VertexBuffer.DestoryBuffer();
 	IndexBuffer.DestoryBuffer();
-	MeshProperties.Destroy();
+	meshProperties.Destroy();
+}
+
+void Mesh::SetBufferIndex(int bufferIndex)
+{
+	BufferIndex = bufferIndex;
 }

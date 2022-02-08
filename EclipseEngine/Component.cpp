@@ -4,7 +4,6 @@ uint64_t Component::ComponentIDCounter = 0;
 
 Component::Component()
 {
-	GameObjectPtr = 0;
 	ComponentID = 0;
 	componentType = kNullComponent;
 
@@ -12,9 +11,13 @@ Component::Component()
 
 Component::Component(ComponentType type)
 {
-	//GameObjectPtr = gameObjectPtr;
 	ComponentID = 0;
 	componentType = type;
+}
+
+Component::Component(const nlohmann::json& json)
+{
+	FromJson(json);
 }
 
 Component::~Component()

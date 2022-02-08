@@ -4,10 +4,25 @@ ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(co
 {
 }
 
+void ComponentRenderer::Draw(VkCommandBuffer& commandBuffer)
+{
+	mesh.Draw(commandBuffer);
+}
+
 void ComponentRenderer::Update(float DeltaTime)
 {
 }
 
+void ComponentRenderer::UpdateMeshProperties(MeshProperties& meshProperties)
+{
+	mesh.UpdateMeshProperties(meshProperties);
+}
+
 void ComponentRenderer::Destroy()
 {
+}
+
+void ComponentRenderer::SetBufferIndex(int bufferIndex)
+{
+	mesh.SetBufferIndex(bufferIndex);
 }

@@ -32,6 +32,11 @@ Transform2D::Transform2D(glm::vec2 position, glm::vec2 rotation, glm::vec2 scale
 	ZIndex = zIndex;
 }
 
+Transform2D::Transform2D(const nlohmann::json& json)
+{
+	FromJson(json);
+}
+
 Transform2D::~Transform2D()
 {
 }

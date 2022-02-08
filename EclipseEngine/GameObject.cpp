@@ -60,6 +60,11 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 	GenerateID();
 }
 
+GameObject::GameObject(nlohmann::json& json)
+{
+	FromJson(json);
+}
+
 GameObject::~GameObject()
 {
 }
@@ -84,7 +89,7 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 				auto spriteRenderer = static_cast<SpriteRenderer*>(comp.get());
 				if (spriteRenderer)
 				{
-					spriteRenderer->mesh.Draw(commandBuffer);
+					spriteRenderer->Draw(commandBuffer);
 				}
 			}
 			else if(comp->GetComponentType() == ComponentType::kMeshRenderer)
@@ -92,7 +97,7 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 				auto meshRenderer = static_cast<MeshRenderer*>(comp.get());
 				if (meshRenderer)
 				{
-					meshRenderer->mesh.Draw(commandBuffer);
+					meshRenderer->Draw(commandBuffer);
 				}
 			}
 		}
@@ -109,6 +114,7 @@ void GameObject::Destory()
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
+	component->GenerateID();
 	ComponentList.emplace_back(component);
 }
 
