@@ -40,7 +40,10 @@ Scene::Scene()
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
 
-   // texture = Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/forrest_ground_01_ao_4k.jpg", VK_FORMAT_R8G8B8A8_SRGB);
+    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
+    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/forrest_ground_01_ao_4k.jpg");
+
+    MaterialManager::AddMaterial(material);
 }
 
 Scene::~Scene()

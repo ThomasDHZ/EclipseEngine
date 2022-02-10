@@ -51,6 +51,7 @@ public:
 
 
     std::string GetFilePath() { return FilePath; }
+    std::string GetTextureName() { return TextureName; }
     uint64_t GetTextureID() { return TextureID; }
     VkImageView GetView() { return View; }
     VkSampler GetSampler() { return Sampler; }

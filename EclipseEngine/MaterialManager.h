@@ -42,6 +42,15 @@ public:
 		return material->GetMaterialID();
 	}
 
+	static uint64_t AddMaterial(std::shared_ptr<Material> material)
+	{
+		MaterialList.emplace_back(material);
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+		return material->GetMaterialID();
+	}
+
 	static std::vector<VkDescriptorBufferInfo>  GetMaterialemBufferList()
 	{
 		std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};

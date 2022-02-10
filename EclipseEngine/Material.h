@@ -1,6 +1,6 @@
 #pragma once
 #include "VulkanRenderer.h"
-#include "Texture.h"
+#include "TextureManager.h"
 #include "VulkanBuffer.h"
 
 const uint32_t DefaultTextureID = 0;
@@ -38,44 +38,6 @@ struct MaterialBufferData
 	alignas(4) uint32_t AlphaMapID = DefaultAlphaTextureID;
 	alignas(4) uint32_t EmissionMapID = DefaultTextureID;
 	alignas(4) uint32_t ShadowMapID = DefaultTextureID;
-
-	void operator=(const MaterialProperties& materialTexture)
-	{
-		Ambient = materialTexture.Ambient;
-		Diffuse = materialTexture.Diffuse;
-		Specular = materialTexture.Specular;
-		Shininess = materialTexture.Shininess;
-		Reflectivness = materialTexture.Reflectivness;
-
-		if (materialTexture.DiffuseMap != nullptr)
-		{
-			DiffuseMapID = materialTexture.DiffuseMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.SpecularMap != nullptr)
-		{
-			SpecularMapID = materialTexture.SpecularMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.NormalMap != nullptr)
-		{
-			NormalMapID = materialTexture.NormalMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.DepthMap != nullptr)
-		{
-			DepthMapID = materialTexture.DepthMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.AlphaMap != nullptr)
-		{
-			AlphaMapID = materialTexture.AlphaMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.EmissionMap != nullptr)
-		{
-			EmissionMapID = materialTexture.EmissionMap->GetTextureBufferIndex();
-		}
-		if (materialTexture.ShadowMap != nullptr)
-		{
-			ShadowMapID = materialTexture.ShadowMap->GetTextureBufferIndex();
-		}
-	}
 };
 
 class Material
@@ -103,12 +65,33 @@ public:
 	void Update();
 	void Destroy();
 
+	void LoadDiffuseMap(const std::string FilePath);
+	void LoadSpecularMap(const std::string FilePath);
+	void LoadNormalMap(const std::string FilePath);
+	void LoadDepthMap(const std::string FilePath);
+	void LoadAlphaMap(const std::string FilePath);
+	void LoadEmissionMap(const std::string FilePath);
+
+	void LoadDiffuseMap(uint64_t TextureIndex);
+	void LoadSpecularMap(uint64_t TextureIndex);
+	void LoadNormalMap(uint64_t TextureIndex);
+	void LoadDepthMap(uint64_t TextureIndex);
+	void LoadAlphaMap(uint64_t TextureIndex);
+	void LoadEmissionMap(uint64_t TextureIndex);
+
+	void LoadDiffuseMap(std::shared_ptr<Texture2D> texture);
+	void LoadSpecularMap(std::shared_ptr<Texture2D> texture);
+	void LoadNormalMap(std::shared_ptr<Texture2D> texture);
+	void LoadDepthMap(std::shared_ptr<Texture2D> TextureIndex);
+	void LoadAlphaMap(std::shared_ptr<Texture2D> TextureIndex);
+	void LoadEmissionMap(std::shared_ptr<Texture2D> TextureIndex);
+
 	void SetBufferIndex(int bufferIndex);
 
 	std::string GetMaterialName() { return MaterialName; }
 	uint64_t GetMaterialID() { return MaterialID; }
 	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }
-	MaterialProperties* GetMaterialPropertiesPtr() { return &materialProperties; }
+	MaterialBufferData GetMaterialTextureData() { return materialTextureData; }
 	VkBuffer GetMaterialBuffer() { return MaterialBuffer.GetBuffer(); }
 };
 

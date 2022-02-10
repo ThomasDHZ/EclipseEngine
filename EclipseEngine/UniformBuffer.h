@@ -1,6 +1,6 @@
 #pragma once
 #include "VulkanBuffer.h"
-
+#include "Material.h"
 struct SceneProperties
 {
 	alignas(4) uint32_t MeshIndex;
@@ -12,6 +12,7 @@ struct SceneProperties
 
 struct MeshProperties
 {
+	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 };
 

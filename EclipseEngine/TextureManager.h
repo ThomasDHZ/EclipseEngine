@@ -118,6 +118,46 @@ public:
 		return Texture2DList;
 	}
 
+	static std::shared_ptr<Texture2D> GetTexture2DByID(uint64_t TextureID)
+	{
+		uint64_t textureBufferIndex = -1;
+		for (auto texture : Texture2DList)
+		{
+			if (texture->GetTextureID() == TextureID)
+			{
+				textureBufferIndex = texture->GetTextureBufferIndex();
+				break;
+			}
+		}
+
+		if (textureBufferIndex != -1)
+		{
+			return Texture2DList[textureBufferIndex];
+		}
+
+		return nullptr;
+	}
+
+	static std::shared_ptr<Texture2D> GetTexture2DByName(const std::string TextureName)
+	{
+		uint64_t textureBufferIndex = -1;
+		for (auto texture : Texture2DList)
+		{
+			if (texture->GetTextureName() == TextureName)
+			{
+				textureBufferIndex = texture->GetTextureBufferIndex();
+				break;
+			}
+		}
+
+		if (textureBufferIndex != -1)
+		{
+			return Texture2DList[textureBufferIndex];
+		}
+
+		return nullptr;
+	}
+
 	static void Destroy()
 	{
 		vkDestroySampler(VulkanRenderer::GetDevice(), NullSampler, nullptr);

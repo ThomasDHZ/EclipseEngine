@@ -162,9 +162,6 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BlinnPhongPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
@@ -321,9 +318,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BlinnPhongPipeline.h">

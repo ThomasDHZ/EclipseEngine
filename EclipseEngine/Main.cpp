@@ -23,7 +23,7 @@ int main()
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
     TextureManager::StartUp();
-   // MaterialManager::StartUp();
+    MaterialManager::StartUp();
     
     Scene scene;
 
@@ -48,7 +48,7 @@ int main()
 
 
     TextureManager::Destroy();
-    //MaterialManager::Destroy();
+    MaterialManager::Destroy();
     scene.Destroy();
     VulkanRenderer::Destroy();
 }
