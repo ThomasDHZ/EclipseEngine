@@ -157,7 +157,6 @@
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -168,6 +167,8 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Transform2D.cpp" />
@@ -217,6 +219,8 @@
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="LimitsandFeatures.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="MeshRenderer.h" />
@@ -235,6 +239,7 @@
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform2D.h" />
     <ClInclude Include="Transform3D.h" />
     <ClInclude Include="UniformBuffer.h" />

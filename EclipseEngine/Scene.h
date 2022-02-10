@@ -18,16 +18,15 @@
 #include "glmExtension.h";
 #include "Renderer2D.h"
 #include "BlinnPhongRenderer.h"
+#include "TextureManager.h"
+#include "MaterialManager.h"
 class Scene
 {
 private:
-
-	//Texture2D texture;
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;
 	SceneProperties sceneProperites;
-	InterfaceRenderPass imGuiRenderPass;
-	//Renderer2D renderer2D;
+	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 
 public:

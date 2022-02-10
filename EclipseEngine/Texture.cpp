@@ -1,12 +1,19 @@
 #include "Texture.h"
 #include "VulkanBuffer.h"
 #include "ImGui/imgui_impl_vulkan.h"
+
+uint64_t Texture::TextureIDCounter = 0;
+
 Texture::Texture()
 {
 }
 
 Texture::Texture(std::string TextureLocation, VkFormat format)
 {
+	FilePath = TextureLocation;
+	TextureName = TextureLocation;
+	GenerateID();
+
 	Width = 0;
 	Height = 0;
 	Depth = 1;
@@ -166,7 +173,7 @@ void Texture::GenerateMipmaps()
 	vkGetPhysicalDeviceFormatProperties(VulkanRenderer::GetPhysicalDevice(), TextureByteFormat, &formatProperties);
 
 	if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)) {
-		throw std::runtime_error("texture image format does not support linear blitting!");
+		throw std::runtime_error("Texture image format does not support linear blitting.");
 	}
 
 	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
@@ -237,6 +244,12 @@ void Texture::GenerateMipmaps()
 	}
 }
 
+void Texture::GenerateID()
+{
+	TextureIDCounter++;
+	TextureID = TextureIDCounter;
+}
+
 void Texture::UpdateImageLayout(VkImageLayout newImageLayout)
 {
 	VkImageSubresourceRange ImageSubresourceRange{};
@@ -274,4 +287,9 @@ void Texture::Destroy()
 	Image = VK_NULL_HANDLE;
 	Memory = VK_NULL_HANDLE;
 	Sampler = VK_NULL_HANDLE;
+}
+
+void Texture::SetTextureBufferIndex(uint64_t bufferIndex)
+{
+	TextureBufferIndex = bufferIndex;
 }

@@ -37,8 +37,7 @@ Scene::Scene()
     GameObjectManager::AddGameObject(obj3);
     GameObjectManager::AddGameObject(obj4);
 
-    imGuiRenderPass.StartUp();
-    //renderer2D.StartUp();
+    renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
 
    // texture = Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/forrest_ground_01_ao_4k.jpg", VK_FORMAT_R8G8B8A8_SRGB);
@@ -111,9 +110,9 @@ void Scene::RebuildRenderers()
 {
     auto objList = GameObjectManager::GetGameObjectList();
 
-    //renderer2D.RebuildRenderers();
+    renderer2D.RebuildRenderers();
     blinnPhongRenderer.RebuildRenderers();
-    imGuiRenderPass.RebuildSwapChain();
+    InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
 }
@@ -129,10 +128,11 @@ void Scene::Draw()
         return;
     }
 
-   // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-    imGuiRenderPass.Draw();
-    CommandBufferSubmitList.emplace_back(imGuiRenderPass.ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
+
+    renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+   // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    InterfaceRenderPass::Draw();
+    CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
     result = VulkanRenderer::SubmitDraw(CommandBufferSubmitList);
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
@@ -146,8 +146,7 @@ void Scene::Destroy()
 {
     GameObjectManager::Destory();
     
-    //renderer2D.Destroy();
+    renderer2D.Destroy();
     blinnPhongRenderer.Destroy();
-    imGuiRenderPass.Destroy();
-
+    InterfaceRenderPass::Destroy();
 }

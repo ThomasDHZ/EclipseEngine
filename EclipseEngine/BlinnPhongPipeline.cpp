@@ -20,6 +20,9 @@ void BlinnPhongPipeline::SetUpDescriptorBindings()
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
     AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    AddTextureDescriptorSetBinding(1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
     SubmitDescriptorSet();
 }
 

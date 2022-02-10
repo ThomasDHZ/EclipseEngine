@@ -1,6 +1,8 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
+#include "TextureManager.h"
+
 
 struct ConstMeshInfo
 {

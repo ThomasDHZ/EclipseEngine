@@ -7,12 +7,18 @@
 class Texture
 {
 private:
+    static uint64_t TextureIDCounter;
+    uint64_t TextureID = 0;
+    uint64_t TextureBufferIndex = 0;
+
     void TransitionImageLayout(VkImageLayout newImageLayout);
     void CopyBufferToImage(VkBuffer buffer);
     void LoadTexture(std::string TextureLocation, VkFormat format);
     void GenerateMipmaps();
 
 protected:
+    std::string FilePath;
+    std::string TextureName;
 
     int Width;
     int Height;
@@ -25,6 +31,7 @@ protected:
     VkImage Image = VK_NULL_HANDLE;
     VkDeviceMemory Memory = VK_NULL_HANDLE;
 
+    void GenerateID();
     void CreateTextureImage(VkImageCreateInfo TextureInfo);
 
 public:
@@ -36,12 +43,20 @@ public:
     void UpdateImageLayout(VkImageLayout newImageLayout);
     void Destroy();
 
+    void SetTextureBufferIndex(uint64_t bufferIndex);
+
     VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
     VkImageView View = VK_NULL_HANDLE;
     VkSampler Sampler = VK_NULL_HANDLE;
 
-    VkImageView* GetView() { return &View; }
-    VkSampler* GetSampler() { return &Sampler; }
+
+    std::string GetFilePath() { return FilePath; }
+    uint64_t GetTextureID() { return TextureID; }
+    VkImageView GetView() { return View; }
+    VkSampler GetSampler() { return Sampler; }
+    VkImageView* GetViewPtr() { return &View; }
+    VkSampler* GetSamplerPtr() { return &Sampler; }
+    uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }
 
     void to_json(nlohmann::json& j, const Texture& p)
     {
