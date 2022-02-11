@@ -26,3 +26,8 @@ void ComponentRenderer::SetBufferIndex(int bufferIndex)
 {
 	mesh.SetBufferIndex(bufferIndex);
 }
+
+void ComponentRenderer::SetMaterial(std::shared_ptr<Material> material)
+{
+	mesh.SetMaterial(material);
+}

@@ -12,7 +12,7 @@ private:
 
 	static uint64_t IsTexture2DLoaded(std::string name)
 	{
-		uint64_t textureID = -1;
+		uint64_t textureID = 0;
 		for (auto texture : Texture2DList)
 		{
 			if (texture->GetFilePath() == name)
@@ -74,7 +74,7 @@ public:
 	static uint64_t LoadTexture2D(const std::string TextureLocation, VkFormat format)
 	{
 		uint64_t isTextureLoaded = IsTexture2DLoaded(TextureLocation);
-		if (isTextureLoaded != -1)
+		if (isTextureLoaded != 0)
 		{
 			return isTextureLoaded;
 		}

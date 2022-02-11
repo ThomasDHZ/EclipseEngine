@@ -6,6 +6,7 @@
 class MaterialManager
 {
 private: 
+	static std::shared_ptr<Material> DefaultMaterial;
 	static std::vector<std::shared_ptr<Material>> MaterialList;
 
 	static void UpdateBufferIndex()
@@ -19,7 +20,8 @@ private:
 public:
 	static void StartUp()
 	{
-		AddMaterial("DefaultMaterial");
+		uint64_t materialID = AddMaterial("DefaultMaterial");
+		DefaultMaterial = GetMaterialByID(materialID);
 	}
 
 	static uint64_t AddMaterial(const std::string materialName)
@@ -44,11 +46,22 @@ public:
 
 	static uint64_t AddMaterial(std::shared_ptr<Material> material)
 	{
-		MaterialList.emplace_back(material);
+	    uint64_t materialID = DoesMaterialExist(material);
+		{
+			MaterialList.emplace_back(material);
+		}
 
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
-		return material->GetMaterialID();
+		return materialID;
+	}
+
+	static void Update(float DeltaTime)
+	{
+		for (auto& material : MaterialList)
+		{
+			material->Update(DeltaTime);
+		}
 	}
 
 	static std::vector<VkDescriptorBufferInfo>  GetMaterialemBufferList()
@@ -71,6 +84,38 @@ public:
 	static std::vector<std::shared_ptr<Material>> GetMaterialList()
 	{
 		return MaterialList;
+	}
+
+	static std::shared_ptr<Material> GetMaterialByID(uint64_t MaterialID)
+	{
+		uint64_t textureBufferIndex = 0;
+		for (auto material : MaterialList)
+		{
+			if (material->GetMaterialID() == MaterialID)
+			{
+				return material;
+			}
+		}
+
+		return nullptr;
+	}
+
+	static std::shared_ptr<Material> GetDefaultMaterial()
+	{
+		return DefaultMaterial;
+	}
+
+	static uint64_t DoesMaterialExist(std::shared_ptr<Material> material)
+	{
+		uint64_t materialID = 0;
+		for (auto materialList : MaterialList)
+		{
+			if (materialList->GetMaterialID() == material->GetMaterialID())
+			{
+				return material->GetMaterialID();
+			}
+		}
+		return 0;
 	}
 
 	static void Destroy()

@@ -49,6 +49,14 @@ private:
     uint64_t MaterialID = 0;
     uint64_t MaterialBufferIndex = 0;
 
+	uint32_t DiffuseMapID = DefaultTextureID;
+	uint32_t SpecularMapID = DefaultTextureID;
+	uint32_t NormalMapID = DefaultTextureID;
+	uint32_t DepthMapID = DefaultTextureID;
+	uint32_t AlphaMapID = DefaultAlphaTextureID;
+	uint32_t EmissionMapID = DefaultTextureID;
+	uint32_t ShadowMapID = DefaultTextureID;
+
 	MaterialProperties materialProperties;
 	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;
@@ -62,7 +70,7 @@ public:
 	Material(const std::string materialName, MaterialProperties& MaterialInfo);
 	~Material();
 
-	void Update();
+	void Update(float DeltaTime);
 	void Destroy();
 
 	void LoadDiffuseMap(const std::string FilePath);

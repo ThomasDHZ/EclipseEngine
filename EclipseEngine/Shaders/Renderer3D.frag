@@ -25,6 +25,7 @@ layout(push_constant) uniform SceneData
 } sceneData;
 
 void main() {
-   outColor = vec4(texture(TextureMap[2], fragUV).rgb, 1.0f);
-    outBloom = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
+   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
+   outColor = vec4(texture(TextureMap[diffuse], fragUV).rgb, texture(TextureMap[alpha], fragUV).r);
 }

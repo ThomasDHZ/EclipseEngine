@@ -60,9 +60,13 @@ public:
 	static void Update(float DeltaTime)
 	{
 		std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};
+
+		std::sort(objList.begin(), objList.end(), GameObject::ZSorting{} );
+
 		for (auto obj : objList)
 		{
 			obj->Update(DeltaTime);
+			MaterialManager::Update(DeltaTime);
 
 			auto spriteRenderer = obj->GetComponentByType(ComponentType::kSpriteRenderer);
 			auto transform2D = obj->GetComponentByType(ComponentType::kTransform2D);
@@ -75,7 +79,7 @@ public:
 
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;
-				meshProps.materialBufferData = MaterialManager::GetMaterialList()[1]->GetMaterialTextureData();
+				meshProps.materialBufferData = sprite->GetMaterial()->GetMaterialTextureData();
 				sprite->UpdateMeshProperties(meshProps);
 			}
 
@@ -89,7 +93,7 @@ public:
 
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;
-				meshProps.materialBufferData = MaterialManager::GetMaterialList()[1]->GetMaterialTextureData();
+				meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
 				mesh->UpdateMeshProperties(meshProps);
 			}
 		}

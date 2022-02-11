@@ -1,5 +1,5 @@
 #include "Scene.h"
-
+#include "MeshRenderer.h"
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
@@ -14,15 +14,40 @@ Scene::Scene()
     camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
-    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
-    //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 0));
-    //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
-    //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 0));
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
-   // obj->AddComponent(std::make_shared<Transform2D>(Transform2D(glm::vec2(1.234f, 1.4321), 23)));
-    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
-    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
-    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
+    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
+    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
+    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+    MaterialManager::AddMaterial(material);
+
+    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
+    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
+    MaterialManager::AddMaterial(material2);
+
+
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
+    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
+    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
+    
+    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b = static_cast<MeshRenderer*>(a.get());
+    b->SetMaterial(material2);
+
+   // std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
+    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b2 = static_cast<MeshRenderer*>(a2.get());
+    b2->SetMaterial(material);
+
+  //  std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
+    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b3 = static_cast<MeshRenderer*>(a3.get());
+    b3->SetMaterial(material2);
+
+  //  std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
+    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b4 = static_cast<MeshRenderer*>(a4.get());
+    b4->SetMaterial(material);
 
     //Transform3D temp;
     //nlohmann::json json;
@@ -39,11 +64,6 @@ Scene::Scene()
 
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
-
-    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/forrest_ground_01_ao_4k.jpg");
-
-    MaterialManager::AddMaterial(material);
 }
 
 Scene::~Scene()
@@ -132,8 +152,8 @@ void Scene::Draw()
     }
 
 
-    renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-   // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 

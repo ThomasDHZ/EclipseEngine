@@ -26,9 +26,9 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-// if(gl_VertexIndex == 0)
+//    if(gl_VertexIndex == 0)
 //	{
-//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
+//		debugPrintfEXT(": %i \n",  meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID);
 //	}
     gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xy, 0.0f, 1.0f);
     Color = inColor;

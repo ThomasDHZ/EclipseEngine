@@ -63,8 +63,15 @@ Material::~Material()
 {
 }
 
-void Material::Update()
+void Material::Update(float DeltaTime)
 {
+	materialTextureData.DiffuseMapID = DiffuseMapID;
+	materialTextureData.SpecularMapID = SpecularMapID;
+	materialTextureData.NormalMapID = NormalMapID;
+	materialTextureData.DepthMapID = DepthMapID;
+	materialTextureData.AlphaMapID = AlphaMapID;
+	materialTextureData.EmissionMapID = EmissionMapID;
+	materialTextureData.ShadowMapID = ShadowMapID;
 	MaterialBuffer.CopyBufferToMemory(&materialTextureData, sizeof(MaterialBufferData));
 }
 
@@ -75,32 +82,38 @@ void Material::Destroy()
 
 void Material::LoadDiffuseMap(const std::string FilePath)
 {
-	materialTextureData.DiffuseMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_SRGB);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_SRGB);
+	DiffuseMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadSpecularMap(const std::string FilePath)
 {
-	materialTextureData.SpecularMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	SpecularMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadNormalMap(const std::string FilePath)
 {
-	materialTextureData.NormalMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	NormalMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadDepthMap(const std::string FilePath)
 {
-	materialTextureData.DepthMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	DepthMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadAlphaMap(const std::string FilePath)
 {
-	materialTextureData.AlphaMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	AlphaMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadEmissionMap(const std::string FilePath)
 {
-	materialTextureData.EmissionMapID = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	auto texture = TextureManager::LoadTexture2D(FilePath, VK_FORMAT_R8G8B8A8_UNORM);
+	EmissionMapID = TextureManager::GetTexture2DByID(texture)->GetTextureBufferIndex();
 }
 
 void Material::LoadDiffuseMap(uint64_t TextureIndex)
@@ -108,11 +121,11 @@ void Material::LoadDiffuseMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.DiffuseMapID = texture->GetTextureID();
+		DiffuseMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.DiffuseMapID = materialTextureData.DiffuseMapID;
+		DiffuseMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
@@ -121,11 +134,11 @@ void Material::LoadSpecularMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.SpecularMapID = texture->GetTextureID();
+		SpecularMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.SpecularMapID = materialTextureData.DiffuseMapID;
+		SpecularMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
@@ -134,11 +147,11 @@ void Material::LoadNormalMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.NormalMapID = texture->GetTextureID();
+		NormalMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.NormalMapID = materialTextureData.DiffuseMapID;
+		NormalMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
@@ -147,11 +160,11 @@ void Material::LoadDepthMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.DepthMapID = texture->GetTextureID();
+		DepthMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.DepthMapID = DefaultTextureID;
+		DepthMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
@@ -160,11 +173,11 @@ void Material::LoadAlphaMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.AlphaMapID = texture->GetTextureID();
+		AlphaMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.AlphaMapID = DefaultAlphaTextureID;
+		AlphaMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
@@ -173,42 +186,42 @@ void Material::LoadEmissionMap(uint64_t TextureIndex)
 	const std::shared_ptr<Texture2D> texture = TextureManager::GetTexture2DByID(TextureIndex);
 	if (texture == nullptr)
 	{
-		materialTextureData.EmissionMapID = texture->GetTextureID();
+		EmissionMapID = texture->GetTextureBufferIndex();
 	}
 	else
 	{
-		materialTextureData.EmissionMapID = DefaultTextureID;
+		EmissionMapID = TextureManager::GetTexture2DByID(TextureIndex)->GetTextureBufferIndex();
 	}
 }
 
 void Material::LoadDiffuseMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	DiffuseMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::LoadSpecularMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	SpecularMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::LoadNormalMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	NormalMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::LoadDepthMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	DepthMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::LoadAlphaMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	AlphaMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::LoadEmissionMap(std::shared_ptr<Texture2D> texture)
 {
-	materialTextureData.EmissionMapID = texture->GetTextureID();
+	EmissionMapID = texture->GetTextureBufferIndex();
 }
 
 void Material::GenerateID()

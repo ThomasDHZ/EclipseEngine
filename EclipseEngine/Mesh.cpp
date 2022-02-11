@@ -4,13 +4,24 @@ Mesh::Mesh()
 {
 }
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 {
 	VertexCount = vertices.size();
 	IndexCount = indices.size();
 	VertexBuffer.CreateBuffer(vertices.data(), vertices.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(indices.data(), indices.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	material = MaterialManager::GetDefaultMaterial();
 }
+
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+{
+	VertexCount = vertices.size();
+	IndexCount = indices.size();
+	VertexBuffer.CreateBuffer(vertices.data(), vertices.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	IndexBuffer.CreateBuffer(indices.data(), indices.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	material = materialPtr;
+}
+
 
 Mesh::~Mesh()
 {
@@ -46,4 +57,9 @@ void Mesh::Destory()
 void Mesh::SetBufferIndex(int bufferIndex)
 {
 	BufferIndex = bufferIndex;
+}
+
+void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
+{
+	material = materialPtr;
 }

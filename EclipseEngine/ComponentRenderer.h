@@ -22,8 +22,10 @@ public:
     void Destroy() override;
 
     void SetBufferIndex(int bufferIndex);
+    void SetMaterial(std::shared_ptr<Material> material);
 
     VkBuffer GetMeshPropertiesBuffer() { return mesh.GetMeshPropertiesBuffer(); }
+    std::shared_ptr<Material> GetMaterial() { return mesh.GetMaterial(); }
 
     void ToJson(nlohmann::json& j) override
     {

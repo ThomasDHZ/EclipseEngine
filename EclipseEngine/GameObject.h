@@ -39,6 +39,7 @@ private:
 	}
 
 public:
+
 	GameObject();
 	GameObject(const std::string Name);
 	GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex);
@@ -84,5 +85,31 @@ public:
 			json.emplace_back(componentJson);
 		}
 	}
+
+	class ZSorting
+	{
+	public:
+		bool operator()( std::shared_ptr<GameObject> obj1, std::shared_ptr<GameObject> obj2)
+		{
+			if (obj1->GetComponentByType(ComponentType::kTransform3D) != nullptr &&
+				obj2->GetComponentByType(ComponentType::kTransform3D) != nullptr)
+			{
+				Transform3D* transform3D1 = static_cast<Transform3D*>(obj1->GetComponentByType(ComponentType::kTransform3D).get());
+				Transform3D* transform3D2 = static_cast<Transform3D*>(obj2->GetComponentByType(ComponentType::kTransform3D).get());
+				
+				return transform3D1->Position.z < transform3D2->Position.z;
+			}
+
+			if (obj1->GetComponentByType(ComponentType::kTransform2D) != nullptr &&
+				obj2->GetComponentByType(ComponentType::kTransform2D) != nullptr)
+			{
+				Transform2D* transform2D1 = static_cast<Transform2D*>(obj1->GetComponentByType(ComponentType::kTransform2D).get());
+				Transform2D* transform2D2 = static_cast<Transform2D*>(obj2->GetComponentByType(ComponentType::kTransform2D).get());
+
+				return transform2D1->ZIndex > transform2D2->ZIndex;
+			}
+				return false;
+		}
+	};
 };
 
