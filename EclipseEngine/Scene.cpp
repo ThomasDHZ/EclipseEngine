@@ -24,28 +24,28 @@ Scene::Scene()
     MaterialManager::AddMaterial(material2);
 
 
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
-    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
-    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
-    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
-    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
+    //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
+    //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
     
-    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     auto b = static_cast<MeshRenderer*>(a.get());
     b->SetMaterial(material2);
 
-   // std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
-    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
+    auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
     auto b2 = static_cast<MeshRenderer*>(a2.get());
     b2->SetMaterial(material);
 
-  //  std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
-    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
+    auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
     auto b3 = static_cast<MeshRenderer*>(a3.get());
     b3->SetMaterial(material2);
 
-  //  std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
-    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
+    auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
     auto b4 = static_cast<MeshRenderer*>(a4.get());
     b4->SetMaterial(material);
 
@@ -152,7 +152,7 @@ void Scene::Draw()
     }
 
 
-    //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+   // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
     blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);

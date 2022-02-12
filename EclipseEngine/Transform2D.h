@@ -22,9 +22,9 @@ private:
 
 public:
 	Transform2D();
-	Transform2D(glm::vec2 position, uint32_t zIndex);
-	Transform2D(glm::vec2 position, glm::vec2 rotation, uint32_t zIndex);
-	Transform2D(glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t zIndex);
+	Transform2D(glm::vec2 position, float zIndex);
+	Transform2D(glm::vec2 position, glm::vec2 rotation, float zIndex);
+	Transform2D(glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, float zIndex);
     Transform2D(const nlohmann::json& json);
 
 	virtual ~Transform2D();

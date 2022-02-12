@@ -106,7 +106,7 @@ public:
 				Transform2D* transform2D1 = static_cast<Transform2D*>(obj1->GetComponentByType(ComponentType::kTransform2D).get());
 				Transform2D* transform2D2 = static_cast<Transform2D*>(obj2->GetComponentByType(ComponentType::kTransform2D).get());
 
-				return transform2D1->ZIndex > transform2D2->ZIndex;
+				return transform2D1->ZIndex < transform2D2->ZIndex;
 			}
 				return false;
 		}
