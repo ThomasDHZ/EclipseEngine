@@ -3,17 +3,24 @@
 #include "VulkanRenderer.h"
 #include "UniformBuffer.h"
 #include "MaterialManager.h"
+#include "AccelerationStructureBuffer.h"
 
 class Mesh
 {
 private:
-	VulkanBuffer IndexBuffer;
-	VulkanBuffer VertexBuffer;
-	MeshPropertiesUniformBuffer meshProperties;
-	std::shared_ptr<Material> material;
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BufferIndex = 0;
+	uint32_t PrimitiveCount = 0; //TriangleCount
+
+	VulkanBuffer IndexBuffer;
+	VulkanBuffer VertexBuffer;
+	VulkanBuffer TransformBuffer;
+	VulkanBuffer TransformInverseBuffer;
+	MeshPropertiesUniformBuffer meshProperties;
+	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
+
+	std::shared_ptr<Material> material;
 
 public:
 
@@ -22,11 +29,9 @@ public:
 	Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	~Mesh();
 
-	void UpdateMeshProperties(MeshProperties& meshProperties);
-
 	void Draw(VkCommandBuffer& commandBuffer);
+	void UpdateMeshProperties(MeshProperties& meshProperties);
 	void Destory();
-
 
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);

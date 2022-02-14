@@ -31,7 +31,7 @@ private:
 
 				switch (type)
 				{
-				case ComponentType::kTransform2D:  { AddComponent(std::make_shared<Transform2D>(Transform2D(jsonArray[x]))); break; }
+				case ComponentType::kTransform2D: { AddComponent(std::make_shared<Transform2D>(Transform2D(jsonArray[x]))); break; }
 				case ComponentType::kTransform3D: { AddComponent(std::make_shared<Transform3D>(Transform3D(jsonArray[x]))); break; }
 				}
 			}
@@ -70,14 +70,14 @@ public:
 
 	void ToJson(nlohmann::json& json)
 	{
-		
+
 		json = nlohmann::json::array();
 
 		nlohmann::json gameObjectJson;
 		gameObjectJson["ObjectName"] = ObjectName;
 		gameObjectJson["GameObjectID"] = GameObjectID;
 		json.emplace_back(gameObjectJson);
-		
+
 		for (auto component : ComponentList)
 		{
 			nlohmann::json componentJson;
@@ -89,14 +89,14 @@ public:
 	class ZSorting
 	{
 	public:
-		bool operator()( std::shared_ptr<GameObject> obj1, std::shared_ptr<GameObject> obj2)
+		bool operator()(std::shared_ptr<GameObject> obj1, std::shared_ptr<GameObject> obj2)
 		{
 			if (obj1->GetComponentByType(ComponentType::kTransform3D) != nullptr &&
 				obj2->GetComponentByType(ComponentType::kTransform3D) != nullptr)
 			{
 				Transform3D* transform3D1 = static_cast<Transform3D*>(obj1->GetComponentByType(ComponentType::kTransform3D).get());
 				Transform3D* transform3D2 = static_cast<Transform3D*>(obj2->GetComponentByType(ComponentType::kTransform3D).get());
-				
+
 				return transform3D1->Position.z < transform3D2->Position.z;
 			}
 
@@ -108,7 +108,8 @@ public:
 
 				return transform2D1->ZIndex < transform2D2->ZIndex;
 			}
-				return false;
+
+			return false;
 		}
 	};
 };

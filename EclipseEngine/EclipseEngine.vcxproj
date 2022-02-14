@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="BaseRenderPass.cpp" />
     <ClCompile Include="BlinnPhongPipeline.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="VulkanRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="BaseRenderPass.h" />
     <ClInclude Include="BlinnPhongPipeline.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />

@@ -89,7 +89,7 @@ public:
 				transform3D != nullptr)
 			{
 				MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
-				Transform2D* transform = static_cast<Transform2D*>(transform3D.get());
+				Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
 
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;

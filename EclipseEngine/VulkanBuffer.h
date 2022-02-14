@@ -20,9 +20,12 @@ public:
 	void CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize);
 	void DestoryBuffer();
 
+	void SetBufferAddress(uint64_t BufferAddress);
+
 	VkBuffer GetBuffer() { return Buffer; }
 	VkBuffer* GetBufferPtr() { return &Buffer; }
 	VkDeviceMemory GetBufferMemory() { return BufferMemory; }
+	VkDeviceMemory* GetBufferMemoryPtr() { return &BufferMemory; }
 	VkDeviceSize GetBufferSize() { return BufferSize; }
 	uint64_t GetBufferDeviceAddress() { return BufferDeviceAddress; }
 	VkAccelerationStructureKHR GetBufferHandle() { return BufferHandle; }

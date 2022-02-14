@@ -75,6 +75,7 @@ void VulkanBuffer::CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize)
 
 void VulkanBuffer::DestoryBuffer()
 {
+	BufferDeviceAddress = 0;
 	if (Buffer != nullptr &&
 		BufferMemory != nullptr)
 	{
@@ -88,4 +89,9 @@ void VulkanBuffer::DestoryBuffer()
 	{
 		std::cout << "Buffer already destoryed." << std::endl;
 	}
+}
+
+void VulkanBuffer::SetBufferAddress(uint64_t BufferAddress)
+{
+	BufferDeviceAddress = BufferAddress;
 }

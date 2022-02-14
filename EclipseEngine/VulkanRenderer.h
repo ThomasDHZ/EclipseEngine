@@ -19,34 +19,18 @@ private:
 	static VkDevice Device;
 	static VkPhysicalDevice PhysicalDevice;
 	static VkSurfaceKHR Surface;
-	static VkQueue GraphicsQueue;
-	static VkQueue PresentQueue;
 	static VkCommandPool CommandPool;
 
-	static int GraphicsFamily;
-	static int PresentFamily;
 	static uint32_t ImageIndex;
 	static uint32_t CMDIndex;
-	static bool RayTracingFeature;
 
 	static std::vector<const char*> ValidationLayers;
-	static std::vector<const char*> DeviceExtensions;
-	static std::vector<std::string> FeatureList;
 
 	static std::vector<VkFence> InFlightFences;
 	static std::vector<VkSemaphore> AcquireImageSemaphores;
 	static std::vector<VkSemaphore> PresentImageSemaphores;
 	static VulkanDebugger VulkanDebug;
 	static VulkanSwapChain SwapChain;
-
-	static std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
-	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
-	static std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
-	static std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
-	static std::vector<const char*> GetRequiredExtensions();
-
-	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
-	static void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
 
 public:
 
@@ -80,8 +64,8 @@ public:
 	static VkDevice GetDevice() { return Device; };
 	static VkPhysicalDevice GetPhysicalDevice() { return PhysicalDevice; };
 	static VkSurfaceKHR GetSurface() { return Surface; };
-	static VkQueue GetGraphicsQueue() { return GraphicsQueue; };
-	static VkQueue GetPresentQueue() { return PresentQueue; };
+	static VkQueue GetGraphicsQueue() { return GPULimitsandFeatures::GetGraphicsQueue(); }
+	static VkQueue GetPresentQueue() { return GPULimitsandFeatures::GetPresentQueue(); }
 	static VkCommandPool GetCommandPool() { return CommandPool; };
 	static uint32_t GetImageIndex() { return ImageIndex; }
 	static uint32_t GetCMDIndex() { return CMDIndex; }
