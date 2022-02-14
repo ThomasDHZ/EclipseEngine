@@ -22,6 +22,11 @@ private:
 
 	std::shared_ptr<Material> material;
 
+	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
+	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
+
+	void MeshBottomLevelAccelerationStructure();
+
 public:
 
 	Mesh();

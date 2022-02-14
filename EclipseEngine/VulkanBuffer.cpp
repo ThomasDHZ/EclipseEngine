@@ -6,6 +6,11 @@ VulkanBuffer::VulkanBuffer()
 {
 }
 
+VulkanBuffer::VulkanBuffer(VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
+{
+	CreateBuffer(BufferSize, usage, properties);
+}
+
 VulkanBuffer::VulkanBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 {
 	CreateBuffer(BufferData, BufferSize, usage, properties);
@@ -13,6 +18,40 @@ VulkanBuffer::VulkanBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUs
 
 VulkanBuffer::~VulkanBuffer()
 {
+}
+
+VkResult VulkanBuffer::CreateBuffer(VkDeviceSize bufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
+{
+	BufferSize = bufferSize;
+
+	VkBufferCreateInfo buffer = {};
+	buffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	buffer.size = BufferSize;
+	buffer.usage = usage;
+	buffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	if (vkCreateBuffer(VulkanRenderer::GetDevice(), &buffer, nullptr, &Buffer) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create buffer!");
+	}
+
+	VkMemoryRequirements memRequirements;
+	vkGetBufferMemoryRequirements(VulkanRenderer::GetDevice(), Buffer, &memRequirements);
+
+	VkMemoryAllocateFlagsInfoKHR ExtendedAllocFlagsInfo{};
+	ExtendedAllocFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+	ExtendedAllocFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
+
+	VkMemoryAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocInfo.allocationSize = memRequirements.size;
+	allocInfo.memoryTypeIndex = VulkanRenderer::GetMemoryType(memRequirements.memoryTypeBits, properties);
+	allocInfo.pNext = &ExtendedAllocFlagsInfo;
+
+	if (vkAllocateMemory(VulkanRenderer::GetDevice(), &allocInfo, nullptr, &BufferMemory) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to allocate buffer memory!");
+	}
+
+	return vkBindBufferMemory(VulkanRenderer::GetDevice(), Buffer, BufferMemory, 0);
 }
 
 VkResult VulkanBuffer::CreateBuffer(void* BufferData, VkDeviceSize bufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)

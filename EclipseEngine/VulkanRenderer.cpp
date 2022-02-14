@@ -7,19 +7,20 @@ uint32_t Window::Width;
 uint32_t Window::Height;
 bool Window::FramebufferResized;
 
-int GPULimitsandFeatures::GraphicsFamily = -1;
-int GPULimitsandFeatures::PresentFamily = -1;
-VkQueue GPULimitsandFeatures::GraphicsQueue = VK_NULL_HANDLE;
-VkQueue GPULimitsandFeatures::PresentQueue = VK_NULL_HANDLE;
-bool GPULimitsandFeatures::RayTracingFeature = false;
-std::vector<const char*> GPULimitsandFeatures::DeviceExtensionList;
-std::vector<std::string> GPULimitsandFeatures::FeatureList;
-VkPhysicalDeviceFeatures GPULimitsandFeatures::PhysicalDeviceFeatures;
-VkPhysicalDeviceProperties GPULimitsandFeatures::PhysicalDeviceProperties;
-VkPhysicalDeviceLimits GPULimitsandFeatures::PhysicalDeviceLimits;
-VkPhysicalDeviceAccelerationStructureFeaturesKHR GPULimitsandFeatures::AccelerationStructureFeatures;
-VkPhysicalDeviceRayTracingPipelineFeaturesKHR GPULimitsandFeatures::RayTracingPipelineFeatures;
-VkSampleCountFlagBits GPULimitsandFeatures::MaxSampleCount;
+int GraphicsDevice::GraphicsFamily = -1;
+int GraphicsDevice::PresentFamily = -1;
+VkQueue GraphicsDevice::GraphicsQueue = VK_NULL_HANDLE;
+VkQueue GraphicsDevice::PresentQueue = VK_NULL_HANDLE;
+bool GraphicsDevice::RayTracingFeature = false;
+bool GraphicsDevice::RayTracingActive = false;
+std::vector<const char*> GraphicsDevice::DeviceExtensionList;
+std::vector<std::string> GraphicsDevice::FeatureList;
+VkPhysicalDeviceFeatures GraphicsDevice::PhysicalDeviceFeatures;
+VkPhysicalDeviceProperties GraphicsDevice::PhysicalDeviceProperties;
+VkPhysicalDeviceLimits GraphicsDevice::PhysicalDeviceLimits;
+VkPhysicalDeviceAccelerationStructureFeaturesKHR GraphicsDevice::AccelerationStructureFeatures;
+VkPhysicalDeviceRayTracingPipelineFeaturesKHR GraphicsDevice::RayTracingPipelineFeatures;
+VkSampleCountFlagBits GraphicsDevice::MaxSampleCount;
 
 std::unique_ptr<GameController> GameController::Controller = nullptr;
 GLFWgamepadstate GameController::ControllerState;
@@ -70,17 +71,17 @@ void VulkanRenderer::StartUp()
 {
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_MAINTENANCE3_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
-	GPULimitsandFeatures::AddRequriedDeviceExtensions(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_MAINTENANCE3_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
 
 	VkApplicationInfo VulkanInfo = {};
 	VulkanInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -91,7 +92,7 @@ void VulkanRenderer::StartUp()
 	VulkanInfo.apiVersion = VK_API_VERSION_1_2;
 
 
-	std::vector<const char*> ExtensionList = GPULimitsandFeatures::GetRequiredExtensions();
+	std::vector<const char*> ExtensionList = GraphicsDevice::GetRequiredExtensions();
 	VkInstanceCreateInfo VulkanCreateInfo = {};
 	VulkanCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	VulkanCreateInfo.pApplicationInfo = &VulkanInfo;
@@ -145,19 +146,19 @@ void VulkanRenderer::StartUp()
 	vkEnumeratePhysicalDevices(Instance, &deviceCount, devices.data());
 	for (const auto& gpudevice : devices)
 	{
-		GPULimitsandFeatures::FindQueueFamilies(gpudevice, Surface);
-		std::set<std::string> extensionsNotSupported = GPULimitsandFeatures::CheckDeviceExtensionSupport(gpudevice);
-		VkPhysicalDeviceFeatures supportedFeatures = GPULimitsandFeatures::GetPhysicalDeviceFeatures(gpudevice);
-		std::vector<VkSurfaceFormatKHR> SurfaceFormatList = GPULimitsandFeatures::GetSurfaceFormatList(gpudevice, Surface);
-		std::vector<VkPresentModeKHR> PresentModeList = GPULimitsandFeatures::GetPresentModeList(gpudevice, Surface);
+		GraphicsDevice::FindQueueFamilies(gpudevice, Surface);
+		std::set<std::string> extensionsNotSupported = GraphicsDevice::CheckDeviceExtensionSupport(gpudevice);
+		VkPhysicalDeviceFeatures supportedFeatures = GraphicsDevice::GetPhysicalDeviceFeatures(gpudevice);
+		std::vector<VkSurfaceFormatKHR> SurfaceFormatList = GraphicsDevice::GetSurfaceFormatList(gpudevice, Surface);
+		std::vector<VkPresentModeKHR> PresentModeList = GraphicsDevice::GetPresentModeList(gpudevice, Surface);
 
-		if (GPULimitsandFeatures::GetGraphicsFamily() != -1 &&
-			GPULimitsandFeatures::GetPresentFamily() != -1 &&
+		if (GraphicsDevice::GetGraphicsFamily() != -1 &&
+			GraphicsDevice::GetPresentFamily() != -1 &&
 			SurfaceFormatList.size() != 0 &&
 			PresentModeList.size() != 0 &&
 			supportedFeatures.samplerAnisotropy)
 		{
-			GPULimitsandFeatures::CheckRayTracingCompatiblity(gpudevice);
+			GraphicsDevice::CheckRayTracingCompatiblity(gpudevice);
 			PhysicalDevice = gpudevice;
 		}
 	}
@@ -167,7 +168,7 @@ void VulkanRenderer::StartUp()
 	}
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-	std::set<uint32_t> uniqueQueueFamilies = { static_cast<uint32_t>(GPULimitsandFeatures::GetGraphicsFamily()), static_cast<uint32_t>(GPULimitsandFeatures::GetPresentFamily()) };
+	std::set<uint32_t> uniqueQueueFamilies = { static_cast<uint32_t>(GraphicsDevice::GetGraphicsFamily()), static_cast<uint32_t>(GraphicsDevice::GetPresentFamily()) };
 
 	float queuePriority = 1.0f;
 	for (uint32_t queueFamily : uniqueQueueFamilies)
@@ -238,8 +239,8 @@ void VulkanRenderer::StartUp()
 	createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 	createInfo.pQueueCreateInfos = queueCreateInfos.data();
 	createInfo.pEnabledFeatures = nullptr;
-	createInfo.enabledExtensionCount = static_cast<uint32_t>(GPULimitsandFeatures::GetRequriedDeviceExtensionList().size());
-	createInfo.ppEnabledExtensionNames = GPULimitsandFeatures::GetRequriedDeviceExtensionListPtr()->data();
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(GraphicsDevice::GetRequriedDeviceExtensionList().size());
+	createInfo.ppEnabledExtensionNames = GraphicsDevice::GetRequriedDeviceExtensionListPtr()->data();
 	createInfo.pNext = &PhysicalDeviceVulkan11Features;
 
 #ifdef NDEBUG
@@ -253,13 +254,13 @@ void VulkanRenderer::StartUp()
 		throw std::runtime_error("failed to create logical device!");
 	}
 
-	GPULimitsandFeatures::GetGPULimitsandFeatures(Device, PhysicalDevice);
+	GraphicsDevice::GetGPULimitsandFeatures(Device, PhysicalDevice);
 	SwapChain = VulkanSwapChain(Window::GetWindowPtr(), Device, PhysicalDevice, Surface);
 
 	VkCommandPoolCreateInfo CommandPoolCreateInfo{};
 	CommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	CommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-	CommandPoolCreateInfo.queueFamilyIndex = GPULimitsandFeatures::GetGraphicsFamily();
+	CommandPoolCreateInfo.queueFamilyIndex = GraphicsDevice::GetGraphicsFamily();
 
 	if (vkCreateCommandPool(Device, &CommandPoolCreateInfo, nullptr, &CommandPool) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to create graphics command pool.");
@@ -347,7 +348,7 @@ VkResult VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferS
 	SubmitInfo.pCommandBuffers = CommandBufferSubmitList.data();
 	SubmitInfo.signalSemaphoreCount = 1;
 	SubmitInfo.pSignalSemaphores = &PresentImageSemaphores[ImageIndex];
-	VkResult QueueSubmit = vkQueueSubmit(GPULimitsandFeatures::GetGraphicsQueue(), 1, &SubmitInfo, InFlightFences[CMDIndex]);
+	VkResult QueueSubmit = vkQueueSubmit(GraphicsDevice::GetGraphicsQueue(), 1, &SubmitInfo, InFlightFences[CMDIndex]);
 	if (QueueSubmit != VK_SUCCESS) {
 		throw std::runtime_error("Failed to submit draw command buffer.");
 	}
@@ -359,7 +360,7 @@ VkResult VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferS
 	PresentInfoKHR.swapchainCount = 1;
 	PresentInfoKHR.pSwapchains = &SwapChain.Swapchain;
 	PresentInfoKHR.pImageIndices = &ImageIndex;
-	VkResult result = vkQueuePresentKHR(GPULimitsandFeatures::GetPresentQueue(), &PresentInfoKHR);
+	VkResult result = vkQueuePresentKHR(GraphicsDevice::GetPresentQueue(), &PresentInfoKHR);
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		RebuildSwapChain();
@@ -458,8 +459,8 @@ VkResult  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer) {
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &commandBuffer;
 
-	VkResult result = vkQueueSubmit(GPULimitsandFeatures::GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-	result = vkQueueWaitIdle(GPULimitsandFeatures::GetGraphicsQueue());
+	VkResult result = vkQueueSubmit(GraphicsDevice::GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+	result = vkQueueWaitIdle(GraphicsDevice::GetGraphicsQueue());
 
 	vkFreeCommandBuffers(Device, CommandPool, 1, &commandBuffer);
 
@@ -474,8 +475,8 @@ VkResult  VulkanRenderer::EndSingleTimeCommands(VkCommandBuffer commandBuffer, V
 	submitInfo.commandBufferCount = 1;
 	submitInfo.pCommandBuffers = &commandBuffer;
 
-	VkResult result = vkQueueSubmit(GPULimitsandFeatures::GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-	result = vkQueueWaitIdle(GPULimitsandFeatures::GetGraphicsQueue());
+	VkResult result = vkQueueSubmit(GraphicsDevice::GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+	result = vkQueueWaitIdle(GraphicsDevice::GetGraphicsQueue());
 
 	vkFreeCommandBuffers(Device, commandPool, 1, &commandBuffer);
 
@@ -495,4 +496,12 @@ uint32_t VulkanRenderer::GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlag
 	}
 
 	throw std::runtime_error("Failed to find suitable memory type.");
+}
+
+uint64_t VulkanRenderer::GetBufferDeviceAddress(VkBuffer buffer)
+{
+	VkBufferDeviceAddressInfoKHR BufferDevice{};
+	BufferDevice.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+	BufferDevice.buffer = buffer;
+	return vkGetBufferDeviceAddressKHR(Device, &BufferDevice);
 }

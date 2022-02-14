@@ -6,7 +6,7 @@
 
 #include "Window.h"
 #include "VulkanDebugger.h"
-#include "LimitsandFeatures.h"
+#include "GraphicsDevice.h"
 #include "VulkanSwapChain.h"
 #include "Pixel.h"
 
@@ -59,13 +59,14 @@ public:
 	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
 	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
 	static uint32_t GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+	static uint64_t GetBufferDeviceAddress(VkBuffer buffer);
 
 	static VkInstance GetInstance() { return Instance; };
 	static VkDevice GetDevice() { return Device; };
 	static VkPhysicalDevice GetPhysicalDevice() { return PhysicalDevice; };
 	static VkSurfaceKHR GetSurface() { return Surface; };
-	static VkQueue GetGraphicsQueue() { return GPULimitsandFeatures::GetGraphicsQueue(); }
-	static VkQueue GetPresentQueue() { return GPULimitsandFeatures::GetPresentQueue(); }
+	static VkQueue GetGraphicsQueue() { return GraphicsDevice::GetGraphicsQueue(); }
+	static VkQueue GetPresentQueue() { return GraphicsDevice::GetPresentQueue(); }
 	static VkCommandPool GetCommandPool() { return CommandPool; };
 	static uint32_t GetImageIndex() { return ImageIndex; }
 	static uint32_t GetCMDIndex() { return CMDIndex; }

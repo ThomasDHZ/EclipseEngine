@@ -13,11 +13,11 @@ void BlinnPhongRenderPass::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GPULimitsandFeatures::GetMaxSampleCount()));
+    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
     RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GPULimitsandFeatures::GetMaxSampleCount()));
+    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
     RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, GPULimitsandFeatures::GetMaxSampleCount()));
+    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
 
     CreateRenderPass();
     CreateRendererFramebuffers();
@@ -31,7 +31,7 @@ void BlinnPhongRenderPass::CreateRenderPass()
 
     VkAttachmentDescription AlebdoAttachment = {};
     AlebdoAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    AlebdoAttachment.samples = GPULimitsandFeatures::GetMaxSampleCount();
+    AlebdoAttachment.samples = GraphicsDevice::GetMaxSampleCount();
     AlebdoAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     AlebdoAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -42,7 +42,7 @@ void BlinnPhongRenderPass::CreateRenderPass()
 
     VkAttachmentDescription BloomAttachment = {};
     BloomAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomAttachment.samples = GPULimitsandFeatures::GetMaxSampleCount();
+    BloomAttachment.samples = GraphicsDevice::GetMaxSampleCount();
     BloomAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     BloomAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     BloomAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -75,7 +75,7 @@ void BlinnPhongRenderPass::CreateRenderPass()
 
     VkAttachmentDescription DepthAttachment = {};
     DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = GPULimitsandFeatures::GetMaxSampleCount();
+    DepthAttachment.samples = GraphicsDevice::GetMaxSampleCount();
     DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

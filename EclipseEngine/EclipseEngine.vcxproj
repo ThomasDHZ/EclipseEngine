@@ -219,7 +219,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="LimitsandFeatures.h" />
+    <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Mesh.h" />

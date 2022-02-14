@@ -209,7 +209,7 @@
     <ClInclude Include="VulkanDebugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LimitsandFeatures.h">
+    <ClInclude Include="GraphicsDevice.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="VulkanSwapChain.h">

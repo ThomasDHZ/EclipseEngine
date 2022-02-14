@@ -1,7 +1,11 @@
 #pragma once
 #include <vulkan/vulkan.h>
+#include <vector>
+#include <set>
+#include <array>
+#include "Window.h"
 
-class GPULimitsandFeatures
+class GraphicsDevice
 {
 private:
 	static std::vector<std::string> FeatureList;
@@ -19,10 +23,11 @@ private:
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
 	static VkSampleCountFlagBits MaxSampleCount;
 	static bool RayTracingFeature;
+	static bool RayTracingActive;
 
 	static VkSampleCountFlagBits GetMaxUsableSampleCount(VkPhysicalDevice GPUDevice)
 	{
-		VkSampleCountFlags counts = GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferColorSampleCounts & GPULimitsandFeatures::GetPhysicalDeviceFeaPhysicalDeviceLimits().framebufferDepthSampleCounts;
+		VkSampleCountFlags counts = PhysicalDeviceLimits.framebufferColorSampleCounts & PhysicalDeviceLimits.framebufferDepthSampleCounts;
 		if (counts & VK_SAMPLE_COUNT_64_BIT) { return VK_SAMPLE_COUNT_64_BIT; }
 		if (counts & VK_SAMPLE_COUNT_32_BIT) { return VK_SAMPLE_COUNT_32_BIT; }
 		if (counts & VK_SAMPLE_COUNT_16_BIT) { return VK_SAMPLE_COUNT_16_BIT; }
@@ -208,6 +213,8 @@ public:
 	static const std::vector<const char*>* GetRequriedDeviceExtensionListPtr() { return &DeviceExtensionList; }
 	static int GetGraphicsFamily() { return GraphicsFamily; }
 	static int GetPresentFamily() { return PresentFamily; }
+	static bool IsRayTracingFeatureActive() { return RayTracingFeature; }
+	static bool IsRayTracerActive() { return RayTracingActive; }
 	static VkQueue GetGraphicsQueue() { return GraphicsQueue; }
 	static VkQueue GetPresentQueue() { return PresentQueue; }
 	static VkSampleCountFlagBits GetMaxSampleCount() { return MaxSampleCount; };
