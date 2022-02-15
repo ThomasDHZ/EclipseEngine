@@ -4,7 +4,7 @@
 class AccelerationStructureBuffer
 {
 private:
-	VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
+
 	VulkanBuffer AccelerationBuffer;
 
 public:
@@ -16,6 +16,6 @@ public:
 	void CreateAccelerationStructure(VkAccelerationStructureTypeKHR type, VkAccelerationStructureBuildSizesInfoKHR& buildSizeInfo);
 	void Destroy();
 
-	VkAccelerationStructureKHR GetAccelerationStructureBufferHandle() { return handle; }
+	VkAccelerationStructureKHR handle = VK_NULL_HANDLE;
 };
 

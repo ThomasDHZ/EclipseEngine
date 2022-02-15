@@ -204,6 +204,11 @@ public:
 		}
 	}
 
+	static uint32_t GetAlignedSize(uint32_t value, uint32_t alignment)
+	{
+		return (value + alignment - 1) & ~(alignment - 1);
+	}
+
 	static void AddRequriedDeviceExtensions(const char* DeviceExtension)
 	{
 		DeviceExtensionList.emplace_back(DeviceExtension);

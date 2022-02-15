@@ -189,6 +189,12 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RayTraceRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -354,6 +360,12 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="AccelerationStructureBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTraceRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracingPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
