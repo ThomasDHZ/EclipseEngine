@@ -71,7 +71,7 @@ void RayTraceRenderer::SetUpTopLevelAccelerationStructure()
     //{
     //    InstancesBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-    //    DeviceOrHostAddressConst.deviceAddress = engine->GetBufferDeviceAddress(instancesBuffer.Buffer);
+    //    DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstancesBuffer.GetBuffer());
     //}
 
     //VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
@@ -91,15 +91,15 @@ void RayTraceRenderer::SetUpTopLevelAccelerationStructure()
 
     //VkAccelerationStructureBuildSizesInfoKHR accelerationStructureBuildSizesInfo{};
     //accelerationStructureBuildSizesInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
-    //VulkanRenderer::vkGetAccelerationStructureBuildSizesKHR(engine->Device, VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, &AccelerationStructureBuildGeometryInfo, &PrimitiveCount, &accelerationStructureBuildSizesInfo);
+    //VulkanRenderer::vkGetAccelerationStructureBuildSizesKHR(VulkanRenderer::GetDevice(), VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, &AccelerationStructureBuildGeometryInfo, &PrimitiveCount, &accelerationStructureBuildSizesInfo);
 
-    //if (topLevelAS.handle == VK_NULL_HANDLE)
+    //if (TopLevelAccelerationStructure.handle == VK_NULL_HANDLE)
     //{
-    //    topLevelAS.CreateAccelerationStructure(engine, VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, accelerationStructureBuildSizesInfo);
+    //    TopLevelAccelerationStructure.CreateAccelerationStructure(VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR, accelerationStructureBuildSizesInfo);
     //}
 
     //VulkanBuffer scratchBuffer = VulkanBuffer(accelerationStructureBuildSizesInfo.buildScratchSize, VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-    //scratchBuffer.BufferDeviceAddress = engine->GetBufferDeviceAddress(scratchBuffer.Buffer);
+    //scratchBuffer.SetBufferAddress(VulkanRenderer::GetBufferDeviceAddress(scratchBuffer.GetBuffer()));
 
     //VkAccelerationStructureBuildGeometryInfoKHR AccelerationStructureBuildGeometryInfo2 = {};
     //AccelerationStructureBuildGeometryInfo2.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
@@ -108,16 +108,16 @@ void RayTraceRenderer::SetUpTopLevelAccelerationStructure()
     //AccelerationStructureBuildGeometryInfo2.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     //AccelerationStructureBuildGeometryInfo2.geometryCount = 1;
     //AccelerationStructureBuildGeometryInfo2.pGeometries = &AccelerationStructureGeometry;
-    //AccelerationStructureBuildGeometryInfo2.scratchData.deviceAddress = scratchBuffer.BufferDeviceAddress;
+    //AccelerationStructureBuildGeometryInfo2.scratchData.deviceAddress = scratchBuffer.GetBufferDeviceAddress();
 
-    //if (topLevelAS.handle == VK_NULL_HANDLE)
+    //if (TopLevelAccelerationStructure.handle == VK_NULL_HANDLE)
     //{
-    //    AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = topLevelAS.handle;
+    //    AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.handle;
     //}
     //else
     //{
-    //    AccelerationStructureBuildGeometryInfo2.srcAccelerationStructure = topLevelAS.handle;
-    //    AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = topLevelAS.handle;
+    //    AccelerationStructureBuildGeometryInfo2.srcAccelerationStructure = TopLevelAccelerationStructure.handle;
+    //    AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.handle;
     //}
 
     //VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo = {};
@@ -127,7 +127,7 @@ void RayTraceRenderer::SetUpTopLevelAccelerationStructure()
     //AccelerationStructureBuildRangeInfo.transformOffset = 0;
     //std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationStructureBuildRangeInfoList = { AccelerationStructureBuildRangeInfo };
 
-    //topLevelAS.AcclerationCommandBuffer(engine, AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
+    //TopLevelAccelerationStructure.AcclerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
 
     //scratchBuffer.DestoryBuffer();
     //InstancesBuffer.DestoryBuffer();

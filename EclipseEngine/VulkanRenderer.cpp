@@ -89,7 +89,7 @@ void VulkanRenderer::StartUp()
 	VulkanInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 	VulkanInfo.pEngineName = "No Engine";
 	VulkanInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	VulkanInfo.apiVersion = VK_API_VERSION_1_2;
+	VulkanInfo.apiVersion = VK_API_VERSION_1_3;
 
 
 	std::vector<const char*> ExtensionList = GraphicsDevice::GetRequiredExtensions();
