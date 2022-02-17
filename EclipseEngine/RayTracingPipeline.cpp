@@ -8,14 +8,14 @@ RayTracingPipeline::~RayTracingPipeline()
 {
 }
 
-void RayTracingPipeline::SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure)
+void RayTracingPipeline::SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture)
 {
-    SetUpDescriptorBindings(TopLevelAccelerationStructure);
+    SetUpDescriptorBindings(TopLevelAccelerationStructure, RayTracedTexture);
     SetUpPipeline();
     SetUpShaderBindingTable();
 }
 
-void RayTracingPipeline::SetUpDescriptorBindings(AccelerationStructureBuffer& TopLevelAccelerationStructure)
+void RayTracingPipeline::SetUpDescriptorBindings(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture)
 {
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(TopLevelAccelerationStructure.handle);
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceReturnImageDescriptor(VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
@@ -117,14 +117,14 @@ void RayTracingPipeline::SetUpPipeline()
     }
 }
 
-void RayTracingPipeline::UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure)
+void RayTracingPipeline::UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
     RaygenShaderBindingTable.DestoryBuffer();
     MissShaderBindingTable.DestoryBuffer();
     HitShaderBindingTable.DestoryBuffer();
 
-    SetUpDescriptorBindings(TopLevelAccelerationStructure);
+    SetUpDescriptorBindings(TopLevelAccelerationStructure, RayTracedTexture);
     SetUpPipeline();
     SetUpShaderBindingTable();
 }

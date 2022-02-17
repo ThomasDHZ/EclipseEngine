@@ -1,9 +1,10 @@
 #pragma once
+#include "BaseRenderPass.h"
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
 
-class RayTraceRenderPass
+class RayTraceRenderPass : public BaseRenderPass
 {
 private:
 	AccelerationStructureBuffer TopLevelAccelerationStructure{};
@@ -13,8 +14,6 @@ private:
 
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
-    VkCommandBuffer RayTraceCommandBuffer;
-
     std::shared_ptr<RenderedColorTexture> RayTracedTexture;
 
     RayTraceRenderPass();

@@ -20,6 +20,8 @@
 #include "BlinnPhongRenderer.h"
 #include "TextureManager.h"
 #include "MaterialManager.h"
+#include "RayTraceRenderer.h"
+
 class Scene
 {
 private:
@@ -28,6 +30,7 @@ private:
 	SceneProperties sceneProperites;
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
+	RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();

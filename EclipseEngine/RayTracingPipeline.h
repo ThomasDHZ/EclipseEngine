@@ -18,7 +18,7 @@ private:
 
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaders{};
 
-    void SetUpDescriptorBindings(AccelerationStructureBuffer& TopLevelAccelerationStructure);
+    void SetUpDescriptorBindings(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture);
     void SetUpPipeline();
     void SetUpShaderBindingTable();
 
@@ -27,8 +27,8 @@ public:
     RayTracingPipeline();
     ~RayTracingPipeline();
 
-    void SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure);
-    void UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure);
+    void SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture);
+    void UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture);
 
     VkBuffer GetRaygenShaderBindingTable() { return RaygenShaderBindingTable.GetBuffer(); }
     VkBuffer GetMissShaderBindingTable() { return MissShaderBindingTable.GetBuffer(); }

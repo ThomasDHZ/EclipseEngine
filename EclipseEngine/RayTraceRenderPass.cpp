@@ -11,13 +11,14 @@ RayTraceRenderPass::~RayTraceRenderPass()
 
 void RayTraceRenderPass::StartUp()
 {
-    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(VulkanRenderer::GetSwapChainResolutionVec2()));
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
 
     TopLevelAccelerationStructure = AccelerationStructureBuffer();
     SetUpTopLevelAccelerationStructure();
 
     RayTracePipeline = std::make_shared<RayTracingPipeline>();
-    RayTracePipeline->SetUp(TopLevelAccelerationStructure);
+    RayTracePipeline->SetUp(TopLevelAccelerationStructure, RayTracedTexture);
 
     SetUpCommandBuffers();
 }
@@ -30,7 +31,7 @@ void RayTraceRenderPass::SetUpCommandBuffers()
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     allocInfo.commandBufferCount = 1;
 
-    if (vkAllocateCommandBuffers(VulkanRenderer::GetDevice(), &allocInfo, &RayTraceCommandBuffer) != VK_SUCCESS) {
+    if (vkAllocateCommandBuffers(VulkanRenderer::GetDevice(), &allocInfo, &CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to allocate command buffers.");
     }
 }
@@ -165,7 +166,7 @@ void RayTraceRenderPass::Draw(SceneProperties& sceneProperties)
 
     VkImageSubresourceRange subresourceRange = { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 };
 
-    vkBeginCommandBuffer(RayTraceCommandBuffer, &cmdBufInfo);
+    vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &cmdBufInfo);
     const uint32_t handleSizeAligned = GraphicsDevice::GetAlignedSize(RayTracePipeline->GetRayTracingPipelineProperties().shaderGroupHandleSize, RayTracePipeline->GetRayTracingPipelineProperties().shaderGroupHandleAlignment);
 
     VkStridedDeviceAddressRegionKHR raygenShaderSbtEntry{};
@@ -184,22 +185,24 @@ void RayTraceRenderPass::Draw(SceneProperties& sceneProperties)
     hitShaderSbtEntry.size = handleSizeAligned;
 
 
-    vkCmdPushConstants(RayTraceCommandBuffer, RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &sceneProperties);
-    vkCmdBindPipeline(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipelineLayout(), 0, 1, RayTracePipeline->GetDescriptorSetPtr(), 0, 0);
+    vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &sceneProperties);
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipelineLayout(), 0, 1, RayTracePipeline->GetDescriptorSetPtr(), 0, 0);
 
     VkStridedDeviceAddressRegionKHR CallableShaderSbtEntry{};
-    RayTracedTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_GENERAL);
-    VulkanRenderer::vkCmdTraceRaysKHR(RayTraceCommandBuffer, &raygenShaderSbtEntry, &missShaderSbtEntry, &hitShaderSbtEntry, &CallableShaderSbtEntry, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 1);
-    RayTracedTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    RayTracedTexture->UpdateImageLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_GENERAL);
+    VulkanRenderer::vkCmdTraceRaysKHR(CommandBuffer[VulkanRenderer::GetCMDIndex()], &raygenShaderSbtEntry, &missShaderSbtEntry, &hitShaderSbtEntry, &CallableShaderSbtEntry, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 1);
+    RayTracedTexture->UpdateImageLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    vkEndCommandBuffer(RayTraceCommandBuffer);
+    vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
 void RayTraceRenderPass::RebuildSwapChain()
 {
-    RayTracedTexture->RecreateRendererTexture(VulkanRenderer::GetSwapChainResolutionVec2());
-    RayTracePipeline->UpdateGraphicsPipeLine(TopLevelAccelerationStructure);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
+    RayTracePipeline->UpdateGraphicsPipeLine(TopLevelAccelerationStructure, RayTracedTexture);
 }
 
 void RayTraceRenderPass::Destroy()

@@ -174,6 +174,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="RayTraceRenderer.cpp" />
     <ClCompile Include="RayTraceRenderPass.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderBatch2D.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixel.h" />
+    <ClInclude Include="RayTraceRenderer.h" />
     <ClInclude Include="RayTraceRenderPass.h" />
     <ClInclude Include="RayTracingPipeline.h" />
     <ClInclude Include="RenderBatch2D.h" />
@@ -256,14 +258,19 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\anyhit.rahit" />
+    <None Include="Shaders\anyhit1.rahit" />
     <None Include="Shaders\compile.bat" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
     <None Include="Shaders\MeshProperties.glsl" />
+    <None Include="Shaders\miss.rmiss" />
+    <None Include="Shaders\raygen.rgen" />
     <None Include="Shaders\Renderer2D.frag" />
     <None Include="Shaders\Renderer2D.vert" />
     <None Include="Shaders\Renderer3D.frag" />
     <None Include="Shaders\Renderer3D.vert" />
+    <None Include="Shaders\shadow.rmiss" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

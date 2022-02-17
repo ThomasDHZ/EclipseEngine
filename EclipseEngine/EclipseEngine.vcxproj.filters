@@ -52,6 +52,12 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{2343821a-2587-4a55-b630-169164832903}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\RayTraceShaders">
+      <UniqueIdentifier>{04a36797-d126-4b4c-9f49-aa71a372337a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\RasterizationShaders">
+      <UniqueIdentifier>{7e0a75e5-6c1e-4f28-946e-a5affa985a24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -193,6 +199,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RayTraceRenderPass.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTraceRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -371,31 +380,49 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RayTraceRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\FrameBuffer.frag">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="Shaders\FrameBuffer.vert">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="Shaders\compile.bat">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Shaders\Renderer2D.frag">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="Shaders\Renderer2D.vert">
-      <Filter>Shader</Filter>
     </None>
     <None Include="Shaders\MeshProperties.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="Shaders\anyhit.rahit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\anyhit1.rahit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\miss.rmiss">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\raygen.rgen">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\shadow.rmiss">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\FrameBuffer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\FrameBuffer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\Renderer2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\Renderer2D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
     <None Include="Shaders\Renderer3D.frag">
-      <Filter>Shader</Filter>
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\Renderer3D.vert">
-      <Filter>Shader</Filter>
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

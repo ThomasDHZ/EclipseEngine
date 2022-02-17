@@ -64,6 +64,7 @@ Scene::Scene()
 
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
+    rayTraceRenderer.StartUp();
 }
 
 Scene::~Scene()
@@ -135,6 +136,7 @@ void Scene::RebuildRenderers()
 
     renderer2D.RebuildRenderers();
     blinnPhongRenderer.RebuildRenderers();
+    rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
@@ -171,5 +173,6 @@ void Scene::Destroy()
     
     renderer2D.Destroy();
     blinnPhongRenderer.Destroy();
+    rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }
