@@ -189,11 +189,11 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RayTraceRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RayTracingPipeline.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTraceRenderPass.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,10 +362,13 @@
     <ClInclude Include="AccelerationStructureBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RayTraceRenderer.h">
+    <ClInclude Include="RayTraceRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayTracingPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

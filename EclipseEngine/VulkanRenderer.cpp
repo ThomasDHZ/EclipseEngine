@@ -91,7 +91,6 @@ void VulkanRenderer::StartUp()
 	VulkanInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 	VulkanInfo.apiVersion = VK_API_VERSION_1_3;
 
-
 	std::vector<const char*> ExtensionList = GraphicsDevice::GetRequiredExtensions();
 	VkInstanceCreateInfo VulkanCreateInfo = {};
 	VulkanCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;

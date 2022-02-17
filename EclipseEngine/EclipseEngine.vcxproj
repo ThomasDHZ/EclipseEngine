@@ -174,7 +174,7 @@
     <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
-    <ClCompile Include="RayTraceRenderer.cpp" />
+    <ClCompile Include="RayTraceRenderPass.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="RenderBatch2D.cpp" />
     <ClCompile Include="RenderedColorTexture.cpp" />
@@ -224,13 +224,14 @@
     <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixel.h" />
-    <ClInclude Include="RayTraceRenderer.h" />
+    <ClInclude Include="RayTraceRenderPass.h" />
     <ClInclude Include="RayTracingPipeline.h" />
     <ClInclude Include="RenderBatch2D.h" />
     <ClInclude Include="RenderedColorTexture.h" />

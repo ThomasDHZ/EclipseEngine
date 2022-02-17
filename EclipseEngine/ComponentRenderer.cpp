@@ -1,5 +1,9 @@
 #include "ComponentRenderer.h"
 
+ComponentRenderer::ComponentRenderer() : Component(ComponentType::kNullComponent)
+{
+}
+
 ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(componentType)
 {
 }

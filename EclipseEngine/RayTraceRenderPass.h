@@ -3,7 +3,7 @@
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
 
-class RayTraceRenderer
+class RayTraceRenderPass
 {
 private:
 	AccelerationStructureBuffer TopLevelAccelerationStructure{};
@@ -15,12 +15,14 @@ public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
     VkCommandBuffer RayTraceCommandBuffer;
 
-    RayTraceRenderer();
-    ~RayTraceRenderer();
+    std::shared_ptr<RenderedColorTexture> RayTracedTexture;
+
+    RayTraceRenderPass();
+    ~RayTraceRenderPass();
 
     void StartUp();
     void SetUpTopLevelAccelerationStructure();
-    void Draw();
+    void Draw(SceneProperties& sceneProperties);
     void RebuildSwapChain();
     void Destroy();
 };

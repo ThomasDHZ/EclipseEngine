@@ -41,7 +41,10 @@ public:
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
 
+	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return meshProperties.GetVulkanBufferData().GetBuffer(); }
+	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 	std::shared_ptr<Material> GetMaterial() { return material; }
+	
 };
 

@@ -4,7 +4,6 @@
 class VulkanBuffer
 {
 private:
-	VkBuffer Buffer = VK_NULL_HANDLE;
 	VkDeviceMemory BufferMemory = VK_NULL_HANDLE;
 	VkDeviceSize BufferSize = 0;
 	uint64_t BufferDeviceAddress = 0;
@@ -24,6 +23,7 @@ public:
 
 	void SetBufferAddress(uint64_t BufferAddress);
 
+	VkBuffer Buffer = VK_NULL_HANDLE;
 	VkBuffer GetBuffer() { return Buffer; }
 	VkBuffer* GetBufferPtr() { return &Buffer; }
 	VkDeviceMemory GetBufferMemory() { return BufferMemory; }

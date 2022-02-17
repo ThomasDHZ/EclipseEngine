@@ -10,8 +10,6 @@ RayTracingPipeline::~RayTracingPipeline()
 
 void RayTracingPipeline::SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure)
 {
-    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(VulkanRenderer::GetSwapChainResolutionVec2()));
-
     SetUpDescriptorBindings(TopLevelAccelerationStructure);
     SetUpPipeline();
     SetUpShaderBindingTable();
@@ -21,7 +19,7 @@ void RayTracingPipeline::SetUpDescriptorBindings(AccelerationStructureBuffer& To
 {
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(TopLevelAccelerationStructure.handle);
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceReturnImageDescriptor(VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
-    VkDescriptorBufferInfo SceneDataBufferInfo = AddBufferDescriptor(rayTraceSceneProperties);
+    VkDescriptorBufferInfo SceneDataBufferInfo = AddBufferDescriptor(RayTraceSceneProperties);
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
 
@@ -41,7 +39,7 @@ void RayTracingPipeline::SetUpPipeline()
     VkPushConstantRange pushConstantRange{};
     pushConstantRange.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR;
     pushConstantRange.offset = 0;
-    pushConstantRange.size = sizeof(rayTraceSceneProperties);
+    pushConstantRange.size = sizeof(RayTraceSceneProperties);
 
     VkPipelineLayoutCreateInfo PipelineLayoutCreateInfo = {};
     PipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
@@ -121,12 +119,10 @@ void RayTracingPipeline::SetUpPipeline()
 
 void RayTracingPipeline::UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure)
 {
-    RayTracedTexture->RecreateRendererTexture(VulkanRenderer::GetSwapChainResolutionVec2());
-
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    raygenShaderBindingTable.DestoryBuffer();
-    missShaderBindingTable.DestoryBuffer();
-    hitShaderBindingTable.DestoryBuffer();
+    RaygenShaderBindingTable.DestoryBuffer();
+    MissShaderBindingTable.DestoryBuffer();
+    HitShaderBindingTable.DestoryBuffer();
 
     SetUpDescriptorBindings(TopLevelAccelerationStructure);
     SetUpPipeline();
@@ -135,15 +131,15 @@ void RayTracingPipeline::UpdateGraphicsPipeLine(AccelerationStructureBuffer& Top
 
 void RayTracingPipeline::SetUpShaderBindingTable()
 {
-    const uint32_t handleSize = rayTracingPipelineProperties.shaderGroupHandleSize;
-    const uint32_t handleSizeAligned = GraphicsDevice::GetAlignedSize(rayTracingPipelineProperties.shaderGroupHandleSize, rayTracingPipelineProperties.shaderGroupHandleAlignment);
+    const uint32_t handleSize = RayTracingPipelineProperties.shaderGroupHandleSize;
+    const uint32_t handleSizeAligned = GraphicsDevice::GetAlignedSize(RayTracingPipelineProperties.shaderGroupHandleSize, RayTracingPipelineProperties.shaderGroupHandleAlignment);
     const uint32_t groupCount = static_cast<uint32_t>(RayTraceShaders.size());
     const uint32_t sbtSize = groupCount * handleSizeAligned;
 
     std::vector<uint8_t> shaderHandleStorage(sbtSize);
     VulkanRenderer::vkGetRayTracingShaderGroupHandlesKHR(VulkanRenderer::GetDevice(), ShaderPipeline, 0, groupCount, sbtSize, shaderHandleStorage.data());
 
-    raygenShaderBindingTable.CreateBuffer(shaderHandleStorage.data(), handleSize, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-    missShaderBindingTable.CreateBuffer(shaderHandleStorage.data() + handleSizeAligned, handleSize * 2, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-    hitShaderBindingTable.CreateBuffer(shaderHandleStorage.data() + (handleSizeAligned * 3), handleSize * 3, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    RaygenShaderBindingTable.CreateBuffer(shaderHandleStorage.data(), handleSize, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    MissShaderBindingTable.CreateBuffer(shaderHandleStorage.data() + handleSizeAligned, handleSize * 2, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    HitShaderBindingTable.CreateBuffer(shaderHandleStorage.data() + (handleSizeAligned * 3), handleSize * 3, VK_BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }

@@ -41,6 +41,7 @@ public:
     ~Texture();
 
     void UpdateImageLayout(VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void Destroy();
 
     void SetTextureBufferIndex(uint64_t bufferIndex);

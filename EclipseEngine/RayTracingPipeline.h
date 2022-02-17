@@ -8,13 +8,13 @@
 class RayTracingPipeline : public GraphicsPipeline
 {
 private:
-    VulkanBuffer raygenShaderBindingTable;
-    VulkanBuffer missShaderBindingTable;
-    VulkanBuffer hitShaderBindingTable;
-    VulkanBuffer rayTraceSceneProperties;
+    VulkanBuffer RaygenShaderBindingTable;
+    VulkanBuffer MissShaderBindingTable;
+    VulkanBuffer HitShaderBindingTable;
+    VulkanBuffer RayTraceSceneProperties;
 
-    VkPhysicalDeviceRayTracingPipelinePropertiesKHR  rayTracingPipelineProperties{};
-    VkPhysicalDeviceAccelerationStructureFeaturesKHR accelerationStructureFeatures{};
+    VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties{};
+    VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
 
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaders{};
 
@@ -23,11 +23,15 @@ private:
     void SetUpShaderBindingTable();
 
 public:
-    std::shared_ptr<RenderedColorTexture> RayTracedTexture;
 
     RayTracingPipeline();
     ~RayTracingPipeline();
 
     void SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure);
     void UpdateGraphicsPipeLine(AccelerationStructureBuffer& TopLevelAccelerationStructure);
+
+    VkBuffer GetRaygenShaderBindingTable() { return RaygenShaderBindingTable.GetBuffer(); }
+    VkBuffer GetMissShaderBindingTable() { return MissShaderBindingTable.GetBuffer(); }
+    VkBuffer GetHitShaderBindingTable() { return HitShaderBindingTable.GetBuffer(); }
+    VkPhysicalDeviceRayTracingPipelinePropertiesKHR GetRayTracingPipelineProperties() { return RayTracingPipelineProperties; }
 };
