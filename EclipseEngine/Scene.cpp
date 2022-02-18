@@ -155,7 +155,8 @@ void Scene::Draw()
 
 
    // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+  //  blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 

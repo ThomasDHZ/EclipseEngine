@@ -204,6 +204,9 @@
     <ClCompile Include="RayTraceRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -383,6 +386,9 @@
     <ClInclude Include="RayTraceRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">
@@ -423,6 +429,9 @@
     </None>
     <None Include="Shaders\Renderer3D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\closesthit.rchit">
+      <Filter>Shader\RayTraceShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

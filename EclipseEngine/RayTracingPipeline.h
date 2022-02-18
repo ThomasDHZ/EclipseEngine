@@ -11,7 +11,6 @@ private:
     VulkanBuffer RaygenShaderBindingTable;
     VulkanBuffer MissShaderBindingTable;
     VulkanBuffer HitShaderBindingTable;
-    VulkanBuffer RayTraceSceneProperties;
 
     VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties{};
     VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};

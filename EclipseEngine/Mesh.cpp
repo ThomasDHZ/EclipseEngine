@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "Math.h"
 
 Mesh::Mesh()
 {
@@ -168,6 +169,15 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 {
 	meshProperties.Update(meshProps);
+
+	glm::mat4 FinalTransform = meshProps.MeshTransform;
+	glm::mat4 transformMatrix2 = glm::transpose(meshProps.MeshTransform);
+
+	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+
+	TransformBuffer.CopyBufferToMemory(&FinalTransform, sizeof(FinalTransform));
+	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+
 	if (GraphicsDevice::IsRayTracingFeatureActive() &&
 		GraphicsDevice::IsRayTracerActive() &&
 		IndexCount != 0)

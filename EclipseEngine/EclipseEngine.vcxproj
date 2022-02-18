@@ -189,6 +189,7 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="Transform3D.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Transform2D.h" />
     <ClInclude Include="Transform3D.h" />
     <ClInclude Include="UniformBuffer.h" />
@@ -260,6 +262,7 @@
   <ItemGroup>
     <None Include="Shaders\anyhit.rahit" />
     <None Include="Shaders\anyhit1.rahit" />
+    <None Include="Shaders\closesthit.rchit" />
     <None Include="Shaders\compile.bat" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />

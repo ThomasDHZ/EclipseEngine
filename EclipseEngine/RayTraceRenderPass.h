@@ -15,6 +15,7 @@ private:
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
     std::shared_ptr<RenderedColorTexture> RayTracedTexture;
+    VkCommandBuffer RayTraceCommandBuffer;
 
     RayTraceRenderPass();
     ~RayTraceRenderPass();

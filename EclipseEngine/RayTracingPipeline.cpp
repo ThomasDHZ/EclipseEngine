@@ -10,6 +10,18 @@ RayTracingPipeline::~RayTracingPipeline()
 
 void RayTracingPipeline::SetUp(AccelerationStructureBuffer& TopLevelAccelerationStructure, std::shared_ptr<RenderedColorTexture> RayTracedTexture)
 {
+    RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
+    VkPhysicalDeviceProperties2 deviceProperties2{};
+    deviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+    deviceProperties2.pNext = &RayTracingPipelineProperties;
+    vkGetPhysicalDeviceProperties2(VulkanRenderer::GetPhysicalDevice(), &deviceProperties2);
+
+    AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+    VkPhysicalDeviceFeatures2 deviceFeatures2{};
+    deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    deviceFeatures2.pNext = &AccelerationStructureFeatures;
+    vkGetPhysicalDeviceFeatures2(VulkanRenderer::GetPhysicalDevice(), &deviceFeatures2);
+
     SetUpDescriptorBindings(TopLevelAccelerationStructure, RayTracedTexture);
     SetUpPipeline();
     SetUpShaderBindingTable();
@@ -19,15 +31,14 @@ void RayTracingPipeline::SetUpDescriptorBindings(AccelerationStructureBuffer& To
 {
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(TopLevelAccelerationStructure.handle);
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceReturnImageDescriptor(VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
-    VkDescriptorBufferInfo SceneDataBufferInfo = AddBufferDescriptor(RayTraceSceneProperties);
+
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
 
     AddAccelerationDescriptorSetBinding(0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageTextureSetBinding(1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddUniformBufferDescriptorSetBinding(2, SceneDataBufferInfo);
-    AddStorageBufferDescriptorSetBinding(3, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-    AddTextureDescriptorSetBinding(4, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(2, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+    AddTextureDescriptorSetBinding(3, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     SubmitDescriptorSet();
 }
@@ -39,7 +50,7 @@ void RayTracingPipeline::SetUpPipeline()
     VkPushConstantRange pushConstantRange{};
     pushConstantRange.stageFlags = VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR;
     pushConstantRange.offset = 0;
-    pushConstantRange.size = sizeof(RayTraceSceneProperties);
+    pushConstantRange.size = sizeof(SceneProperties);
 
     VkPipelineLayoutCreateInfo PipelineLayoutCreateInfo = {};
     PipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

@@ -27,7 +27,7 @@ void RayTraceRenderer::GUIUpdate()
 void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
     rayTraceRenderPass.Draw(sceneProperties);
-    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.GetCommandBuffer());
+    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.RayTraceCommandBuffer);
 
     FrameBufferRenderer.Draw();
     CommandBufferSubmitList.emplace_back(FrameBufferRenderer.GetCommandBuffer());
