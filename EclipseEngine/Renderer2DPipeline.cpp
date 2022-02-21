@@ -17,7 +17,7 @@ Renderer2DPipeline::~Renderer2DPipeline()
 
 void Renderer2DPipeline::SetUpDescriptorBindings()
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();

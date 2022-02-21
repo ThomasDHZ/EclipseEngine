@@ -8,19 +8,21 @@
 class Mesh
 {
 private:
+	std::vector<Vertex> VertexList;
+	std::vector<uint32_t> IndexList;
+	std::shared_ptr<Material> material;
+
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BufferIndex = 0;
 	uint32_t PrimitiveCount = 0; //TriangleCount
 
-	VulkanBuffer IndexBuffer;
 	VulkanBuffer VertexBuffer;
+	VulkanBuffer IndexBuffer;
 	VulkanBuffer TransformBuffer;
 	VulkanBuffer TransformInverseBuffer;
 	MeshPropertiesUniformBuffer meshProperties;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
-
-	std::shared_ptr<Material> material;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
@@ -43,6 +45,8 @@ public:
 
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return meshProperties.GetVulkanBufferData().GetBuffer(); }
+	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
+	VkBuffer GetMeshIndexBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	

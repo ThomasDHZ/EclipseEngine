@@ -28,6 +28,8 @@ public:
     uint32_t GetMeshBufferIndex() { return mesh.GetMeshBufferIndex(); }
     uint64_t GetBLASBufferDeviceAddress() { return mesh.GetBLASBufferDeviceAddress(); }
     VkBuffer GetMeshPropertiesBuffer() { return mesh.GetMeshPropertiesBuffer(); }
+    VkBuffer GetMeshVertexBuffer() { return mesh.GetMeshVertexBuffer(); }
+    VkBuffer GetMeshIndexBuffer() { return mesh.GetMeshIndexBuffer(); }
     std::shared_ptr<Material> GetMaterial() { return mesh.GetMaterial(); }
 
     void ToJson(nlohmann::json& j) override

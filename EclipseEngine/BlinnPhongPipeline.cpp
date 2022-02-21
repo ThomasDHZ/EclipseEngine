@@ -17,7 +17,7 @@ BlinnPhongPipeline::~BlinnPhongPipeline()
 
 void BlinnPhongPipeline::SetUpDescriptorBindings()
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();

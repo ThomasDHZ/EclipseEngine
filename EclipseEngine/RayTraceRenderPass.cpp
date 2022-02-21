@@ -76,7 +76,9 @@ void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
             //    }
             //    else
             //    {
-            //        GLMTransformMatrix2 = glm::transpose(model->ModelTransform);
+
+            Transform3D* transform  = static_cast<Transform3D*>(obj->GetComponentByType(ComponentType::kTransform3D).get());
+                    GLMTransformMatrix2 = glm::transpose(transform->Transform);
             //    }
           /*  }*/
             VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);

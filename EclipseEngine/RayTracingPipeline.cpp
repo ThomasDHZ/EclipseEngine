@@ -33,12 +33,16 @@ void RayTracingPipeline::SetUpDescriptorBindings(AccelerationStructureBuffer& To
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceReturnImageDescriptor(VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
 
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesmBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = GameObjectManager::GetMeshVertexBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = GameObjectManager::GetMeshIndexBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = GameObjectManager::GetMeshPropertiesBufferList();
 
     AddAccelerationDescriptorSetBinding(0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageTextureSetBinding(1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddStorageBufferDescriptorSetBinding(2, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-    AddTextureDescriptorSetBinding(3, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(2, MeshVertexBufferList, MeshVertexBufferList.size());
+    AddStorageBufferDescriptorSetBinding(3, MeshIndexBufferList, MeshIndexBufferList.size());
+    AddStorageBufferDescriptorSetBinding(4, MeshPropertiesBufferList, MeshPropertiesBufferList.size());
+    AddTextureDescriptorSetBinding(5, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     SubmitDescriptorSet();
 }

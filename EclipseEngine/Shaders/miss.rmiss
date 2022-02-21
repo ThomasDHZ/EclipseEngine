@@ -1,5 +1,6 @@
 #version 460
 #extension GL_EXT_ray_tracing : enable
+#extension GL_EXT_scalar_block_layout : enable
 #include "MeshProperties.glsl"
 layout(push_constant) uniform SceneData
 {
@@ -19,10 +20,21 @@ struct RayHitInfo
     bool hitGeo;
 };
 
+struct Vertex 
+{
+    vec3 pos;
+    vec3 color;
+    vec2 uv;
+};
+
 layout(location = 0) rayPayloadInEXT RayHitInfo rayPayload;
+layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;
 layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
-layout(binding = 2) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
+layout(binding = 3) buffer Indices { uint i[]; } indices[];
+layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 5) uniform sampler2D TextureMap[];
+
 void main()
 {
 	rayPayload.color = vec3(0.0f, 0.0f, 1.0f);
