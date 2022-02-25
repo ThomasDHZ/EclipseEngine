@@ -25,11 +25,12 @@ public:
     void SetBufferIndex(int bufferIndex);
     void SetMaterial(std::shared_ptr<Material> material);
 
+    uint64_t GetMeshID() { return mesh.GetMeshID(); }
     uint32_t GetMeshBufferIndex() { return mesh.GetMeshBufferIndex(); }
     uint64_t GetBLASBufferDeviceAddress() { return mesh.GetBLASBufferDeviceAddress(); }
     VkBuffer GetMeshPropertiesBuffer() { return mesh.GetMeshPropertiesBuffer(); }
     VkBuffer GetMeshVertexBuffer() { return mesh.GetMeshVertexBuffer(); }
-    VkBuffer GetMeshIndexBuffer() { return mesh.GetMeshIndexBuffer(); }
+    VkBuffer GetMeshIndiceBuffer() { return mesh.GetMeshIndiceBuffer(); }
     std::shared_ptr<Material> GetMaterial() { return mesh.GetMaterial(); }
 
     void ToJson(nlohmann::json& j) override

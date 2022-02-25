@@ -218,7 +218,26 @@ void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        sceneProperties.MeshIndex = obj->GetGameObjectID() - 1;
+        ComponentRenderer* componentRenderer = nullptr;
+        if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
+            obj->GetComponentByType(ComponentType::kMeshRenderer))
+        {
+            if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
+            {
+                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
+            }
+
+            if (obj->GetComponentByType(ComponentType::kMeshRenderer))
+            {
+                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
+            }
+        }
+        else
+        {
+            continue;
+        }
+
+        sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
         vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], blinnphongPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 
         obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);

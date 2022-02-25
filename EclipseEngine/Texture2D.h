@@ -7,6 +7,7 @@ protected:
     void CreateTextureSampler();
 public:
     Texture2D();
-    Texture2D(const std::string TextureLocation, VkFormat format);
+    Texture2D(nlohmann::json& json);
+    Texture2D(const std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);
     ~Texture2D();
 };

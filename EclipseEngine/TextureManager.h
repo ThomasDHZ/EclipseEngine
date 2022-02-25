@@ -10,19 +10,18 @@ private:
 	static VkSampler NullSampler;
 	static std::vector<std::shared_ptr<Texture2D>> Texture2DList;
 
-	static uint64_t IsTexture2DLoaded(std::string name)
+	static std::shared_ptr<Texture2D> IsTexture2DLoaded(std::string name)
 	{
 		uint64_t textureID = 0;
 		for (auto texture : Texture2DList)
 		{
 			if (texture->GetFilePath() == name)
 			{
-				textureID = texture->GetTextureID();
-				return textureID;
+				return texture;
 			}
 		}
 
-		return textureID;
+		return nullptr;
 	}
 
 	static void UpdateBufferIndex()
@@ -37,8 +36,8 @@ public:
 
 	static void StartUp()
 	{
-		LoadTexture2D("../texture/DefaultTexture.png", VK_FORMAT_R8G8B8A8_UNORM);
-		LoadTexture2D("../texture/AlphaDefault.png", VK_FORMAT_R8G8B8A8_UNORM);
+		LoadTexture2D("../texture/DefaultTexture.png", TextureTypeEnum::kDiffuseTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+		LoadTexture2D("../texture/AlphaDefault.png", TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 
 		VkSamplerCreateInfo NullSamplerInfo = {};
 		NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -64,27 +63,35 @@ public:
 		}
 	}
 
-	static uint64_t LoadTexture2D(std::shared_ptr<Texture2D> texture)
+	static std::shared_ptr<Texture2D> LoadTexture2D(std::shared_ptr<Texture2D> texture)
 	{
-		Texture2DList.emplace_back(texture);
-		VulkanRenderer::UpdateRendererFlag = true;
-		return texture->GetTextureID();
-	}
-
-	static uint64_t LoadTexture2D(const std::string TextureLocation, VkFormat format)
-	{
-		uint64_t isTextureLoaded = IsTexture2DLoaded(TextureLocation);
-		if (isTextureLoaded != 0)
+		std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
+		if (isTextureLoaded != nullptr)
 		{
 			return isTextureLoaded;
 		}
 
-		const std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(TextureLocation, format));
 		Texture2DList.emplace_back(texture);
 
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
-		return texture->GetTextureID();
+		return texture;
+	}
+
+	static std::shared_ptr<Texture2D> LoadTexture2D(const std::string TextureLocation, TextureTypeEnum textureType, VkFormat format)
+	{
+		std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(TextureLocation);
+		if (isTextureLoaded != nullptr)
+		{
+			return isTextureLoaded;
+		}
+
+		const std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(TextureLocation, textureType, format));
+		Texture2DList.emplace_back(texture);
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+		return texture;
 	}
 
 	static std::vector<VkDescriptorImageInfo>  GetTexturemBufferList()

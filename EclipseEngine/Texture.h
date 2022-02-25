@@ -4,6 +4,19 @@
 #include "stb_image.h"
 #include <json.hpp>
 
+enum TextureTypeEnum
+{
+    kUndefinedTexture,
+    kRenderedColorTexture,
+    kRenderedDepthTexture,
+    kDiffuseTextureMap,
+    kSpecularTextureMap,
+    kNormalTextureMap,
+    kDepthTextureMap,
+    kAlphaTextureMap,
+    kEmissionTextureMap,
+};
+
 class Texture
 {
 private:
@@ -24,6 +37,9 @@ protected:
     int Height;
     int Depth;
     uint32_t MipMapLevels = 1;
+
+    TextureTypeEnum TextureType = kUndefinedTexture;
+    VkFormat StartTextureByteFormat = VK_FORMAT_UNDEFINED;
     VkFormat TextureByteFormat = VK_FORMAT_UNDEFINED;
     VkImageLayout TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
@@ -36,7 +52,9 @@ protected:
 
 public:
     Texture();
-    Texture(std::string TextureLocation, VkFormat format);
+    Texture(TextureTypeEnum textureType);
+    Texture(nlohmann::json& json);
+    Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);
 
     ~Texture();
 
@@ -50,7 +68,6 @@ public:
     VkImageView View = VK_NULL_HANDLE;
     VkSampler Sampler = VK_NULL_HANDLE;
 
-
     std::string GetFilePath() { return FilePath; }
     std::string GetTextureName() { return TextureName; }
     uint64_t GetTextureID() { return TextureID; }
@@ -60,25 +77,26 @@ public:
     VkSampler* GetSamplerPtr() { return &Sampler; }
     uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }
 
-    void to_json(nlohmann::json& j, const Texture& p)
+    virtual nlohmann::json ToJson()
     {
-        j["Width"] = Width;
-        j["Height"] = Height;
-        j["Depth"] = Depth;
-        j["TextureByteFormat"] = TextureByteFormat;
-        j["TextureImageLayout"] = TextureImageLayout;
-        j["SampleCount"] = SampleCount;
+        nlohmann::json json;
+
+        json["FilePath"] = FilePath;
+        json["TextureName"] = TextureName;
+
+        json["Width"] = Width;
+        json["Height"] = Height;
+        json["Depth"] = Depth;
+        json["MipMapLevels"] = MipMapLevels;
+        json["SampleCount"] = SampleCount;
+
+        json["TextureType"] = TextureType;
+        json["StartTextureByteFormat"] = StartTextureByteFormat;
+        json["TextureByteFormat"] = TextureByteFormat;
+        json["TextureImageLayout"] = TextureImageLayout;
+
+        return json;
     }
 
-    void from_json(const nlohmann::json& j, Texture& p)
-    {
-        j.at("Width").get_to(p.Width);
-        j.at("Height").get_to(p.Height);
-        j.at("Depth").get_to(p.Depth);
-        j.at("MipMapLevels").get_to(p.MipMapLevels);
-        j.at("TextureByteFormat").get_to(p.TextureByteFormat);
-        j.at("TextureImageLayout").get_to(p.TextureImageLayout);
-        j.at("SampleCount").get_to(p.SampleCount);
-    }
 };
 

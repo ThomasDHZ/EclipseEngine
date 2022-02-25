@@ -1,12 +1,16 @@
 #include "Mesh.h"
 #include "Math.h"
 
+uint64_t Mesh::MeshIDCounter = 0;
+
 Mesh::Mesh()
 {
 }
 
 Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 {
+	GenerateID();
+
 	VertexList = vertices;
 	IndexList = indices;
 
@@ -61,6 +65,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 
 Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
+	GenerateID();
+
 	VertexList = vertices;
 	IndexList = indices;
 
@@ -190,6 +196,12 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 	{
 		MeshBottomLevelAccelerationStructure();
 	}
+}
+
+void Mesh::GenerateID()
+{
+	MeshIDCounter++;
+	MeshID = MeshIDCounter;
 }
 
 void Mesh::Draw(VkCommandBuffer& commandBuffer)

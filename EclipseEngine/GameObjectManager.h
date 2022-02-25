@@ -119,7 +119,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				sprite->SetBufferIndex(MeshPropertiesBufferList.size());
+				sprite->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
 			}
 
 			auto meshRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -137,7 +137,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				mesh->SetBufferIndex(MeshPropertiesBufferList.size());
+				mesh->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
 			}
 		}
 
@@ -164,7 +164,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshVertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				sprite->SetBufferIndex(MeshVertexBufferList.size());
+				sprite->SetBufferIndex(MeshVertexBufferList.size() - 1);
 			}
 
 			auto meshRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -182,7 +182,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshVertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				mesh->SetBufferIndex(MeshVertexBufferList.size());
+				mesh->SetBufferIndex(MeshVertexBufferList.size() - 1);
 			}
 		}
 
@@ -201,7 +201,7 @@ public:
 
 				MeshProperties meshProps = {};
 				sprite->UpdateMeshProperties(meshProps);
-				VkBuffer buffer = sprite->GetMeshIndexBuffer();
+				VkBuffer buffer = sprite->GetMeshIndiceBuffer();
 
 				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 				MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -209,7 +209,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshIndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				sprite->SetBufferIndex(MeshIndexBufferList.size());
+				sprite->SetBufferIndex(MeshIndexBufferList.size() - 1);
 			}
 
 			auto meshRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -219,7 +219,7 @@ public:
 
 				MeshProperties meshProps = {};
 				mesh->UpdateMeshProperties(meshProps);
-				VkBuffer buffer = mesh->GetMeshIndexBuffer();
+				VkBuffer buffer = mesh->GetMeshIndiceBuffer();
 
 				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 				MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -227,7 +227,7 @@ public:
 				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 				MeshIndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-				mesh->SetBufferIndex(MeshIndexBufferList.size());
+				mesh->SetBufferIndex(MeshIndexBufferList.size() - 1);
 			}
 		}
 

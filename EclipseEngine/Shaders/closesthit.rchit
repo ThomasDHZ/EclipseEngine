@@ -65,7 +65,7 @@ void main()
 {
 	Vertex vertex = BuildVertexInfo();
 
-	   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
-   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
+	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
+   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
     rayHitInfo.color = texture(TextureMap[diffuse], vertex.uv).rgb;
 }

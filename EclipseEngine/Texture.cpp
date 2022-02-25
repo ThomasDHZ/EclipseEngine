@@ -6,9 +6,51 @@ uint64_t Texture::TextureIDCounter = 0;
 
 Texture::Texture()
 {
+	FilePath = "";
+	TextureName = "";
+	GenerateID();
+	Width = 0;
+	Height = 0;
+	Depth = 1;
+
+	TextureType = TextureTypeEnum::kUndefinedTexture;
+	StartTextureByteFormat = VK_FORMAT_UNDEFINED;
+	TextureByteFormat = VK_FORMAT_UNDEFINED;
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 }
 
-Texture::Texture(std::string TextureLocation, VkFormat format)
+Texture::Texture(TextureTypeEnum textureType)
+{
+	TextureType = textureType;
+	GenerateID();
+}
+
+Texture::Texture(nlohmann::json& json)
+{
+
+	json.at("FilePath").get_to(FilePath);
+	json.at("TextureName").get_to(TextureName);
+	GenerateID();
+
+	json.at("Width").get_to(Width);
+	json.at("Height").get_to(Height);
+	json.at("Depth").get_to(Depth);
+
+	json.at("TextureType").get_to(TextureType);
+	json.at("StartTextureByteFormat").get_to(StartTextureByteFormat);
+	json.at("TextureByteFormat").get_to(TextureByteFormat);
+	json.at("TextureImageLayout").get_to(TextureImageLayout);
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+
+	if (FilePath != "")
+	{
+		LoadTexture(FilePath, StartTextureByteFormat);
+	}
+}
+
+Texture::Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFormat format)
 {
 	FilePath = TextureLocation;
 	TextureName = TextureLocation;
@@ -17,18 +59,14 @@ Texture::Texture(std::string TextureLocation, VkFormat format)
 	Width = 0;
 	Height = 0;
 	Depth = 1;
+
+	TextureType = textureType;
+	StartTextureByteFormat = format;
 	TextureByteFormat = format;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
 	LoadTexture(TextureLocation, format);
-
-	//Texture temp;
-	//nlohmann::json json;
-
-	//to_json(json, *this);
-	//std::cout << json << std::endl;
-	//from_json(json, temp);
 }
 
 Texture::~Texture()

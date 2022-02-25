@@ -49,15 +49,20 @@ private:
     uint64_t MaterialID = 0;
     uint64_t MaterialBufferIndex = 0;
 
-	uint32_t DiffuseMapID = DefaultTextureID;
-	uint32_t SpecularMapID = DefaultTextureID;
-	uint32_t NormalMapID = DefaultTextureID;
-	uint32_t DepthMapID = DefaultTextureID;
-	uint32_t AlphaMapID = DefaultAlphaTextureID;
-	uint32_t EmissionMapID = DefaultTextureID;
-	uint32_t ShadowMapID = DefaultTextureID;
+	alignas(16) glm::vec3 Ambient = glm::vec3(0.2f);
+	alignas(16) glm::vec3 Diffuse = glm::vec3(0.6f);
+	alignas(16) glm::vec3 Specular = glm::vec3(1.0f);
+	alignas(4) float Shininess = 32;
+	alignas(4) float Reflectivness = 0.0f;
 
-	MaterialProperties materialProperties;
+	std::shared_ptr<Texture> DiffuseMap = nullptr;
+	std::shared_ptr<Texture> SpecularMap = nullptr;
+	std::shared_ptr<Texture> NormalMap = nullptr;
+	std::shared_ptr<Texture> DepthMap = nullptr;
+	std::shared_ptr<Texture> AlphaMap = nullptr;
+	std::shared_ptr<Texture> EmissionMap = nullptr;
+	std::shared_ptr<Texture> ShadowMap = nullptr;
+
 	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;
 
@@ -68,6 +73,7 @@ public:
 	Material();
 	Material(const std::string materialName);
 	Material(const std::string materialName, MaterialProperties& MaterialInfo);
+	Material(nlohmann::json& json);
 	~Material();
 
 	void Update(float DeltaTime);
@@ -101,5 +107,40 @@ public:
 	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }
 	MaterialBufferData GetMaterialTextureData() { return materialTextureData; }
 	VkBuffer GetMaterialBuffer() { return MaterialBuffer.GetBuffer(); }
+
+	virtual void ToJson(nlohmann::json& json)
+	{
+		json["MaterialName"] = MaterialName;
+		json["Ambient"] = { Ambient.x, Ambient.y, Ambient.z };
+		json["Diffuse"] = { Diffuse.x, Diffuse.y, Diffuse.z };
+		json["Specular"] = { Specular.x, Specular.y, Specular.z };
+		json["Shininess"] = Shininess;
+		json["Reflectivness"] = Reflectivness;
+
+		if (DiffuseMap != nullptr)
+		{
+			json["DiffuseMap"] = DiffuseMap->ToJson();
+		}
+		if (SpecularMap != nullptr)
+		{
+			json["SpecularMap"] = SpecularMap->ToJson();
+		}
+		if (NormalMap != nullptr)
+		{
+			json["NormalMap"] = NormalMap->ToJson();
+		}
+		if (DepthMap != nullptr)
+		{
+			json["DepthMap"] = DepthMap->ToJson();
+		}
+		if (AlphaMap != nullptr)
+		{
+			json["AlphaMap"] = AlphaMap->ToJson();
+		}
+		if (EmissionMap != nullptr)
+		{
+			json["EmissionMap"] = EmissionMap->ToJson();
+		}
+	}
 };
 

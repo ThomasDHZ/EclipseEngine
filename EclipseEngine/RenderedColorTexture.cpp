@@ -5,7 +5,7 @@ RenderedColorTexture::RenderedColorTexture()
 
 }
 
-RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Texture()
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
@@ -21,7 +21,7 @@ RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Textu
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;

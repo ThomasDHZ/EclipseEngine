@@ -11,6 +11,13 @@ Scene::Scene()
 //std::cout << json << std::endl;
 //from_json(json, temp);
 
+
+    //nlohmann::json json;
+
+    //ToJson(json);
+    //std::cout << json << std::endl;
+    //Texture2D texturez = Texture2D(json);
+
     camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
@@ -19,10 +26,22 @@ Scene::Scene()
     material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
     MaterialManager::AddMaterial(material);
 
+
     std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
     material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
     MaterialManager::AddMaterial(material2);
 
+    nlohmann::json json;
+    material->ToJson(json);
+    std::cout << json << std::endl;
+    std::shared_ptr<Material> mat = std::make_shared<Material>(Material(json));
+    MaterialManager::AddMaterial(mat);
+
+    nlohmann::json json2;
+    material2->ToJson(json2);
+    std::cout << json2 << std::endl;
+    std::shared_ptr<Material> mat2 = std::make_shared<Material>(Material(json2));
+    MaterialManager::AddMaterial(mat2);
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
     //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
@@ -32,22 +51,22 @@ Scene::Scene()
     
     auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     auto b = static_cast<MeshRenderer*>(a.get());
-    b->SetMaterial(material2);
+    b->SetMaterial(mat2);
 
     std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject3D2", glm::vec3(2.0f, 0.0f, 0.0f)));
     auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
     auto b2 = static_cast<MeshRenderer*>(a2.get());
-    b2->SetMaterial(material);
+    b2->SetMaterial(mat);
 
     std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3D3", glm::vec3(1.0f)));
     auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
     auto b3 = static_cast<MeshRenderer*>(a3.get());
-    b3->SetMaterial(material2);
+    b3->SetMaterial(mat2);
 
     std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject3D4", glm::vec3(2.0f, 1.0f, 0.0f)));
     auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
     auto b4 = static_cast<MeshRenderer*>(a4.get());
-    b4->SetMaterial(material);
+    b4->SetMaterial(mat);
 
     //Transform3D temp;
     //nlohmann::json json;
@@ -155,9 +174,9 @@ void Scene::Draw()
 
 
    // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-  //  blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-    rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
-    rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+   // rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
+   // rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 

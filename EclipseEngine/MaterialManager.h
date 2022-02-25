@@ -51,6 +51,9 @@ public:
 			MaterialList.emplace_back(material);
 		}
 
+		nlohmann::json json;
+		MaterialList.back()->ToJson(json);
+
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return materialID;

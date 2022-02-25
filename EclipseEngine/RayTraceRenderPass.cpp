@@ -42,7 +42,7 @@ void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
     std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
     for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
     {
-
+        auto a = GameObjectManager::GetGameObjectList();
         const std::shared_ptr<GameObject> obj = GameObjectManager::GetGameObjectList()[x];
         ComponentRenderer* componentRenderer = nullptr;
 

@@ -66,8 +66,8 @@ void main()
 {
 	Vertex vertex = BuildVertexInfo();
 
-	   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
-   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
+	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
+   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
 
 	 if(texture(TextureMap[alpha], vertex.uv).r == 0.0f ||
 		texture(TextureMap[diffuse], vertex.uv).a == 0.0f)
