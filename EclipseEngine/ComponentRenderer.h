@@ -8,10 +8,6 @@ private:
 
 protected:
     Mesh mesh;
-    void FromJson(const nlohmann::json& json) override
-    {
-
-    }
 
 public:
     ComponentRenderer();
@@ -33,9 +29,11 @@ public:
     VkBuffer GetMeshIndiceBuffer() { return mesh.GetMeshIndiceBuffer(); }
     std::shared_ptr<Material> GetMaterial() { return mesh.GetMaterial(); }
 
-    void ToJson(nlohmann::json& j) override
+    virtual nlohmann::json ToJson() override
     {
+        nlohmann::json json = Component::ToJson();
 
+        return json;
     }
 };
 

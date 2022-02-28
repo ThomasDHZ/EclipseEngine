@@ -62,7 +62,30 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 
 GameObject::GameObject(nlohmann::json& json)
 {
-	FromJson(json);
+	std::cout << json << std::endl;
+
+	json.at("ObjectName").get_to(ObjectName);
+
+	for (int x = 0; x <= json.size(); x++)
+	{
+		ComponentType type = ComponentType::kNullComponent;
+		json["ComponentList"][x].at("componentType").get_to(type);
+
+
+		switch (type)
+		{
+			case ComponentType::kTransform2D: { AddComponent(std::make_shared<Transform2D>(Transform2D(json["ComponentList"][x]))); break; }
+			case ComponentType::kTransform3D: { AddComponent(std::make_shared<Transform3D>(Transform3D(json["ComponentList"][x]))); break; }
+			case ComponentType::kSpriteRenderer: { AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(json["ComponentList"][x]))); break; }
+			case ComponentType::kMeshRenderer:
+			{ 
+
+				std::cout << json["ComponentList"][x] << std::endl;
+				auto  a = MeshRenderer(json[x]); 
+				break; 
+			}
+		}
+	}
 }
 
 GameObject::~GameObject()

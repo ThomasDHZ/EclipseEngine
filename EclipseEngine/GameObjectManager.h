@@ -239,6 +239,16 @@ public:
 		return objList;
 	}
 
+	static nlohmann::json SaveGameObjects()
+	{
+		nlohmann::json json;
+		for (int x = 0; x < objList.size(); x++)
+		{
+			json[x] = objList[x]->ToJson();
+		}
+		return json;
+	}
+
 	static void Destory()
 	{
 		for (auto& obj : objList)

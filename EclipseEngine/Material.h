@@ -108,8 +108,10 @@ public:
 	MaterialBufferData GetMaterialTextureData() { return materialTextureData; }
 	VkBuffer GetMaterialBuffer() { return MaterialBuffer.GetBuffer(); }
 
-	virtual void ToJson(nlohmann::json& json)
+	nlohmann::json ToJson()
 	{
+		nlohmann::json json;
+
 		json["MaterialName"] = MaterialName;
 		json["Ambient"] = { Ambient.x, Ambient.y, Ambient.z };
 		json["Diffuse"] = { Diffuse.x, Diffuse.y, Diffuse.z };
@@ -141,6 +143,8 @@ public:
 		{
 			json["EmissionMap"] = EmissionMap->ToJson();
 		}
+
+		return json;
 	}
 };
 

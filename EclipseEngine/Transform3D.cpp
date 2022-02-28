@@ -28,9 +28,17 @@ Transform3D::Transform3D(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale
 	Scale = scale;
 }
 
-Transform3D::Transform3D(const nlohmann::json& json)
+Transform3D::Transform3D(const nlohmann::json& json) : Component(json)
 {
-	FromJson(json);
+	json.at("Position")[0].get_to(Position.x);
+	json.at("Position")[1].get_to(Position.y);
+	json.at("Position")[2].get_to(Position.z);
+	json.at("Rotation")[0].get_to(Rotation.x);
+	json.at("Rotation")[1].get_to(Rotation.y);
+	json.at("Rotation")[2].get_to(Rotation.z);
+	json.at("Scale")[0].get_to(Scale.x);
+	json.at("Scale")[1].get_to(Scale.y);
+	json.at("Scale")[2].get_to(Scale.z);
 }
 
 Transform3D::~Transform3D()

@@ -8,19 +8,7 @@ class Transform3D : public Component
 private:
 
 protected:
-    void FromJson(const nlohmann::json& json) override
-    {
-        json.at("ComponentID").get_to(ComponentID);
-        json.at("Position")[0].get_to(Position.x);
-        json.at("Position")[1].get_to(Position.y);
-        json.at("Position")[2].get_to(Position.z);
-        json.at("Rotation")[0].get_to(Rotation.x);
-        json.at("Rotation")[1].get_to(Rotation.y);
-        json.at("Rotation")[2].get_to(Rotation.z);
-        json.at("Scale")[0].get_to(Scale.x);
-        json.at("Scale")[1].get_to(Scale.y);
-        json.at("Scale")[2].get_to(Scale.z);
-    }
+ 
 
 public:
 	Transform3D();
@@ -38,12 +26,15 @@ public:
 	glm::vec3 Scale = glm::vec3(1.0f);
 	glm::mat4 Transform = glm::mat4(1.0f);
 
-    virtual void ToJson(nlohmann::json& j) override
+    virtual nlohmann::json ToJson() override
     {
-        j["ComponentID"] = ComponentID;
-        j["Position"] = { Position.x, Position.y, Position.z };
-        j["Rotation"] = { Rotation.x, Rotation.y, Rotation.z };
-        j["Scale"] = { Scale.x, Scale.y, Scale.z };
+        nlohmann::json json = Component::ToJson();
+
+        json["Position"] = { Position.x, Position.y, Position.z };
+        json["Rotation"] = { Rotation.x, Rotation.y, Rotation.z };
+        json["Scale"] = { Scale.x, Scale.y, Scale.z };
+
+        return json;
     }
 };
 

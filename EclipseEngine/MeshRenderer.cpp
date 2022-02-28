@@ -6,6 +6,11 @@ MeshRenderer::MeshRenderer() : ComponentRenderer(ComponentType::kMeshRenderer)
 	mesh = Mesh(vertices, indices);
 }
 
+MeshRenderer::MeshRenderer(nlohmann::json& json) : ComponentRenderer(json)
+{
+	mesh = Mesh(vertices, indices);
+}
+
 MeshRenderer::~MeshRenderer()
 {
 }

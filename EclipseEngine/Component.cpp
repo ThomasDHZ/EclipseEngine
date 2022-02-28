@@ -17,7 +17,7 @@ Component::Component(ComponentType type)
 
 Component::Component(const nlohmann::json& json)
 {
-	FromJson(json);
+	json.at("componentType").get_to(componentType);
 }
 
 Component::~Component()

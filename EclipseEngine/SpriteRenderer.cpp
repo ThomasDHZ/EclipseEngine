@@ -6,6 +6,11 @@ SpriteRenderer::SpriteRenderer() : ComponentRenderer(ComponentType::kSpriteRende
 	mesh = Mesh(vertices, indices);
 }
 
+SpriteRenderer::SpriteRenderer(nlohmann::json& json) : ComponentRenderer(json)
+{
+	mesh = Mesh(vertices, indices);
+}
+
 SpriteRenderer::~SpriteRenderer()
 {
 }

@@ -51,9 +51,6 @@ public:
 			MaterialList.emplace_back(material);
 		}
 
-		nlohmann::json json;
-		MaterialList.back()->ToJson(json);
-
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return materialID;
@@ -119,6 +116,16 @@ public:
 			}
 		}
 		return 0;
+	}
+
+	static nlohmann::json SaveMaterials()
+	{
+		nlohmann::json json;
+		for (int x = 0; x < MaterialList.size(); x++)
+		{
+			json[x] = MaterialList[x]->ToJson();
+		}
+		return json;
 	}
 
 	static void Destroy()

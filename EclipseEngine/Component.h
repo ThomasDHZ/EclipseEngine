@@ -21,10 +21,6 @@ protected:
 	uint64_t ComponentID;
 	ComponentType componentType;
 
-	virtual void FromJson(const nlohmann::json& json)
-	{
-	}
-
 public:
 
 	Component();
@@ -42,8 +38,13 @@ public:
 	ComponentType GetComponentType() { return componentType; }
 	uint64_t GetComponentID() { return ComponentID; }
 
-	virtual void ToJson(nlohmann::json& j)
+	virtual nlohmann::json ToJson()
 	{
+		nlohmann::json json;
+
+		json["componentType"] = componentType;
+
+		return json;
 	}
 };
 
