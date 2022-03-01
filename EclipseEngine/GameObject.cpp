@@ -1,9 +1,25 @@
 #include "GameObject.h"
+#include "LineRenderer.h"
 
 uint64_t GameObject::GameObjectIDCounter = 0;
 
 GameObject::GameObject()
 {
+}
+
+GameObject::GameObject(const std::string Name, std::vector<Vertex>& VertexList)
+{
+	ObjectName = Name;
+	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
+	AddComponent(std::make_shared<LineRenderer>(LineRenderer(VertexList)));
+	GenerateID();
+}
+
+GameObject::GameObject(glm::vec3 StartLine, glm::vec3 EndLine)
+{
+	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
+	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine)));
+	GenerateID();
 }
 
 GameObject::GameObject(const std::string Name)

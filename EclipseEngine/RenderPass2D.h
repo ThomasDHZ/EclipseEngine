@@ -5,6 +5,7 @@
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
+#include "DrawLinePipeline.h"
 
 class RenderPass2D : public BaseRenderPass
 {
@@ -20,6 +21,7 @@ public:
 	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
 	std::shared_ptr<Renderer2DPipeline> renderer2DPipeline;
+	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
 
 	void StartUp();
 	void RebuildSwapChain();

@@ -168,6 +168,7 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
+    <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="JsonHelper.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="GraphicsDevice.h" />
+    <ClInclude Include="LineRenderer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />

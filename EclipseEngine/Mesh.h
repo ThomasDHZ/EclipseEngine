@@ -5,10 +5,18 @@
 #include "MaterialManager.h"
 #include "AccelerationStructureBuffer.h"
 
+enum EnumMeshType
+{
+	kLine,
+	kPolygon
+};
+
 class Mesh
 {
 private:
 	static uint64_t MeshIDCounter;
+
+	EnumMeshType meshType;
 
 	std::vector<Vertex> VertexList;
 	std::vector<uint32_t> IndexList;
@@ -35,6 +43,8 @@ private:
 public:
 
 	Mesh();
+	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
+	Mesh(std::vector<Vertex>& vertices);
 	Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
 	Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	~Mesh();

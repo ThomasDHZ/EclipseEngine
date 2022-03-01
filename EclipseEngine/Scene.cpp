@@ -60,6 +60,12 @@ Scene::Scene()
     auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
     auto b4 = static_cast<MeshRenderer*>(a4.get());
     b4->SetMaterial(mat);
+
+
+    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("safd", glm::vec3(0.0f), glm::vec3(5.0f, 0.0f, 0.0f)));
+    //auto a5 = obj5->GetComponentByType(ComponentType::kLineRenderer);
+    //auto b5= static_cast<MeshRenderer*>(a5.get());
+    //b5->SetMaterial(mat);
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
     //
     //auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
@@ -85,13 +91,13 @@ Scene::Scene()
     GameObjectManager::AddGameObject(obj2);
     GameObjectManager::AddGameObject(obj3);
     GameObjectManager::AddGameObject(obj4);
-
+    GameObjectManager::AddGameObject(obj5);
     //nlohmann::json ab = obj->ToJson();
     //GameObject adsf = GameObject(ab);
 
     nlohmann::json json3;
-    json3["GameObjectList"] = GameObjectManager::SaveGameObjects();
-    json3["MaterialList"] = MaterialManager::SaveMaterials();
+    //json3["GameObjectList"] = GameObjectManager::SaveGameObjects();
+    //json3["MaterialList"] = MaterialManager::SaveMaterials();
 
     std::cout << json3 << std::endl;
 
@@ -187,8 +193,8 @@ void Scene::Draw()
     }
 
 
-   // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+    //blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
    // rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
    // rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
