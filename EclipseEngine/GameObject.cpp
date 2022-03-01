@@ -41,6 +41,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position)
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position)));
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
+
 	GenerateID();
 }
 
@@ -71,21 +72,20 @@ GameObject::GameObject(nlohmann::json& json)
 		ComponentType type = ComponentType::kNullComponent;
 		json["ComponentList"][x].at("componentType").get_to(type);
 
-
 		switch (type)
 		{
-			case ComponentType::kTransform2D: { AddComponent(std::make_shared<Transform2D>(Transform2D(json["ComponentList"][x]))); break; }
-			case ComponentType::kTransform3D: { AddComponent(std::make_shared<Transform3D>(Transform3D(json["ComponentList"][x]))); break; }
-			case ComponentType::kSpriteRenderer: { AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(json["ComponentList"][x]))); break; }
-			case ComponentType::kMeshRenderer:
-			{ 
+		case ComponentType::kTransform2D: { AddComponent(std::make_shared<Transform2D>(Transform2D(json["ComponentList"][x]))); break; }
+		case ComponentType::kTransform3D: { AddComponent(std::make_shared<Transform3D>(Transform3D(json["ComponentList"][x]))); break; }
+		case ComponentType::kSpriteRenderer: {break; }
+		case ComponentType::kMeshRenderer:
+		{
 
-				std::cout << json["ComponentList"][x] << std::endl;
-				auto  a = MeshRenderer(json[x]); 
-				break; 
-			}
+			MeshRenderer a = MeshRenderer(json["ComponentList"][x]);
+			break;
+		}
 		}
 	}
+	auto abs = 34;
 }
 
 GameObject::~GameObject()

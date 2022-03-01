@@ -24,13 +24,5 @@ public:
 
 	void Update(float DeltaTime) override;
 	void Destroy() override;
-
-
-	virtual nlohmann::json ToJson() override
-	{
-		nlohmann::json json = Component::ToJson();
-
-		return json;
-	}
 };
 

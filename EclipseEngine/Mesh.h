@@ -55,5 +55,24 @@ public:
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	
+	nlohmann::json ToJson()
+	{
+		nlohmann::json json;
+
+		if (VertexList.size() != 0)
+		{
+			for (int x = 0; x < VertexList.size(); x++)
+			{
+				json["VertexList"][x] = VertexList[x].ToJson();
+			}
+		}
+		if (IndexList.size() != 0)
+		{
+			json["IndexList"] = IndexList;
+		}
+		json["Material"] = material->ToJson();
+
+		return json;
+	}
 };
 

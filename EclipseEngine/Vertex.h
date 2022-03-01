@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <glm/glm.hpp>
+#include <json.hpp>
 
 struct Vertex {
     glm::vec3 pos;
@@ -37,5 +38,16 @@ struct Vertex {
         attributeDescriptions[2].offset = offsetof(Vertex, uv);
 
         return attributeDescriptions;
+    }
+
+    nlohmann::json ToJson()
+    {
+        nlohmann::json json;
+
+        json["pos"] = { pos.x, pos.y, pos.z };
+        json["color"] = { color.x, color.y, color.z };
+        json["uv"] = { uv.x, uv.y };
+
+        return json;
     }
 };

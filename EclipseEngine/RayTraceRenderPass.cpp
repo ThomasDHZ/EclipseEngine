@@ -76,9 +76,17 @@ void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
             //    }
             //    else
             //    {
+            if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
+            {
+                Transform2D* transform = static_cast<Transform2D*>(obj->GetComponentByType(ComponentType::kTransform2D).get());
+                GLMTransformMatrix2 = glm::transpose(transform->Transform);
+            }
+            if (obj->GetComponentByType(ComponentType::kMeshRenderer))
+            {
+                Transform3D* transform = static_cast<Transform3D*>(obj->GetComponentByType(ComponentType::kTransform3D).get());
+                GLMTransformMatrix2 = glm::transpose(transform->Transform);
+            }
 
-            Transform3D* transform  = static_cast<Transform3D*>(obj->GetComponentByType(ComponentType::kTransform3D).get());
-                    GLMTransformMatrix2 = glm::transpose(transform->Transform);
             //    }
           /*  }*/
             VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);

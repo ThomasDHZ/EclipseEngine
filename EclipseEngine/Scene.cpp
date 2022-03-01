@@ -42,11 +42,26 @@ Scene::Scene()
     MaterialManager::AddMaterial(mat2);
 
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
+    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b = static_cast<MeshRenderer*>(a.get());
+    b->SetMaterial(mat2);
+
     std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b2 = static_cast<MeshRenderer*>(a2.get());
+    b2->SetMaterial(mat);
+
     std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
+    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b3 = static_cast<MeshRenderer*>(a3.get());
+    b3->SetMaterial(mat2);
+
     std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
-   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
-    
+    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b4 = static_cast<MeshRenderer*>(a4.get());
+    b4->SetMaterial(mat);
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
+    //
     //auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     //auto b = static_cast<MeshRenderer*>(a.get());
     //b->SetMaterial(mat2);
@@ -71,8 +86,8 @@ Scene::Scene()
     GameObjectManager::AddGameObject(obj3);
     GameObjectManager::AddGameObject(obj4);
 
-    nlohmann::json ab = obj->ToJson();
-    GameObject adsf = GameObject(ab);
+    //nlohmann::json ab = obj->ToJson();
+    //GameObject adsf = GameObject(ab);
 
     nlohmann::json json3;
     json3["GameObjectList"] = GameObjectManager::SaveGameObjects();

@@ -33,6 +33,8 @@ public:
     {
         nlohmann::json json = Component::ToJson();
 
+        json["Mesh"] = mesh.ToJson();
+
         return json;
     }
 };

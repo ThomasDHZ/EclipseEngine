@@ -207,6 +207,9 @@
     <ClCompile Include="RayTraceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="DrawLinePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -392,6 +395,9 @@
     <ClInclude Include="JsonHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DrawLinePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">
@@ -435,6 +441,12 @@
     </None>
     <None Include="Shaders\closesthit.rchit">
       <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="Shaders\LineRendererShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\LineRendererShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

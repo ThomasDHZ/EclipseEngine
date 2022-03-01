@@ -8,7 +8,7 @@ SpriteRenderer::SpriteRenderer() : ComponentRenderer(ComponentType::kSpriteRende
 
 SpriteRenderer::SpriteRenderer(nlohmann::json& json) : ComponentRenderer(json)
 {
-	mesh = Mesh(vertices, indices);
+	//mesh = Mesh(vertices, indices);
 }
 
 SpriteRenderer::~SpriteRenderer()
