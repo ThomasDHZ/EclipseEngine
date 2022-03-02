@@ -5,6 +5,7 @@
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
 #include "BlinnPhongPipeline.h"
+#include "DrawLinePipeline.h"
 
 class BlinnPhongRenderPass : public BaseRenderPass
 {
@@ -24,6 +25,7 @@ public:
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	std::shared_ptr<BlinnPhongPipeline> blinnphongPipeline;
+	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
 
 	void StartUp();
 	void RebuildSwapChain();

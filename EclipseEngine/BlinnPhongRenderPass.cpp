@@ -22,6 +22,7 @@ void BlinnPhongRenderPass::StartUp()
     CreateRenderPass();
     CreateRendererFramebuffers();
     blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass));
+    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass));
     SetUpCommandBuffers();
 }
 
@@ -178,11 +179,13 @@ void BlinnPhongRenderPass::RebuildSwapChain()
     DepthTexture->RecreateRendererTexture(RenderPassResolution);
 
     blinnphongPipeline->Destroy();
+    drawLinePipeline->Destroy();
     BaseRenderPass::Destroy();
 
     CreateRenderPass();
     CreateRendererFramebuffers();
     blinnphongPipeline->UpdateGraphicsPipeLine(RenderPass);
+    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass);
     SetUpCommandBuffers();
 }
 
@@ -214,33 +217,63 @@ void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
     renderPassInfo.pClearValues = clearValues.data();
 
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
-    for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = nullptr;
-        if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
-            obj->GetComponentByType(ComponentType::kMeshRenderer))
+        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
+        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
+        for (auto obj : GameObjectManager::GetGameObjectList())
         {
-            if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
+            ComponentRenderer* componentRenderer = nullptr;
+
+            if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
+                obj->GetComponentByType(ComponentType::kMeshRenderer))
             {
-                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
+                if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
+                {
+                    componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
+                }
+
+                if (obj->GetComponentByType(ComponentType::kMeshRenderer))
+                {
+                    componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
+                }
+            }
+            else
+            {
+                continue;
             }
 
-            if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-            {
-                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
-            }
+            sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
+            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], blinnphongPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+
+            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
         }
-        else
+    }
+
+    //Line Render Pass
+    {
+        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
+        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+        for (auto obj : GameObjectManager::GetGameObjectList())
         {
-            continue;
+            ComponentRenderer* componentRenderer = nullptr;
+
+            if (obj->GetComponentByType(ComponentType::kLineRenderer))
+            {
+                if (obj->GetComponentByType(ComponentType::kLineRenderer))
+                {
+                    componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kLineRenderer).get());
+                }
+            }
+            else
+            {
+                continue;
+            }
+
+            sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
+            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], drawLinePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+
+            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
         }
-
-        sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], blinnphongPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-
-        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
@@ -257,6 +290,7 @@ void BlinnPhongRenderPass::Destroy()
     DepthTexture->Destroy();
 
     blinnphongPipeline->Destroy();
+    drawLinePipeline->Destroy();
 
     BaseRenderPass::Destroy();
 }

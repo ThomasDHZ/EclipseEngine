@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MaterialManager.h"
+#include "LineRenderer.h"
 
 class GameObjectManager
 {
@@ -96,6 +97,19 @@ public:
 				meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
 				mesh->UpdateMeshProperties(meshProps);
 			}
+
+			auto lineRenderer = obj->GetComponentByType(ComponentType::kLineRenderer);
+			if (lineRenderer != nullptr &&
+				transform3D != nullptr)
+			{
+				LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+				Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
+
+				MeshProperties meshProps = {};
+				meshProps.MeshTransform = transform->Transform;
+				meshProps.materialBufferData = line->GetMaterial()->GetMaterialTextureData();
+				line->UpdateMeshProperties(meshProps);
+			}
 		}
 	}
 
@@ -138,6 +152,24 @@ public:
 				MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
 				mesh->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+			}
+
+			auto lineRenderer = obj->GetComponentByType(ComponentType::kLineRenderer);
+			if (lineRenderer)
+			{
+				SpriteRenderer* line = static_cast<SpriteRenderer*>(lineRenderer.get());
+
+				MeshProperties meshProps = {};
+				line->UpdateMeshProperties(meshProps);
+				VkBuffer buffer = line->GetMeshPropertiesBuffer();
+
+				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+				MeshPropertiesmBufferBufferInfo.buffer = buffer;
+				MeshPropertiesmBufferBufferInfo.offset = 0;
+				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+				MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+				line->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
 			}
 		}
 
@@ -184,6 +216,24 @@ public:
 
 				mesh->SetBufferIndex(MeshVertexBufferList.size() - 1);
 			}
+
+			auto lineRenderer = obj->GetComponentByType(ComponentType::kLineRenderer);
+			if (lineRenderer)
+			{
+				LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+
+				MeshProperties meshProps = {};
+				line->UpdateMeshProperties(meshProps);
+				VkBuffer buffer = line->GetMeshVertexBuffer();
+
+				VkDescriptorBufferInfo linePropertiesmBufferBufferInfo = {};
+				linePropertiesmBufferBufferInfo.buffer = buffer;
+				linePropertiesmBufferBufferInfo.offset = 0;
+				linePropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+				MeshVertexBufferList.emplace_back(linePropertiesmBufferBufferInfo);
+
+				line->SetBufferIndex(MeshVertexBufferList.size() - 1);
+			}
 		}
 
 		return MeshVertexBufferList;
@@ -228,6 +278,24 @@ public:
 				MeshIndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
 				mesh->SetBufferIndex(MeshIndexBufferList.size() - 1);
+			}
+
+			auto lineRenderer = obj->GetComponentByType(ComponentType::kLineRenderer);
+			if (lineRenderer)
+			{
+				LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+
+				MeshProperties meshProps = {};
+				line->UpdateMeshProperties(meshProps);
+				VkBuffer buffer = line->GetMeshIndiceBuffer();
+
+				VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+				MeshPropertiesmBufferBufferInfo.buffer = buffer;
+				MeshPropertiesmBufferBufferInfo.offset = 0;
+				MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+				MeshIndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+				line->SetBufferIndex(MeshIndexBufferList.size() - 1);
 			}
 		}
 

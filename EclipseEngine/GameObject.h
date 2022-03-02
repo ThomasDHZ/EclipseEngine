@@ -18,8 +18,8 @@ private:
 public:
 
 	GameObject();
-	GameObject(const std::string Name, std::vector<Vertex>& VertexList);
-	GameObject(glm::vec3 StartLine, glm::vec3 EndLine);
+	GameObject(const std::string Name, std::vector<Vertex>& VertexList, int a);
+	GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a);
 	GameObject(const std::string Name);
 	GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex);
 	GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t zIndex);

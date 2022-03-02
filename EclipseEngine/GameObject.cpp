@@ -7,7 +7,7 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(const std::string Name, std::vector<Vertex>& VertexList)
+GameObject::GameObject(const std::string Name, std::vector<Vertex>& VertexList, int a)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
@@ -15,8 +15,9 @@ GameObject::GameObject(const std::string Name, std::vector<Vertex>& VertexList)
 	GenerateID();
 }
 
-GameObject::GameObject(glm::vec3 StartLine, glm::vec3 EndLine)
+GameObject::GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a)
 {
+	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
 	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine)));
 	GenerateID();
@@ -121,7 +122,8 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 	for (auto& comp : ComponentList)
 	{
 		if (comp->GetComponentType() == ComponentType::kSpriteRenderer ||
-			comp->GetComponentType() == ComponentType::kMeshRenderer)
+			comp->GetComponentType() == ComponentType::kMeshRenderer || 
+			comp->GetComponentType() == ComponentType::kLineRenderer)
 		{
 			if (comp->GetComponentType() == ComponentType::kSpriteRenderer)
 			{
@@ -137,6 +139,14 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer)
 				if (meshRenderer)
 				{
 					meshRenderer->Draw(commandBuffer);
+				}
+			}
+			else if (comp->GetComponentType() == ComponentType::kLineRenderer)
+			{
+				auto lineRenderer = static_cast<LineRenderer*>(comp.get());
+				if (lineRenderer)
+				{
+					lineRenderer->Draw(commandBuffer);
 				}
 			}
 		}
