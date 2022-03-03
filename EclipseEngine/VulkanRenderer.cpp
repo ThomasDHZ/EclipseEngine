@@ -55,6 +55,7 @@ VkPhysicalDevice VulkanRenderer::PhysicalDevice = VK_NULL_HANDLE;
 VkSurfaceKHR VulkanRenderer::Surface = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
 bool VulkanRenderer::UpdateRendererFlag = false;
+bool VulkanRenderer::WireframeModeFlag = false;
 
 PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
 PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;

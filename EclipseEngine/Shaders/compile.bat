@@ -6,6 +6,8 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe Renderer3D.vert -o Renderer3DVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe Renderer3D.frag -o Renderer3DFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe LineRendererShader.vert -o LineRendererShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe LineRendererShader.frag -o LineRendererShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe WireFrameShader.vert -o WireFrameShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe WireFrameShader.frag -o WireFrameShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 closesthit.rchit -o closesthit.rchit.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 anyhit.rahit -o anyhit.rahit.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 anyhit1.rahit -o anyhit1.rahit.spv

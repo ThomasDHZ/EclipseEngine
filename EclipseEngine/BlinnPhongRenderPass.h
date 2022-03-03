@@ -6,6 +6,7 @@
 #include "GameObjectManager.h"
 #include "BlinnPhongPipeline.h"
 #include "DrawLinePipeline.h"
+#include "WireframePipeline.h"
 
 class BlinnPhongRenderPass : public BaseRenderPass
 {
@@ -26,6 +27,7 @@ public:
 
 	std::shared_ptr<BlinnPhongPipeline> blinnphongPipeline;
 	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
+	std::shared_ptr<WireframePipeline> wireframePipeline;
 
 	void StartUp();
 	void RebuildSwapChain();

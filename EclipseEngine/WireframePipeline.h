@@ -2,17 +2,15 @@
 #include "GraphicsPipeline.h"
 #include "GameObjectManager.h"
 
-class DrawLinePipeline : public GraphicsPipeline
+class WireframePipeline : public GraphicsPipeline
 {
 private:
 	void SetUpDescriptorBindings();
 	void SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
 public:
-	DrawLinePipeline();
-	DrawLinePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
-	~DrawLinePipeline();
+	WireframePipeline();
+	WireframePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	~WireframePipeline();
 
 	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
 };
-
-

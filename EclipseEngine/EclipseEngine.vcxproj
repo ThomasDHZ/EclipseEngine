@@ -198,6 +198,7 @@
     <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
+    <ClCompile Include="WireframePipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
@@ -263,6 +264,7 @@
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WireframePipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\anyhit.rahit" />
@@ -281,6 +283,8 @@
     <None Include="Shaders\Renderer3D.frag" />
     <None Include="Shaders\Renderer3D.vert" />
     <None Include="Shaders\shadow.rmiss" />
+    <None Include="Shaders\WireFrameShader.frag" />
+    <None Include="Shaders\WireFrameShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,21 +1,22 @@
-#include "DrawLinePipeline.h"
+#include "WireframePipeline.h"
+
 #include "Mesh.h"
 
-DrawLinePipeline::DrawLinePipeline() : GraphicsPipeline()
+WireframePipeline::WireframePipeline() : GraphicsPipeline()
 {
 }
 
-DrawLinePipeline::DrawLinePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
+WireframePipeline::WireframePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
 {
     SetUpDescriptorBindings();
     SetUpShaderPipeLine(renderPass, sampleCount);
 }
 
-DrawLinePipeline::~DrawLinePipeline()
+WireframePipeline::~WireframePipeline()
 {
 }
 
-void DrawLinePipeline::SetUpDescriptorBindings()
+void WireframePipeline::SetUpDescriptorBindings()
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
@@ -23,11 +24,11 @@ void DrawLinePipeline::SetUpDescriptorBindings()
     SubmitDescriptorSet();
 }
 
-void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount)
+void WireframePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -42,7 +43,7 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSam
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
 
     VkViewport viewport{};
@@ -159,7 +160,7 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSam
     }
 }
 
-void DrawLinePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount)
+void WireframePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
     SetUpDescriptorBindings();

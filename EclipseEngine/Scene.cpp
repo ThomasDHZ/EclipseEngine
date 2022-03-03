@@ -62,7 +62,7 @@ Scene::Scene()
     //b4->SetMaterial(mat);
 
 
-    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("LineTest", glm::vec3(0.0f), glm::vec3(5.0f, 0.0f, 0.0f), 1));
+    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("LineTest", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, -5.0f), 1));
     //auto a5 = obj5->GetComponentByType(ComponentType::kLineRenderer);
     //auto b5= static_cast<MeshRenderer*>(a5.get());
     //b5->SetMaterial(mat);
@@ -138,7 +138,8 @@ void Scene::ImGuiUpdate()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     
     const auto objList = GameObjectManager::GetGameObjectList();
-    
+    ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
+
     for (int x = 0; x < objList.size(); x++)
     {
         if (objList[x]->GetComponentByType(ComponentType::kTransform2D))
@@ -189,7 +190,7 @@ void Scene::Draw()
     }
 
 
-    //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+   //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
     blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
    // rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
    // rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);

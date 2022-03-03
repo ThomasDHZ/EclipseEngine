@@ -35,6 +35,7 @@ private:
 public:
 
 	static bool UpdateRendererFlag;
+	static bool WireframeModeFlag;
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
