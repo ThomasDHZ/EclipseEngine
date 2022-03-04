@@ -10,6 +10,17 @@ RenderPass2D::~RenderPass2D()
 
 void RenderPass2D::StartUp()
 {
+    VkPipelineColorBlendAttachmentState ColorAttachment;
+    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+    ColorAttachmentList.emplace_back(ColorAttachment);
+    
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
@@ -18,8 +29,8 @@ void RenderPass2D::StartUp()
     CreateRenderPass();
     CreateRendererFramebuffers();
     renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass));
-    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, VK_SAMPLE_COUNT_1_BIT));
-    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, VK_SAMPLE_COUNT_1_BIT));
+    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
     SetUpCommandBuffers();
 }
 
@@ -132,13 +143,14 @@ void RenderPass2D::RebuildSwapChain()
 
     renderer2DPipeline->Destroy();
     drawLinePipeline->Destroy();
+    wireframePipeline->Destroy();
     BaseRenderPass::Destroy();
 
     CreateRenderPass();
     CreateRendererFramebuffers();
     renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass);
-    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, VK_SAMPLE_COUNT_1_BIT);
-    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, VK_SAMPLE_COUNT_1_BIT);
+    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
     SetUpCommandBuffers();
 }
 

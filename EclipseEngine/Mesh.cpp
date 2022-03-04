@@ -279,11 +279,20 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 void Mesh::Destory()
 {
 	VertexBuffer.DestoryBuffer();
-	IndexBuffer.DestoryBuffer();
-	TransformBuffer.DestoryBuffer();
-	TransformInverseBuffer.DestoryBuffer();
 	meshProperties.Destroy();
 
+	if (IndexBuffer.Buffer != nullptr)
+	{
+		IndexBuffer.DestoryBuffer();
+	}
+	if (TransformBuffer.Buffer != nullptr)
+	{
+		TransformBuffer.DestoryBuffer();
+	}
+	if (TransformInverseBuffer.Buffer != nullptr)
+	{
+		TransformInverseBuffer.DestoryBuffer();
+	}
 	if (BottomLevelAccelerationBuffer.handle != VK_NULL_HANDLE)
 	{
 		BottomLevelAccelerationBuffer.Destroy();

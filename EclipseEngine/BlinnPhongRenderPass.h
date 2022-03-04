@@ -11,6 +11,8 @@
 class BlinnPhongRenderPass : public BaseRenderPass
 {
 private:
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 

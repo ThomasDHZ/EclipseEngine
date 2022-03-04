@@ -11,6 +11,18 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
+   VkPipelineColorBlendAttachmentState ColorAttachment;
+   ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+   ColorAttachment.blendEnable = VK_TRUE;
+   ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+   ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+   ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+   ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+   ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+   ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+   ColorAttachmentList.emplace_back(ColorAttachment);
+   ColorAttachmentList.emplace_back(ColorAttachment);
+
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
@@ -22,8 +34,8 @@ void BlinnPhongRenderPass::StartUp()
     CreateRenderPass();
     CreateRendererFramebuffers();
     blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass));
-    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, GraphicsDevice::GetMaxSampleCount()));
-    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, GraphicsDevice::GetMaxSampleCount()));
+    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
+    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
     SetUpCommandBuffers();
 }
 
@@ -186,8 +198,8 @@ void BlinnPhongRenderPass::RebuildSwapChain()
     CreateRenderPass();
     CreateRendererFramebuffers();
     blinnphongPipeline->UpdateGraphicsPipeLine(RenderPass);
-    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, GraphicsDevice::GetMaxSampleCount());
-    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, GraphicsDevice::GetMaxSampleCount());
+    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
+    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
     SetUpCommandBuffers();
 }
 

@@ -11,6 +11,8 @@
 class RenderPass2D : public BaseRenderPass
 {
 private:
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+
 	void CreateRenderPass();
 	void CreateRendererFramebuffers();
 

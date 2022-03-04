@@ -6,11 +6,11 @@ class WireframePipeline : public GraphicsPipeline
 {
 private:
 	void SetUpDescriptorBindings();
-	void SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	void SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 public:
 	WireframePipeline();
-	WireframePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	WireframePipeline(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 	~WireframePipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 };

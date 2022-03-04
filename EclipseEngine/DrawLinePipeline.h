@@ -6,13 +6,13 @@ class DrawLinePipeline : public GraphicsPipeline
 {
 private:
 	void SetUpDescriptorBindings();
-	void SetUpShaderPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	void SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 public:
 	DrawLinePipeline();
-	DrawLinePipeline(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	DrawLinePipeline(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 	~DrawLinePipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, VkSampleCountFlagBits sampleCount);
+	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount);
 };
 
 
