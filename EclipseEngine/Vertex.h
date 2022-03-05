@@ -19,25 +19,32 @@ struct Vertex {
         return bindingDescription;
     }
 
-    static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() 
+    {
+        std::vector<VkVertexInputAttributeDescription> AttributeDescriptionList{};
 
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        VkVertexInputAttributeDescription PositionAttribute;
+        PositionAttribute.binding = 0;
+        PositionAttribute.location = 0;
+        PositionAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        PositionAttribute.offset = offsetof(Vertex, pos);
+        AttributeDescriptionList.emplace_back(PositionAttribute);
 
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
+        VkVertexInputAttributeDescription ColorAttribute;
+        ColorAttribute.binding = 0;
+        ColorAttribute.location = 1;
+        ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        ColorAttribute.offset = offsetof(Vertex, color);
+        AttributeDescriptionList.emplace_back(ColorAttribute);
 
-        attributeDescriptions[2].binding = 0;
-        attributeDescriptions[2].location = 2;
-        attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[2].offset = offsetof(Vertex, uv);
+        VkVertexInputAttributeDescription UVAttribute;
+        UVAttribute.binding = 0;
+        UVAttribute.location = 2;
+        UVAttribute.format = VK_FORMAT_R32G32_SFLOAT;
+        UVAttribute.offset = offsetof(Vertex, uv);
+        AttributeDescriptionList.emplace_back(UVAttribute);
 
-        return attributeDescriptions;
+        return AttributeDescriptionList;
     }
 
     nlohmann::json ToJson()

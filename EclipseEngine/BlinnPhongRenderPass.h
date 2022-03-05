@@ -12,12 +12,18 @@ class BlinnPhongRenderPass : public BaseRenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	VkVertexInputBindingDescription VertexInputBindingDescription;
+		std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
+
+
 	void CreateRenderPass();
 	void CreateRendererFramebuffers();
+	void CreateGraphicsPipeline();
 
 public:
 	BlinnPhongRenderPass();

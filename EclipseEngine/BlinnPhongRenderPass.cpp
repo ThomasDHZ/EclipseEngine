@@ -11,17 +11,17 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
-   VkPipelineColorBlendAttachmentState ColorAttachment;
-   ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-   ColorAttachment.blendEnable = VK_TRUE;
-   ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-   ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-   ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-   ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-   ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-   ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-   ColorAttachmentList.emplace_back(ColorAttachment);
-   ColorAttachmentList.emplace_back(ColorAttachment);
+    VkPipelineColorBlendAttachmentState ColorAttachment;
+ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+ColorAttachment.blendEnable = VK_TRUE;
+ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+ColorAttachmentList.emplace_back(ColorAttachment);
+ColorAttachmentList.emplace_back(ColorAttachment);
 
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -33,6 +33,8 @@ void BlinnPhongRenderPass::StartUp()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
+    CreateGraphicsPipeline();
+
     blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass));
     drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
     wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
@@ -181,6 +183,30 @@ void BlinnPhongRenderPass::CreateRendererFramebuffers()
     }
 }
 
+void BlinnPhongRenderPass::CreateGraphicsPipeline()
+{
+   // PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+   // PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+   //  VertexInputBindingDescription = Vertex::getBindingDescription();
+   //VertexInputAttributeDescription = Vertex::getAttributeDescriptions();
+
+   //VkPipelineColorBlendAttachmentState ColorAttachment;
+   // ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+   // ColorAttachment.blendEnable = VK_TRUE;
+   // ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+   // ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+   // ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+   // ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+   // ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+   // ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+   // ColorAttachmentList.emplace_back(ColorAttachment);
+   // ColorAttachmentList.emplace_back(ColorAttachment);
+
+
+   // blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass, PipelineShaderStageList, VertexInputBindingDescription, VertexInputAttributeDescription, ColorAttachmentList));
+}
+
 void BlinnPhongRenderPass::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -217,6 +243,18 @@ void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
     clearValues[3].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
     clearValues[4].depthStencil = { 1.0f, 0 };
 
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = (float)RenderPassResolution.x;
+    viewport.height = (float)RenderPassResolution.y;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+
+    VkRect2D rect2D{};
+    rect2D.offset = { 0, 0 };
+    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
@@ -231,6 +269,8 @@ void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
     renderPassInfo.pClearValues = clearValues.data();
 
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
+    vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
