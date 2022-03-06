@@ -11,6 +11,7 @@ private:
     VulkanBuffer InstancesBuffer;
 
     void SetUpCommandBuffers();
+    void BuildRenderPassPipelines();
 
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;

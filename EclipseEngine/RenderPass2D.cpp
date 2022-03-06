@@ -28,9 +28,7 @@ void RenderPass2D::StartUp()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass));
-    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
-    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -134,6 +132,22 @@ void RenderPass2D::CreateRendererFramebuffers()
     }
 }
 
+void RenderPass2D::BuildRenderPassPipelines()
+{
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, DescriptorBindingList));
+    }
+
+    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+}
+
 void RenderPass2D::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -148,9 +162,7 @@ void RenderPass2D::RebuildSwapChain()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    renderer2DPipeline->UpdateGraphicsPipeLine(RenderPass);
-    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
-    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 

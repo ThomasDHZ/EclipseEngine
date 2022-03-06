@@ -5,9 +5,9 @@ BlinnPhongPipeline::BlinnPhongPipeline() : GraphicsPipeline()
 {
 }
 
-BlinnPhongPipeline::BlinnPhongPipeline(const VkRenderPass& renderPass) : GraphicsPipeline()
+BlinnPhongPipeline::BlinnPhongPipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass);
 }
 
@@ -15,15 +15,9 @@ BlinnPhongPipeline::~BlinnPhongPipeline()
 {
 }
 
-void BlinnPhongPipeline::SetUpDescriptorBindings()
+void BlinnPhongPipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    AddTextureDescriptorSetBinding(1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-    SubmitDescriptorSet();
+    SubmitDescriptorSet(DescriptorBindingList);
 }
 
 void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
@@ -146,9 +140,9 @@ void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     }
 }
 
-void BlinnPhongPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass)
+void BlinnPhongPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass);
 }

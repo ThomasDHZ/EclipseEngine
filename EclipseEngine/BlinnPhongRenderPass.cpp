@@ -33,11 +33,7 @@ ColorAttachmentList.emplace_back(ColorAttachment);
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    CreateGraphicsPipeline();
-
-    blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass));
-    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
-    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -183,28 +179,20 @@ void BlinnPhongRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void BlinnPhongRenderPass::CreateGraphicsPipeline()
+void BlinnPhongRenderPass::BuildRenderPassPipelines()
 {
-   // PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-   // PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-   //  VertexInputBindingDescription = Vertex::getBindingDescription();
-   //VertexInputAttributeDescription = Vertex::getAttributeDescriptions();
+        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass, DescriptorBindingList));
+    }
 
-   //VkPipelineColorBlendAttachmentState ColorAttachment;
-   // ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-   // ColorAttachment.blendEnable = VK_TRUE;
-   // ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-   // ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-   // ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-   // ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-   // ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-   // ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-   // ColorAttachmentList.emplace_back(ColorAttachment);
-   // ColorAttachmentList.emplace_back(ColorAttachment);
-
-
-   // blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(RenderPass, PipelineShaderStageList, VertexInputBindingDescription, VertexInputAttributeDescription, ColorAttachmentList));
+    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
+    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
 }
 
 void BlinnPhongRenderPass::RebuildSwapChain()
@@ -223,9 +211,7 @@ void BlinnPhongRenderPass::RebuildSwapChain()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    blinnphongPipeline->UpdateGraphicsPipeLine(RenderPass);
-    drawLinePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
-    wireframePipeline->UpdateGraphicsPipeLine(RenderPass, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 

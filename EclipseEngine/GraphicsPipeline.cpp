@@ -97,6 +97,64 @@ void GraphicsPipeline::SubmitDescriptorSet()
     }
 }
 
+void GraphicsPipeline::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2)
+{
+    if (DescriptorBindingList2.size() > 0)
+    {
+        {
+            std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
+            for (auto& DescriptorBinding : DescriptorBindingList2)
+            {
+                DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
+            }
+            DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+        }
+        {
+            std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
+            for (auto& DescriptorBinding : DescriptorBindingList2)
+            {
+                LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
+            }
+            DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+        }
+        {
+            DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+
+            std::vector<VkWriteDescriptorSet> DescriptorList;
+
+            for (auto& DescriptorBinding : DescriptorBindingList2)
+            {
+
+
+                if (DescriptorBinding.BufferDescriptor.size() > 0)
+                {
+                    DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else if (DescriptorBinding.TextureDescriptor.size() > 0)
+                {
+                    DescriptorList.emplace_back(AddTextureDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else
+                {
+                    DescriptorList.emplace_back(AddAccelerationBuffer(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+                }
+            }
+            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
+        }
+    }
+    else
+    {
+        DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1));
+        DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+
+        LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL, 1 });
+        DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+
+        DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+        vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
+    }
+}
+
 void GraphicsPipeline::UpdateGraphicsPipeLine()
 {
     DescriptorPoolList.clear();

@@ -12,25 +12,6 @@ struct ConstMeshInfo
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 };
 
-struct DescriptorSetBindingStruct
-{
-	uint32_t DescriptorSlotNumber;
-	VkShaderStageFlags StageFlags;
-	VkDescriptorType DescriptorType;
-	VkWriteDescriptorSetAccelerationStructureKHR AccelerationStructureDescriptor;
-	std::vector<VkDescriptorImageInfo> TextureDescriptor;
-	std::vector<VkDescriptorBufferInfo> BufferDescriptor;
-	uint32_t Count;
-};
-
-struct DescriptorSetLayoutBindingInfo
-{
-	uint32_t Binding;
-	VkDescriptorType DescriptorType;
-	VkShaderStageFlags StageFlags;
-	uint32_t Count;
-};
-
 class GraphicsPipeline
 {
 private:
@@ -92,6 +73,7 @@ public:
 	void AddStorageBufferDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddNullDescriptorSetBinding(uint32_t BindingNumber);
 	void SubmitDescriptorSet();
+	void SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2);
 
 	virtual void UpdateGraphicsPipeLine();
 	virtual void Destroy();

@@ -15,6 +15,7 @@ private:
 
 	void CreateRenderPass();
 	void CreateRendererFramebuffers();
+	void BuildRenderPassPipelines();
 
 public:
 	RenderPass2D();

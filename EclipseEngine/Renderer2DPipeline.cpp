@@ -5,9 +5,9 @@ Renderer2DPipeline::Renderer2DPipeline() : GraphicsPipeline()
 {
 }
 
-Renderer2DPipeline::Renderer2DPipeline(const VkRenderPass& renderPass) : GraphicsPipeline()
+Renderer2DPipeline::Renderer2DPipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass);
 }
 
@@ -15,15 +15,9 @@ Renderer2DPipeline::~Renderer2DPipeline()
 {
 }
 
-void Renderer2DPipeline::SetUpDescriptorBindings()
+void Renderer2DPipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    AddTextureDescriptorSetBinding(1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-    SubmitDescriptorSet();
+    SubmitDescriptorSet(DescriptorBindingList);
 }
 
 void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
@@ -137,9 +131,9 @@ void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     }
 }
 
-void Renderer2DPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass)
+void Renderer2DPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass);
 }

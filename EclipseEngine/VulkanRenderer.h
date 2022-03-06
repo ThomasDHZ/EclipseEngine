@@ -10,6 +10,25 @@
 #include "VulkanSwapChain.h"
 #include "Pixel.h"
 
+struct DescriptorSetBindingStruct
+{
+	uint32_t DescriptorSlotNumber;
+	VkShaderStageFlags StageFlags;
+	VkDescriptorType DescriptorType;
+	VkWriteDescriptorSetAccelerationStructureKHR AccelerationStructureDescriptor;
+	std::vector<VkDescriptorImageInfo> TextureDescriptor;
+	std::vector<VkDescriptorBufferInfo> BufferDescriptor;
+	uint32_t Count;
+};
+
+struct DescriptorSetLayoutBindingInfo
+{
+	uint32_t Binding;
+	VkDescriptorType DescriptorType;
+	VkShaderStageFlags StageFlags;
+	uint32_t Count;
+};
+
 class VulkanRenderer
 {
 private:
