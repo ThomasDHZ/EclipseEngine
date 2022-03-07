@@ -56,6 +56,24 @@ void BaseRenderPass::SetUpCommandBuffers()
     }
 }
 
+
+VkWriteDescriptorSetAccelerationStructureKHR BaseRenderPass::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR& handle)
+{
+    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = {};
+    AccelerationDescriptorStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+    AccelerationDescriptorStructure.accelerationStructureCount = 1;
+    AccelerationDescriptorStructure.pAccelerationStructures = &handle;
+    return AccelerationDescriptorStructure;
+}
+
+VkDescriptorImageInfo BaseRenderPass::AddRayTraceStorageImageDescriptor(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkImageLayout ImageLayout, VkImageView& ImageView)
+{
+    VkDescriptorImageInfo RayTraceImageDescriptor{};
+    RayTraceImageDescriptor.imageView = ImageView;
+    RayTraceImageDescriptor.imageLayout = ImageLayout;
+    return RayTraceImageDescriptor;
+}
+
 void BaseRenderPass::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)
 {
     DescriptorSetBindingStruct DescriptorSetBinding{};

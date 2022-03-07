@@ -195,9 +195,6 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RayTracingPipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RayTraceRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
@@ -214,6 +211,9 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="WireframePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracingPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
