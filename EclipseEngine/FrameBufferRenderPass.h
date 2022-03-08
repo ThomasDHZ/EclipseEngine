@@ -1,8 +1,8 @@
 #pragma once
 #include "FrameBufferPipeline.h"
-#include "BaseRenderPass.h"
+#include "RenderPass.h"
 
-class FrameBufferRenderPass : public BaseRenderPass
+class FrameBufferRenderPass : public RenderPass
 {
 private:
 	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;

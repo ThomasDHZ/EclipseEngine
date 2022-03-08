@@ -6,9 +6,9 @@ WireframePipeline::WireframePipeline() : GraphicsPipeline()
 {
 }
 
-WireframePipeline::WireframePipeline(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
+WireframePipeline::WireframePipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass, ColorAttachments, sampleCount);
 }
 
@@ -16,12 +16,9 @@ WireframePipeline::~WireframePipeline()
 {
 }
 
-void WireframePipeline::SetUpDescriptorBindings()
+void WireframePipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-    SubmitDescriptorSet();
+    SubmitDescriptorSet(DescriptorBindingList);
 }
 
 void WireframePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
@@ -141,9 +138,9 @@ void WireframePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std:
     }
 }
 
-void WireframePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
+void WireframePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings();
+    SetUpDescriptorBindings(DescriptorBindingList);
     SetUpShaderPipeLine(renderPass, ColorAttachments, sampleCount);
 }

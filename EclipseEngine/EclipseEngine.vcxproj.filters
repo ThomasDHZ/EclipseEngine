@@ -78,7 +78,7 @@
     <ClCompile Include="InterfaceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="BaseRenderPass.cpp">
+    <ClCompile Include="RenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="FrameBufferRenderPass.cpp">
@@ -275,7 +275,7 @@
     <ClInclude Include="RenderPass2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseRenderPass.h">
+    <ClInclude Include="RenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="FrameBufferPipeline.h">

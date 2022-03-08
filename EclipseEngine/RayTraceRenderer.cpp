@@ -1,6 +1,6 @@
 #include "RayTraceRenderer.h"
 
-RayTraceRenderer::RayTraceRenderer() : BaseRenderPass()
+RayTraceRenderer::RayTraceRenderer() : RenderPass()
 {
 }
 

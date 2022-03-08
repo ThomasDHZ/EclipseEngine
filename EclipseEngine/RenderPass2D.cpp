@@ -1,6 +1,6 @@
 #include "RenderPass2D.h"
 
-RenderPass2D::RenderPass2D() : BaseRenderPass()
+RenderPass2D::RenderPass2D() : RenderPass()
 {
 }
 
@@ -100,7 +100,7 @@ void RenderPass2D::CreateRenderPass()
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
 
-    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &RenderPass))
+    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
         throw std::runtime_error("Failed to create GBuffer RenderPass.");
     }
@@ -118,7 +118,7 @@ void RenderPass2D::CreateRendererFramebuffers()
     {
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = RenderPass;
+        framebufferInfo.renderPass = renderPass;
         framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
         framebufferInfo.pAttachments = AttachmentList.data();
         framebufferInfo.width = RenderPassResolution.x;
@@ -141,11 +141,20 @@ void RenderPass2D::BuildRenderPassPipelines()
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(RenderPass, DescriptorBindingList));
+        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(renderPass, DescriptorBindingList));
     }
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-    drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
-    wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(RenderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+    }
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+    }
 }
 
 void RenderPass2D::RebuildSwapChain()
@@ -155,14 +164,34 @@ void RenderPass2D::RebuildSwapChain()
     renderedTexture->RecreateRendererTexture(RenderPassResolution);
     depthTexture->RecreateRendererTexture(RenderPassResolution);
 
-    renderer2DPipeline->Destroy();
-    drawLinePipeline->Destroy();
-    wireframePipeline->Destroy();
-    BaseRenderPass::Destroy();
+    RenderPass::Destroy();
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+        renderer2DPipeline->Destroy();
+        renderer2DPipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList);
+    }
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        drawLinePipeline->Destroy();
+        drawLinePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+    }
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        wireframePipeline->Destroy();
+        wireframePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+    }
     SetUpCommandBuffers();
 }
 
@@ -194,7 +223,7 @@ void RenderPass2D::Draw(SceneProperties sceneProperties)
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = RenderPass;
+    renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
@@ -205,102 +234,16 @@ void RenderPass2D::Draw(SceneProperties sceneProperties)
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
-        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipeline());
-        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
         if (VulkanRenderer::WireframeModeFlag)
         {
-            //Wireframe Render Pass
-            {
-                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                for (auto obj : GameObjectManager::GetGameObjectList())
-                {
-                    ComponentRenderer* componentRenderer = nullptr;
-
-                    if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
-                        obj->GetComponentByType(ComponentType::kMeshRenderer))
-                    {
-                        if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
-                        {
-                            componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
-                        }
-
-                        if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-                        {
-                            componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
-                        }
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-                    vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], wireframePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-
-                    obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-                }
-            }
+            DrawWireFrame(wireframePipeline, sceneProperties);
         }
         else
         {
-            for (auto obj : GameObjectManager::GetGameObjectList())
-            {
-                ComponentRenderer* componentRenderer = nullptr;
-
-                if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
-                    obj->GetComponentByType(ComponentType::kMeshRenderer))
-                {
-                    if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
-                    {
-                        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
-                    }
-
-                    if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-                    {
-                        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-
-                sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-                vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], renderer2DPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-
-                obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-            }
+            DrawMesh(renderer2DPipeline, sceneProperties);
         }
+        DrawLine(drawLinePipeline, sceneProperties);
     }
-
-    //Line Render Pass
-    {
-        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
-        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-        for (auto obj : GameObjectManager::GetGameObjectList())
-        {
-            ComponentRenderer* componentRenderer = nullptr;
-
-            if (obj->GetComponentByType(ComponentType::kLineRenderer))
-            {
-                if (obj->GetComponentByType(ComponentType::kLineRenderer))
-                {
-                    componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kLineRenderer).get());
-                }
-            }
-            else
-            {
-                continue;
-            }
-
-            sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], drawLinePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-
-            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-        }
-    }
-
 
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
@@ -317,5 +260,5 @@ void RenderPass2D::Destroy()
     drawLinePipeline->Destroy();
     wireframePipeline->Destroy();
 
-    BaseRenderPass::Destroy();
+    RenderPass::Destroy();
 }

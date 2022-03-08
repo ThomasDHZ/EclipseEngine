@@ -1,10 +1,10 @@
 #pragma once
-#include "BaseRenderPass.h"
+#include "RenderPass.h"
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
 
-class RayTraceRenderPass : public BaseRenderPass
+class RayTraceRenderPass : public RenderPass
 {
 private:
 	AccelerationStructureBuffer TopLevelAccelerationStructure{};

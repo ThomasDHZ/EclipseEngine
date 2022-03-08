@@ -2,7 +2,7 @@
 #include "FrameBufferRenderPass.h"
 #include "RayTraceRenderPass.h"
 
-class RayTraceRenderer : public BaseRenderPass
+class RayTraceRenderer : public RenderPass
 {
 private:
 public:

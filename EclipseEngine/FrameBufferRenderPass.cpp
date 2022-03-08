@@ -1,6 +1,6 @@
 #include "FrameBufferRenderPass.h"
 
-FrameBufferRenderPass::FrameBufferRenderPass() : BaseRenderPass()
+FrameBufferRenderPass::FrameBufferRenderPass() : RenderPass()
 {
 }
 
@@ -47,7 +47,7 @@ void FrameBufferRenderPass::CreateRenderPass()
     renderPassInfo.dependencyCount = 1;
     renderPassInfo.pDependencies = &dependency;
 
-    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &RenderPass) != VK_SUCCESS) {
+    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
     }
 }
@@ -65,7 +65,7 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = RenderPass;
+        framebufferInfo.renderPass = renderPass;
         framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
         framebufferInfo.pAttachments = attachments.data();
         framebufferInfo.width = RenderPassResolution.x;
@@ -86,7 +86,7 @@ void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> Render
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(RenderPass, RenderedTexture));
+    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(renderPass, RenderedTexture));
     SetUpCommandBuffers();
 }
 
@@ -95,8 +95,8 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     frameBufferPipeline->Destroy();
 
-    vkDestroyRenderPass(VulkanRenderer::GetDevice(), RenderPass, nullptr);
-    RenderPass = VK_NULL_HANDLE;
+    vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
+    renderPass = VK_NULL_HANDLE;
 
     for (auto& framebuffer : SwapChainFramebuffers)
     {
@@ -106,7 +106,7 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    frameBufferPipeline->UpdateGraphicsPipeLine(RenderPass, RenderedTexture);
+    frameBufferPipeline->UpdateGraphicsPipeLine(renderPass, RenderedTexture);
     SetUpCommandBuffers();
 }
 
@@ -142,7 +142,7 @@ void FrameBufferRenderPass::Draw()
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = RenderPass;
+    renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = Rect2D.offset;
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
@@ -164,5 +164,5 @@ void FrameBufferRenderPass::Draw()
 void FrameBufferRenderPass::Destroy()
 {
     frameBufferPipeline->Destroy();
-    BaseRenderPass::Destroy();
+    RenderPass::Destroy();
 }

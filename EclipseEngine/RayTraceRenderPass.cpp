@@ -1,7 +1,7 @@
 #include "RayTraceRenderPass.h"
 #include "Math.h"
 
-RayTraceRenderPass::RayTraceRenderPass()
+RayTraceRenderPass::RayTraceRenderPass() : RenderPass()
 {
 }
 

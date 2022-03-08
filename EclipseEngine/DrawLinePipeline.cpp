@@ -5,25 +5,22 @@ DrawLinePipeline::DrawLinePipeline() : GraphicsPipeline()
 {
 }
 
-DrawLinePipeline::DrawLinePipeline(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
+DrawLinePipeline::DrawLinePipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings();
-    SetUpShaderPipeLine(renderPass, ColorAttachments, sampleCount);
+    SetUpDescriptorBindings(DescriptorBindingList);
+    SetUpShaderPipeLine(renderPass, DescriptorBindingList, ColorAttachments, sampleCount);
 }
 
 DrawLinePipeline::~DrawLinePipeline()
 {
 }
 
-void DrawLinePipeline::SetUpDescriptorBindings()
+void DrawLinePipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
-    AddStorageBufferDescriptorSetBinding(0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-    SubmitDescriptorSet();
+    SubmitDescriptorSet(DescriptorBindingList);
 }
 
-void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
+void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList,std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -124,9 +121,9 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::
     }
 }
 
-void DrawLinePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
+void DrawLinePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings();
-    SetUpShaderPipeLine(renderPass, ColorAttachments, sampleCount);
+    SetUpDescriptorBindings(DescriptorBindingList);
+    SetUpShaderPipeLine(renderPass, DescriptorBindingList, ColorAttachments, sampleCount);
 }

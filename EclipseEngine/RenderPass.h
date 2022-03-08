@@ -1,13 +1,15 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
+#include "GameObjectManager.h"
+#include "GraphicsPipeline.h"
 
-class BaseRenderPass
+class RenderPass
 {
 private:
 
 protected:
-	VkRenderPass RenderPass = VK_NULL_HANDLE;
+	VkRenderPass renderPass = VK_NULL_HANDLE;
 	std::vector<VkCommandBuffer> CommandBuffer;
 	std::vector<VkFramebuffer> SwapChainFramebuffers;
 	glm::ivec2 RenderPassResolution;
@@ -27,10 +29,13 @@ protected:
 
 public:
 
-	BaseRenderPass();
-	~BaseRenderPass();
+	RenderPass();
+	~RenderPass();
 
 	void OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer);
+	virtual void DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
+	virtual void DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
+	virtual void DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();
 
