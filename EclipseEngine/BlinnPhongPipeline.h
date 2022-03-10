@@ -5,13 +5,13 @@
 class BlinnPhongPipeline : public GraphicsPipeline
 {
 private:
-	void SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
-	void SetUpShaderPipeLine(const VkRenderPass& renderPass);
+	void SetUpDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
+	void SetUpShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 public:
 	BlinnPhongPipeline();
-	BlinnPhongPipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+	BlinnPhongPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	~BlinnPhongPipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+	void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 };
 

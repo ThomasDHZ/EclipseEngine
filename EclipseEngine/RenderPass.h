@@ -3,10 +3,12 @@
 #include "VulkanBuffer.h"
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
+#include <fstream>
 
 class RenderPass
 {
 private:
+	VkShaderModule ReadShaderFile(const std::string& filename);
 
 protected:
 	VkRenderPass renderPass = VK_NULL_HANDLE;
@@ -14,8 +16,13 @@ protected:
 	std::vector<VkFramebuffer> SwapChainFramebuffers;
 	glm::ivec2 RenderPassResolution;
 
+	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+
 	VkWriteDescriptorSetAccelerationStructureKHR AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR& handle);
 	VkDescriptorImageInfo AddRayTraceStorageImageDescriptor(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkImageLayout ImageLayout, VkImageView& ImageView);
+
+	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 
 	void AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);

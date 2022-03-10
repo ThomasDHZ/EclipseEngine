@@ -5,27 +5,23 @@ DrawLinePipeline::DrawLinePipeline() : GraphicsPipeline()
 {
 }
 
-DrawLinePipeline::DrawLinePipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount) : GraphicsPipeline()
+DrawLinePipeline::DrawLinePipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass, DescriptorBindingList, ColorAttachments, sampleCount);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }
 
 DrawLinePipeline::~DrawLinePipeline()
 {
 }
 
-void DrawLinePipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+void DrawLinePipeline::SetUpDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    SubmitDescriptorSet(DescriptorBindingList);
+    SubmitDescriptorSet(buildGraphicsPipelineInfo.DescriptorBindingList);
 }
 
-void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList,std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
+void DrawLinePipeline::SetUpShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
@@ -58,7 +54,7 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::
     VkPipelineMultisampleStateCreateInfo multisampling{};
     multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampling.sampleShadingEnable = VK_TRUE;
-    multisampling.rasterizationSamples = sampleCount;
+    multisampling.rasterizationSamples = buildGraphicsPipelineInfo.sampleCount;
 
     VkPipelineDepthStencilStateCreateInfo depthStencil{};
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -72,8 +68,8 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     colorBlending.logicOpEnable = VK_FALSE;
     colorBlending.logicOp = VK_LOGIC_OP_COPY;
-    colorBlending.attachmentCount = static_cast<uint32_t>(ColorAttachments.size());
-    colorBlending.pAttachments = ColorAttachments.data();
+    colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
+    colorBlending.pAttachments = buildGraphicsPipelineInfo.ColorAttachments.data();
     colorBlending.blendConstants[0] = 0.0f;
     colorBlending.blendConstants[1] = 0.0f;
     colorBlending.blendConstants[2] = 0.0f;
@@ -97,8 +93,8 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
-    pipelineInfo.pStages = PipelineShaderStageList.data();
+    pipelineInfo.stageCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.PipelineShaderStageList.size());
+    pipelineInfo.pStages = buildGraphicsPipelineInfo.PipelineShaderStageList.data();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -107,23 +103,18 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass, std::
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = ShaderPipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.renderPass = buildGraphicsPipelineInfo.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS) {
         throw std::runtime_error("Failed to create gbuffer pipeline.");
     }
-
-    for (auto& shader : PipelineShaderStageList)
-    {
-        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-    }
 }
 
-void DrawLinePipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits sampleCount)
+void DrawLinePipeline::UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass, DescriptorBindingList, ColorAttachments, sampleCount);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }

@@ -5,27 +5,23 @@ Renderer2DPipeline::Renderer2DPipeline() : GraphicsPipeline()
 {
 }
 
-Renderer2DPipeline::Renderer2DPipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList) : GraphicsPipeline()
+Renderer2DPipeline::Renderer2DPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }
 
 Renderer2DPipeline::~Renderer2DPipeline()
 {
 }
 
-void Renderer2DPipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+void Renderer2DPipeline::SetUpDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    SubmitDescriptorSet(DescriptorBindingList);
+    SubmitDescriptorSet(buildGraphicsPipelineInfo.DescriptorBindingList);
 }
 
-void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
+void Renderer2DPipeline::SetUpShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
@@ -68,22 +64,12 @@ void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     depthStencil.depthBoundsTestEnable = VK_FALSE;
     depthStencil.stencilTestEnable = VK_FALSE;
 
-    std::array<VkPipelineColorBlendAttachmentState, 1> ColorAttachment = {};
-    ColorAttachment[0].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment[0].blendEnable = VK_TRUE;
-    ColorAttachment[0].srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    ColorAttachment[0].dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    ColorAttachment[0].colorBlendOp = VK_BLEND_OP_ADD;
-    ColorAttachment[0].srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    ColorAttachment[0].dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    ColorAttachment[0].alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     colorBlending.logicOpEnable = VK_FALSE;
     colorBlending.logicOp = VK_LOGIC_OP_COPY;
-    colorBlending.attachmentCount = static_cast<uint32_t>(ColorAttachment.size());
-    colorBlending.pAttachments = ColorAttachment.data();
+    colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
+    colorBlending.pAttachments = buildGraphicsPipelineInfo.ColorAttachments.data();
     colorBlending.blendConstants[0] = 0.0f;
     colorBlending.blendConstants[1] = 0.0f;
     colorBlending.blendConstants[2] = 0.0f;
@@ -107,8 +93,8 @@ void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
-    pipelineInfo.pStages = PipelineShaderStageList.data();
+    pipelineInfo.stageCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.PipelineShaderStageList.size());
+    pipelineInfo.pStages = buildGraphicsPipelineInfo.PipelineShaderStageList.data();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -117,23 +103,18 @@ void Renderer2DPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = ShaderPipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.renderPass = buildGraphicsPipelineInfo.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS) {
         throw std::runtime_error("Failed to create gbuffer pipeline.");
     }
-
-    for (auto& shader : PipelineShaderStageList)
-    {
-        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-    }
 }
 
-void Renderer2DPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+void Renderer2DPipeline::UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }

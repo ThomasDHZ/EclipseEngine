@@ -21,6 +21,7 @@ void RenderPass2D::StartUp()
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
     ColorAttachmentList.emplace_back(ColorAttachment);
     
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
@@ -137,23 +138,71 @@ void RenderPass2D::BuildRenderPassPipelines()
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(renderPass, DescriptorBindingList));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
 }
 
@@ -171,26 +220,71 @@ void RenderPass2D::RebuildSwapChain()
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-        renderer2DPipeline->Destroy();
-        renderer2DPipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList);
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        drawLinePipeline->Destroy();
-        drawLinePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        wireframePipeline->Destroy();
-        wireframePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT);
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     SetUpCommandBuffers();
 }

@@ -151,6 +151,35 @@ void RenderPass::SetUpCommandBuffers()
 }
 
 
+VkShaderModule RenderPass::ReadShaderFile(const std::string& filename)
+{
+    std::ifstream file(filename, std::ios::ate | std::ios::binary);
+
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filename);
+    }
+
+    size_t fileSize = (size_t)file.tellg();
+    std::vector<char> buffer(fileSize);
+
+    file.seekg(0);
+    file.read(buffer.data(), fileSize);
+
+    file.close();
+
+    VkShaderModuleCreateInfo createInfo = {};
+    createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    createInfo.codeSize = buffer.size();
+    createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
+
+    VkShaderModule shaderModule;
+    if (vkCreateShaderModule(VulkanRenderer::GetDevice(), &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create shader module!");
+    }
+
+    return shaderModule;
+}
+
 VkWriteDescriptorSetAccelerationStructureKHR RenderPass::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR& handle)
 {
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = {};
@@ -166,6 +195,17 @@ VkDescriptorImageInfo RenderPass::AddRayTraceStorageImageDescriptor(std::vector<
     RayTraceImageDescriptor.imageView = ImageView;
     RayTraceImageDescriptor.imageLayout = ImageLayout;
     return RayTraceImageDescriptor;
+}
+
+VkPipelineShaderStageCreateInfo RenderPass::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
+{
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertShaderStageInfo.stage = shaderStages;
+    vertShaderStageInfo.module = ReadShaderFile(filename);
+    vertShaderStageInfo.pName = "main";
+
+    return vertShaderStageInfo;
 }
 
 void RenderPass::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)

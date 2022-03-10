@@ -23,7 +23,7 @@ private:
 	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
 	std::shared_ptr<WireframePipeline> wireframePipeline;
 
-	void CreateRenderPass();
+	void BuildRenderPass();
 	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 

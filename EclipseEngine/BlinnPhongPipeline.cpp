@@ -5,27 +5,23 @@ BlinnPhongPipeline::BlinnPhongPipeline() : GraphicsPipeline()
 {
 }
 
-BlinnPhongPipeline::BlinnPhongPipeline(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList) : GraphicsPipeline()
+BlinnPhongPipeline::BlinnPhongPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo) : GraphicsPipeline()
 {
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }
 
 BlinnPhongPipeline::~BlinnPhongPipeline()
 {
 }
 
-void BlinnPhongPipeline::SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+void BlinnPhongPipeline::SetUpDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    SubmitDescriptorSet(DescriptorBindingList);
+    SubmitDescriptorSet(buildGraphicsPipelineInfo.DescriptorBindingList);
 }
 
-void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
+void BlinnPhongPipeline::SetUpShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
@@ -58,7 +54,7 @@ void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     VkPipelineMultisampleStateCreateInfo multisampling{};
     multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     multisampling.sampleShadingEnable = VK_TRUE;
-    multisampling.rasterizationSamples = GraphicsDevice::GetMaxSampleCount();
+    multisampling.rasterizationSamples = buildGraphicsPipelineInfo.sampleCount;
 
     VkPipelineDepthStencilStateCreateInfo depthStencil{};
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -68,31 +64,12 @@ void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     depthStencil.depthBoundsTestEnable = VK_FALSE;
     depthStencil.stencilTestEnable = VK_FALSE;
 
-    std::array<VkPipelineColorBlendAttachmentState, 2> ColorAttachment = {};
-    ColorAttachment[0].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment[0].blendEnable = VK_TRUE;
-    ColorAttachment[0].srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    ColorAttachment[0].dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    ColorAttachment[0].colorBlendOp = VK_BLEND_OP_ADD;
-    ColorAttachment[0].srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    ColorAttachment[0].dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    ColorAttachment[0].alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-
-    ColorAttachment[1].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment[1].blendEnable = VK_TRUE;
-    ColorAttachment[1].srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    ColorAttachment[1].dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    ColorAttachment[1].colorBlendOp = VK_BLEND_OP_ADD;
-    ColorAttachment[1].srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    ColorAttachment[1].dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    ColorAttachment[1].alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     colorBlending.logicOpEnable = VK_FALSE;
     colorBlending.logicOp = VK_LOGIC_OP_COPY;
-    colorBlending.attachmentCount = static_cast<uint32_t>(ColorAttachment.size());
-    colorBlending.pAttachments = ColorAttachment.data();
+    colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
+    colorBlending.pAttachments = buildGraphicsPipelineInfo.ColorAttachments.data();
     colorBlending.blendConstants[0] = 0.0f;
     colorBlending.blendConstants[1] = 0.0f;
     colorBlending.blendConstants[2] = 0.0f;
@@ -116,8 +93,8 @@ void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
-    pipelineInfo.pStages = PipelineShaderStageList.data();
+    pipelineInfo.stageCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.PipelineShaderStageList.size());
+    pipelineInfo.pStages = buildGraphicsPipelineInfo.PipelineShaderStageList.data();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -126,23 +103,18 @@ void BlinnPhongPipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = ShaderPipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.renderPass = buildGraphicsPipelineInfo.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
     if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS) {
         throw std::runtime_error("Failed to create gbuffer pipeline.");
     }
-
-    for (auto& shader : PipelineShaderStageList)
-    {
-        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-    }
 }
 
-void BlinnPhongPipeline::UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+void BlinnPhongPipeline::UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    SetUpDescriptorBindings(DescriptorBindingList);
-    SetUpShaderPipeLine(renderPass);
+    SetUpDescriptorBindings(buildGraphicsPipelineInfo);
+    SetUpShaderPipeLine(buildGraphicsPipelineInfo);
 }

@@ -28,4 +28,5 @@ void main() {
    uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
    outColor = vec4(texture(TextureMap[diffuse], fragUV).rgb, texture(TextureMap[alpha], fragUV).r);
+   outBloom = vec4(1.0f);
 }

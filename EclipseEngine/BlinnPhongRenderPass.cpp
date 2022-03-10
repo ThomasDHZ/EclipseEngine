@@ -11,50 +11,39 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
-    VkPipelineColorBlendAttachmentState ColorAttachment;
-ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-ColorAttachment.blendEnable = VK_TRUE;
-ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-ColorAttachmentList.emplace_back(ColorAttachment);
-ColorAttachmentList.emplace_back(ColorAttachment);
-
+    SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
+    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, SampleCount));
     RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
+    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, SampleCount));
     RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, GraphicsDevice::GetMaxSampleCount()));
+    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
 
-    CreateRenderPass();
+    BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void BlinnPhongRenderPass::CreateRenderPass()
+void BlinnPhongRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
-    VkAttachmentDescription AlebdoAttachment = {};
-    AlebdoAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    AlebdoAttachment.samples = GraphicsDevice::GetMaxSampleCount();
-    AlebdoAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    AlebdoAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    AlebdoAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    AlebdoAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(AlebdoAttachment);
+    VkAttachmentDescription ColorAttachment = {};
+    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    ColorAttachment.samples = SampleCount;
+    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(ColorAttachment);
 
     VkAttachmentDescription BloomAttachment = {};
     BloomAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomAttachment.samples = GraphicsDevice::GetMaxSampleCount();
+    BloomAttachment.samples = SampleCount;
     BloomAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     BloomAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     BloomAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -87,7 +76,7 @@ void BlinnPhongRenderPass::CreateRenderPass()
 
     VkAttachmentDescription DepthAttachment = {};
     DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = GraphicsDevice::GetMaxSampleCount();
+    DepthAttachment.samples = SampleCount;
     DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -146,7 +135,7 @@ void BlinnPhongRenderPass::CreateRenderPass()
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create GBuffer RenderPass.");
+        throw std::runtime_error("Failed to create Buffer RenderPass.");
     }
 }
 
@@ -181,26 +170,86 @@ void BlinnPhongRenderPass::CreateRendererFramebuffers()
 
 void BlinnPhongRenderPass::BuildRenderPassPipelines()
 {
+    VkPipelineColorBlendAttachmentState ColorAttachment;
+    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+    ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
+
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(renderPass, DescriptorBindingList));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(renderPass, DescriptorBindingList, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount()));
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
 }
 
@@ -216,32 +265,77 @@ void BlinnPhongRenderPass::RebuildSwapChain()
 
     RenderPass::Destroy();
 
-    CreateRenderPass();
+    BuildRenderPass();
     CreateRendererFramebuffers();
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-        blinnphongPipeline->Destroy();
-        blinnphongPipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList);
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        drawLinePipeline->Destroy();
-        drawLinePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
     {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
 
-        wireframePipeline->Destroy();
-        wireframePipeline->UpdateGraphicsPipeLine(renderPass, DescriptorBindingList, ColorAttachmentList, GraphicsDevice::GetMaxSampleCount());
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
     }
 
     SetUpCommandBuffers();

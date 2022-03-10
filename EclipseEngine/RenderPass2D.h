@@ -11,8 +11,6 @@
 class RenderPass2D : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-
 	std::shared_ptr<Renderer2DPipeline> renderer2DPipeline;
 	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
 	std::shared_ptr<WireframePipeline> wireframePipeline;

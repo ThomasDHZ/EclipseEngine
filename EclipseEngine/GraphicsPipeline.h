@@ -12,6 +12,15 @@ struct ConstMeshInfo
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 };
 
+struct BuildGraphicsPipelineInfo
+{
+	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	VkRenderPass renderPass;
+	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
+	VkSampleCountFlagBits sampleCount;
+};
+
 class GraphicsPipeline
 {
 private:
