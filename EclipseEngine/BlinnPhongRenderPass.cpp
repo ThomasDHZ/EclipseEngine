@@ -199,8 +199,10 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(buildGraphicsPipelineInfo));
+        blinnphongPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -221,8 +223,10 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonLine;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -243,8 +247,10 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -285,8 +291,10 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        blinnphongPipeline = std::make_shared<BlinnPhongPipeline>(BlinnPhongPipeline(buildGraphicsPipelineInfo));
+        blinnphongPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -307,8 +315,10 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonLine;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -329,8 +339,10 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {

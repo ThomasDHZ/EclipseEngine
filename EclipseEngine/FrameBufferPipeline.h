@@ -7,12 +7,12 @@
 class FrameBufferPipeline : public GraphicsPipeline
 {
 private:
-	void SetUpDescriptorBindings(std::shared_ptr<RenderedColorTexture> RenderedTexture);
-	void SetUpShaderPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture);
+	void SetUpDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
+	void SetUpShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 public:
 	FrameBufferPipeline();
-	FrameBufferPipeline(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture);
+	FrameBufferPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	~FrameBufferPipeline();
 
-	void UpdateGraphicsPipeLine(const VkRenderPass& renderPass, std::shared_ptr<RenderedColorTexture> RenderedTexture);
+	void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 };

@@ -8,7 +8,7 @@ FrameBufferRenderPass::~FrameBufferRenderPass()
 {
 }
 
-void FrameBufferRenderPass::CreateRenderPass()
+void FrameBufferRenderPass::BuildRenderPass()
 {
     VkAttachmentDescription colorAttachment{};
     colorAttachment.format = VK_FORMAT_B8G8R8A8_SRGB;
@@ -52,7 +52,7 @@ void FrameBufferRenderPass::CreateRenderPass()
     }
 }
 
-void FrameBufferRenderPass::CreateRendererFramebuffers()
+void FrameBufferRenderPass::BuildRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
@@ -80,20 +80,59 @@ void FrameBufferRenderPass::CreateRendererFramebuffers()
 
 }
 
-void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture)
+void FrameBufferRenderPass::BuildRenderPassPipelines()
 {
+    VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
+    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    colorBlendAttachment.blendEnable = VK_FALSE;
+    ColorAttachmentList.emplace_back(colorBlendAttachment);
+
+    {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+
+        VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+
+        frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(buildGraphicsPipelineInfo));
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
+}
+
+void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> renderedTexture)
+{
+    RenderedTexture = renderedTexture;
+
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    CreateRenderPass();
-    CreateRendererFramebuffers();
-    frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(renderPass, RenderedTexture));
+    BuildRenderPass();
+    BuildRendererFramebuffers();
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture)
+void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> renderedTexture)
 {
+    RenderedTexture = renderedTexture;
+
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    frameBufferPipeline->Destroy();
 
     vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
     renderPass = VK_NULL_HANDLE;
@@ -104,9 +143,34 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
         framebuffer = VK_NULL_HANDLE;
     }
 
-    CreateRenderPass();
-    CreateRendererFramebuffers();
-    frameBufferPipeline->UpdateGraphicsPipeLine(renderPass, RenderedTexture);
+    BuildRenderPass();
+    BuildRendererFramebuffers();
+
+    VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
+    {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+
+        frameBufferPipeline->Destroy();
+        frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
     SetUpCommandBuffers();
 }
 
@@ -137,7 +201,7 @@ void FrameBufferRenderPass::Draw()
     rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
 
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &CommandBufferBeginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
+        throw std::runtime_error("Failed to begin recording command buffer.");
     }
 
     VkRenderPassBeginInfo renderPassInfo{};
@@ -157,7 +221,7 @@ void FrameBufferRenderPass::Draw()
     vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 4, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
+        throw std::runtime_error("Failed to record command buffer.");
     }
 }
 

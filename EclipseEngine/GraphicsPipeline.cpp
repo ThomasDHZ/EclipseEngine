@@ -3,6 +3,10 @@
 
 GraphicsPipeline::GraphicsPipeline()
 {
+}
+
+GraphicsPipeline::GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
+{
     VkSamplerCreateInfo NullSamplerInfo = {};
     NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
     NullSamplerInfo.magFilter = VK_FILTER_NEAREST;
@@ -32,14 +36,16 @@ GraphicsPipeline::GraphicsPipeline()
     DescriptorPoolList.clear();
     LayoutBindingInfo.clear();
     DescriptorList.clear();
-    DescriptorBindingList.clear();
+
+    BuildDescriptorBindings(buildGraphicsPipelineInfo);
+    BuildShaderPipeLine(buildGraphicsPipelineInfo);
 }
 
 GraphicsPipeline::~GraphicsPipeline()
 {
 }
 
-void GraphicsPipeline::SubmitDescriptorSet()
+void GraphicsPipeline::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
     if (DescriptorBindingList.size() > 0)
     {
@@ -97,70 +103,11 @@ void GraphicsPipeline::SubmitDescriptorSet()
     }
 }
 
-void GraphicsPipeline::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2)
-{
-    if (DescriptorBindingList2.size() > 0)
-    {
-        {
-            std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
-            for (auto& DescriptorBinding : DescriptorBindingList2)
-            {
-                DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
-            }
-            DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
-        }
-        {
-            std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
-            for (auto& DescriptorBinding : DescriptorBindingList2)
-            {
-                LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
-            }
-            DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
-        }
-        {
-            DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
-
-            std::vector<VkWriteDescriptorSet> DescriptorList;
-
-            for (auto& DescriptorBinding : DescriptorBindingList2)
-            {
-
-
-                if (DescriptorBinding.BufferDescriptor.size() > 0)
-                {
-                    DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
-                }
-                else if (DescriptorBinding.TextureDescriptor.size() > 0)
-                {
-                    DescriptorList.emplace_back(AddTextureDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
-                }
-                else
-                {
-                    DescriptorList.emplace_back(AddAccelerationBuffer(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
-                }
-            }
-            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
-        }
-    }
-    else
-    {
-        DescriptorPoolList.emplace_back(AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1));
-        DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
-
-        LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL, 1 });
-        DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
-
-        DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
-        vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
-    }
-}
-
 void GraphicsPipeline::UpdateGraphicsPipeLine()
 {
     DescriptorPoolList.clear();
     LayoutBindingInfo.clear();
     DescriptorList.clear();
-    DescriptorBindingList.clear();
 
     vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
     vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
@@ -173,6 +120,28 @@ void GraphicsPipeline::UpdateGraphicsPipeLine()
     DescriptorPool = VK_NULL_HANDLE;
     DescriptorSetLayout = VK_NULL_HANDLE;
     PipelineCache = VK_NULL_HANDLE;
+}
+
+void GraphicsPipeline::UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
+{
+    DescriptorPoolList.clear();
+    LayoutBindingInfo.clear();
+    DescriptorList.clear();
+
+    vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
+    vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
+    vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), DescriptorPool, nullptr);
+    vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
+    vkDestroyPipelineCache(VulkanRenderer::GetDevice(), PipelineCache, nullptr);
+
+    ShaderPipeline = VK_NULL_HANDLE;
+    ShaderPipelineLayout = VK_NULL_HANDLE;
+    DescriptorPool = VK_NULL_HANDLE;
+    DescriptorSetLayout = VK_NULL_HANDLE;
+    PipelineCache = VK_NULL_HANDLE;
+
+    BuildDescriptorBindings(buildGraphicsPipelineInfo);
+    BuildShaderPipeLine(buildGraphicsPipelineInfo);
 }
 
 void GraphicsPipeline::Destroy()
@@ -254,104 +223,6 @@ VkWriteDescriptorSet GraphicsPipeline::AddBufferDescriptorSet(uint32_t BindingNu
     BufferDescriptor.descriptorCount = static_cast<uint32_t>(BufferInfoList.size());
     BufferDescriptor.pBufferInfo = BufferInfoList.data();
     return BufferDescriptor;
-}
-
-void GraphicsPipeline::AddAccelerationDescriptorSetBinding(uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
-    DescriptorSetBinding.AccelerationStructureDescriptor = accelerationStructure;
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddStorageTextureSetBinding(uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddTextureDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    DescriptorSetBinding.TextureDescriptor = TextureImageInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddTextureDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddUniformBufferDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddUniformBufferDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddStorageBufferDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddStorageBufferDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void GraphicsPipeline::AddNullDescriptorSetBinding(uint32_t BindingNumber)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = VK_SHADER_STAGE_ALL;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.Count = 0;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
 VkDescriptorPoolSize GraphicsPipeline::AddDsecriptorPoolBinding(VkDescriptorType descriptorType, uint32_t descriptorCount)
@@ -457,7 +328,7 @@ VkDescriptorSet GraphicsPipeline::CreateDescriptorSets(VkDescriptorPool descript
 
     VkDescriptorSet DescriptorSets;
     if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate descriptor sets!");
+        throw std::runtime_error("Failed to allocate descriptor sets.");
     }
 
     return DescriptorSets;
@@ -601,6 +472,120 @@ VkShaderModule GraphicsPipeline::ReadShaderFile(const std::string& filename)
     }
 
     return shaderModule;
+}
+
+void GraphicsPipeline::BuildDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
+{
+    SubmitDescriptorSet(buildGraphicsPipelineInfo.DescriptorBindingList);
+}
+
+void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
+{
+    VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+
+    auto bindingDescription = Vertex::getBindingDescription();
+    auto attributeDescriptions = Vertex::getAttributeDescriptions();
+
+    vertexInputInfo.vertexBindingDescriptionCount = 1;
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+
+    VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
+    inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    inputAssembly.primitiveRestartEnable = VK_FALSE;
+
+    VkPipelineViewportStateCreateInfo viewportState{};
+    viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+
+    VkPipelineRasterizationStateCreateInfo rasterizer{};
+    rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    rasterizer.depthClampEnable = VK_FALSE;
+    rasterizer.rasterizerDiscardEnable = VK_FALSE;
+    rasterizer.lineWidth = 1.0f;
+    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+    rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+    rasterizer.depthBiasEnable = VK_FALSE;
+
+    if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonMesh)
+    {
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+    }
+    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonLine)
+    {
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
+        rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
+    }
+    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonWireFrame)
+    {
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
+    }
+
+    VkPipelineMultisampleStateCreateInfo multisampling{};
+    multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+    multisampling.sampleShadingEnable = VK_TRUE;
+    multisampling.rasterizationSamples = buildGraphicsPipelineInfo.sampleCount;
+
+    VkPipelineDepthStencilStateCreateInfo depthStencil{};
+    depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.depthTestEnable = VK_TRUE;
+    depthStencil.depthWriteEnable = VK_TRUE;
+    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    depthStencil.depthBoundsTestEnable = VK_FALSE;
+    depthStencil.stencilTestEnable = VK_FALSE;
+
+    VkPipelineColorBlendStateCreateInfo colorBlending{};
+    colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    colorBlending.logicOpEnable = VK_FALSE;
+    colorBlending.logicOp = VK_LOGIC_OP_COPY;
+    colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
+    colorBlending.pAttachments = buildGraphicsPipelineInfo.ColorAttachments.data();
+    colorBlending.blendConstants[0] = 0.0f;
+    colorBlending.blendConstants[1] = 0.0f;
+    colorBlending.blendConstants[2] = 0.0f;
+    colorBlending.blendConstants[3] = 0.0f;
+
+    VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+    pipelineLayoutInfo.setLayoutCount = 1;
+    pipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
+    pipelineLayoutInfo.pushConstantRangeCount = 1;
+
+    if (buildGraphicsPipelineInfo.ConstBufferSize != 0)
+    {
+        VkPushConstantRange pushConstantRange{};
+        pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+        pushConstantRange.offset = 0;
+        pushConstantRange.size = buildGraphicsPipelineInfo.ConstBufferSize;
+        pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+    }
+
+    if (vkCreatePipelineLayout(VulkanRenderer::GetDevice(), &pipelineLayoutInfo, nullptr, &ShaderPipelineLayout) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to create pipeline layout.");
+    }
+
+    VkGraphicsPipelineCreateInfo pipelineInfo{};
+    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    pipelineInfo.stageCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.PipelineShaderStageList.size());
+    pipelineInfo.pStages = buildGraphicsPipelineInfo.PipelineShaderStageList.data();
+    pipelineInfo.pVertexInputState = &vertexInputInfo;
+    pipelineInfo.pInputAssemblyState = &inputAssembly;
+    pipelineInfo.pViewportState = &viewportState;
+    pipelineInfo.pRasterizationState = &rasterizer;
+    pipelineInfo.pMultisampleState = &multisampling;
+    pipelineInfo.pDepthStencilState = &depthStencil;
+    pipelineInfo.pColorBlendState = &colorBlending;
+    pipelineInfo.layout = ShaderPipelineLayout;
+    pipelineInfo.renderPass = buildGraphicsPipelineInfo.renderPass;
+    pipelineInfo.subpass = 0;
+    pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+    if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to create pipeline.");
+    }
 }
 
 VkPipelineShaderStageCreateInfo GraphicsPipeline::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)

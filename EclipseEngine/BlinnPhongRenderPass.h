@@ -4,9 +4,7 @@
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
-#include "BlinnPhongPipeline.h"
-#include "DrawLinePipeline.h"
-#include "WireframePipeline.h"
+#include "GraphicsPipeline.h"
 
 class BlinnPhongRenderPass : public RenderPass
 {
@@ -19,9 +17,9 @@ private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
-	std::shared_ptr<BlinnPhongPipeline> blinnphongPipeline;
-	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
-	std::shared_ptr<WireframePipeline> wireframePipeline;
+	std::shared_ptr<GraphicsPipeline> blinnphongPipeline;
+	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
+	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();

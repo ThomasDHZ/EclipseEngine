@@ -152,8 +152,10 @@ void RenderPass2D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(buildGraphicsPipelineInfo));
+        renderer2DPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -173,9 +175,11 @@ void RenderPass2D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonLine;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -195,9 +199,10 @@ void RenderPass2D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -234,8 +239,10 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        renderer2DPipeline = std::make_shared<Renderer2DPipeline>(Renderer2DPipeline(buildGraphicsPipelineInfo));
+        renderer2DPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -255,9 +262,11 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonLine;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -277,9 +286,10 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
 
-        wireframePipeline = std::make_shared<WireframePipeline>(WireframePipeline(buildGraphicsPipelineInfo));
+        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
         for (auto& shader : PipelineShaderStageList)
         {

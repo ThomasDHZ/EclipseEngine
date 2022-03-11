@@ -6,9 +6,11 @@ class FrameBufferRenderPass : public RenderPass
 {
 private:
 	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;
+	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void CreateRenderPass();
-	void CreateRendererFramebuffers();
+	void BuildRenderPass();
+	void BuildRendererFramebuffers();
+	void BuildRenderPassPipelines();
 
 public:
 	FrameBufferRenderPass();
@@ -16,6 +18,7 @@ public:
 
 	void StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture);
 	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture);
+
 	void Draw();
 	void Destroy();
 };

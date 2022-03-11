@@ -2,7 +2,14 @@
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
 #include "TextureManager.h"
+#include "Vertex.h"
 
+enum MeshTypeEnum
+{
+	kPolygonMesh,
+	kPolygonWireFrame,
+	kPolygonLine
+};
 
 struct ConstMeshInfo
 {
@@ -15,10 +22,12 @@ struct ConstMeshInfo
 struct BuildGraphicsPipelineInfo
 {
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkRenderPass renderPass;
 	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
-	VkSampleCountFlagBits sampleCount;
+	VkRenderPass renderPass = VK_NULL_HANDLE;
+	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
+	MeshTypeEnum MeshType = kPolygonMesh;
+	uint32_t ConstBufferSize = 0;
 };
 
 class GraphicsPipeline
@@ -27,9 +36,11 @@ private:
 	std::vector<VkDescriptorPoolSize>  DescriptorPoolList{};
 	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo{};
 	std::vector<VkWriteDescriptorSet> DescriptorList{};
-	std::vector<DescriptorSetBindingStruct> DescriptorBindingList{};
 
 	VkShaderModule ReadShaderFile(const std::string& filename);
+
+	void BuildDescriptorBindings(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
+	void BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 
 	VkWriteDescriptorSet AddAccelerationBuffer(uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure);
 	VkWriteDescriptorSet AddTextureDescriptorSet(uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkDescriptorType descriptorType);
@@ -70,21 +81,13 @@ protected:
 public:
 
 	GraphicsPipeline();
+	GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	~GraphicsPipeline();
 
-	void AddAccelerationDescriptorSetBinding(uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddStorageTextureSetBinding(uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddTextureDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddTextureDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddUniformBufferDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddUniformBufferDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddStorageBufferDescriptorSetBinding(uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddStorageBufferDescriptorSetBinding(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
-	void AddNullDescriptorSetBinding(uint32_t BindingNumber);
-	void SubmitDescriptorSet();
 	void SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2);
 
 	virtual void UpdateGraphicsPipeLine();
+	virtual void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	virtual void Destroy();
 
 	VkPipelineLayout GetShaderPipelineLayout() { return ShaderPipelineLayout; }

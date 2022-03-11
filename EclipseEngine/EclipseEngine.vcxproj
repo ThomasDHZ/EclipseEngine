@@ -148,15 +148,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="RenderPass.cpp" />
-    <ClCompile Include="BlinnPhongPipeline.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="BlinnPhongRenderPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentRenderer.cpp" />
-    <ClCompile Include="DrawLinePipeline.cpp" />
-    <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
@@ -184,7 +182,6 @@
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
     <ClCompile Include="Renderer2D.cpp" />
-    <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
@@ -198,19 +195,16 @@
     <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
-    <ClCompile Include="WireframePipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
+    <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="RenderPass.h" />
-    <ClInclude Include="BlinnPhongPipeline.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="BlinnPhongRenderPass.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />
-    <ClInclude Include="DrawLinePipeline.h" />
-    <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameObject.h" />
@@ -247,7 +241,6 @@
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
     <ClInclude Include="Renderer2D.h" />
-    <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SpriteRenderer.h" />
@@ -264,7 +257,6 @@
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="WireframePipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\anyhit.rahit" />

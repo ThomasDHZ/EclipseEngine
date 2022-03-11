@@ -1,19 +1,17 @@
 #pragma once
 #include "RenderPass.h"
-#include "Renderer2DPipeline.h"
+#include "GraphicsPipeline.h"
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
-#include "DrawLinePipeline.h"
-#include "WireframePipeline.h"
 
 class RenderPass2D : public RenderPass
 {
 private:
-	std::shared_ptr<Renderer2DPipeline> renderer2DPipeline;
-	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
-	std::shared_ptr<WireframePipeline> wireframePipeline;
+	std::shared_ptr<GraphicsPipeline> renderer2DPipeline;
+	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
+	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void CreateRenderPass();
 	void CreateRendererFramebuffers();
