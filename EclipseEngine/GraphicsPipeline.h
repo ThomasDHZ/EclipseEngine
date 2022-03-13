@@ -28,6 +28,7 @@ struct BuildGraphicsPipelineInfo
 	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
 	MeshTypeEnum MeshType = kPolygonMesh;
 	uint32_t ConstBufferSize = 0;
+	bool IncludeVertexDescriptors = true;
 };
 
 class GraphicsPipeline

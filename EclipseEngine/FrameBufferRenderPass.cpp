@@ -104,6 +104,7 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
         frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(buildGraphicsPipelineInfo));
 
@@ -162,6 +163,7 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
 
         frameBufferPipeline->Destroy();
         frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
@@ -200,10 +202,6 @@ void FrameBufferRenderPass::Draw()
     rect2D.offset = { 0, 0 };
     rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
 
-    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &CommandBufferBeginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to begin recording command buffer.");
-    }
-
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
@@ -212,6 +210,10 @@ void FrameBufferRenderPass::Draw()
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
+
+    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &CommandBufferBeginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to begin recording command buffer.");
+    }
 
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);

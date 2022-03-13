@@ -202,7 +202,7 @@
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="FrameBufferPipeline.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
+      <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,7 +384,7 @@
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="FrameBufferPipeline.h">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
+      <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
