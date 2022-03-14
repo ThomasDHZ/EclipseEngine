@@ -180,12 +180,12 @@ VkShaderModule RenderPass::ReadShaderFile(const std::string& filename)
     return shaderModule;
 }
 
-VkWriteDescriptorSetAccelerationStructureKHR RenderPass::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR& handle)
+VkWriteDescriptorSetAccelerationStructureKHR RenderPass::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR* handle)
 {
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = {};
     AccelerationDescriptorStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
     AccelerationDescriptorStructure.accelerationStructureCount = 1;
-    AccelerationDescriptorStructure.pAccelerationStructures = &handle;
+    AccelerationDescriptorStructure.pAccelerationStructures = handle;
     return AccelerationDescriptorStructure;
 }
 

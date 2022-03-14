@@ -294,7 +294,8 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        blinnphongPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        blinnphongPipeline->Destroy();
+        blinnphongPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -318,7 +319,8 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonLine;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline->Destroy();
+        drawLinePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -342,7 +344,8 @@ void BlinnPhongRenderPass::RebuildSwapChain()
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        wireframePipeline->Destroy();
+        wireframePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {

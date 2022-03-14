@@ -201,7 +201,7 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 	AccelerationStructureBuildSizesInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
 	VulkanRenderer::vkGetAccelerationStructureBuildSizesKHR(VulkanRenderer::GetDevice(), VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, &AccelerationStructureBuildGeometryInfo, PrimitiveCountList.data(), &AccelerationStructureBuildSizesInfo);
 
-	if (BottomLevelAccelerationBuffer.handle == VK_NULL_HANDLE)
+	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
 	{
 		BottomLevelAccelerationBuffer.CreateAccelerationStructure(VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR, AccelerationStructureBuildSizesInfo);
 	}
@@ -217,17 +217,17 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 	AccelerationBuildGeometryInfo.geometryCount = static_cast<uint32_t>(AccelerationStructureGeometryList.size());
 	AccelerationBuildGeometryInfo.pGeometries = AccelerationStructureGeometryList.data();
 	AccelerationBuildGeometryInfo.scratchData.deviceAddress = scratchBuffer.GetBufferDeviceAddress();
-	if (BottomLevelAccelerationBuffer.handle == VK_NULL_HANDLE)
+	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
 	{
-		AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.handle;
+		AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
 	}
 	else
 	{
-		AccelerationBuildGeometryInfo.srcAccelerationStructure = BottomLevelAccelerationBuffer.handle;
-		AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.handle;
+		AccelerationBuildGeometryInfo.srcAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
+		AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
 	}
 
-	BottomLevelAccelerationBuffer.AcclerationCommandBuffer(AccelerationBuildGeometryInfo, AccelerationBuildStructureRangeInfos);
+	BottomLevelAccelerationBuffer.AccelerationCommandBuffer(AccelerationBuildGeometryInfo, AccelerationBuildStructureRangeInfos);
 
 	scratchBuffer.DestoryBuffer();
 }
@@ -293,7 +293,7 @@ void Mesh::Destory()
 	{
 		TransformInverseBuffer.DestoryBuffer();
 	}
-	if (BottomLevelAccelerationBuffer.handle != VK_NULL_HANDLE)
+	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() != VK_NULL_HANDLE)
 	{
 		BottomLevelAccelerationBuffer.Destroy();
 	}

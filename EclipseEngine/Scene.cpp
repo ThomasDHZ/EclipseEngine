@@ -87,7 +87,7 @@ Scene::Scene()
     //GameObject adsf = GameObject(ab);
 
     renderer2D.StartUp();
-    blinnPhongRenderer.StartUp();
+  //  blinnPhongRenderer.StartUp();
     rayTraceRenderer.StartUp();
 }
 
@@ -145,7 +145,7 @@ void Scene::ImGuiUpdate()
     }
 
 
- /*   if (renderPass2D.renderedTexture->ImGuiDescriptorSet != nullptr)
+  /*  if (renderPass2D.renderedTexture->ImGuiDescriptorSet != nullptr)
     {
         ImGui::Image(renderPass2D.renderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }*/
@@ -156,8 +156,8 @@ void Scene::RebuildRenderers()
     auto objList = GameObjectManager::GetGameObjectList();
 
     renderer2D.RebuildRenderers();
-    blinnPhongRenderer.RebuildRenderers();
-    rayTraceRenderer.RebuildSwapChain();
+   // blinnPhongRenderer.RebuildRenderers();
+   rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
@@ -175,10 +175,10 @@ void Scene::Draw()
     }
 
 
-   renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+  // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
     // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
- //   rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
-//    rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
+    rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
@@ -195,7 +195,7 @@ void Scene::Destroy()
     GameObjectManager::Destory();
     
     renderer2D.Destroy();
-    blinnPhongRenderer.Destroy();
+ //  blinnPhongRenderer.Destroy();
     rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }

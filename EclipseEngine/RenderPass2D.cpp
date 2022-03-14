@@ -201,6 +201,7 @@ void RenderPass2D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
         wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
 
@@ -242,7 +243,8 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        renderer2DPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        renderer2DPipeline->Destroy();
+        renderer2DPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -266,7 +268,8 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        drawLinePipeline->Destroy();
+        drawLinePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -288,8 +291,10 @@ void RenderPass2D::RebuildSwapChain()
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonWireFrame;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        wireframePipeline->Destroy();
+        wireframePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
 
         for (auto& shader : PipelineShaderStageList)
         {

@@ -123,6 +123,14 @@ void VulkanBuffer::DestoryBuffer()
 
 		Buffer = VK_NULL_HANDLE;
 		BufferMemory = VK_NULL_HANDLE;
+
+		if (BufferHandle != VK_NULL_HANDLE)
+		{
+			BufferDeviceAddress = 0;
+
+			VulkanRenderer::vkDestroyAccelerationStructureKHR(VulkanRenderer::GetDevice(), BufferHandle, nullptr);
+			BufferHandle = VK_NULL_HANDLE;
+		}
 	}
 	else
 	{

@@ -8,7 +8,7 @@ AccelerationStructureBuffer::~AccelerationStructureBuffer()
 {
 }
 
-void AccelerationStructureBuffer::AcclerationCommandBuffer(VkAccelerationStructureBuildGeometryInfoKHR& AccelerationStructureBuildGeometryInfo, std::vector<VkAccelerationStructureBuildRangeInfoKHR>& AccelerationStructureBuildRangeInfo)
+void AccelerationStructureBuffer::AccelerationCommandBuffer(VkAccelerationStructureBuildGeometryInfoKHR& AccelerationStructureBuildGeometryInfo, std::vector<VkAccelerationStructureBuildRangeInfoKHR>& AccelerationStructureBuildRangeInfo)
 {
 	VkCommandBufferAllocateInfo CommandBufferAllocateInfo{};
 	CommandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -73,16 +73,15 @@ void AccelerationStructureBuffer::CreateAccelerationStructure(VkAccelerationStru
 	accelerationStructureCreate_info.buffer = AccelerationBuffer.GetBuffer();
 	accelerationStructureCreate_info.size = buildSizeInfo.accelerationStructureSize;
 	accelerationStructureCreate_info.type = type;
-	VulkanRenderer::vkCreateAccelerationStructureKHR(VulkanRenderer::GetDevice(), &accelerationStructureCreate_info, nullptr, &handle);
+	VulkanRenderer::vkCreateAccelerationStructureKHR(VulkanRenderer::GetDevice(), &accelerationStructureCreate_info, nullptr, AccelerationBuffer.GetBufferHandlePtr());
 
 	VkAccelerationStructureDeviceAddressInfoKHR accelerationDeviceAddressInfo{};
 	accelerationDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-	accelerationDeviceAddressInfo.accelerationStructure = handle;
+	accelerationDeviceAddressInfo.accelerationStructure = AccelerationBuffer.GetBufferHandle();
 	AccelerationBuffer.SetBufferAddress(VulkanRenderer::vkGetAccelerationStructureDeviceAddressKHR(VulkanRenderer::GetDevice(), &accelerationDeviceAddressInfo));
 }
 
 void AccelerationStructureBuffer::Destroy()
 {
 	AccelerationBuffer.DestoryBuffer();
-	handle = VK_NULL_HANDLE;
 }

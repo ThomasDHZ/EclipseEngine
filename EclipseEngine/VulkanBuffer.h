@@ -31,4 +31,5 @@ public:
 	VkDeviceSize GetBufferSize() { return BufferSize; }
 	uint64_t GetBufferDeviceAddress() { return BufferDeviceAddress; }
 	VkAccelerationStructureKHR GetBufferHandle() { return BufferHandle; }
+	VkAccelerationStructureKHR* GetBufferHandlePtr() { return &BufferHandle; }
 };
