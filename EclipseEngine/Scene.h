@@ -29,7 +29,7 @@ private:
 	PerspectiveCamera camera2;
 	SceneProperties sceneProperites;
 	Renderer2D renderer2D;
-	//BlinnPhongRenderer blinnPhongRenderer;
+	BlinnPhongRenderer blinnPhongRenderer;
 	RayTraceRenderer rayTraceRenderer;
 
 public:

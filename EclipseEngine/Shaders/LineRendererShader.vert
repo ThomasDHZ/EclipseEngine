@@ -8,10 +8,8 @@
 
 layout(location = 0) in vec3 inPosition;
 layout(location = 1) in vec3 inColor;
-layout(location = 2) in vec2 inUV;
 
 layout(location = 0) out vec3 Color;
-layout(location = 1) out vec2 UV;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
@@ -32,5 +30,4 @@ void main() {
 //	}
     gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xy, 0.0f, 1.0f);
     Color = inColor;
-    UV = inUV;
 }

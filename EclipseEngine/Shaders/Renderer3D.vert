@@ -6,12 +6,17 @@
 
 #include "MeshProperties.glsl"
 
-layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec3 inColor;
-layout(location = 2) in vec2 inUV;
+layout (location = 0) in vec4 inPosition;
+layout (location = 1) in vec4 aNormal;
+layout (location = 2) in vec4 aTexCoords;
+layout (location = 3) in vec4 aTangent;
+layout (location = 4) in vec4 aBitangent;
 
-layout(location = 0) out vec3 Color;
-layout(location = 1) out vec2 UV;
+layout(location = 0) out vec4 FragPos;
+layout(location = 1) out vec4 TexCoords;
+layout(location = 2) out vec4 Normal;
+layout(location = 3) out vec4 Tangent;
+layout(location = 4) out vec4 BiTangent;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
@@ -30,7 +35,6 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
-    Color = inColor;
-    UV = inUV;
+    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0);
+    TexCoords = aTexCoords;
 }

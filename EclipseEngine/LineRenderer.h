@@ -7,7 +7,7 @@ private:
 
 public:
 	LineRenderer();
-	LineRenderer(std::vector<Vertex> VertexList);
+	LineRenderer(std::vector<LineVertex> VertexList);
 	LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint);
 	LineRenderer(nlohmann::json& json);
 	virtual ~LineRenderer();

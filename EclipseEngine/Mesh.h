@@ -18,7 +18,7 @@ private:
 
 	EnumMeshType meshType;
 
-	std::vector<Vertex> VertexList;
+	std::vector<MeshVertex> VertexList;
 	std::vector<uint32_t> IndexList;
 	std::shared_ptr<Material> material;
 
@@ -44,9 +44,9 @@ public:
 
 	Mesh();
 	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
-	Mesh(std::vector<Vertex>& vertices);
-	Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices);
-	Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	Mesh(std::vector<LineVertex>& vertices);
+	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
+	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	~Mesh();
 
 	void GenerateID();

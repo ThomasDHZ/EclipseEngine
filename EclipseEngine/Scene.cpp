@@ -4,6 +4,9 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
+
+    auto af = sizeof(MeshVertex);
+    auto bb = 34;
   /*  nlohmann::json json;
     Vec4 a = Vec4()*/
 
@@ -87,7 +90,7 @@ Scene::Scene()
     //GameObject adsf = GameObject(ab);
 
     renderer2D.StartUp();
-  //  blinnPhongRenderer.StartUp();
+    blinnPhongRenderer.StartUp();
     rayTraceRenderer.StartUp();
 }
 
@@ -156,7 +159,7 @@ void Scene::RebuildRenderers()
     auto objList = GameObjectManager::GetGameObjectList();
 
     renderer2D.RebuildRenderers();
-   // blinnPhongRenderer.RebuildRenderers();
+    blinnPhongRenderer.RebuildRenderers();
    rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
@@ -175,10 +178,10 @@ void Scene::Draw()
     }
 
 
-  // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-    // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-    rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
-    rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+   //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    //rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
+    //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
@@ -195,7 +198,7 @@ void Scene::Destroy()
     GameObjectManager::Destory();
     
     renderer2D.Destroy();
- //  blinnPhongRenderer.Destroy();
+   blinnPhongRenderer.Destroy();
     rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }

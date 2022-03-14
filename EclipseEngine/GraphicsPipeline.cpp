@@ -481,8 +481,20 @@ void GraphicsPipeline::BuildDescriptorBindings(BuildGraphicsPipelineInfo& buildG
 
 void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    VkVertexInputBindingDescription bindingDescription = Vertex::getBindingDescription();
-    std::vector<VkVertexInputAttributeDescription> attributeDescriptions = Vertex::getAttributeDescriptions();
+    VkVertexInputBindingDescription bindingDescription;
+    std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+
+    if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonMesh ||
+        buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonWireFrame)
+    {
+        bindingDescription = MeshVertex::getBindingDescription();
+        attributeDescriptions = MeshVertex::getAttributeDescriptions();
+    }
+    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonLine)
+    {
+        bindingDescription = LineVertex::getBindingDescription();
+        attributeDescriptions = LineVertex::getAttributeDescriptions();
+    }
 
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;

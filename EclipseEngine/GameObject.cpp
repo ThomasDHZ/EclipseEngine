@@ -7,7 +7,7 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(const std::string Name, std::vector<Vertex>& VertexList, int a)
+GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));

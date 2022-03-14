@@ -6,8 +6,11 @@
 
 #include "MeshProperties.glsl"
 
-layout(location = 0) in vec3 fragColor;
-layout(location = 1) in vec2 fragUV;
+layout(location = 0) in vec3 FragPos;
+layout(location = 1) in vec2 TexCoords;
+layout(location = 2) in vec3 Normal;
+layout(location = 3) in vec3 Tangent;
+layout(location = 4) in vec3 BiTangent;
 
 layout(location = 0) out vec4 outColor;
 layout(location = 1) out vec4 outBloom;
@@ -27,6 +30,6 @@ layout(push_constant) uniform SceneData
 void main() {
    uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(texture(TextureMap[diffuse], fragUV).rgb, texture(TextureMap[alpha], fragUV).r);
+   outColor = vec4(texture(TextureMap[diffuse], TexCoords).rgb, texture(TextureMap[alpha], TexCoords).r);
    outBloom = vec4(1.0f);
 }

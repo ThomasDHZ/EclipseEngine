@@ -4,7 +4,7 @@ LineRenderer::LineRenderer() : ComponentRenderer()
 {
 }
 
-LineRenderer::LineRenderer(std::vector<Vertex> VertexList) : ComponentRenderer(ComponentType::kLineRenderer)
+LineRenderer::LineRenderer(std::vector<LineVertex> VertexList) : ComponentRenderer(ComponentType::kLineRenderer)
 {
 	mesh = Mesh(VertexList);
 }

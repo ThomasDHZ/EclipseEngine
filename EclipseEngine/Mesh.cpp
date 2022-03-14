@@ -7,11 +7,11 @@ Mesh::Mesh()
 {
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices)
+Mesh::Mesh(std::vector<LineVertex>& vertices)
 {
 	GenerateID();
 
-	VertexList = vertices;
+	//VertexList = vertices;
 
 	IndexList = {
 
@@ -28,16 +28,16 @@ Mesh::Mesh(std::vector<Vertex>& vertices)
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 {
 	GenerateID();
 
-	VertexList = {
-	{{StartPoint}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-	{{EndPoint}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
+	std::vector<LineVertex> VertexList2 = {
+	{{StartPoint}, {1.0f, 0.0f, 0.0f}},
+	{{EndPoint}, {0.0f, 1.0f, 0.0f}}
 	};
 
 	IndexList = {
@@ -45,7 +45,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	};
 
 
-	VertexCount = VertexList.size();
+	VertexCount = VertexList2.size();
 	IndexCount = IndexList.size();
 	PrimitiveCount = static_cast<uint32_t>(IndexList.size()) / 3;
 
@@ -56,10 +56,10 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
+Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 {
 	GenerateID();
 
@@ -77,7 +77,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -102,7 +102,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
 		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
 		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex);
+		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
 		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
 		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
 		AccelerationStructureGeometry.geometry.triangles.transformData.deviceAddress = 0;
@@ -117,7 +117,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices)
 	}
 }
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
 	GenerateID();
 
@@ -133,7 +133,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::s
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -158,7 +158,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, std::s
 		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
 		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
 		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex);
+		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
 		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
 		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
 
