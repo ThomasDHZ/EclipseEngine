@@ -25,9 +25,18 @@ struct RayPayload {
 
 struct Vertex 
 {
-    vec3 pos;
-    vec3 color;
-    vec2 uv;
+    vec3 Position;
+	float PositionPadding;
+    vec3 Normal;
+	float NormalPadding;
+    vec2 UV;
+	vec2 UVPadding;
+    vec3 Tangant;
+	float TangantPadding;
+    vec3 BiTangant;
+	float BiTangentPadding;
+	vec3 Color;
+	float ColorPadding;
 };
 
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
@@ -53,12 +62,12 @@ Vertex BuildVertexInfo()
 
 	const vec3 barycentricCoords = vec3(1.0f - attribs.x - attribs.y, attribs.x, attribs.y);
 
-	vertex.pos = v0.pos * barycentricCoords.x + v1.pos * barycentricCoords.y + v2.pos * barycentricCoords.z;
-	vertex.pos = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.pos, 1.0));
+	vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
+	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
 
-	vertex.color = v0.color * barycentricCoords.x + v1.color * barycentricCoords.y + v2.color * barycentricCoords.z;
+	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
 
-	vertex.uv = v0.uv * barycentricCoords.x + v1.uv * barycentricCoords.y + v2.uv * barycentricCoords.z;
+	vertex.Color = v0.Color * barycentricCoords.x + v1.Color * barycentricCoords.y + v2.Color * barycentricCoords.z;
 
 	return vertex;
 }
@@ -70,8 +79,8 @@ void main()
 	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
    uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
 
-	 if(texture(TextureMap[alpha], vertex.uv).r == 0.0f ||
-		texture(TextureMap[diffuse], vertex.uv).a == 0.0f)
+	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
+		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
    {
 	 ignoreIntersectionEXT;
    }

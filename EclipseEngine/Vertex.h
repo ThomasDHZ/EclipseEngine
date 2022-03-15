@@ -52,12 +52,18 @@ struct LineVertex {
 
 struct MeshVertex 
 {
-    glm::vec4 Position = glm::vec4(0.0f);
-    glm::vec4 Normal = glm::vec4(0.0f);
-    glm::vec4 TexureCoord = glm::vec4(0.0f);
-    glm::vec4 Padding3 = glm::vec4(0.0f);
-    glm::vec4 Tangant = glm::vec4(0.0f);
-    glm::vec4 BiTangant = glm::vec4(0.0f);
+    glm::vec3 Position = glm::vec3(0.0f);
+    float PositionPadding = 0.0f;
+    glm::vec3 Normal = glm::vec3(0.0f);
+    float NormalPadding = 0.0f;
+    glm::vec2 UV = glm::vec2(0.0f);
+    glm::vec2 UVPadding = glm::vec2(0.0f);
+    glm::vec3 Tangant = glm::vec3(0.0f);
+    float TangantPadding = 0.0f;
+    glm::vec3 BiTangant = glm::vec3(0.0f);
+    float BiTangentPadding = 0.0f;
+    glm::vec3 Color = glm::vec3(1.0f);
+    float ColorPadding = 0.0f;
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
@@ -89,7 +95,7 @@ struct MeshVertex
         AttributeDescription.binding = 0;
         AttributeDescription.location = 2;
         AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, TexureCoord);
+        AttributeDescription.offset = offsetof(MeshVertex, UV);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
@@ -102,6 +108,12 @@ struct MeshVertex
         AttributeDescription.location = 4;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
         AttributeDescription.offset = offsetof(MeshVertex, BiTangant);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 0;
+        AttributeDescription.location = 5;
+        AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
+        AttributeDescription.offset = offsetof(MeshVertex, Color);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;

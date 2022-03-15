@@ -38,30 +38,31 @@ Scene::Scene()
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f), 0));
     //auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
     //auto b = static_cast<MeshRenderer*>(a.get());
-    //b->SetMaterial(mat2);
+    //b->SetMaterial(material2);
 
     //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
     //auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
     //auto b2 = static_cast<MeshRenderer*>(a2.get());
-    //b2->SetMaterial(mat);
+    //b2->SetMaterial(material);
 
     //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
     //auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
     //auto b3 = static_cast<MeshRenderer*>(a3.get());
-    //b3->SetMaterial(mat2);
+    //b3->SetMaterial(material2);
 
     //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
     //auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
     //auto b4 = static_cast<MeshRenderer*>(a4.get());
-    //b4->SetMaterial(mat);
+    //b4->SetMaterial(material);
 
 
     std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("LineTest", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, -5.0f), 1));
-    //auto a5 = obj5->GetComponentByType(ComponentType::kLineRenderer);
-    //auto b5= static_cast<MeshRenderer*>(a5.get());
-    //b5->SetMaterial(mat);
+
+    auto a5 = obj5->GetComponentByType(ComponentType::kLineRenderer);
+    auto b5= static_cast<MeshRenderer*>(a5.get());
+    b5->SetMaterial(material);
+
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject3D", glm::vec3(5.0f)));
-    
     auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     auto b = static_cast<MeshRenderer*>(a.get());
     b->SetMaterial(material2);
@@ -178,8 +179,8 @@ void Scene::Draw()
     }
 
 
-   //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-    blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+   renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+    //blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     //rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
     //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
