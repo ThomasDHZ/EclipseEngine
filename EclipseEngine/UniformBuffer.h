@@ -20,8 +20,9 @@ struct RayTraceSceneProperties
 
 struct MeshProperties
 {
-	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
+	alignas(16) glm::mat4 ModelTransform = glm::mat4(1.0f);
+	MaterialBufferData materialBufferData;
 };
 
 template <class T>

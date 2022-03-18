@@ -8,6 +8,10 @@ struct MaterialProperties
 
 	uint DiffuseMapID;
 	uint SpecularMapID;
+	uint AlbedoMapID;
+	uint MetallicMapID;
+	uint RoughnessMapID;
+	uint AmbientOcclusionMapID;
 	uint NormalMapID;
 	uint DepthMapID;
 	uint AlphaMapID;
@@ -17,6 +21,7 @@ struct MaterialProperties
 
 struct MeshProperties
 {
-	MaterialProperties materialProperties;
 	mat4 MeshTransform;
+	mat4 ModelTransform;
+	MaterialProperties materialProperties;
 };

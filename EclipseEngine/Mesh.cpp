@@ -17,9 +17,11 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 
 	};
 
+	ParentModelID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
-	PrimitiveCount = static_cast<uint32_t>(IndexList.size()) / 3;
+	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
+	BoneCount = 0;
 
 	meshType = EnumMeshType::kLine;
 
@@ -44,10 +46,11 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 
 	};
 
-
+	ParentModelID = -1;
 	VertexCount = VertexList2.size();
 	IndexCount = IndexList.size();
-	PrimitiveCount = static_cast<uint32_t>(IndexList.size()) / 3;
+	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
+	BoneCount = 0;
 
 	meshType = EnumMeshType::kLine;
 
@@ -66,9 +69,11 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	VertexList = vertices;
 	IndexList = indices;
 
+	ParentModelID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
-	PrimitiveCount = static_cast<uint32_t>(indices.size()) / 3;
+	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
+	BoneCount = 0;
 
 	meshType = EnumMeshType::kPolygon;
 
@@ -93,7 +98,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
 		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
 
-		PrimitiveCount = IndexCount / 3;
+		TriangleCount = IndexCount / 3;
 
 		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
 		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
@@ -108,7 +113,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 		AccelerationStructureGeometry.geometry.triangles.transformData.deviceAddress = 0;
 		AccelerationStructureGeometry.geometry.triangles.transformData.hostAddress = nullptr;
 
-		AccelerationStructureBuildRangeInfo.primitiveCount = PrimitiveCount;
+		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
 		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
@@ -126,7 +131,8 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
-	PrimitiveCount = static_cast<uint32_t>(indices.size()) / 3;
+	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
+	BoneCount = 0;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -149,7 +155,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
 		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
 
-		PrimitiveCount = IndexCount / 3;
+		TriangleCount = IndexCount / 3;
 
 		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
 		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
@@ -164,7 +170,70 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 
 		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
 
-		AccelerationStructureBuildRangeInfo.primitiveCount = PrimitiveCount;
+		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
+		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
+		AccelerationStructureBuildRangeInfo.firstVertex = 0;
+		AccelerationStructureBuildRangeInfo.transformOffset = 0;
+
+		MeshBottomLevelAccelerationStructure();
+	}
+}
+
+Mesh::Mesh(uint64_t ModelID, std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+{
+	GenerateID();
+
+	VertexList = vertices;
+	IndexList = indices;
+
+	ParentModelID = ModelID;
+	VertexCount = VertexList.size();
+	IndexCount = IndexList.size();
+	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
+	BoneCount = 0;
+
+	material = MaterialManager::GetDefaultMaterial();
+
+	glm::mat4 MeshTransform = glm::mat4(1.0f);
+	MeshTransform = glm::transpose(MeshTransform);
+
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	if (BoneCount != 0)
+	{
+		BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	}
+	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
+
+	if (GraphicsDevice::IsRayTracingFeatureActive())
+	{
+		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
+		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
+		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
+
+		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
+		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
+		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
+
+		TriangleCount = IndexCount / 3;
+
+		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
+		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+		AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
+		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
+		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
+		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
+		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
+
+		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
+
+		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
 		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
@@ -180,7 +249,7 @@ Mesh::~Mesh()
 
 void Mesh::MeshBottomLevelAccelerationStructure()
 {
-	std::vector<uint32_t> PrimitiveCountList{ PrimitiveCount };
+	std::vector<uint32_t> PrimitiveCountList{ TriangleCount };
 	std::vector<VkAccelerationStructureGeometryKHR> AccelerationStructureGeometryList{ AccelerationStructureGeometry };
 	std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationBuildStructureRangeInfos{ AccelerationStructureBuildRangeInfo };
 
@@ -255,6 +324,38 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 	}
 }
 
+void Mesh::UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+{
+	meshProperties.Update(meshProps);
+
+	if (BoneList.size() != 0)
+	{
+		for (auto bone : BoneList)
+		{
+			BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
+		}
+		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
+	}
+
+	glm::mat4 FinalTransform = meshProps.MeshTransform;
+	glm::mat4 transformMatrix2 = glm::transpose(meshProps.MeshTransform);
+
+	if (TransformBuffer.Buffer != nullptr)
+	{
+		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+
+		TransformBuffer.CopyBufferToMemory(&FinalTransform, sizeof(FinalTransform));
+		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+
+		if (GraphicsDevice::IsRayTracingFeatureActive() &&
+			GraphicsDevice::IsRayTracerActive() &&
+			IndexCount != 0)
+		{
+			MeshBottomLevelAccelerationStructure();
+		}
+	}
+}
+
 void Mesh::GenerateID()
 {
 	MeshIDCounter++;
@@ -293,10 +394,23 @@ void Mesh::Destory()
 	{
 		TransformInverseBuffer.DestoryBuffer();
 	}
+	if(BoneTransformBuffer.Buffer != nullptr)
+	{
+		BoneTransformBuffer.DestoryBuffer();
+	}
+	if (BoneWeightBuffer.Buffer != nullptr)
+	{
+		BoneWeightBuffer.DestoryBuffer();
+	}
 	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() != VK_NULL_HANDLE)
 	{
 		BottomLevelAccelerationBuffer.Destroy();
 	}
+}
+
+void Mesh::SetParentModel(uint64_t ModelID)
+{
+	ParentModelID = ModelID;
 }
 
 void Mesh::SetBufferIndex(int bufferIndex)

@@ -34,6 +34,22 @@ Material::Material(const std::string materialName, MaterialProperties& MaterialI
 	{
 		materialTextureData.SpecularMapID = MaterialInfo.SpecularMap->GetTextureBufferIndex();
 	}
+	if (AlbedoMap != nullptr)
+	{
+		materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+	}
+	if (MetallicMap != nullptr)
+	{
+		materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+	}
+	if (RoughnessMap != nullptr)
+	{
+		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+	}
+	if (AmbientOcclusionMap != nullptr)
+	{
+		materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
+	}
 	if (MaterialInfo.NormalMap != nullptr)
 	{
 		materialTextureData.NormalMapID = MaterialInfo.NormalMap->GetTextureBufferIndex();
@@ -84,6 +100,22 @@ Material::Material(nlohmann::json& json)
 	{
 		SpecularMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("SpecularMap"))));
 	}
+	if (json.contains("AlbedoMap"))
+	{
+		AlbedoMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AlbedoMap"))));
+	}
+	if (json.contains("MetallicMap"))
+	{
+		MetallicMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("MetallicMap"))));
+	}
+	if (json.contains("RoughnessMap"))
+	{
+		RoughnessMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("RoughnessMap"))));
+	}
+	if (json.contains("AmbientOcclusionMap"))
+	{
+		AmbientOcclusionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AmbientOcclusionMap"))));
+	}
 	if (json.contains("NormalMap"))
 	{
 		NormalMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("NormalMap"))));
@@ -124,6 +156,22 @@ void Material::Update(float DeltaTime)
 	{
 		materialTextureData.SpecularMapID = SpecularMap->GetTextureBufferIndex();
 	}
+	if (AlbedoMap != nullptr)
+	{
+		materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+	}
+	if (MetallicMap != nullptr)
+	{
+		materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+	}
+	if (RoughnessMap != nullptr)
+	{
+		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+	}
+	if (RoughnessMap != nullptr)
+	{
+		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+	}
 	if (NormalMap != nullptr)
 	{
 		materialTextureData.NormalMapID = NormalMap->GetTextureBufferIndex();
@@ -163,6 +211,26 @@ void Material::LoadSpecularMap(const std::string FilePath)
 	SpecularMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kSpecularTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 }
 
+void Material::LoadAlbedoMap(const std::string FilePath)
+{
+	AlbedoMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
+}
+
+void Material::LoadMetallicMap(const std::string FilePath)
+{
+	MetallicMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+}
+
+void Material::LoadRoughnessMap(const std::string FilePath)
+{
+	RoughnessMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+}
+
+void Material::LoadAmbientOcclusionMap(const std::string FilePath)
+{
+	AmbientOcclusionMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+}
+
 void Material::LoadNormalMap(const std::string FilePath)
 {
 	NormalMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
@@ -193,6 +261,26 @@ void Material::LoadSpecularMap(uint64_t TextureIndex)
 	SpecularMap = TextureManager::GetTexture2DByID(TextureIndex);
 }
 
+void Material::LoadAlbedoMap(uint64_t TextureIndex)
+{
+	AlbedoMap = TextureManager::GetTexture2DByID(TextureIndex);
+}
+
+void Material::LoadMetallicMap(uint64_t TextureIndex)
+{
+	MetallicMap = TextureManager::GetTexture2DByID(TextureIndex);
+}
+
+void Material::LoadRoughnessMap(uint64_t TextureIndex)
+{
+	RoughnessMap = TextureManager::GetTexture2DByID(TextureIndex);
+}
+
+void Material::LoadAmbientOcclusionMap(uint64_t TextureIndex)
+{
+	AmbientOcclusionMap = TextureManager::GetTexture2DByID(TextureIndex);
+}
+
 void Material::LoadNormalMap(uint64_t TextureIndex)
 {
 	NormalMap = TextureManager::GetTexture2DByID(TextureIndex);
@@ -221,6 +309,26 @@ void Material::LoadDiffuseMap(std::shared_ptr<Texture2D> texture)
 void Material::LoadSpecularMap(std::shared_ptr<Texture2D> texture)
 {
 	SpecularMap = texture;
+}
+
+void Material::LoadAlbedoMap(std::shared_ptr<Texture2D> texture)
+{
+	AlbedoMap = texture;
+}
+
+void Material::LoadMetallicMap(std::shared_ptr<Texture2D> texture)
+{
+	MetallicMap = texture;
+}
+
+void Material::LoadRoughnessMap(std::shared_ptr<Texture2D> texture)
+{
+	RoughnessMap = texture;
+}
+
+void Material::LoadAmbientOcclusionMap(std::shared_ptr<Texture2D> texture)
+{
+	AmbientOcclusionMap = texture;
 }
 
 void Material::LoadNormalMap(std::shared_ptr<Texture2D> texture)

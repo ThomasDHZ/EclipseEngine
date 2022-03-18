@@ -4,6 +4,7 @@
 #include "UniformBuffer.h"
 #include "MaterialManager.h"
 #include "AccelerationStructureBuffer.h"
+#include "Bone.h"
 
 enum EnumMeshType
 {
@@ -11,33 +12,47 @@ enum EnumMeshType
 	kPolygon
 };
 
+struct MeshBoneWeights
+{
+	glm::ivec4 BoneID = glm::ivec4(0);
+	glm::vec4 BoneWeights = glm::vec4(0.0f);
+};
+
 class Mesh
 {
 private:
 	static uint64_t MeshIDCounter;
 
+	uint64_t MeshID = 0;
+	uint64_t ParentModelID = 0;
+	uint32_t VertexCount = 0;
+	uint32_t IndexCount = 0;
+	uint32_t TriangleCount = 0;
+	uint32_t BoneCount = 0;
+	uint32_t BufferIndex = 0;
+
 	EnumMeshType meshType;
 
 	std::vector<MeshVertex> VertexList;
 	std::vector<uint32_t> IndexList;
-	std::shared_ptr<Material> material;
+	std::vector<MeshBoneWeights> BoneWeightList;
+	std::vector<glm::mat4> BoneTransform;
 
-	uint64_t MeshID = 0;
-	uint32_t VertexCount = 0;
-	uint32_t IndexCount = 0;
-	uint32_t BufferIndex = 0;
-	uint32_t PrimitiveCount = 0; //TriangleCount
+	std::shared_ptr<Material> material;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer TransformBuffer;
 	VulkanBuffer TransformInverseBuffer;
+	VulkanBuffer BoneWeightBuffer;
+	VulkanBuffer BoneTransformBuffer;
 	MeshPropertiesUniformBuffer meshProperties;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
+	void GenerateID();
 	void MeshBottomLevelAccelerationStructure();
 
 public:
@@ -47,13 +62,15 @@ public:
 	Mesh(std::vector<LineVertex>& vertices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	Mesh(uint64_t ModelID, std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	~Mesh();
 
-	void GenerateID();
 	void Draw(VkCommandBuffer& commandBuffer);
-	void UpdateMeshProperties(MeshProperties& meshProperties);
+	void UpdateMeshProperties(MeshProperties& meshProps);
+	void UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Destory();
 
+	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
 

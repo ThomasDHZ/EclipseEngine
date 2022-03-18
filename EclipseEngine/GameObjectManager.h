@@ -77,7 +77,6 @@ public:
 				SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
 				Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
 
-
 				MeshProperties meshProps = {};
 				meshProps.MeshTransform = transform->Transform;
 				meshProps.materialBufferData = sprite->GetMaterial()->GetMaterialTextureData();

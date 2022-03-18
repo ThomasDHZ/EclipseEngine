@@ -16,6 +16,10 @@ struct MaterialProperties
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
 	std::shared_ptr<Texture> SpecularMap = nullptr;
+	std::shared_ptr<Texture> AlbedoMap = nullptr;
+	std::shared_ptr<Texture> MetallicMap = nullptr;
+	std::shared_ptr<Texture> RoughnessMap = nullptr;
+	std::shared_ptr<Texture> AmbientOcclusionMap = nullptr;
 	std::shared_ptr<Texture> NormalMap = nullptr;
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
@@ -33,6 +37,10 @@ struct MaterialBufferData
 
 	alignas(4) uint32_t DiffuseMapID = DefaultTextureID;
 	alignas(4) uint32_t SpecularMapID = DefaultTextureID;
+	alignas(4) uint32_t AlbedoMapID = DefaultTextureID;
+	alignas(4) uint32_t MetallicMapID = DefaultTextureID;
+	alignas(4) uint32_t RoughnessMapID = DefaultTextureID;
+	alignas(4) uint32_t AmbientOcclusionMapID = DefaultTextureID;
 	alignas(4) uint32_t NormalMapID = DefaultTextureID;
 	alignas(4) uint32_t DepthMapID = DefaultTextureID;
 	alignas(4) uint32_t AlphaMapID = DefaultAlphaTextureID;
@@ -57,6 +65,10 @@ private:
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
 	std::shared_ptr<Texture> SpecularMap = nullptr;
+	std::shared_ptr<Texture> AlbedoMap = nullptr;
+	std::shared_ptr<Texture> MetallicMap = nullptr;
+	std::shared_ptr<Texture> RoughnessMap = nullptr;
+	std::shared_ptr<Texture> AmbientOcclusionMap = nullptr;
 	std::shared_ptr<Texture> NormalMap = nullptr;
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
@@ -81,6 +93,10 @@ public:
 
 	void LoadDiffuseMap(const std::string FilePath);
 	void LoadSpecularMap(const std::string FilePath);
+	void LoadAlbedoMap(const std::string FilePath);
+	void LoadMetallicMap(const std::string FilePath);
+	void LoadRoughnessMap(const std::string FilePath);
+	void LoadAmbientOcclusionMap(const std::string FilePath);
 	void LoadNormalMap(const std::string FilePath);
 	void LoadDepthMap(const std::string FilePath);
 	void LoadAlphaMap(const std::string FilePath);
@@ -88,6 +104,10 @@ public:
 
 	void LoadDiffuseMap(uint64_t TextureIndex);
 	void LoadSpecularMap(uint64_t TextureIndex);
+	void LoadAlbedoMap(uint64_t TextureIndex);
+	void LoadMetallicMap(uint64_t TextureIndex);
+	void LoadRoughnessMap(uint64_t TextureIndex);
+	void LoadAmbientOcclusionMap(uint64_t TextureIndex);
 	void LoadNormalMap(uint64_t TextureIndex);
 	void LoadDepthMap(uint64_t TextureIndex);
 	void LoadAlphaMap(uint64_t TextureIndex);
@@ -95,6 +115,10 @@ public:
 
 	void LoadDiffuseMap(std::shared_ptr<Texture2D> texture);
 	void LoadSpecularMap(std::shared_ptr<Texture2D> texture);
+	void LoadAlbedoMap(std::shared_ptr<Texture2D> texture);
+	void LoadMetallicMap(std::shared_ptr<Texture2D> texture);
+	void LoadRoughnessMap(std::shared_ptr<Texture2D> texture);
+	void LoadAmbientOcclusionMap(std::shared_ptr<Texture2D> texture);
 	void LoadNormalMap(std::shared_ptr<Texture2D> texture);
 	void LoadDepthMap(std::shared_ptr<Texture2D> TextureIndex);
 	void LoadAlphaMap(std::shared_ptr<Texture2D> TextureIndex);
@@ -126,6 +150,22 @@ public:
 		if (SpecularMap != nullptr)
 		{
 			json["SpecularMap"] = SpecularMap->ToJson();
+		}
+		if (AlbedoMap != nullptr)
+		{
+			json["AlbedoMap"] = AlbedoMap->ToJson();
+		}
+		if (MetallicMap != nullptr)
+		{
+			json["MetallicMap"] = MetallicMap->ToJson();
+		}
+		if (RoughnessMap != nullptr)
+		{
+			json["RoughnessMap"] = RoughnessMap->ToJson();
+		}
+		if (AmbientOcclusionMap != nullptr)
+		{
+			json["AmbientOcclusionMap"] = AmbientOcclusionMap->ToJson();
 		}
 		if (NormalMap != nullptr)
 		{
