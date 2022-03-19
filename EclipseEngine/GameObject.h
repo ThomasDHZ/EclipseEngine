@@ -44,6 +44,9 @@ public:
 
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
+	void GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
+	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
+	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);
 
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return ComponentList; };
 

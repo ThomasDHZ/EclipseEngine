@@ -201,6 +201,7 @@
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="Bone.h" />
+    <ClInclude Include="Converters.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="RenderPass.h" />

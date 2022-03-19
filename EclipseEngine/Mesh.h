@@ -18,6 +18,19 @@ struct MeshBoneWeights
 	glm::vec4 BoneWeights = glm::vec4(0.0f);
 };
 
+struct MeshLoadingInfo
+{
+	uint64_t ModelID; 
+	std::vector<MeshVertex>& vertices;
+	std::vector<uint32_t>& indices; 
+	uint32_t BoneCount;
+	std::vector<MeshBoneWeights> BoneWeightList;
+	std::vector<glm::mat4> BoneTransform;
+	glm::mat4 MeshTransform;
+	std::shared_ptr<Material> materialPtr;
+
+};
+
 class Mesh
 {
 private:
@@ -62,7 +75,7 @@ public:
 	Mesh(std::vector<LineVertex>& vertices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
-	Mesh(uint64_t ModelID, std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	Mesh(MeshLoadingInfo meshLoader);
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);

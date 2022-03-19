@@ -1,14 +1,23 @@
 #pragma once
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <assimp/Importer.hpp>
 
+#include "Converters.h"
 #include "Mesh.h"
 #include "Bone.h"
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
+
+struct NodeMap
+{
+	std::string NodeString;
+	aiMatrix4x4 NodeTransform;
+	int ParentNodeID;
+	int NodeID;
+	std::vector<int> ChildNodeList;
+	int MeshID;
+};
 
 class Model
 {
@@ -24,6 +33,7 @@ private:
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;
 	std::vector<std::shared_ptr<Bone>> BoneList;
+	std::vector<NodeMap> NodeMapList;
 
 	void GenerateID();
 	void LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* scene);
@@ -31,17 +41,18 @@ private:
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
 	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<MeshVertex>& VertexList);
 	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<MeshVertex>& VertexList);
-	uint64_t LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
+	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
 public:
 	Model();
+	Model(const std::string& FilePath);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
-	void Update();
+	void Update(MeshProperties& meshProps);
 	void Destroy();
 };
 

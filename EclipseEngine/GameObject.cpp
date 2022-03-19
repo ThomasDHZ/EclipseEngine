@@ -115,6 +115,47 @@ void GameObject::Update(float DeltaTime)
 	{
 		comp->Update(DeltaTime);
 	}
+
+	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
+	auto transform2D = GetComponentByType(ComponentType::kTransform2D);
+	if (spriteRenderer != nullptr &&
+		transform2D != nullptr)
+	{
+		SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+		Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
+
+		MeshProperties meshProps = {};
+		meshProps.MeshTransform = transform->Transform;
+		meshProps.materialBufferData = sprite->GetMaterial()->GetMaterialTextureData();
+		sprite->UpdateMeshProperties(meshProps);
+	}
+
+	auto meshRenderer = GetComponentByType(ComponentType::kMeshRenderer);
+	auto transform3D = GetComponentByType(ComponentType::kTransform3D);
+	if (meshRenderer != nullptr &&
+		transform3D != nullptr)
+	{
+		MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
+		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
+
+		MeshProperties meshProps = {};
+		meshProps.MeshTransform = transform->Transform;
+		meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
+		mesh->UpdateMeshProperties(meshProps);
+	}
+
+	auto lineRenderer = GetComponentByType(ComponentType::kLineRenderer);
+	if (lineRenderer != nullptr &&
+		transform3D != nullptr)
+	{
+		LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
+
+		MeshProperties meshProps = {};
+		meshProps.MeshTransform = transform->Transform;
+		meshProps.materialBufferData = line->GetMaterial()->GetMaterialTextureData();
+		line->UpdateMeshProperties(meshProps);
+	}
 }
 
 void GameObject::Draw(VkCommandBuffer& commandBuffer)
@@ -210,4 +251,169 @@ std::shared_ptr<Component> GameObject::GetComponentByID(uint64_t ComponentID)
 	}
 
 	return nullptr;
+}
+
+void GameObject::GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
+{
+	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
+	if (spriteRenderer)
+	{
+		SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+
+		MeshProperties meshProps = {};
+		sprite->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = sprite->GetMeshPropertiesBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		sprite->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+	}
+
+	auto meshRenderer = GetComponentByType(ComponentType::kMeshRenderer);
+	if (meshRenderer)
+	{
+		MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
+
+		MeshProperties meshProps = {};
+		mesh->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		mesh->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+	}
+
+	auto lineRenderer = GetComponentByType(ComponentType::kLineRenderer);
+	if (lineRenderer)
+	{
+		SpriteRenderer* line = static_cast<SpriteRenderer*>(lineRenderer.get());
+
+		MeshProperties meshProps = {};
+		line->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = line->GetMeshPropertiesBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		line->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+	}
+}
+
+void GameObject::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
+{
+	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
+	if (spriteRenderer)
+	{
+		SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+
+		MeshProperties meshProps = {};
+		sprite->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = sprite->GetMeshIndiceBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		sprite->SetBufferIndex(IndexBufferList.size() - 1);
+	}
+
+	auto meshRenderer =  GetComponentByType(ComponentType::kMeshRenderer);
+	if (meshRenderer)
+	{
+		MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
+
+		MeshProperties meshProps = {};
+		mesh->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = mesh->GetMeshIndiceBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		mesh->SetBufferIndex(IndexBufferList.size() - 1);
+	}
+
+	auto lineRenderer = GetComponentByType(ComponentType::kLineRenderer);
+	if (lineRenderer)
+	{
+		LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+
+		MeshProperties meshProps = {};
+		line->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = line->GetMeshIndiceBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+		line->SetBufferIndex(IndexBufferList.size() - 1);
+	}
+}
+
+void GameObject::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
+{
+	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
+	if (spriteRenderer)
+	{
+		SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+
+		MeshProperties meshProps = {};
+		sprite->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = sprite->GetMeshVertexBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+	}
+
+	auto meshRenderer = GetComponentByType(ComponentType::kMeshRenderer);
+	if (meshRenderer)
+	{
+		MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
+
+		MeshProperties meshProps = {};
+		mesh->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = mesh->GetMeshVertexBuffer();
+
+		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+		MeshPropertiesmBufferBufferInfo.buffer = buffer;
+		MeshPropertiesmBufferBufferInfo.offset = 0;
+		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+	}
+
+	auto lineRenderer = GetComponentByType(ComponentType::kLineRenderer);
+	if (lineRenderer)
+	{
+		LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+
+		MeshProperties meshProps = {};
+		line->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = line->GetMeshVertexBuffer();
+
+		VkDescriptorBufferInfo linePropertiesmBufferBufferInfo = {};
+		linePropertiesmBufferBufferInfo.buffer = buffer;
+		linePropertiesmBufferBufferInfo.offset = 0;
+		linePropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+		VertexBufferList.emplace_back(linePropertiesmBufferBufferInfo);
+	}
 }

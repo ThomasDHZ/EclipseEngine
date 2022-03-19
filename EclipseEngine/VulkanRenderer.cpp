@@ -70,6 +70,8 @@ PFN_vkCreateRayTracingPipelinesKHR VulkanRenderer::vkCreateRayTracingPipelinesKH
 
 void VulkanRenderer::StartUp()
 {
+	UpdateRendererFlag = true;
+
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
@@ -378,6 +380,7 @@ void VulkanRenderer::RebuildSwapChain()
 {
 	vkDeviceWaitIdle(Device);
 
+	UpdateRendererFlag = true;
 	for (auto imageView : SwapChain.GetSwapChainImageViews()) {
 		vkDestroyImageView(Device, imageView, nullptr);
 	}

@@ -6,6 +6,33 @@ Model::Model()
 {
 }
 
+Model::Model(const std::string& FilePath)
+{
+	GenerateID();
+	Assimp::Importer ModelImporter;
+
+	const aiScene* Scene = ModelImporter.ReadFile(FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
+	{
+		std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
+		return;
+	}
+
+	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	//LoadNodeTree(Scene->mRootNode);
+	//LoadAnimations(Scene);
+	LoadMesh(FilePath, Scene->mRootNode, Scene);
+
+	//if (AnimationList.size() > 0)
+	//{
+	//	AnimatedModel = true;
+	//	AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
+	//	AnimationRenderer = AnimatorCompute(MeshList[0]);
+	//}
+
+	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+}
+
 Model::~Model()
 {
 }
@@ -21,9 +48,9 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 	uint32_t TotalVertex = 0;
 	uint32_t TotalIndex = 0;
 
-	for (unsigned int i = 0; i < node->mNumMeshes; i++)
+	for (uint32_t x = 0; x < node->mNumMeshes; x++)
 	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[x]];
 
 		auto vertices = LoadVertices(mesh);
 		auto indices = LoadIndices(mesh);
@@ -32,25 +59,30 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 
 		LoadBones(scene->mRootNode, mesh, vertices);
 
-		/*MeshList.emplace_back(std::make_shared<Mesh>(Mesh(ModelID, vertices, indices, materialID, boneWeights, BoneList.size())));
-		MeshList.back()->ParentModelID = ModelID;
-		MeshList.back()->VertexList = vertices;
-		MeshList.back()->MeshTransform = AssimpToGLMMatrixConverter(node->mTransformation);
+		//MeshLoadingInfo meshLoader;
+		//meshLoader.ModelID = ModelID;
+		//meshLoader.vertices = vertices;
+		//meshLoader.indices = indices;
+		//meshLoader.BoneCount = BoneList.size();
+		//meshLoader.BoneWeightList = boneWeights;
+		//meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
+		//meshLoader.materialPtr = materialID;
 
-		TotalVertex += MeshList.back()->VertexCount;
-		TotalIndex += MeshList.back()->IndexCount;
+		TotalVertex += vertices.size();
+		TotalIndex += indices.size();
+
 		for (auto nodeMap : NodeMapList)
 		{
 			if (nodeMap.NodeString == node->mName.C_Str())
 			{
-				MeshList.back()->MeshID = nodeMap.NodeID;
+				//MeshList.back()->MeshID = nodeMap.NodeID;
 			}
-		}*/
+		}
 	}
 
-	for (unsigned int i = 0; i < node->mNumChildren; i++)
+	for (uint32_t x = 0; x < node->mNumChildren; x++)
 	{
-		LoadMesh(FilePath, node->mChildren[i], scene);
+		LoadMesh(FilePath, node->mChildren[x], scene);
 	}
 }
 
@@ -112,7 +144,7 @@ void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Me
 	{
 		bool Exists = false;
 		auto node = RootNode->FindNode(mesh->mBones[x]->mName.data);
-		//BoneList.emplace_back(std::make_shared<Bone>(mesh->mBones[x]->mName.data, x, AssimpToGLMMatrixConverter(mesh->mBones[x]->mOffsetMatrix)));
+		//BoneList.emplace_back(std::make_shared<Bone>(mesh->mBones[x]->mName.data, x, Converter::AssimpToGLMMatrixConverter(mesh->mBones[x]->mOffsetMatrix)));
 	}
 }
 
@@ -160,7 +192,7 @@ std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Me
 	return BoneWeightList;
 }
 
-uint64_t Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene)
 {
 	MaterialProperties MaterialInfo;
 
@@ -251,7 +283,8 @@ uint64_t Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const ai
 		MaterialInfo.EmissionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 	}
 
-	return MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialInfo);
+	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialInfo);
+	return MaterialManager::GetMaterialByID(materialID);
 }
 
 void Model::AddMesh(std::shared_ptr<Mesh> mesh)
@@ -268,7 +301,7 @@ void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 {
 }
 
-void Model::Update()
+void Model::Update(MeshProperties& meshProps)
 {
 	ModelTransform = glm::mat4(1.0f);
 	ModelTransform = glm::translate(ModelTransform, ModelPosition);
@@ -276,6 +309,16 @@ void Model::Update()
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransform = glm::scale(ModelTransform, ModelScale);
+
+	if (BoneList.size() > 0)
+	{
+		//AnimationPlayer.Update();
+	}
+
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshProperties(meshProps, ModelTransform, BoneList);
+	}
 }
 
 void Model::Destroy()

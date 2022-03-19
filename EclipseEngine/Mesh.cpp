@@ -179,35 +179,34 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	}
 }
 
-Mesh::Mesh(uint64_t ModelID, std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+Mesh::Mesh(MeshLoadingInfo meshLoader)
 {
 	GenerateID();
 
-	VertexList = vertices;
-	IndexList = indices;
+	VertexList = meshLoader.vertices;
+	IndexList = meshLoader.indices;
 
-	ParentModelID = ModelID;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
-	BoneCount = 0;
+	ParentModelID = meshLoader.ModelID;
+	VertexCount = meshLoader.vertices.size();
+	IndexCount = meshLoader.indices.size();
+	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;
+	BoneCount = BoneCount;
 
-	material = MaterialManager::GetDefaultMaterial();
-
-	glm::mat4 MeshTransform = glm::mat4(1.0f);
-	MeshTransform = glm::transpose(MeshTransform);
+	material = meshLoader.materialPtr;
+	glm::mat4 MeshTransform = meshLoader.MeshTransform;
 
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	
 	if (BoneCount != 0)
 	{
 		BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
-	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	
 	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
-
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
 		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
@@ -415,7 +414,15 @@ void Mesh::SetParentModel(uint64_t ModelID)
 
 void Mesh::SetBufferIndex(int bufferIndex)
 {
-	BufferIndex = bufferIndex;
+
+	if (VulkanRenderer::UpdateRendererFlag)
+	{
+		BufferIndex = bufferIndex;
+	}
+	else
+	{
+		std::cout << "Can't update BufferIndex unless pipelines in the process of being rebuild." << std::endl;
+	}
 }
 
 void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
