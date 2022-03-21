@@ -29,6 +29,8 @@ public:
     VkBuffer GetMeshPropertiesBuffer() { return mesh->GetMeshPropertiesBuffer(); }
     VkBuffer GetMeshVertexBuffer() { return mesh->GetMeshVertexBuffer(); }
     VkBuffer GetMeshIndiceBuffer() { return mesh->GetMeshIndiceBuffer(); }
+
+    std::shared_ptr<Model> GetModel() { return model; }
     std::shared_ptr<Material> GetMaterial() { return mesh->GetMaterial(); }
 
     virtual nlohmann::json ToJson() override

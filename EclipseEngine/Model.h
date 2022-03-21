@@ -54,5 +54,7 @@ public:
 
 	void Update(MeshProperties& meshProps);
 	void Destroy();
+
+	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 };
 
