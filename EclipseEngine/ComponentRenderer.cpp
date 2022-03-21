@@ -4,13 +4,13 @@ ComponentRenderer::ComponentRenderer() : Component(ComponentType::kNullComponent
 {
 }
 
-ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(componentType)
+ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(componentType, ComponentSubType::kRenderedObject)
 {
 }
 
 void ComponentRenderer::Draw(VkCommandBuffer& commandBuffer)
 {
-	mesh.Draw(commandBuffer);
+	mesh->Draw(commandBuffer);
 }
 
 void ComponentRenderer::Update(float DeltaTime)
@@ -19,7 +19,7 @@ void ComponentRenderer::Update(float DeltaTime)
 
 void ComponentRenderer::UpdateMeshProperties(MeshProperties& meshProperties)
 {
-	mesh.UpdateMeshProperties(meshProperties);
+	mesh->UpdateMeshProperties(meshProperties);
 }
 
 void ComponentRenderer::Destroy()
@@ -28,10 +28,10 @@ void ComponentRenderer::Destroy()
 
 void ComponentRenderer::SetBufferIndex(int bufferIndex)
 {
-	mesh.SetBufferIndex(bufferIndex);
+	mesh->SetBufferIndex(bufferIndex);
 }
 
 void ComponentRenderer::SetMaterial(std::shared_ptr<Material> material)
 {
-	mesh.SetMaterial(material);
+	mesh->SetMaterial(material);
 }

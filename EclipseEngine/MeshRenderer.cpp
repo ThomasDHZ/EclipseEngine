@@ -3,7 +3,7 @@
 
 MeshRenderer::MeshRenderer() : ComponentRenderer(ComponentType::kMeshRenderer)
 {
-	mesh = Mesh(vertices, indices);
+	mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
 }
 
 MeshRenderer::MeshRenderer(nlohmann::json& json) : ComponentRenderer(json)
@@ -21,5 +21,5 @@ void MeshRenderer::Update(float DeltaTime)
 
 void MeshRenderer::Destroy()
 {
-	mesh.Destory();
+	mesh->Destory();
 }

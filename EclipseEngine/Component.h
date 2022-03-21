@@ -12,6 +12,12 @@ enum ComponentType
 	kTransform3D
 };
 
+enum ComponentSubType
+{
+	kRenderedObject,
+	kTransform,
+};
+
 
 class Component
 {
@@ -21,11 +27,12 @@ private:
 protected:
 	uint64_t ComponentID;
 	ComponentType componentType;
+	ComponentSubType componentSubType;
 
 public:
 
 	Component();
-	Component(ComponentType type);
+	Component(ComponentType type, ComponentSubType componentSubType);
 	Component(const nlohmann::json& json);
 	virtual ~Component();
 
@@ -37,6 +44,7 @@ public:
 	void GenerateID();
 
 	ComponentType GetComponentType() { return componentType; }
+	ComponentSubType GetComponentSubType() { return componentSubType; }
 	uint64_t GetComponentID() { return ComponentID; }
 
 	virtual nlohmann::json ToJson()
@@ -44,6 +52,7 @@ public:
 		nlohmann::json json;
 
 		json["componentType"] = componentType;
+		json["componentSubType"] = componentSubType;
 
 		return json;
 	}

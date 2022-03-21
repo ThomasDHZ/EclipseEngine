@@ -34,6 +34,10 @@ public:
 	void Draw(VkCommandBuffer& commandBuffer);
 	void Destory();
 
+	void AddMesh(std::shared_ptr<Mesh> mesh);
+	void RemoveMesh(std::shared_ptr<Mesh> mesh);
+	void TransferMesh(GameObject ToGameObject, std::shared_ptr<Mesh> mesh);
+
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
 
@@ -42,8 +46,10 @@ public:
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
 
+	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
+
 	void GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
 	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
 	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);

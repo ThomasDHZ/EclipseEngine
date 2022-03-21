@@ -1,9 +1,11 @@
 #pragma once
 #include "Component.h"
+#include "Transform.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-class Transform2D : public Component
+class Transform2D : public Transform
 {
 private:
 
@@ -22,7 +24,6 @@ public:
 	glm::vec3 Position = glm::vec3(0.0f);
 	glm::vec3 Rotation = glm::vec3(0.0f);
 	glm::vec3 Scale = glm::vec3(1.0f);
-	glm::mat4 Transform = glm::mat4(1.0f);
 	uint32_t ZIndex;
 
     virtual nlohmann::json ToJson() override

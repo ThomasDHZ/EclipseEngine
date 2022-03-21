@@ -6,12 +6,12 @@ LineRenderer::LineRenderer() : ComponentRenderer()
 
 LineRenderer::LineRenderer(std::vector<LineVertex> VertexList) : ComponentRenderer(ComponentType::kLineRenderer)
 {
-	mesh = Mesh(VertexList);
+	mesh = std::make_shared<Mesh>(Mesh(VertexList));
 }
 
 LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint) : ComponentRenderer(ComponentType::kLineRenderer)
 {
-	mesh = Mesh(StartPoint, EndPoint);
+	mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
 }
 
 
@@ -30,5 +30,5 @@ void LineRenderer::Update(float DeltaTime)
 
 void LineRenderer::Destroy()
 {
-	mesh.Destory();
+	mesh->Destory();
 }

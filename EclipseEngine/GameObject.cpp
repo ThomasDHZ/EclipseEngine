@@ -116,16 +116,33 @@ void GameObject::Update(float DeltaTime)
 		comp->Update(DeltaTime);
 	}
 
+	//auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
+	//auto componentTransform = GetComponentBySubType(ComponentSubType::kTransform);
+	//if (objRenderer != nullptr &&
+	//	componentTransform != nullptr)
+	//{
+	//	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
+	//	for (auto& mesh : objRendererPtr->getM)
+	//	{
+	//		Transform* transformPtr = static_cast<Transform*>(componentTransform.get());
+
+	//		MeshProperties meshProps = {};
+	//		meshProps.MeshTransform = transformPtr->TransformMatrix;
+	//		meshProps.materialBufferData = objRendererPtr->GetMaterial()->GetMaterialTextureData();
+	//		objRendererPtr->UpdateMeshProperties(meshProps);
+	//	}
+	//}
+
 	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
 	auto transform2D = GetComponentByType(ComponentType::kTransform2D);
 	if (spriteRenderer != nullptr &&
 		transform2D != nullptr)
 	{
-		SpriteRenderer* sprite = static_cast<SpriteRenderer*>(spriteRenderer.get());
+		ComponentRenderer* sprite = static_cast<ComponentRenderer*>(spriteRenderer.get());
 		Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
 
 		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->Transform;
+		meshProps.MeshTransform = transform->TransformMatrix;
 		meshProps.materialBufferData = sprite->GetMaterial()->GetMaterialTextureData();
 		sprite->UpdateMeshProperties(meshProps);
 	}
@@ -135,11 +152,11 @@ void GameObject::Update(float DeltaTime)
 	if (meshRenderer != nullptr &&
 		transform3D != nullptr)
 	{
-		MeshRenderer* mesh = static_cast<MeshRenderer*>(meshRenderer.get());
+		ComponentRenderer* mesh = static_cast<ComponentRenderer*>(meshRenderer.get());
 		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
 
 		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->Transform;
+		meshProps.MeshTransform = transform->TransformMatrix;
 		meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
 		mesh->UpdateMeshProperties(meshProps);
 	}
@@ -148,11 +165,11 @@ void GameObject::Update(float DeltaTime)
 	if (lineRenderer != nullptr &&
 		transform3D != nullptr)
 	{
-		LineRenderer* line = static_cast<LineRenderer*>(lineRenderer.get());
+		ComponentRenderer* line = static_cast<ComponentRenderer*>(lineRenderer.get());
 		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
 
 		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->Transform;
+		meshProps.MeshTransform = transform->TransformMatrix;
 		meshProps.materialBufferData = line->GetMaterial()->GetMaterialTextureData();
 		line->UpdateMeshProperties(meshProps);
 	}
@@ -228,6 +245,19 @@ void GameObject::GenerateID()
 }
 
 std::shared_ptr<Component> GameObject::GetComponentByType(ComponentType componentType)
+{
+	for (auto& comp : ComponentList)
+	{
+		if (comp->GetComponentType() == componentType)
+		{
+			return comp;
+		}
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Component> GameObject::GetComponentBySubType(ComponentSubType componentType)
 {
 	for (auto& comp : ComponentList)
 	{

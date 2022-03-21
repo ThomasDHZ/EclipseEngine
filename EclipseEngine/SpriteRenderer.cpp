@@ -3,7 +3,7 @@
 
 SpriteRenderer::SpriteRenderer() : ComponentRenderer(ComponentType::kSpriteRenderer)
 {
-	mesh = Mesh(vertices, indices);
+	mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
 }
 
 SpriteRenderer::SpriteRenderer(nlohmann::json& json) : ComponentRenderer(json)
@@ -21,5 +21,5 @@ void SpriteRenderer::Update(float DeltaTime)
 
 void SpriteRenderer::Destroy()
 {
-	mesh.Destory();
+	mesh->Destory();
 }
