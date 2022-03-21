@@ -79,22 +79,8 @@ void RenderPass::DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, Scene
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = nullptr;
-
-        if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
-            obj->GetComponentByType(ComponentType::kMeshRenderer))
-        {
-            if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
-            {
-                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
-            }
-
-            if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-            {
-                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
-            }
-        }
-        else
+        ComponentRenderer* componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+        if (!componentRenderer)
         {
             continue;
         }
@@ -112,16 +98,8 @@ void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, ScenePrope
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = nullptr;
-
-        if (obj->GetComponentByType(ComponentType::kLineRenderer))
-        {
-            if (obj->GetComponentByType(ComponentType::kLineRenderer))
-            {
-                componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kLineRenderer).get());
-            }
-        }
-        else
+        ComponentRenderer* componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+        if (!componentRenderer)
         {
             continue;
         }
