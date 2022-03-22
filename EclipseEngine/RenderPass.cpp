@@ -46,7 +46,8 @@ void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, ScenePrope
 
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+        ComponentRenderer* componentRenderer = nullptr;
+        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
         if (!componentRenderer)
         {
             continue;
@@ -65,7 +66,8 @@ void RenderPass::DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, Scene
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+        ComponentRenderer* componentRenderer = nullptr;
+        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
         if (!componentRenderer)
         {
             continue;
@@ -84,7 +86,8 @@ void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, ScenePrope
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
     for (auto obj : GameObjectManager::GetGameObjectList())
     {
-        ComponentRenderer* componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+        ComponentRenderer* componentRenderer = nullptr;
+        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
         if (!componentRenderer)
         {
             continue;
