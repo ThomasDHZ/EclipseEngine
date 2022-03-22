@@ -53,10 +53,13 @@ void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, ScenePrope
             continue;
         }
 
-        sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+        for (auto mesh : componentRenderer->GetModel()->GetMeshList())
+        {
+            sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 
-        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+        }
     }
 }
 
@@ -73,10 +76,13 @@ void RenderPass::DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, Scene
             continue;
         }
 
-        sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+        for (auto mesh : componentRenderer->GetModel()->GetMeshList())
+        {
+            sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 
-        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+        }
     }
 }
 
@@ -93,10 +99,13 @@ void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, ScenePrope
             continue;
         }
 
-        sceneProperties.MeshIndex = componentRenderer->GetMeshBufferIndex();
-        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+        for (auto mesh : componentRenderer->GetModel()->GetMeshList())
+        {
+            sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 
-        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+        }
     }
 }
 

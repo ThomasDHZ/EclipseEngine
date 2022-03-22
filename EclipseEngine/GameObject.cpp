@@ -116,32 +116,21 @@ void GameObject::Update(float DeltaTime)
 		comp->Update(DeltaTime);
 	}
 
-	//auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	//auto componentTransform = GetComponentBySubType(ComponentSubType::kTransform);
-	//if (objRenderer != nullptr &&
-	//	componentTransform != nullptr)
-	//{
-	//	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//	{
-	//		Transform* transformPtr = static_cast<Transform*>(componentTransform.get());
-
-	//		MeshProperties meshProps = {};
-	//		meshProps.MeshTransform = transformPtr->TransformMatrix;
-	//		meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
-	//		objRendererPtr->UpdateMeshProperties(meshProps);
-	//	}
-	//}
-
-	auto objRenderer = static_cast<ComponentRenderer*>(GetComponentBySubType(ComponentSubType::kRenderedObject).get());
-	auto componentTransform = static_cast<Transform*>(GetComponentBySubType(ComponentSubType::kTransform).get());
+	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
+	auto componentTransform = GetComponentBySubType(ComponentSubType::kTransform);
 	if (objRenderer != nullptr &&
 		componentTransform != nullptr)
 	{
-		MeshProperties meshProps = {};
-		meshProps.MeshTransform = componentTransform->TransformMatrix;
-		meshProps.materialBufferData = objRenderer->GetMaterial()->GetMaterialTextureData();
-		objRenderer->UpdateMeshProperties(meshProps);
+		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
+		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
+		{
+			Transform* transformPtr = static_cast<Transform*>(componentTransform.get());
+
+			MeshProperties meshProps = {};
+			meshProps.MeshTransform = transformPtr->TransformMatrix;
+			meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
+			objRendererPtr->UpdateMeshProperties(meshProps);
+		}
 	}
 }
 
@@ -229,34 +218,15 @@ std::shared_ptr<Component> GameObject::GetComponentByID(uint64_t ComponentID)
 void GameObject::GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
 {
 
-	//auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	//if (objRenderer != nullptr)
-	//{
-	//	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//	{
-	//		MeshProperties meshProps = {};
-	//		objRendererPtr->UpdateMeshProperties(meshProps);
-	//		VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
-
-	//		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	//		MeshPropertiesmBufferBufferInfo.buffer = buffer;
-	//		MeshPropertiesmBufferBufferInfo.offset = 0;
-	//		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	//		MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
-
-	//		objRendererPtr->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
-	//	}
-	//}
-
 	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
 	if (objRenderer != nullptr)
 	{
 		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-
+		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
+		{
 			MeshProperties meshProps = {};
 			objRendererPtr->UpdateMeshProperties(meshProps);
-			VkBuffer buffer = objRendererPtr->GetMeshPropertiesBuffer();
+			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 			MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -264,39 +234,22 @@ void GameObject::GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInf
 			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 			MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-			objRendererPtr->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+			mesh->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
+		}
 	}
 }
 
 void GameObject::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
 {
-//	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-//if (objRenderer != nullptr)
-//{
-//	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-//	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-//	{
-//		MeshProperties meshProps = {};
-//		objRendererPtr->UpdateMeshProperties(meshProps);
-//		VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
-//
-//		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-//		MeshPropertiesmBufferBufferInfo.buffer = buffer;
-//		MeshPropertiesmBufferBufferInfo.offset = 0;
-//		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-//		IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
-//
-//		objRendererPtr->SetBufferIndex(IndexBufferList.size() - 1);
-//	}
-//}
-
 	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	if (objRenderer != nullptr)
+if (objRenderer != nullptr)
+{
+	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
+	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
 	{
-		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-
 		MeshProperties meshProps = {};
-		VkBuffer buffer = objRendererPtr->GetMeshIndiceBuffer();
+		objRendererPtr->UpdateMeshProperties(meshProps);
+		VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 		MeshPropertiesmBufferBufferInfo.buffer = buffer;
@@ -304,46 +257,30 @@ void GameObject::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBu
 		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 		IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-		objRendererPtr->SetBufferIndex(IndexBufferList.size() - 1);
+		mesh->SetBufferIndex(IndexBufferList.size() - 1);
 	}
+}
 }
 
 void GameObject::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
 {
-//	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-//if (objRenderer != nullptr)
-//{
-	//ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//{
-	//	MeshProperties meshProps = {};
-	//	objRendererPtr->UpdateMeshProperties(meshProps);
-	//	VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
-
-	//	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	//	MeshPropertiesmBufferBufferInfo.buffer = buffer;
-	//	MeshPropertiesmBufferBufferInfo.offset = 0;
-	//	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	//	VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
-
-	//	objRendererPtr->SetBufferIndex(VertexBufferList.size() - 1);
-	//}
-//}
-
 	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
 	if (objRenderer != nullptr)
 	{
 		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
+		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
+		{
+			MeshProperties meshProps = {};
+			objRendererPtr->UpdateMeshProperties(meshProps);
+			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
-		MeshProperties meshProps = {};
-		VkBuffer buffer = objRendererPtr->GetMeshVertexBuffer();
+			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+			MeshPropertiesmBufferBufferInfo.buffer = buffer;
+			MeshPropertiesmBufferBufferInfo.offset = 0;
+			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+			VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-		MeshPropertiesmBufferBufferInfo.buffer = buffer;
-		MeshPropertiesmBufferBufferInfo.offset = 0;
-		MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-		VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
-
-		objRendererPtr->SetBufferIndex(VertexBufferList.size() - 1);
+			mesh->SetBufferIndex(VertexBufferList.size() - 1);
+		}
 	}
 }

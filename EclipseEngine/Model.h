@@ -46,6 +46,7 @@ private:
 public:
 	Model();
 	Model(const std::string& FilePath);
+	Model(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	Model(std::vector<LineVertex>& vertices);
 	Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);

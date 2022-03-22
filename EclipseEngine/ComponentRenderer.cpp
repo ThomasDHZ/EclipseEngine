@@ -10,7 +10,7 @@ ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(co
 
 void ComponentRenderer::Draw(VkCommandBuffer& commandBuffer)
 {
-	mesh->Draw(commandBuffer);
+	model->Draw(commandBuffer);
 }
 
 void ComponentRenderer::Update(float DeltaTime)
@@ -19,19 +19,19 @@ void ComponentRenderer::Update(float DeltaTime)
 
 void ComponentRenderer::UpdateMeshProperties(MeshProperties& meshProperties)
 {
-	mesh->UpdateMeshProperties(meshProperties);
+	model->Update(meshProperties);
 }
 
 void ComponentRenderer::Destroy()
 {
 }
 
-void ComponentRenderer::SetBufferIndex(int bufferIndex)
-{
-	mesh->SetBufferIndex(bufferIndex);
-}
-
-void ComponentRenderer::SetMaterial(std::shared_ptr<Material> material)
-{
-	mesh->SetMaterial(material);
-}
+//void ComponentRenderer::SetBufferIndex(int bufferIndex)
+//{
+//	mesh->SetBufferIndex(bufferIndex);
+//}
+//
+//void ComponentRenderer::SetMaterial(std::shared_ptr<Material> material)
+//{
+//	mesh->SetMaterial(material);
+//}
