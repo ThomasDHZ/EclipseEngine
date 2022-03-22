@@ -133,45 +133,15 @@ void GameObject::Update(float DeltaTime)
 	//	}
 	//}
 
-	auto spriteRenderer = GetComponentByType(ComponentType::kSpriteRenderer);
-	auto transform2D = GetComponentByType(ComponentType::kTransform2D);
-	if (spriteRenderer != nullptr &&
-		transform2D != nullptr)
+	auto objRenderer = static_cast<ComponentRenderer*>(GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+	auto componentTransform = static_cast<Transform*>(GetComponentBySubType(ComponentSubType::kTransform).get());
+	if (objRenderer != nullptr &&
+		componentTransform != nullptr)
 	{
-		ComponentRenderer* sprite = static_cast<ComponentRenderer*>(spriteRenderer.get());
-		Transform2D* transform = static_cast<Transform2D*>(transform2D.get());
-
 		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->TransformMatrix;
-		meshProps.materialBufferData = sprite->GetMaterial()->GetMaterialTextureData();
-		sprite->UpdateMeshProperties(meshProps);
-	}
-
-	auto meshRenderer = GetComponentByType(ComponentType::kMeshRenderer);
-	auto transform3D = GetComponentByType(ComponentType::kTransform3D);
-	if (meshRenderer != nullptr &&
-		transform3D != nullptr)
-	{
-		ComponentRenderer* mesh = static_cast<ComponentRenderer*>(meshRenderer.get());
-		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
-
-		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->TransformMatrix;
-		meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
-		mesh->UpdateMeshProperties(meshProps);
-	}
-
-	auto lineRenderer = GetComponentByType(ComponentType::kLineRenderer);
-	if (lineRenderer != nullptr &&
-		transform3D != nullptr)
-	{
-		ComponentRenderer* line = static_cast<ComponentRenderer*>(lineRenderer.get());
-		Transform3D* transform = static_cast<Transform3D*>(transform3D.get());
-
-		MeshProperties meshProps = {};
-		meshProps.MeshTransform = transform->TransformMatrix;
-		meshProps.materialBufferData = line->GetMaterial()->GetMaterialTextureData();
-		line->UpdateMeshProperties(meshProps);
+		meshProps.MeshTransform = componentTransform->TransformMatrix;
+		meshProps.materialBufferData = objRenderer->GetMaterial()->GetMaterialTextureData();
+		objRenderer->UpdateMeshProperties(meshProps);
 	}
 }
 

@@ -33,6 +33,21 @@ Model::Model(const std::string& FilePath)
 	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
 
+Model::Model(std::vector<LineVertex>& vertices)
+{
+	AddMesh(vertices);
+}
+
+Model::Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
+{
+	AddMesh(vertices, indices);
+}
+
+Model::Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+{
+	AddMesh(vertices, indices, materialPtr);
+}
+
 Model::~Model()
 {
 }
@@ -293,6 +308,34 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 	MeshList.emplace_back(mesh);
 }
 
+void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	mesh->SetParentModel(ModelID);
+	MeshList.emplace_back(mesh);
+}
+
+void Model::AddMesh(std::vector<LineVertex>& vertices)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
+	mesh->SetParentModel(ModelID);
+	MeshList.emplace_back(mesh);
+}
+
+void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
+	mesh->SetParentModel(ModelID);
+	MeshList.emplace_back(mesh);
+}
+
+void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
+	mesh->SetParentModel(ModelID);
+	MeshList.emplace_back(mesh);
+}
+
 void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
 {
 }
@@ -313,14 +356,24 @@ void Model::Update(MeshProperties& meshProps)
 	if (BoneList.size() > 0)
 	{
 		//AnimationPlayer.Update();
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshProperties(meshProps, ModelTransform, BoneList);
+		}
 	}
-
-	for (auto& mesh : MeshList)
+	else
 	{
-		mesh->UpdateMeshProperties(meshProps, ModelTransform, BoneList);
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshProperties(meshProps);
+		}
 	}
 }
 
 void Model::Destroy()
 {
+	for (auto& mesh : MeshList)
+	{
+		mesh->Destory();
+	}
 }
