@@ -59,6 +59,7 @@ public:
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
+	void Draw(VkCommandBuffer& commandBuffer);
 	void Update(MeshProperties& meshProps);
 	void Destroy();
 

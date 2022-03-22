@@ -344,6 +344,14 @@ void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 {
 }
 
+void Model::Draw(VkCommandBuffer& commandBuffer)
+{
+	for (auto& mesh : MeshList)
+	{
+		mesh->Draw(commandBuffer);
+	}
+}
+
 void Model::Update(MeshProperties& meshProps)
 {
 	ModelTransform = glm::mat4(1.0f);
