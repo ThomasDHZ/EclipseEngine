@@ -302,7 +302,17 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 
 void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 {
-	meshProperties.Update(meshProps);
+	MeshTransformMatrix = glm::mat4(1.0f);
+	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshTransformMatrix = glm::scale(MeshTransformMatrix, MeshScale);
+
+	meshProperties.MeshTransform = MeshTransformMatrix;
+	meshProperties.ModelTransform = glm::mat4(1.0f);
+	meshProperties.materialBufferData = material->GetMaterialTextureData();
+	MeshPropertiesBuffer.Update(meshProps);
 
 	glm::mat4 FinalTransform = meshProps.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProps.MeshTransform);
@@ -325,7 +335,17 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 
 void Mesh::UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
-	meshProperties.Update(meshProps);
+	MeshTransformMatrix = glm::mat4(1.0f);
+	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshTransformMatrix = glm::scale(MeshTransformMatrix, MeshScale);
+
+	meshProperties.MeshTransform = MeshTransformMatrix;
+	meshProperties.ModelTransform = ModelMatrix;
+	meshProperties.materialBufferData = material->GetMaterialTextureData();
+    MeshPropertiesBuffer.Update(meshProps);
 
 	if (BoneList.size() != 0)
 	{
@@ -379,7 +399,7 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 void Mesh::Destory()
 {
 	VertexBuffer.DestoryBuffer();
-	meshProperties.Destroy();
+	MeshPropertiesBuffer.Destroy();
 
 	if (IndexBuffer.Buffer != nullptr)
 	{

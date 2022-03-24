@@ -5,6 +5,7 @@
 #include "MaterialManager.h"
 #include "AccelerationStructureBuffer.h"
 #include "Bone.h"
+#include "Converters.h"
 
 enum EnumMeshType
 {
@@ -20,9 +21,9 @@ struct MeshBoneWeights
 
 struct MeshLoadingInfo
 {
-	uint64_t ModelID; 
+	uint64_t ModelID;
 	std::vector<MeshVertex>& vertices;
-	std::vector<uint32_t>& indices; 
+	std::vector<uint32_t>& indices;
 	uint32_t BoneCount;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
@@ -51,6 +52,12 @@ private:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 
+	glm::vec3 MeshPosition = glm::vec3(0.0f);
+	glm::vec3 MeshRotation = glm::vec3(0.0f);
+	glm::vec3 MeshScale = glm::vec3(1.0f);
+	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
+
+	MeshProperties meshProperties;
 	std::shared_ptr<Material> material;
 
 	VulkanBuffer VertexBuffer;
@@ -59,7 +66,7 @@ private:
 	VulkanBuffer TransformInverseBuffer;
 	VulkanBuffer BoneWeightBuffer;
 	VulkanBuffer BoneTransformBuffer;
-	MeshPropertiesUniformBuffer meshProperties;
+	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
@@ -89,12 +96,14 @@ public:
 
 	uint64_t GetMeshID() { return MeshID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
-	VkBuffer GetMeshPropertiesBuffer() { return meshProperties.GetVulkanBufferData().GetBuffer(); }
+	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
+	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	std::shared_ptr<Material> GetMaterial() { return material; }
-	
+
+
 	nlohmann::json ToJson()
 	{
 		nlohmann::json json;
