@@ -357,7 +357,7 @@ void Model::Draw(VkCommandBuffer& commandBuffer)
 	}
 }
 
-void Model::Update(MeshProperties& meshProps)
+void Model::Update()
 {
 	ModelTransform = glm::mat4(1.0f);
 	ModelTransform = glm::translate(ModelTransform, ModelPosition);
@@ -371,14 +371,14 @@ void Model::Update(MeshProperties& meshProps)
 		//AnimationPlayer.Update();
 		for (auto& mesh : MeshList)
 		{
-			mesh->UpdateMeshProperties(meshProps, ModelTransform, BoneList);
+			mesh->UpdateMeshProperties(ModelTransform, BoneList);
 		}
 	}
 	else
 	{
 		for (auto& mesh : MeshList)
 		{
-			mesh->UpdateMeshProperties(meshProps);
+			mesh->UpdateMeshProperties();
 		}
 	}
 }

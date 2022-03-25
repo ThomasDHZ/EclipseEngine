@@ -300,7 +300,7 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 	scratchBuffer.DestoryBuffer();
 }
 
-void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
+void Mesh::UpdateMeshProperties()
 {
 	MeshTransformMatrix = glm::mat4(1.0f);
 	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
@@ -312,10 +312,10 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 	meshProperties.MeshTransform = MeshTransformMatrix;
 	meshProperties.ModelTransform = glm::mat4(1.0f);
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
-	MeshPropertiesBuffer.Update(meshProps);
+	MeshPropertiesBuffer.Update(meshProperties);
 
-	glm::mat4 FinalTransform = meshProps.MeshTransform;
-	glm::mat4 transformMatrix2 = glm::transpose(meshProps.MeshTransform);
+	glm::mat4 FinalTransform = meshProperties.MeshTransform;
+	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
 	if (TransformBuffer.Buffer != nullptr)
 	{
@@ -333,7 +333,7 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps)
 	}
 }
 
-void Mesh::UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
 	MeshTransformMatrix = glm::mat4(1.0f);
 	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
@@ -345,7 +345,7 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& Mode
 	meshProperties.MeshTransform = MeshTransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
-    MeshPropertiesBuffer.Update(meshProps);
+	MeshPropertiesBuffer.Update(meshProperties);
 
 	if (BoneList.size() != 0)
 	{
@@ -356,8 +356,8 @@ void Mesh::UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& Mode
 		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
 	}
 
-	glm::mat4 FinalTransform = meshProps.MeshTransform;
-	glm::mat4 transformMatrix2 = glm::transpose(meshProps.MeshTransform);
+	glm::mat4 FinalTransform = meshProperties.MeshTransform;
+	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
 	if (TransformBuffer.Buffer != nullptr)
 	{

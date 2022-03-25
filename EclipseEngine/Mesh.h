@@ -21,9 +21,9 @@ struct MeshBoneWeights
 
 struct MeshLoadingInfo
 {
-	uint64_t ModelID;
+	uint64_t ModelID; 
 	std::vector<MeshVertex>& vertices;
-	std::vector<uint32_t>& indices;
+	std::vector<uint32_t>& indices; 
 	uint32_t BoneCount;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
@@ -86,8 +86,8 @@ public:
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);
-	void UpdateMeshProperties(MeshProperties& meshProps);
-	void UpdateMeshProperties(MeshProperties& meshProps, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	void UpdateMeshProperties();
+	void UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Destory();
 
 	void SetParentModel(uint64_t ModelID);
@@ -100,10 +100,8 @@ public:
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
-	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	std::shared_ptr<Material> GetMaterial() { return material; }
-
-
+	
 	nlohmann::json ToJson()
 	{
 		nlohmann::json json;

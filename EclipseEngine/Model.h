@@ -61,7 +61,7 @@ public:
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
 	void Draw(VkCommandBuffer& commandBuffer);
-	void Update(MeshProperties& meshProps);
+	void Update();
 	void Destroy();
 
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }

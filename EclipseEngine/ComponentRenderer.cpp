@@ -17,9 +17,9 @@ void ComponentRenderer::Update(float DeltaTime)
 {
 }
 
-void ComponentRenderer::UpdateMeshProperties(MeshProperties& meshProperties)
+void ComponentRenderer::UpdateMeshProperties()
 {
-	model->Update(meshProperties);
+	model->Update();
 }
 
 void ComponentRenderer::Destroy()

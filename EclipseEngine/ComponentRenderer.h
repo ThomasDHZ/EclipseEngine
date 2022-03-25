@@ -17,7 +17,7 @@ public:
 
     void Draw(VkCommandBuffer& commandBuffer);
     void Update(float DeltaTime) override;
-    void UpdateMeshProperties(MeshProperties& meshProperties);
+    void UpdateMeshProperties();
     void Destroy() override;
 
     //void SetBufferIndex(int bufferIndex);

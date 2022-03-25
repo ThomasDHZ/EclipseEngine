@@ -124,12 +124,7 @@ void GameObject::Update(float DeltaTime)
 		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
 		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
 		{
-			Transform* transformPtr = static_cast<Transform*>(componentTransform.get());
-
-			MeshProperties meshProps = {};
-			meshProps.MeshTransform = transformPtr->TransformMatrix;
-			meshProps.materialBufferData = mesh->GetMaterial()->GetMaterialTextureData();
-			objRendererPtr->UpdateMeshProperties(meshProps);
+			objRendererPtr->UpdateMeshProperties();
 		}
 	}
 }
@@ -225,6 +220,7 @@ void GameObject::GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInf
 		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
 		{
 			MeshProperties meshProps = {};
+			objRendererPtr->UpdateMeshProperties();
 			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
@@ -247,6 +243,7 @@ if (objRenderer != nullptr)
 	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
 	{
 		MeshProperties meshProps = {};
+		objRendererPtr->UpdateMeshProperties();
 		VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 		VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
@@ -269,6 +266,7 @@ void GameObject::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& Vertex
 		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
 		{
 			MeshProperties meshProps = {};
+			objRendererPtr->UpdateMeshProperties();
 			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
 
 			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
