@@ -3,96 +3,81 @@
 class MeshRendererManager
 {
 private:
-	std::vector<std::shared_ptr<Model>> ModelList;
-	std::vector<std::shared_ptr<Mesh>> MeshList;
+	static std::vector<std::shared_ptr<Model>> ModelList;
+	static std::vector<std::shared_ptr<Mesh>> MeshList;
 
 public:
-	static void Update(float DeltaTime)
-	{
-		//for (auto& comp : ComponentList)
-		//{
-		//	comp->Update(DeltaTime);
-		//}
 
-		//auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-		//if (objRenderer != nullptr)
-		//{
-		//	ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-		//	for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-		//	{
-		//		objRendererPtr->UpdateMeshProperties();
-		//	}
-		//}
+	static std::shared_ptr<Mesh> AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
+	{
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+		MeshList.emplace_back(mesh);
+
+		return mesh;
 	}
 
-	//void GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
-	//{
+	static std::shared_ptr<Mesh> AddMesh(std::vector<LineVertex>& vertices)
+	{
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
+		MeshList.emplace_back(mesh);
 
-	//	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	//	if (objRenderer != nullptr)
-	//	{
-	//		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//		{
-	//			MeshProperties meshProps = {};
-	//			objRendererPtr->UpdateMeshProperties();
-	//			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
+		return mesh;
+	}
 
-	//			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	//			MeshPropertiesmBufferBufferInfo.buffer = buffer;
-	//			MeshPropertiesmBufferBufferInfo.offset = 0;
-	//			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	//			MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
+	{
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
+		MeshList.emplace_back(mesh);
 
-	//			mesh->SetBufferIndex(MeshPropertiesBufferList.size() - 1);
-	//		}
-	//	}
-	//}
+		return mesh;
+	}
 
-	//void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
-	//{
-	//	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	//	if (objRenderer != nullptr)
-	//	{
-	//		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//		{
-	//			MeshProperties meshProps = {};
-	//			objRendererPtr->UpdateMeshProperties();
-	//			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
+	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+	{
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
+		MeshList.emplace_back(mesh);
 
-	//			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	//			MeshPropertiesmBufferBufferInfo.buffer = buffer;
-	//			MeshPropertiesmBufferBufferInfo.offset = 0;
-	//			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	//			IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+		return mesh;
+	}
 
-	//			mesh->SetBufferIndex(IndexBufferList.size() - 1);
-	//		}
-	//	}
-	//}
+	static std::shared_ptr<Mesh> AddMesh(MeshLoadingInfo meshLoader)
+	{
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(meshLoader));
+		MeshList.emplace_back(mesh);
 
-	//void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
-	//{
-	//	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	//	if (objRenderer != nullptr)
-	//	{
-	//		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-	//		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-	//		{
-	//			MeshProperties meshProps = {};
-	//			objRendererPtr->UpdateMeshProperties();
-	//			VkBuffer buffer = mesh->GetMeshPropertiesBuffer();
+		return mesh;
+	}
 
-	//			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	//			MeshPropertiesmBufferBufferInfo.buffer = buffer;
-	//			MeshPropertiesmBufferBufferInfo.offset = 0;
-	//			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	//			VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+	static void Update(float DeltaTime)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshProperties();
+		}
+	}
 
-	//			mesh->SetBufferIndex(VertexBufferList.size() - 1);
-	//		}
-	//	}
-	//}
+	static void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
+		}
+	}
+
+	static void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->GetMeshVertexBuffer(VertexBufferList);
+		}
+	}
+
+	static void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->GetMeshIndexBuffer(IndexBufferList);
+		}
+	}
 };
 
