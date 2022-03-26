@@ -10,7 +10,7 @@ MeshRenderer::MeshRenderer() : ComponentRenderer(ComponentType::kMeshRenderer)
 MeshRenderer::MeshRenderer(glm::vec3 position)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
-	mesh->SetPosition(position);
+	mesh->SetMeshPosition(position);
 
 	model = std::make_shared<Model>(Model(mesh));
 }
@@ -18,8 +18,8 @@ MeshRenderer::MeshRenderer(glm::vec3 position)
 MeshRenderer::MeshRenderer(glm::vec3 position, glm::vec3 rotation) : ComponentRenderer(ComponentType::kMeshRenderer)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
-	mesh->SetPosition(position);
-	mesh->SetRotation(rotation);
+	mesh->SetMeshPosition(position);
+	mesh->SetMeshRotation(rotation);
 
 	model = std::make_shared<Model>(Model(mesh));
 }
@@ -27,9 +27,9 @@ MeshRenderer::MeshRenderer(glm::vec3 position, glm::vec3 rotation) : ComponentRe
 MeshRenderer::MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : ComponentRenderer(ComponentType::kMeshRenderer)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
-	mesh->SetPosition(position);
-	mesh->SetRotation(rotation);
-	mesh->SetScale(scale);
+	mesh->SetMeshPosition(position);
+	mesh->SetMeshRotation(rotation);
+	mesh->SetMeshScale(scale);
 
 	model = std::make_shared<Model>(Model(mesh));
 }

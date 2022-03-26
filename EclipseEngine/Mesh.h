@@ -93,9 +93,9 @@ public:
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
-	void SetPosition(glm::vec3 position);
-	void SetRotation(glm::vec3 rotation);
-	void SetScale(glm::vec3 scale);
+	void SetMeshPosition(glm::vec3 position);
+	void SetMeshRotation(glm::vec3 rotation);
+	void SetMeshScale(glm::vec3 scale);
 
 	uint64_t GetMeshID() { return MeshID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
@@ -104,6 +104,9 @@ public:
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 	std::shared_ptr<Material> GetMaterial() { return material; }
+	glm::vec3* GetMeshPosition() { return &MeshPosition; }
+	glm::vec3* GetMeshRotation() { return &MeshRotation; }
+	glm::vec3* GetMeshScale() { return &MeshScale; };
 	
 	nlohmann::json ToJson()
 	{
