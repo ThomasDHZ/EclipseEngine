@@ -19,6 +19,9 @@ private:
 
 public:
 	SpriteRenderer();
+	SpriteRenderer(glm::vec3 position);
+	SpriteRenderer(glm::vec3 position, glm::vec3 rotation);
+	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	SpriteRenderer(nlohmann::json& json);
 	virtual ~SpriteRenderer();
 

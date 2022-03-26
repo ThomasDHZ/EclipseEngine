@@ -449,3 +449,18 @@ void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
 {
 	material = materialPtr;
 }
+
+void Mesh::SetPosition(glm::vec3 position)
+{
+	MeshPosition = position;
+}
+
+void Mesh::SetRotation(glm::vec3 rotation)
+{
+	MeshRotation = rotation;
+}
+
+void Mesh::SetScale(glm::vec3 scale)
+{
+	MeshScale = scale;
+}

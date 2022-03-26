@@ -18,8 +18,8 @@ Component::Component(ComponentType type, ComponentSubType subtype)
 
 Component::Component(const nlohmann::json& json)
 {
-	json.at("componentType").get_to(componentType);
-	json.at("componentSubType").get_to(componentSubType);
+	//json.at("componentType").get_to(componentType);
+	//json.at("componentSubType").get_to(componentSubType);
 }
 
 Component::~Component()

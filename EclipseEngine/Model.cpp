@@ -33,24 +33,10 @@ Model::Model(const std::string& FilePath)
 	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
 
-Model::Model(glm::vec3& StartPoint, glm::vec3& EndPoint)
+Model::Model(std::shared_ptr<Mesh> mesh)
 {
-	AddMesh(StartPoint, EndPoint);
-}
-
-Model::Model(std::vector<LineVertex>& vertices)
-{
-	AddMesh(vertices);
-}
-
-Model::Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
-{
-	AddMesh(vertices, indices);
-}
-
-Model::Model(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
-{
-	AddMesh(vertices, indices, materialPtr);
+	GenerateID();
+	AddMesh(mesh);
 }
 
 Model::~Model()

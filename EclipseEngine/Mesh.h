@@ -93,6 +93,9 @@ public:
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
+	void SetPosition(glm::vec3 position);
+	void SetRotation(glm::vec3 rotation);
+	void SetScale(glm::vec3 scale);
 
 	uint64_t GetMeshID() { return MeshID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }

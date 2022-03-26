@@ -33,7 +33,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zInd
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, zIndex)));
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex))));
 	GenerateID();
 }
 
@@ -41,7 +41,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, zIndex)));
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f))));
 	GenerateID();
 }
 
@@ -49,7 +49,7 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, scale, zIndex)));
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer()));
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 0.0f))));
 	GenerateID();
 }
 
@@ -57,7 +57,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position)
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position)));
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position)));
 
 	GenerateID();
 }
@@ -66,7 +66,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation)));
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation)));
 	GenerateID();
 }
 
@@ -74,7 +74,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 {
 	ObjectName = Name;
 	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation, scale)));
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer()));
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation, scale)));
 	GenerateID();
 }
 

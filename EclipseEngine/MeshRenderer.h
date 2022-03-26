@@ -19,6 +19,9 @@ private:
 
 public:
 	MeshRenderer();
+	MeshRenderer(glm::vec3 position);
+	MeshRenderer(glm::vec3 position, glm::vec3 rotation);
+	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	MeshRenderer(nlohmann::json& json);
 	virtual ~MeshRenderer();
 
