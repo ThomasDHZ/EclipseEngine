@@ -464,3 +464,38 @@ void Mesh::SetMeshScale(glm::vec3 scale)
 {
 	MeshScale = scale;
 }
+
+void  Mesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
+{
+	UpdateMeshProperties();
+
+	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesBuffer.GetVulkanBufferData().Buffer;
+	MeshPropertiesmBufferBufferInfo.offset = 0;
+	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+	MeshPropertiesBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+	BufferIndex = MeshPropertiesBufferList.size() - 1;
+}
+
+void Mesh::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
+{
+	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesBuffer.GetVulkanBufferData().Buffer;
+	MeshPropertiesmBufferBufferInfo.offset = 0;
+	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+	VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+	BufferIndex = VertexBufferList.size() - 1;
+}
+
+void Mesh::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
+{
+	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+	MeshPropertiesmBufferBufferInfo.buffer = VertexBuffer.Buffer;
+	MeshPropertiesmBufferBufferInfo.offset = 0;
+	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+	IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
+
+	BufferIndex = IndexBufferList.size() - 1;
+}

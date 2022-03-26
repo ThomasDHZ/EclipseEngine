@@ -97,12 +97,18 @@ public:
 	void SetMeshRotation(glm::vec3 rotation);
 	void SetMeshScale(glm::vec3 scale);
 
+	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
+	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
+	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);
+
 	uint64_t GetMeshID() { return MeshID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
+
+
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	glm::vec3* GetMeshPosition() { return &MeshPosition; }
 	glm::vec3* GetMeshRotation() { return &MeshRotation; }
