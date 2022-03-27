@@ -15,7 +15,6 @@ public:
     ComponentRenderer();
     ComponentRenderer(ComponentType componentType);
 
-    void Draw(VkCommandBuffer& commandBuffer);
     void Update(float DeltaTime) override;
     void UpdateMeshProperties();
     void Destroy() override;

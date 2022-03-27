@@ -8,11 +8,6 @@ ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(co
 {
 }
 
-void ComponentRenderer::Draw(VkCommandBuffer& commandBuffer)
-{
-	model->Draw(commandBuffer);
-}
-
 void ComponentRenderer::Update(float DeltaTime)
 {
 }

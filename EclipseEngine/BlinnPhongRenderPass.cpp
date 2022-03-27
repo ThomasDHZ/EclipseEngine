@@ -182,7 +182,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
     ColorAttachmentList.emplace_back(ColorAttachment);
     ColorAttachmentList.emplace_back(ColorAttachment);
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -274,7 +274,7 @@ void BlinnPhongRenderPass::RebuildSwapChain()
     BuildRenderPass();
     CreateRendererFramebuffers();
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -356,7 +356,7 @@ void BlinnPhongRenderPass::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
+void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -398,17 +398,19 @@ void BlinnPhongRenderPass::Draw(SceneProperties sceneProperties)
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    {
-        if (VulkanRenderer::WireframeModeFlag)
-        {
-            DrawWireFrame(wireframePipeline, sceneProperties);
-        }
-        else
-        {
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
+    //{
+    //    if (VulkanRenderer::WireframeModeFlag)
+    //    {
+    //        DrawWireFrame(wireframePipeline, sceneProperties);
+    //    }
+    //    else
+    //    {
             DrawMesh(blinnphongPipeline, sceneProperties);
-        }
-        DrawLine(drawLinePipeline, sceneProperties);
-    }
+    //    }
+    //    DrawLine(drawLinePipeline, sceneProperties);
+    //}
 
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {

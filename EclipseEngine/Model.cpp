@@ -84,6 +84,8 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 				//MeshList.back()->MeshID = nodeMap.NodeID;
 			}
 		}
+
+		AddMesh(vertices, indices, materialID);
 	}
 
 	for (uint32_t x = 0; x < node->mNumChildren; x++)
@@ -101,7 +103,7 @@ std::vector<MeshVertex> Model::LoadVertices(aiMesh* mesh)
 		MeshVertex vertex;
 		vertex.Position = glm::vec3{ mesh->mVertices[x].x, mesh->mVertices[x].y, mesh->mVertices[x].z };
 		vertex.Normal = glm::vec3{ mesh->mNormals[x].x, mesh->mNormals[x].y, mesh->mNormals[x].z };
-		vertex.Color = glm::vec3{ mesh->mColors[x]->r, mesh->mColors[x]->g, mesh->mColors[x]->b };
+		//vertex.Color = glm::vec3{ mesh->mColors[x]->r, mesh->mColors[x]->g, mesh->mColors[x]->b };
 
 		if (mesh->mTangents)
 		{
@@ -297,34 +299,43 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 {
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
 }
 
 void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
 }
 
 void Model::AddMesh(std::vector<LineVertex>& vertices)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
+	
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
 }
 
 void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
+	
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
 }
 
 void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
+	
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
 }
 
 void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
@@ -333,14 +344,6 @@ void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
 
 void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 {
-}
-
-void Model::Draw(VkCommandBuffer& commandBuffer)
-{
-	for (auto& mesh : MeshList)
-	{
-		mesh->Draw(commandBuffer);
-	}
 }
 
 void Model::Update()

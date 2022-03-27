@@ -78,6 +78,14 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 	GenerateID();
 }
 
+GameObject::GameObject(const std::string Name, const std::string filePath)
+{
+	ObjectName = Name;
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath)));
+
+	GenerateID();
+}
+
 GameObject::GameObject(nlohmann::json& json)
 {
 	std::cout << json << std::endl;
@@ -114,25 +122,6 @@ void GameObject::Update(float DeltaTime)
 	for (auto& comp : ComponentList)
 	{
 		comp->Update(DeltaTime);
-	}
-
-	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	if (objRenderer != nullptr)
-	{
-		ComponentRenderer* objRendererPtr = static_cast<ComponentRenderer*>(objRenderer.get());
-		for (auto& mesh : objRendererPtr->GetModel()->GetMeshList())
-		{
-			objRendererPtr->UpdateMeshProperties();
-		}
-	}
-}
-
-void GameObject::Draw(VkCommandBuffer& commandBuffer)
-{
-	auto objRenderer = GetComponentBySubType(ComponentSubType::kRenderedObject);
-	if (objRenderer != nullptr)
-	{
-		static_cast<ComponentRenderer*>(objRenderer.get())->Draw(commandBuffer);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
+#include "MeshRendererManager.h"
 #include "Converters.h"
 #include "Mesh.h"
 #include "Bone.h"
@@ -57,7 +58,6 @@ public:
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
-	void Draw(VkCommandBuffer& commandBuffer);
 	void Update();
 	void Destroy();
 

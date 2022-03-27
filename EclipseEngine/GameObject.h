@@ -27,11 +27,11 @@ public:
 	GameObject(const std::string Name, glm::vec3 position);
 	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation);
 	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	GameObject(const std::string Name, const std::string filePath);
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 
 	virtual void Update(float DeltaTime);
-	void Draw(VkCommandBuffer& commandBuffer);
 	void Destory();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);

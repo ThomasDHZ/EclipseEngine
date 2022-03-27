@@ -1,5 +1,6 @@
 #pragma once
 #include "ComponentRenderer.h"
+#include "Model.h"
 #include "Mesh.h"
 
 class MeshRenderer : public ComponentRenderer
@@ -22,6 +23,7 @@ public:
 	MeshRenderer(glm::vec3 position);
 	MeshRenderer(glm::vec3 position, glm::vec3 rotation);
 	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	MeshRenderer(const std::string& FilePath);
 	MeshRenderer(nlohmann::json& json);
 	virtual ~MeshRenderer();
 

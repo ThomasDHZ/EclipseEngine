@@ -39,9 +39,9 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr());
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = GameObjectManager::GetMeshVertexBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = GameObjectManager::GetMeshIndexBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
 
     AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
@@ -241,9 +241,9 @@ void RayTraceRenderPass::RebuildSwapChain()
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr());
     VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = GameObjectManager::GetMeshVertexBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = GameObjectManager::GetMeshIndexBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
 
     AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);

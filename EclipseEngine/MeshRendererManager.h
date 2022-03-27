@@ -1,9 +1,12 @@
 #pragma once
-#include "GameObject.h"
+#include "VulkanRenderer.h"
+#include "Mesh.h"
+#include "GraphicsPipeline.h"
+
 class MeshRendererManager
 {
 private:
-	static std::vector<std::shared_ptr<Model>> ModelList;
+	//static std::vector<std::shared_ptr<Model>> ModelList;
 	static std::vector<std::shared_ptr<Mesh>> MeshList;
 
 public:
@@ -48,6 +51,12 @@ public:
 		return mesh;
 	}
 
+	static std::shared_ptr<Mesh> AddMesh(std::shared_ptr<Mesh> mesh)
+	{
+		MeshList.emplace_back(mesh);
+		return mesh;
+	}
+
 	static void Update(float DeltaTime)
 	{
 		for (auto& mesh : MeshList)
@@ -56,28 +65,69 @@ public:
 		}
 	}
 
-	static void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
+	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties)
 	{
 		for (auto& mesh : MeshList)
 		{
-			mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
+			sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+			vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+
+			mesh->Draw(cmdBuffer);
 		}
 	}
 
-	static void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
+	static std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer()
 	{
-		for (auto& mesh : MeshList)
+		std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList{};
+
+		if (VulkanRenderer::UpdateRendererFlag)
 		{
-			mesh->GetMeshVertexBuffer(VertexBufferList);
+			for (auto& mesh : MeshList)
+			{
+				mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
+			}
 		}
+		else
+		{
+			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
+		}
+		return MeshPropertiesBufferList;
 	}
 
-	static void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
+	static std::vector<VkDescriptorBufferInfo> GetMeshVertexBuffer()
 	{
-		for (auto& mesh : MeshList)
+		std::vector<VkDescriptorBufferInfo> VertexBufferList{};
+
+		if (VulkanRenderer::UpdateRendererFlag)
 		{
-			mesh->GetMeshIndexBuffer(IndexBufferList);
+			for (auto& mesh : MeshList)
+			{
+				mesh->GetMeshVertexBuffer(VertexBufferList);
+			}
 		}
+		else
+		{
+			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
+		}
+		return VertexBufferList;
+	}
+
+	static std::vector<VkDescriptorBufferInfo> GetMeshIndexBuffer()
+	{
+		std::vector<VkDescriptorBufferInfo> IndexBufferList{};
+
+		if (VulkanRenderer::UpdateRendererFlag)
+		{
+			for (auto& mesh : MeshList)
+			{
+				mesh->GetMeshIndexBuffer(IndexBufferList);
+			}
+		}
+		else
+		{
+			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
+		}
+		return IndexBufferList;
 	}
 };
 

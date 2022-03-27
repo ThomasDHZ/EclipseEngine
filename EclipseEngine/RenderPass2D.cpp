@@ -135,7 +135,7 @@ void RenderPass2D::CreateRendererFramebuffers()
 
 void RenderPass2D::BuildRenderPassPipelines()
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -223,7 +223,7 @@ void RenderPass2D::RebuildSwapChain()
 
     CreateRenderPass();
     CreateRendererFramebuffers();
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = GameObjectManager::GetMeshPropertiesBufferList();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;

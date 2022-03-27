@@ -34,6 +34,11 @@ MeshRenderer::MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 sca
 	model = std::make_shared<Model>(Model(mesh));
 }
 
+MeshRenderer::MeshRenderer(const std::string& FilePath) : ComponentRenderer(ComponentType::kMeshRenderer)
+{
+	model = std::make_shared<Model>(Model(FilePath));
+}
+
 MeshRenderer::MeshRenderer(nlohmann::json& json) : ComponentRenderer(json)
 {
 	//mesh = Mesh(vertices, indices);

@@ -3,7 +3,7 @@
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "GameObjectManager.h"
+#include "MeshRendererManager.h"
 #include "GraphicsPipeline.h"
 
 class BlinnPhongRenderPass : public RenderPass
@@ -36,7 +36,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(SceneProperties sceneProperties);
+	void Draw(SceneProperties& sceneProperties);
 	void Destroy();
 };
 
