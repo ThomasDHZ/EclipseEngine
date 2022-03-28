@@ -23,7 +23,7 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 	BoneCount = 0;
 
-	meshType = EnumMeshType::kLine;
+	meshType = MeshTypeEnum::kLine;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -52,7 +52,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 	BoneCount = 0;
 
-	meshType = EnumMeshType::kLine;
+	meshType = MeshTypeEnum::kLine;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -75,7 +75,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
 	BoneCount = 0;
 
-	meshType = EnumMeshType::kPolygon;
+	meshType = MeshTypeEnum::kPolygon;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -133,6 +133,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
 	BoneCount = 0;
+	meshType = MeshTypeEnum::kPolygon;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -190,7 +191,8 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 	VertexCount = meshLoader.vertices.size();
 	IndexCount = meshLoader.indices.size();
 	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;
-	BoneCount = BoneCount;
+	BoneCount = meshLoader.BoneCount;
+	meshType = meshLoader.meshType;
 
 	material = meshLoader.materialPtr;
 	glm::mat4 MeshTransform = meshLoader.MeshTransform;

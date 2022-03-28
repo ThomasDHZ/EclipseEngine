@@ -7,10 +7,11 @@
 #include "Bone.h"
 #include "Converters.h"
 
-enum EnumMeshType
+enum MeshTypeEnum
 {
-	kLine,
-	kPolygon
+	kUnkown,
+	kPolygon,
+	kLine
 };
 
 struct MeshBoneWeights
@@ -29,6 +30,7 @@ struct MeshLoadingInfo
 	std::vector<glm::mat4> BoneTransform;
 	glm::mat4 MeshTransform;
 	std::shared_ptr<Material> materialPtr;
+	MeshTypeEnum meshType;
 
 	MeshLoadingInfo() {}
 
@@ -47,7 +49,7 @@ private:
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
 
-	EnumMeshType meshType;
+	MeshTypeEnum meshType;
 
 	std::vector<MeshVertex> VertexList;
 	std::vector<uint32_t> IndexList;
@@ -135,5 +137,19 @@ public:
 
 		return json;
 	}
+
+	class MeshTypeSort
+	{
+	public:
+		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
+		{
+			if (mesh1->meshType >= mesh2->meshType)
+			{
+				return true;
+			}
+
+			return false;
+		}
+	};
 };
 

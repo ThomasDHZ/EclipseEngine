@@ -85,6 +85,7 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 		meshLoader.BoneWeightList = boneWeights;
 		meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
 		meshLoader.materialPtr = material;
+		meshLoader.meshType = MeshTypeEnum::kPolygon;
 		AddMesh(meshLoader);
 	}
 

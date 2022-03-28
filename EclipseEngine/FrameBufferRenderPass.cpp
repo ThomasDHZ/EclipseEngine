@@ -103,7 +103,7 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
         frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(buildGraphicsPipelineInfo));
@@ -163,7 +163,7 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.MeshType = MeshTypeEnum::kPolygonMesh;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
 
         frameBufferPipeline->Destroy();
         frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);

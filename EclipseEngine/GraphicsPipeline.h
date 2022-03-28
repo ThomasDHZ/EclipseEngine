@@ -4,11 +4,11 @@
 #include "TextureManager.h"
 #include "Vertex.h"
 
-enum MeshTypeEnum
+enum PipelineRendererTypeEnum
 {
-	kPolygonMesh,
-	kPolygonWireFrame,
-	kPolygonLine
+	kRenderMesh,
+	kRenderWireFrame,
+	kRenderLine
 };
 
 struct ConstMeshInfo
@@ -26,7 +26,7 @@ struct BuildGraphicsPipelineInfo
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
 	VkRenderPass renderPass = VK_NULL_HANDLE;
 	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
-	MeshTypeEnum MeshType = kPolygonMesh;
+	PipelineRendererTypeEnum PipelineRendererType = kRenderMesh;
 	uint32_t ConstBufferSize = 0;
 	bool IncludeVertexDescriptors = true;
 };

@@ -484,13 +484,13 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     VkVertexInputBindingDescription bindingDescription;
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 
-    if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonMesh ||
-        buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonWireFrame)
+    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
     {
         bindingDescription = MeshVertex::getBindingDescription();
         attributeDescriptions = MeshVertex::getAttributeDescriptions();
     }
-    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonLine)
+    else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
     {
         bindingDescription = LineVertex::getBindingDescription();
         attributeDescriptions = LineVertex::getAttributeDescriptions();
@@ -519,17 +519,17 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
     rasterizer.depthBiasEnable = VK_FALSE;
 
-    if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonMesh)
+    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh)
     {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
     }
-    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonLine)
+    else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
     {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_LINE_LIST;
         rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
     }
-    else if (buildGraphicsPipelineInfo.MeshType == MeshTypeEnum::kPolygonWireFrame)
+    else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
     {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
