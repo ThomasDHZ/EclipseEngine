@@ -39,66 +39,15 @@ void RenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)
     vkDestroyFence(VulkanRenderer::GetDevice(), fence, nullptr);
 }
 
-void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties)
+void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 {
-    for (auto obj : GameObjectManager::GetGameObjectList())
-    {
-        ComponentRenderer* componentRenderer = nullptr;
-        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
-        if (!componentRenderer)
-        {
-            continue;
-        }
-
-        MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, sceneProperties);
-    }
+    MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);
 }
 
-//void RenderPass::DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties)
-//{
-//    //vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipeline());
-//    //vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
-//    //for (auto obj : GameObjectManager::GetGameObjectList())
-//    //{
-//    //    ComponentRenderer* componentRenderer = nullptr;
-//    //    componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
-//    //    if (!componentRenderer)
-//    //    {
-//    //        continue;
-//    //    }
-//
-//    //    for (auto mesh : componentRenderer->GetModel()->GetMeshList())
-//    //    {
-//    //        sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-//    //        vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-//
-//    //        obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-//    //    }
-//    //}
-//}
-
-//void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties)
-//{
-//    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipeline());
-//    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline->GetShaderPipelineLayout(), 0, 1, pipeline->GetDescriptorSetPtr(), 0, nullptr);
-//    for (auto obj : GameObjectManager::GetGameObjectList())
-//    {
-//        ComponentRenderer* componentRenderer = nullptr;
-//        componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
-//        if (!componentRenderer)
-//        {
-//            continue;
-//        }
-//
-//        for (auto mesh : componentRenderer->GetModel()->GetMeshList())
-//        {
-//            sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-//            vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-//
-//            obj->Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-//        }
-//    }
-//}
+void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
+{
+    MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);
+}
 
 void RenderPass::SetUpCommandBuffers()
 {

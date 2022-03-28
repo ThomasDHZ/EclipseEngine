@@ -41,9 +41,8 @@ public:
 	~RenderPass();
 
 	void OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer);
-	virtual void DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
-	//virtual void DrawWireFrame(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
-	//virtual void DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties);
+	virtual void DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
+	virtual void DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();
 

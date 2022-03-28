@@ -59,11 +59,21 @@ public:
 
 	static void Update(float DeltaTime)
 	{
-		//std::sort(MeshList.begin(), MeshList.end(), Mesh::MeshTypeSort{});
+		SortByZIndex();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshProperties();
 		}
+	}
+
+	static void SortByZIndex()
+	{
+		std::sort(MeshList.begin(), MeshList.end(), Mesh::ZSorting{});
+	}
+
+	static void SortByRenderPipeline()
+	{
+		std::sort(MeshList.begin(), MeshList.end(), Mesh::MeshTypeSort{});
 	}
 
 	static void GUIUpdate()
@@ -78,15 +88,18 @@ public:
 		}
 	}
 
-	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, SceneProperties& sceneProperties)
+	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
-		for (auto& mesh : MeshList)
-		{
-			sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-			vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+		mesh->Draw(cmdBuffer);
+	}
 
-			mesh->Draw(cmdBuffer);
-		}
+	static void DrawLine(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
+	{
+		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
+		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+		mesh->Draw(cmdBuffer);
 	}
 
 	static std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer()
@@ -142,5 +155,7 @@ public:
 		}
 		return IndexBufferList;
 	}
+
+	static std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 };
 

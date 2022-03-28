@@ -60,7 +60,6 @@ public:
 	
 	static void Update(float DeltaTime)
 	{
-		std::sort(objList.begin(), objList.end(), GameObject::ZSorting{} );
 		for (auto obj : objList)
 		{
 			MaterialManager::Update(DeltaTime);

@@ -106,6 +106,7 @@ public:
 	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);
 
 	uint64_t GetMeshID() { return MeshID; }
+	MeshTypeEnum GetMeshType() { return meshType; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
@@ -143,12 +144,16 @@ public:
 	public:
 		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
 		{
-			if (mesh1->meshType >= mesh2->meshType)
-			{
-				return true;
-			}
+			return  mesh1->meshType < mesh2->meshType;
+		}
+	};
 
-			return false;
+	class ZSorting
+	{
+	public:
+		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
+		{
+			return mesh1->MeshPosition.z < mesh2->MeshPosition.z;
 		}
 	};
 };
