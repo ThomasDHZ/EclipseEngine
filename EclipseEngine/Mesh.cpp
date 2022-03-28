@@ -179,7 +179,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	}
 }
 
-Mesh::Mesh(MeshLoadingInfo meshLoader)
+Mesh::Mesh(MeshLoadingInfo& meshLoader)
 {
 	GenerateID();
 

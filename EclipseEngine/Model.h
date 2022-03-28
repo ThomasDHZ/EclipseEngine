@@ -55,6 +55,8 @@ public:
 	void AddMesh(std::vector<LineVertex>& vertices);
 	void AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	void AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	void AddMesh(MeshLoadingInfo& meshLoader);
+
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 

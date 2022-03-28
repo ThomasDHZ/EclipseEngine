@@ -80,8 +80,6 @@ void Texture::LoadTexture(std::string TextureLocation, VkFormat format)
 	VkDeviceSize imageSize = Width * Height * 4;
 	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(Width, Height)))) + 1;
 
-	stbi_set_flip_vertically_on_load(true);
-
 	VulkanBuffer StagingBuffer;
 	StagingBuffer.CreateBuffer(pixels, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 

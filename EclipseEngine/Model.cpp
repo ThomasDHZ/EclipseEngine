@@ -61,18 +61,9 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 		auto vertices = LoadVertices(mesh);
 		auto indices = LoadIndices(mesh);
 		auto boneWeights = LoadBoneWeights(mesh, vertices);
-		auto materialID = LoadMaterial(FilePath, mesh, scene);
+		auto material = LoadMaterial(FilePath, mesh, scene);
 
 		LoadBones(scene->mRootNode, mesh, vertices);
-
-		//MeshLoadingInfo meshLoader;
-		//meshLoader.ModelID = ModelID;
-		//meshLoader.vertices = vertices;
-		//meshLoader.indices = indices;
-		//meshLoader.BoneCount = BoneList.size();
-		//meshLoader.BoneWeightList = boneWeights;
-		//meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
-		//meshLoader.materialPtr = materialID;
 
 		TotalVertex += vertices.size();
 		TotalIndex += indices.size();
@@ -85,7 +76,16 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 			}
 		}
 
-		AddMesh(vertices, indices, materialID);
+
+		MeshLoadingInfo meshLoader;
+		meshLoader.ModelID = ModelID;
+		meshLoader.vertices = vertices;
+		meshLoader.indices = indices;
+		meshLoader.BoneCount = BoneList.size();
+		meshLoader.BoneWeightList = boneWeights;
+		meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
+		meshLoader.materialPtr = material;
+		AddMesh(meshLoader);
 	}
 
 	for (uint32_t x = 0; x < node->mNumChildren; x++)
@@ -333,6 +333,15 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
 	
+	mesh->SetParentModel(ModelID);
+	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
+}
+
+void Model::AddMesh(MeshLoadingInfo& meshLoader)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(meshLoader));
+
 	mesh->SetParentModel(ModelID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
