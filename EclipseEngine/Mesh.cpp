@@ -327,7 +327,6 @@ void Mesh::UpdateMeshProperties()
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
 		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			GraphicsDevice::IsRayTracerActive() &&
 			IndexCount != 0)
 		{
 			MeshBottomLevelAccelerationStructure();
@@ -369,7 +368,6 @@ void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
 		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			GraphicsDevice::IsRayTracerActive() &&
 			IndexCount != 0)
 		{
 			MeshBottomLevelAccelerationStructure();
@@ -482,6 +480,8 @@ void  Mesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPro
 
 void Mesh::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
 {
+	UpdateMeshProperties();
+
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesBuffer.GetVulkanBufferData().Buffer;
 	MeshPropertiesmBufferBufferInfo.offset = 0;
@@ -493,6 +493,8 @@ void Mesh::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBuffer
 
 void Mesh::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
 {
+	UpdateMeshProperties();
+
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 	MeshPropertiesmBufferBufferInfo.buffer = VertexBuffer.Buffer;
 	MeshPropertiesmBufferBufferInfo.offset = 0;

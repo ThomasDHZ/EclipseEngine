@@ -389,3 +389,8 @@ void Model::Destroy()
 		mesh->Destory();
 	}
 }
+
+glm::mat4 Model::TransposeModelMatrix()
+{
+	return glm::transpose(ModelTransform);
+}

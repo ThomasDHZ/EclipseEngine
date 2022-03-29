@@ -112,7 +112,7 @@ public:
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
-
+	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	glm::vec3* GetMeshPosition() { return &MeshPosition; }

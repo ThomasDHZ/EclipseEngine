@@ -63,6 +63,7 @@ public:
 	void Update();
 	void Destroy();
 
+	glm::mat4 TransposeModelMatrix();
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 };
 

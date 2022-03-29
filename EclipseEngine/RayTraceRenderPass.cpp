@@ -56,71 +56,59 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
 
 void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
 {
+ //   uint32_t PrimitiveCount = 1;
+ //   std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
+ //   for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
+ //   {
+ //       const auto componentRenderer = static_cast<ComponentRenderer*>(GameObjectManager::GetGameObjectList()[x]->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
+ //       if (!componentRenderer)
+ //       {
+ //           continue;
+ //       }
+
+ //       const auto model = componentRenderer->GetModel();
+ //       glm::mat4 GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
+ ///*       if (model == nullptr)
+ //       {
+ //           GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
+ //       }
+ //       else
+ //       {
+ //           GLMTransformMatrix2 = model->TransposeModelMatrix();
+ //       }*/
+
+ //       VkTransformMatrixKHR ModelMatrix = Converter::GLMToVkTransformMatrix(GLMTransformMatrix2);
+
+ //       for (int y = 0; y < model->GetMeshList().size(); y++)
+ //       {
+ //           const auto mesh = model->GetMeshList()[y];
+ //           VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
+ //           AccelerationStructureInstance.transform = ModelMatrix;
+ //           AccelerationStructureInstance.instanceCustomIndex = mesh->GetMeshBufferIndex();
+ //           AccelerationStructureInstance.mask = 0xFF;
+ //           AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
+ //           AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+ //           AccelerationStructureInstance.accelerationStructureReference = mesh->GetBLASBufferDeviceAddress();
+ //           AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
+ //       }
+ //   }
+
     uint32_t PrimitiveCount = 1;
     std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
-    for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
+    for (int x = 0; x < MeshRendererManager::GetMeshList().size(); x++)
     {
-        //for (int y = 0; y < GameObjectManager::GetGameObjectList().size(); y++)
-        //{
-        //    auto a = GameObjectManager::GetGameObjectList();
-        //    const std::shared_ptr<GameObject> obj = GameObjectManager::GetGameObjectList()[x];
-        //    ComponentRenderer* componentRenderer = nullptr;
+        const auto mesh = MeshRendererManager::GetMeshList()[x];
+        glm::mat4 GLMTransformMatrix2 = mesh->GetMeshTransformMatrix();
+        VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
 
-        //    if (obj->GetComponentByType(ComponentType::kSpriteRenderer) ||
-        //        obj->GetComponentByType(ComponentType::kMeshRenderer))
-        //    {
-        //        if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
-        //        {
-        //            componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kSpriteRenderer).get());
-        //        }
-
-        //        if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-        //        {
-        //            componentRenderer = static_cast<ComponentRenderer*>(obj->GetComponentByType(ComponentType::kMeshRenderer).get());
-        //        }
-        //    }
-        //    else
-        //    {
-        //        continue;
-        //    }
-
-        //    /*  if (assetManager->meshManager->MeshList[x]->ShowMesh)
-        //      {*/
-        //    glm::mat4 GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
-        //    //if (assetManager->meshManager->MeshList[x]->ParentModelID != 0)
-        //    //{
-        //    //    const auto model = assetManager->ObjManager->GetModel(assetManager->meshManager->MeshList[x]->ParentModelID);
-        //    //    if (model == nullptr)
-        //    //    {
-        //    //        GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
-        //    //    }
-        //    //    else
-        //    //    {
-        //    if (obj->GetComponentByType(ComponentType::kSpriteRenderer))
-        //    {
-        //        Transform2D* transform = static_cast<Transform2D*>(obj->GetComponentByType(ComponentType::kTransform2D).get());
-        //        GLMTransformMatrix2 = glm::transpose(transform->TransformMatrix);
-        //    }
-        //    if (obj->GetComponentByType(ComponentType::kMeshRenderer))
-        //    {
-        //        Transform3D* transform = static_cast<Transform3D*>(obj->GetComponentByType(ComponentType::kTransform3D).get());
-        //        GLMTransformMatrix2 = glm::transpose(transform->TransformMatrix);
-        //    }
-
-        //    //    }
-        //  /*  }*/
-        //    VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
-
-        //    VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
-        //    AccelerationStructureInstance.transform = transformMatrix;
-        //    AccelerationStructureInstance.instanceCustomIndex = componentRenderer->GetMeshBufferIndex();
-        //    AccelerationStructureInstance.mask = 0xFF;
-        //    AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
-        //    AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
-        //    AccelerationStructureInstance.accelerationStructureReference = componentRenderer->GetBLASBufferDeviceAddress();
-        //    AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
-        //    //  }
-        //}
+        VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
+        AccelerationStructureInstance.transform = transformMatrix;
+        AccelerationStructureInstance.instanceCustomIndex = mesh->GetMeshBufferIndex();
+        AccelerationStructureInstance.mask = 0xFF;
+        AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
+        AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+        AccelerationStructureInstance.accelerationStructureReference = mesh->GetBLASBufferDeviceAddress();
+        AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
     }
 
     VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};
