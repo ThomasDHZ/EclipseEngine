@@ -159,9 +159,6 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Transform3D.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="MaterialManager.cpp">
       <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform2D.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="BlinnPhongRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
@@ -212,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="Bone.cpp">
       <Filter>Source Files\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="MeshRendererManager.cpp">
       <Filter>Source Files\Managers</Filter>

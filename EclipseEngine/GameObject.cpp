@@ -10,7 +10,6 @@ GameObject::GameObject()
 GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
 	AddComponent(std::make_shared<LineRenderer>(LineRenderer(VertexList)));
 	GenerateID();
 }
@@ -18,7 +17,6 @@ GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexLi
 GameObject::GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform3D>(Transform3D(glm::vec3(0.0f))));
 	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine)));
 	GenerateID();
 }
@@ -32,7 +30,6 @@ GameObject::GameObject(const std::string Name)
 GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform2D>(Transform2D(position, zIndex)));
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex))));
 	GenerateID();
 }
@@ -40,7 +37,6 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zInd
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, zIndex)));
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f))));
 	GenerateID();
 }
@@ -48,7 +44,6 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform2D>(Transform2D(position, rotation, scale, zIndex)));
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 0.0f))));
 	GenerateID();
 }
@@ -56,7 +51,6 @@ GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rot
 GameObject::GameObject(const std::string Name, glm::vec3 position)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform3D>(Transform3D(position)));
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position)));
 
 	GenerateID();
@@ -65,7 +59,6 @@ GameObject::GameObject(const std::string Name, glm::vec3 position)
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation)));
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation)));
 	GenerateID();
 }
@@ -73,7 +66,6 @@ GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rot
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<Transform3D>(Transform3D(position, rotation, scale)));
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation, scale)));
 	GenerateID();
 }
@@ -99,8 +91,6 @@ GameObject::GameObject(nlohmann::json& json)
 
 		switch (type)
 		{
-		case ComponentType::kTransform2D: { AddComponent(std::make_shared<Transform2D>(Transform2D(json["ComponentList"][x]))); break; }
-		case ComponentType::kTransform3D: { AddComponent(std::make_shared<Transform3D>(Transform3D(json["ComponentList"][x]))); break; }
 		case ComponentType::kSpriteRenderer: {break; }
 		case ComponentType::kMeshRenderer:
 		{

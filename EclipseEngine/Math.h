@@ -5,7 +5,7 @@
 class EngineMath
 {
 public:
-    static VkTransformMatrixKHR GLMToVkTransformMatrix(glm::mat4 matrix)
+    static VkTransformMatrixKHR GLMToVkTransformMatrix(glm::mat4& matrix)
     {
         return VkTransformMatrixKHR
         {

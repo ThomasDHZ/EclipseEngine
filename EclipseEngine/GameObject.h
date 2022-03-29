@@ -3,8 +3,6 @@
 #include "Component.h"
 #include "SpriteRenderer.h"
 #include "MeshRenderer.h"
-#include "Transform2D.h"
-#include "Transform3D.h"
 
 class GameObject
 {
