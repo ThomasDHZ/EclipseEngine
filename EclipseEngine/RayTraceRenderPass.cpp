@@ -56,49 +56,12 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
 
 void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
 {
- //   uint32_t PrimitiveCount = 1;
- //   std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
- //   for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
- //   {
- //       const auto componentRenderer = static_cast<ComponentRenderer*>(GameObjectManager::GetGameObjectList()[x]->GetComponentBySubType(ComponentSubType::kRenderedObject).get());
- //       if (!componentRenderer)
- //       {
- //           continue;
- //       }
-
- //       const auto model = componentRenderer->GetModel();
- //       glm::mat4 GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
- ///*       if (model == nullptr)
- //       {
- //           GLMTransformMatrix2 = glm::transpose(glm::mat4(1.0f));
- //       }
- //       else
- //       {
- //           GLMTransformMatrix2 = model->TransposeModelMatrix();
- //       }*/
-
- //       VkTransformMatrixKHR ModelMatrix = Converter::GLMToVkTransformMatrix(GLMTransformMatrix2);
-
- //       for (int y = 0; y < model->GetMeshList().size(); y++)
- //       {
- //           const auto mesh = model->GetMeshList()[y];
- //           VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
- //           AccelerationStructureInstance.transform = ModelMatrix;
- //           AccelerationStructureInstance.instanceCustomIndex = mesh->GetMeshBufferIndex();
- //           AccelerationStructureInstance.mask = 0xFF;
- //           AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
- //           AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
- //           AccelerationStructureInstance.accelerationStructureReference = mesh->GetBLASBufferDeviceAddress();
- //           AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
- //       }
- //   }
-
     uint32_t PrimitiveCount = 1;
     std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
     for (int x = 0; x < MeshRendererManager::GetMeshList().size(); x++)
     {
         const auto mesh = MeshRendererManager::GetMeshList()[x];
-        glm::mat4 GLMTransformMatrix2 = mesh->GetMeshTransformMatrix();
+        glm::mat4 GLMTransformMatrix2 = glm::mat4(1.0f);
         VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
 
         VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
