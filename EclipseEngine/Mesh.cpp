@@ -304,47 +304,47 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 
 void Mesh::UpdateMeshProperties()
 {
-	MeshTransformMatrix = glm::mat4(1.0f);
-	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	MeshTransformMatrix = glm::scale(MeshTransformMatrix, MeshScale);
+	glm::mat4 TransformMatrix = glm::mat4(1.0f);
+	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
-	meshProperties.MeshTransform = MeshTransformMatrix;
+	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = glm::mat4(1.0f);
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 
-	glm::mat4 FinalTransform = meshProperties.MeshTransform;
+	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (TransformBuffer.Buffer != nullptr)
-	{
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+	//if (TransformBuffer.Buffer != nullptr)
+	//{
+	//	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
 
-		TransformBuffer.CopyBufferToMemory(&FinalTransform, sizeof(FinalTransform));
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+	//	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+	//	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
-		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			IndexCount != 0)
-		{
-			MeshBottomLevelAccelerationStructure();
-		}
-	}
+	//	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+	//		IndexCount != 0)
+	//	{
+	//		MeshBottomLevelAccelerationStructure();
+	//	}
+	//}
 }
 
 void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
-	MeshTransformMatrix = glm::mat4(1.0f);
-	MeshTransformMatrix = glm::translate(MeshTransformMatrix, MeshPosition);
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	MeshTransformMatrix = glm::scale(MeshTransformMatrix, MeshScale);
+	glm::mat4 TransformMatrix = glm::mat4(1.0f);
+	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
-	meshProperties.MeshTransform = MeshTransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
+	meshProperties.MeshTransform = TransformMatrix;
+	meshProperties.ModelTransform = glm::mat4(1.0f);
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 
@@ -357,22 +357,22 @@ void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<
 		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
 	}
 
-	glm::mat4 FinalTransform = meshProperties.MeshTransform;
+	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (TransformBuffer.Buffer != nullptr)
-	{
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+	//if (TransformBuffer.Buffer != nullptr)
+	//{
+	//	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
 
-		TransformBuffer.CopyBufferToMemory(&FinalTransform, sizeof(FinalTransform));
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+	//	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+	//	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
-		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			IndexCount != 0)
-		{
-			MeshBottomLevelAccelerationStructure();
-		}
-	}
+	//	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+	//		IndexCount != 0)
+	//	{
+	//		MeshBottomLevelAccelerationStructure();
+	//	}
+	//}
 }
 
 void Mesh::GenerateID()
@@ -467,8 +467,6 @@ void Mesh::SetMeshScale(glm::vec3 scale)
 
 void  Mesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
 {
-	UpdateMeshProperties();
-
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
 	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesBuffer.GetVulkanBufferData().Buffer;
 	MeshPropertiesmBufferBufferInfo.offset = 0;
@@ -480,10 +478,8 @@ void  Mesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPro
 
 void Mesh::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList)
 {
-	UpdateMeshProperties();
-
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesBuffer.GetVulkanBufferData().Buffer;
+	MeshPropertiesmBufferBufferInfo.buffer = VertexBuffer.Buffer;
 	MeshPropertiesmBufferBufferInfo.offset = 0;
 	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 	VertexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
@@ -493,10 +489,8 @@ void Mesh::GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBuffer
 
 void Mesh::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList)
 {
-	UpdateMeshProperties();
-
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	MeshPropertiesmBufferBufferInfo.buffer = VertexBuffer.Buffer;
+	MeshPropertiesmBufferBufferInfo.buffer = IndexBuffer.Buffer;
 	MeshPropertiesmBufferBufferInfo.offset = 0;
 	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 	IndexBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);

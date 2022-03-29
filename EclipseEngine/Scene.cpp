@@ -113,7 +113,7 @@ void Scene::Update()
 
     auto time = glfwGetTime();
     GameObjectManager::Update(time);
-    MeshRendererManager::Update(time);
+    MeshRendererManager::Update();
 
     camera2.Update(time);
 
@@ -141,11 +141,11 @@ void Scene::ImGuiUpdate()
 
 void Scene::RebuildRenderers()
 {
-    auto objList = GameObjectManager::GetGameObjectList();
+    MeshRendererManager::Update();
 
     renderer2D.RebuildRenderers();
     blinnPhongRenderer.RebuildRenderers();
-   rayTraceRenderer.RebuildSwapChain();
+    rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
@@ -163,7 +163,7 @@ void Scene::Draw()
     }
 
    //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-   // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+  //  blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
     rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     InterfaceRenderPass::Draw();

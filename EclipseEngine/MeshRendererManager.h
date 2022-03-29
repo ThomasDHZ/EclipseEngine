@@ -57,7 +57,7 @@ public:
 		return mesh;
 	}
 
-	static void Update(float DeltaTime)
+	static void Update()
 	{
 		SortByZIndex();
 		for (auto& mesh : MeshList)
