@@ -347,18 +347,14 @@ void Mesh::UpdateMeshProperties()
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (TransformBuffer.Buffer != nullptr)
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GraphicsDevice::IsRayTracerActive() &&
+		IndexCount != 0)
 	{
 		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-
-		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			IndexCount != 0)
-		{
-			MeshBottomLevelAccelerationStructure();
-		}
+		MeshBottomLevelAccelerationStructure();
 	}
 }
 
@@ -388,18 +384,14 @@ void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (TransformBuffer.Buffer != nullptr)
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GraphicsDevice::IsRayTracerActive() &&
+		IndexCount != 0)
 	{
 		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-
-		if (GraphicsDevice::IsRayTracingFeatureActive() &&
-			IndexCount != 0)
-		{
-			MeshBottomLevelAccelerationStructure();
-		}
+		MeshBottomLevelAccelerationStructure();
 	}
 }
 

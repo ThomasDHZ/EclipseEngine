@@ -23,7 +23,6 @@ private:
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
 	static VkSampleCountFlagBits MaxSampleCount;
 	static bool RayTracingFeature;
-	static bool RayTracingActive;
 
 	static VkSampleCountFlagBits GetMaxUsableSampleCount(VkPhysicalDevice GPUDevice)
 	{
@@ -39,6 +38,7 @@ private:
 	}
 
 public:
+	static bool RayTracingActive;
 	static std::vector<const char*> GetRequiredExtensions() {
 		uint32_t glfwExtensionCount = 0;
 		const char** glfwExtensions;
