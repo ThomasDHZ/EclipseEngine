@@ -368,17 +368,6 @@ void Model::Update()
 	if (BoneList.size() > 0)
 	{
 		//AnimationPlayer.Update();
-		for (auto& mesh : MeshList)
-		{
-			mesh->UpdateMeshProperties(ModelTransform, BoneList);
-		}
-	}
-	else
-	{
-		for (auto& mesh : MeshList)
-		{
-			mesh->UpdateMeshProperties();
-		}
 	}
 }
 

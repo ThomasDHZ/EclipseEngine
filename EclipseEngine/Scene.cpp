@@ -32,32 +32,32 @@ Scene::Scene()
     MaterialManager::AddMaterial(material2);
 
 
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
 
 
-    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f, 0.0f), 1));
-    //auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
-    //auto b = static_cast<MeshRenderer*>(a.get());
-    //b->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f, 0.0f), 1));
+    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b = static_cast<MeshRenderer*>(a.get());
+    b->GetModel()->GetMeshList()[0]->SetMaterial(material);
 
 
-    //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
-    //auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
-    //auto b2 = static_cast<MeshRenderer*>(a2.get());
-    //b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b2 = static_cast<MeshRenderer*>(a2.get());
+    b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
 
-    //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
-    //auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
-    //auto b3 = static_cast<MeshRenderer*>(a3.get());
-    //b3->GetModel()->GetMeshList()[0]->SetMaterial(material2);
+    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", glm::vec2(1.0f), 0));
+    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b3 = static_cast<MeshRenderer*>(a3.get());
+    b3->GetModel()->GetMeshList()[0]->SetMaterial(material2);
 
-    //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
-    //auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
-    //auto b4 = static_cast<MeshRenderer*>(a4.get());
-    //b4->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b4 = static_cast<MeshRenderer*>(a4.get());
+    b4->GetModel()->GetMeshList()[0]->SetMaterial(material);
 
 
-    //std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("LineTest", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, -5.0f), 1));
+    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("LineTest", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, -5.0f), 1));
 
     //auto a5 = obj5->GetComponentByType(ComponentType::kLineRenderer);
     //auto b5= static_cast<MeshRenderer*>(a5.get());
@@ -84,10 +84,10 @@ Scene::Scene()
     //b4->SetMaterial(material);
 
     GameObjectManager::AddGameObject(obj);
-    //GameObjectManager::AddGameObject(obj2);
-    //GameObjectManager::AddGameObject(obj3);
-    //GameObjectManager::AddGameObject(obj4);
-    //GameObjectManager::AddGameObject(obj5);
+    GameObjectManager::AddGameObject(obj2);
+    GameObjectManager::AddGameObject(obj3);
+    GameObjectManager::AddGameObject(obj4);
+    GameObjectManager::AddGameObject(obj5);
     //nlohmann::json ab = obj->ToJson();
     //GameObject adsf = GameObject(ab);
 
@@ -188,9 +188,9 @@ void Scene::Draw()
 void Scene::Destroy()
 {
     GameObjectManager::Destory();
-    
+
     renderer2D.Destroy();
-   blinnPhongRenderer.Destroy();
+    blinnPhongRenderer.Destroy();
     rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }

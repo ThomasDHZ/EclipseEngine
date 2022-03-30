@@ -6,7 +6,6 @@
 class MeshRendererManager
 {
 private:
-	//static std::vector<std::shared_ptr<Model>> ModelList;
 	static std::vector<std::shared_ptr<Mesh>> MeshList;
 
 public:
