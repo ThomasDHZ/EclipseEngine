@@ -1,12 +1,12 @@
 #pragma once
-#include "MeshPicketRenderPass.h"
+#include "MeshPickerRenderPass3D.h"
 #include "BlinnPhongRenderPass.h"
 #include "FrameBufferRenderPass.h"
 #include "InterfaceRenderPass.h"
 class BlinnPhongRenderer
 {
 private:
-	MeshPicketRenderPass meshPickerRenderPass;
+	MeshPickerRenderPass3D meshPickerRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 public:

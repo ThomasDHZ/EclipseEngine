@@ -64,6 +64,12 @@
     <Filter Include="Header Files\Animation">
       <UniqueIdentifier>{c986aa8a-9850-458e-9bb5-ba22ee19b3ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Texture">
+      <UniqueIdentifier>{a7c9e716-2e17-4fc4-983f-8fddedeee147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Texture">
+      <UniqueIdentifier>{d76f5dc7-a11a-466a-ab4c-f03a79275423}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -99,23 +105,8 @@
     <ClCompile Include="GraphicsPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedColorTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedDepthTexture.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
@@ -213,8 +204,29 @@
     <ClCompile Include="ModelManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="MeshPicketRenderPass.cpp">
+    <ClCompile Include="MeshPickerRenderPass3D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshPickerRenderPass2D.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadableTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedColorTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedDepthTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,13 +272,7 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Pixel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderedTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderPass.h">
@@ -277,12 +283,6 @@
     </ClInclude>
     <ClInclude Include="GraphicsPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderedColorTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderedDepthTexture.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
@@ -341,9 +341,6 @@
     <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
@@ -363,9 +360,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RayTraceRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JsonHelper.h">
@@ -404,17 +398,41 @@
     <ClInclude Include="Transform.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MeshRendererManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="ModelManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="MeshPicketRenderPass.h">
+    <ClInclude Include="MeshPickerRenderPass3D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshPickerRenderPass2D.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedColorTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedDepthTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer2D.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadableTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTraceRenderer.h">
+      <Filter>Header Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

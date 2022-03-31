@@ -9,6 +9,7 @@ enum TextureTypeEnum
     kUndefinedTexture,
     kRenderedColorTexture,
     kRenderedDepthTexture,
+    kReadableTexture,
     kDiffuseTextureMap,
     kSpecularTextureMap,
     kAlbedoTextureMap,
@@ -62,10 +63,14 @@ public:
     ~Texture();
 
     void UpdateImageLayout(VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
     void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
     void Destroy();
 
     void SetTextureBufferIndex(uint64_t bufferIndex);
+
+    static void CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
 
     VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
     VkImage Image = VK_NULL_HANDLE;

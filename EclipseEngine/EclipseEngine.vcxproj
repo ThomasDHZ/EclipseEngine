@@ -150,10 +150,12 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
-    <ClCompile Include="MeshPicketRenderPass.cpp" />
+    <ClCompile Include="MeshPickerRenderPass2D.cpp" />
+    <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="ReadableTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="BlinnPhongRenderPass.cpp" />
@@ -203,10 +205,12 @@
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
-    <ClInclude Include="MeshPicketRenderPass.h" />
+    <ClInclude Include="MeshPickerRenderPass2D.h" />
+    <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="ReadableTexture.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="BlinnPhongRenderPass.h" />

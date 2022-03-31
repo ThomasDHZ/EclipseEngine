@@ -6,7 +6,7 @@
 #include "MeshRendererManager.h"
 #include "GraphicsPipeline.h"
 
-class MeshPicketRenderPass : public RenderPass
+class MeshPickerRenderPass2D : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -21,8 +21,8 @@ private:
 	void BuildRenderPassPipelines();
 
 public:
-	MeshPicketRenderPass();
-	~MeshPicketRenderPass();
+	MeshPickerRenderPass2D();
+	~MeshPickerRenderPass2D();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
