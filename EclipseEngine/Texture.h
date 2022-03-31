@@ -48,8 +48,7 @@ protected:
     VkImageLayout TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
-    VkImage Image = VK_NULL_HANDLE;
-    VkDeviceMemory Memory = VK_NULL_HANDLE;
+
 
     void GenerateID();
     void CreateTextureImage(VkImageCreateInfo TextureInfo);
@@ -69,6 +68,8 @@ public:
     void SetTextureBufferIndex(uint64_t bufferIndex);
 
     VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
+    VkImage Image = VK_NULL_HANDLE;
+    VkDeviceMemory Memory = VK_NULL_HANDLE;
     VkImageView View = VK_NULL_HANDLE;
     VkSampler Sampler = VK_NULL_HANDLE;
 

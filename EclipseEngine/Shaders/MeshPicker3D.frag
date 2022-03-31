@@ -14,6 +14,7 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outBloom;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) uniform sampler2D TextureMap[];
@@ -28,8 +29,8 @@ layout(push_constant) uniform SceneData
     float Timer;
 } sceneData;
 
-void main() {
-   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
+void main() 
+{
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(texture(TextureMap[diffuse], UV).rgb, texture(TextureMap[alpha], UV).r);
+   outColor = vec4(sceneData.MeshColor, texture(TextureMap[alpha], UV).r);
 }

@@ -121,6 +121,8 @@ void Scene::Update()
     sceneProperites.view = camera2.GetViewMatrix();
     sceneProperites.proj = camera2.GetProjectionMatrix();
     sceneProperites.Timer = time;
+
+    blinnPhongRenderer.Update();
 }
 
 void Scene::ImGuiUpdate()
@@ -134,10 +136,10 @@ void Scene::ImGuiUpdate()
 
     MeshRendererManager::GUIUpdate();
 
-    //if (renderPass2D.renderedTexture->ImGuiDescriptorSet != nullptr)
-    //{
-    //    ImGui::Image(renderPass2D.renderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    //}
+  /*  if (blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet != nullptr)
+    {
+        ImGui::Image(blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    }*/
 }
 
 void Scene::RebuildRenderers()

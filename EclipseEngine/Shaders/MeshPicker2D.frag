@@ -28,8 +28,8 @@ layout(push_constant) uniform SceneData
     float Timer;
 } sceneData;
 
-void main() {
-   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
+void main() 
+{
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(texture(TextureMap[diffuse], UV).rgb, texture(TextureMap[alpha], UV).r);
+   outColor = vec4(sceneData.MeshColor, texture(TextureMap[alpha], UV).r);
 }

@@ -81,7 +81,7 @@ public:
 		for (int x = 0; x < MeshList.size(); x++)
 		{
 		
-			ImGui::SliderFloat3(("Mesh position " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshPosition()->x, 0.0f, 100.0f);
+			ImGui::SliderFloat3(("Mesh position " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshPosition()->x, -100.0f, 100.0f);
 			ImGui::SliderFloat3(("Mesh rotation " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshRotation()->x, 0.0f, 360.0f);
 			ImGui::SliderFloat3(("Mesh scale " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshScale()->x, 0.0f, 1.0f);
 		}

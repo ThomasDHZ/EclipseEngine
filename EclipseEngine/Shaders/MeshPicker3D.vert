@@ -28,17 +28,16 @@ layout(push_constant) uniform SceneData
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
-    vec3 MeshColor;
     float Timer;
 } sceneData;
 
 void main() {
 
-//    if(gl_VertexIndex == 0)
+// if(gl_VertexIndex == 0)
 //	{
-//		debugPrintfEXT(": %i \n",  meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID);
+//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xy, 0.0f, 1.0f);
+    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0);
     Color = aColor;
     UV = aUV;
 }

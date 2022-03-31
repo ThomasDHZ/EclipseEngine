@@ -150,6 +150,7 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
+    <ClCompile Include="MeshPicketRenderPass.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
+    <ClInclude Include="MeshPicketRenderPass.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />
@@ -273,6 +275,10 @@
     <None Include="Shaders\FrameBuffer.vert" />
     <None Include="Shaders\LineRendererShader.frag" />
     <None Include="Shaders\LineRendererShader.vert" />
+    <None Include="Shaders\MeshPicker2D.frag" />
+    <None Include="Shaders\MeshPicker2D.vert" />
+    <None Include="Shaders\MeshPicker3D.frag" />
+    <None Include="Shaders\MeshPicker3D.vert" />
     <None Include="Shaders\MeshProperties.glsl" />
     <None Include="Shaders\miss.rmiss" />
     <None Include="Shaders\raygen.rgen" />

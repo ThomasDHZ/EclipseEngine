@@ -3,11 +3,12 @@
 #include "Material.h"
 struct SceneProperties
 {
-	alignas(4) uint32_t MeshIndex;
-	alignas(16) glm::mat4 proj;
-	alignas(16) glm::mat4 view;
-	alignas(16) glm::vec3 CameraPos;
-	alignas(4)  float Timer;
+	alignas(4) uint32_t MeshIndex = 0;
+	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
+	alignas(16) glm::mat4 view = glm::mat4(1.0f);
+	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
+	alignas(16) glm::vec3 MeshColor = glm::vec3(1.0f, 0.0f, 0.0f);
+	alignas(4)  float Timer = 0.0f;
 };
 
 struct RayTraceSceneProperties
