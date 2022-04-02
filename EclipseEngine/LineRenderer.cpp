@@ -82,6 +82,7 @@ LineRenderer::~LineRenderer()
 
 void LineRenderer::Update(float DeltaTime)
 {
+	model->Update();
 }
 
 void LineRenderer::Destroy()

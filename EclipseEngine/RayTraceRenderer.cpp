@@ -22,13 +22,17 @@ void RayTraceRenderer::RebuildSwapChain()
     FrameBufferRenderer.RebuildSwapChain(rayTraceRenderPass.RayTracedTexture);
 }
 
-void RayTraceRenderer::GUIUpdate()
+void RayTraceRenderer::Update()
 {
     if (Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
         const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
         meshPickerRenderPass.ReadPixel(mouseCoord);
     }
+}
+
+void RayTraceRenderer::GUIUpdate()
+{
 }
 
 void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)

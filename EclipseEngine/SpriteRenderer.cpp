@@ -46,6 +46,7 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Update(float DeltaTime)
 {
+	model->Update();
 }
 
 void SpriteRenderer::Destroy()

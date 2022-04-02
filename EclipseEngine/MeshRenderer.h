@@ -1,7 +1,6 @@
 #pragma once
 #include "ComponentRenderer.h"
 #include "Model.h"
-#include "Mesh.h"
 
 class MeshRenderer : public ComponentRenderer
 {
@@ -17,6 +16,7 @@ private:
  0, 1, 3, 
 		1, 2, 3
 	};
+	std::shared_ptr<Model> model;
 
 public:
 	MeshRenderer();
@@ -29,5 +29,7 @@ public:
 
 	void Update(float DeltaTime) override;
 	void Destroy() override;
+
+	std::shared_ptr<Model> GetModel() { return model; }
 };
 

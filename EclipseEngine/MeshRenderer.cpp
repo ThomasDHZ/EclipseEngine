@@ -50,6 +50,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::Update(float DeltaTime)
 {
+	model->Update();
 }
 
 void MeshRenderer::Destroy()

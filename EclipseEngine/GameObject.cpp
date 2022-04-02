@@ -1,5 +1,7 @@
 #include "GameObject.h"
 #include "LineRenderer.h"
+#include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 
 uint64_t GameObject::GameObjectIDCounter = 0;
 

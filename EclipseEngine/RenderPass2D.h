@@ -5,6 +5,7 @@
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
+#include "MeshRendererManager.h"
 
 class RenderPass2D : public RenderPass
 {

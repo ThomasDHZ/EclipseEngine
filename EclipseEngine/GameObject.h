@@ -1,8 +1,7 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "Component.h"
-#include "SpriteRenderer.h"
-#include "MeshRenderer.h"
+#include "Mesh.h"
 
 class GameObject
 {
@@ -11,6 +10,7 @@ private:
 
 	std::string ObjectName;
 	uint64_t GameObjectID;
+	glm::ivec3 GameObjectColorID = glm::ivec3(1.0f);
 	std::vector<std::shared_ptr<Component>> ComponentList;
 
 public:
@@ -47,10 +47,7 @@ public:
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
-
-	void GetGameObjectPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
-	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
-	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);
+	glm::ivec3 GetGameObjectColorID() { return GameObjectColorID; }
 
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return ComponentList; };
 

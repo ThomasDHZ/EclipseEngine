@@ -16,6 +16,7 @@ public:
 
 	void StartUp();
 	void RebuildSwapChain();
+	void Update();
 	void GUIUpdate();
 	void Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();

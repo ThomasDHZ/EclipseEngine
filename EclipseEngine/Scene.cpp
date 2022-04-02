@@ -122,7 +122,15 @@ void Scene::Update()
     sceneProperites.proj = camera2.GetProjectionMatrix();
     sceneProperites.Timer = time;
 
-    blinnPhongRenderer.Update();
+    if (GraphicsDevice::IsRayTracerActive())
+    {
+        rayTraceRenderer.Update();
+    }
+    else
+    {
+        //renderer2D.Update();
+        blinnPhongRenderer.Update();
+    }
 }
 
 void Scene::ImGuiUpdate()
@@ -165,7 +173,6 @@ void Scene::Draw()
         return;
     }
 
-    //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
     if (GraphicsDevice::IsRayTracerActive())
     {
         rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
@@ -173,6 +180,7 @@ void Scene::Draw()
     }
     else
     {
+       // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
         blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
  

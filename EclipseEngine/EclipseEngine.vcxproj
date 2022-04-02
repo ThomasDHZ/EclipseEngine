@@ -150,6 +150,7 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
+    <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
@@ -173,7 +174,6 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
-    <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
@@ -205,6 +205,7 @@
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
+    <ClInclude Include="LineRenderer.h" />
     <ClInclude Include="MeshPickerRenderPass2D.h" />
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRendererManager.h" />
@@ -235,7 +236,6 @@
     <ClInclude Include="JsonHelper.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="GraphicsDevice.h" />
-    <ClInclude Include="LineRenderer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />

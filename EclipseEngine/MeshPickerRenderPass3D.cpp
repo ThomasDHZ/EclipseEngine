@@ -268,11 +268,11 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
     if (GraphicsDevice::IsRayTracerActive())
     {
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
         VulkanRenderer::EndSingleTimeCommands(commandBuffer);
     }
     else
@@ -286,10 +286,6 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
         VulkanRenderer::EndSingleTimeCommands(commandBuffer);
     }
 
-    VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
-    VkSubresourceLayout subResourceLayout;
-    vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), PickerTexture->Image, &subResource, &subResourceLayout);
-
     const char* data;
     vkMapMemory(VulkanRenderer::GetDevice(), PickerTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
 
@@ -297,9 +293,9 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
     const int PixelMemoryPos = (PixelTexCoord.x + (PixelTexCoord.y * RenderPassResolution.x)) * pixelSize;
 
     Pixel pixel;
-    pixel.Red = data[PixelMemoryPos];
+    pixel.Red =   data[PixelMemoryPos];
     pixel.Green = data[PixelMemoryPos + 1];
-    pixel.Blue = data[PixelMemoryPos + 2];
+    pixel.Blue =  data[PixelMemoryPos + 2];
     pixel.Alpha = data[PixelMemoryPos + 3];
 
     PickerTexture->Destroy();

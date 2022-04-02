@@ -24,12 +24,12 @@ layout(push_constant) uniform SceneData
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
-    vec3 MeshColor;
+    ivec3 MeshColorID;
     float Timer;
 } sceneData;
 
 void main() 
 {
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(sceneData.MeshColor, texture(TextureMap[alpha], UV).r);
+   outColor = vec4(sceneData.MeshColorID, texture(TextureMap[alpha], UV).r);
 }

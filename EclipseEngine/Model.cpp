@@ -299,6 +299,7 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 {
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }
@@ -308,6 +309,7 @@ void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
 	
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }
@@ -317,6 +319,7 @@ void Model::AddMesh(std::vector<LineVertex>& vertices)
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
 	
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }
@@ -326,6 +329,7 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
 	
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }
@@ -335,6 +339,7 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
 	
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }
@@ -344,6 +349,7 @@ void Model::AddMesh(MeshLoadingInfo& meshLoader)
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(meshLoader));
 
 	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
 }

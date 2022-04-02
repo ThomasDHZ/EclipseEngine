@@ -330,7 +330,7 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 	scratchBuffer.DestoryBuffer();
 }
 
-void Mesh::UpdateMeshProperties()
+void Mesh::Update()
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
@@ -358,7 +358,7 @@ void Mesh::UpdateMeshProperties()
 	}
 }
 
-void Mesh::UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
@@ -450,6 +450,10 @@ void Mesh::Destory()
 void Mesh::SetParentModel(uint64_t ModelID)
 {
 	ParentModelID = ModelID;
+}
+void Mesh::SetParentGameObjectID(uint64_t GameObjectID)
+{
+	ParentGameObjectID = GameObjectID;
 }
 
 void Mesh::SetBufferIndex(int bufferIndex)

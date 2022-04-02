@@ -43,6 +43,7 @@ private:
 
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
+	uint64_t ParentGameObjectID = 0;
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t TriangleCount = 0;
@@ -90,10 +91,11 @@ public:
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);
-	void UpdateMeshProperties();
-	void UpdateMeshProperties(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	void Update();
+	void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Destory();
 
+	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
@@ -106,6 +108,8 @@ public:
 	void GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferList);
 
 	uint64_t GetMeshID() { return MeshID; }
+	uint64_t GetParentModelID() { return ParentModelID; }
+	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	MeshTypeEnum GetMeshType() { return meshType; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }

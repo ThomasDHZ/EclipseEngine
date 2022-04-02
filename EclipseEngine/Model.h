@@ -25,12 +25,13 @@ class Model
 private:
 	static uint64_t ModelIDCounter;
 
-	uint64_t ModelID;
+	uint64_t ModelID = 0;
+	uint64_t ParentGameObjectID = 0;
 
 	glm::vec3 ModelPosition = glm::vec3(0.0f);
 	glm::vec3 ModelRotation = glm::vec3(0.0f);
 	glm::vec3 ModelScale = glm::vec3(1.0f);
-	glm::mat4 ModelTransform;
+	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;
 	std::vector<std::shared_ptr<Bone>> BoneList;
@@ -64,6 +65,8 @@ public:
 	void Destroy();
 
 	glm::mat4 TransposeModelMatrix();
+	uint64_t GetModelID() { return ModelID; }
+	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 };
 

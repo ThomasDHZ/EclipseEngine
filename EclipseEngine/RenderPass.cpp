@@ -1,4 +1,5 @@
 #include "RenderPass.h"
+#include "MeshRendererManager.h"
 
 RenderPass::RenderPass()
 {

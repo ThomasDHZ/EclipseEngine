@@ -28,6 +28,7 @@ layout(push_constant) uniform SceneData
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
+    ivec3 MeshColorID;
     float Timer;
 } sceneData;
 
