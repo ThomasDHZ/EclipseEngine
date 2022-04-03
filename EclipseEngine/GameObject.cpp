@@ -12,72 +12,80 @@ GameObject::GameObject()
 GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<LineRenderer>(LineRenderer(VertexList)));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<LineRenderer>(LineRenderer(VertexList, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine)));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name)
 {
 	ObjectName = Name;
 	GenerateID();
+	GenerateColorID();
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex))));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f))));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f), GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t zIndex)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 0.0f))));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(glm::vec3(position.x, position.y, zIndex), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 0.0f), GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position)));
-
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation)));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation, scale)));
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(position, rotation, scale, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, const std::string filePath)
 {
 	ObjectName = Name;
-	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath)));
-
 	GenerateID();
+	GenerateColorID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath, GameObjectID)));
 }
 
 GameObject::GameObject(nlohmann::json& json)
@@ -148,6 +156,15 @@ void GameObject::GenerateID()
 {
 	GameObjectIDCounter++;
 	GameObjectID = GameObjectIDCounter;
+}
+
+void GameObject::GenerateColorID()
+{
+	const float red = (255.0f - (float)GameObjectID) / 255.0f;
+	const float green = (255.0f - (float)GameObjectID) / 255.0f;
+	const float blue = (255.0f - (float)GameObjectID) / 255.0f;
+
+	GameObjectColorID = glm::vec3(red, green, blue);
 }
 
 std::shared_ptr<Component> GameObject::GetComponentByType(ComponentType componentType)

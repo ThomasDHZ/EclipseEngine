@@ -26,13 +26,14 @@ private:
 
 protected:
 	uint64_t ComponentID;
+	uint64_t ParentGameObjectID;
 	ComponentType componentType;
 	ComponentSubType componentSubType;
 
 public:
 
 	Component();
-	Component(ComponentType type, ComponentSubType componentSubType);
+	Component(uint64_t GameObjectID, ComponentType type, ComponentSubType componentSubType);
 	Component(const nlohmann::json& json);
 	virtual ~Component();
 

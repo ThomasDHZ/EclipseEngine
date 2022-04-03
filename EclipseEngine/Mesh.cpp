@@ -18,6 +18,7 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 	};
 
 	ParentModelID = -1;
+	ParentGameObjectID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
@@ -47,6 +48,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	};
 
 	ParentModelID = -1;
+	ParentGameObjectID = -1;
 	VertexCount = VertexList2.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
@@ -70,6 +72,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	IndexList = indices;
 
 	ParentModelID = -1;
+	ParentGameObjectID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
@@ -129,6 +132,8 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	VertexList = vertices;
 	IndexList = indices;
 
+	ParentModelID = -1;
+	ParentGameObjectID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
@@ -188,6 +193,7 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 	IndexList = meshLoader.indices;
 
 	ParentModelID = meshLoader.ModelID;
+	ParentGameObjectID = meshLoader.GameObjectID;
 	VertexCount = meshLoader.vertices.size();
 	IndexCount = meshLoader.indices.size();
 	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;

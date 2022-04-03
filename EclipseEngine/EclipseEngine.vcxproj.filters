@@ -329,9 +329,6 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Transform3D.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -352,9 +349,6 @@
     </ClInclude>
     <ClInclude Include="MaterialManager.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform2D.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="AccelerationStructureBuffer.h">
       <Filter>Header Files</Filter>
@@ -391,9 +385,6 @@
     </ClInclude>
     <ClInclude Include="Converters.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="MeshRendererManager.h">
       <Filter>Header Files\Managers</Filter>

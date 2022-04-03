@@ -18,11 +18,11 @@ private:
 	std::shared_ptr<Model> model;
 
 public:
-	SpriteRenderer();
-	SpriteRenderer(glm::vec3 position);
-	SpriteRenderer(glm::vec3 position, glm::vec3 rotation);
-	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-	SpriteRenderer(nlohmann::json& json);
+	SpriteRenderer(uint64_t GameObjectID);
+	SpriteRenderer(glm::vec3 position, uint64_t GameObjectID);
+	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
+	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
+	SpriteRenderer(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~SpriteRenderer();
 
 	void Update(float DeltaTime) override;

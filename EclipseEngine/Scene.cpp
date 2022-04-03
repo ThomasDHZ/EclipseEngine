@@ -128,8 +128,8 @@ void Scene::Update()
     }
     else
     {
-        //renderer2D.Update();
-        blinnPhongRenderer.Update();
+        renderer2D.Update();
+        //blinnPhongRenderer.Update();
     }
 }
 
@@ -144,10 +144,10 @@ void Scene::ImGuiUpdate()
 
     MeshRendererManager::GUIUpdate();
 
-  /*  if (blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet != nullptr)
+    if (blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet != nullptr)
     {
         ImGui::Image(blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    }*/
+    }
 }
 
 void Scene::RebuildRenderers()
@@ -180,8 +180,8 @@ void Scene::Draw()
     }
     else
     {
-       // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-        blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+       // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();

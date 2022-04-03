@@ -6,7 +6,7 @@ Model::Model()
 {
 }
 
-Model::Model(const std::string& FilePath)
+Model::Model(const std::string& FilePath, uint64_t GameObjectID)
 {
 	GenerateID();
 	Assimp::Importer ModelImporter;
@@ -18,6 +18,7 @@ Model::Model(const std::string& FilePath)
 		return;
 	}
 
+	ParentGameObjectID = GameObjectID;
 	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 	//LoadNodeTree(Scene->mRootNode);
 	//LoadAnimations(Scene);
@@ -33,9 +34,10 @@ Model::Model(const std::string& FilePath)
 	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
 
-Model::Model(std::shared_ptr<Mesh> mesh)
+Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 {
 	GenerateID();
+	ParentGameObjectID = GameObjectID;
 	AddMesh(mesh);
 }
 

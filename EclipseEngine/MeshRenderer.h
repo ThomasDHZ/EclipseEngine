@@ -19,12 +19,12 @@ private:
 	std::shared_ptr<Model> model;
 
 public:
-	MeshRenderer();
-	MeshRenderer(glm::vec3 position);
-	MeshRenderer(glm::vec3 position, glm::vec3 rotation);
-	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-	MeshRenderer(const std::string& FilePath);
-	MeshRenderer(nlohmann::json& json);
+	MeshRenderer(uint64_t GameObjectID);
+	MeshRenderer(glm::vec3 position, uint64_t GameObjectID);
+	MeshRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
+	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
+	MeshRenderer(const std::string& FilePath, uint64_t GameObjectID);
+	MeshRenderer(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~MeshRenderer();
 
 	void Update(float DeltaTime) override;

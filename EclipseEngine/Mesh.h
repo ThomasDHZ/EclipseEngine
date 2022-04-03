@@ -23,6 +23,7 @@ struct MeshBoneWeights
 struct MeshLoadingInfo
 {
 	uint64_t ModelID; 
+	uint64_t GameObjectID;
 	std::vector<MeshVertex> vertices;
 	std::vector<uint32_t> indices; 
 	uint32_t BoneCount;
@@ -109,7 +110,10 @@ public:
 
 	uint64_t GetMeshID() { return MeshID; }
 	uint64_t GetParentModelID() { return ParentModelID; }
-	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
+	uint64_t GetParentGameObjectID() 
+	{ 
+		return ParentGameObjectID; 
+	}
 	MeshTypeEnum GetMeshType() { return meshType; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }

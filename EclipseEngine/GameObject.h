@@ -10,7 +10,7 @@ private:
 
 	std::string ObjectName;
 	uint64_t GameObjectID;
-	glm::ivec3 GameObjectColorID = glm::ivec3(1.0f);
+	glm::vec3 GameObjectColorID = glm::vec3(1.0f);
 	std::vector<std::shared_ptr<Component>> ComponentList;
 
 public:
@@ -40,16 +40,22 @@ public:
 	void RemoveComponent(std::shared_ptr<Component> component);
 
 	void GenerateID();
+	void GenerateColorID();
 
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
+	glm::vec3 GetGameObjectColorID() { return GameObjectColorID; }
 
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
-	glm::ivec3 GetGameObjectColorID() { return GameObjectColorID; }
 
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return ComponentList; };
+
+	bool operator==(const GameObject& rhs) const
+	{ 
+		return this->GameObjectID == rhs.GameObjectID; 
+	}
 
 	virtual nlohmann::json ToJson()
 	{

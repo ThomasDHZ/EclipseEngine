@@ -4,7 +4,7 @@ ComponentRenderer::ComponentRenderer() : Component(ComponentType::kNullComponent
 {
 }
 
-ComponentRenderer::ComponentRenderer(ComponentType componentType) : Component(componentType, ComponentSubType::kRenderedObject)
+ComponentRenderer::ComponentRenderer(uint64_t GameObjectID, ComponentType componentType) : Component(GameObjectID, componentType, ComponentSubType::kRenderedObject)
 {
 }
 

@@ -47,8 +47,8 @@ private:
 
 public:
 	Model();
-	Model(const std::string& FilePath);
-	Model(std::shared_ptr<Mesh> mesh);
+	Model(const std::string& FilePath, uint64_t GameObjectID);
+	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);

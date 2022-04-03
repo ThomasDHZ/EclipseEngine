@@ -9,7 +9,7 @@ protected:
 
 public:
     ComponentRenderer();
-    ComponentRenderer(ComponentType componentType);
+    ComponentRenderer(uint64_t GameObjectID, ComponentType componentType);
 
     void Update(float DeltaTime) override;
     void UpdateMeshProperties();

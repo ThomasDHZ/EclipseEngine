@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MaterialManager.h"
+#include <algorithm>
 
 class GameObjectManager
 {
@@ -42,7 +43,7 @@ public:
 		return nullptr;
 	}
 
-	static glm::ivec3 GetGameObjectsByColorID(uint64_t ObjID)
+	static glm::vec3 GetGameObjectsColorID(uint64_t ObjID)
 	{
 		for (auto obj : objList)
 		{
@@ -52,7 +53,7 @@ public:
 			}
 		}
 
-		return glm::ivec3(0.0f);
+		return glm::vec3(0.0f);
 	}
 
 	static std::vector<std::shared_ptr<GameObject>> GetGameObjectsByComponentType(ComponentType componentType)
