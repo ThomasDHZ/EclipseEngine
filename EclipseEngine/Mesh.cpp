@@ -10,7 +10,7 @@ Mesh::Mesh()
 Mesh::Mesh(std::vector<LineVertex>& vertices)
 {
 	GenerateID();
-
+	GenerateColorID();
 	//VertexList = vertices;
 
 	IndexList = {
@@ -37,6 +37,7 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 {
 	GenerateID();
+	GenerateColorID();
 
 	std::vector<LineVertex> VertexList2 = {
 	{{StartPoint}, {1.0f, 0.0f, 0.0f}},
@@ -67,6 +68,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 {
 	GenerateID();
+	GenerateColorID();
 
 	VertexList = vertices;
 	IndexList = indices;
@@ -128,6 +130,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
 	GenerateID();
+	GenerateColorID();
 
 	VertexList = vertices;
 	IndexList = indices;
@@ -188,6 +191,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 Mesh::Mesh(MeshLoadingInfo& meshLoader)
 {
 	GenerateID();
+	GenerateColorID();
 
 	VertexList = meshLoader.vertices;
 	IndexList = meshLoader.indices;
@@ -405,6 +409,15 @@ void Mesh::GenerateID()
 {
 	MeshIDCounter++;
 	MeshID = MeshIDCounter;
+}
+
+void Mesh::GenerateColorID()
+{
+	const float red = (255.0f - (float)MeshID) / 255.0f;
+	const float green = (255.0f - (float)MeshID) / 255.0f;
+	const float blue = (255.0f - (float)MeshID) / 255.0f;
+
+	MeshColorID = glm::vec3(red, green, blue);
 }
 
 void Mesh::Draw(VkCommandBuffer& commandBuffer)

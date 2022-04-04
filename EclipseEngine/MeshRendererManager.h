@@ -87,10 +87,23 @@ public:
 		}
 	}
 
+	static glm::vec3 GetGameObjectsColorID(uint64_t MeshID)
+	{
+		for (auto mesh : MeshList)
+		{
+			if (mesh->GetMeshID() == MeshID)
+			{
+				return mesh->GetMeshColorID();
+			}
+		}
+
+		return glm::vec3(0.0f);
+	}
+
 	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
 		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		sceneProperties.MeshColorID = GameObjectManager::GetGameObjectsColorID(mesh->GetParentGameObjectID());
+		sceneProperties.MeshColorID = mesh->GetMeshColorID();
 		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 		mesh->Draw(cmdBuffer);
 	}
@@ -98,7 +111,7 @@ public:
 	static void DrawLine(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
 		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		//sceneProperties.MeshColorID = GameObjectManager::GetGameObjectsColorID(mesh->GetParentGameObjectID());
+		sceneProperties.MeshColorID = mesh->GetMeshColorID();
 		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 		mesh->Draw(cmdBuffer);
 	}

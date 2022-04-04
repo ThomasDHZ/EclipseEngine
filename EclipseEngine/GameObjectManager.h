@@ -43,19 +43,6 @@ public:
 		return nullptr;
 	}
 
-	static glm::vec3 GetGameObjectsColorID(uint64_t ObjID)
-	{
-		for (auto obj : objList)
-		{
-			if (obj->GetGameObjectID() == ObjID)
-			{
-				return obj->GetGameObjectColorID();
-			}
-		}
-
-		return glm::vec3(0.0f);
-	}
-
 	static std::vector<std::shared_ptr<GameObject>> GetGameObjectsByComponentType(ComponentType componentType)
 	{
 		std::vector<std::shared_ptr<GameObject>> returnObjectList;

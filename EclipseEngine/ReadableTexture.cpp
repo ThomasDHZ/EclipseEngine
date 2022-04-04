@@ -92,8 +92,8 @@ void ReadableTexture::CreateTextureSampler()
 {
 	VkSamplerCreateInfo TextureImageSamplerInfo = {};
 	TextureImageSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	TextureImageSamplerInfo.magFilter = VK_FILTER_LINEAR;
-	TextureImageSamplerInfo.minFilter = VK_FILTER_LINEAR;
+	TextureImageSamplerInfo.magFilter = VK_FILTER_NEAREST;
+	TextureImageSamplerInfo.minFilter = VK_FILTER_NEAREST;
 	TextureImageSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 	TextureImageSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
 	TextureImageSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;

@@ -25,6 +25,7 @@ public:
 	~MeshPickerRenderPass2D();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
 	void StartUp();
 	void RebuildSwapChain();

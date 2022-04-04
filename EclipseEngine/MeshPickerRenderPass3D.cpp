@@ -15,6 +15,7 @@ void MeshPickerRenderPass3D::StartUp()
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, SampleCount));
+    depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -26,24 +27,38 @@ void MeshPickerRenderPass3D::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
-    VkAttachmentDescription ColorAttachment = {};
-    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    ColorAttachment.samples = SampleCount;
-    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(ColorAttachment);
+    VkAttachmentDescription AlebdoAttachment = {};
+    AlebdoAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    AlebdoAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    AlebdoAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    AlebdoAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    AlebdoAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    AlebdoAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(AlebdoAttachment);
+
+    VkAttachmentDescription DepthAttachment = {};
+    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
+    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(DepthAttachment);
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+
+    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
     subpassDescription.pColorAttachments = ColorRefsList.data();
+    subpassDescription.pDepthStencilAttachment = &depthReference;
 
     std::vector<VkSubpassDependency> DependencyList;
 
@@ -78,7 +93,7 @@ void MeshPickerRenderPass3D::BuildRenderPass()
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create Buffer RenderPass.");
+        throw std::runtime_error("Failed to create GBuffer RenderPass.");
     }
 }
 
@@ -88,6 +103,7 @@ void MeshPickerRenderPass3D::CreateRendererFramebuffers()
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(depthTexture->View);
 
     for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
     {
@@ -154,6 +170,7 @@ void MeshPickerRenderPass3D::RebuildSwapChain()
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+    depthTexture->RecreateRendererTexture(RenderPassResolution);
 
     RenderPass::Destroy();
 
@@ -199,8 +216,9 @@ void MeshPickerRenderPass3D::Draw(SceneProperties& sceneProperties)
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 1> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { {0.0f, 1.0f, 0.0f, 1.0f} };
+    clearValues[1].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -255,6 +273,7 @@ void MeshPickerRenderPass3D::Draw(SceneProperties& sceneProperties)
 void MeshPickerRenderPass3D::Destroy()
 {
     RenderedTexture->Destroy();
+    depthTexture->Destroy();
 
     MeshPickerPipeline->Destroy();
 
@@ -263,6 +282,14 @@ void MeshPickerRenderPass3D::Destroy()
 
 Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
 {
+    if (PixelTexCoord.x < 0 ||
+        PixelTexCoord.y < 0 ||
+        RenderPassResolution.x < PixelTexCoord.x ||
+        RenderPassResolution.y < PixelTexCoord.y)
+    {
+        return Pixel(0x00, 0x00, 0x00, 0x00);
+    }
+
     std::shared_ptr<ReadableTexture> PickerTexture = std::make_shared<ReadableTexture>(ReadableTexture(RenderPassResolution, SampleCount));
 
     if (GraphicsDevice::IsRayTracerActive())

@@ -10,7 +10,6 @@ private:
 
 	std::string ObjectName;
 	uint64_t GameObjectID;
-	glm::vec3 GameObjectColorID = glm::vec3(1.0f);
 	std::vector<std::shared_ptr<Component>> ComponentList;
 
 public:
@@ -40,11 +39,9 @@ public:
 	void RemoveComponent(std::shared_ptr<Component> component);
 
 	void GenerateID();
-	void GenerateColorID();
 
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
-	glm::vec3 GetGameObjectColorID() { return GameObjectColorID; }
 
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);

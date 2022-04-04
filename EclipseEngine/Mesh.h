@@ -24,6 +24,7 @@ struct MeshLoadingInfo
 {
 	uint64_t ModelID; 
 	uint64_t GameObjectID;
+
 	std::vector<MeshVertex> vertices;
 	std::vector<uint32_t> indices; 
 	uint32_t BoneCount;
@@ -50,6 +51,7 @@ private:
 	uint32_t TriangleCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
+	glm::vec3 MeshColorID = glm::vec3(0.0f);
 
 	MeshTypeEnum meshType;
 
@@ -79,6 +81,7 @@ private:
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
 	void GenerateID();
+	void GenerateColorID();
 	void MeshBottomLevelAccelerationStructure();
 
 public:
@@ -115,6 +118,7 @@ public:
 		return ParentGameObjectID; 
 	}
 	MeshTypeEnum GetMeshType() { return meshType; }
+	glm::vec3 GetMeshColorID() { return MeshColorID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
