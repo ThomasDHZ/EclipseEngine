@@ -17,10 +17,13 @@ void BlinnPhongRenderer::StartUp()
 
 void BlinnPhongRenderer::Update()
 {
-	if (Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+	if (!VulkanRenderer::ImGUILayerActive &&
+		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-		meshPickerRenderPass.ReadPixel(mouseCoord);
+		const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+
+		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
 	}
 }
 

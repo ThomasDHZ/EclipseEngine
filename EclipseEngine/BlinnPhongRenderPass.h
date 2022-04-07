@@ -4,6 +4,7 @@
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "MeshRendererManager.h"
+#include "LightManager.h"
 #include "GraphicsPipeline.h"
 
 class BlinnPhongRenderPass : public RenderPass

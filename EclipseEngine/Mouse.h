@@ -76,7 +76,16 @@ public:
 		LastY = newLastCoords.y;
 	}
 
+	static bool GetMouseButtonClicked(int button)
+	{
 
+			return MouseButtonPressed[button];
+		
+	}
+	static bool GetMouseButtonDragged(int button)
+	{
+		return MouseButtonPressed[button];
+	}
 	static bool GetMouseButtonPressed(int button)
 	{
 		return MouseButtonPressed[button];

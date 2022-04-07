@@ -55,6 +55,7 @@ public:
 
 	static bool UpdateRendererFlag;
 	static bool WireframeModeFlag;
+	static bool ImGUILayerActive;
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;

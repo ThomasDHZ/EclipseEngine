@@ -7,7 +7,7 @@ class MeshRendererManager
 {
 private:
 	static std::vector<std::shared_ptr<Mesh>> MeshList;
-
+	static std::shared_ptr<Mesh> ActiveMesh;
 public:
 
 	static std::shared_ptr<Mesh> AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
@@ -63,6 +63,7 @@ public:
 		{
 			mesh->Update();
 		}
+
 	}
 
 	static void SortByZIndex()
@@ -77,17 +78,147 @@ public:
 
 	static void GUIUpdate()
 	{
-
-		for (int x = 0; x < MeshList.size(); x++)
+		if (ActiveMesh != nullptr)
 		{
-		
-			ImGui::SliderFloat3(("Mesh position " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshPosition()->x, -100.0f, 100.0f);
-			ImGui::SliderFloat3(("Mesh rotation " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshRotation()->x, 0.0f, 360.0f);
-			ImGui::SliderFloat3(("Mesh scale " + std::to_string(x)).c_str(), &MeshList[x]->GetMeshScale()->x, 0.0f, 1.0f);
+			ImGui::SliderFloat3("Mesh position ", &ActiveMesh->GetMeshPosition()->x, -100.0f, 100.0f);
+			ImGui::SliderFloat3("Mesh rotation ", &ActiveMesh->GetMeshRotation()->x, 0.0f, 360.0f);
+			ImGui::SliderFloat3("Mesh scale ", &ActiveMesh->GetMeshScale()->x, 0.0f, 1.0f);
+
+			GetMeshMaterialDetails();
 		}
 	}
 
-	static glm::vec3 GetGameObjectsColorID(uint64_t MeshID)
+	static void GetMeshMaterialDetails()
+	{
+		const auto material = ActiveMesh->GetMaterial();
+		if (material)
+		{
+			ImGui::LabelText("DiffuseTexture", "DiffuseTexture");
+			if (ActiveMesh->GetMaterial()->GetDiffuseMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetDiffuseMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("SpecularMap", "SpecularMap");
+			if (ActiveMesh->GetMaterial()->GetSpecularMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetSpecularMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("Albedo Map", "Albedo Map");
+			if (ActiveMesh->GetMaterial()->GetAlbedoMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetAlbedoMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("MetallicMap", "MetallicMap");
+			if (ActiveMesh->GetMaterial()->GetMetallicMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetMetallicMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("RoughnessMap", "RoughnessMap");
+			if (ActiveMesh->GetMaterial()->GetRoughnessMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetRoughnessMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("AmbientOcclusionMap", "AmbientOcclusionMap");
+			if (ActiveMesh->GetMaterial()->GetAmbientOcclusionMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetAmbientOcclusionMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("NormalMap", "NormalMap");
+			if (ActiveMesh->GetMaterial()->GetNormalMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetNormalMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("DepthMap", "DepthMap");
+			if (ActiveMesh->GetMaterial()->GetDepthMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetDepthMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("AlphaMap", "AlphaMap");
+			if (ActiveMesh->GetMaterial()->GetAlphaMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetAlphaMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+
+			ImGui::LabelText("EmissionMap", "EmissionMap");
+			if (ActiveMesh->GetMaterial()->GetEmissionMap())
+			{
+				const auto texture = ActiveMesh->GetMaterial()->GetEmissionMap();
+				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+			else
+			{
+				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+			}
+		}
+	}
+
+	static std::shared_ptr<Mesh> GetMeshByColorID(Pixel pixel)
+	{
+		for (auto mesh : MeshList)
+		{
+			if (mesh->GetMeshColorID() == pixel)
+			{
+				return mesh;
+			}
+		}
+
+		return nullptr;
+	}
+
+	static Pixel GetGameObjectsColorID(uint64_t MeshID)
 	{
 		for (auto mesh : MeshList)
 		{
@@ -97,13 +228,14 @@ public:
 			}
 		}
 
-		return glm::vec3(0.0f);
+		return Pixel();
 	}
+
 
 	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
 		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		sceneProperties.MeshColorID = mesh->GetMeshColorID();
+		sceneProperties.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 		mesh->Draw(cmdBuffer);
 	}
@@ -111,9 +243,14 @@ public:
 	static void DrawLine(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
 		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		sceneProperties.MeshColorID = mesh->GetMeshColorID();
+		sceneProperties.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 		mesh->Draw(cmdBuffer);
+	}
+
+	static void SetSelectedMesh(std::shared_ptr<Mesh> mesh)
+	{
+		ActiveMesh = mesh;
 	}
 
 	static std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer()
@@ -129,7 +266,7 @@ public:
 		}
 		else
 		{
-			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
+			std::cout << "Can't update MeshBuffers unless pipelines in the process of being rebuild." << std::endl;
 		}
 		return MeshPropertiesBufferList;
 	}
@@ -170,6 +307,7 @@ public:
 		return IndexBufferList;
 	}
 
+	static std::shared_ptr<Mesh> GetSelectedMesh() { return ActiveMesh; }
 	static std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 };
 

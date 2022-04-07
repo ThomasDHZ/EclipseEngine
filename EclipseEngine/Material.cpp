@@ -29,46 +29,57 @@ Material::Material(const std::string materialName, MaterialProperties& MaterialI
 	if(MaterialInfo.DiffuseMap != nullptr)
 	{
 		materialTextureData.DiffuseMapID = MaterialInfo.DiffuseMap->GetTextureBufferIndex();
+		DiffuseMap = MaterialInfo.DiffuseMap;
 	}
 	if (MaterialInfo.SpecularMap != nullptr)
 	{
 		materialTextureData.SpecularMapID = MaterialInfo.SpecularMap->GetTextureBufferIndex();
+		SpecularMap = MaterialInfo.SpecularMap;
 	}
 	if (AlbedoMap != nullptr)
 	{
 		materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+		AlbedoMap = MaterialInfo.AlbedoMap;
 	}
 	if (MetallicMap != nullptr)
 	{
 		materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+		MetallicMap = MaterialInfo.MetallicMap;
 	}
 	if (RoughnessMap != nullptr)
 	{
 		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+		RoughnessMap = MaterialInfo.RoughnessMap;
 	}
 	if (AmbientOcclusionMap != nullptr)
 	{
 		materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
+		AmbientOcclusionMap = MaterialInfo.AmbientOcclusionMap;
 	}
 	if (MaterialInfo.NormalMap != nullptr)
 	{
 		materialTextureData.NormalMapID = MaterialInfo.NormalMap->GetTextureBufferIndex();
+		NormalMap = MaterialInfo.NormalMap;
 	}
 	if (MaterialInfo.DepthMap != nullptr)
 	{
 		materialTextureData.DepthMapID = MaterialInfo.DepthMap->GetTextureBufferIndex();
+		DepthMap = MaterialInfo.DepthMap;
 	}
 	if (MaterialInfo.AlphaMap != nullptr)
 	{
 		materialTextureData.AlphaMapID = MaterialInfo.AlphaMap->GetTextureBufferIndex();
+		AlphaMap = MaterialInfo.AlphaMap;
 	}
 	if (MaterialInfo.EmissionMap != nullptr)
 	{
 		materialTextureData.EmissionMapID = MaterialInfo.EmissionMap->GetTextureBufferIndex();
+		EmissionMap = MaterialInfo.EmissionMap;
 	}
 	if (MaterialInfo.ShadowMap != nullptr)
 	{
 		materialTextureData.ShadowMapID = MaterialInfo.ShadowMap->GetTextureBufferIndex();
+		ShadowMap = MaterialInfo.ShadowMap;
 	}
 
 	MaterialBuffer.CreateBuffer(&materialTextureData, sizeof(MaterialProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);

@@ -132,6 +132,18 @@ public:
 	MaterialBufferData GetMaterialTextureData() { return materialTextureData; }
 	VkBuffer GetMaterialBuffer() { return MaterialBuffer.GetBuffer(); }
 
+	std::shared_ptr<Texture> GetDiffuseMap() { return DiffuseMap; }
+	std::shared_ptr<Texture> GetSpecularMap() { return SpecularMap; }
+	std::shared_ptr<Texture> GetAlbedoMap() { return AlbedoMap; }
+	std::shared_ptr<Texture> GetMetallicMap() { return MetallicMap; }
+	std::shared_ptr<Texture> GetRoughnessMap() { return RoughnessMap; }
+	std::shared_ptr<Texture> GetAmbientOcclusionMap() { return AmbientOcclusionMap; }
+	std::shared_ptr<Texture> GetNormalMap() { return NormalMap; }
+	std::shared_ptr<Texture> GetDepthMap() { return DepthMap; }
+	std::shared_ptr<Texture> GetAlphaMap() { return AlphaMap; }
+	std::shared_ptr<Texture> GetEmissionMap() { return EmissionMap; }
+	std::shared_ptr<Texture> GetShadowMap() { return ShadowMap; }
+
 	nlohmann::json ToJson()
 	{
 		nlohmann::json json;

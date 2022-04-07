@@ -51,7 +51,7 @@ private:
 	uint32_t TriangleCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
-	glm::vec3 MeshColorID = glm::vec3(0.0f);
+	Pixel MeshColorID = NullPixel;
 
 	MeshTypeEnum meshType;
 
@@ -118,7 +118,7 @@ public:
 		return ParentGameObjectID; 
 	}
 	MeshTypeEnum GetMeshType() { return meshType; }
-	glm::vec3 GetMeshColorID() { return MeshColorID; }
+	Pixel GetMeshColorID() { return MeshColorID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }

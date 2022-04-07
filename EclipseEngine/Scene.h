@@ -21,13 +21,16 @@
 #include "TextureManager.h"
 #include "MaterialManager.h"
 #include "RayTraceRenderer.h"
+#include "MeshRenderer.h"
+#include "LightManager.h"
 
 class Scene
 {
 private:
+	SceneProperties sceneProperites;
+
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;
-	SceneProperties sceneProperites;
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 	RayTraceRenderer rayTraceRenderer;

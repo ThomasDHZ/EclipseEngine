@@ -9,6 +9,7 @@
 #include "TextureManager.h"
 #include "InterfaceRenderPass.h"
 #include "MaterialManager.h"
+#include "LightManager.h"
 
 VkRenderPass InterfaceRenderPass::RenderPass = VK_NULL_HANDLE;
 VkDescriptorPool InterfaceRenderPass::ImGuiDescriptorPool = VK_NULL_HANDLE;
@@ -24,6 +25,7 @@ int main()
     InterfaceRenderPass::StartUp();
     TextureManager::StartUp();
     MaterialManager::StartUp();
+    LightManager::StartUp();
     
     Scene scene;
 

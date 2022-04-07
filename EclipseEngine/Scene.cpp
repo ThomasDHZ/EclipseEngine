@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "MeshRenderer.h"
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
@@ -91,6 +90,8 @@ Scene::Scene()
     //nlohmann::json ab = obj->ToJson();
     //GameObject adsf = GameObject(ab);
 
+
+  //  LightManager::AddDirectionalLight();
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
     rayTraceRenderer.StartUp();
@@ -114,6 +115,7 @@ void Scene::Update()
     auto time = glfwGetTime();
     GameObjectManager::Update(time);
     MeshRendererManager::Update();
+    LightManager::Update();
 
     camera2.Update(time);
 
@@ -131,6 +133,8 @@ void Scene::Update()
         //renderer2D.Update();
        blinnPhongRenderer.Update();
     }
+
+
 }
 
 void Scene::ImGuiUpdate()
@@ -148,6 +152,8 @@ void Scene::ImGuiUpdate()
     {
         ImGui::Image(blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
+
+    VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
 }
 
 void Scene::RebuildRenderers()

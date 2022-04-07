@@ -5,6 +5,40 @@
 class Converter
 {
 public:
+
+	static glm::vec1 PixelToVec1(Pixel pixel)
+	{
+		const float red = (float)pixel.Red / 255.0f;
+		return glm::vec1(red);
+	}
+
+	static glm::vec2 PixelToVec2(Pixel pixel)
+	{
+		const float red = (float)pixel.Red / 255.0f;
+		const float green = (float)pixel.Green / 255.0f;
+
+		return glm::vec2(red, green);
+	}
+
+	static glm::vec3 PixelToVec3(Pixel pixel)
+	{
+		const float red = (float)pixel.Red / 255.0f;
+		const float green = (float)pixel.Green / 255.0f;
+		const float blue = (float)pixel.Blue / 255.0f;
+
+		return glm::vec3(red, green, blue);
+	}
+
+	static glm::vec4 PixelToVec4(Pixel pixel)
+	{
+		const float red = (float)pixel.Red / 255.0f;
+		const float green = (float)pixel.Green / 255.0f;
+		const float blue = (float)pixel.Blue / 255.0f;
+		const float alpha = (float)pixel.Alpha / 255.0f;
+
+		return glm::vec4(red, green, blue, alpha);
+	}
+
 	static glm::mat4 AssimpToGLMMatrixConverter(aiMatrix4x4 AssMatrix)
 	{
 		glm::mat4 GLMMatrix;

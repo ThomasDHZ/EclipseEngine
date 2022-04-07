@@ -413,11 +413,11 @@ void Mesh::GenerateID()
 
 void Mesh::GenerateColorID()
 {
-	const float red = (255.0f - (float)MeshID) / 255.0f;
-	const float green = (255.0f - (float)MeshID) / 255.0f;
-	const float blue = (255.0f - (float)MeshID) / 255.0f;
+	byte red = (255.0f - (float)MeshID);
+	byte green = (255.0f - (float)MeshID);
+	byte blue = (255.0f - (float)MeshID);
 
-	MeshColorID = glm::vec3(red, green, blue);
+	MeshColorID = Pixel(red, green, blue, 0xFF);
 }
 
 void Mesh::Draw(VkCommandBuffer& commandBuffer)
