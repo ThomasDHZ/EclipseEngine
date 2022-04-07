@@ -91,7 +91,7 @@ Scene::Scene()
     //GameObject adsf = GameObject(ab);
 
 
-  //  LightManager::AddDirectionalLight();
+    LightManager::AddDirectionalLight();
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
     rayTraceRenderer.StartUp();

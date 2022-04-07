@@ -146,7 +146,7 @@ public:
 			}
 			else
 			{
-				for (auto& light : SpotLightList)
+				for (auto& light : DirectionalLightList)
 				{
 					light->GetLightPropertiesBuffer(DirectionalLightBufferList);
 				}
@@ -175,7 +175,7 @@ public:
 			}
 			else
 			{
-				for (auto& light : SpotLightList)
+				for (auto& light : PointLightList)
 				{
 					light->GetLightPropertiesBuffer(PointLightBufferList);
 				}

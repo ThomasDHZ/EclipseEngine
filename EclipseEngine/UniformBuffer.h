@@ -72,10 +72,12 @@ private:
 public:
 	UniformBuffer()
 	{
+		VulkanBufferData.CreateBuffer(nullptr, sizeof(T), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 
 	UniformBuffer(T UniformData)
 	{
+		VulkanBufferData.CreateBuffer(nullptr, sizeof(T), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		Update(UniformData);
 	}
 
@@ -86,11 +88,6 @@ public:
 
 	void Update(T UniformData)
 	{
-		if (VulkanBufferData.GetBuffer() == nullptr)
-		{
-			VulkanBufferData.CreateBuffer(nullptr, sizeof(T), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		}
-
 		UniformDataInfo = UniformData;
 		VulkanBufferData.CopyBufferToMemory(&UniformDataInfo, sizeof(T));
 	}

@@ -51,6 +51,7 @@ int main()
 
     TextureManager::Destroy();
     MaterialManager::Destroy();
+    LightManager::Destory();
     scene.Destroy();
     VulkanRenderer::Destroy();
 }
