@@ -1,7 +1,10 @@
 #version 460
 #extension GL_EXT_ray_tracing : require
 #extension GL_EXT_scalar_block_layout : enable
+
 #include "MeshProperties.glsl"
+#include "Lights.glsl"
+
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
@@ -9,6 +12,9 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
     float Timer;
 } sceneData;
 

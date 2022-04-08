@@ -30,8 +30,8 @@ Scene::Scene()
     material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
     MaterialManager::AddMaterial(material2);
 
-
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
 
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f, 0.0f), 1));
@@ -122,6 +122,9 @@ void Scene::Update()
     sceneProperites.CameraPos = camera2.GetPosition();
     sceneProperites.view = camera2.GetViewMatrix();
     sceneProperites.proj = camera2.GetProjectionMatrix();
+    sceneProperites.DirectionalLightCount = LightManager::GetDirectionalLightCount();
+    sceneProperites.PointLightCount = LightManager::GetPointLightCount();
+    sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
     sceneProperites.Timer = time;
 
     if (GraphicsDevice::IsRayTracerActive())
@@ -147,6 +150,7 @@ void Scene::ImGuiUpdate()
     ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
 
     MeshRendererManager::GUIUpdate();
+    LightManager::GUIUpdate();
 
     if (blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet != nullptr)
     {

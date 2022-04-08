@@ -21,7 +21,13 @@ struct MaterialProperties
 
 struct MeshProperties
 {
+	MaterialProperties materialProperties;
 	mat4 MeshTransform;
 	mat4 ModelTransform;
-	MaterialProperties materialProperties;
+	vec2 UVOffset;
+	vec2 UVScale;
+	vec2 UVFlip;
+	float heightScale;
+	float minLayers;
+	float maxLayers;
 };

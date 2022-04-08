@@ -113,10 +113,7 @@ public:
 
 	uint64_t GetMeshID() { return MeshID; }
 	uint64_t GetParentModelID() { return ParentModelID; }
-	uint64_t GetParentGameObjectID() 
-	{ 
-		return ParentGameObjectID; 
-	}
+	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	MeshTypeEnum GetMeshType() { return meshType; }
 	Pixel GetMeshColorID() { return MeshColorID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
@@ -127,10 +124,15 @@ public:
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 
 	std::shared_ptr<Material> GetMaterial() { return material; }
+	MeshProperties GetMeshProperties() { return meshProperties; }
+
 	glm::vec3* GetMeshPosition() { return &MeshPosition; }
 	glm::vec3* GetMeshRotation() { return &MeshRotation; }
 	glm::vec3* GetMeshScale() { return &MeshScale; };
-	
+	glm::vec2* GetUVOffset() { return &meshProperties.UVOffset; }
+	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }
+	glm::vec2* GetUVFlip() { return &meshProperties.UVFlip; }
+
 	nlohmann::json ToJson()
 	{
 		nlohmann::json json;

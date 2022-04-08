@@ -80,9 +80,18 @@ public:
 	{
 		if (ActiveMesh != nullptr)
 		{
+			ImGui::LabelText("", "Transform");
 			ImGui::SliderFloat3("Mesh position ", &ActiveMesh->GetMeshPosition()->x, -100.0f, 100.0f);
 			ImGui::SliderFloat3("Mesh rotation ", &ActiveMesh->GetMeshRotation()->x, 0.0f, 360.0f);
 			ImGui::SliderFloat3("Mesh scale ", &ActiveMesh->GetMeshScale()->x, 0.0f, 1.0f);
+			
+			ImGui::NewLine();
+
+			ImGui::LabelText("", "UVTransform");
+			ImGui::SliderFloat2("UV Offset ", &ActiveMesh->GetUVOffset()->x, 0.0f, 1.0f);
+			ImGui::SliderFloat2("UV scale ", &ActiveMesh->GetUVScale()->x, 0.0f, 10.0f);
+			ImGui::SliderFloat2("Flip UV", &ActiveMesh->GetUVFlip()->x, 0.0f, 1.0f);
+		
 
 			GetMeshMaterialDetails();
 		}
@@ -90,6 +99,10 @@ public:
 
 	static void GetMeshMaterialDetails()
 	{
+		ImGui::NewLine();
+
+		ImGui::LabelText("", "Material");
+
 		const auto material = ActiveMesh->GetMaterial();
 		if (material)
 		{

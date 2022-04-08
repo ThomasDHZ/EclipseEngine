@@ -4,7 +4,7 @@
 
 struct DirectionalLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
-	alignas(16) glm::vec3 direction = glm::vec3(0.0f);
+	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
 	alignas(16) glm::vec3 ambient = glm::vec3(0.8f);
 	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
 	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
@@ -44,6 +44,9 @@ struct SceneProperties
 	alignas(16) glm::mat4 view = glm::mat4(1.0f);
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 	alignas(16) glm::vec3 MeshColorID = glm::vec3(0.0f);
+	alignas(4)  uint32_t DirectionalLightCount;
+	alignas(4)  uint32_t PointLightCount;
+	alignas(4)  uint32_t SpotLightCount;
 	alignas(4)  float Timer = 0.0f;
 };
 
@@ -57,19 +60,27 @@ struct RayTraceSceneProperties
 
 struct MeshProperties
 {
+	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 ModelTransform = glm::mat4(1.0f);
-	MaterialBufferData materialBufferData;
+	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
+	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);
+	alignas(8) glm::vec2 UVFlip = glm::vec2(0.0f);
+	alignas(4) float heightScale = 0.1f;
+	alignas(4) float minLayers = 8;
+	alignas(4) float maxLayers = 32;
 };
 
 template <class T>
 class UniformBuffer
 {
 private: 
-	T UniformDataInfo;
 	VulkanBuffer VulkanBufferData;
 
 public:
+
+	T UniformDataInfo;
+
 	UniformBuffer()
 	{
 		VulkanBufferData.CreateBuffer(nullptr, sizeof(T), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);

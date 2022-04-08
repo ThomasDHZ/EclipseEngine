@@ -33,6 +33,18 @@ public:
 		}
 	}
 
+	static void GUIUpdate()
+	{
+		for (int x = 0; x < DirectionalLightList.size(); x++)
+		{
+			ImGui::SliderFloat3(("DLight position " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetPositionPtr()->x, -100.0f, 2000.0f);
+			ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+			ImGui::SliderFloat3(("DLight ambient " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetAmbientPtr()->x, 0.0f, 1.0f);
+			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+			ImGui::SliderFloat3(("DLight specular " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetSpecularPtr()->x, 0.0f, 1.0f);
+		}
+	}
+
 	static void Destory()
 	{
 		for (auto& directionalLight : DirectionalLightList)
@@ -216,5 +228,9 @@ public:
 		}
 		return SpotLightBufferList;
 	}
+
+	static uint32_t GetDirectionalLightCount() { return DirectionalLightList.size(); }
+	static uint32_t GetPointLightCount() { return PointLightList.size(); }
+	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }
 };
 

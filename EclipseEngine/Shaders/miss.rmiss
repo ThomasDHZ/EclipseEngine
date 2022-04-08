@@ -1,7 +1,10 @@
 #version 460
 #extension GL_EXT_ray_tracing : enable
 #extension GL_EXT_scalar_block_layout : enable
+
 #include "MeshProperties.glsl"
+#include "Lights.glsl"
+
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
@@ -9,6 +12,9 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
     float Timer;
 } sceneData;
 
@@ -43,6 +49,9 @@ layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
 layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
 layout(binding = 3) buffer Indices { uint i[]; } indices[];
 layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+//layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+//layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+//layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 5) uniform sampler2D TextureMap[];
 
 void main()

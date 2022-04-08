@@ -30,12 +30,148 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
     float Timer;
 } sceneData;
 
+vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
+
 void main() {
-   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
-   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(texture(TextureMap[diffuse], UV).rgb, texture(TextureMap[alpha], UV).r);
-   outBloom = vec4(1.0f);
+   const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
+   vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+        FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
+
+   if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
+      texture(TextureMap[material.DiffuseMapID], FinalUV).a == 0.0f)
+   {
+	 discard;
+   }
+   if(meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+   {
+        FinalUV.y = 1.0f - FinalUV.y;
+   }
+   if(meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+   {
+        FinalUV.x = 1.0f - FinalUV.x;
+   }
+
+   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
+   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
+   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
+   mat3 TBN = transpose(mat3(T, B, N));
+   
+   vec3 normal = Normal;
+   vec3 ViewPos  = sceneData.CameraPos;
+   vec3 FragPos2  = FragPos;
+   vec3 viewDir = normalize(ViewPos - FragPos2);
+    if(material.NormalMapID != 0)
+    {
+        ViewPos  = TBN * sceneData.CameraPos;
+        FragPos2  = TBN * FragPos;
+    }
+
+    if(material.NormalMapID != 0)
+    {
+        if(material.DepthMapID != 0)
+        {
+            FinalUV = ParallaxMapping(material, FinalUV,  viewDir);       
+            if(FinalUV.x > 1.0 || FinalUV.y > 1.0 || FinalUV.x < 0.0 || FinalUV.y < 0.0)
+            {
+              discard;
+            }
+        }
+        normal = texture(TextureMap[material.NormalMapID], FinalUV).rgb;
+        normal = normalize(normal * 2.0 - 1.0);
+     }
+
+   vec3 result = vec3(0.0f);
+   for(int x = 0; x < sceneData.DirectionalLightCount; x++)
+   {
+        result += CalcNormalDirLight(material, TBN, normal, FinalUV, x);
+   }
+
+//    vec3 I = normalize(FragPos2 - ViewPos);
+//    vec3 R = reflect(I, normalize(normal));
+//    vec3 Reflection = texture(CubeMap[0], R).rgb;
+//    vec3 finalMix = mix(result, Reflection, material.Reflectivness);
+
+    outColor = vec4(result, material.AlphaMapID);
+    outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+}
+
+vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
+{
+    vec3 LightPos = DLight[index].directionalLight.direction;
+    vec3 ViewPos = sceneData.CameraPos;
+    vec3 FragPos2 = FragPos;
+    if (material.NormalMapID != 0)
+    {
+        LightPos = TBN * DLight[index].directionalLight.direction;
+        ViewPos = TBN * sceneData.CameraPos;
+        FragPos2 = TBN * FragPos;
+    }
+    vec3 ViewDir = normalize(ViewPos - FragPos2);
+
+    const vec3 lightDir = normalize(-LightPos);
+    const float diff = max(dot(normal, lightDir), 0.0);
+
+    const vec3 halfwayDir = normalize(lightDir + ViewDir);
+    const float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+
+    vec3 ambient = DLight[index].directionalLight.ambient * material.Diffuse.rgb;
+    vec3 diffuse = DLight[index].directionalLight.diffuse * diff * material.Diffuse.rgb;
+    vec3 specular = DLight[index].directionalLight.specular * spec * material.Specular;
+    if (material.DiffuseMapID != 0)
+    {
+        ambient = DLight[index].directionalLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        diffuse = DLight[index].directionalLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+    }
+    if (material.SpecularMapID != 0)
+    {
+        specular = DLight[index].directionalLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
+    }
+
+    float LightDistance = length(LightPos - FragPos2);
+
+//    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+//    float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
+    return (ambient + diffuse + specular);
+}
+
+vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir)
+{
+    const float heightScale = meshBuffer[sceneData.MeshIndex].meshProperties.heightScale;
+    const float minLayers = meshBuffer[sceneData.MeshIndex].meshProperties.minLayers;
+    const float maxLayers = meshBuffer[sceneData.MeshIndex].meshProperties.maxLayers;
+    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+    float layerDepth = 1.0 / numLayers;
+    float currentLayerDepth = 0.0;
+
+    viewDir.y = -viewDir.y;
+    vec2 P = viewDir.xy / viewDir.z * heightScale;
+    vec2 deltaTexCoords = P / numLayers;
+
+    vec2  currentTexCoords = texCoords;
+    float currentDepthMapValue = texture(TextureMap[material.DepthMapID], currentTexCoords).r;
+
+    while (currentLayerDepth < currentDepthMapValue)
+    {
+        currentTexCoords -= deltaTexCoords;
+        currentDepthMapValue = texture(TextureMap[material.DepthMapID], currentTexCoords).r;
+        currentLayerDepth += layerDepth;
+    }
+
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+    float afterDepth = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = texture(TextureMap[material.DepthMapID], prevTexCoords).r - currentLayerDepth + layerDepth;
+
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+    return finalTexCoords;
 }

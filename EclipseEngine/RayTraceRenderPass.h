@@ -3,6 +3,7 @@
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
+#include "LightManager.h"
 
 class RayTraceRenderPass : public RenderPass
 {

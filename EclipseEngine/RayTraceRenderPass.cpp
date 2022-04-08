@@ -43,12 +43,18 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
     std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
     std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
+    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
     AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList, MeshVertexBufferList.size());
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList, MeshIndexBufferList.size());
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList, MeshPropertiesBufferList.size());
+    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, DirectionalLightBufferInfoList, DirectionalLightBufferInfoList.size());
+    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, PointLightBufferInfoList, PointLightBufferInfoList.size());
+    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, SpotLightBufferInfoList, SpotLightBufferInfoList.size());
     AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, RenderedTextureBufferInfo.size(), VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     RayTracePipeline = std::make_shared<RayTracingPipeline>();

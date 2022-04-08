@@ -3,7 +3,10 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
+
 #include "MeshProperties.glsl"
+#include "Lights.glsl"
+
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
@@ -11,6 +14,9 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
     float Timer;
 } sceneData;
 
@@ -46,6 +52,9 @@ layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
 layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
 layout(binding = 3) buffer Indices { uint i[]; } indices[];
 layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+//layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+//layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+//layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 5) uniform sampler2D TextureMap[];
 
 Vertex BuildVertexInfo()
@@ -70,6 +79,8 @@ Vertex BuildVertexInfo()
 
 	return vertex;
 }
+//vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+//vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
 
 void main()
 {
@@ -79,3 +90,76 @@ void main()
    uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
     rayHitInfo.color = texture(TextureMap[diffuse], vertex.UV).rgb;
 }
+
+//vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
+//{
+//    vec3 LightPos = DLight[index].directionalLight.direction;
+//    vec3 ViewPos = sceneData.CameraPos;
+//    vec3 FragPos2 = FragPos;
+//    if (material.NormalMapID != 0)
+//    {
+//        LightPos = TBN * DLight[index].directionalLight.direction;
+//        ViewPos = TBN * sceneData.CameraPos;
+//        FragPos2 = TBN * FragPos;
+//    }
+//    vec3 ViewDir = normalize(ViewPos - FragPos2);
+//
+//    const vec3 lightDir = normalize(-LightPos);
+//    const float diff = max(dot(normal, lightDir), 0.0);
+//
+//    const vec3 halfwayDir = normalize(lightDir + ViewDir);
+//    const float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+//
+//    vec3 ambient = DLight[index].directionalLight.ambient * material.Diffuse.rgb;
+//    vec3 diffuse = DLight[index].directionalLight.diffuse * diff * material.Diffuse.rgb;
+//    vec3 specular = DLight[index].directionalLight.specular * spec * material.Specular;
+//    if (material.DiffuseMapID != 0)
+//    {
+//        ambient = DLight[index].directionalLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+//        diffuse = DLight[index].directionalLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+//    }
+//    if (material.SpecularMapID != 0)
+//    {
+//        specular = DLight[index].directionalLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
+//    }
+//
+//    float LightDistance = length(LightPos - FragPos2);
+//
+////    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+////    float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
+//    return (ambient + diffuse + specular);
+//}
+//
+//vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir)
+//{
+//    const float heightScale = meshBuffer[sceneData.MeshIndex].meshProperties.heightScale;
+//    const float minLayers = meshBuffer[sceneData.MeshIndex].meshProperties.minLayers;
+//    const float maxLayers = meshBuffer[sceneData.MeshIndex].meshProperties.maxLayers;
+//    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+//    float layerDepth = 1.0 / numLayers;
+//    float currentLayerDepth = 0.0;
+//
+//    viewDir.y = -viewDir.y;
+//    vec2 P = viewDir.xy / viewDir.z * heightScale;
+//    vec2 deltaTexCoords = P / numLayers;
+//
+//    vec2  currentTexCoords = texCoords;
+//    float currentDepthMapValue = texture(TextureMap[material.DepthMapID], currentTexCoords).r;
+//
+//    while (currentLayerDepth < currentDepthMapValue)
+//    {
+//        currentTexCoords -= deltaTexCoords;
+//        currentDepthMapValue = texture(TextureMap[material.DepthMapID], currentTexCoords).r;
+//        currentLayerDepth += layerDepth;
+//    }
+//
+//    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+//
+//    float afterDepth = currentDepthMapValue - currentLayerDepth;
+//    float beforeDepth = texture(TextureMap[material.DepthMapID], prevTexCoords).r - currentLayerDepth + layerDepth;
+//
+//    float weight = afterDepth / (afterDepth - beforeDepth);
+//    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+//
+//    return finalTexCoords;
+//}
