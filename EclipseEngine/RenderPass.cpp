@@ -156,14 +156,14 @@ VkDescriptorImageInfo RenderPass::AddTextureDescriptor(VkImageView view, VkSampl
     return DescriptorImage;
 }
 
-void RenderPass::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
+void RenderPass::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags)
 {
     DescriptorSetBindingStruct DescriptorSetBinding{};
     DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
     DescriptorSetBinding.StageFlags = StageFlags;
     DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
     DescriptorSetBinding.TextureDescriptor = TextureImageInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
+    DescriptorSetBinding.Count = TextureImageInfo.size();
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
@@ -189,14 +189,14 @@ void RenderPass::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetB
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void RenderPass::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
+void RenderPass::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
 {
     DescriptorSetBindingStruct DescriptorSetBinding{};
     DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
     DescriptorSetBinding.StageFlags = StageFlags;
     DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
     DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
+    DescriptorSetBinding.Count = BufferInfo.size();
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
@@ -211,14 +211,14 @@ void RenderPass::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetB
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void RenderPass::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, uint32_t DescriptorCount, VkShaderStageFlags StageFlags)
+void RenderPass::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
 {
     DescriptorSetBindingStruct DescriptorSetBinding{};
     DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
     DescriptorSetBinding.StageFlags = StageFlags;
     DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = DescriptorCount;
+    DescriptorSetBinding.Count = BufferInfo.size();
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
