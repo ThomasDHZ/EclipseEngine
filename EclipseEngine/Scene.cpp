@@ -92,6 +92,8 @@ Scene::Scene()
 
 
     LightManager::AddDirectionalLight();
+    LightManager::AddPointLight();
+    LightManager::AddSpotLight();
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
     rayTraceRenderer.StartUp();

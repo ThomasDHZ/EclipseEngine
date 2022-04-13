@@ -37,6 +37,8 @@ layout(push_constant) uniform SceneData
 } sceneData;
 
 vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
 vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
 
 void main() {
@@ -92,7 +94,14 @@ void main() {
    {
         result += CalcNormalDirLight(material, TBN, normal, FinalUV, x);
    }
-
+   for(int x = 0; x < sceneData.PointLightCount; x++)
+   {
+        result += CalcNormalPointLight(material, TBN, normal, FinalUV, x);   
+   }
+   for(int x = 0; x < sceneData.SpotLightCount; x++)
+   {
+        result += CalcNormalSpotLight(material, TBN, normal, FinalUV, x);   
+   }
 //    vec3 I = normalize(FragPos2 - ViewPos);
 //    vec3 R = reflect(I, normalize(normal));
 //    vec3 Reflection = texture(CubeMap[0], R).rgb;
@@ -140,6 +149,86 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 //    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
 //    float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
     return (ambient + diffuse + specular);
+}
+
+vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
+{
+    vec3 LightPos = PLight[index].pointLight.position;
+    vec3 ViewPos = sceneData.CameraPos;
+    vec3 FragPos2 = FragPos;
+    if (material.NormalMapID != 0)
+    {
+        LightPos = TBN * PLight[index].pointLight.position;
+        ViewPos = TBN * sceneData.CameraPos;
+        FragPos2 = TBN * FragPos;
+    }
+    vec3 ViewDir = normalize(ViewPos - FragPos2);
+
+    vec3 lightDir = normalize(LightPos - FragPos2);
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    vec3 halfwayDir = normalize(lightDir + ViewDir);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+
+    vec3 ambient = PLight[index].pointLight.ambient * material.Diffuse.rgb;
+    vec3 diffuse = PLight[index].pointLight.diffuse * diff * material.Diffuse.rgb;
+    vec3 specular = PLight[index].pointLight.specular * spec * material.Specular;
+    if (material.DiffuseMapID != 0)
+    {
+        ambient = PLight[index].pointLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        diffuse = PLight[index].pointLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+    }
+    if (material.SpecularMapID != 0)
+    {
+        specular = PLight[index].pointLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
+    }
+
+    float LightDistance = length(LightPos - FragPos2);
+    float attenuation = 1.0 / (1.0f + PLight[index].pointLight.linear * LightDistance + PLight[index].pointLight.quadratic * (LightDistance * LightDistance));
+
+    return (ambient + diffuse + specular) * attenuation;
+}
+
+vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
+{
+    vec3 LightPos = SLight[index].spotLight.position;
+    vec3 ViewPos = sceneData.CameraPos;
+    vec3 FragPos2 = FragPos;
+    if (material.NormalMapID != 0)
+    {
+        LightPos = TBN * SLight[index].spotLight.direction;
+        ViewPos = TBN * sceneData.CameraPos;
+        FragPos2 = TBN * FragPos;
+    }
+    vec3 ViewDir = normalize(ViewPos - FragPos2);
+
+    vec3 lightDir = normalize(LightPos - FragPos2);
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    vec3 halfwayDir = normalize(lightDir + ViewDir);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+
+    vec3 ambient = SLight[index].spotLight.ambient * material.Diffuse.rgb;
+    vec3 diffuse = SLight[index].spotLight.diffuse * diff * material.Diffuse.rgb;
+    vec3 specular = SLight[index].spotLight.specular * spec * material.Specular;
+    if (material.DiffuseMapID != 0)
+    {
+        ambient = SLight[index].spotLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        diffuse = SLight[index].spotLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+    }
+    if (material.SpecularMapID != 0)
+    {
+        specular = SLight[index].spotLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
+    }
+
+    float theta = dot(lightDir, normalize(-SLight[index].spotLight.direction)); 
+    float epsilon = SLight[index].spotLight.cutOff - SLight[index].spotLight.outerCutOff;
+    float intensity = clamp((theta - SLight[index].spotLight.outerCutOff) / epsilon, 0.0, 1.0);
+
+    float LightDistance = length(LightPos - FragPos2);
+    float attenuation = 1.0 / (1.0f + SLight[index].spotLight.linear * LightDistance + SLight[index].spotLight.quadratic * (LightDistance * LightDistance));
+
+    return (ambient + diffuse + specular) * attenuation;
 }
 
 vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir)

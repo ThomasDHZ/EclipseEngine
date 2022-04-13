@@ -52,13 +52,21 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList);
-   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, DirectionalLightBufferInfoList);
-    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, PointLightBufferInfoList);
-    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, DirectionalLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, PointLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, SpotLightBufferInfoList);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
-    RayTracePipeline = std::make_shared<RayTracingPipeline>();
-    RayTracePipeline->SetUp(DescriptorBindingList);
+    if (RayTracePipeline == nullptr)
+    {
+        RayTracePipeline = std::make_shared<RayTracingPipeline>();
+        RayTracePipeline->SetUp(DescriptorBindingList);
+    }
+    else
+    {
+        RayTracePipeline->Destroy();
+        RayTracePipeline->SetUp(DescriptorBindingList);
+    }
 }
 
 void RayTraceRenderPass::SetUpTopLevelAccelerationStructure()
@@ -193,24 +201,7 @@ void RayTraceRenderPass::RebuildSwapChain()
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr());
-    VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
-    std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-
-    AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-    RayTracePipeline->UpdateGraphicsPipeLine(DescriptorBindingList);
+    BuildRenderPassPipelines();
 }
 
 void RayTraceRenderPass::Destroy()

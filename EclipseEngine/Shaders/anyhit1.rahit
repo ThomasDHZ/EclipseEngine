@@ -52,10 +52,10 @@ layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
 layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
 layout(binding = 3) buffer Indices { uint i[]; } indices[];
 layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-//layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-//layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-//layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 5) uniform sampler2D TextureMap[];
+layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 8) uniform sampler2D TextureMap[];
 
 Vertex BuildVertexInfo()
 {
@@ -84,12 +84,12 @@ void main()
 {
 	Vertex vertex = BuildVertexInfo();
 
-	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
-   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
-
-	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
-		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
-   {
-	 ignoreIntersectionEXT;
-   }
+//	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
+//   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
+//
+//	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
+//		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
+//   {
+//	 ignoreIntersectionEXT;
+//   }
 }

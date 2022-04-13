@@ -125,6 +125,7 @@ void MeshPickerRenderPass3D::CreateRendererFramebuffers()
 
 void MeshPickerRenderPass3D::BuildRenderPassPipelines()
 {
+    ColorAttachmentList.clear();
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     ColorAttachment.blendEnable = VK_TRUE;
@@ -135,47 +136,6 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
     ColorAttachmentList.emplace_back(ColorAttachment);
-
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-
-        MeshPickerPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
-}
-
-void MeshPickerRenderPass3D::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-    depthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers();
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
@@ -197,15 +157,35 @@ void MeshPickerRenderPass3D::RebuildSwapChain()
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        MeshPickerPipeline->Destroy();
-        MeshPickerPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        if (MeshPickerPipeline == nullptr)
+        {
+            MeshPickerPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            MeshPickerPipeline->Destroy();
+            MeshPickerPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
 
         for (auto& shader : PipelineShaderStageList)
         {
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
+}
 
+void MeshPickerRenderPass3D::RebuildSwapChain()
+{
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+    depthTexture->RecreateRendererTexture(RenderPassResolution);
+
+    RenderPass::Destroy();
+
+    BuildRenderPass();
+    CreateRendererFramebuffers();
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
