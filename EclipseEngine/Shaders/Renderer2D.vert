@@ -37,7 +37,7 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n",  meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID);
 //	}
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xy, 0.0f, 1.0f);
+    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
     Color = aColor;
     UV = aUV;
 }
