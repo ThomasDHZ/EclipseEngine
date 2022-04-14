@@ -239,7 +239,7 @@ vec3 CalcNormalSpotLight(Vertex vertex, MaterialProperties material, mat3 TBN,  
     vec3 FragPos2 = vertex.Position;
     if (material.NormalMapID != 0)
     {
-        LightPos = TBN * SLight[index].spotLight.position;
+        LightPos = TBN * SLight[index].spotLight.direction;
         ViewPos = TBN * sceneData.CameraPos;
         FragPos2 = TBN * vertex.Position;
     }
@@ -271,10 +271,7 @@ vec3 CalcNormalSpotLight(Vertex vertex, MaterialProperties material, mat3 TBN,  
     float LightDistance = length(LightPos - FragPos2);
     float attenuation = 1.0 / (1.0f + SLight[index].spotLight.linear * LightDistance + SLight[index].spotLight.quadratic * (LightDistance * LightDistance));
 
-    vec3 result = (ambient + diffuse);
-//    result = RTXShadow(result, specular, lightDir, 10000.0f);
-//    result *= attenuation;
-    return result;
+    return (ambient + diffuse + specular) * attenuation;
 }
 
 vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords, vec3 viewDir)
