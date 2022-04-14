@@ -297,7 +297,9 @@
     <None Include="Shaders\Renderer2D.vert" />
     <None Include="Shaders\Renderer3D.frag" />
     <None Include="Shaders\Renderer3D.vert" />
+    <None Include="Shaders\VertexBuilder.glsl" />
     <None Include="Shaders\shadow.rmiss" />
+    <None Include="Shaders\VertexLayout.glsl" />
     <None Include="Shaders\WireFrameShader.frag" />
     <None Include="Shaders\WireFrameShader.vert" />
   </ItemGroup>

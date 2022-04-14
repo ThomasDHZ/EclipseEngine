@@ -535,5 +535,11 @@
     <None Include="Shaders\Lights.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="Shaders\VertexLayout.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="Shaders\VertexBuilder.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
   </ItemGroup>
 </Project>

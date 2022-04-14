@@ -4,6 +4,7 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
+#include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
 
@@ -28,21 +29,6 @@ struct RayPayload {
 	bool hitGeo;
 };
 
-struct Vertex 
-{
-    vec3 Position;
-	float PositionPadding;
-    vec3 Normal;
-	float NormalPadding;
-    vec2 UV;
-	vec2 UVPadding;
-    vec3 Tangant;
-	float TangantPadding;
-    vec3 BiTangant;
-	float BiTangentPadding;
-	vec3 Color;
-	float ColorPadding;
-};
 
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 hitAttributeEXT vec2 attribs;

@@ -3,7 +3,12 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
+#extension GL_EXT_scalar_block_layout : enable
+#extension GL_EXT_debug_printf : enable
+#extension GL_EXT_ray_tracing : enable
+#extension GL_EXT_ray_query : enable
 
+#include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
 
@@ -22,6 +27,10 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 4) uniform sampler2D TextureMap[];
+
+//layout(binding = 5, set = 0) uniform accelerationStructureEXT topLevelAS;
+//layout(binding = 6, scalar) buffer Vertices { Vertex v[]; } vertices[];
+//layout(binding = 7) buffer Indices { uint i[]; } indices[];
 
 layout(push_constant) uniform SceneData
 {
