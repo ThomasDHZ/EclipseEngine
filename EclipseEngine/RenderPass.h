@@ -3,6 +3,8 @@
 #include "VulkanBuffer.h"
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
+#include "ModelManager.h"
+
 #include <fstream>
 
 class RenderPass

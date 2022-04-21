@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "Math.h"
 
 uint64_t Model::ModelIDCounter = 0;
 
@@ -23,7 +24,7 @@ Model::Model(const std::string& FilePath, uint64_t GameObjectID)
 	//LoadNodeTree(Scene->mRootNode);
 	//LoadAnimations(Scene);
 	LoadMesh(FilePath, Scene->mRootNode, Scene);
-
+	VulkanRenderer::UpdateTLAS = true;
 	//if (AnimationList.size() > 0)
 	//{
 	//	AnimatedModel = true;
@@ -39,6 +40,7 @@ Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 	GenerateID();
 	ParentGameObjectID = GameObjectID;
 	AddMesh(mesh);
+	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::~Model()
@@ -366,6 +368,7 @@ void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 
 void Model::Update()
 {
+	const glm::mat4 LastTransform = ModelTransform;
 	ModelTransform = glm::mat4(1.0f);
 	ModelTransform = glm::translate(ModelTransform, ModelPosition);
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -373,9 +376,43 @@ void Model::Update()
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransform = glm::scale(ModelTransform, ModelScale);
 
+	if (LastTransform != ModelTransform)
+	{
+		VulkanRenderer::UpdateTLAS = true;
+	}
+
 	if (BoneList.size() > 0)
 	{
 		//AnimationPlayer.Update();
+		for (auto& mesh : MeshList)
+		{
+			mesh->Update(ModelTransform, BoneList);
+		}
+	}
+	else
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->Update(ModelTransform);
+		}
+	}
+}
+
+void Model::UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList)
+{
+	for (auto& mesh : GetMeshList())
+	{
+		glm::mat4 GLMTransformMatrix2 = ModelTransform;
+		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
+
+		VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
+		AccelerationStructureInstance.transform = transformMatrix;
+		AccelerationStructureInstance.instanceCustomIndex = mesh->GetMeshBufferIndex();
+		AccelerationStructureInstance.mask = 0xFF;
+		AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
+		AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+		AccelerationStructureInstance.accelerationStructureReference = mesh->GetBLASBufferDeviceAddress();
+		AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
 	}
 }
 
@@ -385,6 +422,18 @@ void Model::Destroy()
 	{
 		mesh->Destory();
 	}
+}
+
+bool Model::DoesMeshExistInModel(std::shared_ptr<Mesh> mesh)
+{
+	for (auto& meshInModel : MeshList)
+	{
+		if (meshInModel->GetMeshID() == mesh->GetMeshID())
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 glm::mat4 Model::TransposeModelMatrix()

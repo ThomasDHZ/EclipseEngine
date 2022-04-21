@@ -1,11 +1,12 @@
 #pragma once
 #include "Component.h"
+#include "ModelManager.h"
 
 class ComponentRenderer : public Component
 {
 private:
-
 protected:
+    std::shared_ptr<Model> model;
 
 public:
     ComponentRenderer();
@@ -14,6 +15,9 @@ public:
     void Update(float DeltaTime) override;
     void UpdateMeshProperties();
     void Destroy() override;
+
+
+    std::shared_ptr<Model> GetModel() { return model; }
 
     virtual nlohmann::json ToJson() override
     {

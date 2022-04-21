@@ -1,25 +1,25 @@
-#include "RayTraceRenderPass.h"
+#include "RaytraceHybridPass.h"
 #include "Math.h"
 #include "MeshRendererManager.h"
 
-RayTraceRenderPass::RayTraceRenderPass() : RenderPass()
+RaytraceHybridPass::RaytraceHybridPass() : RenderPass()
 {
 }
 
-RayTraceRenderPass::~RayTraceRenderPass()
+RaytraceHybridPass::~RaytraceHybridPass()
 {
 }
 
-void RayTraceRenderPass::StartUp()
+void RaytraceHybridPass::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
+    RenderedShadowTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
 
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void RayTraceRenderPass::SetUpCommandBuffers()
+void RaytraceHybridPass::SetUpCommandBuffers()
 {
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -32,7 +32,7 @@ void RayTraceRenderPass::SetUpCommandBuffers()
     }
 }
 
-void RayTraceRenderPass::BuildRenderPassPipelines()
+void RaytraceHybridPass::BuildRenderPassPipelines()
 {
     std::vector<VkPipelineShaderStageCreateInfo> ShaderList;
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaderList;
@@ -68,7 +68,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         ShadowShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ShadowShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("Shaders/closesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("Shaders/hybridclosesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ClosestHitShaderInfo = {};
         ClosestHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ClosestHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
@@ -92,7 +92,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     }
     {
         VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, ModelManager::GetAccelerationStructureHandlePtr());
-        VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
+        VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RenderedShadowTexture->View);
         std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
         std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
@@ -123,7 +123,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void RayTraceRenderPass::Draw(SceneProperties& sceneProperties)
+void RaytraceHybridPass::Draw(SceneProperties& sceneProperties)
 {
     VkCommandBufferBeginInfo cmdBufInfo{};
     cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -156,24 +156,24 @@ void RayTraceRenderPass::Draw(SceneProperties& sceneProperties)
     vkCmdBindDescriptorSets(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipelineLayout(), 0, 1, RayTracePipeline->GetDescriptorSetPtr(), 0, 0);
 
     VkStridedDeviceAddressRegionKHR CallableShaderSbtEntry{};
-    RayTracedTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+    RenderedShadowTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_GENERAL);
     VulkanRenderer::vkCmdTraceRaysKHR(RayTraceCommandBuffer, &raygenShaderSbtEntry, &missShaderSbtEntry, &hitShaderSbtEntry, &CallableShaderSbtEntry, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 1);
-    RayTracedTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    RenderedShadowTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     vkEndCommandBuffer(RayTraceCommandBuffer);
 }
 
-void RayTraceRenderPass::RebuildSwapChain()
+void RaytraceHybridPass::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
+    RenderedShadowTexture->RecreateRendererTexture(RenderPassResolution);
     BuildRenderPassPipelines();
 }
 
-void RayTraceRenderPass::Destroy()
+void RaytraceHybridPass::Destroy()
 {
-    RayTracedTexture->Destroy();
+    RenderedShadowTexture->Destroy();
     RayTracePipeline->Destroy();
 
     RenderPass::Destroy();

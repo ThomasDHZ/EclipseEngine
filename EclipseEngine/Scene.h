@@ -33,11 +33,12 @@ private:
 	PerspectiveCamera camera2;
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
-	RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();
 	~Scene();
+
+	RayTraceRenderer rayTraceRenderer;
 
 	void StartUp();
 	void Update();

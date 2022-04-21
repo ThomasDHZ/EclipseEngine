@@ -82,7 +82,7 @@ private:
 
 	void GenerateID();
 	void GenerateColorID();
-	void MeshBottomLevelAccelerationStructure();
+	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
 
@@ -95,7 +95,7 @@ public:
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);
-	void Update();
+	void Update(const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Destory();
 

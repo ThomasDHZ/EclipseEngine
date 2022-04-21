@@ -5,6 +5,7 @@ SpriteRenderer::SpriteRenderer(uint64_t GameObjectID) : ComponentRenderer(GameOb
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
 	model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
+	ModelManager::AddModel(model);
 }
 
 SpriteRenderer::SpriteRenderer(glm::vec3 position, uint64_t GameObjectID) : ComponentRenderer(GameObjectID, ComponentType::kSpriteRenderer)
@@ -13,6 +14,7 @@ SpriteRenderer::SpriteRenderer(glm::vec3 position, uint64_t GameObjectID) : Comp
 	mesh->SetMeshPosition(position);
 
 	model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
+	ModelManager::AddModel(model);
 }
 
 SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID) : ComponentRenderer(GameObjectID, ComponentType::kSpriteRenderer)
@@ -22,6 +24,7 @@ SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t 
 	mesh->SetMeshRotation(rotation);
 
 	model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
+	ModelManager::AddModel(model);
 }
 
 SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID) : ComponentRenderer(GameObjectID, ComponentType::kSpriteRenderer)
@@ -32,6 +35,7 @@ SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3
 	mesh->SetMeshScale(scale);
 
 	model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
+	ModelManager::AddModel(model);
 }
 
 

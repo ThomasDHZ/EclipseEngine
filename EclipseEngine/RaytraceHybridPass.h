@@ -6,7 +6,7 @@
 #include "LightManager.h"
 #include "ModelManager.h"
 
-class RayTraceRenderPass : public RenderPass
+class RaytraceHybridPass : public RenderPass
 {
 private:
     void SetUpCommandBuffers();
@@ -14,15 +14,14 @@ private:
 
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
-    std::shared_ptr<RenderedColorTexture> RayTracedTexture;
+    std::shared_ptr<RenderedColorTexture> RenderedShadowTexture;
     VkCommandBuffer RayTraceCommandBuffer;
 
-    RayTraceRenderPass();
-    ~RayTraceRenderPass();
+    RaytraceHybridPass();
+    ~RaytraceHybridPass();
 
     void StartUp();
     void Draw(SceneProperties& sceneProperties);
     void RebuildSwapChain();
     void Destroy();
 };
-

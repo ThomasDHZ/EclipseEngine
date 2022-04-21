@@ -193,6 +193,7 @@
     <ClCompile Include="RenderedTexture.cpp" />
     <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
+    <ClCompile Include="RaytraceHybridPass.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="RenderedTexture.h" />
     <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderPass2D.h" />
+    <ClInclude Include="RaytraceHybridPass.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRenderer.h" />
@@ -283,6 +285,7 @@
     <None Include="Shaders\compile.bat" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
+    <None Include="Shaders\hybridclosesthit.rchit" />
     <None Include="Shaders\Lights.glsl" />
     <None Include="Shaders\LineRendererShader.frag" />
     <None Include="Shaders\LineRendererShader.vert" />

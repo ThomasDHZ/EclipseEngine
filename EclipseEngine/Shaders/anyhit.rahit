@@ -69,13 +69,13 @@ Vertex BuildVertexInfo()
 void main() 
 {
 	Vertex vertex = BuildVertexInfo();
-//
-//	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
-//   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
-//
-//	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
-//		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
-//   {
-//	 ignoreIntersectionEXT;
-//   }
+
+	   uint diffuse = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.DiffuseMapID;
+   uint alpha = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties.AlphaMapID;
+
+	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
+		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
+   {
+	 ignoreIntersectionEXT;
+   }
 }

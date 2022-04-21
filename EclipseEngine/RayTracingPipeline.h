@@ -12,25 +12,19 @@ private:
     VulkanBuffer MissShaderBindingTable;
     VulkanBuffer HitShaderBindingTable;
 
-    VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties{};
-    VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
-
-    std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaders{};
-
     void SetUpDescriptorBindings(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
-    void SetUpPipeline();
-    void SetUpShaderBindingTable();
+    void SetUpPipeline(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList);
+    void SetUpShaderBindingTable(std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList);
 
 public:
 
     RayTracingPipeline();
     ~RayTracingPipeline();
 
-    void SetUp(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
-    void UpdateGraphicsPipeLine(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+    void SetUp(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+    void UpdateGraphicsPipeLine(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
 
     VkBuffer GetRaygenShaderBindingTable() { return RaygenShaderBindingTable.GetBuffer(); }
     VkBuffer GetMissShaderBindingTable() { return MissShaderBindingTable.GetBuffer(); }
     VkBuffer GetHitShaderBindingTable() { return HitShaderBindingTable.GetBuffer(); }
-    VkPhysicalDeviceRayTracingPipelinePropertiesKHR GetRayTracingPipelineProperties() { return RayTracingPipelineProperties; }
 };

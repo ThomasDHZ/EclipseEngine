@@ -1,11 +1,9 @@
 #pragma once
 #include "ComponentRenderer.h"
-#include "Model.h"
 
 class LineRenderer : public ComponentRenderer
 {
 private:
-	std::shared_ptr<Model> model;
 public:
 	LineRenderer();
 	LineRenderer(std::vector<LineVertex> VertexList, uint64_t GameObjectID);
@@ -22,5 +20,4 @@ public:
 	void Update(float DeltaTime) override;
 	void Destroy() override;
 
-	std::shared_ptr<Model> GetModel() { return model; }
 };

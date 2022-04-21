@@ -89,7 +89,8 @@ Scene::Scene()
     //GameObjectManager::AddGameObject(obj5);
     //nlohmann::json ab = obj->ToJson();
     //GameObject adsf = GameObject(ab);
-
+    MeshRendererManager::Update();
+    ModelManager::Update();
 
     LightManager::AddDirectionalLight();
     LightManager::AddPointLight();
@@ -117,6 +118,7 @@ void Scene::Update()
     auto time = glfwGetTime();
     GameObjectManager::Update(time);
     MeshRendererManager::Update();
+    ModelManager::Update();
     LightManager::Update();
 
     camera2.Update(time);
@@ -151,13 +153,21 @@ void Scene::ImGuiUpdate()
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
     ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
 
+    for (auto& model : ModelManager::GetModelList())
+    {
+    
+            ImGui::LabelText("", "Model Transform");
+            ImGui::SliderFloat3("Model position ", &model->GetModelPositionPtr()->x, -100.0f, 100.0f);
+            ImGui::SliderFloat3("Model rotation ", &model->GetModelRotationPtr()->x, 0.0f, 360.0f);
+            ImGui::SliderFloat3("Model scale ", &model->GetModelScalePtr()->x, 0.0f, 1.0f);
+    }
+
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
 
-    if (blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet != nullptr)
-    {
-        ImGui::Image(blinnPhongRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    }
+
+        ImGui::Image(blinnPhongRenderer.raytraceHybridPass.RenderedShadowTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    
 
     VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
 }
@@ -187,7 +197,6 @@ void Scene::Draw()
 
     if (GraphicsDevice::IsRayTracerActive())
     {
-        rayTraceRenderer.rayTraceRenderPass.SetUpTopLevelAccelerationStructure();
         rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
     else

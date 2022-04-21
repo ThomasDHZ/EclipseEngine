@@ -24,7 +24,7 @@ private:
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
-	void BuildRenderPassPipelines();
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 public:
 	BlinnPhongRenderPass();
@@ -34,8 +34,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp();
-	void RebuildSwapChain();
+	void StartUp(std::shared_ptr<RenderedColorTexture> shadowMap);
+	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 	void Draw(SceneProperties& sceneProperties);
 	void Destroy();

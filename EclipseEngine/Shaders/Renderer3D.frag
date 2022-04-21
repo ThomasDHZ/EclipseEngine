@@ -20,17 +20,14 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
-layout(location = 1) out vec4 outBloom;
+//layout(location = 1) out vec4 outBloom;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 4) uniform sampler2D TextureMap[];
-
-//layout(binding = 5, set = 0) uniform accelerationStructureEXT topLevelAS;
-//layout(binding = 6, scalar) buffer Vertices { Vertex v[]; } vertices[];
-//layout(binding = 7) buffer Indices { uint i[]; } indices[];
+layout(binding = 5, set = 0) uniform accelerationStructureEXT topLevelAS;
 
 layout(push_constant) uniform SceneData
 {
@@ -51,6 +48,8 @@ vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec
 vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
 
 void main() {
+
+//debugPrintfEXT(": %i \n", sceneData.MeshIndex);
    const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
@@ -103,27 +102,28 @@ void main() {
    {
         result += CalcNormalDirLight(material, TBN, normal, FinalUV, x);
    }
-   for(int x = 0; x < sceneData.PointLightCount; x++)
-   {
-        result += CalcNormalPointLight(material, TBN, normal, FinalUV, x);   
-   }
-   for(int x = 0; x < sceneData.SpotLightCount; x++)
-   {
-        result += CalcNormalSpotLight(material, TBN, normal, FinalUV, x);   
-   }
+//   for(int x = 0; x < sceneData.PointLightCount; x++)
+//   {
+//        result += CalcNormalPointLight(material, TBN, normal, FinalUV, x);   
+//   }
+//   for(int x = 0; x < sceneData.SpotLightCount; x++)
+//   {
+//        result += CalcNormalSpotLight(material, TBN, normal, FinalUV, x);   
+//   }
 //    vec3 I = normalize(FragPos2 - ViewPos);
 //    vec3 R = reflect(I, normalize(normal));
 //    vec3 Reflection = texture(CubeMap[0], R).rgb;
 //    vec3 finalMix = mix(result, Reflection, material.Reflectivness);
 
     outColor = vec4(result, material.AlphaMapID);
-    outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+//    outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 }
 
 vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
 {
     vec3 LightPos = DLight[index].directionalLight.direction;
+
     vec3 ViewPos = sceneData.CameraPos;
     vec3 FragPos2 = FragPos;
     if (material.NormalMapID != 0)
@@ -155,9 +155,26 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 
     float LightDistance = length(LightPos - FragPos2);
 
-//    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-//    float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
-    return (ambient + diffuse + specular);
+
+      vec3 result = ambient;
+ float tMin      = 0.001f;
+  float tMax      = length(LightPos - FragPos2);
+  vec3  origin    = FragPos;
+  vec3  direction = normalize(-LightPos); 
+
+      rayQueryEXT rayQuery;
+      rayQueryInitializeEXT(rayQuery, topLevelAS, gl_RayFlagsTerminateOnFirstHitEXT, 0xFF, origin, tMin, direction, tMax);
+
+      while(rayQueryProceedEXT(rayQuery))
+      {
+      }
+
+      if(rayQueryGetIntersectionTypeEXT(rayQuery, true) != gl_RayQueryCommittedIntersectionNoneEXT)
+      {
+         result += (diffuse + specular);
+      }
+
+   return result;
 }
 
 vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)

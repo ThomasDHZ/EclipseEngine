@@ -147,43 +147,22 @@ vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, ve
     if (material.NormalMapID != 0)
     {
         LightPos = TBN * DLight[index].directionalLight.direction;
-        ViewPos = TBN * sceneData.CameraPos;
         FragPos2 = TBN *  vertex.Position;;
     }
-    vec3 ViewDir = normalize(ViewPos - FragPos2);
 
-    const vec3 lightDir = normalize(-LightPos);
-    const float diff = max(dot(normal, lightDir), 0.0);
+    vec3 result = vec3(0.0f);
 
-    const vec3 halfwayDir = normalize(lightDir + ViewDir);
-    const float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+    float tmin = 0.001;
+	float tmax = length(LightPos - FragPos2);
+	vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
+    vec3 lightDir = normalize(-LightPos);
+	shadowed = true;  
+	traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, lightDir, tmax, 1);
 
-    vec3 ambient = DLight[index].directionalLight.ambient * material.Diffuse.rgb;
-    vec3 diffuse = DLight[index].directionalLight.diffuse * diff * material.Diffuse.rgb;
-    vec3 specular = DLight[index].directionalLight.specular * spec * material.Specular;
-    if (material.DiffuseMapID != 0)
+	if (shadowed) 
     {
-        ambient = DLight[index].directionalLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
-        diffuse = DLight[index].directionalLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
-    }
-    if (material.SpecularMapID != 0)
-    {
-        specular = DLight[index].directionalLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
-    }
-
-    float LightDistance = length(LightPos - FragPos2);
-    vec3 result = ambient;
-
-  float tmin = 0.001;
-  float tmax = length(LightPos - FragPos2);
-  vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
-  shadowed = true;  
-  traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, lightDir, tmax, 1);
-  if (!shadowed) 
-  {
-     result += (diffuse + specular);
-  }
-  return result;
+       result = vec3(1.0f, 0.0f, 0.0f);
+	}
 
     return result;
 }

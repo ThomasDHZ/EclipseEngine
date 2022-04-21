@@ -3,15 +3,19 @@
 #include "BlinnPhongRenderPass.h"
 #include "FrameBufferRenderPass.h"
 #include "InterfaceRenderPass.h"
+#include "RaytraceHybridPass.h"
 class BlinnPhongRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
+
 public:
 	BlinnPhongRenderer();
 	~BlinnPhongRenderer();
+
+	RaytraceHybridPass raytraceHybridPass;
 
 	void StartUp();
 	void Update();

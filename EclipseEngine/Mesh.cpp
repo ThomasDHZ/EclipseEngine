@@ -93,8 +93,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
-	if (GraphicsDevice::IsRayTracingFeatureActive())
-	{
+
 		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
@@ -123,8 +122,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		MeshBottomLevelAccelerationStructure();
-	}
+		UpdateMeshBottomLevelAccelerationStructure();
 }
 
 Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
@@ -154,8 +152,6 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
-	if (GraphicsDevice::IsRayTracingFeatureActive())
-	{
 		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
@@ -184,8 +180,8 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		MeshBottomLevelAccelerationStructure();
-	}
+		UpdateMeshBottomLevelAccelerationStructure();
+
 }
 
 Mesh::Mesh(MeshLoadingInfo& meshLoader)
@@ -219,8 +215,7 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 	}
 	
 	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
-	if (GraphicsDevice::IsRayTracingFeatureActive())
-	{
+
 		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
@@ -249,8 +244,7 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		MeshBottomLevelAccelerationStructure();
-	}
+		UpdateMeshBottomLevelAccelerationStructure();
 }
 
 
@@ -258,7 +252,7 @@ Mesh::~Mesh()
 {
 }
 
-void Mesh::MeshBottomLevelAccelerationStructure()
+void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 {
 	VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 	VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
@@ -340,7 +334,7 @@ void Mesh::MeshBottomLevelAccelerationStructure()
 	scratchBuffer.DestoryBuffer();
 }
 
-void Mesh::Update()
+void Mesh::Update(const glm::mat4& ModelMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
@@ -349,22 +343,28 @@ void Mesh::Update()
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
+	if (meshProperties.MeshTransform != TransformMatrix)
+	{
+		VulkanRenderer::UpdateBLAS = true;
+	}
+
 	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = glm::mat4(1.0f);
+	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
-	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (GraphicsDevice::IsRayTracingFeatureActive() &&
-		GraphicsDevice::IsRayTracerActive() &&
+	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+
+	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
+	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+
+	if (VulkanRenderer::UpdateBLAS &&
 		IndexCount != 0)
 	{
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-		MeshBottomLevelAccelerationStructure();
+		UpdateMeshBottomLevelAccelerationStructure();
 	}
 }
 
@@ -378,7 +378,7 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
 	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = glm::mat4(1.0f);
+	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 
@@ -394,15 +394,15 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (GraphicsDevice::IsRayTracingFeatureActive() &&
-		GraphicsDevice::IsRayTracerActive() &&
-		IndexCount != 0)
-	{
+	//if (GraphicsDevice::IsRayTracingFeatureActive() &&
+	//	GraphicsDevice::IsRayTracerActive() &&
+	//	IndexCount != 0)
+	//{
 		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-		MeshBottomLevelAccelerationStructure();
-	}
+		UpdateMeshBottomLevelAccelerationStructure();
+	/*}*/
 }
 
 void Mesh::GenerateID()

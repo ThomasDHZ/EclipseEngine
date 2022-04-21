@@ -62,11 +62,19 @@ public:
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
 	void Update();
+	void UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList);
 	void Destroy();
+
+	bool DoesMeshExistInModel(std::shared_ptr<Mesh> mesh);
 
 	glm::mat4 TransposeModelMatrix();
 	uint64_t GetModelID() { return ModelID; }
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
+
+	glm::mat4 GetModelMatrix() { return ModelTransform; }
+	glm::vec3* GetModelPositionPtr() { return &ModelPosition; }
+	glm::vec3* GetModelRotationPtr() { return &ModelRotation; }
+	glm::vec3* GetModelScalePtr() { return &ModelScale; }
 };
 

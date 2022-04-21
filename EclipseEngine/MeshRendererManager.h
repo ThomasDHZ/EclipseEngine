@@ -59,11 +59,6 @@ public:
 	static void Update()
 	{
 		SortByZIndex();
-		for (auto& mesh : MeshList)
-		{
-			mesh->Update();
-		}
-
 	}
 
 	static void SortByZIndex()

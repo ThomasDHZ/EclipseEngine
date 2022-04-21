@@ -21,6 +21,8 @@ private:
 	static VkPhysicalDeviceLimits PhysicalDeviceLimits;
 	static VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures;
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
+	static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties;
+
 	static VkSampleCountFlagBits MaxSampleCount;
 	static bool RayTracingFeature;
 
@@ -64,6 +66,12 @@ public:
 
 		vkGetPhysicalDeviceProperties(GPUDevice, &PhysicalDeviceProperties);
 		PhysicalDeviceLimits = PhysicalDeviceProperties.limits;
+
+		RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
+		VkPhysicalDeviceProperties2 PhysicalDeviceProperties{};
+		PhysicalDeviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+		PhysicalDeviceProperties.pNext = &RayTracingPipelineProperties;
+		vkGetPhysicalDeviceProperties2(GPUDevice, &PhysicalDeviceProperties);
 
 		MaxSampleCount = GetMaxUsableSampleCount(GPUDevice);
 
@@ -228,4 +236,5 @@ public:
 	static VkPhysicalDeviceLimits GetPhysicalDeviceFeaPhysicalDeviceLimits() { return PhysicalDeviceLimits; }
 	static VkPhysicalDeviceAccelerationStructureFeaturesKHR GetAccelerationStructureFeatures() { return AccelerationStructureFeatures; }
 	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR GetRayTracingPipelineFeatures() { return RayTracingPipelineFeatures; }
+	static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  GetRayTracingPipelineProperties() { return RayTracingPipelineProperties; }
 };
