@@ -44,8 +44,8 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCo
 	blinnPhongRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());
 
-	raytraceHybridPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(raytraceHybridPass.RayTraceCommandBuffer);
+	//raytraceHybridPass.Draw(sceneProperites);
+	//CommandBufferSubmitList.emplace_back(raytraceHybridPass.RayTraceCommandBuffer);
 
 	frameBufferRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());

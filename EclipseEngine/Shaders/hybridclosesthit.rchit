@@ -15,6 +15,7 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    vec3 AmbientLight;
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
@@ -186,12 +187,12 @@ vec3 CalcNormalPointLight(Vertex vertex, MaterialProperties material, mat3 TBN, 
     vec3 halfwayDir = normalize(lightDir + ViewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
-    vec3 ambient = PLight[index].pointLight.ambient * material.Diffuse.rgb;
+    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = PLight[index].pointLight.diffuse * diff * material.Diffuse.rgb;
     vec3 specular = PLight[index].pointLight.specular * spec * material.Specular;
     if (material.DiffuseMapID != 0)
     {
-        ambient = PLight[index].pointLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
         diffuse = PLight[index].pointLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
     }
     if (material.SpecularMapID != 0)
@@ -227,12 +228,12 @@ vec3 CalcNormalSpotLight(Vertex vertex, MaterialProperties material, mat3 TBN,  
     vec3 halfwayDir = normalize(lightDir + ViewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
-    vec3 ambient = SLight[index].spotLight.ambient * material.Diffuse.rgb;
+    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = SLight[index].spotLight.diffuse * diff * material.Diffuse.rgb;
     vec3 specular = SLight[index].spotLight.specular * spec * material.Specular;
     if (material.DiffuseMapID != 0)
     {
-        ambient = SLight[index].spotLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
         diffuse = SLight[index].spotLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
     }
     if (material.SpecularMapID != 0)

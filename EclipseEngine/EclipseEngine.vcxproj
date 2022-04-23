@@ -151,6 +151,7 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
+    <ClCompile Include="HybridRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Converters.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
+    <ClInclude Include="HybridRenderPass.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LineRenderer.h" />
@@ -285,6 +287,8 @@
     <None Include="Shaders\compile.bat" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
+    <None Include="Shaders\GBuffer.frag" />
+    <None Include="Shaders\GBuffer.vert" />
     <None Include="Shaders\hybridclosesthit.rchit" />
     <None Include="Shaders\Lights.glsl" />
     <None Include="Shaders\LineRendererShader.frag" />

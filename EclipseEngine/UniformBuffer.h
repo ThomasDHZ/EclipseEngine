@@ -5,7 +5,6 @@
 struct DirectionalLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
-	alignas(16) glm::vec3 ambient = glm::vec3(0.8f);
 	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
 	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
@@ -13,7 +12,6 @@ struct DirectionalLightBuffer {
 
 struct PointLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
-	alignas(16) glm::vec3 ambient = glm::vec3(0.8f);
 	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
 	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
 	alignas(4) float constant = 1.0f;
@@ -25,7 +23,6 @@ struct PointLightBuffer {
 struct SpotLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.0f);
-	alignas(16) glm::vec3 ambient = glm::vec3(0.8f);
 	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
 	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
 
@@ -44,6 +41,7 @@ struct SceneProperties
 	alignas(16) glm::mat4 view = glm::mat4(1.0f);
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 	alignas(16) glm::vec3 MeshColorID = glm::vec3(0.0f);
+	alignas(16) glm::vec3 AmbientLight = glm::vec3(0.1f);
 	alignas(4)  uint32_t DirectionalLightCount;
 	alignas(4)  uint32_t PointLightCount;
 	alignas(4)  uint32_t SpotLightCount;

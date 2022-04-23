@@ -36,6 +36,7 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    vec3 AmbientLight;
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
@@ -140,12 +141,12 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
     const vec3 halfwayDir = normalize(lightDir + ViewDir);
     const float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
-    vec3 ambient = DLight[index].directionalLight.ambient * material.Diffuse.rgb;
+    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = DLight[index].directionalLight.diffuse * diff * material.Diffuse.rgb;
     vec3 specular = DLight[index].directionalLight.specular * spec * material.Specular;
     if (material.DiffuseMapID != 0)
     {
-        ambient = DLight[index].directionalLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
         diffuse = DLight[index].directionalLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
     }
     if (material.SpecularMapID != 0)
@@ -157,24 +158,24 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 
 
       vec3 result = ambient;
- float tMin      = 0.001f;
-  float tMax      = length(LightPos - FragPos2);
-  vec3  origin    = FragPos;
-  vec3  direction = normalize(-LightPos); 
+// float tMin      = 0.001f;
+//  float tMax      = length(LightPos - FragPos2);
+//  vec3  origin    = FragPos;
+//  vec3  direction = normalize(-LightPos); 
+//
+//      rayQueryEXT rayQuery;
+//      rayQueryInitializeEXT(rayQuery, topLevelAS, gl_RayFlagsTerminateOnFirstHitEXT, 0xFF, origin, tMin, direction, tMax);
+//
+//      while(rayQueryProceedEXT(rayQuery))
+//      {
+//      }
+//
+//      if(rayQueryGetIntersectionTypeEXT(rayQuery, true) != gl_RayQueryCommittedIntersectionNoneEXT)
+//      {
+//         result += (diffuse + specular);
+//      }
 
-      rayQueryEXT rayQuery;
-      rayQueryInitializeEXT(rayQuery, topLevelAS, gl_RayFlagsTerminateOnFirstHitEXT, 0xFF, origin, tMin, direction, tMax);
-
-      while(rayQueryProceedEXT(rayQuery))
-      {
-      }
-
-      if(rayQueryGetIntersectionTypeEXT(rayQuery, true) != gl_RayQueryCommittedIntersectionNoneEXT)
-      {
-         result += (diffuse + specular);
-      }
-
-   return result;
+   return result + diffuse + specular;
 }
 
 vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
@@ -196,12 +197,12 @@ vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, ve
     vec3 halfwayDir = normalize(lightDir + ViewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
-    vec3 ambient = PLight[index].pointLight.ambient * material.Diffuse.rgb;
+    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = PLight[index].pointLight.diffuse * diff * material.Diffuse.rgb;
     vec3 specular = PLight[index].pointLight.specular * spec * material.Specular;
     if (material.DiffuseMapID != 0)
     {
-        ambient = PLight[index].pointLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
         diffuse = PLight[index].pointLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
     }
     if (material.SpecularMapID != 0)
@@ -234,12 +235,12 @@ vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec
     vec3 halfwayDir = normalize(lightDir + ViewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
-    vec3 ambient = SLight[index].spotLight.ambient * material.Diffuse.rgb;
+    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = SLight[index].spotLight.diffuse * diff * material.Diffuse.rgb;
     vec3 specular = SLight[index].spotLight.specular * spec * material.Specular;
     if (material.DiffuseMapID != 0)
     {
-        ambient = SLight[index].spotLight.ambient * vec3(texture(TextureMap[material.DiffuseMapID], uv));
+        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
         diffuse = SLight[index].spotLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
     }
     if (material.SpecularMapID != 0)

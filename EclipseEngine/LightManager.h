@@ -39,14 +39,12 @@ public:
 		{
 			ImGui::SliderFloat3(("DLight position " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetPositionPtr()->x, -100.0f, 2000.0f);
 			ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-			ImGui::SliderFloat3(("DLight ambient " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetAmbientPtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("DLight specular " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetSpecularPtr()->x, 0.0f, 1.0f);
 		}
 		for (int x = 0; x < PointLightList.size(); x++)
 		{
 			ImGui::SliderFloat3(("PLight position " + std::to_string(x)).c_str(), &PointLightList[x]->GetPositionPtr()->x, -100.0f, 2000.0f);
-			ImGui::SliderFloat3(("PLight ambient " + std::to_string(x)).c_str(), &PointLightList[x]->GetAmbientPtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("PLight Diffuse " + std::to_string(x)).c_str(), &PointLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("PLight specular " + std::to_string(x)).c_str(), &PointLightList[x]->GetSpecularPtr()->x, 0.0f, 1.0f);
 		}
@@ -54,7 +52,6 @@ public:
 		{
 			ImGui::SliderFloat3(("SLight position " + std::to_string(x)).c_str(), &SpotLightList[x]->GetPositionPtr()->x, -100.0f, 2000.0f);
 			ImGui::SliderFloat3(("SLight direction " + std::to_string(x)).c_str(), &SpotLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-			ImGui::SliderFloat3(("SLight ambient " + std::to_string(x)).c_str(), &SpotLightList[x]->GetAmbientPtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("SLight Diffuse " + std::to_string(x)).c_str(), &SpotLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("SLight specular " + std::to_string(x)).c_str(), &SpotLightList[x]->GetSpecularPtr()->x, 0.0f, 1.0f);
 		}

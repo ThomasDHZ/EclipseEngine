@@ -92,7 +92,12 @@ Scene::Scene()
     MeshRendererManager::Update();
     ModelManager::Update();
 
-    LightManager::AddDirectionalLight();
+
+    auto dLight = DirectionalLightBuffer{};
+    dLight.diffuse = glm::vec3(0.2f);
+    dLight.specular = glm::vec3(0.5f);
+
+    LightManager::AddDirectionalLight(dLight);
     LightManager::AddPointLight();
     LightManager::AddSpotLight();
     renderer2D.StartUp();
