@@ -5,14 +5,14 @@ RenderedColorTexture::RenderedColorTexture()
 
 }
 
-RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Texture(kRenderedColorTexture)
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkFormat TextureFormat) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureByteFormat = TextureFormat;
 
 	CreateTextureImage();
 	CreateTextureView();
@@ -21,14 +21,14 @@ RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution) : Textu
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture(kRenderedColorTexture)
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkFormat TextureFormat, VkSampleCountFlagBits sampleCount) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = sampleCount;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureByteFormat = TextureFormat;
 
 	CreateTextureImage();
 	CreateTextureView();
@@ -55,7 +55,7 @@ void RenderedColorTexture::CreateTextureImage()
 	TextureInfo.samples = SampleCount;
 	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 	TextureInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT;
-	TextureInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureInfo.format = TextureByteFormat;
 
 	Texture::CreateTextureImage(TextureInfo);
 }
@@ -71,7 +71,7 @@ void RenderedColorTexture::CreateTextureView()
 	TextureImageViewInfo.subresourceRange.baseArrayLayer = 0;
 	TextureImageViewInfo.subresourceRange.layerCount = 1;
 	TextureImageViewInfo.image = Image;
-	TextureImageViewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureImageViewInfo.format = TextureByteFormat;
 	TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 
 	if (vkCreateImageView(VulkanRenderer::GetDevice(), &TextureImageViewInfo, nullptr, &View)) {

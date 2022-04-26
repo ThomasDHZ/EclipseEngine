@@ -10,9 +10,8 @@ BlinnPhongRenderer::~BlinnPhongRenderer()
 
 void BlinnPhongRenderer::StartUp()
 {
-	raytraceHybridPass.StartUp();
 	meshPickerRenderPass.StartUp();
-	blinnPhongRenderPass.StartUp(raytraceHybridPass.RenderedShadowTexture);
+	blinnPhongRenderPass.StartUp();
 	frameBufferRenderPass.StartUp(blinnPhongRenderPass.RenderedTexture);
 }
 
@@ -30,9 +29,7 @@ void BlinnPhongRenderer::Update()
 
 void BlinnPhongRenderer::RebuildRenderers()
 {
-	raytraceHybridPass.RebuildSwapChain();
 	meshPickerRenderPass.RebuildSwapChain();
-	blinnPhongRenderPass.RebuildSwapChain(raytraceHybridPass.RenderedShadowTexture);
 	frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderPass.RenderedTexture);
 }
 
@@ -44,16 +41,12 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCo
 	blinnPhongRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());
 
-	//raytraceHybridPass.Draw(sceneProperites);
-	//CommandBufferSubmitList.emplace_back(raytraceHybridPass.RayTraceCommandBuffer);
-
 	frameBufferRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
 }
 
 void BlinnPhongRenderer::Destroy()
 {
-	raytraceHybridPass.Destroy();
 	meshPickerRenderPass.Destroy();
 	blinnPhongRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();

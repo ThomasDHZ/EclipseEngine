@@ -255,7 +255,16 @@
     <ClCompile Include="RaytraceHybridPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="HybridRenderPass.cpp">
+    <ClCompile Include="HybridRenderer.cpp">
+      <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="GBufferRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderPassImageManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
   </ItemGroup>
@@ -386,6 +395,9 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JsonHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="BlinnPhongRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
@@ -470,10 +482,16 @@
     <ClInclude Include="RaytraceHybridPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="JsonHelper.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="HybridRenderer.h">
+      <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
-    <ClInclude Include="HybridRenderPass.h">
+    <ClInclude Include="GBufferRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderPassImageManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
   </ItemGroup>
@@ -556,10 +574,10 @@
     <None Include="Shaders\hybridclosesthit.rchit">
       <Filter>Shader\RayTraceShaders</Filter>
     </None>
-    <None Include="Shaders\GBuffer.frag">
+    <None Include="Shaders\DeferredRenderer.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="Shaders\GBuffer.vert">
+    <None Include="Shaders\DeferredRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

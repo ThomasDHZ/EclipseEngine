@@ -63,6 +63,15 @@ void RayTracingPipeline::UpdateGraphicsPipeLine(std::vector<VkPipelineShaderStag
     SetUpShaderBindingTable(RayTraceShaderList);
 }
 
+void RayTracingPipeline::Destroy()
+{
+    RaygenShaderBindingTable.DestoryBuffer();
+    MissShaderBindingTable.DestoryBuffer();
+    HitShaderBindingTable.DestoryBuffer();
+
+    GraphicsPipeline::Destroy();
+}
+
 void RayTracingPipeline::SetUpShaderBindingTable(std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList)
 {
     const uint32_t handleSize = GraphicsDevice::GetRayTracingPipelineProperties().shaderGroupHandleSize;

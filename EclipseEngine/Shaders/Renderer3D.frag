@@ -27,7 +27,6 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 4) uniform sampler2D TextureMap[];
-layout(binding = 5, set = 0) uniform accelerationStructureEXT topLevelAS;
 
 layout(push_constant) uniform SceneData
 {

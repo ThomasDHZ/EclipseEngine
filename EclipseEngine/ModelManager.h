@@ -24,10 +24,10 @@ public:
             model->Update();
         }
 
-   /*     if (VulkanRenderer::UpdateTLAS)
+    /*    if (VulkanRenderer::UpdateTLAS)
         {*/
             UpdateUpTopLevelAccelerationStructure();
-       //}
+       /* }*/
 
         VulkanRenderer::UpdateBLAS = false;
         VulkanRenderer::UpdateTLAS = false;

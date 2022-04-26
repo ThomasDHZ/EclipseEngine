@@ -484,24 +484,32 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     VkVertexInputBindingDescription bindingDescription;
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 
-    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
-        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
-    {
-        bindingDescription = MeshVertex::getBindingDescription();
-        attributeDescriptions = MeshVertex::getAttributeDescriptions();
-    }
-    else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
-    {
-        bindingDescription = LineVertex::getBindingDescription();
-        attributeDescriptions = LineVertex::getAttributeDescriptions();
-    }
-
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
-    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 1;
-    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+    if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
+    {
+        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
+        {
+            bindingDescription = MeshVertex::getBindingDescription();
+            attributeDescriptions = MeshVertex::getAttributeDescriptions();
+        }
+        else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
+        {
+            bindingDescription = LineVertex::getBindingDescription();
+            attributeDescriptions = LineVertex::getAttributeDescriptions();
+        }
+
+        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vertexInputInfo.vertexBindingDescriptionCount = 1;
+        vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+        vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
+        vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+    }
+    else
+    {
+        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vertexInputInfo.vertexBindingDescriptionCount = 0;
+    }
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;

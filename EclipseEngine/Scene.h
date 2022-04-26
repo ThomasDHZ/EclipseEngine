@@ -23,6 +23,7 @@
 #include "RayTraceRenderer.h"
 #include "MeshRenderer.h"
 #include "LightManager.h"
+#include "HybridRenderer.h"
 
 class Scene
 {
@@ -33,6 +34,7 @@ private:
 	PerspectiveCamera camera2;
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
+	HybridRenderer hybridRenderer;
 
 public:
 	Scene();

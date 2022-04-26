@@ -13,7 +13,7 @@ RaytraceHybridPass::~RaytraceHybridPass()
 void RaytraceHybridPass::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    RenderedShadowTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
+    RenderedShadowTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
 
     BuildRenderPassPipelines();
     SetUpCommandBuffers();

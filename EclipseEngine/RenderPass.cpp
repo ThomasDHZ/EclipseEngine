@@ -147,6 +147,15 @@ void RenderPass::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStr
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
+VkDescriptorImageInfo RenderPass::AddTextureDescriptor(std::shared_ptr<Texture> texture)
+{
+    VkDescriptorImageInfo DescriptorImage{};
+    DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    DescriptorImage.imageView = texture->View;
+    DescriptorImage.sampler = texture->Sampler;
+    return DescriptorImage;
+}
+
 VkDescriptorImageInfo RenderPass::AddTextureDescriptor(VkImageView view, VkSampler sampler)
 {
     VkDescriptorImageInfo DescriptorImage{};

@@ -7,20 +7,13 @@
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
 
-class HybridRenderPass : public RenderPass
+class GBufferRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
-	std::shared_ptr<RenderedColorTexture> PositionTexture;
-	std::shared_ptr<RenderedColorTexture> NormalTexture;
-	std::shared_ptr<RenderedColorTexture> AlbedoTexture;
-	std::shared_ptr<RenderedColorTexture> SpecularTexture;
-	std::shared_ptr<RenderedColorTexture> BloomTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	std::shared_ptr<GraphicsPipeline> hybridPipeline;
 
@@ -29,10 +22,15 @@ private:
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 public:
-	HybridRenderPass();
-	~HybridRenderPass();
+	GBufferRenderPass();
+	~GBufferRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::shared_ptr<RenderedColorTexture> PositionTexture;
+	std::shared_ptr<RenderedColorTexture> NormalTexture;
+	std::shared_ptr<RenderedColorTexture> AlbedoTexture;
+	std::shared_ptr<RenderedColorTexture> SpecularTexture;
+	std::shared_ptr<RenderedColorTexture> BloomTexture;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void StartUp(std::shared_ptr<RenderedColorTexture> shadowMap);
 	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap);

@@ -14,7 +14,7 @@ void MeshPickerRenderPass3D::StartUp()
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, SampleCount));
+    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
     depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
 
     BuildRenderPass();
@@ -156,6 +156,7 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
 
         if (MeshPickerPipeline == nullptr)
         {

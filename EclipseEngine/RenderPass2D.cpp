@@ -24,7 +24,7 @@ void RenderPass2D::StartUp()
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
+    renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
     depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
 
     CreateRenderPass();

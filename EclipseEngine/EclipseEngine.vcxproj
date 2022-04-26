@@ -149,9 +149,11 @@
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
-    <ClCompile Include="HybridRenderPass.cpp" />
+    <ClCompile Include="HybridRenderer.cpp" />
+    <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
@@ -195,6 +197,7 @@
     <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="RaytraceHybridPass.cpp" />
+    <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
@@ -210,9 +213,11 @@
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Converters.h" />
+    <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
-    <ClInclude Include="HybridRenderPass.h" />
+    <ClInclude Include="HybridRenderer.h" />
+    <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LineRenderer.h" />
@@ -266,6 +271,7 @@
     <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="RaytraceHybridPass.h" />
+    <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRenderer.h" />
@@ -285,10 +291,10 @@
     <None Include="Shaders\anyhit1.rahit" />
     <None Include="Shaders\closesthit.rchit" />
     <None Include="Shaders\compile.bat" />
+    <None Include="Shaders\DeferredRenderer.frag" />
+    <None Include="Shaders\DeferredRenderer.vert" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
-    <None Include="Shaders\GBuffer.frag" />
-    <None Include="Shaders\GBuffer.vert" />
     <None Include="Shaders\hybridclosesthit.rchit" />
     <None Include="Shaders\Lights.glsl" />
     <None Include="Shaders\LineRendererShader.frag" />

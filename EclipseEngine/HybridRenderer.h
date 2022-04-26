@@ -2,18 +2,22 @@
 #include "MeshPickerRenderPass3D.h"
 #include "BlinnPhongRenderPass.h"
 #include "FrameBufferRenderPass.h"
-#include "InterfaceRenderPass.h"
+#include "GBufferRenderPass.h"
 #include "RaytraceHybridPass.h"
-class BlinnPhongRenderer
+#include "DeferredRenderPass.h"
+
+class HybridRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
-	BlinnPhongRenderPass blinnPhongRenderPass;
+	GBufferRenderPass GBufferRenderPass;
+	DeferredRenderPass deferredRenderPass;
+	RaytraceHybridPass raytraceHybridPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
-	BlinnPhongRenderer();
-	~BlinnPhongRenderer();
+	HybridRenderer();
+	~HybridRenderer();
 
 	void StartUp();
 	void Update();
@@ -24,4 +28,3 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
-

@@ -12,22 +12,25 @@ void RayTraceRenderer::StartUp()
 {
     meshPickerRenderPass.StartUp();
     rayTraceRenderPass.StartUp();
-    FrameBufferRenderer.StartUp(rayTraceRenderPass.RayTracedTexture);
+    //FrameBufferRenderer.StartUp(rayTraceRenderPass.RayTracedTexture);
 }
 
 void RayTraceRenderer::RebuildSwapChain()
 {
     meshPickerRenderPass.RebuildSwapChain();
     rayTraceRenderPass.RebuildSwapChain();
-    FrameBufferRenderer.RebuildSwapChain(rayTraceRenderPass.RayTracedTexture);
+   // FrameBufferRenderer.RebuildSwapChain(rayTraceRenderPass.RayTracedTexture);
 }
 
 void RayTraceRenderer::Update()
 {
-    if (Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+    if (!VulkanRenderer::ImGUILayerActive &&
+        Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
         const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-        meshPickerRenderPass.ReadPixel(mouseCoord);
+        const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+
+        MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
     }
 }
 
@@ -43,14 +46,14 @@ void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkComm
     rayTraceRenderPass.Draw(sceneProperties);
     CommandBufferSubmitList.emplace_back(rayTraceRenderPass.RayTraceCommandBuffer);
 
-    FrameBufferRenderer.Draw();
-    CommandBufferSubmitList.emplace_back(FrameBufferRenderer.GetCommandBuffer());
+  //  FrameBufferRenderer.Draw();
+  //  CommandBufferSubmitList.emplace_back(FrameBufferRenderer.GetCommandBuffer());
 }
 
 void RayTraceRenderer::Destroy()
 {
     meshPickerRenderPass.Destroy();
     rayTraceRenderPass.Destroy();
-    FrameBufferRenderer.Destroy();
+   // FrameBufferRenderer.Destroy();
 }
 

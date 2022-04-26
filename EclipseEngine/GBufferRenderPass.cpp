@@ -1,24 +1,24 @@
-#include "HybridRenderPass.h"
+#include "GBufferRenderPass.h"
 
-HybridRenderPass::HybridRenderPass() : RenderPass()
+GBufferRenderPass::GBufferRenderPass() : RenderPass()
 {
 }
 
-HybridRenderPass::~HybridRenderPass()
+GBufferRenderPass::~GBufferRenderPass()
 {
 }
 
-void HybridRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
+void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    PositionTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    NormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    AlbedoTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    SpecularTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    PositionTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    NormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    AlbedoTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    SpecularTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -26,7 +26,7 @@ void HybridRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
     SetUpCommandBuffers();
 }
 
-void HybridRenderPass::BuildRenderPass()
+void GBufferRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
@@ -87,7 +87,7 @@ void HybridRenderPass::BuildRenderPass()
 
     VkAttachmentDescription DepthAttachment = {};
     DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = SampleCount;
+    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -148,7 +148,7 @@ void HybridRenderPass::BuildRenderPass()
     }
 }
 
-void HybridRenderPass::CreateRendererFramebuffers()
+void GBufferRenderPass::CreateRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
@@ -178,7 +178,7 @@ void HybridRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void HybridRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap)
+void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -189,12 +189,9 @@ void HybridRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTex
     ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
+
+    ColorAttachmentList.clear();
+    ColorAttachmentList.resize(5, ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
@@ -229,6 +226,7 @@ void HybridRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTex
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
 
         if (hybridPipeline == nullptr)
         {
@@ -247,7 +245,7 @@ void HybridRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTex
     }
 }
 
-void HybridRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap)
+void GBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -266,7 +264,7 @@ void HybridRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> sh
     SetUpCommandBuffers();
 }
 
-void HybridRenderPass::Draw(SceneProperties& sceneProperties)
+void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -329,7 +327,7 @@ void HybridRenderPass::Draw(SceneProperties& sceneProperties)
     }
 }
 
-void HybridRenderPass::Destroy()
+void GBufferRenderPass::Destroy()
 {
     PositionTexture->Destroy();
     NormalTexture->Destroy();

@@ -13,7 +13,7 @@ RayTraceRenderPass::~RayTraceRenderPass()
 void RayTraceRenderPass::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution));
+    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
 
     BuildRenderPassPipelines();
     SetUpCommandBuffers();

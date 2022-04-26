@@ -1,64 +1,70 @@
-#include "MeshPickerRenderPass2D.h"
-#include "ReadableTexture.h"
+#include "DeferredRenderPass.h"
 
-MeshPickerRenderPass2D::MeshPickerRenderPass2D() : RenderPass()
+DeferredRenderPass::DeferredRenderPass() : RenderPass()
 {
 }
 
-MeshPickerRenderPass2D::~MeshPickerRenderPass2D()
+DeferredRenderPass::~DeferredRenderPass()
 {
 }
 
-void MeshPickerRenderPass2D::StartUp()
+void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionTexture,
+    std::shared_ptr<RenderedColorTexture> NormalTexture,
+    std::shared_ptr<RenderedColorTexture> AlbedoTexture,
+    std::shared_ptr<RenderedColorTexture> SpecularTexture,
+    std::shared_ptr<RenderedColorTexture> BloomTexture,
+    std::shared_ptr<RenderedColorTexture> ShadowTexture)
 {
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
+    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(PositionTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
     SetUpCommandBuffers();
 }
 
-void MeshPickerRenderPass2D::BuildRenderPass()
+void DeferredRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
-    VkAttachmentDescription AlebdoAttachment = {};
-    AlebdoAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    AlebdoAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    AlebdoAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    AlebdoAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    AlebdoAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    AlebdoAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(AlebdoAttachment);
+    VkAttachmentDescription ColorAttachment = {};
+    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    ColorAttachment.samples = SampleCount;
+    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(ColorAttachment);
 
-    VkAttachmentDescription DepthAttachment = {};
-    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(DepthAttachment);
+    VkAttachmentDescription MultiSampledAttachment = {};
+    MultiSampledAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    MultiSampledAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    MultiSampledAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    MultiSampledAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    MultiSampledAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    MultiSampledAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    MultiSampledAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    MultiSampledAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(MultiSampledAttachment);
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    std::vector<VkAttachmentReference> MultiSampleReferenceList;
+    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
     subpassDescription.pColorAttachments = ColorRefsList.data();
-    subpassDescription.pDepthStencilAttachment = &depthReference;
+    subpassDescription.pResolveAttachments = MultiSampleReferenceList.data();
 
     std::vector<VkSubpassDependency> DependencyList;
 
@@ -93,17 +99,17 @@ void MeshPickerRenderPass2D::BuildRenderPass()
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create GBuffer RenderPass.");
+        throw std::runtime_error("Failed to create Buffer RenderPass.");
     }
 }
 
-void MeshPickerRenderPass2D::CreateRendererFramebuffers()
+void DeferredRenderPass::CreateRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
     std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ColorTexture->View);
     AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(depthTexture->View);
 
     for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
     {
@@ -123,7 +129,12 @@ void MeshPickerRenderPass2D::CreateRendererFramebuffers()
     }
 }
 
-void MeshPickerRenderPass2D::BuildRenderPassPipelines()
+void DeferredRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> PositionTexture,
+    std::shared_ptr<RenderedColorTexture> NormalTexture,
+    std::shared_ptr<RenderedColorTexture> AlbedoTexture,
+    std::shared_ptr<RenderedColorTexture> SpecularTexture,
+    std::shared_ptr<RenderedColorTexture> BloomTexture,
+    std::shared_ptr<RenderedColorTexture> ShadowTexture)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -134,18 +145,29 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
     ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-    ColorAttachmentList.emplace_back(ColorAttachment);
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    ColorAttachmentList.clear();
+    ColorAttachmentList.resize(1, ColorAttachment);
+
+    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+
+    VkDescriptorImageInfo PositionTextureBuffer = AddTextureDescriptor(PositionTexture);
+    VkDescriptorImageInfo NormalTextureBuffer = AddTextureDescriptor(NormalTexture);
+    VkDescriptorImageInfo AlbedoTextureBuffer = AddTextureDescriptor(AlbedoTexture);
+    VkDescriptorImageInfo SpecularTextureBuffer = AddTextureDescriptor(SpecularTexture);
+    VkDescriptorImageInfo BloomTextureBuffer = AddTextureDescriptor(BloomTexture);
+    VkDescriptorImageInfo ShadowTextureBuffer = AddTextureDescriptor(ShadowTexture);
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker2DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, PositionTextureBuffer);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, NormalTextureBuffer);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 2, AlbedoTextureBuffer);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 3, SpecularTextureBuffer);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, BloomTextureBuffer);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, ShadowTextureBuffer);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
@@ -155,16 +177,16 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
-        if (MeshPickerPipeline == nullptr)
+        if (DeferredPipeline == nullptr)
         {
-            MeshPickerPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            DeferredPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
         }
         else
         {
-            MeshPickerPipeline->Destroy();
-            MeshPickerPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            DeferredPipeline->Destroy();
+            DeferredPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -174,22 +196,27 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
     }
 }
 
-void MeshPickerRenderPass2D::RebuildSwapChain()
+void DeferredRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> PositionTexture,
+    std::shared_ptr<RenderedColorTexture> NormalTexture,
+    std::shared_ptr<RenderedColorTexture> AlbedoTexture,
+    std::shared_ptr<RenderedColorTexture> SpecularTexture,
+    std::shared_ptr<RenderedColorTexture> BloomTexture,
+    std::shared_ptr<RenderedColorTexture> ShadowTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
+    ColorTexture->RecreateRendererTexture(RenderPassResolution);
     RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-    depthTexture->RecreateRendererTexture(RenderPassResolution);
 
     RenderPass::Destroy();
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(PositionTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
     SetUpCommandBuffers();
 }
 
-void MeshPickerRenderPass2D::Draw(SceneProperties& sceneProperties)
+void DeferredRenderPass::Draw(SceneProperties& sceneProperties)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -197,8 +224,8 @@ void MeshPickerRenderPass2D::Draw(SceneProperties& sceneProperties)
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
     std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { {0.0f, 1.0f, 0.0f, 1.0f} };
-    clearValues[1].depthStencil = { 1.0f, 0 };
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -224,70 +251,24 @@ void MeshPickerRenderPass2D::Draw(SceneProperties& sceneProperties)
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
-
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    {
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            switch (mesh->GetMeshType())
-            {
-            case MeshTypeEnum::kPolygon:
-            {
-                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                DrawMesh(MeshPickerPipeline, mesh, sceneProperties);
-                break;
-            }
-            }
-        }
-    }
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipelineLayout(), 0, 1, DeferredPipeline->GetDescriptorSetPtr(), 0, nullptr);
+    vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 4, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
 }
 
-void MeshPickerRenderPass2D::Destroy()
+void DeferredRenderPass::Destroy()
 {
+    ColorTexture->Destroy();
     RenderedTexture->Destroy();
-    depthTexture->Destroy();
 
-    MeshPickerPipeline->Destroy();
+    DeferredPipeline->Destroy();
 
     RenderPass::Destroy();
-}
-
-Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
-{
-    std::shared_ptr<ReadableTexture> PickerTexture = std::make_shared<ReadableTexture>(ReadableTexture(RenderPassResolution, SampleCount));
-
-    VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-    Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
-    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
-    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-    VulkanRenderer::EndSingleTimeCommands(commandBuffer);
-
-    VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
-    VkSubresourceLayout subResourceLayout;
-    vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), PickerTexture->Image, &subResource, &subResourceLayout);
-
-    const char* data;
-    vkMapMemory(VulkanRenderer::GetDevice(), PickerTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
-
-    const uint32_t pixelSize = sizeof(Pixel);
-    const int PixelMemoryPos = (PixelTexCoord.x + (PixelTexCoord.y * RenderPassResolution.x)) * pixelSize;
-
-    Pixel pixel;
-    pixel.Red = data[PixelMemoryPos];
-    pixel.Green = data[PixelMemoryPos + 1];
-    pixel.Blue = data[PixelMemoryPos + 2];
-    pixel.Alpha = data[PixelMemoryPos + 3];
-
-    PickerTexture->Destroy();
-    return pixel;
 }

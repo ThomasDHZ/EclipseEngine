@@ -102,6 +102,7 @@ Scene::Scene()
     LightManager::AddSpotLight();
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
+    hybridRenderer.StartUp();
     rayTraceRenderer.StartUp();
 }
 
@@ -143,7 +144,8 @@ void Scene::Update()
     else
     {
         //renderer2D.Update();
-       blinnPhongRenderer.Update();
+      // blinnPhongRenderer.Update();
+        hybridRenderer.Update();
     }
 
 
@@ -171,7 +173,7 @@ void Scene::ImGuiUpdate()
     LightManager::GUIUpdate();
 
 
-        ImGui::Image(blinnPhongRenderer.raytraceHybridPass.RenderedShadowTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        //ImGui::Image(blinnPhongRenderer.raytraceHybridPass.RenderedShadowTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     
 
     VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
@@ -207,7 +209,8 @@ void Scene::Draw()
     else
     {
        // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-        blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        //blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();
@@ -227,6 +230,7 @@ void Scene::Destroy()
 
     renderer2D.Destroy();
     blinnPhongRenderer.Destroy();
+    hybridRenderer.Destroy();
     rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }

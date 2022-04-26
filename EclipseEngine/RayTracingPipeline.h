@@ -23,6 +23,7 @@ public:
 
     void SetUp(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
     void UpdateGraphicsPipeLine(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+    void Destroy();
 
     VkBuffer GetRaygenShaderBindingTable() { return RaygenShaderBindingTable.GetBuffer(); }
     VkBuffer GetMissShaderBindingTable() { return MissShaderBindingTable.GetBuffer(); }
