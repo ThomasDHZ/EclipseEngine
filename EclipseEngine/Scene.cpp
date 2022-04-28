@@ -144,8 +144,9 @@ void Scene::Update()
     else
     {
         //renderer2D.Update();
-      // blinnPhongRenderer.Update();
         hybridRenderer.Update();
+      // blinnPhongRenderer.Update();
+        
     }
 
 
@@ -155,26 +156,31 @@ void Scene::ImGuiUpdate()
 {
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    
+
     const auto objList = GameObjectManager::GetGameObjectList();
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
     ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
 
     for (auto& model : ModelManager::GetModelList())
     {
-    
-            ImGui::LabelText("", "Model Transform");
-            ImGui::SliderFloat3("Model position ", &model->GetModelPositionPtr()->x, -100.0f, 100.0f);
-            ImGui::SliderFloat3("Model rotation ", &model->GetModelRotationPtr()->x, 0.0f, 360.0f);
-            ImGui::SliderFloat3("Model scale ", &model->GetModelScalePtr()->x, 0.0f, 1.0f);
+
+        ImGui::LabelText("", "Model Transform");
+        ImGui::SliderFloat3("Model position ", &model->GetModelPositionPtr()->x, -100.0f, 100.0f);
+        ImGui::SliderFloat3("Model rotation ", &model->GetModelRotationPtr()->x, 0.0f, 360.0f);
+        ImGui::SliderFloat3("Model scale ", &model->GetModelScalePtr()->x, 0.0f, 1.0f);
     }
 
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
 
-
-        //ImGui::Image(blinnPhongRenderer.raytraceHybridPass.RenderedShadowTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    
+    ImGui::Image(hybridRenderer.GBufferRenderPass.PositionTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.TangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.BiTangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.TBNormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.NormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.AlbedoTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.SpecularTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(hybridRenderer.GBufferRenderPass.BloomTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
 
     VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
 }
@@ -184,7 +190,8 @@ void Scene::RebuildRenderers()
     MeshRendererManager::Update();
 
     renderer2D.RebuildRenderers();
-    blinnPhongRenderer.RebuildRenderers();
+    //blinnPhongRenderer.RebuildRenderers();
+    hybridRenderer.RebuildRenderers();
     rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
@@ -205,6 +212,7 @@ void Scene::Draw()
     if (GraphicsDevice::IsRayTracerActive())
     {
         rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        
     }
     else
     {

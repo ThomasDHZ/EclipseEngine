@@ -26,6 +26,9 @@ public:
 	~GBufferRenderPass();
 
 	std::shared_ptr<RenderedColorTexture> PositionTexture;
+	std::shared_ptr<RenderedColorTexture> TangentTexture;
+	std::shared_ptr<RenderedColorTexture> BiTangentTexture;
+	std::shared_ptr<RenderedColorTexture> TBNormalTexture;
 	std::shared_ptr<RenderedColorTexture> NormalTexture;
 	std::shared_ptr<RenderedColorTexture> AlbedoTexture;
 	std::shared_ptr<RenderedColorTexture> SpecularTexture;

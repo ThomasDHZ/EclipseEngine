@@ -20,10 +20,13 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outPosition;
-layout(location = 1) out vec4 outNormal;
-layout(location = 2) out vec4 outAlbedo;
-layout(location = 3) out vec4 outSpecular;
-layout(location = 4) out vec4 outBloom;
+layout(location = 1) out vec4 outTangent;
+layout(location = 2) out vec4 outBiTangent;
+layout(location = 3) out vec4 outTBNormal;
+layout(location = 4) out vec4 outNormal;
+layout(location = 5) out vec4 outAlbedo;
+layout(location = 6) out vec4 outSpecular;
+layout(location = 7) out vec4 outBloom;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
@@ -71,7 +74,10 @@ const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperti
    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
    mat3 TBN = transpose(mat3(T, B, N));
-   
+   outTangent = vec4(T, 1.0f);
+   outBiTangent = vec4(B, 1.0f);
+   outTBNormal = vec4(N, 1.0f);
+
    vec3 normal = Normal;
    vec3 ViewPos  = sceneData.CameraPos;
    vec3 FragPos2  = FragPos;

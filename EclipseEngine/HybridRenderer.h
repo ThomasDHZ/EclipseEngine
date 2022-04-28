@@ -10,14 +10,15 @@ class HybridRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
-	GBufferRenderPass GBufferRenderPass;
-	DeferredRenderPass deferredRenderPass;
 	RaytraceHybridPass raytraceHybridPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
 	HybridRenderer();
 	~HybridRenderer();
+
+	GBufferRenderPass GBufferRenderPass;
+	DeferredRenderPass deferredRenderPass;
 
 	void StartUp();
 	void Update();

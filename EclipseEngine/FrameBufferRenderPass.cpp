@@ -106,7 +106,15 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
-        frameBufferPipeline = std::make_shared<FrameBufferPipeline>(FrameBufferPipeline(buildGraphicsPipelineInfo));
+        if (frameBufferPipeline == nullptr)
+        {
+            frameBufferPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            frameBufferPipeline->Destroy();
+            frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
 
         for (auto& shader : PipelineShaderStageList)
         {
@@ -144,35 +152,11 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
         framebuffer = VK_NULL_HANDLE;
     }
 
+    RenderPass::Destroy();
+
     BuildRenderPass();
     BuildRendererFramebuffers();
-
-    VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-
-        frameBufferPipeline->Destroy();
-        frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 

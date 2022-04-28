@@ -14,6 +14,9 @@ void HybridRenderer::StartUp()
 	meshPickerRenderPass.StartUp();
 	GBufferRenderPass.StartUp(raytraceHybridPass.RenderedShadowTexture);
 	deferredRenderPass.StartUp(GBufferRenderPass.PositionTexture,
+								GBufferRenderPass.TangentTexture,
+								GBufferRenderPass.BiTangentTexture,
+								GBufferRenderPass.TBNormalTexture,
 								GBufferRenderPass.NormalTexture,
 								GBufferRenderPass.AlbedoTexture,
 								GBufferRenderPass.SpecularTexture,
@@ -40,6 +43,9 @@ void HybridRenderer::RebuildRenderers()
 	meshPickerRenderPass.RebuildSwapChain();
 	GBufferRenderPass.RebuildSwapChain(raytraceHybridPass.RenderedShadowTexture);
 	deferredRenderPass.RebuildSwapChain(GBufferRenderPass.PositionTexture,
+										GBufferRenderPass.TangentTexture,
+										GBufferRenderPass.BiTangentTexture,
+										GBufferRenderPass.TBNormalTexture,
 										GBufferRenderPass.NormalTexture,
 										GBufferRenderPass.AlbedoTexture,
 										GBufferRenderPass.SpecularTexture,
@@ -53,11 +59,11 @@ void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkComman
 	meshPickerRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 
-	deferredRenderPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(deferredRenderPass.GetCommandBuffer());
-
 	GBufferRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(GBufferRenderPass.GetCommandBuffer());
+
+	deferredRenderPass.Draw(sceneProperites);
+	CommandBufferSubmitList.emplace_back(deferredRenderPass.GetCommandBuffer());
 
 	raytraceHybridPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(raytraceHybridPass.RayTraceCommandBuffer);

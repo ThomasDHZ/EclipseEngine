@@ -14,6 +14,9 @@ void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     PositionTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    TangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    BiTangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    TBNormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     NormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     AlbedoTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
     SpecularTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
@@ -41,6 +44,39 @@ void GBufferRenderPass::BuildRenderPass()
     PositionTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     AttachmentDescriptionList.emplace_back(PositionTexture);
 
+    VkAttachmentDescription TangentTexture = {};
+    TangentTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+    TangentTexture.samples = SampleCount;
+    TangentTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    TangentTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    TangentTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    TangentTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    TangentTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    TangentTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(TangentTexture);
+
+    VkAttachmentDescription BiTangentTexture = {};
+    BiTangentTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+    BiTangentTexture.samples = SampleCount;
+    BiTangentTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    BiTangentTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    BiTangentTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    BiTangentTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    BiTangentTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    BiTangentTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(BiTangentTexture);
+
+    VkAttachmentDescription TBNormalTexture = {};
+    TBNormalTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+    TBNormalTexture.samples = SampleCount;
+    TBNormalTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    TBNormalTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    TBNormalTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    TBNormalTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    TBNormalTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    TBNormalTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(TBNormalTexture);
+
     VkAttachmentDescription NormalTexture = {};
     NormalTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
     NormalTexture.samples = SampleCount;
@@ -54,7 +90,7 @@ void GBufferRenderPass::BuildRenderPass()
 
     VkAttachmentDescription AlbedoTexture = {};
     AlbedoTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    AlbedoTexture.samples = VK_SAMPLE_COUNT_1_BIT;
+    AlbedoTexture.samples = SampleCount;
     AlbedoTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     AlbedoTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     AlbedoTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -65,7 +101,7 @@ void GBufferRenderPass::BuildRenderPass()
 
     VkAttachmentDescription SpecularTexture = {};
     SpecularTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    SpecularTexture.samples = VK_SAMPLE_COUNT_1_BIT;
+    SpecularTexture.samples = SampleCount;
     SpecularTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     SpecularTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     SpecularTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -76,7 +112,7 @@ void GBufferRenderPass::BuildRenderPass()
 
     VkAttachmentDescription BloomTexture = {};
     BloomTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomTexture.samples = VK_SAMPLE_COUNT_1_BIT;
+    BloomTexture.samples = SampleCount;
     BloomTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     BloomTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
     BloomTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -102,8 +138,11 @@ void GBufferRenderPass::BuildRenderPass()
     ColorRefsList.emplace_back(VkAttachmentReference{ 2, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
     ColorRefsList.emplace_back(VkAttachmentReference{ 3, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
     ColorRefsList.emplace_back(VkAttachmentReference{ 4, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 5, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 6, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 7, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    VkAttachmentReference depthReference = { 5, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 8, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -154,6 +193,9 @@ void GBufferRenderPass::CreateRendererFramebuffers()
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(PositionTexture->View);
+    AttachmentList.emplace_back(TangentTexture->View);
+    AttachmentList.emplace_back(BiTangentTexture->View);
+    AttachmentList.emplace_back(TBNormalTexture->View);
     AttachmentList.emplace_back(NormalTexture->View);
     AttachmentList.emplace_back(AlbedoTexture->View);
     AttachmentList.emplace_back(SpecularTexture->View);
@@ -191,7 +233,7 @@ void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTe
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(5, ColorAttachment);
+    ColorAttachmentList.resize(8, ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
@@ -250,6 +292,9 @@ void GBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> s
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     PositionTexture->RecreateRendererTexture(RenderPassResolution);
+    TangentTexture->RecreateRendererTexture(RenderPassResolution);
+    BiTangentTexture->RecreateRendererTexture(RenderPassResolution);
+    TBNormalTexture->RecreateRendererTexture(RenderPassResolution);
     NormalTexture->RecreateRendererTexture(RenderPassResolution);
     AlbedoTexture->RecreateRendererTexture(RenderPassResolution);
     SpecularTexture->RecreateRendererTexture(RenderPassResolution);
@@ -270,13 +315,16 @@ void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 6> clearValues{};
+    std::array<VkClearValue, 9> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
     clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
     clearValues[2].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
     clearValues[3].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
     clearValues[4].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[5].depthStencil = { 1.0f, 0 };
+    clearValues[5].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[6].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[7].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[8].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -336,7 +384,7 @@ void GBufferRenderPass::Destroy()
     BloomTexture->Destroy();
     DepthTexture->Destroy();
 
-    hybridPipeline->Destroy();\
+    hybridPipeline->Destroy();
 
     RenderPass::Destroy();
 }

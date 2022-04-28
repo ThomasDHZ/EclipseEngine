@@ -189,9 +189,6 @@
     <ClCompile Include="RayTracingPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="FrameBufferPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -410,9 +407,6 @@
     <ClInclude Include="RenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="FrameBufferPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -578,6 +572,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\DeferredRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\GBuffer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\GBuffer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

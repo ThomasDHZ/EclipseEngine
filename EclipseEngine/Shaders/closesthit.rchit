@@ -180,11 +180,10 @@ vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, ve
   vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
   shadowed = true;  
   traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, lightDir, tmax, 1);
-  if (!shadowed) 
+  if (shadowed) 
   {
      result += (diffuse + specular);
   }
-  return result;
 
     return result;
 }

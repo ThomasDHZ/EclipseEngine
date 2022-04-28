@@ -1,11 +1,12 @@
 #pragma once
-#include "FrameBufferPipeline.h"
+#include "GraphicsPipeline.h"
 #include "RenderPass.h"
+#include "RenderedColorTexture.h"
 
 class FrameBufferRenderPass : public RenderPass
 {
 private:
-	std::shared_ptr<FrameBufferPipeline> frameBufferPipeline;
+	std::shared_ptr<GraphicsPipeline> frameBufferPipeline;
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
 	void BuildRenderPass();
