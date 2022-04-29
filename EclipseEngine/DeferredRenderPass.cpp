@@ -197,6 +197,7 @@ void DeferredRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorT
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
@@ -279,6 +280,7 @@ void DeferredRenderPass::Draw(SceneProperties& sceneProperties)
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipeline());
+    vkCmdPushConstants(CommandBuffer[VulkanRenderer::GetCMDIndex()], DeferredPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipelineLayout(), 0, 1, DeferredPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 4, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);

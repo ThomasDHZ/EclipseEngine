@@ -3,6 +3,7 @@
 #extension GL_EXT_debug_printf : enable
 
 layout(location = 0) out vec2 fragTexCoord;
+
 void main() 
 {
 //    if(gl_VertexIndex == 0)

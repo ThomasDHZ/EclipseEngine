@@ -10,17 +10,6 @@ RenderPass2D::~RenderPass2D()
 
 void RenderPass2D::StartUp()
 {
-    VkPipelineColorBlendAttachmentState ColorAttachment;
-    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
-    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -135,6 +124,19 @@ void RenderPass2D::CreateRendererFramebuffers()
 
 void RenderPass2D::BuildRenderPassPipelines()
 {
+    VkPipelineColorBlendAttachmentState ColorAttachment;
+    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+
+
+    ColorAttachmentList.emplace_back(ColorAttachment);
+
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {

@@ -134,7 +134,9 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
     ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-    ColorAttachmentList.emplace_back(ColorAttachment);
+
+    ColorAttachmentList.clear();
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
@@ -262,19 +264,36 @@ void MeshPickerRenderPass2D::Destroy()
 
 Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
 {
+    if (PixelTexCoord.x < 0 ||
+        PixelTexCoord.y < 0 ||
+        RenderPassResolution.x < PixelTexCoord.x ||
+        RenderPassResolution.y < PixelTexCoord.y)
+    {
+        return Pixel(0x00, 0x00, 0x00, 0x00);
+    }
+
     std::shared_ptr<ReadableTexture> PickerTexture = std::make_shared<ReadableTexture>(ReadableTexture(RenderPassResolution, SampleCount));
 
-    VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-    Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
-    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
-    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-    VulkanRenderer::EndSingleTimeCommands(commandBuffer);
-
-    VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
-    VkSubresourceLayout subResourceLayout;
-    vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), PickerTexture->Image, &subResource, &subResourceLayout);
+    if (GraphicsDevice::IsRayTracerActive())
+    {
+        VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+        VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+    }
+    else
+    {
+        VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+        VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+    }
 
     const char* data;
     vkMapMemory(VulkanRenderer::GetDevice(), PickerTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);

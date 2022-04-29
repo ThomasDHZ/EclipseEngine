@@ -73,15 +73,6 @@ void main()
     const vec3 viewDir = normalize(ViewPos - FragPos);
 
     vec3 result = vec3(0.0f);
-//    result = CalcNormalDirLight(Normal.rgb, 0);
-//
-//    vec3 LightPos = DLight[0].directionalLight.direction;
-//         LightPos = TBN * DLight[0].directionalLight.direction;
-//    vec3 lightDir = normalize(-LightPos);
-//    float diff = max(dot(Normal.rgb, lightDir), 0.0);
-//    result = DLight[0].directionalLight.diffuse * diff * Diffuse;
-//    outColor = vec4(result, 1.0f);
-
 
     vec3 LightPos = DLight[0].directionalLight.direction;
          LightPos = TBN * DLight[0].directionalLight.direction;

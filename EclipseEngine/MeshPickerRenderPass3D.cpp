@@ -125,7 +125,6 @@ void MeshPickerRenderPass3D::CreateRendererFramebuffers()
 
 void MeshPickerRenderPass3D::BuildRenderPassPipelines()
 {
-    ColorAttachmentList.clear();
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     ColorAttachment.blendEnable = VK_TRUE;
@@ -135,7 +134,9 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
     ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-    ColorAttachmentList.emplace_back(ColorAttachment);
+
+    ColorAttachmentList.clear();
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
