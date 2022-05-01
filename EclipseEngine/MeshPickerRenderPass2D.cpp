@@ -266,8 +266,8 @@ Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
 {
     if (PixelTexCoord.x < 0 ||
         PixelTexCoord.y < 0 ||
-        RenderPassResolution.x < PixelTexCoord.x ||
-        RenderPassResolution.y < PixelTexCoord.y)
+        RenderPassResolution.x - 1 < PixelTexCoord.x ||
+        RenderPassResolution.y - 1 < PixelTexCoord.y)
     {
         return Pixel(0x00, 0x00, 0x00, 0x00);
     }
