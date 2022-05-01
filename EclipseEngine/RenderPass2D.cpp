@@ -134,7 +134,7 @@ void RenderPass2D::BuildRenderPassPipelines()
     ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
-
+    ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();

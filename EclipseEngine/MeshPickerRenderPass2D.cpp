@@ -146,7 +146,7 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
@@ -288,7 +288,7 @@ Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
     {
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);

@@ -145,7 +145,7 @@ void Scene::Update()
     {
         //renderer2D.Update();
         hybridRenderer.Update();
-      // blinnPhongRenderer.Update();
+      //blinnPhongRenderer.Update();
         
     }
 
@@ -173,14 +173,14 @@ void Scene::ImGuiUpdate()
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
 
-    ImGui::Image(hybridRenderer.GBufferRenderPass.PositionTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.TangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.BiTangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.TBNormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.NormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.AlbedoTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.SpecularTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    ImGui::Image(hybridRenderer.GBufferRenderPass.BloomTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.PositionTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.TangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.BiTangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.TBNormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.NormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.AlbedoTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.SpecularTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(hybridRenderer.GBufferRenderPass.BloomTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
 
     VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
 }
@@ -190,7 +190,7 @@ void Scene::RebuildRenderers()
     MeshRendererManager::Update();
 
     renderer2D.RebuildRenderers();
-    //blinnPhongRenderer.RebuildRenderers();
+    blinnPhongRenderer.RebuildRenderers();
     hybridRenderer.RebuildRenderers();
     rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
@@ -216,8 +216,8 @@ void Scene::Draw()
     }
     else
     {
-       // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-        //blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+       // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
         hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
  

@@ -272,13 +272,16 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
         return Pixel(0x00, 0x00, 0x00, 0x00);
     }
 
+
+
+
     std::shared_ptr<ReadableTexture> PickerTexture = std::make_shared<ReadableTexture>(ReadableTexture(RenderPassResolution, SampleCount));
 
     if (GraphicsDevice::IsRayTracerActive())
     {
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
@@ -288,9 +291,9 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
     {
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
-        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
+        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL); 
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
         VulkanRenderer::EndSingleTimeCommands(commandBuffer);
     }

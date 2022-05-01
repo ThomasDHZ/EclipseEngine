@@ -17,7 +17,8 @@ void BlinnPhongRenderer::StartUp()
 
 void BlinnPhongRenderer::Update()
 {
-	if (!VulkanRenderer::ImGUILayerActive &&
+	if (VulkanRenderer::EditorModeFlag &&
+		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
@@ -30,13 +31,17 @@ void BlinnPhongRenderer::Update()
 void BlinnPhongRenderer::RebuildRenderers()
 {
 	meshPickerRenderPass.RebuildSwapChain();
+	blinnPhongRenderPass.RebuildSwapChain();
 	frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderPass.RenderedTexture);
 }
 
 void BlinnPhongRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	meshPickerRenderPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	if (VulkanRenderer::EditorModeFlag)
+	{
+		meshPickerRenderPass.Draw(sceneProperites);
+		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	}
 
 	blinnPhongRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());

@@ -85,6 +85,8 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
     VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
     colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     colorBlendAttachment.blendEnable = VK_FALSE;
+
+    ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(colorBlendAttachment);
 
     {

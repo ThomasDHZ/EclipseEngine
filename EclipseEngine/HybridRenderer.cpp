@@ -27,7 +27,8 @@ void HybridRenderer::StartUp()
 
 void HybridRenderer::Update()
 {
-	if (!VulkanRenderer::ImGUILayerActive &&
+	if (VulkanRenderer::EditorModeFlag &&
+		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
 		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
@@ -56,8 +57,11 @@ void HybridRenderer::RebuildRenderers()
 
 void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	meshPickerRenderPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	if (VulkanRenderer::EditorModeFlag)
+	{
+		meshPickerRenderPass.Draw(sceneProperites);
+		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	}
 
 	GBufferRenderPass.Draw(sceneProperites);
 	CommandBufferSubmitList.emplace_back(GBufferRenderPass.GetCommandBuffer());
@@ -77,5 +81,6 @@ void HybridRenderer::Destroy()
 	raytraceHybridPass.Destroy();
 	meshPickerRenderPass.Destroy();
 	GBufferRenderPass.Destroy();
+	deferredRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

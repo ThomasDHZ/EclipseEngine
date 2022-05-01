@@ -378,6 +378,9 @@ void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
 void GBufferRenderPass::Destroy()
 {
     PositionTexture->Destroy();
+    TangentTexture->Destroy();
+    BiTangentTexture->Destroy();
+    TBNormalTexture->Destroy();
     NormalTexture->Destroy();
     AlbedoTexture->Destroy();
     SpecularTexture->Destroy();
