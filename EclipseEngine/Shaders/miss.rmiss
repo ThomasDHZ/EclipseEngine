@@ -38,9 +38,9 @@ layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 8) uniform sampler2D TextureMap[];
-
+layout(binding = 9, set = 0) uniform samplerCube CubeMap[];
 void main()
 {
-	rayPayload.color = vec3(0.0f, 0.0f, 1.0f);
+	rayPayload.color = texture(CubeMap[0], gl_WorldRayDirectionEXT).rgb;
 	rayPayload.normal = vec3(0.0f);
 }

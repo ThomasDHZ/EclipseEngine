@@ -1,4 +1,5 @@
 #include "Scene.h"
+
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
@@ -30,8 +31,18 @@ Scene::Scene()
     material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
     MaterialManager::AddMaterial(material2);
 
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
-   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
+    CubeMapLayout cubeMapfiles;
+    cubeMapfiles.Left = "../texture/skybox/right.jpg";
+    cubeMapfiles.Right = "../texture/skybox/left.jpg";
+    cubeMapfiles.Top = "../texture/skybox/top.jpg";
+    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
+    cubeMapfiles.Front = "../texture/skybox/back.jpg";
+    cubeMapfiles.Back = "../texture/skybox/front.jpg";
+    TextureManager::LoadCubeMapTexture(cubeMapfiles);
+
+
+   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
 
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f, 0.0f), 1));

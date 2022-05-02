@@ -80,8 +80,7 @@ void Texture::LoadTexture(std::string TextureLocation, VkFormat format)
 	VkDeviceSize imageSize = Width * Height * 4;
 	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(Width, Height)))) + 1;
 
-	VulkanBuffer StagingBuffer;
-	StagingBuffer.CreateBuffer(pixels, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VulkanBuffer StagingBuffer(pixels, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	VkImageCreateInfo ImageCreateInfo = {};
 	ImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -146,6 +145,10 @@ void Texture::CopyBufferToImage(VkBuffer buffer)
 	BufferImage.imageExtent.height = Height;
 	BufferImage.imageExtent.depth = Depth;
 	BufferImage.imageSubresource.layerCount = 1;
+	if (TextureType == TextureTypeEnum::kCubeMapTexture)
+	{
+		BufferImage.imageSubresource.layerCount = 6;
+	}
 
 	vkCmdCopyBufferToImage(commandBuffer, buffer, Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &BufferImage);
 	VkResult result = VulkanRenderer::EndSingleTimeCommands(commandBuffer);
@@ -170,7 +173,7 @@ void Texture::TransitionImageLayout(VkImageLayout newImageLayout)
 	barrier.subresourceRange.baseMipLevel = 0;
 	barrier.subresourceRange.levelCount = MipMapLevels;
 	barrier.subresourceRange.baseArrayLayer = 0;
-	barrier.subresourceRange.layerCount = 1;
+	barrier.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
 
 	VkPipelineStageFlags sourceStage;

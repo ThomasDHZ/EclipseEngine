@@ -101,6 +101,14 @@ void RaytraceHybridPass::BuildRenderPassPipelines()
         std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
         std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
+        std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
+        const auto cubeMap = TextureManager::GetCubeMapTextureList()[0];
+        VkDescriptorImageInfo cubeMapBuffer;
+        cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        cubeMapBuffer.imageView = cubeMap->View;
+        cubeMapBuffer.sampler = cubeMap->Sampler;
+        CubeMapBufferInfoList.emplace_back(cubeMapBuffer);
+
         AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
         AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
@@ -110,6 +118,7 @@ void RaytraceHybridPass::BuildRenderPassPipelines()
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, PointLightBufferInfoList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, SpotLightBufferInfoList);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 8, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, CubeMapBufferInfoList); 
     }
 
     if (RayTracePipeline == nullptr)

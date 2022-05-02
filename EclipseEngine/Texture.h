@@ -20,6 +20,7 @@ enum TextureTypeEnum
     kDepthTextureMap,
     kAlphaTextureMap,
     kEmissionTextureMap,
+    kCubeMapTexture
 };
 
 class Texture
@@ -29,8 +30,6 @@ private:
     uint64_t TextureID = 0;
     uint64_t TextureBufferIndex = 0;
 
-    void TransitionImageLayout(VkImageLayout newImageLayout);
-    void CopyBufferToImage(VkBuffer buffer);
     void LoadTexture(std::string TextureLocation, VkFormat format);
     void GenerateMipmaps();
 
@@ -49,10 +48,10 @@ protected:
     VkImageLayout TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
-
-
     void GenerateID();
     void CreateTextureImage(VkImageCreateInfo TextureInfo);
+    void TransitionImageLayout(VkImageLayout newImageLayout);
+    void CopyBufferToImage(VkBuffer buffer);
 
 public:
     Texture();

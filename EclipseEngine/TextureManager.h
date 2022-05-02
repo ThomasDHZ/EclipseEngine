@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Texture2D.h"
+#include "CubeMapTexture.h"
 
 
 class TextureManager
@@ -9,11 +10,26 @@ class TextureManager
 private:
 	static VkSampler NullSampler;
 	static std::vector<std::shared_ptr<Texture2D>> Texture2DList;
+	static std::vector<std::shared_ptr<CubeMapTexture>> CubeMapTextureList;
 
 	static std::shared_ptr<Texture2D> IsTexture2DLoaded(std::string name)
 	{
 		uint64_t textureID = 0;
 		for (auto texture : Texture2DList)
+		{
+			if (texture->GetFilePath() == name)
+			{
+				return texture;
+			}
+		}
+
+		return nullptr;
+	}
+
+	static std::shared_ptr<CubeMapTexture> IsCubeMapTextureLoaded(std::string name)
+	{
+		uint64_t textureID = 0;
+		for (auto texture : CubeMapTextureList)
 		{
 			if (texture->GetFilePath() == name)
 			{
@@ -94,6 +110,22 @@ public:
 		return texture;
 	}
 
+	static std::shared_ptr<CubeMapTexture> LoadCubeMapTexture(const CubeMapLayout& cubeMapLayout)
+	{
+		std::shared_ptr<CubeMapTexture> isTextureLoaded = IsCubeMapTextureLoaded(cubeMapLayout.Left);
+		if (isTextureLoaded != nullptr)
+		{
+			return isTextureLoaded;
+		}
+
+		const std::shared_ptr<CubeMapTexture> texture = std::make_shared<CubeMapTexture>(CubeMapTexture(cubeMapLayout));
+		CubeMapTextureList.emplace_back(texture);
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+		return texture;
+	}
+
 	static std::vector<VkDescriptorImageInfo>  GetTexturemBufferList()
 	{
 		std::vector<VkDescriptorImageInfo> DescriptorImageList;
@@ -165,12 +197,61 @@ public:
 		return nullptr;
 	}
 
+	static std::vector<std::shared_ptr<CubeMapTexture>> GetCubeMapTextureList()
+	{
+		return CubeMapTextureList;
+	}
+
+	static std::shared_ptr<CubeMapTexture> GetCubeMapTextureByID(uint64_t TextureID)
+	{
+		uint64_t textureBufferIndex = -1;
+		for (auto texture : CubeMapTextureList)
+		{
+			if (texture->GetTextureID() == TextureID)
+			{
+				textureBufferIndex = texture->GetTextureBufferIndex();
+				break;
+			}
+		}
+
+		if (textureBufferIndex != -1)
+		{
+			return CubeMapTextureList[textureBufferIndex];
+		}
+
+		return nullptr;
+	}
+
+	static std::shared_ptr<CubeMapTexture> GetCubeMapTextureByName(const std::string TextureName)
+	{
+		uint64_t textureBufferIndex = -1;
+		for (auto texture : CubeMapTextureList)
+		{
+			if (texture->GetTextureName() == TextureName)
+			{
+				textureBufferIndex = texture->GetTextureBufferIndex();
+				break;
+			}
+		}
+
+		if (textureBufferIndex != -1)
+		{
+			return CubeMapTextureList[textureBufferIndex];
+		}
+
+		return nullptr;
+	}
+
 	static void Destroy()
 	{
 		vkDestroySampler(VulkanRenderer::GetDevice(), NullSampler, nullptr);
 		NullSampler = VK_NULL_HANDLE;
 
 		for (auto& texture : Texture2DList)
+		{
+			texture->Destroy();
+		}
+		for (auto& texture : CubeMapTextureList)
 		{
 			texture->Destroy();
 		}
