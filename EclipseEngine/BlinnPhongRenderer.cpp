@@ -35,15 +35,15 @@ void BlinnPhongRenderer::RebuildRenderers()
 	frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderPass.RenderedTexture);
 }
 
-void BlinnPhongRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw(sceneProperites);
+		meshPickerRenderPass.Draw(sceneProperties);
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
 
-	blinnPhongRenderPass.Draw(sceneProperites);
+	blinnPhongRenderPass.Draw(sceneProperties, skyboxView);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());
 
 	frameBufferRenderPass.Draw();

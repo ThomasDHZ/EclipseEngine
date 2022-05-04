@@ -152,6 +152,7 @@
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -199,6 +200,7 @@
     <ClCompile Include="RaytraceHybridPass.cpp" />
     <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -216,6 +218,7 @@
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="Light.h" />
@@ -273,6 +276,7 @@
     <ClInclude Include="RaytraceHybridPass.h" />
     <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Texture.h" />
@@ -291,8 +295,12 @@
     <None Include="Shaders\anyhit1.rahit" />
     <None Include="Shaders\closesthit.rchit" />
     <None Include="Shaders\compile.bat" />
+    <None Include="Shaders\CubeMap.frag" />
+    <None Include="Shaders\CubeMap.vert" />
     <None Include="Shaders\DeferredRenderer.frag" />
     <None Include="Shaders\DeferredRenderer.vert" />
+    <None Include="Shaders\EnvironmentToCubeMap.frag" />
+    <None Include="Shaders\EnvironmentToCubeMap.vert" />
     <None Include="Shaders\FrameBuffer.frag" />
     <None Include="Shaders\FrameBuffer.vert" />
     <None Include="Shaders\GBuffer.frag" />

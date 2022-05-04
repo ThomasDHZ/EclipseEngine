@@ -6,6 +6,7 @@
 #include "MeshRendererManager.h"
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
+#include "Skybox.h"
 
 class BlinnPhongRenderPass : public RenderPass
 {
@@ -19,8 +20,11 @@ private:
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	std::shared_ptr<GraphicsPipeline> blinnphongPipeline;
+	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
 	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
+
+	std::shared_ptr<Skybox> skybox;
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
@@ -37,7 +41,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(SceneProperties& sceneProperties);
+	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
 	void Destroy();
 };
 

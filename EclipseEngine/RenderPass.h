@@ -45,6 +45,7 @@ public:
 
 	void OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer);
 	virtual void DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
+	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstSkyBoxView& sceneProperties);
 	virtual void DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();

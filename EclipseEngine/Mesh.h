@@ -11,6 +11,7 @@ enum MeshTypeEnum
 {
 	kUnkown,
 	kPolygon,
+	kSkybox,
 	kLine
 };
 
@@ -43,6 +44,12 @@ class Mesh
 private:
 	static uint64_t MeshIDCounter;
 
+	Pixel MeshColorID = NullPixel;
+
+	void GenerateColorID();
+	void UpdateMeshBottomLevelAccelerationStructure();
+protected:
+
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
@@ -51,7 +58,6 @@ private:
 	uint32_t TriangleCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
-	Pixel MeshColorID = NullPixel;
 
 	MeshTypeEnum meshType;
 
@@ -81,8 +87,6 @@ private:
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
 	void GenerateID();
-	void GenerateColorID();
-	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
 

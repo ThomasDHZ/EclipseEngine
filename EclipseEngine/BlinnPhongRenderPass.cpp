@@ -20,6 +20,9 @@ void BlinnPhongRenderPass::StartUp()
     RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
     DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
 
+    skybox = std::make_shared<Skybox>(Skybox());
+    skybox->StartUp();
+
     BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
@@ -172,7 +175,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.blendEnable = VK_FALSE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -191,6 +194,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+
     {
         //VkDescriptorImageInfo ShadowMapBufferInfo;
         //ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -225,6 +229,44 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
         {
             blinnphongPipeline->Destroy();
             blinnphongPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
+    {
+        VkDescriptorImageInfo SkyboxBufferInfo;
+        SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
+        SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
+
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(ConstSkyBoxView);
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
+
+        if (skyboxPipeline == nullptr)
+        {
+            skyboxPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            skyboxPipeline->Destroy();
+            skyboxPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -317,7 +359,7 @@ void BlinnPhongRenderPass::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties)
+void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -325,10 +367,10 @@ void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties)
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
     std::array<VkClearValue, 5> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[2].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[3].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
+    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
+    clearValues[2].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
+    clearValues[3].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
     clearValues[4].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
@@ -360,6 +402,10 @@ void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties)
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
+        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
+        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
+        DrawSkybox(skyboxPipeline, skybox, skyboxView);
+
         MeshRendererManager::SortByRenderPipeline();
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {

@@ -29,6 +29,7 @@ class Scene
 {
 private:
 	SceneProperties sceneProperites;
+	ConstSkyBoxView cubeMapInfo;
 
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;

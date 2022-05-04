@@ -267,6 +267,12 @@
     <ClCompile Include="CubeMapTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="EnvironmentTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -491,7 +497,13 @@
     <ClInclude Include="DeferredRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="EnvironmentTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
     <ClInclude Include="CubeMapTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -584,6 +596,18 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\GBuffer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\EnvironmentToCubeMap.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\EnvironmentToCubeMap.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\CubeMap.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\CubeMap.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

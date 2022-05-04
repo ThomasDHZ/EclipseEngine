@@ -1,5 +1,5 @@
 #include "Scene.h"
-
+#include "EnvironmentTexture.h"
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
@@ -40,6 +40,7 @@ Scene::Scene()
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
+    std::shared_ptr<EnvironmentTexture> environment = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
@@ -148,6 +149,10 @@ void Scene::Update()
     sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
     sceneProperites.Timer = time;
 
+    cubeMapInfo.view = glm::mat4(glm::mat3(camera2.GetViewMatrix()));
+    cubeMapInfo.proj = glm::perspective(glm::radians(camera2.GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
+    cubeMapInfo.proj[1][1] *= -1;
+
     if (GraphicsDevice::IsRayTracerActive())
     {
         rayTraceRenderer.Update();
@@ -155,8 +160,8 @@ void Scene::Update()
     else
     {
         //renderer2D.Update();
-        hybridRenderer.Update();
-      //blinnPhongRenderer.Update();
+      //  hybridRenderer.Update();
+      blinnPhongRenderer.Update();
         
     }
 
@@ -228,8 +233,8 @@ void Scene::Draw()
     else
     {
         //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-       // blinnPhongRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-        hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+       blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+      //  hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();
