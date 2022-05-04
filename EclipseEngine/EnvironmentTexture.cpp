@@ -34,8 +34,10 @@ void EnvironmentTexture::LoadTexture(std::string TextureLocation, VkFormat textu
 	std::vector<unsigned char*> textureData;
 	int texChannels;
 
+	stbi_set_flip_vertically_on_load(true);
 	auto data = stbi_loadf(TextureLocation.c_str(), &Width, &Height, &texChannels, STBI_rgb_alpha);
 	const VkDeviceSize imageSize = Width * Height * 4 * sizeof(float);
+	stbi_set_flip_vertically_on_load(false);
 
 	VulkanBuffer StagingBuffer(&data[0], imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 

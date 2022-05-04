@@ -34,16 +34,16 @@ void PBRRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
-    VkAttachmentDescription ColorAttachment = {};
-    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    ColorAttachment.samples = SampleCount;
-    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(ColorAttachment);
+    VkAttachmentDescription AlebdoAttachment = {};
+    AlebdoAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    AlebdoAttachment.samples = SampleCount;
+    AlebdoAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    AlebdoAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    AlebdoAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    AlebdoAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    AlebdoAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    AlebdoAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(AlebdoAttachment);
 
     VkAttachmentDescription BloomAttachment = {};
     BloomAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
@@ -141,6 +141,7 @@ void PBRRenderPass::BuildRenderPass()
     {
         throw std::runtime_error("Failed to create Buffer RenderPass.");
     }
+
 }
 
 void PBRRenderPass::CreateRendererFramebuffers()
@@ -220,12 +221,12 @@ void PBRRenderPass::BuildRenderPassPipelines()
 
         if (skyboxPipeline == nullptr)
         {
-            skyboxPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            skyboxPipeline = std::make_shared<SkyBoxRenderPipeline>(SkyBoxRenderPipeline(renderPass, RenderPassResolution, SampleCount));
         }
         else
         {
             skyboxPipeline->Destroy();
-            skyboxPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            skyboxPipeline->UpdateGraphicsPipeLine(renderPass, RenderPassResolution, SampleCount);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -334,9 +335,9 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
-        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
-        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
-        DrawSkybox(skyboxPipeline, skybox, skyboxView);
+        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvirnmentToCubePipeline->GetShaderPipeline());
+        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvirnmentToCubePipeline->GetShaderPipelineLayout(), 0, 1, EnvirnmentToCubePipeline->GetDescriptorSetPtr(), 0, nullptr);
+        DrawSkybox(EnvirnmentToCubePipeline, skybox, skyboxView);
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {

@@ -3,6 +3,7 @@
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
 #include "Skybox.h"
+#include "CubeMapPipeline.h"
 
 
 class PBRRenderPass : public RenderPass
@@ -17,7 +18,7 @@ private:
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	std::shared_ptr<GraphicsPipeline> EnvirnmentToCubePipeline;
-	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
+	std::shared_ptr<SkyBoxRenderPipeline> skyboxPipeline;
 
 	std::shared_ptr<Skybox> skybox;
 
