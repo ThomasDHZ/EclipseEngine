@@ -24,6 +24,7 @@
 #include "MeshRenderer.h"
 #include "LightManager.h"
 #include "HybridRenderer.h"
+#include "PBRRenderer.h"
 
 class Scene
 {
@@ -33,9 +34,11 @@ private:
 
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;
+
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 	HybridRenderer hybridRenderer;
+	PBRRenderer pbrRenderer;
 
 public:
 	Scene();

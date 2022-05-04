@@ -273,6 +273,12 @@
     <ClCompile Include="Skybox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PBRRenderer.cpp">
+      <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -505,6 +511,12 @@
     </ClInclude>
     <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRRenderer.h">
+      <Filter>Header Files\Renderer\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -40,7 +40,7 @@ Scene::Scene()
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
-    std::shared_ptr<EnvironmentTexture> environment = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    TextureManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
@@ -115,6 +115,7 @@ Scene::Scene()
     renderer2D.StartUp();
     blinnPhongRenderer.StartUp();
     hybridRenderer.StartUp();
+    pbrRenderer.StartUp();
     rayTraceRenderer.StartUp();
 }
 
@@ -161,7 +162,8 @@ void Scene::Update()
     {
         //renderer2D.Update();
       //  hybridRenderer.Update();
-      blinnPhongRenderer.Update();
+     // blinnPhongRenderer.Update();
+        pbrRenderer.Update();
         
     }
 
@@ -208,6 +210,7 @@ void Scene::RebuildRenderers()
     renderer2D.RebuildRenderers();
     blinnPhongRenderer.RebuildRenderers();
     hybridRenderer.RebuildRenderers();
+    pbrRenderer.RebuildRenderers();
     rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
@@ -233,8 +236,9 @@ void Scene::Draw()
     else
     {
         //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-       blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+     //  blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
       //  hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();
@@ -255,6 +259,7 @@ void Scene::Destroy()
     renderer2D.Destroy();
     blinnPhongRenderer.Destroy();
     hybridRenderer.Destroy();
+    pbrRenderer.Destroy();
     rayTraceRenderer.Destroy();
     InterfaceRenderPass::Destroy();
 }

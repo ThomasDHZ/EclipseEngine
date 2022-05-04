@@ -3,7 +3,7 @@
 #include <memory>
 #include "Texture2D.h"
 #include "CubeMapTexture.h"
-
+#include "EnvironmentTexture.h"
 
 class TextureManager
 {
@@ -49,6 +49,7 @@ private:
 	}
 
 public: 
+	static std::shared_ptr<EnvironmentTexture> EnvironmentTexture;
 
 	static void StartUp()
 	{

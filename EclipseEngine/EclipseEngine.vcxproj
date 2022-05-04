@@ -162,6 +162,8 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="PBRRenderer.cpp" />
+    <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
@@ -229,6 +231,8 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="PBRRenderer.h" />
+    <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="ReadableTexture.h" />
     <ClInclude Include="RenderPass.h" />

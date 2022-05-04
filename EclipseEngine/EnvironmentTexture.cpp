@@ -78,7 +78,7 @@ void EnvironmentTexture::CreateTextureView(VkFormat textureFormat)
 	TextureImageViewInfo.subresourceRange.baseMipLevel = 0;
 	TextureImageViewInfo.subresourceRange.levelCount = 1;
 	TextureImageViewInfo.subresourceRange.baseArrayLayer = 0;
-	TextureImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
+	TextureImageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
 	TextureImageViewInfo.subresourceRange.layerCount = 1;
 
 	if (vkCreateImageView(VulkanRenderer::GetDevice(), &TextureImageViewInfo, nullptr, &View)) {
