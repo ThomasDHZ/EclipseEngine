@@ -149,10 +149,10 @@
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Bone.cpp" />
-    <ClCompile Include="CubeMapPipeline.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
@@ -167,6 +167,7 @@
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
+    <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="BlinnPhongRenderPass.cpp" />
@@ -218,10 +219,10 @@
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Converters.h" />
-    <ClInclude Include="CubeMapPipeline.h" />
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="ReadableTexture.h" />
+    <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="BlinnPhongRenderPass.h" />

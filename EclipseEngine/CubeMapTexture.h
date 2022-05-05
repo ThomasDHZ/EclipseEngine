@@ -20,5 +20,6 @@ private:
 public:
 	CubeMapTexture();
 	CubeMapTexture(CubeMapLayout CubeMapFiles);
+	CubeMapTexture(glm::ivec2 TextureResolution, TextureTypeEnum textureType);
 	~CubeMapTexture();
 };

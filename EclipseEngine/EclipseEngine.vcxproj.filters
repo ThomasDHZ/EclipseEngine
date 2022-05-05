@@ -279,8 +279,11 @@
     <ClCompile Include="PBRRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="CubeMapPipeline.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedCubeMapTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -521,8 +524,11 @@
     <ClInclude Include="PBRRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="CubeMapPipeline.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="EnvironmentToCubeRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedCubeMapTexture.h">
+      <Filter>Header Files\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

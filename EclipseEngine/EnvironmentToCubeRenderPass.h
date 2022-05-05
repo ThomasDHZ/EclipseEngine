@@ -5,8 +5,7 @@
 #include "Skybox.h"
 #include "RenderedCubeMapTexture.h"
 
-
-class PBRRenderPass : public RenderPass
+class EnvironmentToCubeRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -14,27 +13,22 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedColorTexture> BloomTexture;
-
-	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
+	std::shared_ptr<GraphicsPipeline> EnvirnmentToCubePipeline;
 
 	std::shared_ptr<Skybox> skybox;
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap);
+	void BuildRenderPassPipelines();
 
 public:
-	PBRRenderPass();
-	~PBRRenderPass();
+	EnvironmentToCubeRenderPass();
+	~EnvironmentToCubeRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
-	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap;
 
-	void StartUp(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap);
-	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap);
+	void StartUp();
+	void RebuildSwapChain();
 
 	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
 	void Destroy();

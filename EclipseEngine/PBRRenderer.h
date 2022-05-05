@@ -2,11 +2,13 @@
 #include "MeshPickerRenderPass3D.h"
 #include "FrameBufferRenderPass.h"
 #include "PBRRenderPass.h"
+#include "EnvironmentToCubeRenderPass.h"
 
 class PBRRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	PBRRenderPass pbrRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 

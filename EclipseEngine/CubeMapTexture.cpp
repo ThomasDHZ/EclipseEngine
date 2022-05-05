@@ -25,6 +25,21 @@ CubeMapTexture::CubeMapTexture(CubeMapLayout CubeMapFiles) : Texture(TextureType
 	CreateTextureSampler();
 }
 
+CubeMapTexture::CubeMapTexture(glm::ivec2 TextureResolution, TextureTypeEnum textureType) : Texture(textureType)
+{
+	FilePath = "3";
+	TextureName = "w";
+	GenerateID();
+
+	Width = TextureResolution.x;
+	Height = TextureResolution.y;
+	Depth = 1;
+
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+}
+
 CubeMapTexture::~CubeMapTexture()
 {
 }
