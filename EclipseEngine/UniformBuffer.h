@@ -34,6 +34,12 @@ struct SpotLightBuffer {
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 };
 
+struct PrefilterSkyboxSettings
+{
+	alignas(4) uint32_t SkyboxSize = 0.0f;
+	alignas(4) float roughness = 0.0f;
+};
+
 struct SceneProperties
 {
 	alignas(4)  uint32_t MeshIndex = 0;

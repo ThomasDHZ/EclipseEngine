@@ -12,6 +12,8 @@ void PBRRenderer::StartUp()
 {
 	meshPickerRenderPass.StartUp();
 	environmentToCubeRenderPass.StartUp();
+	irradianceRenderPass.StartUp(512.0f);
+	prefilterRenderPass.StartUp(512.0f);
 	pbrRenderPass.StartUp(environmentToCubeRenderPass.RenderedCubeMap);
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
@@ -33,6 +35,8 @@ void PBRRenderer::RebuildRenderers()
 {
 	meshPickerRenderPass.RebuildSwapChain();
 	environmentToCubeRenderPass.RebuildSwapChain();
+	irradianceRenderPass.RebuildSwapChain(512.0f);
+	prefilterRenderPass.RebuildSwapChain(512.0f);
 	pbrRenderPass.RebuildSwapChain(environmentToCubeRenderPass.RenderedCubeMap);
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
@@ -48,6 +52,12 @@ void PBRRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skybox
 	environmentToCubeRenderPass.Draw(sceneProperties, skyboxView);
 	CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.GetCommandBuffer());
 
+	irradianceRenderPass.Draw();
+	CommandBufferSubmitList.emplace_back(irradianceRenderPass.GetCommandBuffer());
+
+	prefilterRenderPass.Draw();
+	CommandBufferSubmitList.emplace_back(prefilterRenderPass.GetCommandBuffer());
+
 	pbrRenderPass.Draw(sceneProperties, skyboxView);
 	CommandBufferSubmitList.emplace_back(pbrRenderPass.GetCommandBuffer());
 
@@ -59,6 +69,8 @@ void PBRRenderer::Destroy()
 {
 	meshPickerRenderPass.Destroy();
 	environmentToCubeRenderPass.Destroy();
+	irradianceRenderPass.Destroy();
+	prefilterRenderPass.Destroy();
 	pbrRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

@@ -156,6 +156,7 @@
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
+    <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineRenderer.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
@@ -226,6 +228,7 @@
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
+    <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LineRenderer.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="ReadableTexture.h" />
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderPass.h" />
@@ -314,6 +318,8 @@
     <None Include="Shaders\GBuffer.frag" />
     <None Include="Shaders\GBuffer.vert" />
     <None Include="Shaders\hybridclosesthit.rchit" />
+    <None Include="Shaders\IrradianceShader.frag" />
+    <None Include="Shaders\IrradianceShader.vert" />
     <None Include="Shaders\Lights.glsl" />
     <None Include="Shaders\LineRendererShader.frag" />
     <None Include="Shaders\LineRendererShader.vert" />
@@ -323,6 +329,8 @@
     <None Include="Shaders\MeshPicker3D.vert" />
     <None Include="Shaders\MeshProperties.glsl" />
     <None Include="Shaders\miss.rmiss" />
+    <None Include="Shaders\PrefilterShader.frag" />
+    <None Include="Shaders\PrefilterShader.vert" />
     <None Include="Shaders\raygen.rgen" />
     <None Include="Shaders\Renderer2D.frag" />
     <None Include="Shaders\Renderer2D.vert" />

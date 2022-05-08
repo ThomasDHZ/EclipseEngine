@@ -43,8 +43,9 @@ Scene::Scene()
     TextureManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
 
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", glm::vec2(0.0f, 0.0f), 1));
     //auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
@@ -162,7 +163,7 @@ void Scene::Update()
     {
         //renderer2D.Update();
       //  hybridRenderer.Update();
-     // blinnPhongRenderer.Update();
+      //blinnPhongRenderer.Update();
         pbrRenderer.Update();
         
     }
@@ -236,9 +237,9 @@ void Scene::Draw()
     else
     {
         //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-     //  blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+      // blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
       //  hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-        pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+       pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();

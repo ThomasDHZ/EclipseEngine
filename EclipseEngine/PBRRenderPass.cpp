@@ -199,8 +199,8 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
     {
         VkDescriptorImageInfo SkyboxBufferInfo;
         SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        SkyboxBufferInfo.imageView = RenderedCubeMap->View;
-        SkyboxBufferInfo.sampler = RenderedCubeMap->Sampler;
+        SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
+        SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));

@@ -50,11 +50,20 @@ void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::share
     MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);
 }
 
+void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh)
+{
+    MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh);
+}
+
+void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, PrefilterSkyboxSettings& prefilterSkyboxSettings)
+{
+    MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, prefilterSkyboxSettings);
+}
+
 void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstSkyBoxView& skyboxView)
 {
     MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, skyboxView);
 }
-
 
 void RenderPass::SetUpCommandBuffers()
 {
