@@ -5,12 +5,14 @@
 #include "EnvironmentToCubeRenderPass.h"
 #include "IrradianceRenderPass.h"
 #include "PrefilterRenderPass.h"
+#include "BRDFRenderPass.h"
 
 class PBRRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	BRDFRenderPass brdfRenderPass;
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;

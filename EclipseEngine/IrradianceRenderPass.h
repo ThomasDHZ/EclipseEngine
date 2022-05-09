@@ -21,7 +21,6 @@ public:
 
 	void StartUp(uint32_t cubeMapSize);
 	void RebuildSwapChain(uint32_t cubeMapSize);
-
 	void Draw();
 	void Destroy();
 };

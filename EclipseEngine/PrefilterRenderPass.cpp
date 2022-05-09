@@ -191,14 +191,8 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 
     prefilterPipeline->Destroy();
 
-    vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
-    renderPass = VK_NULL_HANDLE;
 
-    for (auto& framebuffer : SwapChainFramebuffers)
-    {
-        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
-        framebuffer = VK_NULL_HANDLE;
-    }
+    RenderPass::Destroy();
 
     BuildRenderPass();
     CreateRendererFramebuffers();

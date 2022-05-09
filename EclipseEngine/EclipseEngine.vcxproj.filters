@@ -291,6 +291,9 @@
     <ClCompile Include="IrradianceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="BRDFRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -542,6 +545,9 @@
     <ClInclude Include="PrefilterRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="BRDFRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">
@@ -656,6 +662,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\PrefilterShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\BRDFShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\BRDFShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

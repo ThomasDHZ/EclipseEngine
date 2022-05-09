@@ -1,22 +1,17 @@
-#include "IrradianceRenderPass.h"
-#include "LightManager.h"
+#include "BRDFRenderPass.h"
 
-IrradianceRenderPass::IrradianceRenderPass() : RenderPass()
+BRDFRenderPass::BRDFRenderPass() : RenderPass()
 {
 }
 
-IrradianceRenderPass::~IrradianceRenderPass()
+BRDFRenderPass::~BRDFRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
+void BRDFRenderPass::StartUp(uint32_t textureSize)
 {
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    RenderedCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    RenderedCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-    skybox = std::make_shared<Skybox>(Skybox());
-    skybox->StartUp();
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    BRDFMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -25,7 +20,7 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
     Draw();
 }
 
-void IrradianceRenderPass::BuildRenderPass()
+void BRDFRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
@@ -70,17 +65,6 @@ void IrradianceRenderPass::BuildRenderPass()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
-
-    const uint32_t viewMask = 0b00111111;
-    const uint32_t correlationMask = 0b00111111;
-
-    VkRenderPassMultiviewCreateInfo createInfo{};
-    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
-    createInfo.subpassCount = 1;
-    createInfo.pViewMasks = &viewMask;
-    createInfo.correlationMaskCount = 1;
-    createInfo.pCorrelationMasks = &correlationMask;
-
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -89,22 +73,21 @@ void IrradianceRenderPass::BuildRenderPass()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
-    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("failed to create GBuffer RenderPass!");
+        throw std::runtime_error("failed to create BRDF RenderPass!");
     }
 }
 
-void IrradianceRenderPass::CreateRendererFramebuffers()
+void BRDFRenderPass::CreateRendererFramebuffers()
 {
     SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
 
     for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
     {
         std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(RenderedCubeMap->View);
+        AttachmentList.emplace_back(BRDFMap->View);
 
         VkFramebufferCreateInfo frameBufferCreateInfo = {};
         frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -122,8 +105,9 @@ void IrradianceRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines()
+void BRDFRenderPass::BuildRenderPassPipelines()
 {
+
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     ColorAttachment.blendEnable = VK_FALSE;
@@ -146,8 +130,8 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
@@ -157,17 +141,18 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = 0;
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
-        if (irradiancePipeline == nullptr)
+        if (brdfPipeline == nullptr)
         {
-            irradiancePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            brdfPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
         }
         else
         {
-            irradiancePipeline->Destroy();
-            irradiancePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            brdfPipeline->Destroy();
+            brdfPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -177,16 +162,12 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
 {
-    RenderedCubeMap->Destroy();
-    irradiancePipeline->Destroy();
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    BRDFMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     RenderPass::Destroy();
-
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    RenderedCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    RenderedCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -195,7 +176,7 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     Draw();
 }
 
-void IrradianceRenderPass::Draw()
+void BRDFRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -227,23 +208,21 @@ void IrradianceRenderPass::Draw()
     rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
 
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
+        throw std::runtime_error("Failed to begin recording command buffer.");
     }
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, irradiancePipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, irradiancePipeline->GetShaderPipelineLayout(), 0, 1, irradiancePipeline->GetDescriptorSetPtr(), 0, nullptr);
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, brdfPipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, brdfPipeline->GetShaderPipelineLayout(), 0, 1, brdfPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    DrawSkybox(irradiancePipeline, skybox);
+    vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 6, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
+        throw std::runtime_error("Failed to record command buffer.");
     }
 }
 
-void IrradianceRenderPass::Destroy()
+void BRDFRenderPass::Destroy()
 {
-    RenderedCubeMap->Destroy();
-    irradiancePipeline->Destroy();
-    RenderPass::Destroy();
+
 }
