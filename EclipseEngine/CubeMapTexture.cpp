@@ -46,7 +46,7 @@ CubeMapTexture::~CubeMapTexture()
 
 void CubeMapTexture::LoadTexture(CubeMapLayout CubeMapFiles, VkFormat textureFormat)
 {
-	std::vector<unsigned char*> textureData;
+	std::vector<byte*> textureData;
 	int texChannels;
 
 	textureData.emplace_back(stbi_load(CubeMapFiles.Left.c_str(), &Width, &Height, &texChannels, STBI_rgb_alpha));

@@ -10,7 +10,7 @@ PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap)
+void PBRRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -26,7 +26,7 @@ void PBRRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> RenderedCube
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(RenderedCubeMap);
+    BuildRenderPassPipelines(BRDFMap, IrradianceMap, PrefilterMap);
     SetUpCommandBuffers();
 }
 
@@ -173,7 +173,7 @@ void PBRRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap)
+void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -189,13 +189,67 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
     ColorAttachmentList.resize(2, ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, ModelManager::GetAccelerationStructureHandlePtr());
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+
+    VkDescriptorImageInfo IrradianceMapBuffer;
+    IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    IrradianceMapBuffer.imageView = IrradianceMap->View;
+    IrradianceMapBuffer.sampler = IrradianceMap->Sampler;
+
+    VkDescriptorImageInfo PrefilterBuffer;
+    PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    PrefilterBuffer.imageView = PrefilterMap->View;
+    PrefilterBuffer.sampler = PrefilterMap->Sampler;
+
+    VkDescriptorImageInfo BRDFBuffer;
+    BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    BRDFBuffer.imageView = BRDFMap->View;
+    BRDFBuffer.sampler = BRDFMap->Sampler;
+
+    {
+
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PBRRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PBRRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+
+        if (pbrPipeline == nullptr)
+        {
+            pbrPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            pbrPipeline->Destroy();
+            pbrPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
     {
         VkDescriptorImageInfo SkyboxBufferInfo;
         SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -234,9 +288,74 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
+    {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRendererShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderLine;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
+
+        if (drawLinePipeline == nullptr)
+        {
+            drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            drawLinePipeline->Destroy();
+            drawLinePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
+    {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderWireFrame;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+
+        if (wireframePipeline == nullptr)
+        {
+            wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            wireframePipeline->Destroy();
+            wireframePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
 }
 
-void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap)
+void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -250,7 +369,7 @@ void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> Ren
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(RenderedCubeMap);
+    BuildRenderPassPipelines(BRDFMap, IrradianceMap, PrefilterMap);
     SetUpCommandBuffers();
 }
 
@@ -300,6 +419,37 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
         DrawSkybox(skyboxPipeline, skybox, skyboxView);
+
+        MeshRendererManager::SortByRenderPipeline();
+        for (auto& mesh : MeshRendererManager::GetMeshList())
+        {
+            switch (mesh->GetMeshType())
+            {
+            case MeshTypeEnum::kPolygon:
+            {
+                if (VulkanRenderer::WireframeModeFlag)
+                {
+                    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
+                    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                    DrawMesh(wireframePipeline, mesh, sceneProperties);
+                }
+                else
+                {
+                    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
+                    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                    DrawMesh(pbrPipeline, mesh, sceneProperties);
+                }
+                break;
+            }
+            case MeshTypeEnum::kLine:
+            {
+                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
+                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                DrawLine(drawLinePipeline, mesh, sceneProperties);
+                break;
+            }
+            }
+        }
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {

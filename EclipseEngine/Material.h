@@ -14,6 +14,12 @@ struct MaterialProperties
 	float Shininess = 32;
 	float Reflectivness = 0.0f;
 
+	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	float Matallic = 0.5f;
+	float Roughness = 0.5f;
+	float AmbientOcclusion = 0.0f;
+	float Alpha = 1.0f;
+
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
 	std::shared_ptr<Texture> SpecularMap = nullptr;
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
@@ -34,6 +40,12 @@ struct MaterialBufferData
 	alignas(16) glm::vec3 Specular = glm::vec3(1.0f);
 	alignas(4) float Shininess = 32;
 	alignas(4) float Reflectivness = 0.0f;
+
+	alignas(16) glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	alignas(4) float Matallic = 0.5f;
+	alignas(4) float Roughness = 0.5f;
+	alignas(4) float AmbientOcclusion = 0.0f;
+	alignas(4) float Alpha = 1.0f;
 
 	alignas(4) uint32_t DiffuseMapID = DefaultTextureID;
 	alignas(4) uint32_t SpecularMapID = DefaultTextureID;
@@ -57,11 +69,17 @@ private:
     uint64_t MaterialID = 0;
     uint64_t MaterialBufferIndex = 0;
 
-	alignas(16) glm::vec3 Ambient = glm::vec3(0.2f);
-	alignas(16) glm::vec3 Diffuse = glm::vec3(0.6f);
-	alignas(16) glm::vec3 Specular = glm::vec3(1.0f);
-	alignas(4) float Shininess = 32;
-	alignas(4) float Reflectivness = 0.0f;
+	glm::vec3 Ambient = glm::vec3(0.2f);
+	glm::vec3 Diffuse = glm::vec3(0.6f);
+	glm::vec3 Specular = glm::vec3(1.0f);
+	float Shininess = 32;
+	float Reflectivness = 0.0f;
+
+	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	float Matallic = 0.5f;
+	float Roughness = 0.5f;
+	float AmbientOcclusion = 0.0f;
+	float Alpha = 1.0f;
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
 	std::shared_ptr<Texture> SpecularMap = nullptr;
@@ -74,6 +92,9 @@ private:
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 	std::shared_ptr<Texture> ShadowMap = nullptr;
+
+
+
 
 	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;

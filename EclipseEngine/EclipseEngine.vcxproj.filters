@@ -670,5 +670,11 @@
     <None Include="Shaders\BRDFShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="Shaders\PBRRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\PBRRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

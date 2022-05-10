@@ -6,6 +6,12 @@ struct MaterialProperties
 	float Shininess;
 	float Reflectivness;
 
+	vec3 Albedo;
+	float Matallic;
+	float Roughness;
+	float AmbientOcclusion;
+	float Alpha;
+
 	uint DiffuseMapID;
 	uint SpecularMapID;
 	uint AlbedoMapID;

@@ -15,7 +15,7 @@ void PBRRenderer::StartUp()
 	brdfRenderPass.StartUp(512.0f);
 	irradianceRenderPass.StartUp(512.0f);
 	prefilterRenderPass.StartUp(512.0f);
-	pbrRenderPass.StartUp(environmentToCubeRenderPass.RenderedCubeMap);
+	pbrRenderPass.StartUp(brdfRenderPass.BRDFMap, irradianceRenderPass.RenderedCubeMap, prefilterRenderPass.RenderedCubeMap);
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
 
@@ -39,7 +39,7 @@ void PBRRenderer::RebuildRenderers()
 	brdfRenderPass.RebuildSwapChain(512.0f);
 	irradianceRenderPass.RebuildSwapChain(512.0f);
 	prefilterRenderPass.RebuildSwapChain(512.0f);
-	pbrRenderPass.RebuildSwapChain(environmentToCubeRenderPass.RenderedCubeMap);
+	pbrRenderPass.RebuildSwapChain(brdfRenderPass.BRDFMap, irradianceRenderPass.RenderedCubeMap, prefilterRenderPass.RenderedCubeMap);
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
 
