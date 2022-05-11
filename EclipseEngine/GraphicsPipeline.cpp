@@ -489,6 +489,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     {
         if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
         {
             bindingDescription = MeshVertex::getBindingDescription();
@@ -542,16 +543,23 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
     if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
     {
-        rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
+        {
+            rasterizer.cullMode = VK_CULL_MODE_NONE;
+        }
+        else
+        {
+            rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+        }
     }
     else
     {
         rasterizer.cullMode = VK_CULL_MODE_NONE;
     }
 
-
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
-        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox)
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
     {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
