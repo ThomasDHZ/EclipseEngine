@@ -109,7 +109,7 @@ public:
 	Material(nlohmann::json& json);
 	~Material();
 
-	void Update(float DeltaTime);
+	void Update();
 	void Destroy();
 
 	void LoadDiffuseMap(const std::string FilePath);

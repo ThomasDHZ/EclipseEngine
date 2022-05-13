@@ -62,7 +62,6 @@ public:
 	{
 		for (auto obj : objList)
 		{
-			MaterialManager::Update(DeltaTime);
 			obj->Update(DeltaTime);
 		}
 	}

@@ -156,7 +156,7 @@ Material::~Material()
 {
 }
 
-void Material::Update(float DeltaTime)
+void Material::Update()
 {
 
 	if (DiffuseMap != nullptr)
@@ -179,9 +179,9 @@ void Material::Update(float DeltaTime)
 	{
 		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
 	}
-	if (RoughnessMap != nullptr)
+	if (AmbientOcclusionMap != nullptr)
 	{
-		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+		materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
 	}
 	if (NormalMap != nullptr)
 	{

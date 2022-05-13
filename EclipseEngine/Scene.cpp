@@ -119,6 +119,7 @@ Scene::Scene()
     //GameObjectManager::AddGameObject(obj5);
     //nlohmann::json ab = obj->ToJson();
     //GameObject adsf = GameObject(ab);
+    MaterialManager::Update();
     MeshRendererManager::Update();
     ModelManager::Update();
 
@@ -155,6 +156,7 @@ void Scene::Update()
 
     auto time = glfwGetTime();
     GameObjectManager::Update(time);
+    MaterialManager::Update();
     MeshRendererManager::Update();
     ModelManager::Update();
     LightManager::Update();

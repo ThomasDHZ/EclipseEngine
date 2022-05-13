@@ -56,11 +56,11 @@ public:
 		return materialID;
 	}
 
-	static void Update(float DeltaTime)
+	static void Update()
 	{
 		for (auto& material : MaterialList)
 		{
-			material->Update(DeltaTime);
+			material->Update();
 		}
 	}
 
