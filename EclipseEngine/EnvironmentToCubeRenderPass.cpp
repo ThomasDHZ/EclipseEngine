@@ -71,16 +71,6 @@ void EnvironmentToCubeRenderPass::BuildRenderPass()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
-    const uint32_t viewMask = 0b00111111;
-    const uint32_t correlationMask = 0b00111111;
-
-    VkRenderPassMultiviewCreateInfo MultiviewCreateInfo{};
-    MultiviewCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
-    MultiviewCreateInfo.subpassCount = 1;
-    MultiviewCreateInfo.pViewMasks = &viewMask;
-    MultiviewCreateInfo.correlationMaskCount = 1;
-    MultiviewCreateInfo.pCorrelationMasks = &correlationMask;
-
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -89,7 +79,6 @@ void EnvironmentToCubeRenderPass::BuildRenderPass()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
-    renderPassInfo.pNext = &MultiviewCreateInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {

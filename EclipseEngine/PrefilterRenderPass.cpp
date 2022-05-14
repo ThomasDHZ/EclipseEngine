@@ -27,7 +27,6 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void PrefilterRenderPass::BuildRenderPass()
@@ -198,7 +197,6 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void PrefilterRenderPass::Draw()

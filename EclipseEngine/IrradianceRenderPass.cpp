@@ -22,7 +22,6 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void IrradianceRenderPass::BuildRenderPass()
@@ -192,7 +191,6 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void IrradianceRenderPass::Draw()

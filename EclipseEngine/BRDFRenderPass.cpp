@@ -17,7 +17,6 @@ void BRDFRenderPass::StartUp(uint32_t textureSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void BRDFRenderPass::BuildRenderPass()
@@ -173,7 +172,6 @@ void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
 }
 
 void BRDFRenderPass::Draw()
