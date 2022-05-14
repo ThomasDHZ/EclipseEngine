@@ -87,6 +87,7 @@ public:
     uint64_t GetTextureID() { return TextureID; }
     VkImageView GetView() { return View; }
     VkSampler GetSampler() { return Sampler; }
+    VkImageLayout GetImageLayout() { return TextureImageLayout; }
     VkImageView* GetViewPtr() { return &View; }
     VkSampler* GetSamplerPtr() { return &Sampler; }
     uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }

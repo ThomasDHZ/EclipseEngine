@@ -85,6 +85,8 @@ void RenderedCubeMapTexture::RecreateRendererTexture(glm::ivec2 TextureResolutio
     Width = TextureResolution.x;
     Height = TextureResolution.y;
 
+    TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
     Texture::Destroy();
     CreateTextureImage();
     CreateTextureView();

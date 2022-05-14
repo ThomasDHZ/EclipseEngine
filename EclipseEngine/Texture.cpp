@@ -335,6 +335,7 @@ void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout ne
 	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
 	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
 }
 
 void Texture::UpdateCubeMapLayout(VkImageLayout newImageLayout)
@@ -381,6 +382,7 @@ void Texture::UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout 
 	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
 	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
 }
 
 void Texture::UpdateCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel)
@@ -427,6 +429,7 @@ void Texture::UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout 
 	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
 	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
 }
 
 
