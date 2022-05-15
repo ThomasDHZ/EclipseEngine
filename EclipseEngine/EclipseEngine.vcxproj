@@ -207,6 +207,7 @@
     <ClCompile Include="RaytraceHybridPass.cpp" />
     <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="RaytraceHybridPass.h" />
     <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRenderer.h" />

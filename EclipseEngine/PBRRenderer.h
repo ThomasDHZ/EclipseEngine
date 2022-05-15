@@ -6,6 +6,7 @@
 #include "IrradianceRenderPass.h"
 #include "PrefilterRenderPass.h"
 #include "BRDFRenderPass.h"
+#include "SceneManager.h"
 
 class PBRRenderer
 {

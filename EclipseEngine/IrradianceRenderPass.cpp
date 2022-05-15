@@ -9,18 +9,18 @@ IrradianceRenderPass::~IrradianceRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    RenderedCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    RenderedCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::IrradianceCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     skybox = std::make_shared<Skybox>(Skybox());
     skybox->StartUp();
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(EnvironmentCubeMap);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -103,7 +103,7 @@ void IrradianceRenderPass::CreateRendererFramebuffers()
     for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
     {
         std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(RenderedCubeMap->View);
+        AttachmentList.emplace_back(SceneManager::IrradianceCubeMap->View);
 
         VkFramebufferCreateInfo frameBufferCreateInfo = {};
         frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -121,7 +121,7 @@ void IrradianceRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
+void IrradianceRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -140,8 +140,8 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = EnvironmentCubeMap->View;
-    SkyboxBufferInfo.sampler = EnvironmentCubeMap->Sampler;
+    SkyboxBufferInfo.imageView = SceneManager::CubeMap->View;
+    SkyboxBufferInfo.sampler = SceneManager::CubeMap->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -176,20 +176,20 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 {
-    RenderedCubeMap->Destroy();
+    SceneManager::IrradianceCubeMap->Destroy();
     irradiancePipeline->Destroy();
 
     RenderPass::Destroy();
 
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    RenderedCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    RenderedCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::IrradianceCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(EnvironmentCubeMap);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -241,7 +241,7 @@ void IrradianceRenderPass::Draw()
 
 void IrradianceRenderPass::Destroy()
 {
-    RenderedCubeMap->Destroy();
+    SceneManager::IrradianceCubeMap->Destroy();
     irradiancePipeline->Destroy();
     RenderPass::Destroy();
 }

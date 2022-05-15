@@ -4,6 +4,7 @@
 #include "RenderedDepthTexture.h"
 #include "Skybox.h"
 #include "RenderedCubeMapTexture.h"
+#include "SceneManager.h"
 
 
 class PBRRenderPass : public RenderPass
@@ -26,7 +27,7 @@ private:
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
+	void BuildRenderPassPipelines();
 
 public:
 	PBRRenderPass();
@@ -36,8 +37,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
-	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
+	void StartUp();
+	void RebuildSwapChain();
 
 	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
 	void Destroy();

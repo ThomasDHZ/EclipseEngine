@@ -11,12 +11,13 @@ BRDFRenderPass::~BRDFRenderPass()
 void BRDFRenderPass::StartUp(uint32_t textureSize)
 {
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    BRDFMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    Draw();
 }
 
 void BRDFRenderPass::BuildRenderPass()
@@ -86,7 +87,7 @@ void BRDFRenderPass::CreateRendererFramebuffers()
     for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
     {
         std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(BRDFMap->View);
+        AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
 
         VkFramebufferCreateInfo frameBufferCreateInfo = {};
         frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -164,7 +165,7 @@ void BRDFRenderPass::BuildRenderPassPipelines()
 void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
 {
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    BRDFMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     RenderPass::Destroy();
 
@@ -172,6 +173,7 @@ void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    Draw();
 }
 
 void BRDFRenderPass::Draw()
@@ -218,6 +220,8 @@ void BRDFRenderPass::Draw()
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
+
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
 void BRDFRenderPass::Destroy()

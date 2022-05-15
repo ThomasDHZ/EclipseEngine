@@ -11,11 +11,11 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::StartUp()
 {
 	meshPickerRenderPass.StartUp();
-	environmentToCubeRenderPass.StartUp(2048.0f);
-	brdfRenderPass.StartUp(2048.0f);
-	irradianceRenderPass.StartUp(environmentToCubeRenderPass.RenderedCubeMap, 2048.0f);
-	prefilterRenderPass.StartUp(environmentToCubeRenderPass.RenderedCubeMap, 2048.0f);
-	pbrRenderPass.StartUp(brdfRenderPass.BRDFMap, irradianceRenderPass.RenderedCubeMap, prefilterRenderPass.RenderedCubeMap, environmentToCubeRenderPass.RenderedCubeMap);
+	environmentToCubeRenderPass.StartUp(512.0f);
+	brdfRenderPass.StartUp(512.0f);
+	irradianceRenderPass.StartUp(512.0f);
+	prefilterRenderPass.StartUp(512.0f);
+	pbrRenderPass.StartUp();
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
 
@@ -35,11 +35,11 @@ void PBRRenderer::Update()
 void PBRRenderer::RebuildRenderers()
 {
 	meshPickerRenderPass.RebuildSwapChain();
-	environmentToCubeRenderPass.RebuildSwapChain(2048.0f);
-	brdfRenderPass.RebuildSwapChain(2048.0f);
-	irradianceRenderPass.RebuildSwapChain(environmentToCubeRenderPass.RenderedCubeMap, 2048.0f);
-	prefilterRenderPass.RebuildSwapChain(environmentToCubeRenderPass.RenderedCubeMap, 2048.0f);
-	pbrRenderPass.RebuildSwapChain(brdfRenderPass.BRDFMap, irradianceRenderPass.RenderedCubeMap, prefilterRenderPass.RenderedCubeMap, environmentToCubeRenderPass.RenderedCubeMap);
+	environmentToCubeRenderPass.RebuildSwapChain(512.0f);
+	brdfRenderPass.RebuildSwapChain(512.0f);
+	irradianceRenderPass.RebuildSwapChain(512.0f);
+	prefilterRenderPass.RebuildSwapChain(512.0f);
+	pbrRenderPass.RebuildSwapChain();
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
 
@@ -50,12 +50,6 @@ void PBRRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skybox
 		meshPickerRenderPass.Draw(sceneProperties);
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
-
-	environmentToCubeRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.GetCommandBuffer());
-
-	brdfRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(brdfRenderPass.GetCommandBuffer());
 
 	irradianceRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(irradianceRenderPass.GetCommandBuffer());

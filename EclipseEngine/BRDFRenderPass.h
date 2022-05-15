@@ -13,7 +13,6 @@ public:
 	BRDFRenderPass();
 	~BRDFRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> BRDFMap;
 	std::shared_ptr<GraphicsPipeline> brdfPipeline;
 
 	void StartUp(uint32_t textureSize);

@@ -10,7 +10,7 @@ PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
+void PBRRenderPass::StartUp()
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -26,7 +26,7 @@ void PBRRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(BRDFMap, IrradianceMap, PrefilterMap, EnvironmentCubeMap);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -173,7 +173,7 @@ void PBRRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
+void PBRRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -198,18 +198,18 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTextur
 
     VkDescriptorImageInfo IrradianceMapBuffer;
     IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    IrradianceMapBuffer.imageView = IrradianceMap->View;
-    IrradianceMapBuffer.sampler = IrradianceMap->Sampler;
+    IrradianceMapBuffer.imageView = SceneManager::IrradianceCubeMap->View;
+    IrradianceMapBuffer.sampler = SceneManager::IrradianceCubeMap->Sampler;
 
     VkDescriptorImageInfo PrefilterBuffer;
     PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PrefilterBuffer.imageView = PrefilterMap->View;
-    PrefilterBuffer.sampler = PrefilterMap->Sampler;
+    PrefilterBuffer.imageView = SceneManager::PrefilterCubeMap->View;
+    PrefilterBuffer.sampler = SceneManager::PrefilterCubeMap->Sampler;
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    BRDFBuffer.imageView = BRDFMap->View;
-    BRDFBuffer.sampler = BRDFMap->Sampler;
+    BRDFBuffer.imageView = SceneManager::BRDFTexture->View;
+    BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
 
     {
 
@@ -253,8 +253,8 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTextur
     {
         VkDescriptorImageInfo SkyboxBufferInfo;
         SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        SkyboxBufferInfo.imageView = EnvironmentCubeMap->View;
-        SkyboxBufferInfo.sampler = EnvironmentCubeMap->Sampler;
+        SkyboxBufferInfo.imageView = SceneManager::CubeMap->View;
+        SkyboxBufferInfo.sampler = SceneManager::CubeMap->Sampler;
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -355,7 +355,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTextur
     }
 }
 
-void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
+void PBRRenderPass::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -369,7 +369,7 @@ void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFM
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines(BRDFMap, IrradianceMap, PrefilterMap, EnvironmentCubeMap);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 

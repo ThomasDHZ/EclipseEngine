@@ -140,7 +140,7 @@ Scene::Scene()
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj"));
     auto a2 = obj->GetComponentByType(ComponentType::kMeshRenderer);
     auto b2 = static_cast<MeshRenderer*>(a2.get());
-    b2->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+    b2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
 
 
     GameObjectManager::AddGameObject(obj);

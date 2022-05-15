@@ -4,6 +4,7 @@
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
 #include "ModelManager.h"
+#include "SceneManager.h"
 
 #include <fstream>
 
