@@ -12,7 +12,7 @@ PrefilterRenderPass::~PrefilterRenderPass()
 {
 }
 
-void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
+void PrefilterRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -25,7 +25,7 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(EnvironmentCubeMap);
     SetUpCommandBuffers();
 }
 
@@ -126,7 +126,7 @@ void PrefilterRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void PrefilterRenderPass::BuildRenderPassPipelines()
+void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -145,13 +145,13 @@ void PrefilterRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::EnvironmentTexture->View;
-    SkyboxBufferInfo.sampler = TextureManager::EnvironmentTexture->Sampler;
+    SkyboxBufferInfo.imageView = EnvironmentCubeMap->View;
+    SkyboxBufferInfo.sampler = EnvironmentCubeMap->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PrefilterShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PrefilterShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
@@ -181,7 +181,7 @@ void PrefilterRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void PrefilterRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
 {
     firstRun = true;
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
@@ -195,7 +195,7 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(EnvironmentCubeMap);
     SetUpCommandBuffers();
 }
 

@@ -9,7 +9,7 @@ IrradianceRenderPass::~IrradianceRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
+void IrradianceRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     RenderedCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
@@ -20,7 +20,7 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(EnvironmentCubeMap);
     SetUpCommandBuffers();
 }
 
@@ -121,7 +121,7 @@ void IrradianceRenderPass::CreateRendererFramebuffers()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines()
+void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -140,13 +140,13 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::EnvironmentTexture->View;
-    SkyboxBufferInfo.sampler = TextureManager::EnvironmentTexture->Sampler;
+    SkyboxBufferInfo.imageView = EnvironmentCubeMap->View;
+    SkyboxBufferInfo.sampler = EnvironmentCubeMap->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
@@ -176,7 +176,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void IrradianceRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap, uint32_t cubeMapSize)
 {
     RenderedCubeMap->Destroy();
     irradiancePipeline->Destroy();
@@ -189,7 +189,7 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers();
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(EnvironmentCubeMap);
     SetUpCommandBuffers();
 }
 
