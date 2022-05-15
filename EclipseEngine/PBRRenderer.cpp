@@ -11,10 +11,10 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::StartUp()
 {
 	meshPickerRenderPass.StartUp();
-	environmentToCubeRenderPass.StartUp(512.0f);
-	brdfRenderPass.StartUp(512.0f);
-	irradianceRenderPass.StartUp(512.0f);
-	prefilterRenderPass.StartUp(512.0f);
+	environmentToCubeRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
+	brdfRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
+	irradianceRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
+	prefilterRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
 	pbrRenderPass.StartUp();
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
@@ -35,10 +35,10 @@ void PBRRenderer::Update()
 void PBRRenderer::RebuildRenderers()
 {
 	meshPickerRenderPass.RebuildSwapChain();
-	environmentToCubeRenderPass.RebuildSwapChain(512.0f);
-	brdfRenderPass.RebuildSwapChain(512.0f);
-	irradianceRenderPass.RebuildSwapChain(512.0f);
-	prefilterRenderPass.RebuildSwapChain(512.0f);
+	environmentToCubeRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
+	brdfRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
+	irradianceRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
+	prefilterRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
 	pbrRenderPass.RebuildSwapChain();
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
