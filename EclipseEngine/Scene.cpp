@@ -22,8 +22,8 @@ Scene::Scene()
     camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
 
     std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
-    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+    material->LoadDiffuseMap("../texture/Mario_Diffuse.png");
+    material->LoadAlphaMap("../texture/Mario_Alpha.png");
     MaterialManager::AddMaterial(material);
 
 
@@ -97,18 +97,50 @@ Scene::Scene()
 
 
     {
-    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-    material->LoadAlbedoMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/rusted_iron/albedo.png");
-    material->LoadMetallicMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/rusted_iron/metallic.png");
-    material->LoadRoughnessMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/rusted_iron/roughness.png");
-    material->LoadAmbientOcclusionMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/rusted_iron/ao.png");
-    material->LoadNormalMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/pbr/rusted_iron/normal.png");
-    MaterialManager::AddMaterial(material);
+    std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
+    IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
+    IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
+    IronmMaterial->LoadRoughnessMap("../texture/pbr/rusted_iron/roughness.png");
+    IronmMaterial->LoadAmbientOcclusionMap("../texture/pbr/rusted_iron/ao.png");
+    IronmMaterial->LoadNormalMap("../texture/pbr/rusted_iron/normal.png");
+    MaterialManager::AddMaterial(IronmMaterial);
+
+    std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
+    PlasticMaterial->LoadAlbedoMap("../texture/pbr/plastic/albedo.png");
+    PlasticMaterial->LoadMetallicMap("../texture/pbr/plastic/metallic.png");
+    PlasticMaterial->LoadRoughnessMap("../texture/pbr/plastic/roughness.png");
+    PlasticMaterial->LoadAmbientOcclusionMap("../texture/pbr/plastic/ao.png");
+    PlasticMaterial->LoadNormalMap("../texture/pbr/plastic/normal.png");
+    MaterialManager::AddMaterial(PlasticMaterial);
+
+    std::shared_ptr<Material> WallMaterial = std::make_shared<Material>(Material("WallMaterial"));
+    WallMaterial->LoadAlbedoMap("../texture/pbr/wall/albedo.png");
+    WallMaterial->LoadMetallicMap("../texture/pbr/wall/metallic.png");
+    WallMaterial->LoadRoughnessMap("../texture/pbr/wall/roughness.png");
+    WallMaterial->LoadAmbientOcclusionMap("../texture/pbr/wall/ao.png");
+    WallMaterial->LoadNormalMap("../texture/pbr/wall/normal.png");
+    MaterialManager::AddMaterial(WallMaterial);
+
+    std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
+    GoldMaterial->LoadAlbedoMap("../texture/pbr/gold/albedo.png");
+    GoldMaterial->LoadMetallicMap("../texture/pbr/gold/metallic.png");
+    GoldMaterial->LoadRoughnessMap("../texture/pbr/gold/roughness.png");
+    GoldMaterial->LoadAmbientOcclusionMap("../texture/pbr/gold/ao.png");
+    GoldMaterial->LoadNormalMap("../texture/pbr/gold/normal.png");
+    MaterialManager::AddMaterial(GoldMaterial);
+
+    std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
+    GrassMaterial->LoadAlbedoMap("../texture/pbr/grass/albedo.png");
+    GrassMaterial->LoadMetallicMap("../texture/pbr/grass/metallic.png");
+    GrassMaterial->LoadRoughnessMap("../texture/pbr/grass/roughness.png");
+    GrassMaterial->LoadAmbientOcclusionMap("../texture/pbr/grass/ao.png");
+    GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
+    MaterialManager::AddMaterial(GrassMaterial);
 
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj"));
     auto a2 = obj->GetComponentByType(ComponentType::kMeshRenderer);
     auto b2 = static_cast<MeshRenderer*>(a2.get());
-    b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    b2->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
 
 
     GameObjectManager::AddGameObject(obj);
