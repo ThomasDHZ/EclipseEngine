@@ -140,13 +140,13 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
-    SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
+    SkyboxBufferInfo.imageView = TextureManager::EnvironmentTexture->View;
+    SkyboxBufferInfo.sampler = TextureManager::EnvironmentTexture->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 

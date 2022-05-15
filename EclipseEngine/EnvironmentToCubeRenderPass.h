@@ -1,35 +1,27 @@
 #pragma once
 #include "RenderPass.h"
-#include "RenderedColorTexture.h"
-#include "RenderedDepthTexture.h"
-#include "Skybox.h"
 #include "RenderedCubeMapTexture.h"
+#include "Skybox.h"
 
 class EnvironmentToCubeRenderPass : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkVertexInputBindingDescription VertexInputBindingDescription;
-	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
-	std::shared_ptr<GraphicsPipeline> EnvirnmentToCubePipeline;
-
-	std::shared_ptr<Skybox> skybox;
-
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
+
+	std::shared_ptr<Skybox> skybox;
 
 public:
 	EnvironmentToCubeRenderPass();
 	~EnvironmentToCubeRenderPass();
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap;
+	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
-	void StartUp();
-	void RebuildSwapChain();
-
-	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
+	void StartUp(uint32_t cubeMapSize);
+	void RebuildSwapChain(uint32_t cubeMapSize);
+	void Draw();
 	void Destroy();
 };
+
