@@ -26,7 +26,7 @@ private:
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
 
 public:
 	PBRRenderPass();
@@ -36,8 +36,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap);
-	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap);
+	void StartUp(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
+	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> BRDFMap, std::shared_ptr<RenderedCubeMapTexture> IrradianceMap, std::shared_ptr<RenderedCubeMapTexture> PrefilterMap, std::shared_ptr<RenderedCubeMapTexture> EnvironmentCubeMap);
 
 	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
 	void Destroy();
