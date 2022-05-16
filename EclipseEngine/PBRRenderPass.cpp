@@ -462,7 +462,10 @@ void PBRRenderPass::Destroy()
     RenderedBloomTexture->Destroy();
     DepthTexture->Destroy();
 
+    pbrPipeline->Destroy();
     skyboxPipeline->Destroy();
+    drawLinePipeline->Destroy();
+    wireframePipeline->Destroy();
 
     RenderPass::Destroy();
 }

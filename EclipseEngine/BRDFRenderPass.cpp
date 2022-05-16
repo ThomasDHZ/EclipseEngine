@@ -226,5 +226,7 @@ void BRDFRenderPass::Draw()
 
 void BRDFRenderPass::Destroy()
 {
-
+    SceneManager::BRDFTexture->Destroy();
+    brdfPipeline->Destroy();
+    RenderPass::Destroy();
 }
