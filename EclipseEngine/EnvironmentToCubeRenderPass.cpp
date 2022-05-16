@@ -14,9 +14,6 @@ void EnvironmentToCubeRenderPass::StartUp(uint32_t cubeMapSize)
     SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::CubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-    skybox = std::make_shared<Skybox>(Skybox());
-    skybox->StartUp();
-
     BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
@@ -233,7 +230,7 @@ void EnvironmentToCubeRenderPass::Draw()
     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvironmentToCubeRenderPassPipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvironmentToCubeRenderPassPipeline->GetShaderPipelineLayout(), 0, 1, EnvironmentToCubeRenderPassPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    DrawSkybox(EnvironmentToCubeRenderPassPipeline, skybox);
+    DrawSkybox(EnvironmentToCubeRenderPassPipeline, SceneManager::GetSkyboxMesh());
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");

@@ -21,9 +21,6 @@ void PBRRenderPass::StartUp()
     RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
     DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
 
-    skybox = std::make_shared<Skybox>(Skybox());
-    skybox->StartUp();
-
     BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
@@ -418,7 +415,7 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
     {
         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
-        DrawSkybox(skyboxPipeline, skybox, skyboxView);
+        DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), skyboxView);
 
         MeshRendererManager::SortByRenderPipeline();
         for (auto& mesh : MeshRendererManager::GetMeshList())

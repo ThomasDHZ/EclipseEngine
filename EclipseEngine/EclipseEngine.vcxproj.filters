@@ -401,9 +401,6 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="glmExtension.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>

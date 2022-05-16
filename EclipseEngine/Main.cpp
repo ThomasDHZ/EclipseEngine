@@ -26,6 +26,7 @@ int main()
     TextureManager::StartUp();
     MaterialManager::StartUp();
     LightManager::StartUp();
+    SceneManager::StartUp();
     
     Scene scene;
 
@@ -49,11 +50,15 @@ int main()
     vkDeviceWaitIdle(VulkanRenderer::GetDevice());
 
 
-    TextureManager::Destroy();
-    MaterialManager::Destroy();
+    scene.Destroy();
+
+    SceneManager::Destory();
     ModelManager::Destroy();
     LightManager::Destory();
-    scene.Destroy();
+    MaterialManager::Destroy();
+    TextureManager::Destroy();
+    InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
+    Window::Destroy();
 }
 

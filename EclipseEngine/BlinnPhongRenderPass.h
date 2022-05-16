@@ -24,8 +24,6 @@ private:
 	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
-	std::shared_ptr<Skybox> skybox;
-
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();

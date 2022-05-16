@@ -7,7 +7,6 @@ class PrefilterRenderPass : public RenderPass
 {
 private:
 	uint32_t CubeMapMipLevels = 0;
-	std::shared_ptr<Skybox> skybox;
 
 	void BuildRenderPass();
 	void CreateRendererFramebuffers();

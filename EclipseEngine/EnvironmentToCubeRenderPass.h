@@ -10,8 +10,6 @@ private:
 	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
-	std::shared_ptr<Skybox> skybox;
-
 public:
 	EnvironmentToCubeRenderPass();
 	~EnvironmentToCubeRenderPass();

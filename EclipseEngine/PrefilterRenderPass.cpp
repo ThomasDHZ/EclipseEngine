@@ -20,9 +20,6 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
     DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_SAMPLE_COUNT_1_BIT));
     SceneManager::PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
 
-    skybox = std::make_shared<Skybox>(Skybox());
-    skybox->StartUp();
-
     BuildRenderPass();
     CreateRendererFramebuffers();
     BuildRenderPassPipelines();
@@ -254,7 +251,7 @@ void PrefilterRenderPass::Draw()
         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, prefilterPipeline->GetShaderPipeline());
         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, prefilterPipeline->GetShaderPipelineLayout(), 0, 1, prefilterPipeline->GetDescriptorSetPtr(), 0, nullptr);
         vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        DrawSkybox(prefilterPipeline, skybox, prefiliter);
+        DrawSkybox(prefilterPipeline, SceneManager::GetSkyboxMesh(), prefiliter);
         vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 
         DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

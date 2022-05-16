@@ -164,11 +164,11 @@ Scene::Scene()
     LightManager::AddDirectionalLight(dLight);
     LightManager::AddPointLight();
     LightManager::AddSpotLight();
-    renderer2D.StartUp();
-    blinnPhongRenderer.StartUp();
-    hybridRenderer.StartUp();
+    //renderer2D.StartUp();
+    //blinnPhongRenderer.StartUp();
+    //hybridRenderer.StartUp();
     pbrRenderer.StartUp();
-    rayTraceRenderer.StartUp();
+    //rayTraceRenderer.StartUp();
 }
 
 Scene::~Scene()
@@ -209,7 +209,7 @@ void Scene::Update()
 
     if (GraphicsDevice::IsRayTracerActive())
     {
-        rayTraceRenderer.Update();
+        //rayTraceRenderer.Update();
     }
     else
     {
@@ -225,7 +225,6 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
-
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     const auto objList = GameObjectManager::GetGameObjectList();
@@ -260,11 +259,11 @@ void Scene::RebuildRenderers()
 {
     MeshRendererManager::Update();
 
-    renderer2D.RebuildRenderers();
-    blinnPhongRenderer.RebuildRenderers();
-    hybridRenderer.RebuildRenderers();
-    pbrRenderer.RebuildRenderers();
-    rayTraceRenderer.RebuildSwapChain();
+    //renderer2D.RebuildRenderers();
+    //blinnPhongRenderer.RebuildRenderers();
+    //hybridRenderer.RebuildRenderers();
+    //pbrRenderer.RebuildRenderers();
+    //rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
@@ -283,14 +282,14 @@ void Scene::Draw()
 
     if (GraphicsDevice::IsRayTracerActive())
     {
-        rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
         
     }
     else
     {
-        //renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
-      // blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
-      //  hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+ /*       renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+       blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+        hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);*/
        pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
     }
  
@@ -309,10 +308,9 @@ void Scene::Destroy()
 {
     GameObjectManager::Destory();
 
-    renderer2D.Destroy();
-    blinnPhongRenderer.Destroy();
-    hybridRenderer.Destroy();
+    //renderer2D.Destroy();
+    //blinnPhongRenderer.Destroy();
+    //hybridRenderer.Destroy();
     pbrRenderer.Destroy();
-    rayTraceRenderer.Destroy();
-    InterfaceRenderPass::Destroy();
+    //rayTraceRenderer.Destroy();
 }

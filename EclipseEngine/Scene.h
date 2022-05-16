@@ -15,7 +15,6 @@
 #include "Texture2D.h"
 #include "GameObjectManager.h"
 #include "BlinnPhongRenderer.h"
-#include "glmExtension.h";
 #include "Renderer2D.h"
 #include "BlinnPhongRenderer.h"
 #include "TextureManager.h"
@@ -35,16 +34,15 @@ private:
 	OrthographicCamera camera;
 	PerspectiveCamera camera2;
 
-	Renderer2D renderer2D;
-	BlinnPhongRenderer blinnPhongRenderer;
-	HybridRenderer hybridRenderer;
+	//Renderer2D renderer2D;
+	//BlinnPhongRenderer blinnPhongRenderer;
+	//HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
+	//RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();
 	~Scene();
-
-	RayTraceRenderer rayTraceRenderer;
 
 	void StartUp();
 	void Update();
