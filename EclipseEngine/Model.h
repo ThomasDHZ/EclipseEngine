@@ -28,9 +28,7 @@ private:
 	uint64_t ModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 
-	glm::vec3 ModelPosition = glm::vec3(0.0f);
-	glm::vec3 ModelRotation = glm::vec3(0.0f);
-	glm::vec3 ModelScale = glm::vec3(1.0f);
+
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;
@@ -46,6 +44,11 @@ private:
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
 public:
+
+	glm::vec3 ModelPosition = glm::vec3(0.0f);
+	glm::vec3 ModelRotation = glm::vec3(0.0f);
+	glm::vec3 ModelScale = glm::vec3(1.0f);
+
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);

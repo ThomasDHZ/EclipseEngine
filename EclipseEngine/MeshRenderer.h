@@ -23,6 +23,9 @@ public:
 	MeshRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
 	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
 	MeshRenderer(const std::string& FilePath, uint64_t GameObjectID);
+	MeshRenderer(const std::string& FilePath, glm::vec3 position, uint64_t GameObjectID);
+	MeshRenderer(const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
+	MeshRenderer(const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
 	MeshRenderer(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~MeshRenderer();
 

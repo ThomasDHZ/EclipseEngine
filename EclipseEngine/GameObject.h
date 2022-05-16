@@ -25,6 +25,9 @@ public:
 	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation);
 	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	GameObject(const std::string Name, const std::string filePath);
+	GameObject(const std::string Name, const std::string filePath, glm::vec2 position);
+	GameObject(const std::string Name, const std::string filePath, glm::vec2 position, glm::vec2 rotation);
+	GameObject(const std::string Name, const std::string filePath, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 

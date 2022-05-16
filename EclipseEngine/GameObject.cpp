@@ -78,6 +78,27 @@ GameObject::GameObject(const std::string Name, const std::string filePath)
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath, GameObjectID)));
 }
 
+GameObject::GameObject(const std::string Name, const std::string filePath, glm::vec2 position)
+{
+	ObjectName = Name;
+	GenerateID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath, GameObjectID)));
+}
+
+GameObject::GameObject(const std::string Name, const std::string filePath, glm::vec2 position, glm::vec2 rotation)
+{
+	ObjectName = Name;
+	GenerateID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath, GameObjectID)));
+}
+
+GameObject::GameObject(const std::string Name, const std::string filePath, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale)
+{
+	ObjectName = Name;
+	GenerateID();
+	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(filePath, GameObjectID)));
+}
+
 GameObject::GameObject(nlohmann::json& json)
 {
 	std::cout << json << std::endl;
