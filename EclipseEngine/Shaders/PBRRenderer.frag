@@ -84,12 +84,11 @@ void main()
             }
     }
 
-    //vec3 albedo = material.Albedo; 
-//    if(material.AlbedoMapID != 0)
-//    {
-       vec3 albedo = pow(texture(TextureMap[material.AlbedoMapID], UV).rgb, vec3(2.2));
-   // }   
-
+    vec3 albedo = material.Albedo; 
+    if(material.AlbedoMapID != 0)
+    {
+        albedo = texture(TextureMap[material.AlbedoMapID], UV).rgb;
+    }   
 
     float metallic = material.Matallic; 
     if(material.MetallicMapID != 0)
@@ -144,8 +143,6 @@ void main()
     vec3 ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient + Lo;
-    color = color / (color + vec3(1.0));
-    color = pow(color, vec3(1.0/2.2)); 
     outColor = vec4(color , alpha);
 }
 

@@ -8,6 +8,18 @@ RenderedCubeMapTexture::RenderedCubeMapTexture(glm::ivec2 TextureResolution, VkS
 {
     MipMapLevels = mipLevels;
     SampleCount = sampleCount;
+    TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
+    CreateTextureImage();
+    CreateTextureView();
+    CreateTextureSampler();
+}
+
+RenderedCubeMapTexture::RenderedCubeMapTexture(glm::ivec2 TextureResolution, VkFormat format, VkSampleCountFlagBits sampleCount, uint32_t mipLevels) : CubeMapTexture(TextureResolution, TextureTypeEnum::kRenderedCubeMap)
+{
+    MipMapLevels = mipLevels;
+    SampleCount = sampleCount;
+    TextureByteFormat = format;
 
     CreateTextureImage();
     CreateTextureView();
@@ -29,7 +41,7 @@ void RenderedCubeMapTexture::CreateTextureImage()
     TextureInfo.mipLevels = MipMapLevels;
     TextureInfo.arrayLayers = 6;
     TextureInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
-    TextureInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    TextureInfo.format = TextureByteFormat;
     TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
     TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     TextureInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
@@ -44,7 +56,7 @@ void RenderedCubeMapTexture::CreateTextureView()
     VkImageViewCreateInfo TextureImageViewInfo = {};
     TextureImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     TextureImageViewInfo.image = Image;
-    TextureImageViewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    TextureImageViewInfo.format = TextureByteFormat;
     TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     TextureImageViewInfo.subresourceRange.baseMipLevel = 0;
     TextureImageViewInfo.subresourceRange.levelCount = MipMapLevels;
