@@ -38,10 +38,10 @@ Scene::Scene()
     cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
     cubeMapfiles.Front = "../texture/skybox/back.jpg";
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
+
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
-
+    TextureManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/VizPeople_non_commercial_hdr_v1_02.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
     TextureManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-
     // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
      //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
 
@@ -137,35 +137,50 @@ Scene::Scene()
         GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
         MaterialManager::AddMaterial(GrassMaterial);
 
+        std::shared_ptr<Material> SteelMaterial = std::make_shared<Material>(Material("Steel"));
+        SteelMaterial->LoadAlbedoMap("../texture/space-cruiser-panels2_albedo.png");
+        SteelMaterial->LoadMetallicMap("../texture/space-cruiser-panels2_metallic.png");
+        SteelMaterial->LoadRoughnessMap("../texture/space-cruiser-panels2_roughness.png");
+        SteelMaterial->LoadAmbientOcclusionMap("../texture/space-cruiser-panels2_ao.png");
+        SteelMaterial->LoadNormalMap("../texture/space-cruiser-panels2_normal-ogl.png");
+        SteelMaterial->LoadDepthMap("../texture/space-cruiser-panels2_height.png");
+        MaterialManager::AddMaterial(SteelMaterial);
+
         std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
         auto b = static_cast<MeshRenderer*>(a.get());
-        b->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        b->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         GameObjectManager::AddGameObject(obj);
 
-        std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b2 = static_cast<MeshRenderer*>(a2.get());
-        b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        GameObjectManager::AddGameObject(obj2);
+        //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject2", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        //auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
+        //auto b2 = static_cast<MeshRenderer*>(a2.get());
+        //b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        //GameObjectManager::AddGameObject(obj2);
 
-        std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
-        auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b3 = static_cast<MeshRenderer*>(a3.get());
-        b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-        GameObjectManager::AddGameObject(obj3);
+        //std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject3", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
+        //auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
+        //auto b3 = static_cast<MeshRenderer*>(a3.get());
+        //b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        //GameObjectManager::AddGameObject(obj3);
 
-        std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b4 = static_cast<MeshRenderer*>(a4.get());
-        b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        GameObjectManager::AddGameObject(obj4);
+        //std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject4", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        //auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
+        //auto b4 = static_cast<MeshRenderer*>(a4.get());
+        //b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        //GameObjectManager::AddGameObject(obj4);
 
-        std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b5 = static_cast<MeshRenderer*>(a2.get());
-        b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        GameObjectManager::AddGameObject(obj5);
+        //std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject5", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        //auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
+        //auto b5 = static_cast<MeshRenderer*>(a5.get());
+        //b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        //GameObjectManager::AddGameObject(obj5);
+
+        //std::shared_ptr<GameObject> obj6 = std::make_shared<GameObject>(GameObject("Testobject6", "../Models/plain.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
+        //auto a6 = obj6->GetComponentByType(ComponentType::kMeshRenderer);
+        //auto b6 = static_cast<MeshRenderer*>(a6.get());
+        //b6->GetModel()->GetMeshList()[0]->SetMaterial(SteelMaterial);
+        //GameObjectManager::AddGameObject(obj5);
     }
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
@@ -189,9 +204,31 @@ Scene::Scene()
     dLight.diffuse = glm::vec4(0.5f);
     dLight.specular = glm::vec4(1.0f);
 
+    PointLightBuffer plight = PointLightBuffer();
+    plight.position = glm::vec4(-10.0f, 10.0f, 10.0f, 0.0f);
+    plight.diffuse = glm::vec4(300.0f, 300.0f, 300.0f, 1.0f);
+    plight.specular = glm::vec4(1.0f);
+
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec4(10.0f, 10.0f, 10.0f, 0.0f);
+    plight2.diffuse = glm::vec4(300.0f, 300.0f, 300.0f, 1.0f);
+    plight2.specular = glm::vec4(1.0f);
+
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec4(-10.0f, -10.0f, 10.0f, 0.0f);
+    plight3.diffuse = glm::vec4(300.0f, 300.0f, 300.0f, 1.0f);
+    plight3.specular = glm::vec4(1.0f);
+
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec4(10.0f, -10.0f, 10.0f, 0.0f);
+    plight4.diffuse = glm::vec4(300.0f, 300.0f, 300.0f, 1.0f);
+    plight4.specular = glm::vec4(1.0f);
+
     LightManager::AddDirectionalLight(dLight);
-    LightManager::AddPointLight();
-    LightManager::AddSpotLight();
+    LightManager::AddPointLight(plight);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
     //renderer2D.StartUp();
     //blinnPhongRenderer.StartUp();
     //hybridRenderer.StartUp();

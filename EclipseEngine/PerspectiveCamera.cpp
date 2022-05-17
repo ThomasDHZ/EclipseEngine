@@ -13,7 +13,7 @@ PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm
     Front = glm::vec3(0.0f, 0.0f, -1.0f);
     cameraType = CameraType::Perspective_Camera;
 
-    MovementSpeed = 0.005f;
+    MovementSpeed = 0.0005f;
     MouseSensitivity = 0.1f;
 
     Position = position;
@@ -33,7 +33,7 @@ PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm
     Front = glm::vec3(0.0f, 0.0f, -1.0f);
     cameraType = CameraType::Perspective_Camera;
 
-    MovementSpeed = 0.5f;
+    MovementSpeed = 0.0005f;
     MouseSensitivity = 0.1f;
 
     Position = position;
