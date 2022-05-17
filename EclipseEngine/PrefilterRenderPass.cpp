@@ -17,8 +17,8 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
-    DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_SAMPLE_COUNT_1_BIT));
-    SceneManager::PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+    DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -31,7 +31,7 @@ void PrefilterRenderPass::BuildRenderPass()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    CubeMapAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    CubeMapAttachment.format = VK_FORMAT_R32G32B32A32_SFLOAT;
     CubeMapAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     CubeMapAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     CubeMapAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;

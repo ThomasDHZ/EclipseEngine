@@ -11,7 +11,7 @@ BRDFRenderPass::~BRDFRenderPass()
 void BRDFRenderPass::StartUp(uint32_t textureSize)
 {
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
 
     BuildRenderPass();
     CreateRendererFramebuffers();
@@ -25,7 +25,7 @@ void BRDFRenderPass::BuildRenderPass()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    CubeMapAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    CubeMapAttachment.format = VK_FORMAT_R32G32B32A32_SFLOAT;
     CubeMapAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     CubeMapAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     CubeMapAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;

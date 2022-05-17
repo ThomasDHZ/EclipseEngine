@@ -12,7 +12,7 @@ IrradianceRenderPass::~IrradianceRenderPass()
 void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::IrradianceCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     BuildRenderPass();
@@ -26,7 +26,7 @@ void IrradianceRenderPass::BuildRenderPass()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    CubeMapAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
+    CubeMapAttachment.format = VK_FORMAT_R32G32B32A32_SFLOAT;
     CubeMapAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
     CubeMapAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     CubeMapAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -181,7 +181,7 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     RenderPass::Destroy();
 
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::IrradianceCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     BuildRenderPass();
