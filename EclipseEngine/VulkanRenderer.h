@@ -6,7 +6,7 @@
 
 #include "Window.h"
 #include "VulkanDebugger.h"
-#include "GraphicsDevice.h"
+#include "GPULimitsandFeatures.h"
 #include "VulkanSwapChain.h"
 #include "Pixel.h"
 
@@ -38,12 +38,19 @@ private:
 	static VkDevice Device;
 	static VkPhysicalDevice PhysicalDevice;
 	static VkSurfaceKHR Surface;
+	static VkQueue GraphicsQueue;
+	static VkQueue PresentQueue;
 	static VkCommandPool CommandPool;
 
+	static int GraphicsFamily;
+	static int PresentFamily;
 	static uint32_t ImageIndex;
 	static uint32_t CMDIndex;
+	static bool RayTracingFeature;
 
 	static std::vector<const char*> ValidationLayers;
+	static std::vector<const char*> DeviceExtensions;
+	static std::vector<std::string> FeatureList;
 
 	static std::vector<VkFence> InFlightFences;
 	static std::vector<VkSemaphore> AcquireImageSemaphores;
@@ -51,14 +58,17 @@ private:
 	static VulkanDebugger VulkanDebug;
 	static VulkanSwapChain SwapChain;
 
-public:
+	static std::set<std::string> CheckDeviceExtensionSupport(VkPhysicalDevice GPUDevice);
+	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures(VkPhysicalDevice GPUDevice);
+	static std::vector<VkSurfaceFormatKHR> GetSurfaceFormatList(VkPhysicalDevice GPUDevice);
+	static std::vector<VkPresentModeKHR> GetPresentModeList(VkPhysicalDevice GPUDevice, VkSurfaceKHR Surface);
+	static std::vector<const char*> GetRequiredExtensions();
 
-	static bool UpdateRendererFlag;
-	static bool WireframeModeFlag;
-	static bool ImGUILayerActive;
-	static bool EditorModeFlag;
-	static bool UpdateBLAS;
-	static bool UpdateTLAS;
+	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice);
+	static void FindQueueFamilies(VkPhysicalDevice PhysicalDevice, VkSurfaceKHR Surface);
+
+
+public:
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
@@ -70,6 +80,7 @@ public:
 	static PFN_vkCmdTraceRaysKHR vkCmdTraceRaysKHR;
 	static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
 	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
+	static bool UpdateRendererFlag;
 
 	static void StartUp();
 	static void Update();
@@ -83,14 +94,13 @@ public:
 	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer);
 	static VkResult  EndSingleTimeCommands(VkCommandBuffer commandBuffer, VkCommandPool& commandPool);
 	static uint32_t GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-	static uint64_t GetBufferDeviceAddress(VkBuffer buffer);
 
 	static VkInstance GetInstance() { return Instance; };
 	static VkDevice GetDevice() { return Device; };
 	static VkPhysicalDevice GetPhysicalDevice() { return PhysicalDevice; };
 	static VkSurfaceKHR GetSurface() { return Surface; };
-	static VkQueue GetGraphicsQueue() { return GraphicsDevice::GetGraphicsQueue(); }
-	static VkQueue GetPresentQueue() { return GraphicsDevice::GetPresentQueue(); }
+	static VkQueue GetGraphicsQueue() { return GraphicsQueue; };
+	static VkQueue GetPresentQueue() { return PresentQueue; };
 	static VkCommandPool GetCommandPool() { return CommandPool; };
 	static uint32_t GetImageIndex() { return ImageIndex; }
 	static uint32_t GetCMDIndex() { return CMDIndex; }

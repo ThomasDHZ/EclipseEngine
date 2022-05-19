@@ -29,8 +29,8 @@ public:
           //  UpdateUpTopLevelAccelerationStructure();
        /* }*/
 
-        VulkanRenderer::UpdateBLAS = false;
-        VulkanRenderer::UpdateTLAS = false;
+        //VulkanRenderer::UpdateBLAS = false;
+        //VulkanRenderer::UpdateTLAS = false;
 	}
 
 	static std::shared_ptr<Model> GetModelByMesh(std::shared_ptr<Mesh> mesh)
@@ -43,7 +43,7 @@ public:
 
     static void UpdateUpTopLevelAccelerationStructure()
     {
-        uint32_t PrimitiveCount = 1;
+        /*uint32_t PrimitiveCount = 1;
         std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
         for (int x = 0; x < ModelManager::GetModelList().size(); x++)
         {
@@ -114,7 +114,7 @@ public:
         TopLevelAccelerationStructure.AccelerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
 
         scratchBuffer.DestoryBuffer();
-        InstancesBuffer.DestoryBuffer();
+        InstancesBuffer.DestoryBuffer();*/
     }
 
     static void Destroy()

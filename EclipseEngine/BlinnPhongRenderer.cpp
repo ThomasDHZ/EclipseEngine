@@ -17,15 +17,15 @@ void BlinnPhongRenderer::StartUp()
 
 void BlinnPhongRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
-		!VulkanRenderer::ImGUILayerActive &&
-		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
-	{
-		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-		const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+	//if (VulkanRenderer::EditorModeFlag &&
+	//	!VulkanRenderer::ImGUILayerActive &&
+	//	Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+	//{
+	//	const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
+	//	const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
 
-		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
-	}
+	//	MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
+	//}
 }
 
 void BlinnPhongRenderer::RebuildRenderers()
@@ -37,11 +37,11 @@ void BlinnPhongRenderer::RebuildRenderers()
 
 void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
-	{
-		meshPickerRenderPass.Draw(sceneProperties);
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
-	}
+	//if (VulkanRenderer::EditorModeFlag)
+	//{
+	//	meshPickerRenderPass.Draw(sceneProperties);
+	//	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	//}
 
 	blinnPhongRenderPass.Draw(sceneProperties, skyboxView);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());

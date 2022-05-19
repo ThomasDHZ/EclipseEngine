@@ -343,10 +343,10 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
-	if (meshProperties.MeshTransform != TransformMatrix)
-	{
-		VulkanRenderer::UpdateBLAS = true;
-	}
+	//if (meshProperties.MeshTransform != TransformMatrix)
+	//{
+	//	VulkanRenderer::UpdateBLAS = true;
+	//}
 
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
@@ -361,11 +361,11 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
 	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
-	if (VulkanRenderer::UpdateBLAS &&
-		IndexCount != 0)
-	{
-		UpdateMeshBottomLevelAccelerationStructure();
-	}
+	//if (VulkanRenderer::UpdateBLAS &&
+	//	IndexCount != 0)
+	//{
+	//	UpdateMeshBottomLevelAccelerationStructure();
+	//}
 }
 
 void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)

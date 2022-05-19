@@ -18,7 +18,7 @@ void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionT
     std::shared_ptr<RenderedColorTexture> BloomTexture,
     std::shared_ptr<RenderedColorTexture> ShadowTexture)
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    SampleCount = GPULimitsandFeatures::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));

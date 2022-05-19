@@ -11,7 +11,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    SampleCount = GPULimitsandFeatures::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
@@ -410,18 +410,18 @@ void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxVie
             {
                 case MeshTypeEnum::kPolygon:
                 {
-                    if (VulkanRenderer::WireframeModeFlag)
+                  /*  if (VulkanRenderer::WireframeModeFlag)
                     {
                         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
                         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
                         DrawMesh(wireframePipeline, mesh, sceneProperties);
                     }
                     else
-                    {
+                    {*/
                         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
                         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
                         DrawMesh(blinnphongPipeline, mesh, sceneProperties);
-                    }
+                    //}
                     break;
                 }
                 case MeshTypeEnum::kLine:

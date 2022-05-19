@@ -24,7 +24,7 @@ Model::Model(const std::string& FilePath, uint64_t GameObjectID)
 	//LoadNodeTree(Scene->mRootNode);
 	//LoadAnimations(Scene);
 	LoadMesh(FilePath, Scene->mRootNode, Scene);
-	VulkanRenderer::UpdateTLAS = true;
+	//VulkanRenderer::UpdateTLAS = true;
 	//if (AnimationList.size() > 0)
 	//{
 	//	AnimatedModel = true;
@@ -40,7 +40,7 @@ Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 	GenerateID();
 	ParentGameObjectID = GameObjectID;
 	AddMesh(mesh);
-	VulkanRenderer::UpdateTLAS = true;
+	//VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::~Model()
@@ -376,10 +376,10 @@ void Model::Update()
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransform = glm::scale(ModelTransform, ModelScale);
 
-	if (LastTransform != ModelTransform)
+	/*if (LastTransform != ModelTransform)
 	{
 		VulkanRenderer::UpdateTLAS = true;
-	}
+	}*/
 
 	if (BoneList.size() > 0)
 	{
