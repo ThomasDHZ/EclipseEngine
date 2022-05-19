@@ -235,16 +235,17 @@ void PrefilterRenderPass::Draw()
     rect2D.offset.y = 0.0f;
 
     PrefilterSkyboxSettings prefiliter;
-    for (int x = 0; x < CubeMapMipLevels; x++)
+    for (unsigned int mip = 0; mip < 5; ++mip)
     {
         VkViewport viewport{};
-        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, x));
-        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, x));
+        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
+        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
-        prefiliter.SkyboxSize = CubeMapMipLevels;
-        prefiliter.roughness = (float)RenderPassResolution.x / (float)(CubeMapMipLevels - 1);
+        prefiliter.SkyboxSize = RenderPassResolution.x;
+        prefiliter.roughness = (float)mip / (float)(SceneManager::GetPBRMaxMipLevel() - 1);
+        prefiliter.pbrMaxMipLevel = 4;
 
         vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
         vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
@@ -255,7 +256,7 @@ void PrefilterRenderPass::Draw()
         vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 
         DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()], DrawToCubeMap, SceneManager::PrefilterCubeMap, x);
+        Texture::CopyCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()], DrawToCubeMap, SceneManager::PrefilterCubeMap, mip);
         DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
     SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);

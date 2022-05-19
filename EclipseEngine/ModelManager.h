@@ -26,7 +26,7 @@ public:
 
     /*    if (VulkanRenderer::UpdateTLAS)
         {*/
-            UpdateUpTopLevelAccelerationStructure();
+          //  UpdateUpTopLevelAccelerationStructure();
        /* }*/
 
         VulkanRenderer::UpdateBLAS = false;
