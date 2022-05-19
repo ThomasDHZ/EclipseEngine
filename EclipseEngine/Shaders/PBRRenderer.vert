@@ -41,7 +41,7 @@ void main() {
     FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
-    Normal = mat3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * aNormal;
+    Normal = aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
     gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);

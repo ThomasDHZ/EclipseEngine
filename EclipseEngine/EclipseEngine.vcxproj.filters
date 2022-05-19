@@ -551,9 +551,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="GPULimitsandFeatures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">

@@ -244,8 +244,7 @@ void PrefilterRenderPass::Draw()
         viewport.maxDepth = 1.0f;
 
         prefiliter.SkyboxSize = RenderPassResolution.x;
-        prefiliter.roughness = (float)mip / (float)(SceneManager::GetPBRMaxMipLevel() - 1);
-        prefiliter.pbrMaxMipLevel = 4;
+        prefiliter.roughness = (float)mip / (float)(5 - 1);
 
         vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
         vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);

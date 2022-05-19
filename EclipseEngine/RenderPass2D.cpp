@@ -300,18 +300,18 @@ void RenderPass2D::Draw(SceneProperties sceneProperties)
             {
                 case MeshTypeEnum::kPolygon:
                 {
-                /*    if (VulkanRenderer::WireframeModeFlag)
+                    if (VulkanRenderer::WireframeModeFlag)
                     {
                         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
                         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
                         DrawMesh(wireframePipeline, mesh, sceneProperties);
                     }
                     else
-                    {*/
+                    {
                         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipeline());
                         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, renderer2DPipeline->GetShaderPipelineLayout(), 0, 1, renderer2DPipeline->GetDescriptorSetPtr(), 0, nullptr);
                         DrawMesh(renderer2DPipeline, mesh, sceneProperties);
-                    //}
+                    }
                     break;
                 }
                 case MeshTypeEnum::kLine:

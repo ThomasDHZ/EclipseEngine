@@ -9,7 +9,6 @@ class SceneManager
 {
 private:
 	static float PBRCubeMapSize;
-	static float PBRMaxMipLevel;
 
 	static std::shared_ptr<Skybox> SkyboxMesh;
 
@@ -49,6 +48,5 @@ public:
 
 	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
-	static float GetPBRMaxMipLevel() { return PBRMaxMipLevel; }
 };
 

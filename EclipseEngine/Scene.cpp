@@ -184,39 +184,14 @@ Scene::Scene()
     ModelManager::Update();
 
 
-    //auto dLight = DirectionalLightBuffer{};
-    //dLight.direction = glm::vec4(1.0f);
-    //dLight.diffuse = glm::vec4(0.5f);
-    //dLight.specular = glm::vec4(1.0f);
+    auto dLight = DirectionalLightBuffer{};
+    dLight.direction = glm::vec4(1.0f);
+    dLight.diffuse = glm::vec4(0.5f);
+    dLight.specular = glm::vec4(1.0f);
 
-    //LightManager::AddDirectionalLight(dLight);
-
-    PointLightBuffer plight = PointLightBuffer();
-    plight.position = glm::vec4(0.0f, 10.0f, 0.0f, 0.0f);
-    plight.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    plight.specular = glm::vec4(1.0f);
-
-    PointLightBuffer plight2 = PointLightBuffer();
-    plight2.position = glm::vec4(10.0f, 10.0f, 10.0f, 0.0f);
-    plight2.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    plight2.specular = glm::vec4(1.0f);
-
-    PointLightBuffer plight3 = PointLightBuffer();
-    plight3.position = glm::vec4(-10.0f, -10.0f, 10.0f, 0.0f);
-    plight3.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    plight3.specular = glm::vec4(1.0f);
-
-    PointLightBuffer plight4 = PointLightBuffer();
-    plight4.position = glm::vec4(10.0f, -10.0f, 10.0f, 0.0f);
-    plight4.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    plight4.specular = glm::vec4(1.0f);
-
-    LightManager::AddPointLight(plight);
-    LightManager::AddPointLight(plight2);
-    LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
-
-    //LightManager::AddSpotLight();
+    LightManager::AddDirectionalLight(dLight);
+    LightManager::AddPointLight();
+    LightManager::AddSpotLight();
     //renderer2D.StartUp();
     //blinnPhongRenderer.StartUp();
     //hybridRenderer.StartUp();
@@ -255,24 +230,23 @@ void Scene::Update()
     sceneProperites.PointLightCount = LightManager::GetPointLightCount();
     sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
     sceneProperites.Timer = time;
-    sceneProperites.PBRMaxMipLevel = SceneManager::GetPBRMaxMipLevel();
 
     cubeMapInfo.view = glm::mat4(glm::mat3(camera2.GetViewMatrix()));
     cubeMapInfo.proj = glm::perspective(glm::radians(camera2.GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
     cubeMapInfo.proj[1][1] *= -1;
 
-    //if (GraphicsDevice::IsRayTracerActive())
-    //{
-    //    //rayTraceRenderer.Update();
-    //}
-    //else
-    //{
+    if (GraphicsDevice::IsRayTracerActive())
+    {
+        //rayTraceRenderer.Update();
+    }
+    else
+    {
         //renderer2D.Update();
       //  hybridRenderer.Update();
       //blinnPhongRenderer.Update();
         pbrRenderer.Update();
         
-   /* }*/
+    }
 
 
 }
@@ -282,8 +256,8 @@ void Scene::ImGuiUpdate()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     const auto objList = GameObjectManager::GetGameObjectList();
-   // ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
-    //ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
+    ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
+    ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
 
     for (auto& model : ModelManager::GetModelList())
     {
@@ -306,7 +280,7 @@ void Scene::ImGuiUpdate()
     //ImGui::Image(hybridRenderer.GBufferRenderPass.SpecularTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //ImGui::Image(hybridRenderer.GBufferRenderPass.BloomTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
 
- /*   VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();*/
+    VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
 }
 
 void Scene::RebuildRenderers()
@@ -334,18 +308,18 @@ void Scene::Draw()
         return;
     }
 
-    //if (GraphicsDevice::IsRayTracerActive())
-    //{
-    //    //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-    //    
-    //}
-    //else
-    //{
+    if (GraphicsDevice::IsRayTracerActive())
+    {
+        //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        
+    }
+    else
+    {
  /*       renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
        blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
         hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);*/
        pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
-    //}
+    }
  
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);

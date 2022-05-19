@@ -38,7 +38,6 @@ struct PrefilterSkyboxSettings
 {
 	alignas(4) uint32_t SkyboxSize = 0.0f;
 	alignas(4) float roughness = 0.0f;
-	alignas(4) float pbrMaxMipLevel = 4.0f;
 };
 
 struct SceneProperties
@@ -53,7 +52,6 @@ struct SceneProperties
 	alignas(4)  uint32_t PointLightCount;
 	alignas(4)  uint32_t SpotLightCount;
 	alignas(4)  float Timer = 0.0f;
-	alignas(4)  float PBRMaxMipLevel = 8.0f;
 };
 
 struct ConstSkyBoxView
