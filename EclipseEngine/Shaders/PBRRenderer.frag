@@ -108,7 +108,7 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 void main()
 {  
    const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
-   vec3  albedo = texture(TextureMap[material.AlbedoMapID], UV).rgb;
+   vec3  albedo = pow(texture(TextureMap[material.AlbedoMapID], UV).rgb, vec3(2.2));
    float metallic = texture(TextureMap[material.MetallicMapID], UV).r;
    float roughness = texture(TextureMap[material.RoughnessMapID], UV).r;
    float ao = texture(TextureMap[material.AmbientOcclusionMapID], UV).r;
@@ -179,11 +179,7 @@ void main()
     vec3 ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient + Lo;
-
-    // HDR tonemapping
     color = color / (color + vec3(1.0));
-    // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
-
     outColor = vec4(color , 1.0);
 }

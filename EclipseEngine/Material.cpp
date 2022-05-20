@@ -224,7 +224,7 @@ void Material::LoadSpecularMap(const std::string FilePath)
 
 void Material::LoadAlbedoMap(const std::string FilePath)
 {
-	AlbedoMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
+	AlbedoMap = TextureManager::LoadTexture2D(FilePath, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 }
 
 void Material::LoadMetallicMap(const std::string FilePath)
