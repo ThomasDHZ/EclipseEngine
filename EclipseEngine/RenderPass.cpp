@@ -15,7 +15,7 @@ void RenderPass::Destroy()
     vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
     renderPass = VK_NULL_HANDLE;
 
-    for (auto& framebuffer : SwapChainFramebuffers)
+    for (auto& framebuffer : RenderPassFramebuffer)
     {
         vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;

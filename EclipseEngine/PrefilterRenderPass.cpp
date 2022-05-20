@@ -100,7 +100,7 @@ void PrefilterRenderPass::BuildRenderPass()
 
 void PrefilterRenderPass::CreateRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
 
     for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
     {
@@ -116,7 +116,7 @@ void PrefilterRenderPass::CreateRendererFramebuffers()
         frameBufferCreateInfo.height = RenderPassResolution.y;
         frameBufferCreateInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &SwapChainFramebuffers[i]))
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &RenderPassFramebuffer[i]))
         {
             throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
         }
@@ -221,7 +221,7 @@ void PrefilterRenderPass::Draw()
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetCMDIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetCMDIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent.width = RenderPassResolution.x;
     renderPassInfo.renderArea.extent.height = RenderPassResolution.y;

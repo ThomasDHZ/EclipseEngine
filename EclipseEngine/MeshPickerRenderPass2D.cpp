@@ -99,7 +99,7 @@ void MeshPickerRenderPass2D::BuildRenderPass()
 
 void MeshPickerRenderPass2D::CreateRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
@@ -116,7 +116,7 @@ void MeshPickerRenderPass2D::CreateRendererFramebuffers()
         framebufferInfo.height = RenderPassResolution.y;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]))
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]))
         {
             throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
         }
@@ -217,7 +217,7 @@ void MeshPickerRenderPass2D::Draw(SceneProperties& sceneProperties)
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
@@ -274,18 +274,18 @@ Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
 
     std::shared_ptr<ReadableTexture> PickerTexture = std::make_shared<ReadableTexture>(ReadableTexture(RenderPassResolution, SampleCount));
 
-    if (GraphicsDevice::IsRayTracerActive())
-    {
-        VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
-        PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-        VulkanRenderer::EndSingleTimeCommands(commandBuffer);
-    }
-    else
-    {
+    //if (GraphicsDevice::IsRayTracerActive())
+    //{
+    //    VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+    //    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    //    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    //    Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
+    //    PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+    //    RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+    //    VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+    //}
+    //else
+    //{
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -293,7 +293,7 @@ Pixel MeshPickerRenderPass2D::ReadPixel(glm::ivec2 PixelTexCoord)
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
         VulkanRenderer::EndSingleTimeCommands(commandBuffer);
-    }
+    //}
 
     const char* data;
     vkMapMemory(VulkanRenderer::GetDevice(), PickerTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);

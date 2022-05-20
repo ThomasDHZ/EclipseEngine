@@ -54,7 +54,7 @@ void FrameBufferRenderPass::BuildRenderPass()
 
 void FrameBufferRenderPass::BuildRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
 
     for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) 
     {
@@ -72,7 +72,7 @@ void FrameBufferRenderPass::BuildRendererFramebuffers()
         framebufferInfo.height = RenderPassResolution.y;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]) != VK_SUCCESS) {
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]) != VK_SUCCESS) {
             throw std::runtime_error("failed to create framebuffer!");
         }
     }
@@ -148,7 +148,7 @@ void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTextur
     vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
     renderPass = VK_NULL_HANDLE;
 
-    for (auto& framebuffer : SwapChainFramebuffers)
+    for (auto& framebuffer : RenderPassFramebuffer)
     {
         vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
@@ -191,7 +191,7 @@ void FrameBufferRenderPass::Draw()
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = Rect2D.offset;
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());

@@ -235,18 +235,18 @@ void Scene::Update()
     cubeMapInfo.proj = glm::perspective(glm::radians(camera2.GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
     cubeMapInfo.proj[1][1] *= -1;
 
-    if (GraphicsDevice::IsRayTracerActive())
-    {
-        //rayTraceRenderer.Update();
-    }
-    else
-    {
+    //if (GraphicsDevice::IsRayTracerActive())
+    //{
+    //    //rayTraceRenderer.Update();
+    //}
+    //else
+    //{
         //renderer2D.Update();
       //  hybridRenderer.Update();
       //blinnPhongRenderer.Update();
         pbrRenderer.Update();
         
-    }
+   // }
 
 
 }
@@ -257,7 +257,7 @@ void Scene::ImGuiUpdate()
 
     const auto objList = GameObjectManager::GetGameObjectList();
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
-    ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
+    //ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
 
     for (auto& model : ModelManager::GetModelList())
     {
@@ -290,7 +290,7 @@ void Scene::RebuildRenderers()
     //renderer2D.RebuildRenderers();
     //blinnPhongRenderer.RebuildRenderers();
     //hybridRenderer.RebuildRenderers();
-    //pbrRenderer.RebuildRenderers();
+    pbrRenderer.RebuildRenderers();
     //rayTraceRenderer.RebuildSwapChain();
     InterfaceRenderPass::RebuildSwapChain();
 
@@ -308,18 +308,18 @@ void Scene::Draw()
         return;
     }
 
-    if (GraphicsDevice::IsRayTracerActive())
-    {
-        //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-        
-    }
-    else
-    {
+    //if (GraphicsDevice::IsRayTracerActive())
+    //{
+    //    //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+    //    
+    //}
+    //else
+    //{
  /*       renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
        blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
         hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);*/
        pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
-    }
+    //}
  
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);

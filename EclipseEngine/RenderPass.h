@@ -16,7 +16,7 @@ private:
 protected:
 	VkRenderPass renderPass = VK_NULL_HANDLE;
 	std::vector<VkCommandBuffer> CommandBuffer;
-	std::vector<VkFramebuffer> SwapChainFramebuffers;
+	std::vector<VkFramebuffer> RenderPassFramebuffer;
 	glm::ivec2 RenderPassResolution;
 
 	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;

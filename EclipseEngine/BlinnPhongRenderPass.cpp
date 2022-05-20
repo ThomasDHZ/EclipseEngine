@@ -11,7 +11,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    SampleCount = GPULimitsandFeatures::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
@@ -141,7 +141,7 @@ void BlinnPhongRenderPass::BuildRenderPass()
 
 void BlinnPhongRenderPass::CreateRendererFramebuffers()
 {
-    SwapChainFramebuffers.resize(VulkanRenderer::GetSwapChainImageCount());
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ColorTexture->View);
@@ -161,7 +161,7 @@ void BlinnPhongRenderPass::CreateRendererFramebuffers()
         framebufferInfo.height = RenderPassResolution.y;
         framebufferInfo.layers = 1;
 
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &SwapChainFramebuffers[x]))
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]))
         {
             throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
         }
@@ -385,7 +385,7 @@ void BlinnPhongRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxVie
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = SwapChainFramebuffers[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());

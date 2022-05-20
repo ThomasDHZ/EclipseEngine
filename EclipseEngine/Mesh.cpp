@@ -31,7 +31,7 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	//VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
@@ -62,7 +62,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 	MeshTransform = glm::transpose(MeshTransform);
 
-	VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	//VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
@@ -91,38 +91,38 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
+	//BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
 
-		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
 
-		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
-		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
-		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
+	//	VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
+	//	IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
+	//	TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
 
-		TriangleCount = IndexCount / 3;
+	//	TriangleCount = IndexCount / 3;
 
-		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
-		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
-		AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
-		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
-		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
-		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
-		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
-		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
-		AccelerationStructureGeometry.geometry.triangles.transformData.deviceAddress = 0;
-		AccelerationStructureGeometry.geometry.triangles.transformData.hostAddress = nullptr;
+	//	AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+	//	AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
+	//	AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+	//	AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
+	//	AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
+	//	AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
+	//	AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
+	//	AccelerationStructureGeometry.geometry.triangles.transformData.deviceAddress = 0;
+	//	AccelerationStructureGeometry.geometry.triangles.transformData.hostAddress = nullptr;
 
-		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
-		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
-		AccelerationStructureBuildRangeInfo.firstVertex = 0;
-		AccelerationStructureBuildRangeInfo.transformOffset = 0;
+	//	AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
+	//	AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
+	//	AccelerationStructureBuildRangeInfo.firstVertex = 0;
+	//	AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		UpdateMeshBottomLevelAccelerationStructure();
+	//	UpdateMeshBottomLevelAccelerationStructure();
 }
 
 Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
@@ -150,7 +150,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
+	/*BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
 		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
@@ -180,7 +180,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
 		AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		UpdateMeshBottomLevelAccelerationStructure();
+		UpdateMeshBottomLevelAccelerationStructure();*/
 
 }
 
@@ -214,37 +214,37 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 	
-	BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
+	//BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
-		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
+	//	VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
 
-		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
-		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
-		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
+	//	VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
+	//	IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
+	//	TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
 
-		TriangleCount = IndexCount / 3;
+	//	TriangleCount = IndexCount / 3;
 
-		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
-		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
-		AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
-		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
-		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
-		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
-		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
-		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
+	//	AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+	//	AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
+	//	AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+	//	AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
+	//	AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
+	//	AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
+	//	AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
+	//	AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
 
-		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
+	//	AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
 
-		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
-		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
-		AccelerationStructureBuildRangeInfo.firstVertex = 0;
-		AccelerationStructureBuildRangeInfo.transformOffset = 0;
+	//	AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
+	//	AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
+	//	AccelerationStructureBuildRangeInfo.firstVertex = 0;
+	//	AccelerationStructureBuildRangeInfo.transformOffset = 0;
 
-		UpdateMeshBottomLevelAccelerationStructure();
+	//	UpdateMeshBottomLevelAccelerationStructure();
 }
 
 
@@ -254,7 +254,7 @@ Mesh::~Mesh()
 
 void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 {
-	VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
+	/*VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
 	VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
 	VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
 
@@ -331,7 +331,7 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 
 	BottomLevelAccelerationBuffer.AccelerationCommandBuffer(AccelerationBuildGeometryInfo, AccelerationBuildStructureRangeInfos);
 
-	scratchBuffer.DestoryBuffer();
+	scratchBuffer.DestoryBuffer();*/
 }
 
 void Mesh::Update(const glm::mat4& ModelMatrix)
@@ -401,7 +401,7 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-		UpdateMeshBottomLevelAccelerationStructure();
+		//UpdateMeshBottomLevelAccelerationStructure();
 	/*}*/
 }
 

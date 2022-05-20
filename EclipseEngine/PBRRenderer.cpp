@@ -13,7 +13,7 @@ void PBRRenderer::StartUp()
 	meshPickerRenderPass.StartUp();
 	environmentToCubeRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
 	brdfRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
-	irradianceRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
+	irradianceRenderPass.StartUp(16.0f);
 	prefilterRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
 	pbrRenderPass.StartUp();
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
@@ -45,11 +45,17 @@ void PBRRenderer::RebuildRenderers()
 
 void PBRRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
-	{
-		meshPickerRenderPass.Draw(sceneProperties);
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
-	}
+	//if (VulkanRenderer::EditorModeFlag)
+	//{
+	//	meshPickerRenderPass.Draw(sceneProperties);
+	//	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+	//}
+
+	//environmentToCubeRenderPass.Draw();
+	//CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.GetCommandBuffer());
+
+	//brdfRenderPass.Draw();
+	//CommandBufferSubmitList.emplace_back(brdfRenderPass.GetCommandBuffer());
 
 	irradianceRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(irradianceRenderPass.GetCommandBuffer());
