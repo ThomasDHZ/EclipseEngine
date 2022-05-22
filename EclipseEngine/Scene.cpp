@@ -183,15 +183,31 @@ Scene::Scene()
     MeshRendererManager::Update();
     ModelManager::Update();
 
+    PointLightBuffer plight = PointLightBuffer();
+    plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
+    plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight.specular = glm::vec3(1.0f);
 
-    auto dLight = DirectionalLightBuffer{};
-    dLight.direction = glm::vec4(1.0f);
-    dLight.diffuse = glm::vec4(0.5f);
-    dLight.specular = glm::vec4(1.0f);
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
+    plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight2.specular = glm::vec3(1.0f);
 
-    LightManager::AddDirectionalLight(dLight);
-    LightManager::AddPointLight();
-    LightManager::AddSpotLight();
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
+    plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight3.specular = glm::vec3(1.0f);
+
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
+    plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight4.specular = glm::vec3(1.0f);
+
+    LightManager::AddPointLight(plight);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
+
     //renderer2D.StartUp();
     //blinnPhongRenderer.StartUp();
     //hybridRenderer.StartUp();
@@ -271,7 +287,7 @@ void Scene::ImGuiUpdate()
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
 
-    //ImGui::Image(hybridRenderer.GBufferRenderPass.PositionTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+   // ImGui::Image(pbrRenderer.irradianceRenderPass.texture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //ImGui::Image(hybridRenderer.GBufferRenderPass.TangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //ImGui::Image(hybridRenderer.GBufferRenderPass.BiTangentTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //ImGui::Image(hybridRenderer.GBufferRenderPass.TBNormalTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
