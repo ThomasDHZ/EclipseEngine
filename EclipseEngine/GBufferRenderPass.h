@@ -18,7 +18,6 @@ private:
 	std::shared_ptr<GraphicsPipeline> hybridPipeline;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 public:

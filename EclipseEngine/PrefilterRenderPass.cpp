@@ -20,8 +20,11 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
     DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DrawToCubeMap->View);
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
@@ -98,31 +101,6 @@ void PrefilterRenderPass::BuildRenderPass()
     }
 }
 
-void PrefilterRenderPass::CreateRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
-    {
-        std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(DrawToCubeMap->View);
-
-        VkFramebufferCreateInfo frameBufferCreateInfo = {};
-        frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        frameBufferCreateInfo.renderPass = renderPass;
-        frameBufferCreateInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        frameBufferCreateInfo.pAttachments = AttachmentList.data();
-        frameBufferCreateInfo.width = RenderPassResolution.x;
-        frameBufferCreateInfo.height = RenderPassResolution.y;
-        frameBufferCreateInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &RenderPassFramebuffer[i]))
-        {
-            throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
-        }
-    }
-}
-
 void PrefilterRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
@@ -185,13 +163,13 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
     SceneManager::PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
 
-    prefilterPipeline->Destroy();
-
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DrawToCubeMap->View);
 
     RenderPass::Destroy();
 
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }

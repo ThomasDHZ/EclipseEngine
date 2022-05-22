@@ -9,7 +9,6 @@ private:
 	uint32_t CubeMapMipLevels = 0;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
@@ -19,7 +18,7 @@ public:
 	IrradianceRenderPass();
 	~IrradianceRenderPass();
 
-	std::shared_ptr<GraphicsPipeline> prefilterPipeline;
+	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
 	void StartUp(uint32_t cubeMapSize);
 	void RebuildSwapChain(uint32_t cubeMapSize);

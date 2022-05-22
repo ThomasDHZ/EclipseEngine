@@ -17,7 +17,6 @@ private:
 	std::shared_ptr<GraphicsPipeline> MeshPickerPipeline;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
 public:

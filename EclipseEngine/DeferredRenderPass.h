@@ -15,7 +15,6 @@ private:
 	std::shared_ptr<GraphicsPipeline> DeferredPipeline;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> PositionTexture,
 		std::shared_ptr<RenderedColorTexture> TangentTexture,
 		std::shared_ptr<RenderedColorTexture> BiTangentTexture,

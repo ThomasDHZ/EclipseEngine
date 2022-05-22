@@ -58,16 +58,14 @@ void FrameBufferRenderPass::BuildRendererFramebuffers()
 
     for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) 
     {
-        std::array<VkImageView, 1> attachments =
-        {
-            VulkanRenderer::GetSwapChainImageViews()[x]
-        };
+        std::vector<VkImageView> AttachmentList;
+        AttachmentList.emplace_back(VulkanRenderer::GetSwapChainImageViews()[x]);
 
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
         framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-        framebufferInfo.pAttachments = attachments.data();
+        framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
+        framebufferInfo.pAttachments = AttachmentList.data();
         framebufferInfo.width = RenderPassResolution.x;
         framebufferInfo.height = RenderPassResolution.y;
         framebufferInfo.layers = 1;

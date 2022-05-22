@@ -9,7 +9,6 @@ private:
 	uint32_t CubeMapMipLevels = 0;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;

@@ -82,9 +82,8 @@ void RenderedCubeMapTexture::CreateTextureSampler()
     TextureImageSamplerInfo.mipLodBias = 0.0f;
     TextureImageSamplerInfo.maxAnisotropy = 16.0f;
     TextureImageSamplerInfo.minLod = 0.0f;
-    TextureImageSamplerInfo.maxLod = 1.0f;
-    TextureImageSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_WHITE;
-    TextureImageSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    TextureImageSamplerInfo.maxLod = MipMapLevels;
+    TextureImageSamplerInfo.borderColor = VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE;
 
     if (vkCreateSampler(VulkanRenderer::GetDevice(), &TextureImageSamplerInfo, nullptr, &Sampler))
     {

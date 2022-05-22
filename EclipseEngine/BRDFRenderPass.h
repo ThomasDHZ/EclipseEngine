@@ -6,7 +6,6 @@ class BRDFRenderPass : public RenderPass
 {
 private:
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
 public:

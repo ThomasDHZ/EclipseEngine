@@ -28,6 +28,7 @@ protected:
 	VkDescriptorImageInfo AddTextureDescriptor(VkImageView view, VkSampler sampler);
 
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
+	virtual void CreateRendererFramebuffers(std::vector<VkImageView>& AttachmentList);
 
 	void AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
@@ -49,6 +50,7 @@ public:
 	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstSkyBoxView& sceneProperties);
 	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, PrefilterSkyboxSettings& prefilterSkyboxSettings);
 	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh);
+	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstIrradiance& skyboxView);
 	virtual void DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();

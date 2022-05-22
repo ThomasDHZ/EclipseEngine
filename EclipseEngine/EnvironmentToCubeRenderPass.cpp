@@ -14,8 +14,11 @@ void EnvironmentToCubeRenderPass::StartUp(uint32_t cubeMapSize)
     SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::CubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(SceneManager::CubeMap->View);
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();
@@ -93,31 +96,6 @@ void EnvironmentToCubeRenderPass::BuildRenderPass()
     }
 }
 
-void EnvironmentToCubeRenderPass::CreateRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
-    {
-        std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(SceneManager::CubeMap->View);
-
-        VkFramebufferCreateInfo frameBufferCreateInfo = {};
-        frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        frameBufferCreateInfo.renderPass = renderPass;
-        frameBufferCreateInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        frameBufferCreateInfo.pAttachments = AttachmentList.data();
-        frameBufferCreateInfo.width = RenderPassResolution.x;
-        frameBufferCreateInfo.height = RenderPassResolution.y;
-        frameBufferCreateInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &RenderPassFramebuffer[i]))
-        {
-            throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
-        }
-    }
-}
-
 void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
@@ -178,14 +156,17 @@ void EnvironmentToCubeRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     SceneManager::CubeMap->Destroy();
     EnvironmentToCubeRenderPassPipeline->Destroy();
 
-    RenderPass::Destroy();
-
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     SceneManager::CubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(SceneManager::CubeMap->View);
+
+    RenderPass::Destroy();
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();

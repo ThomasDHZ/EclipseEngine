@@ -65,6 +65,11 @@ void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::sha
     MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, skyboxView);
 }
 
+void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstIrradiance& skyboxView)
+{
+    MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, skyboxView);
+}
+
 void RenderPass::SetUpCommandBuffers()
 {
     CommandBuffer.resize(VulkanRenderer::GetSwapChainImageCount());
@@ -138,6 +143,28 @@ VkPipelineShaderStageCreateInfo RenderPass::CreateShader(const std::string& file
     vertShaderStageInfo.pName = "main";
 
     return vertShaderStageInfo;
+}
+
+void RenderPass::CreateRendererFramebuffers(std::vector<VkImageView>& AttachmentList)
+{
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
+
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
+    {
+        VkFramebufferCreateInfo frameBufferCreateInfo = {};
+        frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        frameBufferCreateInfo.renderPass = renderPass;
+        frameBufferCreateInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
+        frameBufferCreateInfo.pAttachments = AttachmentList.data();
+        frameBufferCreateInfo.width = RenderPassResolution.x;
+        frameBufferCreateInfo.height = RenderPassResolution.y;
+        frameBufferCreateInfo.layers = 1;
+
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &RenderPassFramebuffer[x]))
+        {
+            throw std::runtime_error("Failed to create FrameBuffer.");
+        }
+    }
 }
 
 void RenderPass::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)

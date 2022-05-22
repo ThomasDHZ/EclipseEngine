@@ -13,8 +13,11 @@ void BRDFRenderPass::StartUp(uint32_t textureSize)
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
     SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();
@@ -80,31 +83,6 @@ void BRDFRenderPass::BuildRenderPass()
     }
 }
 
-void BRDFRenderPass::CreateRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    for (size_t i = 0; i < VulkanRenderer::GetSwapChainImageCount(); i++)
-    {
-        std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
-
-        VkFramebufferCreateInfo frameBufferCreateInfo = {};
-        frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        frameBufferCreateInfo.renderPass = renderPass;
-        frameBufferCreateInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        frameBufferCreateInfo.pAttachments = AttachmentList.data();
-        frameBufferCreateInfo.width = RenderPassResolution.x;
-        frameBufferCreateInfo.height = RenderPassResolution.y;
-        frameBufferCreateInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &frameBufferCreateInfo, nullptr, &RenderPassFramebuffer[i]))
-        {
-            throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
-        }
-    }
-}
-
 void BRDFRenderPass::BuildRenderPassPipelines()
 {
 
@@ -165,12 +143,15 @@ void BRDFRenderPass::BuildRenderPassPipelines()
 void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
 {
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    SceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
 
     RenderPass::Destroy();
 
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();

@@ -24,8 +24,12 @@ void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionT
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
     RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(RenderedTexture->View);
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(PositionTexture, TangentTexture, BiTangentTexture, TBNormalTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
     SetUpCommandBuffers();
 }
@@ -103,32 +107,6 @@ void DeferredRenderPass::BuildRenderPass()
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
         throw std::runtime_error("Failed to create Buffer RenderPass.");
-    }
-}
-
-void DeferredRenderPass::CreateRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
-    {
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        framebufferInfo.pAttachments = AttachmentList.data();
-        framebufferInfo.width = RenderPassResolution.x;
-        framebufferInfo.height = RenderPassResolution.y;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]))
-        {
-            throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
-        }
     }
 }
 
@@ -233,10 +211,14 @@ void DeferredRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> 
     ColorTexture->RecreateRendererTexture(RenderPassResolution);
     RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(RenderedTexture->View);
+
     RenderPass::Destroy();
 
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(PositionTexture, TangentTexture, BiTangentTexture, TBNormalTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
     SetUpCommandBuffers();
 }

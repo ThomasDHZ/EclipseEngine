@@ -25,7 +25,6 @@ private:
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
-	void CreateRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
 public:

@@ -23,8 +23,19 @@ void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
     BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
     DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(PositionTexture->View);
+    AttachmentList.emplace_back(TangentTexture->View);
+    AttachmentList.emplace_back(BiTangentTexture->View);
+    AttachmentList.emplace_back(TBNormalTexture->View);
+    AttachmentList.emplace_back(NormalTexture->View);
+    AttachmentList.emplace_back(AlbedoTexture->View);
+    AttachmentList.emplace_back(SpecularTexture->View);
+    AttachmentList.emplace_back(BloomTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
+
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(shadowMap);
     SetUpCommandBuffers();
 }
@@ -187,39 +198,6 @@ void GBufferRenderPass::BuildRenderPass()
     }
 }
 
-void GBufferRenderPass::CreateRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(PositionTexture->View);
-    AttachmentList.emplace_back(TangentTexture->View);
-    AttachmentList.emplace_back(BiTangentTexture->View);
-    AttachmentList.emplace_back(TBNormalTexture->View);
-    AttachmentList.emplace_back(NormalTexture->View);
-    AttachmentList.emplace_back(AlbedoTexture->View);
-    AttachmentList.emplace_back(SpecularTexture->View);
-    AttachmentList.emplace_back(BloomTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++)
-    {
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        framebufferInfo.pAttachments = AttachmentList.data();
-        framebufferInfo.width = RenderPassResolution.x;
-        framebufferInfo.height = RenderPassResolution.y;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]))
-        {
-            throw std::runtime_error("Failed to create Gbuffer FrameBuffer.");
-        }
-    }
-}
-
 void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
@@ -301,10 +279,21 @@ void GBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> s
     BloomTexture->RecreateRendererTexture(RenderPassResolution);
     DepthTexture->RecreateRendererTexture(RenderPassResolution);
 
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(PositionTexture->View);
+    AttachmentList.emplace_back(TangentTexture->View);
+    AttachmentList.emplace_back(BiTangentTexture->View);
+    AttachmentList.emplace_back(TBNormalTexture->View);
+    AttachmentList.emplace_back(NormalTexture->View);
+    AttachmentList.emplace_back(AlbedoTexture->View);
+    AttachmentList.emplace_back(SpecularTexture->View);
+    AttachmentList.emplace_back(BloomTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
+
     RenderPass::Destroy();
 
     BuildRenderPass();
-    CreateRendererFramebuffers();
+    CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(shadowMap);
     SetUpCommandBuffers();
 }
