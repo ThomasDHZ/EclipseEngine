@@ -273,7 +273,6 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
-    <ClInclude Include="JsonHelper.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="Material.h" />
