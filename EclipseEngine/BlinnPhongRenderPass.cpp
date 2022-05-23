@@ -11,7 +11,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 
 void BlinnPhongRenderPass::StartUp()
 {
-    SampleCount = GPULimitsandFeatures::GetMaxSampleCount();
+    SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));

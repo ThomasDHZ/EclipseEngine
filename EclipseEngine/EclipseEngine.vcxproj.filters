@@ -548,9 +548,6 @@
     <ClInclude Include="VulkanBuffer.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GPULimitsandFeaturesSource.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="AccelerationStructureBuffer.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>

@@ -12,8 +12,8 @@ PBRRenderPass::~PBRRenderPass()
 
 void PBRRenderPass::StartUp()
 {
-    SampleCount = GPULimitsandFeatures::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2(); //This is getting the real SwapChain Resoulution.
+    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
     RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
