@@ -140,7 +140,7 @@ Scene::Scene()
         std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
         auto b = static_cast<MeshRenderer*>(a.get());
-        b->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        b->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         GameObjectManager::AddGameObject(obj);
 
         //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));

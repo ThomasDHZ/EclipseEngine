@@ -65,11 +65,6 @@ void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::sha
     MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, skyboxView);
 }
 
-void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstIrradiance& skyboxView)
-{
-    MeshRendererManager::DrawSkybox(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, skyboxView);
-}
-
 void RenderPass::SetUpCommandBuffers()
 {
     CommandBuffer.resize(VulkanRenderer::GetSwapChainImageCount());
