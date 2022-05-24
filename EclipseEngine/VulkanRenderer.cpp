@@ -18,9 +18,9 @@ std::vector<std::string> GraphicsDevice::FeatureList;
 VkPhysicalDeviceFeatures GraphicsDevice::PhysicalDeviceFeatures;
 VkPhysicalDeviceProperties GraphicsDevice::PhysicalDeviceProperties;
 VkPhysicalDeviceLimits GraphicsDevice::PhysicalDeviceLimits;
-//VkPhysicalDeviceAccelerationStructureFeaturesKHR GraphicsDevice::AccelerationStructureFeatures;
-//VkPhysicalDeviceRayTracingPipelineFeaturesKHR GraphicsDevice::RayTracingPipelineFeatures;
-//VkPhysicalDeviceRayTracingPipelinePropertiesKHR GraphicsDevice::RayTracingPipelineProperties;
+VkPhysicalDeviceAccelerationStructureFeaturesKHR GraphicsDevice::AccelerationStructureFeatures;
+VkPhysicalDeviceRayTracingPipelineFeaturesKHR GraphicsDevice::RayTracingPipelineFeatures;
+VkPhysicalDeviceRayTracingPipelinePropertiesKHR GraphicsDevice::RayTracingPipelineProperties;
 VkSampleCountFlagBits GraphicsDevice::MaxSampleCount;
 
 std::unique_ptr<GameController> GameController::Controller = nullptr;
@@ -90,7 +90,6 @@ void VulkanRenderer::StartUp()
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
-	//	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_RAY_QUERY_EXTENSION_NAME);
 
 	VkApplicationInfo VulkanInfo = {};
 	VulkanInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -193,23 +192,28 @@ void VulkanRenderer::StartUp()
 	BufferDeviceAddresFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
 	BufferDeviceAddresFeatures.bufferDeviceAddress = VK_TRUE;
 
-	VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
-	RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-	RayTracingPipelineFeatures.rayTracingPipeline = VK_TRUE;
-	RayTracingPipelineFeatures.pNext = &BufferDeviceAddresFeatures;
+	if (GraphicsDevice::IsRayTracingFeatureActive())
+	{
 
-	VkPhysicalDeviceRayTracingPipelinePropertiesKHR RayTracingPipelineProperties = {};
-	RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
-	RayTracingPipelineProperties.pNext = &RayTracingPipelineFeatures;
+		VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures{};
+		RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+		RayTracingPipelineFeatures.rayTracingPipeline = VK_TRUE;
 
-	VkPhysicalDeviceAccelerationStructureFeaturesKHR RayTracinDeviceProperties = {};
-	RayTracinDeviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-	RayTracinDeviceProperties.pNext = &RayTracingPipelineProperties;
+		VkPhysicalDeviceRayTracingPipelinePropertiesKHR RayTracingPipelineProperties = {};
+		RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
+		RayTracingPipelineProperties.pNext = &RayTracingPipelineFeatures;
 
-	VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
-	AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
-	AccelerationStructureFeatures.accelerationStructure = VK_TRUE;
-	AccelerationStructureFeatures.pNext = &RayTracinDeviceProperties;
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR RayTracinDeviceProperties = {};
+		RayTracinDeviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+		RayTracinDeviceProperties.pNext = &RayTracingPipelineProperties;
+
+		VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
+		AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+		AccelerationStructureFeatures.accelerationStructure = VK_TRUE;
+		AccelerationStructureFeatures.pNext = &RayTracinDeviceProperties;
+
+		BufferDeviceAddresFeatures.pNext = &AccelerationStructureFeatures;
+	}
 
 	VkPhysicalDeviceDescriptorIndexingFeatures PhysicalDeviceDescriptorIndexingFeatures{};
 	PhysicalDeviceDescriptorIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
@@ -217,7 +221,7 @@ void VulkanRenderer::StartUp()
 	PhysicalDeviceDescriptorIndexingFeatures.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
 	PhysicalDeviceDescriptorIndexingFeatures.runtimeDescriptorArray = VK_TRUE;
 	PhysicalDeviceDescriptorIndexingFeatures.descriptorBindingVariableDescriptorCount = VK_TRUE;
-	PhysicalDeviceDescriptorIndexingFeatures.pNext = &AccelerationStructureFeatures;
+	PhysicalDeviceDescriptorIndexingFeatures.pNext = &BufferDeviceAddresFeatures;
 
 	VkPhysicalDeviceRobustness2FeaturesEXT  PhysicalDeviceRobustness2Features{};
 	PhysicalDeviceRobustness2Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_FEATURES_EXT;
@@ -312,7 +316,6 @@ void VulkanRenderer::StartUp()
 	vkCmdTraceRaysKHR = reinterpret_cast<PFN_vkCmdTraceRaysKHR>(vkGetDeviceProcAddr(Device, "vkCmdTraceRaysKHR"));
 	vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(Device, "vkGetRayTracingShaderGroupHandlesKHR"));
 	vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
-
 }
 
 void VulkanRenderer::Update()

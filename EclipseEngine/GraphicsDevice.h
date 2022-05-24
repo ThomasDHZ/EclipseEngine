@@ -19,9 +19,9 @@ private:
 	static VkPhysicalDeviceFeatures PhysicalDeviceFeatures;
 	static VkPhysicalDeviceProperties PhysicalDeviceProperties;
 	static VkPhysicalDeviceLimits PhysicalDeviceLimits;
-	//static VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures;
-	//static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
-	//static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties;
+	static VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures;
+	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR RayTracingPipelineFeatures;
+	static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  RayTracingPipelineProperties;
 
 	static VkSampleCountFlagBits MaxSampleCount;
 	static bool RayTracingFeature;
@@ -53,25 +53,25 @@ public:
 
 	static void GetGPULimitsandFeatures(VkDevice& Device, VkPhysicalDevice& GPUDevice)
 	{
-		//AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+		AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
 
-		//RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
-		//RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
+		RayTracingPipelineFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR;
+		RayTracingPipelineFeatures.pNext = &AccelerationStructureFeatures;
 
 		VkPhysicalDeviceFeatures2 PhysicalDeviceFeatures2{};
 		PhysicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-		//PhysicalDeviceFeatures2.pNext = &RayTracingPipelineFeatures;
+		PhysicalDeviceFeatures2.pNext = &RayTracingPipelineFeatures;
 		vkGetPhysicalDeviceFeatures2(GPUDevice, &PhysicalDeviceFeatures2);
 		PhysicalDeviceFeatures = PhysicalDeviceFeatures2.features;
 
 		vkGetPhysicalDeviceProperties(GPUDevice, &PhysicalDeviceProperties);
 		PhysicalDeviceLimits = PhysicalDeviceProperties.limits;
 
-		//RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
-		//VkPhysicalDeviceProperties2 PhysicalDeviceProperties{};
-		//PhysicalDeviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-		//PhysicalDeviceProperties.pNext = &RayTracingPipelineProperties;
-		//vkGetPhysicalDeviceProperties2(GPUDevice, &PhysicalDeviceProperties);
+		RayTracingPipelineProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR;
+		VkPhysicalDeviceProperties2 PhysicalDeviceProperties{};
+		PhysicalDeviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+		PhysicalDeviceProperties.pNext = &RayTracingPipelineProperties;
+		vkGetPhysicalDeviceProperties2(GPUDevice, &PhysicalDeviceProperties);
 
 		MaxSampleCount = GetMaxUsableSampleCount(GPUDevice);
 
@@ -176,7 +176,7 @@ public:
 
 	static void CheckRayTracingCompatiblity(VkPhysicalDevice GPUDevice)
 	{
-		/*if (!RayTracingFeature)
+		if (!RayTracingFeature)
 		{
 			VkPhysicalDeviceAccelerationStructureFeaturesKHR AccelerationStructureFeatures{};
 			AccelerationStructureFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
@@ -209,7 +209,7 @@ public:
 			{
 				std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
 			}
-		}*/
+		}
 	}
 
 	static uint32_t GetAlignedSize(uint32_t value, uint32_t alignment)
@@ -234,7 +234,7 @@ public:
 	static VkPhysicalDeviceFeatures GetPhysicalDeviceFeatures() { return PhysicalDeviceFeatures; }
 	static VkPhysicalDeviceProperties GetPhysicalDeviceProperties() { return PhysicalDeviceProperties; }
 	static VkPhysicalDeviceLimits GetPhysicalDeviceFeaPhysicalDeviceLimits() { return PhysicalDeviceLimits; }
-	//static VkPhysicalDeviceAccelerationStructureFeaturesKHR GetAccelerationStructureFeatures() { return AccelerationStructureFeatures; }
-	//static VkPhysicalDeviceRayTracingPipelineFeaturesKHR GetRayTracingPipelineFeatures() { return RayTracingPipelineFeatures; }
-	//static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  GetRayTracingPipelineProperties() { return RayTracingPipelineProperties; }
+	static VkPhysicalDeviceAccelerationStructureFeaturesKHR GetAccelerationStructureFeatures() { return AccelerationStructureFeatures; }
+	static VkPhysicalDeviceRayTracingPipelineFeaturesKHR GetRayTracingPipelineFeatures() { return RayTracingPipelineFeatures; }
+	static VkPhysicalDeviceRayTracingPipelinePropertiesKHR  GetRayTracingPipelineProperties() { return RayTracingPipelineProperties; }
 };

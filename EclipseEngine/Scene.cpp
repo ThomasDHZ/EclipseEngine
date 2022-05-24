@@ -42,7 +42,7 @@ Scene::Scene()
 
     TextureManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
      //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
 
      //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
@@ -96,7 +96,7 @@ Scene::Scene()
      //b4->SetMaterial(material);
 
     {
-
+         /*
         std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
         IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
         IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
@@ -141,7 +141,7 @@ Scene::Scene()
         auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
         auto b = static_cast<MeshRenderer*>(a.get());
         b->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        GameObjectManager::AddGameObject(obj);
+        GameObjectManager::AddGameObject(obj);*/
 
         //std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
         //auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
@@ -183,6 +183,12 @@ Scene::Scene()
     MeshRendererManager::Update();
     ModelManager::Update();
 
+    auto dLight = DirectionalLightBuffer{};
+    dLight.diffuse = glm::vec3(0.2f);
+    dLight.specular = glm::vec3(0.5f);
+
+    LightManager::AddDirectionalLight(dLight);
+
     PointLightBuffer plight = PointLightBuffer();
     plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
     plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
@@ -209,10 +215,13 @@ Scene::Scene()
     LightManager::AddPointLight(plight4);
 
     //renderer2D.StartUp();
-    //blinnPhongRenderer.StartUp();
+    blinnPhongRenderer.StartUp();
     //hybridRenderer.StartUp();
-    pbrRenderer.StartUp();
-    //rayTraceRenderer.StartUp();
+    //pbrRenderer.StartUp();
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        rayTraceRenderer.StartUp();
+    }
 }
 
 Scene::~Scene()
@@ -251,18 +260,19 @@ void Scene::Update()
     cubeMapInfo.proj = glm::perspective(glm::radians(camera2.GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
     cubeMapInfo.proj[1][1] *= -1;
 
-    //if (GraphicsDevice::IsRayTracerActive())
-    //{
-    //    //rayTraceRenderer.Update();
-    //}
-    //else
-    //{
+    if (GraphicsDevice::IsRayTracingFeatureActive() &&
+        GraphicsDevice::IsRayTracerActive())
+    {
+        rayTraceRenderer.Update();
+    }
+    else
+    {
         //renderer2D.Update();
       //  hybridRenderer.Update();
-      //blinnPhongRenderer.Update();
-        pbrRenderer.Update();
+      blinnPhongRenderer.Update();
+       // pbrRenderer.Update();
         
-   // }
+    }
 
 
 }
@@ -273,7 +283,10 @@ void Scene::ImGuiUpdate()
 
     const auto objList = GameObjectManager::GetGameObjectList();
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
-    //ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
+    }
 
     for (auto& model : ModelManager::GetModelList())
     {
@@ -304,10 +317,13 @@ void Scene::RebuildRenderers()
     MeshRendererManager::Update();
 
     //renderer2D.RebuildRenderers();
-    //blinnPhongRenderer.RebuildRenderers();
+    blinnPhongRenderer.RebuildRenderers();
     //hybridRenderer.RebuildRenderers();
-    pbrRenderer.RebuildRenderers();
-    //rayTraceRenderer.RebuildSwapChain();
+   // pbrRenderer.RebuildRenderers();
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        rayTraceRenderer.RebuildSwapChain();
+    }
     InterfaceRenderPass::RebuildSwapChain();
 
     VulkanRenderer::UpdateRendererFlag = false;
@@ -324,18 +340,19 @@ void Scene::Draw()
         return;
     }
 
-    //if (GraphicsDevice::IsRayTracerActive())
-    //{
-    //    //rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-    //    
-    //}
-    //else
-    //{
- /*       renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
+    if (GraphicsDevice::IsRayTracingFeatureActive() && 
+        GraphicsDevice::IsRayTracerActive())
+    {
+        rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        
+    }
+    else
+    {
+       // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
        blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
-        hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);*/
-       pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
-    //}
+       // hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+       //pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+    }
  
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
@@ -353,8 +370,11 @@ void Scene::Destroy()
     GameObjectManager::Destory();
 
     //renderer2D.Destroy();
-    //blinnPhongRenderer.Destroy();
+    blinnPhongRenderer.Destroy();
     //hybridRenderer.Destroy();
-    pbrRenderer.Destroy();
-    //rayTraceRenderer.Destroy();
+   // pbrRenderer.Destroy();
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        rayTraceRenderer.Destroy();
+    }
 }

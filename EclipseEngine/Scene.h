@@ -35,10 +35,10 @@ private:
 	PerspectiveCamera camera2;
 
 	//Renderer2D renderer2D;
-	//BlinnPhongRenderer blinnPhongRenderer;
+	BlinnPhongRenderer blinnPhongRenderer;
 	//HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
-	//RayTraceRenderer rayTraceRenderer;
+	//PBRRenderer pbrRenderer;
+	RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();

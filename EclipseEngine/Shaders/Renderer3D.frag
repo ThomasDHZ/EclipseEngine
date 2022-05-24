@@ -115,7 +115,9 @@ void main() {
 //    vec3 Reflection = texture(CubeMap[0], R).rgb;
 //    vec3 finalMix = mix(result, Reflection, material.Reflectivness);
 
-    outColor = vec4(result, material.AlphaMapID);
+    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
+    finalResult = pow(finalResult, vec3(1.0 / 2.2f));
+    outColor = vec4(finalResult, material.AlphaMapID);
 //    outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
 }

@@ -91,7 +91,10 @@ void main()
     {
        result += LDiffuse + specular;
     }
-    outColor = vec4(result, 1.0f);
+
+     vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
+		  finalResult = pow(finalResult, vec3(1.0 / 2.2f));
+    outColor = vec4(finalResult, 1.0f);
 }
 
 vec3 CalcNormalDirLight(vec3 normal, int index)

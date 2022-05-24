@@ -35,5 +35,9 @@ layout(push_constant) uniform SceneData
 void main() {
    uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
    uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
-   outColor = vec4(texture(TextureMap[diffuse], UV).rgb, texture(TextureMap[alpha], UV).r);
+
+   vec3 result = texture(TextureMap[diffuse], UV).rgb;
+   	 vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
+		  finalResult = pow(finalResult, vec3(1.0 / 2.2f));
+   outColor = vec4(finalResult, texture(TextureMap[alpha], UV).r);
 }
