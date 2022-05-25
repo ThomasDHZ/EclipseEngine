@@ -36,61 +36,11 @@ void BlinnPhongRenderPass::StartUp()
 void BlinnPhongRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-
-    VkAttachmentDescription ColorAttachment = {};
-    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    ColorAttachment.samples = SampleCount;
-    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(ColorAttachment);
-
-    VkAttachmentDescription BloomAttachment = {};
-    BloomAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomAttachment.samples = SampleCount;
-    BloomAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    BloomAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    BloomAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BloomAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    BloomAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    BloomAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(BloomAttachment);
-
-    VkAttachmentDescription MultiSampledAttachment = {};
-    MultiSampledAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    MultiSampledAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    MultiSampledAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    MultiSampledAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    MultiSampledAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    MultiSampledAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    MultiSampledAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    MultiSampledAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(MultiSampledAttachment);
-
-    VkAttachmentDescription BloomMultiSampledTexture = {};
-    BloomMultiSampledTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomMultiSampledTexture.samples = VK_SAMPLE_COUNT_1_BIT;
-    BloomMultiSampledTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BloomMultiSampledTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    BloomMultiSampledTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BloomMultiSampledTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    BloomMultiSampledTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    BloomMultiSampledTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(BloomMultiSampledTexture);
-
-    VkAttachmentDescription DepthAttachment = {};
-    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = SampleCount;
-    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(DepthAttachment);
+    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(BloomTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderedBloomTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });

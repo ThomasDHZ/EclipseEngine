@@ -113,3 +113,18 @@ void RenderedDepthTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
+
+VkAttachmentDescription RenderedDepthTexture::GetAttachmentDescription()
+{
+	VkAttachmentDescription DepthAttachment = {};
+	DepthAttachment.format = TextureByteFormat;
+	DepthAttachment.samples = SampleCount;
+	DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+	DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+	return DepthAttachment;
+}

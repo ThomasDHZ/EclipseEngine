@@ -14,5 +14,6 @@ public:
     ~RenderedDepthTexture();
 
     void RecreateRendererTexture(glm::vec2 TextureResolution);
+    VkAttachmentDescription GetAttachmentDescription();
 };
 

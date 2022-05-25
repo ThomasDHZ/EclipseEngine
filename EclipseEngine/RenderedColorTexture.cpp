@@ -113,3 +113,18 @@ void RenderedColorTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
+
+VkAttachmentDescription RenderedColorTexture::GetAttachmentDescription()
+{
+	VkAttachmentDescription RenderedColorTextureAttachment = {};
+	RenderedColorTextureAttachment.format = TextureByteFormat;
+	RenderedColorTextureAttachment.samples = SampleCount;
+	RenderedColorTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	RenderedColorTextureAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	RenderedColorTextureAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	RenderedColorTextureAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	RenderedColorTextureAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	RenderedColorTextureAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+	return RenderedColorTextureAttachment;
+}

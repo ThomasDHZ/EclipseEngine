@@ -43,105 +43,15 @@ void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
 void GBufferRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-
-    VkAttachmentDescription PositionTexture = {};
-    PositionTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    PositionTexture.samples = SampleCount;
-    PositionTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    PositionTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    PositionTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    PositionTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    PositionTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    PositionTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(PositionTexture);
-
-    VkAttachmentDescription TangentTexture = {};
-    TangentTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    TangentTexture.samples = SampleCount;
-    TangentTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    TangentTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    TangentTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    TangentTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    TangentTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    TangentTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(TangentTexture);
-
-    VkAttachmentDescription BiTangentTexture = {};
-    BiTangentTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    BiTangentTexture.samples = SampleCount;
-    BiTangentTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    BiTangentTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    BiTangentTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BiTangentTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    BiTangentTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    BiTangentTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(BiTangentTexture);
-
-    VkAttachmentDescription TBNormalTexture = {};
-    TBNormalTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    TBNormalTexture.samples = SampleCount;
-    TBNormalTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    TBNormalTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    TBNormalTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    TBNormalTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    TBNormalTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    TBNormalTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(TBNormalTexture);
-
-    VkAttachmentDescription NormalTexture = {};
-    NormalTexture.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    NormalTexture.samples = SampleCount;
-    NormalTexture.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    NormalTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    NormalTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    NormalTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    NormalTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    NormalTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(NormalTexture);
-
-    VkAttachmentDescription AlbedoTexture = {};
-    AlbedoTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    AlbedoTexture.samples = SampleCount;
-    AlbedoTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    AlbedoTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    AlbedoTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    AlbedoTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    AlbedoTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    AlbedoTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(AlbedoTexture);
-
-    VkAttachmentDescription SpecularTexture = {};
-    SpecularTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    SpecularTexture.samples = SampleCount;
-    SpecularTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    SpecularTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    SpecularTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    SpecularTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    SpecularTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    SpecularTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(SpecularTexture);
-
-    VkAttachmentDescription BloomTexture = {};
-    BloomTexture.format = VK_FORMAT_R8G8B8A8_UNORM;
-    BloomTexture.samples = SampleCount;
-    BloomTexture.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BloomTexture.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    BloomTexture.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    BloomTexture.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    BloomTexture.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    BloomTexture.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(BloomTexture);
-
-    VkAttachmentDescription DepthAttachment = {};
-    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
-    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(DepthAttachment);
+    AttachmentDescriptionList.emplace_back(PositionTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(TangentTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(BiTangentTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(TBNormalTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(NormalTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(AlbedoTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(SpecularTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(BloomTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });

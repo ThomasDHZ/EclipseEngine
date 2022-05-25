@@ -101,3 +101,18 @@ void RenderedCubeMapTexture::RecreateRendererTexture(glm::ivec2 TextureResolutio
     CreateTextureView();
     CreateTextureSampler();
 }
+
+VkAttachmentDescription RenderedCubeMapTexture::GetAttachmentDescription()
+{
+    VkAttachmentDescription CubeMapTextureAttachment = {};
+
+    CubeMapTextureAttachment.format = TextureByteFormat;
+    CubeMapTextureAttachment.samples = SampleCount;
+    CubeMapTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    CubeMapTextureAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    CubeMapTextureAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    CubeMapTextureAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    CubeMapTextureAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    CubeMapTextureAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    return CubeMapTextureAttachment;
+}

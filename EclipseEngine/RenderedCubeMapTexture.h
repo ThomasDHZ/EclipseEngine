@@ -14,4 +14,5 @@ public:
     ~RenderedCubeMapTexture();
 
     void RecreateRendererTexture(glm::ivec2 TextureResolution);
+    VkAttachmentDescription GetAttachmentDescription();
 };

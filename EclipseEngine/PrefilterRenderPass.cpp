@@ -32,17 +32,7 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
 void PrefilterRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-
-    VkAttachmentDescription CubeMapAttachment = {};
-    CubeMapAttachment.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-    CubeMapAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    CubeMapAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    CubeMapAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    CubeMapAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    CubeMapAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    CubeMapAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    CubeMapAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(CubeMapAttachment);
+    AttachmentDescriptionList.emplace_back(DrawToCubeMap->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });

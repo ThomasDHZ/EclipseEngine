@@ -37,28 +37,8 @@ void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionT
 void DeferredRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-
-    VkAttachmentDescription ColorAttachment = {};
-    ColorAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    ColorAttachment.samples = SampleCount;
-    ColorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    ColorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    ColorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ColorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    ColorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    ColorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(ColorAttachment);
-
-    VkAttachmentDescription MultiSampledAttachment = {};
-    MultiSampledAttachment.format = VK_FORMAT_R8G8B8A8_UNORM;
-    MultiSampledAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    MultiSampledAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    MultiSampledAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    MultiSampledAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    MultiSampledAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    MultiSampledAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    MultiSampledAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    AttachmentDescriptionList.emplace_back(MultiSampledAttachment);
+    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
