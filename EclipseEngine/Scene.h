@@ -35,9 +35,9 @@ private:
 	PerspectiveCamera camera2;
 
 	//Renderer2D renderer2D;
-	BlinnPhongRenderer blinnPhongRenderer;
+	//BlinnPhongRenderer blinnPhongRenderer;
 	//HybridRenderer hybridRenderer;
-	//PBRRenderer pbrRenderer;
+	PBRRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
 
 public:

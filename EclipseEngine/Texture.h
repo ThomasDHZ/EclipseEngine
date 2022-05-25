@@ -102,6 +102,7 @@ public:
         json["Width"] = Width;
         json["Height"] = Height;
         json["Depth"] = Depth;
+
         json["MipMapLevels"] = MipMapLevels;
         json["SampleCount"] = SampleCount;
 

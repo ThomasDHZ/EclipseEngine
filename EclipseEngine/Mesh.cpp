@@ -11,7 +11,6 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 {
 	GenerateID();
 	GenerateColorID();
-	//VertexList = vertices;
 
 	IndexList = {
 

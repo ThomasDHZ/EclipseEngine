@@ -28,14 +28,15 @@ Texture::Texture(TextureTypeEnum textureType)
 
 Texture::Texture(nlohmann::json& json)
 {
+	GenerateID();
 
 	json.at("FilePath").get_to(FilePath);
 	json.at("TextureName").get_to(TextureName);
-	GenerateID();
 
 	json.at("Width").get_to(Width);
 	json.at("Height").get_to(Height);
 	json.at("Depth").get_to(Depth);
+	json.at("MipMapLevels").get_to(MipMapLevels);
 
 	json.at("TextureType").get_to(TextureType);
 	json.at("StartTextureByteFormat").get_to(StartTextureByteFormat);

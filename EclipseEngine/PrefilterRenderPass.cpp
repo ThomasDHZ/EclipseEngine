@@ -213,7 +213,7 @@ void PrefilterRenderPass::Draw()
     rect2D.offset.y = 0.0f;
 
     PrefilterSkyboxSettings prefiliter;
-    for (unsigned int mip = 0; mip < 5; ++mip)
+    for (unsigned int mip = 0;  mip < CubeMapMipLevels; mip++)
     {
         VkViewport viewport{};
         viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
@@ -222,7 +222,7 @@ void PrefilterRenderPass::Draw()
         viewport.maxDepth = 1.0f;
 
         prefiliter.SkyboxSize = RenderPassResolution.x;
-        prefiliter.roughness = (float)mip / (float)(5 - 1);
+        prefiliter.roughness = (float)mip / (float)(CubeMapMipLevels - 1);
 
         vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
         vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);

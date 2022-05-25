@@ -93,9 +93,6 @@ private:
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 	std::shared_ptr<Texture> ShadowMap = nullptr;
 
-
-
-
 	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;
 
@@ -170,9 +167,17 @@ public:
 		nlohmann::json json;
 
 		json["MaterialName"] = MaterialName;
+
 		json["Ambient"] = { Ambient.x, Ambient.y, Ambient.z };
 		json["Diffuse"] = { Diffuse.x, Diffuse.y, Diffuse.z };
 		json["Specular"] = { Specular.x, Specular.y, Specular.z };
+
+		json["Albedo"] = { Albedo.x, Albedo.y, Albedo.z };
+		json["Matallic"] = { Matallic };
+		json["Roughness"] = { Roughness };
+		json["AmbientOcclusion"] = { AmbientOcclusion };
+		json["Alpha"] = { Alpha };
+
 		json["Shininess"] = Shininess;
 		json["Reflectivness"] = Reflectivness;
 
@@ -216,7 +221,10 @@ public:
 		{
 			json["EmissionMap"] = EmissionMap->ToJson();
 		}
-
+		if (ShadowMap != nullptr)
+		{
+			json["ShadowMap"] = ShadowMap->ToJson();
+		}
 		return json;
 	}
 };

@@ -28,7 +28,6 @@ private:
 	uint64_t ModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 
-
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;

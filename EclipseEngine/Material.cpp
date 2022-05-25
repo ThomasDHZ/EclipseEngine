@@ -100,8 +100,14 @@ Material::Material(nlohmann::json& json)
 	materialTextureData.Specular.x = json.at("Specular")[0].get_to(Specular.x);
 	materialTextureData.Specular.y = json.at("Specular")[1].get_to(Specular.y);
 	materialTextureData.Specular.z = json.at("Specular")[2].get_to(Specular.z);
-	materialTextureData.Shininess = json.at("Shininess").get_to(Shininess);
+	materialTextureData.Albedo.x = json.at("Albedo")[0].get_to(Albedo.x);
+	materialTextureData.Albedo.y = json.at("Albedo")[1].get_to(Albedo.y);
+	materialTextureData.Albedo.z = json.at("Albedo")[2].get_to(Albedo.z);
+	materialTextureData.Matallic = json.at("Matallic").get_to(Matallic);
+	materialTextureData.Roughness = json.at("Roughness").get_to(Roughness);
+	materialTextureData.AmbientOcclusion = json.at("AmbientOcclusion").get_to(AmbientOcclusion);
 	materialTextureData.Reflectivness = json.at("Reflectivness").get_to(Reflectivness);
+	materialTextureData.Alpha = json.at("Alpha").get_to(Alpha);
 
 	if (json.contains("DiffuseMap"))
 	{

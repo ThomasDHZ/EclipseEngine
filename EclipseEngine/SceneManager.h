@@ -46,6 +46,15 @@ public:
 		}
 	}
 
+	static void SaveScene()
+	{
+	}
+
+	static void LoadScene()
+	{
+
+	}
+
 	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 };
