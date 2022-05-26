@@ -235,6 +235,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="EnvironmentTexture.h" />
+    <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="IrradianceRenderPass.h" />

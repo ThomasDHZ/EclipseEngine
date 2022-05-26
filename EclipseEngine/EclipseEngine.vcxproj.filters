@@ -554,6 +554,9 @@
     <ClInclude Include="BRDFRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="JsonConverter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">
