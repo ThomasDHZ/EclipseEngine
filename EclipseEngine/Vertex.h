@@ -3,7 +3,7 @@
 #include <vector>
 #include <array>
 #include <glm/glm.hpp>
-#include <json.hpp>
+#include "JsonConverter.h"
 
 struct LineVertex {
     glm::vec3 pos;
@@ -39,14 +39,10 @@ struct LineVertex {
         return AttributeDescriptionList;
     }
 
-    nlohmann::json ToJson()
+    void to_json(nlohmann::json& json)
     {
-        nlohmann::json json;
-
-        json["pos"] = { pos.x, pos.y, pos.z };
-        json["color"] = { color.x, color.y, color.z };
-
-        return json;
+        JsonConverter::to_json(json["pos"], pos);
+        JsonConverter::to_json(json["color"], color);
     }
 };
 
@@ -119,11 +115,19 @@ struct MeshVertex
         return AttributeDescriptions;
     }
 
-    nlohmann::json ToJson()
+    void to_json(nlohmann::json& json)
     {
-        nlohmann::json json;
-
-
-        return json;
+        JsonConverter::to_json(json["Position"], Position);
+        JsonConverter::to_json(json["PositionPadding"], PositionPadding);
+        JsonConverter::to_json(json["Normal"], Normal);
+        JsonConverter::to_json(json["NormalPadding"], NormalPadding);
+        JsonConverter::to_json(json["UV"], UV);
+        JsonConverter::to_json(json["UVPadding"], UVPadding);
+        JsonConverter::to_json(json["Tangant"], Tangant);
+        JsonConverter::to_json(json["TangantPadding"], TangantPadding);
+        JsonConverter::to_json(json["BiTangant"], BiTangant);
+        JsonConverter::to_json(json["BiTangentPadding"], BiTangentPadding);
+        JsonConverter::to_json(json["Color"], Color);
+        JsonConverter::to_json(json["ColorPadding"], ColorPadding);
     }
 };

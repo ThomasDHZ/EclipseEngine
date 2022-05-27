@@ -1,4 +1,5 @@
 #pragma once
+#include "JsonConverter.h"
 #include "UniformBuffer.h"
 
 template <class T>
@@ -6,6 +7,7 @@ class Light
 {
 
 protected:
+	std::string LightName;
 	UniformBuffer<T> LightBuffer;
 
 public:

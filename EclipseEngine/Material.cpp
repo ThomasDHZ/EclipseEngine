@@ -91,6 +91,7 @@ Material::Material(nlohmann::json& json)
 	GenerateID();
 	MaterialName = json.at("MaterialName").get_to(MaterialName);
 
+	//glm::from_json(json.at("Ambient"), materialTextureData.Ambient);
 	materialTextureData.Ambient.x = json.at("Ambient")[0].get_to(Ambient.x);
 	materialTextureData.Ambient.y = json.at("Ambient")[1].get_to(Ambient.y);
 	materialTextureData.Ambient.z = json.at("Ambient")[2].get_to(Ambient.z);

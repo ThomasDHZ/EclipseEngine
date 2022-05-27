@@ -241,6 +241,24 @@ public:
 		return SpotLightBufferList;
 	}
 
+	static nlohmann::json SaveLights()
+	{
+		nlohmann::json json;
+		for (int x = 0; x < DirectionalLightList.size(); x++)
+		{
+			DirectionalLightList[x]->to_json(json[x]);
+		}
+		for (int x = 0; x < PointLightList.size(); x++)
+		{
+			PointLightList[x]->to_json(json[x]);
+		}
+		for (int x = 0; x < SpotLightList.size(); x++)
+		{
+			SpotLightList[x]->to_json(json[x]);
+		}
+		return json;
+	}
+
 	static uint32_t GetDirectionalLightCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }

@@ -6,6 +6,7 @@
 #include "AccelerationStructureBuffer.h"
 #include "Bone.h"
 #include "Converters.h"
+#include "JsonConverter.h"
 
 enum MeshTypeEnum
 {
@@ -19,6 +20,12 @@ struct MeshBoneWeights
 {
 	glm::ivec4 BoneID = glm::ivec4(0);
 	glm::vec4 BoneWeights = glm::vec4(0.0f);
+
+	void to_json(nlohmann::json& json)
+	{
+		JsonConverter::to_json(json["BoneID"], BoneID);
+		JsonConverter::to_json(json["BoneWeights"], BoneWeights);
+	}
 };
 
 struct MeshLoadingInfo
@@ -137,26 +144,6 @@ public:
 	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }
 	glm::vec2* GetUVFlip() { return &meshProperties.UVFlip; }
 
-	nlohmann::json ToJson()
-	{
-		nlohmann::json json;
-
-		if (VertexList.size() != 0)
-		{
-			for (int x = 0; x < VertexList.size(); x++)
-			{
-				json["VertexList"][x] = VertexList[x].ToJson();
-			}
-		}
-		if (IndexList.size() != 0)
-		{
-			json["IndexList"] = IndexList;
-		}
-		json["Material"] = material->ToJson();
-
-		return json;
-	}
-
 	class MeshTypeSort
 	{
 	public:
@@ -174,5 +161,33 @@ public:
 			return mesh1->MeshPosition.z < mesh2->MeshPosition.z;
 		}
 	};
+
+	void to_json(nlohmann::json& json)
+	{
+		json["meshType"] = meshType;
+		for (auto& vertex : VertexList)
+		{
+			vertex.to_json(json["Vertex"]);
+		}
+		json["Indices"] = IndexList;
+		for (auto& bone : BoneWeightList)
+		{
+			bone.to_json(json["BoneWeights"]);
+		}
+
+
+		std::vector<glm::mat4> BoneTransform;
+
+		glm::vec3 MeshPosition = glm::vec3(0.0f);
+		glm::vec3 MeshRotation = glm::vec3(0.0f);
+		glm::vec3 MeshScale = glm::vec3(1.0f);
+		glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
+		//JsonConverter::to_json(json["LightName"], LightName);
+		//JsonConverter::to_json(json["position"], LightBuffer.UniformDataInfo.position);
+		//JsonConverter::to_json(json["direction"], LightBuffer.UniformDataInfo.direction);
+		//JsonConverter::to_json(json["diffuse"], LightBuffer.UniformDataInfo.diffuse);
+		//JsonConverter::to_json(json["specular"], LightBuffer.UniformDataInfo.specular);
+		//JsonConverter::to_json(json["LightSpaceMatrix"], LightBuffer.UniformDataInfo.LightSpaceMatrix);
+	}
 };
 

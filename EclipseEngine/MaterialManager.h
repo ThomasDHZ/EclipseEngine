@@ -123,7 +123,7 @@ public:
 		nlohmann::json json;
 		for (int x = 0; x < MaterialList.size(); x++)
 		{
-			json[x] = MaterialList[x]->ToJson();
+			MaterialList[x]->to_json(json);
 		}
 		return json;
 	}

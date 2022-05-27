@@ -79,6 +79,19 @@ struct MeshProperties
 	alignas(4) float heightScale = 0.1f;
 	alignas(4) float minLayers = 8;
 	alignas(4) float maxLayers = 32;
+
+	void to_json(nlohmann::json& json)
+	{
+		materialBufferData.to_json(json["materialBufferData"]);
+		JsonConverter::to_json(json["MeshTransform"], MeshTransform);
+		JsonConverter::to_json(json["ModelTransform"], ModelTransform);
+		JsonConverter::to_json(json["UVOffset"], UVOffset);
+		JsonConverter::to_json(json["UVScale"], UVScale);
+		JsonConverter::to_json(json["UVFlip"], UVFlip);
+		JsonConverter::to_json(json["heightScale"], heightScale);
+		JsonConverter::to_json(json["minLayers"], minLayers);
+		JsonConverter::to_json(json["maxLayers"], maxLayers);
+	}
 };
 
 template <class T>

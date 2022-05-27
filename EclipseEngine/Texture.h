@@ -92,26 +92,20 @@ public:
     VkSampler* GetSamplerPtr() { return &Sampler; }
     uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }
 
-    virtual nlohmann::json ToJson()
+
+    void to_json(nlohmann::json& json)
     {
-        nlohmann::json json;
-
-        json["FilePath"] = FilePath;
-        json["TextureName"] = TextureName;
-
-        json["Width"] = Width;
-        json["Height"] = Height;
-        json["Depth"] = Depth;
-
-        json["MipMapLevels"] = MipMapLevels;
-        json["SampleCount"] = SampleCount;
-
-        json["TextureType"] = TextureType;
-        json["StartTextureByteFormat"] = StartTextureByteFormat;
-        json["TextureByteFormat"] = TextureByteFormat;
-        json["TextureImageLayout"] = TextureImageLayout;
-
-        return json;
+        JsonConverter::to_json(json["FilePath"], FilePath);
+        JsonConverter::to_json(json["TextureName"], TextureName);
+        JsonConverter::to_json(json["Width"], Width);
+        JsonConverter::to_json(json["Height"], Height);
+        JsonConverter::to_json(json["Depth"], Depth);
+        JsonConverter::to_json(json["MipMapLevels"], MipMapLevels);
+        JsonConverter::to_json(json["SampleCount"], SampleCount);
+        JsonConverter::to_json(json["TextureType"], TextureType);
+        JsonConverter::to_json(json["StartTextureByteFormat"], StartTextureByteFormat);
+        JsonConverter::to_json(json["TextureByteFormat"], TextureByteFormat);
+        JsonConverter::to_json(json["TextureImageLayout"], TextureImageLayout);
     }
 
 };

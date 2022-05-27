@@ -168,12 +168,6 @@ Scene::Scene()
         GameObjectManager::AddGameObject(obj5);
     }
 
-    nlohmann::json json3;
-    json3["GameObjectList"] = GameObjectManager::SaveGameObjects();
-    json3["MaterialList"] = MaterialManager::SaveMaterials();
-
-    std::cout << json3 << std::endl;
-
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
     //auto a2 = obj->GetComponentByType(ComponentType::kMeshRenderer);
     //auto b2 = static_cast<MeshRenderer*>(a2.get());
@@ -219,6 +213,13 @@ Scene::Scene()
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
     LightManager::AddPointLight(plight4);
+
+    nlohmann::json json3;
+    json3["GameObjectList"] = GameObjectManager::SaveGameObjects();
+    json3["MaterialList"] = MaterialManager::SaveMaterials();
+    json3["LightList"] = LightManager::SaveLights();
+
+    std::cout << json3 << std::endl;
 
     //renderer2D.StartUp();
     //blinnPhongRenderer.StartUp();
