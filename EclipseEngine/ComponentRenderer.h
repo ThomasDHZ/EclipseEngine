@@ -19,13 +19,10 @@ public:
 
     std::shared_ptr<Model> GetModel() { return model; }
 
-    virtual nlohmann::json ToJson() override
+    virtual void to_json(nlohmann::json& json) override
     {
-        nlohmann::json json = Component::ToJson();
-
-      /*  json["Mesh"] = mesh->ToJson();*/
-
-        return json;
+        Component::to_json(json);
+        model->to_json(json["Model"]);
     }
 };
 

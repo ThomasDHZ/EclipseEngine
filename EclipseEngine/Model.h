@@ -25,6 +25,8 @@ class Model
 private:
 	static uint64_t ModelIDCounter;
 
+	std::string ModelFilePath;
+
 	uint64_t ModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 
@@ -78,5 +80,14 @@ public:
 	glm::vec3* GetModelPositionPtr() { return &ModelPosition; }
 	glm::vec3* GetModelRotationPtr() { return &ModelRotation; }
 	glm::vec3* GetModelScalePtr() { return &ModelScale; }
+
+	void to_json(nlohmann::json& json)
+	{
+		JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
+		for (int x = 0; x < MeshList.size(); x++)
+		{
+			MeshList[x]->to_json(json["MeshList"][x]);
+		}
+	}
 };
 

@@ -48,14 +48,10 @@ public:
 	ComponentSubType GetComponentSubType() { return componentSubType; }
 	uint64_t GetComponentID() { return ComponentID; }
 
-	virtual nlohmann::json ToJson()
+	virtual void to_json(nlohmann::json& json)
 	{
-		nlohmann::json json;
-
-		json["componentType"] = componentType;
-		json["componentSubType"] = componentSubType;
-
-		return json;
+		JsonConverter::to_json(json["componentType"], componentType);
+		JsonConverter::to_json(json["componentSubType"], componentSubType);
 	}
 };
 

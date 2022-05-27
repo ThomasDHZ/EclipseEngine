@@ -10,6 +10,8 @@ Model::Model()
 Model::Model(const std::string& FilePath, uint64_t GameObjectID)
 {
 	GenerateID();
+	ModelFilePath = FilePath;
+
 	Assimp::Importer ModelImporter;
 
 	const aiScene* Scene = ModelImporter.ReadFile(FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);

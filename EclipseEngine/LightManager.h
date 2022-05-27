@@ -246,15 +246,15 @@ public:
 		nlohmann::json json;
 		for (int x = 0; x < DirectionalLightList.size(); x++)
 		{
-			DirectionalLightList[x]->to_json(json[x]);
+			DirectionalLightList[x]->to_json(json["DirectionalLightList"][x]);
 		}
 		for (int x = 0; x < PointLightList.size(); x++)
 		{
-			PointLightList[x]->to_json(json[x]);
+			PointLightList[x]->to_json(json["PointLightList"][x]);
 		}
 		for (int x = 0; x < SpotLightList.size(); x++)
 		{
-			SpotLightList[x]->to_json(json[x]);
+			SpotLightList[x]->to_json(json["SpotLightList"][x]);
 		}
 		return json;
 	}

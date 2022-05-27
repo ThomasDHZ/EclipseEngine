@@ -76,7 +76,7 @@ public:
 		nlohmann::json json;
 		for (int x = 0; x < objList.size(); x++)
 		{
-			json[x] = objList[x]->ToJson();
+			objList[x]->to_json(json["ObjectList"][x]);
 		}
 		return json;
 	}

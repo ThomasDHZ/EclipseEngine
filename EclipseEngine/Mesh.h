@@ -169,25 +169,15 @@ public:
 		{
 			vertex.to_json(json["Vertex"]);
 		}
-		json["Indices"] = IndexList;
+		JsonConverter::to_json(json["indices"], IndexList);
 		for (auto& bone : BoneWeightList)
 		{
-			bone.to_json(json["BoneWeights"]);
+			bone.to_json(json["BoneWeightList"]);
 		}
+		JsonConverter::to_json(json["BoneTransform"], BoneTransform);
 
-
-		std::vector<glm::mat4> BoneTransform;
-
-		glm::vec3 MeshPosition = glm::vec3(0.0f);
-		glm::vec3 MeshRotation = glm::vec3(0.0f);
-		glm::vec3 MeshScale = glm::vec3(1.0f);
-		glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
-		//JsonConverter::to_json(json["LightName"], LightName);
-		//JsonConverter::to_json(json["position"], LightBuffer.UniformDataInfo.position);
-		//JsonConverter::to_json(json["direction"], LightBuffer.UniformDataInfo.direction);
-		//JsonConverter::to_json(json["diffuse"], LightBuffer.UniformDataInfo.diffuse);
-		//JsonConverter::to_json(json["specular"], LightBuffer.UniformDataInfo.specular);
-		//JsonConverter::to_json(json["LightSpaceMatrix"], LightBuffer.UniformDataInfo.LightSpaceMatrix);
+		meshProperties.to_json(json["MeshProperties"]);
+		material->to_json(json["Material"]);
 	}
 };
 

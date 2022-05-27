@@ -57,18 +57,14 @@ public:
 		return this->GameObjectID == rhs.GameObjectID; 
 	}
 
-	virtual nlohmann::json ToJson()
+	virtual void to_json(nlohmann::json& json)
 	{
-		nlohmann::json json;
+		JsonConverter::to_json(json["ObjectName"], ObjectName);
 
-		json["ObjectName"] = ObjectName;
 		for (int x = 0; x < ComponentList.size(); x++)
 		{
-			json["ComponentList"][x] = ComponentList[x]->ToJson();
+			ComponentList[x]->to_json(json["ComponentList"][x]);
 		}
-		std::cout << json << std::endl;
-
-		return json;
 	}
 };
 
