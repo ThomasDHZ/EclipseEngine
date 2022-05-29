@@ -30,11 +30,18 @@ protected:
 	ComponentType componentType;
 	ComponentSubType componentSubType;
 
+	void from_json(const nlohmann::json& json)
+	{
+		json.at("componentType").get_to(componentType);
+		json.at("componentSubType").get_to(componentSubType);
+	}
+
 public:
 
 	Component();
+	Component(ComponentType type);
 	Component(uint64_t GameObjectID, ComponentType type, ComponentSubType componentSubType);
-	Component(const nlohmann::json& json);
+
 	virtual ~Component();
 
 	virtual void Update(float DeltaTime)

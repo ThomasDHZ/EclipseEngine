@@ -7,7 +7,13 @@ Component::Component()
 	ComponentID = 0;
 	ParentGameObjectID = 0;
 	componentType = kNullComponent;
+}
 
+Component::Component(ComponentType type)
+{
+	ComponentID = 0;
+	ParentGameObjectID = 0;
+	componentType = type;
 }
 
 Component::Component(uint64_t GameObjectID, ComponentType type, ComponentSubType subtype)
@@ -16,12 +22,6 @@ Component::Component(uint64_t GameObjectID, ComponentType type, ComponentSubType
 	ParentGameObjectID = GameObjectID;
 	componentType = type;
 	componentSubType = subtype;
-}
-
-Component::Component(const nlohmann::json& json)
-{
-	//json.at("componentType").get_to(componentType);
-	//json.at("componentSubType").get_to(componentSubType);
 }
 
 Component::~Component()

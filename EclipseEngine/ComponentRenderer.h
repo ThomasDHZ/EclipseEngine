@@ -8,6 +8,11 @@ private:
 protected:
     std::shared_ptr<Model> model;
 
+    void from_json(nlohmann::json& json)
+    {
+       Component::from_json(json);
+    }
+
 public:
     ComponentRenderer();
     ComponentRenderer(uint64_t GameObjectID, ComponentType componentType);

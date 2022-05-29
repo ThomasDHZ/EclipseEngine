@@ -68,9 +68,10 @@ MeshRenderer::MeshRenderer(const std::string& FilePath, glm::vec3 position, glm:
 	ModelManager::AddModel(model);
 }
 
-MeshRenderer::MeshRenderer(nlohmann::json& json, uint64_t GameObjectID) : ComponentRenderer(GameObjectID, json)
+MeshRenderer::MeshRenderer(nlohmann::json json, uint64_t GameObjectID)
 {
-	//mesh = Mesh(vertices, indices);
+	ComponentRenderer::from_json(json);
+	std::cout << json << std::endl;
 }
 
 MeshRenderer::~MeshRenderer()

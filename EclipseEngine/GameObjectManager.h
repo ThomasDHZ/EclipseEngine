@@ -71,12 +71,22 @@ public:
 		return objList;
 	}
 
+	static void LoadGameObjects(nlohmann::json& json)
+	{
+		for (int x = 0; x < json["ObjectList"].size(); x++)
+		{
+			std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject(json.at("ObjectList")[x]));
+			objList.emplace_back(obj);
+		}
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
 	static nlohmann::json SaveGameObjects()
 	{
 		nlohmann::json json;
 		for (int x = 0; x < objList.size(); x++)
 		{
-			objList[x]->to_json(json["ObjectList"][x]);
+			objList[x]->to_json(json[x]);
 		}
 		return json;
 	}

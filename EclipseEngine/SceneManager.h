@@ -57,7 +57,7 @@ public:
 	{
 		nlohmann::json json;
 
-		json["GameObjectList"] = GameObjectManager::SaveGameObjects();
+		json["ObjectList"] = GameObjectManager::SaveGameObjects();
 		json["MaterialList"] = MaterialManager::SaveMaterials();
 		json["LightList"] = LightManager::SaveLights();
 
@@ -83,6 +83,7 @@ public:
 
 		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
 
+		GameObjectManager::LoadGameObjects(jsonstring);
 		MaterialManager::LoadMaterials(jsonstring);
 		LightManager::LoadLights(jsonstring);
 
