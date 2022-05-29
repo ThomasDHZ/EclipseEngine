@@ -9,6 +9,11 @@ PointLight::PointLight(PointLightBuffer light) : Light<PointLightBuffer>(light)
 	LightBuffer.Update(light);
 }
 
+PointLight::PointLight(nlohmann::json& json)
+{
+	from_json(json);
+}
+
 PointLight::~PointLight()
 {
 }

@@ -118,12 +118,25 @@ public:
 		return 0;
 	}
 
+	static void LoadMaterials(nlohmann::json& json)
+	{
+		auto a = json["MaterialList"].size();
+		for (int x = 0; x < json["MaterialList"].size(); x++)
+		{
+			std::shared_ptr<Material> material = std::make_shared<Material>(Material(json.at("MaterialList")[x]));
+			MaterialList.emplace_back(material);
+		}
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
 	static nlohmann::json SaveMaterials()
 	{
 		nlohmann::json json;
 		for (int x = 0; x < MaterialList.size(); x++)
 		{
-			MaterialList[x]->to_json(json["MaterialList"][x]);
+			MaterialList[x]->to_json(json[x]);
 		}
 		return json;
 	}

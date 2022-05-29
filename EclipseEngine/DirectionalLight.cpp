@@ -9,6 +9,11 @@ DirectionalLight::DirectionalLight(DirectionalLightBuffer light) : Light<Directi
 	LightBuffer.Update(light);
 }
 
+DirectionalLight::DirectionalLight(nlohmann::json& json)
+{
+	from_json(json);
+}
+
 DirectionalLight::~DirectionalLight()
 {
 }

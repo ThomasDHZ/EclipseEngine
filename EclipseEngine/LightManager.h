@@ -241,6 +241,27 @@ public:
 		return SpotLightBufferList;
 	}
 
+	static void LoadLights(nlohmann::json& json)
+	{
+		for (int x = 0; x < json["LightList"]["DirectionalLightList"].size(); x++)
+		{
+			std::shared_ptr<DirectionalLight> directionalLight = std::make_shared<DirectionalLight>(DirectionalLight(json["LightList"].at("DirectionalLightList")[x]));
+			DirectionalLightList.emplace_back(directionalLight);
+		}
+		for (int x = 0; x < json["LightList"]["PointLightList"].size(); x++)
+		{
+			std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>(PointLight(json["LightList"].at("PointLightList")[x]));
+			PointLightList.emplace_back(pointLight);
+		}
+		for (int x = 0; x < json["LightList"]["SpotLightList"].size(); x++)
+		{
+			std::shared_ptr<SpotLight> spotLight = std::make_shared<SpotLight>(SpotLight(json["LightList"].at("SpotLightList")[x]));
+			SpotLightList.emplace_back(spotLight);
+		}
+
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
 	static nlohmann::json SaveLights()
 	{
 		nlohmann::json json;

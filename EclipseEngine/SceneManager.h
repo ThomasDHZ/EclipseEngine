@@ -1,9 +1,16 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <iostream>
+#include <fstream>
+
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
 #include "Skybox.h"
+
+#include "GameObjectManager.h"
+#include "LightManager.h"
+#include "MaterialManager.h"
 
 class SceneManager
 {
@@ -46,12 +53,38 @@ public:
 		}
 	}
 
-	static void SaveScene()
+	static void SaveScene(const std::string FileName)
 	{
+		nlohmann::json json;
+
+		json["GameObjectList"] = GameObjectManager::SaveGameObjects();
+		json["MaterialList"] = MaterialManager::SaveMaterials();
+		json["LightList"] = LightManager::SaveLights();
+
+		std::ofstream SaveFile("../Scenes/example.txt");
+		if (SaveFile.is_open())
+		{
+			SaveFile << json;
+			SaveFile.close();
+		}
+		else std::cout << "Unable to open file";
 	}
 
-	static void LoadScene()
+	static void LoadScene(const std::string FileName)
 	{
+		std::string SceneInfo;
+		std::ifstream SceneFile;
+		SceneFile.open(FileName);
+		while (!SceneFile.eof())
+		{
+			getline(SceneFile, SceneInfo);
+		}
+		SceneFile.close();
+
+		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
+
+		MaterialManager::LoadMaterials(jsonstring);
+		LightManager::LoadLights(jsonstring);
 
 	}
 

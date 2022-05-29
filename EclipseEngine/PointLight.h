@@ -4,9 +4,23 @@
 
 class PointLight : public Light<PointLightBuffer>
 {
+private:
+	void from_json(nlohmann::json& json)
+	{
+		JsonConverter::from_json(json["LightName"], LightName);
+		JsonConverter::from_json(json["position"], LightBuffer.UniformDataInfo.position);
+		JsonConverter::from_json(json["diffuse"], LightBuffer.UniformDataInfo.diffuse);
+		JsonConverter::from_json(json["specular"], LightBuffer.UniformDataInfo.specular);
+		JsonConverter::from_json(json["constant"], LightBuffer.UniformDataInfo.constant);
+		JsonConverter::from_json(json["linear"], LightBuffer.UniformDataInfo.linear);
+		JsonConverter::from_json(json["quadratic"], LightBuffer.UniformDataInfo.quadratic);
+		JsonConverter::from_json(json["LightSpaceMatrix"], LightBuffer.UniformDataInfo.LightSpaceMatrix);
+	}
+
 public:
 	PointLight();
 	PointLight(PointLightBuffer light);
+	PointLight(nlohmann::json& json);
 	~PointLight();
 
 	void Update() override;
