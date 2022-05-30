@@ -103,22 +103,17 @@ GameObject::GameObject(nlohmann::json& json)
 {
 	json.at("ObjectName").get_to(ObjectName);
 
-	for (int x = 0; x <= json["ComponentList"].size(); x++)
+	for (int x = 0; x < json["ComponentList"].size(); x++)
 	{
 		ComponentType type = ComponentType::kNullComponent;
 		json["ComponentList"][x].at("componentType").get_to(type);
 
 		switch (type)
 		{
-		case ComponentType::kSpriteRenderer: {break; }
-		case ComponentType::kMeshRenderer:
-		{
-			MeshRenderer a = MeshRenderer(json["ComponentList"][0], GameObjectID);
-			break;
-		}
+			case ComponentType::kSpriteRenderer: {break; }
+			case ComponentType::kMeshRenderer: AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(json["ComponentList"][x], GameObjectID))); break;
 		}
 	}
-	auto abs = 34;
 }
 
 GameObject::~GameObject()

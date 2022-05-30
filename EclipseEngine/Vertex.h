@@ -115,19 +115,23 @@ struct MeshVertex
         return AttributeDescriptions;
     }
 
+    void from_json(nlohmann::json& json)
+    {
+        JsonConverter::from_json(json["Position"], Position);
+        JsonConverter::from_json(json["Normal"], Normal);
+        JsonConverter::from_json(json["UV"], UV);
+        JsonConverter::from_json(json["Tangant"], Tangant);
+        JsonConverter::from_json(json["BiTangant"], BiTangant);
+        JsonConverter::from_json(json["Color"], Color);
+    }
+
     void to_json(nlohmann::json& json)
     {
         JsonConverter::to_json(json["Position"], Position);
-        JsonConverter::to_json(json["PositionPadding"], PositionPadding);
         JsonConverter::to_json(json["Normal"], Normal);
-        JsonConverter::to_json(json["NormalPadding"], NormalPadding);
         JsonConverter::to_json(json["UV"], UV);
-        JsonConverter::to_json(json["UVPadding"], UVPadding);
         JsonConverter::to_json(json["Tangant"], Tangant);
-        JsonConverter::to_json(json["TangantPadding"], TangantPadding);
         JsonConverter::to_json(json["BiTangant"], BiTangant);
-        JsonConverter::to_json(json["BiTangentPadding"], BiTangentPadding);
         JsonConverter::to_json(json["Color"], Color);
-        JsonConverter::to_json(json["ColorPadding"], ColorPadding);
     }
 };

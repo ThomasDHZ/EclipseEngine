@@ -364,6 +364,12 @@ void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
 {
 }
 
+Model::Model(nlohmann::json& json)
+{
+	GenerateID();
+	from_json(json);
+}
+
 void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 {
 }

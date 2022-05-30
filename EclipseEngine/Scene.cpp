@@ -5,6 +5,15 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
+    //renderer2D.StartUp();
+//blinnPhongRenderer.StartUp();
+//hybridRenderer.StartUp();
+    pbrRenderer.StartUp();
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        rayTraceRenderer.StartUp();
+    }
+
     /*  nlohmann::json json;
       Vec4 a = Vec4()*/
 
@@ -218,19 +227,10 @@ Scene::Scene()
     //LightManager::AddPointLight(plight3);
     //LightManager::AddPointLight(plight4);
 
-    SceneManager::SaveScene("../Scenes/example.txt");
+   // SceneManager::SaveScene("../Scenes/example.txt");
 
 
    // std::cout << json3 << std::endl;
-
-    //renderer2D.StartUp();
-    //blinnPhongRenderer.StartUp();
-    //hybridRenderer.StartUp();
-    pbrRenderer.StartUp();
-    if (GraphicsDevice::IsRayTracingFeatureActive())
-    {
-        rayTraceRenderer.StartUp();
-    }
 }
 
 Scene::~Scene()

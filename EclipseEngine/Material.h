@@ -59,6 +59,32 @@ struct MaterialBufferData
 	alignas(4) uint32_t EmissionMapID = DefaultTextureID;
 	alignas(4) uint32_t ShadowMapID = DefaultTextureID;
 
+	void from_json(nlohmann::json& json)
+	{
+		JsonConverter::from_json(json["Ambient"], Ambient);
+		JsonConverter::from_json(json["Diffuse"], Diffuse);
+		JsonConverter::from_json(json["Specular"], Specular);
+		JsonConverter::from_json(json["Albedo"], Albedo);
+		JsonConverter::from_json(json["Matallic"], Matallic);
+		JsonConverter::from_json(json["Roughness"], Roughness);
+		JsonConverter::from_json(json["AmbientOcclusion"], AmbientOcclusion);
+		JsonConverter::from_json(json["Alpha"], Alpha);
+		JsonConverter::from_json(json["Shininess"], Shininess);
+		JsonConverter::from_json(json["Reflectivness"], Reflectivness);
+
+		JsonConverter::from_json(json["DiffuseMapID"], DiffuseMapID);
+		JsonConverter::from_json(json["SpecularMapID"], SpecularMapID);
+		JsonConverter::from_json(json["AlbedoMapID"], AlbedoMapID);
+		JsonConverter::from_json(json["MetallicMapID"], MetallicMapID);
+		JsonConverter::from_json(json["RoughnessMapID"], RoughnessMapID);
+		JsonConverter::from_json(json["AmbientOcclusionMapID"], AmbientOcclusionMapID);
+		JsonConverter::from_json(json["NormalMapID"], NormalMapID);
+		JsonConverter::from_json(json["DepthMapID"], DepthMapID);
+		JsonConverter::from_json(json["AlphaMapID"], AlphaMapID);
+		JsonConverter::from_json(json["EmissionMapID"], EmissionMapID);
+		JsonConverter::from_json(json["ShadowMapID"], ShadowMapID);
+	}
+
 	void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["Ambient"], Ambient);

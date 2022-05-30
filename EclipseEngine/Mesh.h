@@ -21,6 +21,12 @@ struct MeshBoneWeights
 	glm::ivec4 BoneID = glm::ivec4(0);
 	glm::vec4 BoneWeights = glm::vec4(0.0f);
 
+	void from_json(nlohmann::json& json)
+	{
+		JsonConverter::from_json(json["BoneID"], BoneID);
+		JsonConverter::from_json(json["BoneWeights"], BoneWeights);
+	}
+
 	void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["BoneID"], BoneID);
@@ -55,6 +61,42 @@ private:
 
 	void GenerateColorID();
 	void UpdateMeshBottomLevelAccelerationStructure();
+
+	void from_json(nlohmann::json& json)
+	{
+		JsonConverter::from_json(json["VertexCount"], VertexCount);
+		JsonConverter::from_json(json["IndexCount"], IndexCount);
+		JsonConverter::from_json(json["TriangleCount"], TriangleCount);
+		JsonConverter::from_json(json["BoneCount"], BoneCount);
+
+		meshType = MeshTypeEnum::kPolygon;
+
+		VertexList.resize(VertexCount);
+		for (int x = 0; x < json["Vertex"].size(); x++)
+		{
+			VertexList[x].from_json(json["Vertex"][x]);
+		}
+
+		JsonConverter::from_json(json["indices"], IndexList);
+
+		BoneWeightList.resize(BoneCount);
+		for (int x = 0; x < json["BoneWeightList"].size(); x++)
+		{
+			BoneWeightList[x].from_json(json["BoneWeightList"][x]);
+		}
+		JsonConverter::from_json(json["BoneTransform"], BoneTransform);
+
+		JsonConverter::from_json(json["MeshPosition"], MeshPosition);
+		JsonConverter::from_json(json["MeshRotation"], MeshRotation);
+		JsonConverter::from_json(json["MeshScale"], MeshScale);
+		JsonConverter::from_json(json["MeshTransformMatrix"], MeshTransformMatrix);
+
+		meshProperties.from_json(json["MeshProperties"]);
+
+		material = std::make_shared<Material>(Material(json["Material"]));
+		MaterialManager::AddMaterial(material);
+	}
+
 protected:
 
 	uint64_t MeshID = 0;
@@ -103,6 +145,7 @@ public:
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	Mesh(MeshLoadingInfo& meshLoader);
+	Mesh(nlohmann::json& json, uint64_t ModelID);
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);
@@ -164,19 +207,31 @@ public:
 
 	void to_json(nlohmann::json& json)
 	{
-		json["meshType"] = meshType;
-		for (auto& vertex : VertexList)
+		JsonConverter::to_json(json["VertexCount"], VertexCount);
+		JsonConverter::to_json(json["IndexCount"], IndexCount);
+		JsonConverter::to_json(json["TriangleCount"], TriangleCount);
+		JsonConverter::to_json(json["BoneCount"], BoneCount);
+
+		JsonConverter::to_json(json["meshType"], meshType);
+
+		for (int x = 0; x < VertexList.size(); x++)
 		{
-			vertex.to_json(json["Vertex"]);
+			VertexList[x].to_json(json["Vertex"][x]);
 		}
 		JsonConverter::to_json(json["indices"], IndexList);
-		for (auto& bone : BoneWeightList)
+		for (int x = 0; x < BoneWeightList.size(); x++)
 		{
-			bone.to_json(json["BoneWeightList"]);
+			BoneWeightList[x].to_json(json["BoneWeightList"][x]);
 		}
 		JsonConverter::to_json(json["BoneTransform"], BoneTransform);
 
+		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
+		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
+		JsonConverter::to_json(json["MeshScale"], MeshScale);
+		JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
+
 		meshProperties.to_json(json["MeshProperties"]);
+
 		material->to_json(json["Material"]);
 	}
 };

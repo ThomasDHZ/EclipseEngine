@@ -24,11 +24,11 @@ struct JsonConverter
 			}*/
 	}
 
-	static void to_json(nlohmann::json& json, int number)
+	static void to_json(nlohmann::json& json, int& number)
 	{
 		json = number;
 	}
-	static void from_json(nlohmann::json& json, int number)
+	static void from_json(nlohmann::json& json, int& number)
 	{
 		json.get_to(number);
 	}
@@ -46,11 +46,11 @@ struct JsonConverter
 	}
 
 
-	static void to_json(nlohmann::json& json, uint32_t number)
+	static void to_json(nlohmann::json& json, uint32_t& number)
 	{
 		json = number;
 	}
-	static void from_json(nlohmann::json& json, uint32_t number)
+	static void from_json(nlohmann::json& json, uint32_t& number)
 	{
 		json.get_to(number);
 	}
@@ -60,11 +60,7 @@ struct JsonConverter
 	}
 	static void from_json(nlohmann::json& json, std::vector<uint32_t>& numberList)
 	{
-		/*	for (auto& vec2 : numberList)
-			{
-				json[0].get_to(vec2.x);
-				json[1].get_to(vec2.y);
-			}*/
+		json.get_to(numberList);
 	}
 
 	static void to_json(nlohmann::json& json, float number)
@@ -82,11 +78,7 @@ struct JsonConverter
 	}
 	static void from_json(nlohmann::json& json, std::vector<float>& numberList)
 	{
-	/*	for (auto& vec2 : numberList)
-		{
-			json[0].get_to(vec2.x);
-			json[1].get_to(vec2.y);
-		}*/
+		json.get_to(numberList);
 	}
 
 	static void to_json(nlohmann::json& json, glm::vec2& vec2)
