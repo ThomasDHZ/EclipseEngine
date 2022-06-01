@@ -1,4 +1,6 @@
 #pragma once
+#include <future>
+
 #include "Vertex.h"
 #include "VulkanRenderer.h"
 #include "UniformBuffer.h"
@@ -62,29 +64,37 @@ private:
 	void GenerateColorID();
 	void UpdateMeshBottomLevelAccelerationStructure();
 
+	static std::mutex PushMeshMutex;
+	static std::vector<std::future<void>> FutureList;
+	static void LoadVerticesAsync(std::vector<MeshVertex> Vertices, const int index, nlohmann::json json)
+	{
+		std::lock_guard<std::mutex> lock(PushMeshMutex);
+		Vertices[index].from_json(json["Vertex"][index]);
+	}
+
 	void from_json(nlohmann::json& json)
 	{
-		JsonConverter::from_json(json["VertexCount"], VertexCount);
-		JsonConverter::from_json(json["IndexCount"], IndexCount);
-		JsonConverter::from_json(json["TriangleCount"], TriangleCount);
-		JsonConverter::from_json(json["BoneCount"], BoneCount);
+		//JsonConverter::from_json(json["VertexCount"], VertexCount);
+		//JsonConverter::from_json(json["IndexCount"], IndexCount);
+		//JsonConverter::from_json(json["TriangleCount"], TriangleCount);
+		//JsonConverter::from_json(json["BoneCount"], BoneCount);
 
-		meshType = MeshTypeEnum::kPolygon;
+		//meshType = MeshTypeEnum::kPolygon;
 
-		VertexList.resize(VertexCount);
-		for (int x = 0; x < json["Vertex"].size(); x++)
-		{
-			VertexList[x].from_json(json["Vertex"][x]);
-		}
+		////VertexList.resize(VertexCount);
+		////for (int x = 0; x < json["Vertex"].size(); x++)
+		////{
+		////	VertexList[x].from_json(json["Vertex"][x]);
+		////}
 
-		JsonConverter::from_json(json["indices"], IndexList);
+		////JsonConverter::from_json(json["indices"], IndexList);
 
-		BoneWeightList.resize(BoneCount);
-		for (int x = 0; x < json["BoneWeightList"].size(); x++)
-		{
-			BoneWeightList[x].from_json(json["BoneWeightList"][x]);
-		}
-		JsonConverter::from_json(json["BoneTransform"], BoneTransform);
+		//BoneWeightList.resize(BoneCount);
+		//for (int x = 0; x < json["BoneWeightList"].size(); x++)
+		//{
+		//	BoneWeightList[x].from_json(json["BoneWeightList"][x]);
+		//}
+		//JsonConverter::from_json(json["BoneTransform"], BoneTransform);
 
 		JsonConverter::from_json(json["MeshPosition"], MeshPosition);
 		JsonConverter::from_json(json["MeshRotation"], MeshRotation);
@@ -93,8 +103,10 @@ private:
 
 		meshProperties.from_json(json["MeshProperties"]);
 
-		material = std::make_shared<Material>(Material(json["Material"]));
-		MaterialManager::AddMaterial(material);
+		std::string FilePath = "";
+		json["MaterialPath"].get_to(FilePath);
+
+		MaterialManager::LoadMaterial(FilePath);
 	}
 
 protected:
@@ -207,23 +219,23 @@ public:
 
 	void to_json(nlohmann::json& json)
 	{
-		JsonConverter::to_json(json["VertexCount"], VertexCount);
-		JsonConverter::to_json(json["IndexCount"], IndexCount);
-		JsonConverter::to_json(json["TriangleCount"], TriangleCount);
-		JsonConverter::to_json(json["BoneCount"], BoneCount);
+		//JsonConverter::to_json(json["VertexCount"], VertexCount);
+		//JsonConverter::to_json(json["IndexCount"], IndexCount);
+		//JsonConverter::to_json(json["TriangleCount"], TriangleCount);
+		//JsonConverter::to_json(json["BoneCount"], BoneCount);
 
-		JsonConverter::to_json(json["meshType"], meshType);
+		//JsonConverter::to_json(json["meshType"], meshType);
 
-		for (int x = 0; x < VertexList.size(); x++)
-		{
-			VertexList[x].to_json(json["Vertex"][x]);
-		}
-		JsonConverter::to_json(json["indices"], IndexList);
-		for (int x = 0; x < BoneWeightList.size(); x++)
-		{
-			BoneWeightList[x].to_json(json["BoneWeightList"][x]);
-		}
-		JsonConverter::to_json(json["BoneTransform"], BoneTransform);
+		//for (int x = 0; x < VertexList.size(); x++)
+		//{
+		//	VertexList[x].to_json(json["Vertex"][x]);
+		//}
+		//JsonConverter::to_json(json["indices"], IndexList);
+		//for (int x = 0; x < BoneWeightList.size(); x++)
+		//{
+		//	BoneWeightList[x].to_json(json["BoneWeightList"][x]);
+		//}
+		//JsonConverter::to_json(json["BoneTransform"], BoneTransform);
 
 		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
 		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
@@ -232,7 +244,7 @@ public:
 
 		meshProperties.to_json(json["MeshProperties"]);
 
-		material->to_json(json["Material"]);
+		json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
 	}
 };
 

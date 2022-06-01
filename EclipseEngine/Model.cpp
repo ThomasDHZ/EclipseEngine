@@ -67,7 +67,6 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 		auto vertices = LoadVertices(mesh);
 		auto indices = LoadIndices(mesh);
 		auto boneWeights = LoadBoneWeights(mesh, vertices);
-		auto material = LoadMaterial(FilePath, mesh, scene);
 
 		LoadBones(scene->mRootNode, mesh, vertices);
 
@@ -90,8 +89,14 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 		meshLoader.BoneCount = BoneList.size();
 		meshLoader.BoneWeightList = boneWeights;
 		meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
-		meshLoader.materialPtr = material;
 		meshLoader.meshType = MeshTypeEnum::kPolygon;
+
+		/*if (LoadMaterial)
+		{*/
+			auto material = LoadMaterial(FilePath, mesh, scene);
+			meshLoader.materialPtr = material;
+	/*	}*/
+
 		AddMesh(meshLoader);
 	}
 

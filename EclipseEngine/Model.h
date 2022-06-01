@@ -58,12 +58,17 @@ private:
 	void from_json(nlohmann::json& json)
 	{
 		JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
+
 		for (int x = 0; x < json["MeshList"].size(); x++)
 		{
 			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(json["MeshList"][x], ModelID);
 			MeshList.emplace_back(mesh);
 			MeshRendererManager::AddMesh(mesh);
 		}
+
+		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
+		JsonConverter::from_json(json["ModelRotation"], ModelRotation);
+		JsonConverter::from_json(json["ModelScale"], ModelScale);
 	}
 
 public:
@@ -109,20 +114,20 @@ public:
 	{
 		JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
 
-		glm::mat4 ModelTransform = glm::mat4(1.0f);
+		//glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 		for (int x = 0; x < MeshList.size(); x++)
 		{
 			MeshList[x]->to_json(json["MeshList"][x]);
 		}
-		for (int x = 0; x < MeshList.size(); x++)
-		{
-			MeshList[x]->to_json(json["MeshList"][x]);
-		}
-		for (int x = 0; x < NodeMapList.size(); x++)
-		{
-			NodeMapList[x].to_json(json["NodeMapList"][x]);
-		}
+		//for (int x = 0; x < BoneList.size(); x++)
+		//{
+		//	BoneList[x]->to_json(json["BoneList"][x]);
+		//}
+		//for (int x = 0; x < NodeMapList.size(); x++)
+		//{
+		//	NodeMapList[x].to_json(json["NodeMapList"][x]);
+		//}
 
 		JsonConverter::to_json(json["ModelPosition"], ModelPosition);
 		JsonConverter::to_json(json["ModelRotation"], ModelRotation);

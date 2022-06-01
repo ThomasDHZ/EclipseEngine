@@ -197,6 +197,7 @@ public:
 	void SetBufferIndex(int bufferIndex);
 
 	std::string GetMaterialName() { return MaterialName; }
+	std::string* GetMaterialNamePtr() { return &MaterialName; }
 	uint64_t GetMaterialID() { return MaterialID; }
 	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }
 	MaterialBufferData GetMaterialTextureData() { return materialTextureData; }
@@ -217,14 +218,7 @@ public:
 	void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["MaterialName"], MaterialName);
-		JsonConverter::to_json(json["Ambient"], Ambient);
-		JsonConverter::to_json(json["Diffuse"], Diffuse);
-		JsonConverter::to_json(json["Specular"], Specular);
-		JsonConverter::to_json(json["Albedo"], Albedo);
-		JsonConverter::to_json(json["Matallic"], Matallic);
-		JsonConverter::to_json(json["Roughness"], Roughness);
-		JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
-		JsonConverter::to_json(json["Alpha"], Alpha);
+		
 		JsonConverter::to_json(json["Shininess"], Shininess);
 		JsonConverter::to_json(json["Reflectivness"], Reflectivness);
 
@@ -232,42 +226,80 @@ public:
 		{
 			DiffuseMap->to_json(json["DiffuseMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Diffuse"], Diffuse);
+		}
+
 		if (SpecularMap != nullptr)
 		{
 			SpecularMap->to_json(json["SpecularMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Specular"], Specular);
+		}
+
 		if (AlbedoMap != nullptr)
 		{
 			AlbedoMap->to_json(json["AlbedoMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Albedo"], Albedo);
+		}
+
 		if (MetallicMap != nullptr)
 		{
 			MetallicMap->to_json(json["MetallicMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Matallic"], Matallic);
+		}
+
 		if (RoughnessMap != nullptr)
 		{
 			RoughnessMap->to_json(json["RoughnessMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Roughness"], Roughness);
+		}
+
 		if (AmbientOcclusionMap != nullptr)
 		{
 			AmbientOcclusionMap->to_json(json["AmbientOcclusionMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
+		}
+
 		if (NormalMap != nullptr)
 		{
 			NormalMap->to_json(json["NormalMap"]);
 		}
+
 		if (DepthMap != nullptr)
 		{
 			DepthMap->to_json(json["DepthMap"]);
 		}
+
 		if (AlphaMap != nullptr)
 		{
 			AlphaMap->to_json(json["AlphaMap"]);
 		}
+		else
+		{
+			JsonConverter::to_json(json["Alpha"], Alpha);
+		}
+
 		if (EmissionMap != nullptr)
 		{
 			EmissionMap->to_json(json["EmissionMap"]);
 		}
+
 		if (ShadowMap != nullptr)
 		{
 			ShadowMap->to_json(json["ShadowMap"]);

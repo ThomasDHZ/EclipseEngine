@@ -5,14 +5,6 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    //renderer2D.StartUp();
-//blinnPhongRenderer.StartUp();
-//hybridRenderer.StartUp();
-    pbrRenderer.StartUp();
-    if (GraphicsDevice::IsRayTracingFeatureActive())
-    {
-        rayTraceRenderer.StartUp();
-    }
 
     /*  nlohmann::json json;
       Vec4 a = Vec4()*/
@@ -150,34 +142,46 @@ Scene::Scene()
     //    GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
     //    MaterialManager::AddMaterial(GrassMaterial);
 
+    //    //MaterialManager::LoadMaterial("../Materials/IronmMaterial.txt");
+    //    //MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+    //    //MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+    //    //MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+    //    //MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+
+    //    MaterialManager::SaveMaterial(IronmMaterial);
+    //    MaterialManager::SaveMaterial(PlasticMaterial);
+    //    MaterialManager::SaveMaterial(WallMaterial);
+    //    MaterialManager::SaveMaterial(GoldMaterial);
+    //    MaterialManager::SaveMaterial(GrassMaterial);
+
     //    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
     //    auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b = static_cast<MeshRenderer*>(a.get());
-    //    b->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+    //    b->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[1]);
     //    GameObjectManager::AddGameObject(obj);
 
     //    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
     //    auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b2 = static_cast<MeshRenderer*>(a2.get());
-    //    b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+    //    b2->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[2]);
     //    GameObjectManager::AddGameObject(obj2);
 
     //    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
     //    auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b3 = static_cast<MeshRenderer*>(a3.get());
-    //    b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+    //    b3->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[3]);
     //    GameObjectManager::AddGameObject(obj3);
 
     //    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
     //    auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b4 = static_cast<MeshRenderer*>(a4.get());
-    //    b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+    //    b4->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[4]);
     //    GameObjectManager::AddGameObject(obj4);
 
     //    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
     //    auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b5 = static_cast<MeshRenderer*>(a2.get());
-    //    b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+    //    b5->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[5]);
     //    GameObjectManager::AddGameObject(obj5);
     //}
 
@@ -227,9 +231,17 @@ Scene::Scene()
     //LightManager::AddPointLight(plight3);
     //LightManager::AddPointLight(plight4);
 
-   // SceneManager::SaveScene("../Scenes/example.txt");
+    //SceneManager::SaveScene("../Scenes/example.txt");
 
 
+    //renderer2D.StartUp();
+//blinnPhongRenderer.StartUp();
+//hybridRenderer.StartUp();
+    pbrRenderer.StartUp();
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        rayTraceRenderer.StartUp();
+    }
    // std::cout << json3 << std::endl;
 }
 
