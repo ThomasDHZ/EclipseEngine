@@ -101,6 +101,7 @@ GameObject::GameObject(const std::string Name, const std::string filePath, glm::
 
 GameObject::GameObject(nlohmann::json& json)
 {
+	GenerateID();
 	json.at("ObjectName").get_to(ObjectName);
 
 	for (int x = 0; x < json["ComponentList"].size(); x++)

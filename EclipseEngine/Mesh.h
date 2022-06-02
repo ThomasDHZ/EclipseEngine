@@ -169,6 +169,7 @@ public:
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
+	void SetMaterial(const std::string& MaterialPath);
 	void SetMeshPosition(glm::vec3 position);
 	void SetMeshRotation(glm::vec3 rotation);
 	void SetMeshScale(glm::vec3 scale);

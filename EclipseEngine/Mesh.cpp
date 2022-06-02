@@ -569,6 +569,11 @@ void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
 	material = materialPtr;
 }
 
+void Mesh::SetMaterial(const std::string& MaterialPath)
+{
+	material = MaterialManager::LoadMaterial(MaterialPath);
+}
+
 void Mesh::SetMeshPosition(glm::vec3 position)
 {
 	MeshPosition = position;

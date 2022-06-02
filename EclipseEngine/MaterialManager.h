@@ -78,7 +78,7 @@ public:
 
 		std::cout << json << std::endl;
 
-		std::shared_ptr<Material> material = std::make_shared<Material>(Material(json));
+		std::shared_ptr<Material> material = Material::from_json(json["Material"]);
 		MaterialList.emplace_back(material);
 
 		UpdateBufferIndex();
@@ -170,7 +170,7 @@ public:
 		return json;
 	}
 
-	static void LoadMaterial(const std::string FilePath)
+	static std::shared_ptr<Material> LoadMaterial(const std::string FilePath)
 	{
 		std::string SceneInfo;
 		std::ifstream SceneFile;
@@ -187,6 +187,8 @@ public:
 
 		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
 		AddMaterial(jsonstring);
+
+		return MaterialList.back();;
 	}
 
 	static void SaveMaterial(std::shared_ptr<Material> material)

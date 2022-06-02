@@ -11,7 +11,7 @@ protected:
     void from_json(nlohmann::json& json)
     {
        Component::from_json(json);
-       model = std::make_shared<Model>(Model(json.at("Model")));
+       model = std::make_shared<Model>(Model(json.at("Model"), ParentGameObjectID));
        ModelManager::AddModel(model);
     }
 

@@ -148,6 +148,7 @@ Scene::Scene()
     //    //MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
     //    //MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
+    //    MaterialManager::SaveMaterial(MaterialManager::GetDefaultMaterial());
     //    MaterialManager::SaveMaterial(IronmMaterial);
     //    MaterialManager::SaveMaterial(PlasticMaterial);
     //    MaterialManager::SaveMaterial(WallMaterial);
@@ -157,31 +158,31 @@ Scene::Scene()
     //    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
     //    auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b = static_cast<MeshRenderer*>(a.get());
-    //    b->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[1]);
+    //    b->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
     //    GameObjectManager::AddGameObject(obj);
 
     //    std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
     //    auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b2 = static_cast<MeshRenderer*>(a2.get());
-    //    b2->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[2]);
+    //    b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
     //    GameObjectManager::AddGameObject(obj2);
 
     //    std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
     //    auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b3 = static_cast<MeshRenderer*>(a3.get());
-    //    b3->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[3]);
+    //    b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
     //    GameObjectManager::AddGameObject(obj3);
 
     //    std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
     //    auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b4 = static_cast<MeshRenderer*>(a4.get());
-    //    b4->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[4]);
+    //    b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
     //    GameObjectManager::AddGameObject(obj4);
 
     //    std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
     //    auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
     //    auto b5 = static_cast<MeshRenderer*>(a2.get());
-    //    b5->GetModel()->GetMeshList()[0]->SetMaterial(MaterialManager::GetMaterialList()[5]);
+    //    b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
     //    GameObjectManager::AddGameObject(obj5);
     //}
 
@@ -200,38 +201,38 @@ Scene::Scene()
    // MeshRendererManager::Update();
    // ModelManager::Update();
 
-    //auto dLight = DirectionalLightBuffer{};
-    //dLight.diffuse = glm::vec3(0.2f);
-    //dLight.specular = glm::vec3(0.5f);
+ /*   auto dLight = DirectionalLightBuffer{};
+    dLight.diffuse = glm::vec3(0.2f);
+    dLight.specular = glm::vec3(0.5f);
 
-    //LightManager::AddDirectionalLight(dLight);
+    LightManager::AddDirectionalLight(dLight);
 
-    //PointLightBuffer plight = PointLightBuffer();
-    //plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
-    //plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight.specular = glm::vec3(1.0f);
+    PointLightBuffer plight = PointLightBuffer();
+    plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
+    plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight2 = PointLightBuffer();
-    //plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
-    //plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight2.specular = glm::vec3(1.0f);
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
+    plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight2.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight3 = PointLightBuffer();
-    //plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
-    //plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight3.specular = glm::vec3(1.0f);
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
+    plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight3.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight4 = PointLightBuffer();
-    //plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
-    //plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight4.specular = glm::vec3(1.0f);
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
+    plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight4.specular = glm::vec3(1.0f);
 
-    //LightManager::AddPointLight(plight);
-    //LightManager::AddPointLight(plight2);
-    //LightManager::AddPointLight(plight3);
-    //LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
 
-    //SceneManager::SaveScene("../Scenes/example.txt");
+    SceneManager::SaveScene("../Scenes/example.txt");*/
 
 
     //renderer2D.StartUp();

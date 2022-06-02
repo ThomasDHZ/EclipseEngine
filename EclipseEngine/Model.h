@@ -48,6 +48,7 @@ private:
 	std::vector<NodeMap> NodeMapList;
 
 	void GenerateID();
+	void LoadModel(const std::string& FilePath, uint64_t GameObjectID);
 	void LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* scene);
 	std::vector<MeshVertex> LoadVertices(aiMesh* mesh);
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
@@ -55,15 +56,14 @@ private:
 	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<MeshVertex>& VertexList);
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
-	void from_json(nlohmann::json& json)
+	void from_json(nlohmann::json& json, uint64_t GameObjectID)
 	{
 		JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
+		LoadModel(ModelFilePath, GameObjectID);
 
 		for (int x = 0; x < json["MeshList"].size(); x++)
 		{
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(json["MeshList"][x], ModelID);
-			MeshList.emplace_back(mesh);
-			MeshRendererManager::AddMesh(mesh);
+			MeshList[x]->SetMaterial(json["MeshList"][x]["MaterialPath"]);
 		}
 
 		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
@@ -81,7 +81,7 @@ public:
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
-	Model(nlohmann::json& json);
+	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);

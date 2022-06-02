@@ -84,7 +84,7 @@ public:
 		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
 
 		GameObjectManager::LoadGameObjects(jsonstring);
-		MaterialManager::LoadMaterials(jsonstring);
+		//MaterialManager::LoadMaterials(jsonstring);
 		LightManager::LoadLights(jsonstring);
 
 	}

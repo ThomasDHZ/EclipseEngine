@@ -10,31 +10,7 @@ Model::Model()
 Model::Model(const std::string& FilePath, uint64_t GameObjectID)
 {
 	GenerateID();
-	ModelFilePath = FilePath;
-
-	Assimp::Importer ModelImporter;
-
-	const aiScene* Scene = ModelImporter.ReadFile(FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-	if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
-	{
-		std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
-		return;
-	}
-
-	ParentGameObjectID = GameObjectID;
-	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
-	//LoadNodeTree(Scene->mRootNode);
-	//LoadAnimations(Scene);
-	LoadMesh(FilePath, Scene->mRootNode, Scene);
-	VulkanRenderer::UpdateTLAS = true;
-	//if (AnimationList.size() > 0)
-	//{
-	//	AnimatedModel = true;
-	//	AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
-	//	AnimationRenderer = AnimatorCompute(MeshList[0]);
-	//}
-
-	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	LoadModel(FilePath, GameObjectID);
 }
 
 Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
@@ -307,6 +283,35 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 	return MaterialManager::GetMaterialByID(materialID);
 }
 
+void Model::LoadModel(const std::string& FilePath, uint64_t GameObjectID)
+{
+	ModelFilePath = FilePath;
+
+	Assimp::Importer ModelImporter;
+
+	const aiScene* Scene = ModelImporter.ReadFile(FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
+	{
+		std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
+		return;
+	}
+
+	ParentGameObjectID = GameObjectID;
+	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	//LoadNodeTree(Scene->mRootNode);
+	//LoadAnimations(Scene);
+	LoadMesh(FilePath, Scene->mRootNode, Scene);
+	VulkanRenderer::UpdateTLAS = true;
+	//if (AnimationList.size() > 0)
+	//{
+	//	AnimatedModel = true;
+	//	AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
+	//	AnimationRenderer = AnimatorCompute(MeshList[0]);
+	//}
+
+	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+}
+
 void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 {
 	mesh->SetParentModel(ModelID);
@@ -369,10 +374,11 @@ void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
 {
 }
 
-Model::Model(nlohmann::json& json)
+Model::Model(nlohmann::json& json, uint64_t GameObjectID)
 {
 	GenerateID();
-	from_json(json);
+	ParentGameObjectID = GameObjectID;
+	from_json(json, GameObjectID);
 }
 
 void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)

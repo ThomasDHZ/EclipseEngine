@@ -155,7 +155,6 @@ public:
 	Material();
 	Material(const std::string materialName);
 	Material(const std::string materialName, MaterialProperties& MaterialInfo);
-	Material(nlohmann::json& json);
 	~Material();
 
 	void Update();
@@ -215,10 +214,94 @@ public:
 	std::shared_ptr<Texture> GetEmissionMap() { return EmissionMap; }
 	std::shared_ptr<Texture> GetShadowMap() { return ShadowMap; }
 
+	static std::shared_ptr<Material> from_json(nlohmann::json json)
+	{
+		std::cout << json << std::endl;
+		std::shared_ptr<Material> material = std::make_shared<Material>();
+		material->GenerateID();
+		material->MaterialName = json.at("MaterialName").get_to(material->MaterialName);
+
+		//glm::from_json(json.at("Ambient"), materialTextureData.Ambient);
+		material->materialTextureData.Ambient.x = json.at("Ambient")[0].get_to(material->Ambient.x);
+		material->materialTextureData.Ambient.y = json.at("Ambient")[1].get_to(material->Ambient.y);
+		material->materialTextureData.Ambient.z = json.at("Ambient")[2].get_to(material->Ambient.z);
+		material->materialTextureData.Diffuse.x = json.at("Diffuse")[0].get_to(material->Diffuse.x);
+		material->materialTextureData.Diffuse.y = json.at("Diffuse")[1].get_to(material->Diffuse.y);
+		material->materialTextureData.Diffuse.z = json.at("Diffuse")[2].get_to(material->Diffuse.z);
+		material->materialTextureData.Specular.x = json.at("Specular")[0].get_to(material->Specular.x);
+		material->materialTextureData.Specular.y = json.at("Specular")[1].get_to(material->Specular.y);
+		material->materialTextureData.Specular.z = json.at("Specular")[2].get_to(material->Specular.z);
+		material->materialTextureData.Albedo.x = json.at("Albedo")[0].get_to(material->Albedo.x);
+		material->materialTextureData.Albedo.y = json.at("Albedo")[1].get_to(material->Albedo.y);
+		material->materialTextureData.Albedo.z = json.at("Albedo")[2].get_to(material->Albedo.z);
+		material->materialTextureData.Matallic = json.at("Matallic").get_to(material->Matallic);
+		material->materialTextureData.Roughness = json.at("Roughness").get_to(material->Roughness);
+		material->materialTextureData.AmbientOcclusion = json.at("AmbientOcclusion").get_to(material->AmbientOcclusion);
+		material->materialTextureData.Reflectivness = json.at("Reflectivness").get_to(material->Reflectivness);
+		material->materialTextureData.Alpha = json.at("Alpha").get_to(material->Alpha);
+
+		if (json.contains("DiffuseMap"))
+		{
+			material->DiffuseMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("DiffuseMap"))));
+		}
+		if (json.contains("SpecularMap"))
+		{
+			material->SpecularMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("SpecularMap"))));
+		}
+		if (json.contains("AlbedoMap"))
+		{
+			material->AlbedoMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AlbedoMap"))));
+		}
+		if (json.contains("MetallicMap"))
+		{
+			material->MetallicMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("MetallicMap"))));
+		}
+		if (json.contains("RoughnessMap"))
+		{
+			material->RoughnessMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("RoughnessMap"))));
+		}
+		if (json.contains("AmbientOcclusionMap"))
+		{
+			material->AmbientOcclusionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AmbientOcclusionMap"))));
+		}
+		if (json.contains("NormalMap"))
+		{
+			material->NormalMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("NormalMap"))));
+		}
+		if (json.contains("DepthMap"))
+		{
+			material->DepthMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("DepthMap"))));
+		}
+		if (json.contains("AlphaMap"))
+		{
+			material->AlphaMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AlphaMap"))));
+		}
+		if (json.contains("EmissionMap"))
+		{
+			material->EmissionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("EmissionMap"))));
+		}
+		if (json.contains("ShadowMap"))
+		{
+			material->ShadowMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("ShadowMap"))));
+		}
+
+		material->MaterialBuffer.CreateBuffer(&material->materialTextureData, sizeof(MaterialProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VulkanRenderer::UpdateRendererFlag = true;
+
+		return material;
+	}
+
 	void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["MaterialName"], MaterialName);
-		
+		JsonConverter::to_json(json["Ambient"], Ambient);
+		JsonConverter::to_json(json["Diffuse"], Diffuse);
+		JsonConverter::to_json(json["Specular"], Specular);
+		JsonConverter::to_json(json["Albedo"], Albedo);
+		JsonConverter::to_json(json["Matallic"], Matallic);
+		JsonConverter::to_json(json["Roughness"], Roughness);
+		JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
+		JsonConverter::to_json(json["Alpha"], Alpha);
 		JsonConverter::to_json(json["Shininess"], Shininess);
 		JsonConverter::to_json(json["Reflectivness"], Reflectivness);
 
@@ -226,80 +309,42 @@ public:
 		{
 			DiffuseMap->to_json(json["DiffuseMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Diffuse"], Diffuse);
-		}
-
 		if (SpecularMap != nullptr)
 		{
 			SpecularMap->to_json(json["SpecularMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Specular"], Specular);
-		}
-
 		if (AlbedoMap != nullptr)
 		{
 			AlbedoMap->to_json(json["AlbedoMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Albedo"], Albedo);
-		}
-
 		if (MetallicMap != nullptr)
 		{
 			MetallicMap->to_json(json["MetallicMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Matallic"], Matallic);
-		}
-
 		if (RoughnessMap != nullptr)
 		{
 			RoughnessMap->to_json(json["RoughnessMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Roughness"], Roughness);
-		}
-
 		if (AmbientOcclusionMap != nullptr)
 		{
 			AmbientOcclusionMap->to_json(json["AmbientOcclusionMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
-		}
-
 		if (NormalMap != nullptr)
 		{
 			NormalMap->to_json(json["NormalMap"]);
 		}
-
 		if (DepthMap != nullptr)
 		{
 			DepthMap->to_json(json["DepthMap"]);
 		}
-
 		if (AlphaMap != nullptr)
 		{
 			AlphaMap->to_json(json["AlphaMap"]);
 		}
-		else
-		{
-			JsonConverter::to_json(json["Alpha"], Alpha);
-		}
-
 		if (EmissionMap != nullptr)
 		{
 			EmissionMap->to_json(json["EmissionMap"]);
 		}
-
 		if (ShadowMap != nullptr)
 		{
 			ShadowMap->to_json(json["ShadowMap"]);
