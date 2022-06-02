@@ -64,6 +64,18 @@ private:
 		for (int x = 0; x < json["MeshList"].size(); x++)
 		{
 			MeshList[x]->SetMaterial(json["MeshList"][x]["MaterialPath"]);
+
+			glm::vec3 Position = glm::vec3(0.0f);
+			JsonConverter::from_json(json["MeshList"][x]["MeshPosition"], Position);
+			MeshList[x]->SetMeshPosition(Position);
+
+			glm::vec3 Rotation = glm::vec3(0.0f);
+			JsonConverter::from_json(json["MeshList"][x]["MeshRotation"], Rotation);
+			MeshList[x]->SetMeshPosition(Rotation);
+
+			glm::vec3 Scale = glm::vec3(0.0f);
+			JsonConverter::from_json(json["MeshList"][x]["MeshScale"], Scale);
+		    MeshList[x]->SetMeshPosition(Scale);
 		}
 
 		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
