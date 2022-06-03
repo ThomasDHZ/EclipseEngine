@@ -216,7 +216,6 @@ public:
 
 	static std::shared_ptr<Material> from_json(nlohmann::json json)
 	{
-		std::cout << json << std::endl;
 		std::shared_ptr<Material> material = std::make_shared<Material>();
 		material->GenerateID();
 		material->MaterialName = json.at("MaterialName").get_to(material->MaterialName);

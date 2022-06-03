@@ -579,10 +579,6 @@ void Mesh::SetMeshPosition(glm::vec3 position)
 	MeshPosition = position;
 }
 
-void Mesh::SetMaterial(const std::string& MaterialPath)
-{
-	material = MaterialManager::LoadMaterial(MaterialPath);
-}
 
 void Mesh::SetMeshRotation(glm::vec3 rotation)
 {
