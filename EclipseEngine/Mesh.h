@@ -74,28 +74,6 @@ private:
 
 	void from_json(nlohmann::json& json)
 	{
-		//JsonConverter::from_json(json["VertexCount"], VertexCount);
-		//JsonConverter::from_json(json["IndexCount"], IndexCount);
-		//JsonConverter::from_json(json["TriangleCount"], TriangleCount);
-		//JsonConverter::from_json(json["BoneCount"], BoneCount);
-
-		//meshType = MeshTypeEnum::kPolygon;
-
-		////VertexList.resize(VertexCount);
-		////for (int x = 0; x < json["Vertex"].size(); x++)
-		////{
-		////	VertexList[x].from_json(json["Vertex"][x]);
-		////}
-
-		////JsonConverter::from_json(json["indices"], IndexList);
-
-		//BoneWeightList.resize(BoneCount);
-		//for (int x = 0; x < json["BoneWeightList"].size(); x++)
-		//{
-		//	BoneWeightList[x].from_json(json["BoneWeightList"][x]);
-		//}
-		//JsonConverter::from_json(json["BoneTransform"], BoneTransform);
-
 		JsonConverter::from_json(json["MeshPosition"], MeshPosition);
 		JsonConverter::from_json(json["MeshRotation"], MeshRotation);
 		JsonConverter::from_json(json["MeshScale"], MeshScale);
@@ -157,13 +135,12 @@ public:
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	Mesh(MeshLoadingInfo& meshLoader);
-	Mesh(nlohmann::json& json, uint64_t ModelID);
 	~Mesh();
 
 	void Draw(VkCommandBuffer& commandBuffer);
 	void Update(const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
-	void Destory();
+	void Destroy();
 
 	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);
@@ -220,24 +197,6 @@ public:
 
 	void to_json(nlohmann::json& json)
 	{
-		//JsonConverter::to_json(json["VertexCount"], VertexCount);
-		//JsonConverter::to_json(json["IndexCount"], IndexCount);
-		//JsonConverter::to_json(json["TriangleCount"], TriangleCount);
-		//JsonConverter::to_json(json["BoneCount"], BoneCount);
-
-		//JsonConverter::to_json(json["meshType"], meshType);
-
-		//for (int x = 0; x < VertexList.size(); x++)
-		//{
-		//	VertexList[x].to_json(json["Vertex"][x]);
-		//}
-		//JsonConverter::to_json(json["indices"], IndexList);
-		//for (int x = 0; x < BoneWeightList.size(); x++)
-		//{
-		//	BoneWeightList[x].to_json(json["BoneWeightList"][x]);
-		//}
-		//JsonConverter::to_json(json["BoneTransform"], BoneTransform);
-
 		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
 		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
 		JsonConverter::to_json(json["MeshScale"], MeshScale);

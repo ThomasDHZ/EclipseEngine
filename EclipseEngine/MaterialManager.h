@@ -213,4 +213,13 @@ public:
 			material->Destroy();
 		}
 	}
+
+	static void DestroyScene()
+	{
+		for (int x = MaterialList.size() - 1; x >= 0; x--)
+		{
+			MaterialList[x]->Destroy();
+			MaterialList.erase(MaterialList.begin() + x);
+		}
+	}
 };

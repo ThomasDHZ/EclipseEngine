@@ -93,17 +93,10 @@ void BRDFRenderPass::BuildRenderPassPipelines()
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
-    VkDescriptorImageInfo SkyboxBufferInfo;
-    SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
-    SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
-
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;

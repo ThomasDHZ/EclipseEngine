@@ -280,6 +280,25 @@ public:
 		return json;
 	}
 
+	static void DestroyScene()
+	{
+		for (int x = DirectionalLightList.size() - 1; x >= 0; x--)
+		{
+			DirectionalLightList[x]->Destroy();
+			DirectionalLightList.erase(DirectionalLightList.begin() + x);
+		}
+		for (int x = PointLightList.size() - 1; x >= 0; x--)
+		{
+			PointLightList[x]->Destroy();
+			PointLightList.erase(PointLightList.begin() + x);
+		}
+		for (int x = SpotLightList.size() - 1; x >= 0; x--)
+		{
+			SpotLightList[x]->Destroy();
+			SpotLightList.erase(SpotLightList.begin() + x);
+		}
+	}
+
 	static uint32_t GetDirectionalLightCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }

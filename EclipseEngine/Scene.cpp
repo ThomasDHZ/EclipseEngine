@@ -127,6 +127,29 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
+    //ImGui::Begin("VRAM Viewer");
+    //{
+    //    for (int x = 0; x <= TextureManager::GetTexture2DList().size() - 1; x++)
+    //    {
+    //        ImGui::LabelText("Texture ID: " + TextureManager::GetTexture2DList()[x]->GetTextureID(), "Model Transform");
+    //        ImGui::Image(TextureManager::GetTexture2DList()[x]->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //    }
+    //}
+    //ImGui::End();
+
+    ImGui::Begin("File Window");
+    if (ImGui::Button("Save"))
+    {
+        SceneManager::SaveScene("../Scenes/example.txt");
+    }
+
+    if (ImGui::Button("Load"))
+    {
+        vkDeviceWaitIdle(VulkanRenderer::GetDevice());
+        SceneManager::LoadScene("../Scenes/example.txt");
+    }
+    ImGui::End();
+
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     const auto objList = GameObjectManager::GetGameObjectList();
@@ -215,7 +238,7 @@ void Scene::Draw()
 
 void Scene::Destroy()
 {
-    GameObjectManager::Destory();
+    GameObjectManager::Destroy();
 
     //renderer2D.Destroy();
    // blinnPhongRenderer.Destroy();

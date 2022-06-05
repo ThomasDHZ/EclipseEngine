@@ -32,7 +32,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void Update(float DeltaTime);
-	void Destory();
+	void Destroy();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);

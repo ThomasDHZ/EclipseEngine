@@ -129,11 +129,12 @@ void GameObject::Update(float DeltaTime)
 	}
 }
 
-void GameObject::Destory()
+void GameObject::Destroy()
 {
-	for (auto& comp : ComponentList)
+	for (int x = ComponentList.size() - 1; x >= 0; x--)
 	{
-		comp->Destroy();
+		ComponentList[x]->Destroy();
+		ComponentList.erase(ComponentList.begin() + x);
 	}
 }
 

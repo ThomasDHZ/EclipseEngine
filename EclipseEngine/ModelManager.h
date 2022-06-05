@@ -125,6 +125,16 @@ public:
         TopLevelAccelerationStructure.Destroy();
     }
 
+    static void DestroyScene()
+    {
+        for (int x = ModelList.size() - 1; x >= 0; x--)
+        {
+            ModelList[x]->Destroy();
+            ModelList.erase(ModelList.begin() + x);
+        }
+        TopLevelAccelerationStructure.Destroy();
+    }
+
 	static std::vector<std::shared_ptr<Model>> GetModelList() { return ModelList; }
     static VkAccelerationStructureKHR* GetAccelerationStructureHandlePtr() { return TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr(); }
 };

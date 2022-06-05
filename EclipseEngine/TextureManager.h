@@ -257,4 +257,18 @@ public:
 			texture->Destroy();
 		}
 	}
+
+	static void DestroyScene()
+	{
+		for (int x = Texture2DList.size() - 1; x >= 0; x--)
+		{
+			Texture2DList[x]->Destroy();
+			Texture2DList.erase(Texture2DList.begin() + x);
+		}
+		for (int x = CubeMapTextureList.size() - 1; x >= 0; x--)
+		{
+			CubeMapTextureList[x]->Destroy();
+			CubeMapTextureList.erase(CubeMapTextureList.begin() + x);
+		}
+	}
 };

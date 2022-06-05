@@ -132,10 +132,6 @@ void VulkanBuffer::DestoryBuffer()
 			BufferHandle = VK_NULL_HANDLE;
 		}
 	}
-	else
-	{
-		std::cout << "Buffer already destoryed." << std::endl;
-	}
 }
 
 void VulkanBuffer::SetBufferAddress(uint64_t BufferAddress)

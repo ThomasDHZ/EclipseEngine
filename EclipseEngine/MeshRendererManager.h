@@ -285,9 +285,20 @@ public:
 
 		if (VulkanRenderer::UpdateRendererFlag)
 		{
-			for (auto& mesh : MeshList)
+			if (MeshList.size() == 0)
 			{
-				mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
+				VkDescriptorBufferInfo nullBuffer;
+				nullBuffer.buffer = VK_NULL_HANDLE;
+				nullBuffer.offset = 0;
+				nullBuffer.range = VK_WHOLE_SIZE;
+				MeshPropertiesBufferList.emplace_back(nullBuffer);
+			}
+			else
+			{
+				for (auto& mesh : MeshList)
+				{
+					mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
+				}
 			}
 		}
 		else
@@ -303,9 +314,20 @@ public:
 
 		if (VulkanRenderer::UpdateRendererFlag)
 		{
-			for (auto& mesh : MeshList)
+			if (MeshList.size() == 0)
 			{
-				mesh->GetMeshVertexBuffer(VertexBufferList);
+				VkDescriptorBufferInfo nullBuffer;
+				nullBuffer.buffer = VK_NULL_HANDLE;
+				nullBuffer.offset = 0;
+				nullBuffer.range = VK_WHOLE_SIZE;
+				VertexBufferList.emplace_back(nullBuffer);
+			}
+			else
+			{
+				for (auto& mesh : MeshList)
+				{
+					mesh->GetMeshVertexBuffer(VertexBufferList);
+				}
 			}
 		}
 		else
@@ -321,9 +343,20 @@ public:
 
 		if (VulkanRenderer::UpdateRendererFlag)
 		{
-			for (auto& mesh : MeshList)
+			if (MeshList.size() == 0)
 			{
-				mesh->GetMeshIndexBuffer(IndexBufferList);
+				VkDescriptorBufferInfo nullBuffer;
+				nullBuffer.buffer = VK_NULL_HANDLE;
+				nullBuffer.offset = 0;
+				nullBuffer.range = VK_WHOLE_SIZE;
+				IndexBufferList.emplace_back(nullBuffer);
+			}
+			else
+			{
+				for (auto& mesh : MeshList)
+				{
+					mesh->GetMeshIndexBuffer(IndexBufferList);
+				}
 			}
 		}
 		else
@@ -331,6 +364,15 @@ public:
 			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
 		}
 		return IndexBufferList;
+	}
+
+	static void DestroyScene()
+	{
+		for (int x = MeshList.size() - 1; x >= 0; x--)
+		{
+			MeshList[x]->Destroy();
+			MeshList.erase(MeshList.begin() + x);
+		}
 	}
 
 	static std::shared_ptr<Mesh> GetSelectedMesh() { return ActiveMesh; }

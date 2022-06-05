@@ -439,7 +439,7 @@ void Model::Destroy()
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->Destory();
+		mesh->Destroy();
 	}
 }
 

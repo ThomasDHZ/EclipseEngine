@@ -21,7 +21,7 @@ public:
 		{
 			if (objList[x] == obj)
 			{
-				obj->Destory();
+				obj->Destroy();
 				objList.erase(objList.begin() + x);
 				VulkanRenderer::UpdateRendererFlag = true;
 				break;
@@ -91,11 +91,21 @@ public:
 		return json;
 	}
 
-	static void Destory()
+	static void Destroy()
 	{
-		for (auto& obj : objList)
+		for (int x = objList.size() - 1; x >= 0; x--)
 		{
-			obj->Destory();
+			objList[x]->Destroy();
+			objList.erase(objList.begin() + x);
+		}
+	}
+
+	static void DestroyScene()
+	{
+		for (int x = objList.size() - 1; x >= 0; x--)
+		{
+			objList[x]->Destroy();
+			objList.erase(objList.begin() + x);
 		}
 	}
 };

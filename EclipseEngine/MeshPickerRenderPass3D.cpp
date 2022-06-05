@@ -96,7 +96,7 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -104,7 +104,7 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};

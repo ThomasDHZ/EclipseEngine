@@ -102,7 +102,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
         std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
-        const auto cubeMap = TextureManager::GetCubeMapTextureList()[0];
+        const auto cubeMap = SceneManager::CubeMap;
         VkDescriptorImageInfo cubeMapBuffer;
         cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
         cubeMapBuffer.imageView = cubeMap->View;

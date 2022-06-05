@@ -11,6 +11,7 @@
 #include "GameObjectManager.h"
 #include "LightManager.h"
 #include "MaterialManager.h"
+#include "ModelManager.h"
 
 class SceneManager
 {
@@ -33,7 +34,7 @@ public:
 
 	static void Destory()
 	{
-		SkyboxMesh->Destory();
+		SkyboxMesh->Destroy();
 
 		if (BRDFTexture != nullptr)
 		{
@@ -72,6 +73,8 @@ public:
 
 	static void LoadScene(const std::string FileName)
 	{
+		DestroyScene();
+
 		std::string SceneInfo;
 		std::ifstream SceneFile;
 		SceneFile.open(FileName);
@@ -87,6 +90,16 @@ public:
 		//MaterialManager::LoadMaterials(jsonstring);
 		LightManager::LoadLights(jsonstring);
 
+	}
+
+	static void DestroyScene()
+	{
+		MaterialManager::DestroyScene();
+		TextureManager::DestroyScene();
+		GameObjectManager::DestroyScene();
+		ModelManager::DestroyScene();
+		MeshRendererManager::DestroyScene();
+		LightManager::DestroyScene();
 	}
 
 	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
