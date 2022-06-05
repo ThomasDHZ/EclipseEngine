@@ -271,4 +271,11 @@ public:
 			CubeMapTextureList.erase(CubeMapTextureList.begin() + x);
 		}
 	}
+
+	static void DestoryTexture(uint64_t TextureID)
+	{
+		std::shared_ptr<Texture2D> texture = GetTexture2DByID(TextureID);
+		texture->Destroy();
+		Texture2DList.erase(Texture2DList.begin() + texture->GetTextureBufferIndex());
+	}
 };

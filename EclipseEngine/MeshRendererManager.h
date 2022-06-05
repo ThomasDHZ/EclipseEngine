@@ -56,6 +56,19 @@ public:
 		return mesh;
 	}
 
+	static std::shared_ptr<Mesh> GetMeshByID(uint64_t meshID)
+	{
+		for (auto mesh : MeshList)
+		{
+			if (mesh->GetMeshID() == meshID)
+			{
+				return mesh;
+			}
+		}
+
+		return nullptr;
+	}
+
 	static void Update()
 	{
 		SortByZIndex();
@@ -373,6 +386,13 @@ public:
 			MeshList[x]->Destroy();
 			MeshList.erase(MeshList.begin() + x);
 		}
+	}
+
+	static void DestoryMesh(uint64_t MeshID)
+	{
+		std::shared_ptr<Mesh> mesh = GetMeshByID(MeshID);
+		mesh->Destroy();
+		MeshList.erase(MeshList.begin() + mesh->GetMeshBufferIndex());
 	}
 
 	static std::shared_ptr<Mesh> GetSelectedMesh() { return ActiveMesh; }

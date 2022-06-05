@@ -41,6 +41,19 @@ public:
 		}
 	}
 
+    static std::shared_ptr<Model> GetModelByID(uint64_t ModelID)
+    {
+        for (auto model : ModelList)
+        {
+            if (model->GetModelID() == ModelID)
+            {
+                return model;
+            }
+        }
+
+        return nullptr;
+    }
+
     static void UpdateUpTopLevelAccelerationStructure()
     {
         if (GraphicsDevice::IsRayTracingFeatureActive())
@@ -133,6 +146,20 @@ public:
             ModelList.erase(ModelList.begin() + x);
         }
         TopLevelAccelerationStructure.Destroy();
+    }
+
+    static void DestroyModel(uint64_t ModelID)
+    {
+        std::shared_ptr<Model> model = GetModelByID(ModelID);
+        model->Destroy();
+        for (int x = ModelList.size() - 1; x >= 0; x--)
+        {
+            if (model == ModelList[x])
+            {
+                ModelList.erase(ModelList.begin() + x);
+                break;
+            }
+        }
     }
 
 	static std::vector<std::shared_ptr<Model>> GetModelList() { return ModelList; }

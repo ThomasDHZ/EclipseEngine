@@ -299,6 +299,7 @@ public:
 		}
 	}
 
+
 	static uint32_t GetDirectionalLightCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }

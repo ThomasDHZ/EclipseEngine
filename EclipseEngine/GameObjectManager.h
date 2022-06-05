@@ -30,7 +30,7 @@ public:
 	}
 
 
-	static std::shared_ptr<GameObject> GetGameObjectsByID(uint64_t ObjID)
+	static std::shared_ptr<GameObject> GetGameObjectByID(uint64_t ObjID)
 	{
 		for (auto obj : objList)
 		{
@@ -106,6 +106,20 @@ public:
 		{
 			objList[x]->Destroy();
 			objList.erase(objList.begin() + x);
+		}
+	}
+
+	static void DestoryGameObject(uint64_t GameObjectID)
+	{
+		std::shared_ptr<GameObject> gameObject = GetGameObjectByID(GameObjectID);
+		gameObject->Destroy();
+		for (int x = objList.size() - 1; x >= 0; x--)
+		{
+			if (gameObject == objList[x])
+			{
+				objList.erase(objList.begin() + x);
+				break;
+			}
 		}
 	}
 };

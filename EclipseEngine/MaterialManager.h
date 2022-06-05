@@ -222,4 +222,11 @@ public:
 			MaterialList.erase(MaterialList.begin() + x);
 		}
 	}
+
+	static void DestoryMaterial(uint64_t MaterialID)
+	{
+		std::shared_ptr<Material> material = GetMaterialByID(MaterialID);
+		material->Destroy();
+		MaterialList.erase(MaterialList.begin() + material->GetMaterialBufferIndex());
+	}
 };
