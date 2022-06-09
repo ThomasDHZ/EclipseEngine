@@ -28,11 +28,8 @@
 class Scene
 {
 private:
-	SceneProperties sceneProperites;
-	ConstSkyBoxView cubeMapInfo;
-
-	OrthographicCamera camera;
-	PerspectiveCamera camera2;
+	//OrthographicCamera camera;
+	//PerspectiveCamera camera2;
 
 	//Renderer2D renderer2D;
 	//BlinnPhongRenderer blinnPhongRenderer;

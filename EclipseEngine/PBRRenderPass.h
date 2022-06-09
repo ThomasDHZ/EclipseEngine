@@ -37,6 +37,6 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
+	void Draw();
 	void Destroy();
 };

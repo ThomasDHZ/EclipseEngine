@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "Camera.h"
+
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
 #include "Skybox.h"
@@ -21,6 +23,11 @@ private:
 	static std::shared_ptr<Skybox> SkyboxMesh;
 
 public:
+	static std::shared_ptr<Camera> activeCamera;
+
+	static SceneProperties sceneProperites;
+	static ConstSkyBoxView cubeMapInfo;
+
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
 	static std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
@@ -30,6 +37,30 @@ public:
 	{
 		SkyboxMesh = std::make_shared<Skybox>();
 		SkyboxMesh->StartUp();
+	}
+
+	static void Update()
+	{
+		auto time = glfwGetTime();
+		GameObjectManager::Update(time);
+		MaterialManager::Update();
+		MeshRendererManager::Update();
+		ModelManager::Update();
+		LightManager::Update();
+
+		activeCamera->Update(time);
+
+		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
+		sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
+		sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
+		sceneProperites.DirectionalLightCount = LightManager::GetDirectionalLightCount();
+		sceneProperites.PointLightCount = LightManager::GetPointLightCount();
+		sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
+		sceneProperites.Timer = time;
+
+		cubeMapInfo.view = glm::mat4(glm::mat3(SceneManager::activeCamera->GetViewMatrix()));
+		cubeMapInfo.proj = glm::perspective(glm::radians(SceneManager::activeCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
+		cubeMapInfo.proj[1][1] *= -1;
 	}
 
 	static void Destory()

@@ -76,8 +76,6 @@ public:
 		//	MaterialList.emplace_back(material);
 		//}
 
-		std::cout << json << std::endl;
-
 		std::shared_ptr<Material> material = Material::from_json(json["Material"]);
 		MaterialList.emplace_back(material);
 

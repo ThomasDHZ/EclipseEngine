@@ -43,11 +43,11 @@ void PBRRenderer::RebuildRenderers()
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
 
-void PBRRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw(sceneProperties);
+		meshPickerRenderPass.Draw();
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
 
@@ -57,7 +57,7 @@ void PBRRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skybox
 	prefilterRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(prefilterRenderPass.GetCommandBuffer());
 
-	pbrRenderPass.Draw(sceneProperties, skyboxView);
+	pbrRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(pbrRenderPass.GetCommandBuffer());
 
 	frameBufferRenderPass.Draw();

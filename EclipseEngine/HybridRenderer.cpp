@@ -59,7 +59,7 @@ void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkComman
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw(sceneProperites);
+		meshPickerRenderPass.Draw();
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
 

@@ -29,7 +29,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(SceneProperties& sceneProperties);
+	void Draw();
 	void Destroy();
 
 	Pixel ReadPixel(glm::ivec2 PixelTexCoord);

@@ -26,7 +26,7 @@ public:
 	void StartUp();
 	void Update();
 	void RebuildRenderers();
-	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
+	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
 

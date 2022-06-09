@@ -7,8 +7,8 @@ Scene::Scene()
 {
 
 
-    camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
-    camera2 = PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f));
+    //camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
+    SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
     SceneManager::LoadScene("../Scenes/example.txt");
 
@@ -87,26 +87,7 @@ void Scene::Update()
         RebuildRenderers();
     }
 
-    auto time = glfwGetTime();
-    GameObjectManager::Update(time);
-    MaterialManager::Update();
-    MeshRendererManager::Update();
-    ModelManager::Update();
-    LightManager::Update();
-
-    camera2.Update(time);
-
-    sceneProperites.CameraPos = camera2.GetPosition();
-    sceneProperites.view = camera2.GetViewMatrix();
-    sceneProperites.proj = camera2.GetProjectionMatrix();
-    sceneProperites.DirectionalLightCount = LightManager::GetDirectionalLightCount();
-    sceneProperites.PointLightCount = LightManager::GetPointLightCount();
-    sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
-    sceneProperites.Timer = time;
-
-    cubeMapInfo.view = glm::mat4(glm::mat3(camera2.GetViewMatrix()));
-    cubeMapInfo.proj = glm::perspective(glm::radians(camera2.GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
-    cubeMapInfo.proj[1][1] *= -1;
+    SceneManager::Update();
 
     if (GraphicsDevice::IsRayTracingFeatureActive() &&
         GraphicsDevice::IsRayTracerActive())
@@ -214,7 +195,7 @@ void Scene::Draw()
     if (GraphicsDevice::IsRayTracingFeatureActive() && 
         GraphicsDevice::IsRayTracerActive())
     {
-        rayTraceRenderer.Draw(sceneProperites, CommandBufferSubmitList);
+        rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
         
     }
     else
@@ -222,7 +203,7 @@ void Scene::Draw()
        // renderer2D.Draw(sceneProperites, CommandBufferSubmitList);
      //  blinnPhongRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
        // hybridRenderer.Draw(sceneProperites, CommandBufferSubmitList);
-       pbrRenderer.Draw(sceneProperites, cubeMapInfo, CommandBufferSubmitList);
+       pbrRenderer.Draw(CommandBufferSubmitList);
     }
  
     InterfaceRenderPass::Draw();

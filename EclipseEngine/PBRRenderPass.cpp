@@ -305,7 +305,7 @@ void PBRRenderPass::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView)
+void PBRRenderPass::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -350,7 +350,7 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
     {
         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
         vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
-        DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), skyboxView);
+        DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), SceneManager::cubeMapInfo);
 
         MeshRendererManager::SortByRenderPipeline();
         for (auto& mesh : MeshRendererManager::GetMeshList())
@@ -363,13 +363,13 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
                 {
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(wireframePipeline, mesh, sceneProperties);
+                    DrawMesh(wireframePipeline, mesh, SceneManager::sceneProperites);
                 }
                 else
                 {
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(pbrPipeline, mesh, sceneProperties);
+                    DrawMesh(pbrPipeline, mesh, SceneManager::sceneProperites);
                 }
                 break;
             }
@@ -377,7 +377,7 @@ void PBRRenderPass::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyb
             {
                 vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
                 vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                DrawLine(drawLinePipeline, mesh, sceneProperties);
+                DrawLine(drawLinePipeline, mesh, SceneManager::sceneProperites);
                 break;
             }
             }

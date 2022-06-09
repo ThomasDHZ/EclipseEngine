@@ -39,7 +39,7 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw(sceneProperties);
+		meshPickerRenderPass.Draw();
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
 

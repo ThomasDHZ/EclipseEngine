@@ -153,7 +153,7 @@ void MeshPickerRenderPass3D::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void MeshPickerRenderPass3D::Draw(SceneProperties& sceneProperties)
+void MeshPickerRenderPass3D::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -202,7 +202,7 @@ void MeshPickerRenderPass3D::Draw(SceneProperties& sceneProperties)
                 {
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(MeshPickerPipeline, mesh, sceneProperties);
+                    DrawMesh(MeshPickerPipeline, mesh, SceneManager::sceneProperites);
                     break;
                 }
             }
