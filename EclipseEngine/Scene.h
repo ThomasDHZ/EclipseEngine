@@ -28,12 +28,9 @@
 class Scene
 {
 private:
-	//OrthographicCamera camera;
-	//PerspectiveCamera camera2;
-
-	//Renderer2D renderer2D;
-	//BlinnPhongRenderer blinnPhongRenderer;
-	//HybridRenderer hybridRenderer;
+	Renderer2D renderer2D;
+	BlinnPhongRenderer blinnPhongRenderer;
+	HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
 

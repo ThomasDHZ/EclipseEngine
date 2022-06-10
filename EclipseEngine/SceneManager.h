@@ -15,14 +15,23 @@
 #include "MaterialManager.h"
 #include "ModelManager.h"
 
+enum SceneType
+{
+	kBlinnPhong,
+	kPBR,
+	kSprite2D
+};
+
 class SceneManager
 {
 private:
+
 	static float PBRCubeMapSize;
 
 	static std::shared_ptr<Skybox> SkyboxMesh;
 
 public:
+	static SceneType sceneType;
 	static std::shared_ptr<Camera> activeCamera;
 
 	static SceneProperties sceneProperites;
@@ -133,6 +142,7 @@ public:
 		LightManager::DestroyScene();
 	}
 
+	static SceneType GetSceneType() { return sceneType; }
 	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 };

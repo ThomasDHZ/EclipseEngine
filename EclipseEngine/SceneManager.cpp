@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 
+SceneType								SceneManager::sceneType;
 float                                   SceneManager::PBRCubeMapSize =  256.0f;
 std::shared_ptr<Skybox>                 SceneManager::SkyboxMesh;
 std::shared_ptr<RenderedColorTexture>   SceneManager::BRDFTexture = nullptr;
