@@ -374,6 +374,19 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 
+	glm::vec2 XNearFar = glm::vec2(-3.0f, 3.0f);
+	glm::vec2 YNearFar = glm::vec2(-3.0f, 3.0f);
+	glm::vec2 ZNearFar = glm::vec2(-3.0f, 3.0f);
+
+	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.Update();
+
 	MeshTransformMatrix = meshProperties.MeshTransform;
 
 	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
@@ -402,6 +415,19 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
+
+	glm::vec2 XNearFar = glm::vec2(-3.0f, 3.0f);
+	glm::vec2 YNearFar = glm::vec2(-3.0f, 3.0f);
+	glm::vec2 ZNearFar = glm::vec2(-3.0f, 3.0f);
+
+	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.UniformDataInfo.ReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	ReflectionSamplerBuffer.Update();
 
 	if (BoneList.size() != 0)
 	{

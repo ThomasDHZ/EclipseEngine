@@ -54,6 +54,11 @@ struct SceneProperties
 	alignas(4)  float Timer = 0.0f;
 };
 
+struct ReflectionSampler
+{
+	alignas(16) glm::mat4 ReflectionMatrix[6];
+};
+
 struct ConstSkyBoxView
 {
 	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
@@ -147,4 +152,5 @@ public:
 	VulkanBuffer GetVulkanBufferData() { return VulkanBufferData; }
 };
 
+typedef UniformBuffer<ReflectionSampler> ReflectionSamplerUniformBuffer;
 typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;

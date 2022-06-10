@@ -159,6 +159,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines()
         AddTextureDescriptorSetBinding(DescriptorBindingList, 5, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, MeshPropertiesmBufferList);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;

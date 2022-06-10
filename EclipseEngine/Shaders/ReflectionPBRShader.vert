@@ -17,9 +17,9 @@ layout(push_constant) uniform MeshInfo
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
-layout(binding = 12) uniform CubeSampler 
+layout(binding = 8) uniform ReflectionSampler 
 {
-    mat4 lightSpaceMatrix[6];
+    mat4 ReflectionMatrix[6];
 } ReflectionSamples;
 
 layout (location = 0) in vec3 inPosition;
@@ -37,13 +37,10 @@ layout(location = 4) out vec3 BiTangent;
 
 void main() 
 {
-
-
     FragPos = vec3(meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0));    
     TexCoords = aTexCoords;
     Normal = aNormal;
 	Tangent = aTangent.rgb;
 	BiTangent = aBitangent.rgb;
-    gl_Position =  ReflectionSamples.lightSpaceMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
-
+    gl_Position =  ReflectionSamples.ReflectionMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
 }
