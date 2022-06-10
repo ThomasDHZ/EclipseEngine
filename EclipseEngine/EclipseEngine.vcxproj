@@ -171,6 +171,7 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="PBRReflectionRenderPass.cpp" />
     <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="PBRReflectionRenderPass.h" />
     <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
@@ -345,6 +347,8 @@
     <None Include="Shaders\PrefilterShader.frag" />
     <None Include="Shaders\PrefilterShader.vert" />
     <None Include="Shaders\raygen.rgen" />
+    <None Include="Shaders\ReflectionPBRShader.frag" />
+    <None Include="Shaders\ReflectionPBRShader.vert" />
     <None Include="Shaders\Renderer2D.frag" />
     <None Include="Shaders\Renderer2D.vert" />
     <None Include="Shaders\Renderer3D.frag" />

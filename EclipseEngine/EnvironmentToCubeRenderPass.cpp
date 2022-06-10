@@ -105,8 +105,8 @@ void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::EnvironmentTexture->View;
-    SkyboxBufferInfo.sampler = TextureManager::EnvironmentTexture->Sampler;
+    SkyboxBufferInfo.imageView = SceneManager::environmentTexture->View;
+    SkyboxBufferInfo.sampler = SceneManager::environmentTexture->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;

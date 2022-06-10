@@ -37,6 +37,7 @@ public:
 	static SceneProperties sceneProperites;
 	static ConstSkyBoxView cubeMapInfo;
 
+	static std::shared_ptr<EnvironmentTexture>   environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
 	static std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
@@ -98,6 +99,10 @@ public:
 	{
 		nlohmann::json json;
 
+		auto texturepath = environmentTexture->GetFilePath();
+		JsonConverter::to_json(json["environmentTexture"], texturepath);
+		JsonConverter::to_json(json["sceneType"], sceneType);
+
 		json["ObjectList"] = GameObjectManager::SaveGameObjects();
 		json["MaterialList"] = MaterialManager::SaveMaterials();
 		json["LightList"] = LightManager::SaveLights();
@@ -125,6 +130,9 @@ public:
 		SceneFile.close();
 
 		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
+
+		environmentTexture = std::make_shared<EnvironmentTexture>(jsonstring.at("environmentTexture"), VK_FORMAT_R32G32B32A32_SFLOAT);
+		sceneType = jsonstring.at("sceneType");
 
 		GameObjectManager::LoadGameObjects(jsonstring);
 		//MaterialManager::LoadMaterials(jsonstring);

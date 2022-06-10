@@ -218,26 +218,17 @@ public:
 	{
 		std::shared_ptr<Material> material = std::make_shared<Material>();
 		material->GenerateID();
-		material->MaterialName = json.at("MaterialName").get_to(material->MaterialName);
 
-		//glm::from_json(json.at("Ambient"), materialTextureData.Ambient);
-		material->materialTextureData.Ambient.x = json.at("Ambient")[0].get_to(material->Ambient.x);
-		material->materialTextureData.Ambient.y = json.at("Ambient")[1].get_to(material->Ambient.y);
-		material->materialTextureData.Ambient.z = json.at("Ambient")[2].get_to(material->Ambient.z);
-		material->materialTextureData.Diffuse.x = json.at("Diffuse")[0].get_to(material->Diffuse.x);
-		material->materialTextureData.Diffuse.y = json.at("Diffuse")[1].get_to(material->Diffuse.y);
-		material->materialTextureData.Diffuse.z = json.at("Diffuse")[2].get_to(material->Diffuse.z);
-		material->materialTextureData.Specular.x = json.at("Specular")[0].get_to(material->Specular.x);
-		material->materialTextureData.Specular.y = json.at("Specular")[1].get_to(material->Specular.y);
-		material->materialTextureData.Specular.z = json.at("Specular")[2].get_to(material->Specular.z);
-		material->materialTextureData.Albedo.x = json.at("Albedo")[0].get_to(material->Albedo.x);
-		material->materialTextureData.Albedo.y = json.at("Albedo")[1].get_to(material->Albedo.y);
-		material->materialTextureData.Albedo.z = json.at("Albedo")[2].get_to(material->Albedo.z);
-		material->materialTextureData.Matallic = json.at("Matallic").get_to(material->Matallic);
-		material->materialTextureData.Roughness = json.at("Roughness").get_to(material->Roughness);
-		material->materialTextureData.AmbientOcclusion = json.at("AmbientOcclusion").get_to(material->AmbientOcclusion);
-		material->materialTextureData.Reflectivness = json.at("Reflectivness").get_to(material->Reflectivness);
-		material->materialTextureData.Alpha = json.at("Alpha").get_to(material->Alpha);
+		JsonConverter::from_json(json["MaterialName"], material->MaterialName);
+		JsonConverter::from_json(json["Ambient"], material->materialTextureData.Ambient);
+		JsonConverter::from_json(json["Diffuse"], material->materialTextureData.Diffuse);
+		JsonConverter::from_json(json["Specular"], material->materialTextureData.Specular);
+		JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
+		JsonConverter::from_json(json["Matallic"], material->materialTextureData.Matallic);
+		JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
+		JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
+		JsonConverter::from_json(json["Reflectivness"], material->materialTextureData.Reflectivness);
+		JsonConverter::from_json(json["Alpha"], material->materialTextureData.Alpha);
 
 		if (json.contains("DiffuseMap"))
 		{
