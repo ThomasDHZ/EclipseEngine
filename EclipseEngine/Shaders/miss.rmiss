@@ -41,6 +41,8 @@ layout(binding = 8) uniform sampler2D TextureMap[];
 layout(binding = 9, set = 0) uniform samplerCube CubeMap[];
 void main()
 {
-	rayPayload.color = texture(CubeMap[0], gl_WorldRayDirectionEXT).rgb;
+//	rayPayload.color = texture(CubeMap[0], gl_WorldRayDirectionEXT).rgb;
+
+	rayPayload.color = vec3(1.0f, 0.0f, 0.0f);
 	rayPayload.normal = vec3(0.0f);
 }
