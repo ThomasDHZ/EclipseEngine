@@ -1,22 +1,24 @@
-#include "IrradianceRenderPass.h"
-#include "LightManager.h"
+#include "ReflectionPrefilterRenderPass.h"
+#include "Skybox.h"
 
-IrradianceRenderPass::IrradianceRenderPass() : RenderPass()
+ReflectionPrefilterRenderPass::ReflectionPrefilterRenderPass() : RenderPass()
 {
 }
 
-IrradianceRenderPass::~IrradianceRenderPass()
+ReflectionPrefilterRenderPass::~ReflectionPrefilterRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
+void ReflectionPrefilterRenderPass::StartUp(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    IrradianceCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
+
+    DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(IrradianceCubeMap->View);
+    AttachmentList.emplace_back(DrawToCubeMap->View);
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
@@ -24,12 +26,10 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::BuildRenderPass()
+void ReflectionPrefilterRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-
-    VkAttachmentDescription CubeMapAttachment = {};
-    AttachmentDescriptionList.emplace_back(IrradianceCubeMap->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DrawToCubeMap->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -88,7 +88,7 @@ void IrradianceRenderPass::BuildRenderPass()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines()
+void ReflectionPrefilterRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -112,8 +112,8 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PrefilterShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PrefilterShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
@@ -124,16 +124,16 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderPBRSkyBox;
-        buildGraphicsPipelineInfo.ConstBufferSize = 0;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(PrefilterSkyboxSettings);
 
-        if (irradiancePipeline == nullptr)
+        if (prefilterPipeline == nullptr)
         {
-            irradiancePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            prefilterPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
         }
         else
         {
-            irradiancePipeline->Destroy();
-            irradiancePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            prefilterPipeline->Destroy();
+            prefilterPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -143,13 +143,15 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void ReflectionPrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 {
+    firstRun = true;
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
+    DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+    PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(IrradianceCubeMap->View);
+    AttachmentList.emplace_back(DrawToCubeMap->View);
 
     RenderPass::Destroy();
 
@@ -159,11 +161,24 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::Draw()
+void ReflectionPrefilterRenderPass::Draw()
 {
+    if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
+        SceneManager::PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+    {
+        DrawToCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+    }
+
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
+    SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
     std::array<VkClearValue, 1> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
@@ -171,43 +186,54 @@ void IrradianceRenderPass::Draw()
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetCMDIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent.width = RenderPassResolution.x;
     renderPassInfo.renderArea.extent.height = RenderPassResolution.y;
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = (float)RenderPassResolution.x;
-    viewport.height = (float)RenderPassResolution.y;
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-
     VkRect2D rect2D{};
-    rect2D.offset = { 0, 0 };
-    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+    rect2D.extent.width = RenderPassResolution.x;
+    rect2D.extent.height = RenderPassResolution.y;
+    rect2D.offset.x = 0.0f;
+    rect2D.offset.y = 0.0f;
 
-    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
+    PrefilterSkyboxSettings prefiliter;
+    for (unsigned int mip = 0; mip < CubeMapMipLevels; mip++)
+    {
+        VkViewport viewport{};
+        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
+        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        prefiliter.SkyboxSize = RenderPassResolution.x;
+        prefiliter.roughness = (float)mip / (float)(CubeMapMipLevels - 1);
+
+        vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
+        vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
+        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, prefilterPipeline->GetShaderPipeline());
+        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, prefilterPipeline->GetShaderPipelineLayout(), 0, 1, prefilterPipeline->GetDescriptorSetPtr(), 0, nullptr);
+        vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        DrawSkybox(prefilterPipeline, SceneManager::GetSkyboxMesh(), prefiliter);
+        vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+
+        DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()], DrawToCubeMap, SceneManager::PrefilterCubeMap, mip);
+        DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
-    vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
-    vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, irradiancePipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, irradiancePipeline->GetShaderPipelineLayout(), 0, 1, irradiancePipeline->GetDescriptorSetPtr(), 0, nullptr);
-    vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    DrawSkybox(irradiancePipeline, SceneManager::GetSkyboxMesh());
-    vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
 }
 
-void IrradianceRenderPass::Destroy()
+void ReflectionPrefilterRenderPass::Destroy()
 {
-    IrradianceCubeMap->Destroy();
-    irradiancePipeline->Destroy();
+    DrawToCubeMap->Destroy();
+    SceneManager::PrefilterCubeMap->Destroy();
+    prefilterPipeline->Destroy();
     RenderPass::Destroy();
 }

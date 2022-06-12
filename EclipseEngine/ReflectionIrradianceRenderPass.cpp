@@ -1,15 +1,16 @@
-#include "IrradianceRenderPass.h"
+#include "ReflectionIrradianceRenderPass.h"
+
 #include "LightManager.h"
 
-IrradianceRenderPass::IrradianceRenderPass() : RenderPass()
+ReflectionIrradianceRenderPass::ReflectionIrradianceRenderPass() : RenderPass()
 {
 }
 
-IrradianceRenderPass::~IrradianceRenderPass()
+ReflectionIrradianceRenderPass::~ReflectionIrradianceRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
+void ReflectionIrradianceRenderPass::StartUp(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
@@ -24,7 +25,7 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::BuildRenderPass()
+void ReflectionIrradianceRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
@@ -88,7 +89,7 @@ void IrradianceRenderPass::BuildRenderPass()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines()
+void ReflectionIrradianceRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -143,7 +144,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void ReflectionIrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
@@ -159,7 +160,7 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::Draw()
+void ReflectionIrradianceRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -205,7 +206,7 @@ void IrradianceRenderPass::Draw()
     }
 }
 
-void IrradianceRenderPass::Destroy()
+void ReflectionIrradianceRenderPass::Destroy()
 {
     IrradianceCubeMap->Destroy();
     irradiancePipeline->Destroy();

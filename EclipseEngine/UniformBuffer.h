@@ -54,11 +54,6 @@ struct SceneProperties
 	alignas(4)  float Timer = 0.0f;
 };
 
-struct ReflectionSampler
-{
-	alignas(16) glm::mat4 ReflectionMatrix[6];
-};
-
 struct ConstSkyBoxView
 {
 	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
@@ -78,6 +73,7 @@ struct MeshProperties
 	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 ModelTransform = glm::mat4(1.0f);
+	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);
 	alignas(8) glm::vec2 UVFlip = glm::vec2(0.0f);
@@ -85,6 +81,13 @@ struct MeshProperties
 	alignas(4) float minLayers = 8;
 	alignas(4) float maxLayers = 32;
 
+	MeshProperties()
+	{
+		for (int x = 0; x <= 5; x++)
+		{
+			MeshReflectionMatrix[x] = glm::mat4(1.0f);
+		}
+	}
 	void from_json(nlohmann::json& json)
 	{
 		materialBufferData.from_json(json["materialBufferData"]);
@@ -152,5 +155,4 @@ public:
 	VulkanBuffer GetVulkanBufferData() { return VulkanBufferData; }
 };
 
-typedef UniformBuffer<ReflectionSampler> ReflectionSamplerUniformBuffer;
 typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;

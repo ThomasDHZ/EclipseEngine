@@ -177,6 +177,8 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
+    <ClCompile Include="ReflectionIrradianceRenderPass.cpp" />
+    <ClCompile Include="ReflectionPrefilterRenderPass.cpp" />
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
@@ -254,6 +256,8 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="ReadableTexture.h" />
+    <ClInclude Include="ReflectionIrradianceRenderPass.h" />
+    <ClInclude Include="ReflectionPrefilterRenderPass.h" />
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />

@@ -12,6 +12,36 @@ PBRRenderPass::~PBRRenderPass()
 
 void PBRRenderPass::StartUp()
 {
+    ReflectionIrradianceTexture = nullptr;
+    ReflectionPrefilterTexture = nullptr;
+
+    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(BloomTexture->View);
+    AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(RenderedBloomTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
+
+    BuildRenderPass();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+}
+
+void PBRRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
+{
+    ReflectionIrradianceTexture = reflectionIrradianceTexture;
+    ReflectionPrefilterTexture = reflectionPrefilterTexture;
+
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -122,14 +152,32 @@ void PBRRenderPass::BuildRenderPassPipelines()
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     VkDescriptorImageInfo IrradianceMapBuffer;
-    IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    IrradianceMapBuffer.imageView = SceneManager::IrradianceCubeMap->View;
-    IrradianceMapBuffer.sampler = SceneManager::IrradianceCubeMap->Sampler;
+    if (ReflectionIrradianceTexture == nullptr)
+    {
+        IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        IrradianceMapBuffer.imageView = SceneManager::IrradianceCubeMap->View;
+        IrradianceMapBuffer.sampler = SceneManager::IrradianceCubeMap->Sampler;
+    }
+    else
+    {
+        IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        IrradianceMapBuffer.imageView = ReflectionIrradianceTexture->View;
+        IrradianceMapBuffer.sampler = ReflectionIrradianceTexture->Sampler;
+    }
 
     VkDescriptorImageInfo PrefilterBuffer;
-    PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PrefilterBuffer.imageView = SceneManager::PrefilterCubeMap->View;
-    PrefilterBuffer.sampler = SceneManager::PrefilterCubeMap->Sampler;
+    if (ReflectionPrefilterTexture == nullptr)
+    {
+        PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        PrefilterBuffer.imageView = SceneManager::PrefilterCubeMap->View;
+        PrefilterBuffer.sampler = SceneManager::PrefilterCubeMap->Sampler;
+    }
+    else
+    {
+        PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        PrefilterBuffer.imageView = ReflectionPrefilterTexture->View;
+        PrefilterBuffer.sampler = ReflectionPrefilterTexture->Sampler;
+    }
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;

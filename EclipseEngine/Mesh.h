@@ -111,7 +111,6 @@ protected:
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
 	MeshProperties meshProperties;
-	ReflectionSampler reflectionSampler;
 	std::shared_ptr<Material> material;
 
 	VulkanBuffer VertexBuffer;
@@ -121,7 +120,6 @@ protected:
 	VulkanBuffer BoneWeightBuffer;
 	VulkanBuffer BoneTransformBuffer;
 
-	ReflectionSamplerUniformBuffer ReflectionSamplerBuffer;
 	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 

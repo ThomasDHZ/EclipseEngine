@@ -18,6 +18,7 @@ public:
 	IrradianceRenderPass();
 	~IrradianceRenderPass();
 
+	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
 	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
 	void StartUp(uint32_t cubeMapSize);

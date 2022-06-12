@@ -15,6 +15,9 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
+	std::shared_ptr<RenderedCubeMapTexture> ReflectionIrradianceTexture;
+	std::shared_ptr<RenderedCubeMapTexture> ReflectionPrefilterTexture;
+
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
@@ -35,6 +38,7 @@ public:
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void StartUp();
+	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture);
 	void RebuildSwapChain();
 
 	void Draw();

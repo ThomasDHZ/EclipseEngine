@@ -3,7 +3,7 @@
 #include "RenderedCubeMapTexture.h"
 #include "Skybox.h"
 
-class PrefilterRenderPass : public RenderPass
+class ReflectionIrradianceRenderPass : public RenderPass
 {
 private:
 	uint32_t CubeMapMipLevels = 0;
@@ -15,15 +15,15 @@ private:
 	bool firstRun = true;
 
 public:
-	PrefilterRenderPass();
-	~PrefilterRenderPass();
+	ReflectionIrradianceRenderPass();
+	~ReflectionIrradianceRenderPass();
 
-
-	std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
-	std::shared_ptr<GraphicsPipeline> prefilterPipeline;
+	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
+	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
 	void StartUp(uint32_t cubeMapSize);
 	void RebuildSwapChain(uint32_t cubeMapSize);
 	void Draw();
 	void Destroy();
 };
+

@@ -1,6 +1,4 @@
 #include "PrefilterRenderPass.h"
-#include "PrefilterRenderPass.h"
-#include "GraphicsPipeline.h"
 #include "Skybox.h"
 
 
@@ -18,7 +16,7 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    SceneManager::PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+    PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(DrawToCubeMap->View);
@@ -151,7 +149,7 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     firstRun = true;
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-    SceneManager::PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
+    PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(DrawToCubeMap->View);

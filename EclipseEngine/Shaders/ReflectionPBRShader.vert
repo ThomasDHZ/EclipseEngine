@@ -17,11 +17,6 @@ layout(push_constant) uniform MeshInfo
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
-layout(binding = 8) uniform ReflectionSampler 
-{
-    mat4 ReflectionMatrix[6];
-} ReflectionSamples;
-
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
@@ -42,5 +37,5 @@ void main()
     Normal = aNormal;
 	Tangent = aTangent.rgb;
 	BiTangent = aBitangent.rgb;
-    gl_Position =  ReflectionSamples.ReflectionMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
+    gl_Position =   meshBuffer[Mesh.MeshIndex].meshProperties.MeshReflectionMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
 }

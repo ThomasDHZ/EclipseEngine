@@ -14,9 +14,6 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedColorTexture> BloomTexture;
-
 	std::shared_ptr<GraphicsPipeline> pbrPipeline;
 	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
 	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
@@ -29,9 +26,8 @@ public:
 	PBRReflectionRenderPass();
 	~PBRReflectionRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
-	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedCubeMapTexture> ColorTexture;
+	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
 
 	void StartUp();
 	void RebuildSwapChain();
