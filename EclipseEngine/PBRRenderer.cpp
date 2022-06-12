@@ -18,11 +18,7 @@ void PBRRenderer::StartUp()
 	{
 		reflectionIrradianceRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
 		reflectionPrefilterRenderPass.StartUp(SceneManager::GetPBRCubeMapSize());
-
-		//SceneManager::ReflectionIrradianceCubeMap = reflectionIrradianceRenderPass.IrradianceCubeMap;
-		//SceneManager::ReflectionPrefilterCubeMap = reflectionPrefilterRenderPass.PrefilterCubeMap;
-
-		//pbrReflectionRenderPass.StartUp();
+		pbrReflectionRenderPass.StartUp(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap);
 
 	}
 	////Main Render Pass
@@ -61,10 +57,7 @@ void PBRRenderer::RebuildRenderers()
 	{
 		reflectionIrradianceRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
 		reflectionPrefilterRenderPass.RebuildSwapChain(SceneManager::GetPBRCubeMapSize());
-		//pbrReflectionRenderPass.RebuildSwapChain();
-
-		SceneManager::ReflectionIrradianceCubeMap = reflectionIrradianceRenderPass.IrradianceCubeMap;
-		SceneManager::ReflectionPrefilterCubeMap = reflectionPrefilterRenderPass.PrefilterCubeMap;
+		pbrReflectionRenderPass.RebuildSwapChain(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap);
 	}
 	////Main Render Pass
 	{
@@ -95,8 +88,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		reflectionPrefilterRenderPass.Draw();
 		CommandBufferSubmitList.emplace_back(reflectionPrefilterRenderPass.GetCommandBuffer());
 
-		//pbrReflectionRenderPass.Draw();
-		//CommandBufferSubmitList.emplace_back(pbrReflectionRenderPass.GetCommandBuffer());
+		pbrReflectionRenderPass.Draw();
+		CommandBufferSubmitList.emplace_back(pbrReflectionRenderPass.GetCommandBuffer());
 	}
 	////Main Render Pass
 	{

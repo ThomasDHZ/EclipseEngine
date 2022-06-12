@@ -9,28 +9,28 @@ PBRReflectionRenderPass::~PBRReflectionRenderPass()
 {
 }
 
-void PBRReflectionRenderPass::StartUp()
+void PBRReflectionRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    ReflectionCubeMapTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
     BloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(ReflectionCubeMapTexture->View);
     AttachmentList.emplace_back(BloomTexture->View);
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap);
     SetUpCommandBuffers();
 }
 
 void PBRReflectionRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(ReflectionCubeMapTexture->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(BloomTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
@@ -91,7 +91,7 @@ void PBRReflectionRenderPass::BuildRenderPass()
 
 }
 
-void PBRReflectionRenderPass::BuildRenderPassPipelines()
+void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -115,13 +115,13 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo IrradianceMapBuffer;
     IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    IrradianceMapBuffer.imageView = SceneManager::IrradianceCubeMap->View;
-    IrradianceMapBuffer.sampler = SceneManager::IrradianceCubeMap->Sampler;
+    IrradianceMapBuffer.imageView = reflectionIrradianceMap->View;
+    IrradianceMapBuffer.sampler = reflectionIrradianceMap->Sampler;
 
     VkDescriptorImageInfo PrefilterBuffer;
     PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PrefilterBuffer.imageView = SceneManager::PrefilterCubeMap->View;
-    PrefilterBuffer.sampler = SceneManager::PrefilterCubeMap->Sampler;
+    PrefilterBuffer.imageView = reflectionPrefilterMap->View;
+    PrefilterBuffer.sampler = reflectionPrefilterMap->Sampler;
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -272,22 +272,22 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines()
     }*/
 }
 
-void PBRReflectionRenderPass::RebuildSwapChain()
+void PBRReflectionRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture->RecreateRendererTexture(RenderPassResolution);
+    ReflectionCubeMapTexture->RecreateRendererTexture(RenderPassResolution);
     BloomTexture->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(ReflectionCubeMapTexture->View);
     AttachmentList.emplace_back(BloomTexture->View);
 
     RenderPass::Destroy();
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap);
     SetUpCommandBuffers();
 }
 
@@ -374,7 +374,7 @@ void PBRReflectionRenderPass::Draw()
 
 void PBRReflectionRenderPass::Destroy()
 {
-    ColorTexture->Destroy();
+    ReflectionCubeMapTexture->Destroy();
     BloomTexture->Destroy();
 
     pbrPipeline->Destroy();

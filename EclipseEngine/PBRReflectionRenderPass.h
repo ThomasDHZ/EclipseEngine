@@ -20,17 +20,17 @@ private:
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
-	void BuildRenderPassPipelines();
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);
 
 public:
 	PBRReflectionRenderPass();
 	~PBRReflectionRenderPass();
 
-	std::shared_ptr<RenderedCubeMapTexture> ColorTexture;
+	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMapTexture;
 	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
 
-	void StartUp();
-	void RebuildSwapChain();
+	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);
+	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);
 
 	void Draw();
 	void Destroy();
