@@ -22,7 +22,6 @@ struct MaterialProperties
 	uint DepthMapID;
 	uint AlphaMapID;
 	uint EmissionMapID;
-	uint ShadowMapID;
 };
 
 struct MeshProperties

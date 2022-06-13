@@ -30,7 +30,6 @@ struct MaterialProperties
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
-	std::shared_ptr<Texture> ShadowMap = nullptr;
 };
 
 struct MaterialBufferData
@@ -57,7 +56,6 @@ struct MaterialBufferData
 	alignas(4) uint32_t DepthMapID = DefaultTextureID;
 	alignas(4) uint32_t AlphaMapID = DefaultAlphaTextureID;
 	alignas(4) uint32_t EmissionMapID = DefaultTextureID;
-	alignas(4) uint32_t ShadowMapID = DefaultTextureID;
 
 	void from_json(nlohmann::json& json)
 	{
@@ -82,7 +80,6 @@ struct MaterialBufferData
 		JsonConverter::from_json(json["DepthMapID"], DepthMapID);
 		JsonConverter::from_json(json["AlphaMapID"], AlphaMapID);
 		JsonConverter::from_json(json["EmissionMapID"], EmissionMapID);
-		JsonConverter::from_json(json["ShadowMapID"], ShadowMapID);
 	}
 
 	void to_json(nlohmann::json& json)
@@ -108,7 +105,6 @@ struct MaterialBufferData
 		JsonConverter::to_json(json["DepthMapID"], DepthMapID);
 		JsonConverter::to_json(json["AlphaMapID"], AlphaMapID);
 		JsonConverter::to_json(json["EmissionMapID"], EmissionMapID);
-		JsonConverter::to_json(json["ShadowMapID"], ShadowMapID);
 	}
 };
 
@@ -143,7 +139,6 @@ private:
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
-	std::shared_ptr<Texture> ShadowMap = nullptr;
 
 	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;
@@ -212,7 +207,6 @@ public:
 	std::shared_ptr<Texture> GetDepthMap() { return DepthMap; }
 	std::shared_ptr<Texture> GetAlphaMap() { return AlphaMap; }
 	std::shared_ptr<Texture> GetEmissionMap() { return EmissionMap; }
-	std::shared_ptr<Texture> GetShadowMap() { return ShadowMap; }
 
 	static std::shared_ptr<Material> from_json(nlohmann::json json)
 	{
@@ -269,10 +263,6 @@ public:
 		if (json.contains("EmissionMap"))
 		{
 			material->EmissionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("EmissionMap"))));
-		}
-		if (json.contains("ShadowMap"))
-		{
-			material->ShadowMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("ShadowMap"))));
 		}
 
 		material->MaterialBuffer.CreateBuffer(&material->materialTextureData, sizeof(MaterialProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -334,10 +324,6 @@ public:
 		if (EmissionMap != nullptr)
 		{
 			EmissionMap->to_json(json["EmissionMap"]);
-		}
-		if (ShadowMap != nullptr)
-		{
-			ShadowMap->to_json(json["ShadowMap"]);
 		}
 	}
 };

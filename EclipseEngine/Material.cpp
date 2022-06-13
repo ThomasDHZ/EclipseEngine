@@ -76,11 +76,6 @@ Material::Material(const std::string materialName, MaterialProperties& MaterialI
 		materialTextureData.EmissionMapID = MaterialInfo.EmissionMap->GetTextureBufferIndex();
 		EmissionMap = MaterialInfo.EmissionMap;
 	}
-	if (MaterialInfo.ShadowMap != nullptr)
-	{
-		materialTextureData.ShadowMapID = MaterialInfo.ShadowMap->GetTextureBufferIndex();
-		ShadowMap = MaterialInfo.ShadowMap;
-	}
 
 	MaterialBuffer.CreateBuffer(&materialTextureData, sizeof(MaterialProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -132,10 +127,6 @@ void Material::Update()
 	if (EmissionMap != nullptr)
 	{
 		materialTextureData.EmissionMapID = EmissionMap->GetTextureBufferIndex();
-	}
-	if (ShadowMap != nullptr)
-	{
-		materialTextureData.ShadowMapID = ShadowMap->GetTextureBufferIndex();
 	}
 
 	MaterialBuffer.CopyBufferToMemory(&materialTextureData, sizeof(MaterialBufferData));

@@ -158,6 +158,8 @@
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
+    <ClCompile Include="DepthCubeMapRenderPass.cpp" />
+    <ClCompile Include="DepthPassRendererPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
@@ -177,6 +179,7 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
+    <ClCompile Include="RenderedCubeMapDepthTexture.cpp" />
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
@@ -233,6 +236,8 @@
     <ClInclude Include="Converters.h" />
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DeferredRenderPass.h" />
+    <ClInclude Include="DepthCubeMapRenderPass.h" />
+    <ClInclude Include="DepthPassRendererPass.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="EnvironmentTexture.h" />
@@ -254,6 +259,7 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="ReadableTexture.h" />
+    <ClInclude Include="RenderedCubeMapDepthTexture.h" />
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
