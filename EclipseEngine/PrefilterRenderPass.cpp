@@ -10,7 +10,7 @@ PrefilterRenderPass::~PrefilterRenderPass()
 {
 }
 
-void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
+void PrefilterRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -23,7 +23,7 @@ void PrefilterRenderPass::StartUp(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionCubeMap);
     SetUpCommandBuffers();
 }
 
@@ -89,7 +89,7 @@ void PrefilterRenderPass::BuildRenderPass()
     }
 }
 
-void PrefilterRenderPass::BuildRenderPassPipelines()
+void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -108,8 +108,8 @@ void PrefilterRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = SceneManager::CubeMap->View;
-    SkyboxBufferInfo.sampler = SceneManager::CubeMap->Sampler;
+    SkyboxBufferInfo.imageView = reflectionCubeMap->View;
+    SkyboxBufferInfo.sampler = reflectionCubeMap->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -144,7 +144,7 @@ void PrefilterRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void PrefilterRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize)
 {
     firstRun = true;
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
@@ -158,17 +158,17 @@ void PrefilterRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionCubeMap);
     SetUpCommandBuffers();
 }
 
 void PrefilterRenderPass::Draw()
 {
     if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
-        SceneManager::PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+        PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     {
         DrawToCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+        PrefilterCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
     }
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -179,7 +179,7 @@ void PrefilterRenderPass::Draw()
         throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+    PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
     std::array<VkClearValue, 1> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
@@ -221,10 +221,10 @@ void PrefilterRenderPass::Draw()
         vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 
         DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()], DrawToCubeMap, SceneManager::PrefilterCubeMap, mip);
+        Texture::CopyCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()], DrawToCubeMap, PrefilterCubeMap, mip);
         DrawToCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
-    SceneManager::PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+    PrefilterCubeMap->UpdateCubeMapLayout(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
 
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
@@ -234,7 +234,7 @@ void PrefilterRenderPass::Draw()
 void PrefilterRenderPass::Destroy()
 {
     DrawToCubeMap->Destroy();
-    SceneManager::PrefilterCubeMap->Destroy();
+    PrefilterCubeMap->Destroy();
     prefilterPipeline->Destroy();
     RenderPass::Destroy();
 }

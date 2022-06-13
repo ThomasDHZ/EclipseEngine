@@ -15,6 +15,31 @@ layout(push_constant) uniform MeshInfo
     vec3 CameraPos;
 } Mesh;
 
+mat4 MVP[6] = {{{0.000000, 0.000000, 1.010101, 1.000000},
+                       {0.000000, -1.000000, 0.000000, 0.000000},
+                       {-1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}},
+                      {{0.000000, 0.000000, -1.010101, -1.000000},
+                       {0.000000, -1.000000, 0.000000, 0.000000},
+                       {1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}},
+                      {{1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, 1.010101, 1.000000},
+                       {0.000000, 1.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}},
+                      {{1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -1.010101, -1.000000},
+                       {0.000000, -1.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}},
+                      {{1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, -1.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, 1.010101, 1.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}},
+                      {{-1.000000, 0.000000, 0.000000, 0.000000},
+                       {0.000000, -1.000000, 0.000000, 0.000000},
+                       {0.000000, 0.000000, -1.010101, -1.000000},
+                       {0.000000, 0.000000, -0.101010, 0.000000}}};
+
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout (location = 0) in vec3 inPosition;
@@ -37,5 +62,5 @@ void main()
     Normal = aNormal;
 	Tangent = aTangent.rgb;
 	BiTangent = aBitangent.rgb;
-    gl_Position =   meshBuffer[Mesh.MeshIndex].meshProperties.MeshReflectionMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
+    gl_Position =   MVP[gl_ViewIndex]  * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
 }

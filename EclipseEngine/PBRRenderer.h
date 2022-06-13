@@ -8,8 +8,6 @@
 #include "BRDFRenderPass.h"
 #include "SceneManager.h"
 #include "PBRReflectionRenderPass.h"
-#include "ReflectionIrradianceRenderPass.h"
-#include "ReflectionPrefilterRenderPass.h"
 
 class PBRRenderer
 {
@@ -17,8 +15,8 @@ private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
-	ReflectionIrradianceRenderPass reflectionIrradianceRenderPass;
-	ReflectionPrefilterRenderPass reflectionPrefilterRenderPass;
+	IrradianceRenderPass reflectionIrradianceRenderPass;
+	PrefilterRenderPass reflectionPrefilterRenderPass;
 	PBRReflectionRenderPass pbrReflectionRenderPass;
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

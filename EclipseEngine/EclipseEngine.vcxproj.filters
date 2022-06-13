@@ -306,12 +306,6 @@
     <ClCompile Include="PBRReflectionRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="ReflectionIrradianceRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="ReflectionPrefilterRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -568,12 +562,6 @@
     </ClInclude>
     <ClInclude Include="PBRReflectionRenderPass.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionIrradianceRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionPrefilterRenderPass.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

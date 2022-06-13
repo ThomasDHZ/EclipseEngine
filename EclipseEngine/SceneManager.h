@@ -39,10 +39,6 @@ public:
 
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
-	static std::shared_ptr<RenderedCubeMapTexture> ReflectionIrradianceCubeMap;
-	static std::shared_ptr<RenderedCubeMapTexture> ReflectionPrefilterCubeMap;
-	static std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
-	static std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 
 	static void StartUp()
@@ -82,14 +78,6 @@ public:
 		if (BRDFTexture != nullptr)
 		{
 			BRDFTexture->Destroy();
-		}
-		if (IrradianceCubeMap != nullptr)
-		{
-			IrradianceCubeMap->Destroy();
-		}
-		if (PrefilterCubeMap != nullptr)
-		{
-			PrefilterCubeMap->Destroy();
 		}
 		if (CubeMap != nullptr)
 		{

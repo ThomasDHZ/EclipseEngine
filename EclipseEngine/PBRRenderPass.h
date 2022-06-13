@@ -15,9 +15,6 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<RenderedCubeMapTexture> ReflectionIrradianceTexture;
-	std::shared_ptr<RenderedCubeMapTexture> ReflectionPrefilterTexture;
-
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
@@ -27,7 +24,7 @@ private:
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
-	void BuildRenderPassPipelines();
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture);
 
 public:
 	PBRRenderPass();
@@ -37,9 +34,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp();
 	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture);
-	void RebuildSwapChain();
+	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture);
 
 	void Draw();
 	void Destroy();

@@ -9,7 +9,7 @@ IrradianceRenderPass::~IrradianceRenderPass()
 {
 }
 
-void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
+void IrradianceRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
@@ -20,7 +20,7 @@ void IrradianceRenderPass::StartUp(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionCubeMap);
     SetUpCommandBuffers();
 }
 
@@ -88,7 +88,7 @@ void IrradianceRenderPass::BuildRenderPass()
     }
 }
 
-void IrradianceRenderPass::BuildRenderPassPipelines()
+void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -107,8 +107,8 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = SceneManager::CubeMap->View;
-    SkyboxBufferInfo.sampler = SceneManager::CubeMap->Sampler;
+    SkyboxBufferInfo.imageView = reflectionCubeMap->View;
+    SkyboxBufferInfo.sampler = reflectionCubeMap->Sampler;
 
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -143,7 +143,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void IrradianceRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
@@ -155,7 +155,7 @@ void IrradianceRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(reflectionCubeMap);
     SetUpCommandBuffers();
 }
 
