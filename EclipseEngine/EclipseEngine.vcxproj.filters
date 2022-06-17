@@ -312,7 +312,7 @@
     <ClCompile Include="DepthPassRendererPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="DepthCubeMapRenderPass.cpp">
+    <ClCompile Include="DepthDebugRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
   </ItemGroup>
@@ -572,14 +572,14 @@
     <ClInclude Include="PBRReflectionRenderPass.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="DepthPassRendererPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthCubeMapRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
     <ClInclude Include="RenderedCubeMapDepthTexture.h">
       <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthPassRendererPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthDebugRenderPass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -713,6 +713,24 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\ReflectionPBRShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthCubeShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthCubeShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthDebugShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthDebugShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\DepthShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

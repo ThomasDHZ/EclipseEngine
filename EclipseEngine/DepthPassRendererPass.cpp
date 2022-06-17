@@ -12,7 +12,7 @@ DepthPassRendererPass::~DepthPassRendererPass()
 
 void DepthPassRendererPass::StartUp()
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
@@ -30,6 +30,8 @@ void DepthPassRendererPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+
+
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
@@ -97,6 +99,13 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
+
+
+    VkDescriptorImageInfo BRDFBuffer;
+    BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    BRDFBuffer.imageView = SceneManager::BRDFTexture->View;
+    BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
+
     {
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -104,9 +113,6 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/PBRRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
@@ -117,14 +123,14 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
 
-        if (depthPipeline == nullptr)
+        if (DepthPipeline == nullptr)
         {
-            depthPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            DepthPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
         }
         else
         {
-            depthPipeline->Destroy();
-            depthPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            DepthPipeline->Destroy();
+            DepthPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -137,7 +143,6 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
 void DepthPassRendererPass::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
     DepthTexture->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
@@ -190,13 +195,23 @@ void DepthPassRendererPass::Draw()
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
-
         MeshRendererManager::SortByRenderPipeline();
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {
-            vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, depthPipeline->GetShaderPipeline());
-            vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, depthPipeline->GetShaderPipelineLayout(), 0, 1, depthPipeline->GetDescriptorSetPtr(), 0, nullptr);
-            DrawMesh(depthPipeline, mesh, SceneManager::sceneProperites);
+            switch (mesh->GetMeshType())
+            {
+                case MeshTypeEnum::kPolygon:
+                {
+                    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
+                    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                    DrawMesh(DepthPipeline, mesh, SceneManager::sceneProperites);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
         }
     }
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
@@ -208,8 +223,6 @@ void DepthPassRendererPass::Draw()
 void DepthPassRendererPass::Destroy()
 {
     DepthTexture->Destroy();
-
-    depthPipeline->Destroy();
-
+    DepthPipeline->Destroy();
     RenderPass::Destroy();
 }

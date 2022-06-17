@@ -158,7 +158,7 @@
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
-    <ClCompile Include="DepthCubeMapRenderPass.cpp" />
+    <ClCompile Include="DepthDebugRenderPass.cpp" />
     <ClCompile Include="DepthPassRendererPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
@@ -236,7 +236,7 @@
     <ClInclude Include="Converters.h" />
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DeferredRenderPass.h" />
-    <ClInclude Include="DepthCubeMapRenderPass.h" />
+    <ClInclude Include="DepthDebugRenderPass.h" />
     <ClInclude Include="DepthPassRendererPass.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
@@ -330,6 +330,12 @@
     <None Include="Shaders\CubeMap.vert" />
     <None Include="Shaders\DeferredRenderer.frag" />
     <None Include="Shaders\DeferredRenderer.vert" />
+    <None Include="Shaders\DepthCubeShader.frag" />
+    <None Include="Shaders\DepthCubeShader.vert" />
+    <None Include="Shaders\DepthDebugShader.frag" />
+    <None Include="Shaders\DepthDebugShader.vert" />
+    <None Include="Shaders\DepthShader.frag" />
+    <None Include="Shaders\DepthShader.vert" />
     <None Include="Shaders\EnvironmentToCubeMap.frag" />
     <None Include="Shaders\EnvironmentToCubeMap.vert" />
     <None Include="Shaders\FrameBuffer.frag" />

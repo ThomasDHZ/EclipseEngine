@@ -1,9 +1,13 @@
 #pragma once
 #include "RenderPass.h"
-#include "SceneManager.h"
+#include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
+#include "Skybox.h"
+#include "RenderedCubeMapTexture.h"
+#include "SceneManager.h"
 
-class DepthPassRendererPass : RenderPass
+
+class DepthPassRendererPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -11,7 +15,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<GraphicsPipeline> depthPipeline;
+	std::shared_ptr<GraphicsPipeline> DepthPipeline;
 
 	void BuildRenderPass();
 	void BuildRenderPassPipelines();
@@ -28,4 +32,3 @@ public:
 	void Draw();
 	void Destroy();
 };
-

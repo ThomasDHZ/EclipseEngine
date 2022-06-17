@@ -8,6 +8,7 @@
 #include "BRDFRenderPass.h"
 #include "SceneManager.h"
 #include "PBRReflectionRenderPass.h"
+#include "DepthPassRendererPass.h"
 
 class PBRRenderer
 {
@@ -15,6 +16,7 @@ private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
+
 	IrradianceRenderPass reflectionIrradianceRenderPass;
 	PrefilterRenderPass reflectionPrefilterRenderPass;
 	PBRReflectionRenderPass pbrReflectionRenderPass;
@@ -33,6 +35,6 @@ public:
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
-
+	DepthPassRendererPass depthPassRendererPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

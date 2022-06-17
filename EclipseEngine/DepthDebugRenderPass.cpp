@@ -1,23 +1,20 @@
-#include "DepthCubeMapRenderPass.h"
-#include "LightManager.h"
+#include "DepthDebugRenderPass.h"
 
-DepthCubeMapRenderPass::DepthCubeMapRenderPass() : RenderPass()
+DepthDebugRenderPass::DepthDebugRenderPass() : RenderPass()
 {
 }
 
-DepthCubeMapRenderPass::~DepthCubeMapRenderPass()
+DepthDebugRenderPass::~DepthDebugRenderPass()
 {
 }
 
-void DepthCubeMapRenderPass::StartUp(uint32_t cubeMapSize)
+void DepthDebugRenderPass::StartUp(uint32_t textureSize)
 {
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-
-    depthCubeMapTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    DebugTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(depthCubeMapTexture->View);
+    AttachmentList.emplace_back(DebugTexture->View);
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
@@ -25,14 +22,15 @@ void DepthCubeMapRenderPass::StartUp(uint32_t cubeMapSize)
     SetUpCommandBuffers();
 }
 
-void DepthCubeMapRenderPass::BuildRenderPass()
+void DepthDebugRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(depthCubeMapTexture->GetAttachmentDescription());
+
+    VkAttachmentDescription CubeMapAttachment = {};
+    AttachmentDescriptionList.emplace_back(DebugTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-    ColorRefsList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -61,16 +59,6 @@ void DepthCubeMapRenderPass::BuildRenderPass()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
-    const uint32_t viewMask = 0b00111111;
-    const uint32_t correlationMask = 0b00111111;
-
-    VkRenderPassMultiviewCreateInfo createInfo{};
-    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
-    createInfo.subpassCount = 1;
-    createInfo.pViewMasks = &viewMask;
-    createInfo.correlationMaskCount = 1;
-    createInfo.pCorrelationMasks = &correlationMask;
-
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -79,17 +67,16 @@ void DepthCubeMapRenderPass::BuildRenderPass()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
-    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create Buffer RenderPass.");
+        throw std::runtime_error("failed to create BRDF RenderPass!");
     }
-
 }
 
-void DepthCubeMapRenderPass::BuildRenderPassPipelines()
+void DepthDebugRenderPass::BuildRenderPassPipelines()
 {
+
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     ColorAttachment.blendEnable = VK_FALSE;
@@ -101,25 +88,14 @@ void DepthCubeMapRenderPass::BuildRenderPassPipelines()
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(2, ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
     {
-
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/ReflectionPBRShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/ReflectionPBRShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthDebugShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthDebugShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
@@ -128,16 +104,17 @@ void DepthCubeMapRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.ConstBufferSize = 0;
+        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
 
-        if (depthCubeMapPipeline == nullptr)
+        if (DepthDebugPipeline == nullptr)
         {
-            depthCubeMapPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            DepthDebugPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
         }
         else
         {
-            depthCubeMapPipeline->Destroy();
-            depthCubeMapPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            DepthDebugPipeline->Destroy();
+            DepthDebugPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)
@@ -147,14 +124,13 @@ void DepthCubeMapRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void DepthCubeMapRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
+void DepthDebugRenderPass::RebuildSwapChain(uint32_t textureSize)
 {
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-
-    depthCubeMapTexture->RecreateRendererTexture(RenderPassResolution);
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    DebugTexture->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(depthCubeMapTexture->View);
+    AttachmentList.emplace_back(DebugTexture->View);
 
     RenderPass::Destroy();
 
@@ -162,18 +138,27 @@ void DepthCubeMapRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    Draw();
 }
 
-void DepthCubeMapRenderPass::Draw()
+void DepthDebugRenderPass::Draw()
 {
-
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { {0.2f, 0.3f, 0.3f, 1.0f} };
-    clearValues[1].color = { {0.2f, 0.3f, 0.3f, 1.0f} };
+    std::array<VkClearValue, 1> clearValues{};
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent.width = RenderPassResolution.x;
+    renderPassInfo.renderArea.extent.height = RenderPassResolution.y;
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -187,40 +172,24 @@ void DepthCubeMapRenderPass::Draw()
     rect2D.offset = { 0, 0 };
     rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
 
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
-    renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
-    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-    renderPassInfo.pClearValues = clearValues.data();
-
     if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
-
-    vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    {
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, depthCubeMapPipeline->GetShaderPipeline());
-            vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, depthCubeMapPipeline->GetShaderPipelineLayout(), 0, 1, depthCubeMapPipeline->GetDescriptorSetPtr(), 0, nullptr);
-            DrawMesh(depthCubeMapPipeline, mesh, SceneManager::sceneProperites);
-        }
-    }
+    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthDebugPipeline->GetShaderPipeline());
+    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthDebugPipeline->GetShaderPipelineLayout(), 0, 1, DepthDebugPipeline->GetDescriptorSetPtr(), 0, nullptr);
+    vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 6, 1, 0, 0);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
 }
 
-void DepthCubeMapRenderPass::Destroy()
+void DepthDebugRenderPass::Destroy()
 {
-    depthCubeMapTexture->Destroy();
-    depthCubeMapPipeline->Destroy();
+    DebugTexture->Destroy();
+    DepthDebugPipeline->Destroy();
     RenderPass::Destroy();
 }

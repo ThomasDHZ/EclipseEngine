@@ -146,6 +146,8 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
+    ImGui::Image(pbrRenderer.depthPassRendererPass.DepthTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+
     //ImGui::Begin("VRAM Viewer");
     //{
     //    for (int x = 0; x <= TextureManager::GetTexture2DList().size() - 1; x++)
