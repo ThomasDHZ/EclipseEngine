@@ -8,17 +8,17 @@ DepthDebugRenderPass::~DepthDebugRenderPass()
 {
 }
 
-void DepthDebugRenderPass::StartUp(uint32_t textureSize)
+void DepthDebugRenderPass::StartUp(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
-    RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    DebugTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DebugTexture->View);
+    AttachmentList.emplace_back(RenderedTexture->View);
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(depthTexture);
     SetUpCommandBuffers();
 }
 
@@ -27,7 +27,7 @@ void DepthDebugRenderPass::BuildRenderPass()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    AttachmentDescriptionList.emplace_back(DebugTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -74,7 +74,7 @@ void DepthDebugRenderPass::BuildRenderPass()
     }
 }
 
-void DepthDebugRenderPass::BuildRenderPassPipelines()
+void DepthDebugRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
 
     VkPipelineColorBlendAttachmentState ColorAttachment;
@@ -92,6 +92,8 @@ void DepthDebugRenderPass::BuildRenderPassPipelines()
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
+    VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(depthTexture->View, depthTexture->Sampler);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthDebugShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -124,21 +126,20 @@ void DepthDebugRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void DepthDebugRenderPass::RebuildSwapChain(uint32_t textureSize)
+void DepthDebugRenderPass::RebuildSwapChain(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
-    RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    DebugTexture->RecreateRendererTexture(RenderPassResolution);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DebugTexture->View);
+    AttachmentList.emplace_back(RenderedTexture->View);
 
     RenderPass::Destroy();
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(depthTexture);
     SetUpCommandBuffers();
-    Draw();
 }
 
 void DepthDebugRenderPass::Draw()
@@ -189,7 +190,7 @@ void DepthDebugRenderPass::Draw()
 
 void DepthDebugRenderPass::Destroy()
 {
-    DebugTexture->Destroy();
+    RenderedTexture->Destroy();
     DepthDebugPipeline->Destroy();
     RenderPass::Destroy();
 }

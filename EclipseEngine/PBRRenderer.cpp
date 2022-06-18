@@ -31,7 +31,7 @@ void PBRRenderer::StartUp()
 		pbrRenderPass.StartUp(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 	}
 
-	//depthDebugRenderPass.StartUp(depthPassRendererPass.DepthTexture);
+	depthDebugRenderPass.StartUp(depthPassRendererPass.DepthTexture);
 	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
 
@@ -71,6 +71,7 @@ void PBRRenderer::RebuildRenderers()
 		pbrRenderPass.RebuildSwapChain(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 	}
 
+	depthDebugRenderPass.RebuildSwapChain(depthPassRendererPass.DepthTexture);
 	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
 
@@ -110,6 +111,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		CommandBufferSubmitList.emplace_back(pbrRenderPass.GetCommandBuffer());
 	}
 
+	depthDebugRenderPass.Draw();
+	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.GetCommandBuffer());
+
 	frameBufferRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
 }
@@ -126,5 +130,6 @@ void PBRRenderer::Destroy()
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();
 	pbrRenderPass.Destroy();
+	depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

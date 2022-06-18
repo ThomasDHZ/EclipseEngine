@@ -10,8 +10,8 @@ Scene::Scene()
     //camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
-  //  SceneManager::sceneType = SceneType::kPBR;
-    SceneManager::LoadScene("../Scenes/example.txt");
+    SceneManager::sceneType = SceneType::kPBR;
+   // SceneManager::LoadScene("../Scenes/example.txt");
 
     CubeMapLayout cubeMapfiles;
     cubeMapfiles.Left = "../texture/skybox/right.jpg";
@@ -22,11 +22,11 @@ Scene::Scene()
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
-   // SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 
-    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
-   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
+   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
     //auto dLight = DirectionalLightBuffer{};
@@ -146,7 +146,7 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
-    ImGui::Image(pbrRenderer.depthPassRendererPass.DepthTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
 
     //ImGui::Begin("VRAM Viewer");
     //{

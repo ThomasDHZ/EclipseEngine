@@ -92,19 +92,9 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
     ColorAttachmentList.resize(2, ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, ModelManager::GetAccelerationStructureHandlePtr());
+
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-
-
-
-    VkDescriptorImageInfo BRDFBuffer;
-    BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    BRDFBuffer.imageView = SceneManager::BRDFTexture->View;
-    BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
 
     {
 
