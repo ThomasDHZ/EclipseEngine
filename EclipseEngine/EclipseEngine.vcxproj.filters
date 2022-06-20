@@ -309,7 +309,7 @@
     <ClCompile Include="RenderedCubeMapDepthTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="DepthPassRendererPass.cpp">
+    <ClCompile Include="DepthRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="DepthDebugRenderPass.cpp">
@@ -575,7 +575,7 @@
     <ClInclude Include="RenderedCubeMapDepthTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="DepthPassRendererPass.h">
+    <ClInclude Include="DepthRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DepthDebugRenderPass.h">

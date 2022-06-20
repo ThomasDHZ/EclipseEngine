@@ -25,7 +25,7 @@ private:
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
-	void BuildRenderPassPipelines();
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture);
 
 public:
 	BlinnPhongRenderPass();
@@ -35,8 +35,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp();
-	void RebuildSwapChain();
+	void StartUp(std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void RebuildSwapChain(std::shared_ptr<RenderedDepthTexture> depthTexture);
 
 	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
 	void Destroy();

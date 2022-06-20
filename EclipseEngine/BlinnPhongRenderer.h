@@ -4,16 +4,22 @@
 #include "FrameBufferRenderPass.h"
 #include "InterfaceRenderPass.h"
 #include "RaytraceHybridPass.h"
+#include "DepthRenderPass.h"
+#include "DepthDebugRenderPass.h"
+
 class BlinnPhongRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
+	DepthRenderPass depthRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
 	BlinnPhongRenderer();
 	~BlinnPhongRenderer();
+
+	DepthDebugRenderPass depthDebugRenderPass;
 
 	void StartUp();
 	void Update();

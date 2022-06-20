@@ -8,7 +8,7 @@
 #include "BRDFRenderPass.h"
 #include "SceneManager.h"
 #include "PBRReflectionRenderPass.h"
-#include "DepthPassRendererPass.h"
+#include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
 
 class PBRRenderer
@@ -18,7 +18,7 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	DepthPassRendererPass depthPassRendererPass;
+	DepthRenderPass depthPassRendererPass;
 
 	IrradianceRenderPass reflectionIrradianceRenderPass;
 	PrefilterRenderPass reflectionPrefilterRenderPass;

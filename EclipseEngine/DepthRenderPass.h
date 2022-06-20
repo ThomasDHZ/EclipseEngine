@@ -7,7 +7,7 @@
 #include "SceneManager.h"
 
 
-class DepthPassRendererPass : public RenderPass
+class DepthRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -21,8 +21,8 @@ private:
 	void BuildRenderPassPipelines();
 
 public:
-	DepthPassRendererPass();
-	~DepthPassRendererPass();
+	DepthRenderPass();
+	~DepthRenderPass();
 
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 

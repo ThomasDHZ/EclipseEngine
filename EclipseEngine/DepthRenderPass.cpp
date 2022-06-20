@@ -1,16 +1,16 @@
-#include "DepthPassRendererPass.h"
+#include "DepthRenderPass.h"
 #include "LightManager.h"
 
 
-DepthPassRendererPass::DepthPassRendererPass() : RenderPass()
+DepthRenderPass::DepthRenderPass() : RenderPass()
 {
 }
 
-DepthPassRendererPass::~DepthPassRendererPass()
+DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthPassRendererPass::StartUp()
+void DepthRenderPass::StartUp()
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -26,7 +26,7 @@ void DepthPassRendererPass::StartUp()
     SetUpCommandBuffers();
 }
 
-void DepthPassRendererPass::BuildRenderPass()
+void DepthRenderPass::BuildRenderPass()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
@@ -76,7 +76,7 @@ void DepthPassRendererPass::BuildRenderPass()
 
 }
 
-void DepthPassRendererPass::BuildRenderPassPipelines()
+void DepthRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -130,7 +130,7 @@ void DepthPassRendererPass::BuildRenderPassPipelines()
     }
 }
 
-void DepthPassRendererPass::RebuildSwapChain()
+void DepthRenderPass::RebuildSwapChain()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     DepthTexture->RecreateRendererTexture(RenderPassResolution);
@@ -146,7 +146,7 @@ void DepthPassRendererPass::RebuildSwapChain()
     SetUpCommandBuffers();
 }
 
-void DepthPassRendererPass::Draw()
+void DepthRenderPass::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -193,7 +193,7 @@ void DepthPassRendererPass::Draw()
                 case MeshTypeEnum::kPolygon:
                 {
                     DirectionalLightProjection directionalLightProjection;
-                    directionalLightProjection.lightProjectionMatrix = SceneManager::activeCamera->GetProjectionMatrix() * SceneManager::activeCamera->GetViewMatrix();
+                    directionalLightProjection.lightProjectionMatrix = LightManager::GetDirectionalLights()[0]->LightSpaceMatrix;
 
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
@@ -213,7 +213,7 @@ void DepthPassRendererPass::Draw()
     }
 }
 
-void DepthPassRendererPass::Destroy()
+void DepthRenderPass::Destroy()
 {
     DepthTexture->Destroy();
     DepthPipeline->Destroy();

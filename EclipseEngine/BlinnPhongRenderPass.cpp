@@ -9,7 +9,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 {
 }
 
-void BlinnPhongRenderPass::StartUp()
+void BlinnPhongRenderPass::StartUp(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -29,7 +29,7 @@ void BlinnPhongRenderPass::StartUp()
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(depthTexture);
     SetUpCommandBuffers();
 }
 
@@ -96,7 +96,7 @@ void BlinnPhongRenderPass::BuildRenderPass()
     }
 }
 
-void BlinnPhongRenderPass::BuildRenderPassPipelines()
+void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -121,10 +121,10 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     {
-        //VkDescriptorImageInfo ShadowMapBufferInfo;
-        //ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        //ShadowMapBufferInfo.imageView = shadowMap->View;
-        //ShadowMapBufferInfo.sampler = shadowMap->Sampler;
+        VkDescriptorImageInfo ShadowMapBufferInfo;
+        ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        ShadowMapBufferInfo.imageView = depthTexture->View;
+        ShadowMapBufferInfo.sampler = depthTexture->Sampler;
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -135,7 +135,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    //    AddAccelerationDescriptorSetBinding(DescriptorBindingList, 5, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
@@ -266,7 +266,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines()
     }
 }
 
-void BlinnPhongRenderPass::RebuildSwapChain()
+void BlinnPhongRenderPass::RebuildSwapChain(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
@@ -287,7 +287,7 @@ void BlinnPhongRenderPass::RebuildSwapChain()
 
     BuildRenderPass();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(depthTexture);
     SetUpCommandBuffers();
 }
 

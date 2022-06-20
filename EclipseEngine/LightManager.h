@@ -299,7 +299,9 @@ public:
 		}
 	}
 
-
+	static std::vector<std::shared_ptr<DirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }
+	static std::vector<std::shared_ptr<PointLight>> GetPointLights() { return PointLightList; }
+	static std::vector<std::shared_ptr<SpotLight>> GetSpotLLights() { return SpotLightList; }
 	static uint32_t GetDirectionalLightCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }

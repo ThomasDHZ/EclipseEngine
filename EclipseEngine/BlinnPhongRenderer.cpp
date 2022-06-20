@@ -11,7 +11,9 @@ BlinnPhongRenderer::~BlinnPhongRenderer()
 void BlinnPhongRenderer::StartUp()
 {
 	meshPickerRenderPass.StartUp();
-	blinnPhongRenderPass.StartUp();
+	depthRenderPass.StartUp();
+	blinnPhongRenderPass.StartUp(depthRenderPass.DepthTexture);
+	depthDebugRenderPass.StartUp(depthRenderPass.DepthTexture);
 	frameBufferRenderPass.StartUp(blinnPhongRenderPass.RenderedTexture);
 }
 
@@ -31,7 +33,9 @@ void BlinnPhongRenderer::Update()
 void BlinnPhongRenderer::RebuildRenderers()
 {
 	meshPickerRenderPass.RebuildSwapChain();
-	blinnPhongRenderPass.RebuildSwapChain();
+	depthRenderPass.RebuildSwapChain();
+	blinnPhongRenderPass.RebuildSwapChain(depthRenderPass.DepthTexture);
+	depthDebugRenderPass.RebuildSwapChain(depthRenderPass.DepthTexture);
 	frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderPass.RenderedTexture);
 }
 
@@ -43,8 +47,14 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
 	}
 
+	depthRenderPass.Draw();
+	CommandBufferSubmitList.emplace_back(depthRenderPass.GetCommandBuffer());
+
 	blinnPhongRenderPass.Draw(sceneProperties, skyboxView);
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());
+
+	depthDebugRenderPass.Draw();
+	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.GetCommandBuffer());
 
 	frameBufferRenderPass.Draw();
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
@@ -53,6 +63,8 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 void BlinnPhongRenderer::Destroy()
 {
 	meshPickerRenderPass.Destroy();
+	depthRenderPass.Destroy();
 	blinnPhongRenderPass.Destroy();
+	depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }
