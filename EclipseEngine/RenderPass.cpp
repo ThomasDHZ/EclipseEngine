@@ -40,6 +40,11 @@ void RenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)
     vkDestroyFence(VulkanRenderer::GetDevice(), fence, nullptr);
 }
 
+void RenderPass::DrawDepthMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection & directionalLightProjection)
+{
+    MeshRendererManager::DrawDepthMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, directionalLightProjection);
+}
+
 void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 {
     MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);

@@ -192,9 +192,12 @@ void DepthPassRendererPass::Draw()
             {
                 case MeshTypeEnum::kPolygon:
                 {
+                    DirectionalLightProjection directionalLightProjection;
+                    directionalLightProjection.lightProjectionMatrix = SceneManager::activeCamera->GetProjectionMatrix() * SceneManager::activeCamera->GetViewMatrix();
+
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(DepthPipeline, mesh, SceneManager::sceneProperites);
+                    DrawDepthMesh(DepthPipeline, mesh, directionalLightProjection);
                     break;
                 }
                 default:

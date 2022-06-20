@@ -46,6 +46,7 @@ public:
 	~RenderPass();
 
 	void OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer);
+	virtual void DrawDepthMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection& directionalLightProjection);
 	virtual void DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
 	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstSkyBoxView& sceneProperties);
 	virtual void DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, PrefilterSkyboxSettings& prefilterSkyboxSettings);

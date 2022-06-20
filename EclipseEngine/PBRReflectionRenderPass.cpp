@@ -340,29 +340,14 @@ void PBRReflectionRenderPass::Draw()
         {
             switch (mesh->GetMeshType())
             {
-            case MeshTypeEnum::kPolygon:
-            {
-           /*     if (VulkanRenderer::WireframeModeFlag)
+                case MeshTypeEnum::kPolygon:
                 {
-                    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(wireframePipeline, mesh, SceneManager::sceneProperites);
-                }
-                else
-                {*/
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
                     DrawMesh(pbrPipeline, mesh, SceneManager::sceneProperites);
-              /*  }*/
-                break;
-            }
-   /*         case MeshTypeEnum::kLine:
-            {
-                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                DrawLine(drawLinePipeline, mesh, SceneManager::sceneProperites);
-                break;
-            }*/
+                    break;
+                }
+                default: break;
             }
         }
     }

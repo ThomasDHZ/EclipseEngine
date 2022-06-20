@@ -54,6 +54,12 @@ struct SceneProperties
 	alignas(4)  float Timer = 0.0f;
 };
 
+struct DirectionalLightProjection
+{
+	alignas(4)  uint32_t MeshIndex;
+	alignas(16) glm::mat4 lightProjectionMatrix;
+};
+
 struct ConstSkyBoxView
 {
 	alignas(16) glm::mat4 proj = glm::mat4(1.0f);

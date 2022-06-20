@@ -13,6 +13,12 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
+layout(push_constant) uniform DirectionalLightProjection
+{
+	uint MeshIndex;
+    mat4 lightProjectionMatrix;
+} lightProjection;
+
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData
@@ -27,5 +33,5 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
+    gl_Position = lightProjection.lightProjectionMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
 }

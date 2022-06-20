@@ -252,6 +252,12 @@ public:
 		return Pixel();
 	}
 
+	static void DrawDepthMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection& directionalLightProjection)
+	{
+		directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
+		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(DirectionalLightProjection), &directionalLightProjection);
+		mesh->Draw(cmdBuffer);
+	}
 
 	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
 	{
