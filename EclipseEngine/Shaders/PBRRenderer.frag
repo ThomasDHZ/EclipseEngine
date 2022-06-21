@@ -133,8 +133,11 @@ void main()
      ao = texture(TextureMap[material.AmbientOcclusionMapID], UV).r;
    }
 
-
-   vec3 N = getNormalFromMap();
+   vec3 N = Normal;
+   if (material.NormalMapID != 0)
+   {
+      N = getNormalFromMap();
+   }
     vec3 V = normalize(sceneData.CameraPos - FragPos);
     vec3 R = reflect(-V, N); 
 
