@@ -27,7 +27,7 @@ void DirectionalLight::Update()
 
 	glm::mat4 ViewMatrix = glm::lookAt(LightBuffer.UniformDataInfo.direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-	LightSpaceMatrix = ProjectionMatrix * ViewMatrix;
+	LightBuffer.UniformDataInfo.LightSpaceMatrix = ProjectionMatrix * ViewMatrix;
 
 	Light::Update();
 }

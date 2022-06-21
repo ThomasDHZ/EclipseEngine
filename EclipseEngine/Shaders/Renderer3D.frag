@@ -204,12 +204,6 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 
     vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
     float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
-
-    if(shadow != 0.0)
-    {
-        return vec3(shadow, 0.0f, 0.0f);
-    }
-
     return (ambient + (shadow) * (diffuse + specular));
 }
 

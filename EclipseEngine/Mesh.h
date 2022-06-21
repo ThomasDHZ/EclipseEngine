@@ -110,7 +110,7 @@ protected:
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
-	MeshProperties meshProperties;
+	
 	std::shared_ptr<Material> material;
 
 	VulkanBuffer VertexBuffer;
@@ -137,6 +137,8 @@ public:
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	Mesh(MeshLoadingInfo& meshLoader);
 	~Mesh();
+
+	MeshProperties meshProperties;
 
 	void Draw(VkCommandBuffer& commandBuffer);
 	void Update(const glm::mat4& ModelMatrix);

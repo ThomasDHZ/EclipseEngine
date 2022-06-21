@@ -43,7 +43,7 @@ struct MaterialBufferData
 	alignas(16) glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	alignas(4) float Matallic = 0.5f;
 	alignas(4) float Roughness = 0.5f;
-	alignas(4) float AmbientOcclusion = 0.0f;
+	alignas(4) float AmbientOcclusion = 1.0f;
 	alignas(4) float Alpha = 1.0f;
 
 	alignas(4) uint32_t DiffuseMapID = DefaultTextureID;
@@ -126,7 +126,7 @@ private:
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	float Matallic = 0.5f;
 	float Roughness = 0.5f;
-	float AmbientOcclusion = 0.0f;
+	float AmbientOcclusion = 1.0f;
 	float Alpha = 1.0f;
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
@@ -140,7 +140,6 @@ private:
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 
-	MaterialBufferData materialTextureData;
 	VulkanBuffer MaterialBuffer;
 
 	void GenerateID();
@@ -151,6 +150,9 @@ public:
 	Material(const std::string materialName);
 	Material(const std::string materialName, MaterialProperties& MaterialInfo);
 	~Material();
+
+
+	MaterialBufferData materialTextureData;
 
 	void Update();
 	void Destroy();

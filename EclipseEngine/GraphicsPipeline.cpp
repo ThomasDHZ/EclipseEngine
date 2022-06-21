@@ -488,6 +488,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
     {
         if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
@@ -543,7 +544,8 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
     if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
     {
-        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
+        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth || 
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
         {
             rasterizer.cullMode = VK_CULL_MODE_NONE;
         }
@@ -559,6 +561,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
 
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
     {

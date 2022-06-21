@@ -7,6 +7,7 @@
 enum PipelineRendererTypeEnum
 {
 	kRenderMesh,
+	kRenderDepth,
 	kRenderSkybox,
 	kRenderPBRSkyBox,
 	kRenderWireFrame,

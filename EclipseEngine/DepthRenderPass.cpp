@@ -94,15 +94,18 @@ void DepthRenderPass::BuildRenderPassPipelines()
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
 
     {
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PBRRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/PBRRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
 
         BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
         buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
@@ -110,8 +113,8 @@ void DepthRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderDepth;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(DirectionalLightProjection);
 
         if (DepthPipeline == nullptr)
         {
@@ -193,7 +196,7 @@ void DepthRenderPass::Draw()
                 case MeshTypeEnum::kPolygon:
                 {
                     DirectionalLightProjection directionalLightProjection;
-                    directionalLightProjection.lightProjectionMatrix = LightManager::GetDirectionalLights()[0]->LightSpaceMatrix;
+                    directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
 
                     vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
                     vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);

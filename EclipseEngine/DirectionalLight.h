@@ -22,10 +22,13 @@ public:
 	DirectionalLight(nlohmann::json& json);
 	~DirectionalLight();
 
-	glm::vec2 LeftRight = glm::vec2(-5.0f, 5.0f);
-	glm::vec2 TopBottom = glm::vec2(-5.0f, 5.0f);
-	glm::vec2 NearFar = glm::vec2(0.1f, 5.0f);
-	glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
+	//glm::vec2 LeftRight = glm::vec2(-25.0f, 25.0f);
+	//glm::vec2 TopBottom = glm::vec2(-25.0f, 25.0f);
+	//glm::vec2 NearFar = glm::vec2(0.1f, 25.0f);
+	glm::vec2 LeftRight = glm::vec2(-1800.0f, 1900.0f);
+	glm::vec2 TopBottom = glm::vec2(-1151.0f, 1052.0f);
+	glm::vec2 NearFar = glm::vec2(-5000.0f, 460.0f);
+
 
 	void Update();
 	void Destroy() override;

@@ -108,10 +108,31 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 void main()
 {  
    const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
-   vec3  albedo = pow(texture(TextureMap[material.AlbedoMapID], UV).rgb, vec3(2.2));
-   float metallic = texture(TextureMap[material.MetallicMapID], UV).r;
-   float roughness = texture(TextureMap[material.RoughnessMapID], UV).r;
-   float ao = texture(TextureMap[material.AmbientOcclusionMapID], UV).r;
+
+   vec3 albedo = pow(material.Albedo, vec3(2.2));
+   if (material.AlbedoMapID != 0)
+   {
+       albedo = pow(texture(TextureMap[material.AlbedoMapID], UV).rgb, vec3(2.2));
+   }
+
+   float metallic =  material.Matallic;
+   if (material.MetallicMapID != 0)
+   {
+     metallic = texture(TextureMap[material.MetallicMapID], UV).r;
+   }
+
+   float roughness =  material.Roughness;
+   if (material.RoughnessMapID != 0)
+   {
+     roughness = texture(TextureMap[material.RoughnessMapID], UV).r;
+   }
+
+   float ao = material.AmbientOcclusion;
+   if (material.AmbientOcclusionMapID != 0)
+   {
+     ao = texture(TextureMap[material.AmbientOcclusionMapID], UV).r;
+   }
+
 
    vec3 N = getNormalFromMap();
     vec3 V = normalize(sceneData.CameraPos - FragPos);
@@ -179,7 +200,7 @@ void main()
     vec3 ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient + Lo;
-    color = color / (color + vec3(1.0));
-    color = pow(color, vec3(1.0/2.2)); 
-    outColor = vec4(color , 1.0);
+    color = color / (color + vec3(1.0f));
+    color = pow(color, vec3(1.0f/2.2f)); 
+    outColor = vec4(color, 1.0f);
 }

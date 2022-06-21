@@ -107,83 +107,90 @@ public:
 
 	static void GetMeshMaterialDetails()
 	{
-		ImGui::NewLine();
+		ImGui::Begin("Selected Model");
 
 		ImGui::LabelText("", "Material");
 
 		const auto material = ActiveMesh->GetMaterial();
 		if (material)
 		{
-			ImGui::LabelText("DiffuseTexture", "DiffuseTexture");
 			if (ActiveMesh->GetMaterial()->GetDiffuseMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetDiffuseMap();
+
+				ImGui::LabelText("DiffuseTexture", "DiffuseTexture");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
-				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+				ImGui::SliderFloat3("Diffuse ", &ActiveMesh->GetMaterial()->materialTextureData.Diffuse.x, 0.0f, 1.0f);
 			}
 
-			ImGui::LabelText("SpecularMap", "SpecularMap");
 			if (ActiveMesh->GetMaterial()->GetSpecularMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetSpecularMap();
+
+				ImGui::LabelText("SpecularMap", "SpecularMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
-				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+				ImGui::SliderFloat3("Specular ", &ActiveMesh->GetMaterial()->materialTextureData.Specular.x, 0.0f, 1.0f);
 			}
 
-			ImGui::LabelText("Albedo Map", "Albedo Map");
 			if (ActiveMesh->GetMaterial()->GetAlbedoMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetAlbedoMap();
+
+				ImGui::LabelText("Albedo Map", "Albedo Map");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
-				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+				ImGui::SliderFloat3("Albedo ", &ActiveMesh->GetMaterial()->materialTextureData.Albedo.x, 0.0f, 1.0f);
 			}
 
-			ImGui::LabelText("MetallicMap", "MetallicMap");
 			if (ActiveMesh->GetMaterial()->GetMetallicMap())
 			{
+				ImGui::LabelText("MetallicMap", "MetallicMap");
 				const auto texture = ActiveMesh->GetMaterial()->GetMetallicMap();
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
-				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+				ImGui::SliderFloat("Metallic ", &ActiveMesh->GetMaterial()->materialTextureData.Matallic, 0.0f, 1.0f);
 			}
 
-			ImGui::LabelText("RoughnessMap", "RoughnessMap");
 			if (ActiveMesh->GetMaterial()->GetRoughnessMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetRoughnessMap();
+
+				ImGui::LabelText("RoughnessMap", "RoughnessMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
-				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
+				ImGui::SliderFloat("Roughness ", &ActiveMesh->GetMaterial()->materialTextureData.Roughness, 0.0f, 1.0f);
 			}
 
-			ImGui::LabelText("AmbientOcclusionMap", "AmbientOcclusionMap");
 			if (ActiveMesh->GetMaterial()->GetAmbientOcclusionMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetAmbientOcclusionMap();
+
+				ImGui::LabelText("AmbientOcclusionMap", "AmbientOcclusionMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
 			{
+				ImGui::SliderFloat("AmbientOcclusion ", &ActiveMesh->GetMaterial()->materialTextureData.AmbientOcclusion, 0.0f, 1.0f);
 				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 
-			ImGui::LabelText("NormalMap", "NormalMap");
 			if (ActiveMesh->GetMaterial()->GetNormalMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetNormalMap();
+
+				ImGui::LabelText("NormalMap", "NormalMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
@@ -191,10 +198,11 @@ public:
 				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 
-			ImGui::LabelText("DepthMap", "DepthMap");
 			if (ActiveMesh->GetMaterial()->GetDepthMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetDepthMap();
+
+				ImGui::LabelText("DepthMap", "DepthMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
@@ -202,10 +210,11 @@ public:
 				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 
-			ImGui::LabelText("AlphaMap", "AlphaMap");
 			if (ActiveMesh->GetMaterial()->GetAlphaMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetAlphaMap();
+
+				ImGui::LabelText("AlphaMap", "AlphaMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
@@ -213,10 +222,11 @@ public:
 				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 
-			ImGui::LabelText("EmissionMap", "EmissionMap");
 			if (ActiveMesh->GetMaterial()->GetEmissionMap())
 			{
 				const auto texture = ActiveMesh->GetMaterial()->GetEmissionMap();
+
+				ImGui::LabelText("EmissionMap", "EmissionMap");
 				ImGui::Image(texture->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 			else
@@ -224,6 +234,8 @@ public:
 				ImGui::Image(TextureManager::GetTexture2DList()[DefaultTextureID]->ImGuiDescriptorSet, ImVec2(100, 100));
 			}
 		}
+
+		ImGui::End();
 	}
 
 	static std::shared_ptr<Mesh> GetMeshByColorID(Pixel pixel)
