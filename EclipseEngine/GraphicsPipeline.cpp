@@ -491,7 +491,8 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame)
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame ||
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
         {
             bindingDescription = MeshVertex::getBindingDescription();
             attributeDescriptions = MeshVertex::getAttributeDescriptions();
@@ -516,11 +517,31 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
     VkPipelineDepthStencilStateCreateInfo depthStencil{};
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     depthStencil.depthTestEnable = VK_TRUE;
     depthStencil.depthWriteEnable = VK_TRUE;
-    depthStencil.depthBoundsTestEnable = VK_FALSE;
-    depthStencil.stencilTestEnable = VK_FALSE;
-    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    depthStencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
+    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
+    {
+        depthStencil.stencilTestEnable = VK_TRUE;
+        depthStencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
+        depthStencil.back.failOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.depthFailOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.passOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.compareMask = 0xff;
+        depthStencil.back.writeMask = 0xff;
+        depthStencil.back.reference = 1;
+        depthStencil.front = depthStencil.back;
+    }
+    else
+    {
+        depthStencil.depthTestEnable = VK_TRUE;
+        depthStencil.depthWriteEnable = VK_TRUE;
+        depthStencil.depthBoundsTestEnable = VK_FALSE;
+        depthStencil.stencilTestEnable = VK_FALSE;
+        depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    }
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox)
     {
         depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
@@ -549,6 +570,10 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
         {
             rasterizer.cullMode = VK_CULL_MODE_NONE;
         }
+        else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
+        {
+            rasterizer.cullMode = VK_CULL_MODE_FRONT_BIT;
+        }
         else
         {
             rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
@@ -563,7 +588,8 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
-        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
     {
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
@@ -584,16 +610,15 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     multisampling.sampleShadingEnable = VK_TRUE;
     multisampling.rasterizationSamples = buildGraphicsPipelineInfo.sampleCount;
 
+    VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState{};
+    pipelineColorBlendAttachmentState.colorWriteMask = 0xF;
+    pipelineColorBlendAttachmentState.blendEnable = VK_TRUE;
+    buildGraphicsPipelineInfo.ColorAttachments.emplace_back(pipelineColorBlendAttachmentState);
+
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    colorBlending.logicOpEnable = VK_FALSE;
-    colorBlending.logicOp = VK_LOGIC_OP_COPY;
     colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
     colorBlending.pAttachments = buildGraphicsPipelineInfo.ColorAttachments.data();
-    colorBlending.blendConstants[0] = 0.0f;
-    colorBlending.blendConstants[1] = 0.0f;
-    colorBlending.blendConstants[2] = 0.0f;
-    colorBlending.blendConstants[3] = 0.0f;
 
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

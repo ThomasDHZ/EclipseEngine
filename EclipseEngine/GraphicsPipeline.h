@@ -11,7 +11,8 @@ enum PipelineRendererTypeEnum
 	kRenderSkybox,
 	kRenderPBRSkyBox,
 	kRenderWireFrame,
-	kRenderLine
+	kRenderLine,
+	kRenderStencil
 };
 
 struct ConstMeshInfo

@@ -733,5 +733,11 @@
     <None Include="Shaders\DepthShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="Shaders\OutlineRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\OutlineRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

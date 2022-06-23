@@ -14,6 +14,7 @@
 #include "LightManager.h"
 #include "MaterialManager.h"
 #include "ModelManager.h"
+#include "ComponentRenderer.h"
 
 enum SceneType
 {
@@ -83,6 +84,35 @@ public:
 		{
 			CubeMap->Destroy();
 		}
+	}
+
+	static void ImGuiSceneHierarchy()
+	{
+		//ImGui::Begin("Scene");
+	
+		//for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
+		//{
+		//	const std::shared_ptr<GameObject> obj = GameObjectManager::GetGameObjectList()[x];
+
+		//	ImGui::PushID(x);
+		//	bool TreeNodeOpen = ImGui::TreeNodeEx(obj->GetObjectName().c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth);
+		//	ImGui::TreePop();
+
+		//	if (TreeNodeOpen)
+		//	{
+		//		const auto component = obj->GetComponentBySubType(ComponentSubType::kRenderedObject);
+		//		const auto componentRenderer = static_cast<ComponentRenderer*>(component.get());
+		//		const auto model = componentRenderer->GetModel();
+		//		if(componentRenderer)
+		//		{
+		//			//ImGui::PushID(0);
+		//			bool ModelTreeNodeOpen = ImGui::TreeNodeEx(model->GetModelFilePath().c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth);
+		//		//	ImGui::TreePop();
+		//		}
+		//		
+		//	}
+		//}
+		//ImGui::End();
 	}
 
 	static void SaveScene(const std::string FileName)

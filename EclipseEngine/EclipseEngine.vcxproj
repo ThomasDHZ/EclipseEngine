@@ -354,6 +354,8 @@
     <None Include="Shaders\MeshPicker3D.vert" />
     <None Include="Shaders\MeshProperties.glsl" />
     <None Include="Shaders\miss.rmiss" />
+    <None Include="Shaders\OutlineRenderer.frag" />
+    <None Include="Shaders\OutlineRenderer.vert" />
     <None Include="Shaders\PBRRenderer.frag" />
     <None Include="Shaders\PBRRenderer.vert" />
     <None Include="Shaders\PrefilterShader.frag" />

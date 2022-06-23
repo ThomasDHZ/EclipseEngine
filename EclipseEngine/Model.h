@@ -117,6 +117,7 @@ public:
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 
+	std::string GetModelFilePath() { return ModelFilePath; }
 	glm::mat4 GetModelMatrix() { return ModelTransform; }
 	glm::vec3* GetModelPositionPtr() { return &ModelPosition; }
 	glm::vec3* GetModelRotationPtr() { return &ModelRotation; }

@@ -25,6 +25,7 @@ Scene::Scene()
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
+    GameObjectManager::AddGameObject(obj);
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
@@ -198,10 +199,11 @@ void Scene::ImGuiUpdate()
         ImGui::SliderFloat3("Model scale ", &model->GetModelScalePtr()->x, 0.0f, 1.0f);
     }
 
+    SceneManager::ImGuiSceneHierarchy();
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
 
-    VulkanRenderer::ImGUILayerActive = ImGui::IsWindowHovered();
+    VulkanRenderer::ImGUILayerActive = ImGui::IsAnyItemHovered() || ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
 }
 
 void Scene::RebuildRenderers()

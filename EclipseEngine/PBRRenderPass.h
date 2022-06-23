@@ -21,6 +21,7 @@ private:
 	std::shared_ptr<GraphicsPipeline> pbrPipeline;
 	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
 	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
+	std::shared_ptr<GraphicsPipeline> outLinePipeline;
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
