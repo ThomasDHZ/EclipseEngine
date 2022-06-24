@@ -739,5 +739,11 @@
     <None Include="Shaders\OutlineRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="Shaders\SelectedObjectShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\SelectedObjectShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

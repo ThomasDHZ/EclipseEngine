@@ -47,9 +47,9 @@ public:
 		return material->GetMaterialID();
 	}
 
-	static uint64_t AddMaterial(const std::string materialName, MaterialProperties& MaterialInfo)
+	static uint64_t AddMaterial(const std::string materialName, MaterialTypeEnum materialType, MaterialProperties& MaterialInfo)
 	{
-		const std::shared_ptr<Material> material = std::make_shared<Material>(Material(materialName, MaterialInfo));
+		const std::shared_ptr<Material> material = std::make_shared<Material>(Material(materialName, materialType, MaterialInfo));
 		MaterialList.emplace_back(material);
 
 		UpdateBufferIndex();
@@ -81,14 +81,6 @@ public:
 
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	static void Update()
-	{
-		for (auto& material : MaterialList)
-		{
-			material->Update();
-		}
 	}
 
 	static std::vector<VkDescriptorBufferInfo>  GetMaterialemBufferList()

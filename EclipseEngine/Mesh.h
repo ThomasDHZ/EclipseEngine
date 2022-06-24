@@ -60,6 +60,7 @@ private:
 	static uint64_t MeshIDCounter;
 
 	Pixel MeshColorID = NullPixel;
+	bool SelectedMesh = false;
 
 	void GenerateColorID();
 	void UpdateMeshBottomLevelAccelerationStructure();
@@ -145,6 +146,7 @@ public:
 	void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Destroy();
 
+	void SetSelectedMesh(bool selected);
 	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);

@@ -83,6 +83,7 @@ struct MeshProperties
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);
 	alignas(8) glm::vec2 UVFlip = glm::vec2(0.0f);
+	alignas(4) int SelectedObjectBufferIndex = 0;
 	alignas(4) float heightScale = 0.1f;
 	alignas(4) float minLayers = 8;
 	alignas(4) float maxLayers = 32;

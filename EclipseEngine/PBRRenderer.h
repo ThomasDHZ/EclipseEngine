@@ -18,7 +18,7 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	DepthRenderPass depthPassRendererPass;
+	//DepthRenderPass depthPassRendererPass;
 
 	IrradianceRenderPass reflectionIrradianceRenderPass;
 	PrefilterRenderPass reflectionPrefilterRenderPass;
@@ -40,6 +40,6 @@ public:
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
-	DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

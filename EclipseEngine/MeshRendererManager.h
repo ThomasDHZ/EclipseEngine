@@ -307,7 +307,19 @@ public:
 
 	static void SetSelectedMesh(std::shared_ptr<Mesh> mesh)
 	{
-		ActiveMesh = mesh;
+		if (mesh != nullptr)
+		{
+			if (ActiveMesh != nullptr)
+			{
+				ActiveMesh->SetSelectedMesh(false);
+			}
+			ActiveMesh = mesh;
+			mesh->SetSelectedMesh(true);
+		}
+		else
+		{
+			ActiveMesh = nullptr;
+		}
 	}
 
 	static std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer()

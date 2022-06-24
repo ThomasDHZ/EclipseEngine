@@ -384,6 +384,16 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
+
+	if (SelectedMesh)
+	{
+		meshProperties.SelectedObjectBufferIndex = 1;
+	}
+	else
+	{
+		meshProperties.SelectedObjectBufferIndex = 0;
+	}
+
 	MeshPropertiesBuffer.Update(meshProperties);
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
@@ -425,6 +435,15 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
+
+	if (SelectedMesh)
+	{
+		meshProperties.SelectedObjectBufferIndex = 1;
+	}
+	else
+	{
+		meshProperties.SelectedObjectBufferIndex = 0;
+	}
 	MeshPropertiesBuffer.Update(meshProperties);
 
 	if (BoneList.size() != 0)
@@ -513,6 +532,10 @@ void Mesh::Destroy()
 void Mesh::SetParentModel(uint64_t ModelID)
 {
 	ParentModelID = ModelID;
+}
+void Mesh::SetSelectedMesh(bool selected)
+{
+	SelectedMesh = selected;
 }
 void Mesh::SetParentGameObjectID(uint64_t GameObjectID)
 {

@@ -52,7 +52,6 @@ public:
 	{
 		auto time = glfwGetTime();
 		GameObjectManager::Update(time);
-		MaterialManager::Update();
 		MeshRendererManager::Update();
 		ModelManager::Update();
 		LightManager::Update();
@@ -168,6 +167,8 @@ public:
 		ModelManager::DestroyScene();
 		MeshRendererManager::DestroyScene();
 		LightManager::DestroyScene();
+
+		TextureManager::StartUp();
 	}
 
 	static SceneType GetSceneType() { return sceneType; }

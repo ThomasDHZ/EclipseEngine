@@ -33,6 +33,7 @@ struct MeshProperties
 	vec2 UVOffset;
 	vec2 UVScale;
 	vec2 UVFlip;
+	int SelectedMesh;
 	float heightScale;
 	float minLayers;
 	float maxLayers;

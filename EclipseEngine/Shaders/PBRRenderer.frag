@@ -36,6 +36,7 @@ layout(push_constant) uniform SceneData
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
+    uint SelectedObjectBufferIndex;
     float Timer;
     float PBRMaxMipLevel;
 } sceneData;
@@ -205,5 +206,10 @@ void main()
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
-    outColor = vec4(color, 1.0f);
+
+    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
+    {
+        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
+    }
+    outColor = vec4(color, 0.8f);
 }

@@ -367,6 +367,8 @@
     <None Include="Shaders\Renderer2D.vert" />
     <None Include="Shaders\Renderer3D.frag" />
     <None Include="Shaders\Renderer3D.vert" />
+    <None Include="Shaders\SelectedObjectShader.frag" />
+    <None Include="Shaders\SelectedObjectShader.vert" />
     <None Include="Shaders\VertexBuilder.glsl" />
     <None Include="Shaders\shadow.rmiss" />
     <None Include="Shaders\VertexLayout.glsl" />

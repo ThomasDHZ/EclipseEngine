@@ -6,8 +6,16 @@
 const uint32_t DefaultTextureID = 0;
 const uint32_t DefaultAlphaTextureID = 1;
 
+enum MaterialTypeEnum
+{
+	kMaterialnone,
+	kMaterialBlinnPhong,
+	kMaterialPBR
+};
+
 struct MaterialProperties
 {
+	MaterialTypeEnum materialType = kMaterialnone;
 	glm::vec3 Ambient = glm::vec3(0.2f);
 	glm::vec3 Diffuse = glm::vec3(0.6f);
 	glm::vec3 Specular = glm::vec3(1.0f);
@@ -112,6 +120,7 @@ class Material
 {
 private:
     static uint64_t MaterialIDCounter;
+	MaterialTypeEnum MaterialType;
 
 	std::string MaterialName;
     uint64_t MaterialID = 0;
@@ -148,13 +157,13 @@ public:
 
 	Material();
 	Material(const std::string materialName);
-	Material(const std::string materialName, MaterialProperties& MaterialInfo);
+	Material(const std::string materialName, MaterialTypeEnum materialtype, MaterialProperties& MaterialInfo);
 	~Material();
 
 
 	MaterialBufferData materialTextureData;
 
-	void Update();
+	void MaterialBufferUpdate();
 	void Destroy();
 
 	void LoadDiffuseMap(const std::string FilePath);
@@ -216,40 +225,52 @@ public:
 		material->GenerateID();
 
 		JsonConverter::from_json(json["MaterialName"], material->MaterialName);
-		JsonConverter::from_json(json["Ambient"], material->materialTextureData.Ambient);
-		JsonConverter::from_json(json["Diffuse"], material->materialTextureData.Diffuse);
-		JsonConverter::from_json(json["Specular"], material->materialTextureData.Specular);
-		JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
-		JsonConverter::from_json(json["Matallic"], material->materialTextureData.Matallic);
-		JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
-		JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
-		JsonConverter::from_json(json["Reflectivness"], material->materialTextureData.Reflectivness);
+		material->MaterialType == MaterialTypeEnum::kMaterialPBR;
+
+		if (material->MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
+		{
+			JsonConverter::from_json(json["Ambient"], material->materialTextureData.Ambient);
+			JsonConverter::from_json(json["Diffuse"], material->materialTextureData.Diffuse);
+			JsonConverter::from_json(json["Specular"], material->materialTextureData.Specular);
+			JsonConverter::from_json(json["Shininess"], material->materialTextureData.Shininess);
+			JsonConverter::from_json(json["Reflectivness"], material->materialTextureData.Reflectivness);
+
+			if (json.contains("DiffuseMap"))
+			{
+				material->DiffuseMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("DiffuseMap"))));
+			}
+			if (json.contains("SpecularMap"))
+			{
+				material->SpecularMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("SpecularMap"))));
+			}
+		}
+		else
+		{
+			JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
+			JsonConverter::from_json(json["Matallic"], material->materialTextureData.Matallic);
+			JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
+			JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
+
+			if (json.contains("AlbedoMap"))
+			{
+				material->AlbedoMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AlbedoMap"))));
+			}
+			if (json.contains("MetallicMap"))
+			{
+				material->MetallicMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("MetallicMap"))));
+			}
+			if (json.contains("RoughnessMap"))
+			{
+				material->RoughnessMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("RoughnessMap"))));
+			}
+			if (json.contains("AmbientOcclusionMap"))
+			{
+				material->AmbientOcclusionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AmbientOcclusionMap"))));
+			}
+		}
+
 		JsonConverter::from_json(json["Alpha"], material->materialTextureData.Alpha);
 
-		if (json.contains("DiffuseMap"))
-		{
-			material->DiffuseMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("DiffuseMap"))));
-		}
-		if (json.contains("SpecularMap"))
-		{
-			material->SpecularMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("SpecularMap"))));
-		}
-		if (json.contains("AlbedoMap"))
-		{
-			material->AlbedoMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AlbedoMap"))));
-		}
-		if (json.contains("MetallicMap"))
-		{
-			material->MetallicMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("MetallicMap"))));
-		}
-		if (json.contains("RoughnessMap"))
-		{
-			material->RoughnessMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("RoughnessMap"))));
-		}
-		if (json.contains("AmbientOcclusionMap"))
-		{
-			material->AmbientOcclusionMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("AmbientOcclusionMap"))));
-		}
 		if (json.contains("NormalMap"))
 		{
 			material->NormalMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("NormalMap"))));
@@ -268,6 +289,7 @@ public:
 		}
 
 		material->MaterialBuffer.CreateBuffer(&material->materialTextureData, sizeof(MaterialProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		material->MaterialBufferUpdate();
 		VulkanRenderer::UpdateRendererFlag = true;
 
 		return material;
@@ -276,41 +298,50 @@ public:
 	void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["MaterialName"], MaterialName);
-		JsonConverter::to_json(json["Ambient"], Ambient);
-		JsonConverter::to_json(json["Diffuse"], Diffuse);
-		JsonConverter::to_json(json["Specular"], Specular);
-		JsonConverter::to_json(json["Albedo"], Albedo);
-		JsonConverter::to_json(json["Matallic"], Matallic);
-		JsonConverter::to_json(json["Roughness"], Roughness);
-		JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
-		JsonConverter::to_json(json["Alpha"], Alpha);
-		JsonConverter::to_json(json["Shininess"], Shininess);
-		JsonConverter::to_json(json["Reflectivness"], Reflectivness);
+		JsonConverter::to_json(json["MaterialType"], MaterialType);
+		if (MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
+		{
+			JsonConverter::to_json(json["Ambient"], Ambient);
+			JsonConverter::to_json(json["Diffuse"], Diffuse);
+			JsonConverter::to_json(json["Specular"], Specular);
+			JsonConverter::to_json(json["Reflectivness"], Reflectivness);
 
-		if (DiffuseMap != nullptr)
-		{
-			DiffuseMap->to_json(json["DiffuseMap"]);
+			if (DiffuseMap != nullptr)
+			{
+				DiffuseMap->to_json(json["DiffuseMap"]);
+			}
+			if (SpecularMap != nullptr)
+			{
+				SpecularMap->to_json(json["SpecularMap"]);
+			}
 		}
-		if (SpecularMap != nullptr)
+		else
 		{
-			SpecularMap->to_json(json["SpecularMap"]);
+			JsonConverter::to_json(json["Albedo"], Albedo);
+			JsonConverter::to_json(json["Matallic"], Matallic);
+			JsonConverter::to_json(json["Roughness"], Roughness);
+			JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
+
+			if (AlbedoMap != nullptr)
+			{
+				AlbedoMap->to_json(json["AlbedoMap"]);
+			}
+			if (MetallicMap != nullptr)
+			{
+				MetallicMap->to_json(json["MetallicMap"]);
+			}
+			if (RoughnessMap != nullptr)
+			{
+				RoughnessMap->to_json(json["RoughnessMap"]);
+			}
+			if (AmbientOcclusionMap != nullptr)
+			{
+				AmbientOcclusionMap->to_json(json["AmbientOcclusionMap"]);
+			}
 		}
-		if (AlbedoMap != nullptr)
-		{
-			AlbedoMap->to_json(json["AlbedoMap"]);
-		}
-		if (MetallicMap != nullptr)
-		{
-			MetallicMap->to_json(json["MetallicMap"]);
-		}
-		if (RoughnessMap != nullptr)
-		{
-			RoughnessMap->to_json(json["RoughnessMap"]);
-		}
-		if (AmbientOcclusionMap != nullptr)
-		{
-			AmbientOcclusionMap->to_json(json["AmbientOcclusionMap"]);
-		}
+
+		JsonConverter::to_json(json["Alpha"], Alpha);
+
 		if (NormalMap != nullptr)
 		{
 			NormalMap->to_json(json["NormalMap"]);

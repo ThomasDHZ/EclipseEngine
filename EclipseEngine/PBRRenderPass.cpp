@@ -312,6 +312,39 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
+
+    {
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/SelectedObjectShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/SelectedObjectShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+
+        if (selectObjectPipeline == nullptr)
+        {
+            selectObjectPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            selectObjectPipeline->Destroy();
+            selectObjectPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
 }
 
 void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
@@ -408,7 +441,7 @@ void PBRRenderPass::Draw()
                     if (MeshRendererManager::GetSelectedMesh() == mesh)
                     {
                         vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
                         DrawMesh(outLinePipeline, mesh, SceneManager::sceneProperites);
                     }
                 }

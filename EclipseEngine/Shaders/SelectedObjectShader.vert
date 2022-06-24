@@ -33,8 +33,7 @@ layout(push_constant) uniform SceneData
 } sceneData;
 
 void main() {
-
-    vec4 pos = vec4(inPosition.xyz + (aNormal * 0.01f), 1.0f);
-    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * pos);    
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * pos;
+    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
+    Color = aColor;
+    UV = aUV;
 }
