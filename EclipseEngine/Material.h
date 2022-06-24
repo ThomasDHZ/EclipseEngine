@@ -23,7 +23,7 @@ struct MaterialProperties
 	float Reflectivness = 0.0f;
 
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Matallic = 0.5f;
+	float Metallic = 0.5f;
 	float Roughness = 0.5f;
 	float AmbientOcclusion = 0.0f;
 	float Alpha = 1.0f;
@@ -49,7 +49,7 @@ struct MaterialBufferData
 	alignas(4) float Reflectivness = 0.0f;
 
 	alignas(16) glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	alignas(4) float Matallic = 0.5f;
+	alignas(4) float Metallic = 0.5f;
 	alignas(4) float Roughness = 0.5f;
 	alignas(4) float AmbientOcclusion = 1.0f;
 	alignas(4) float Alpha = 1.0f;
@@ -71,7 +71,7 @@ struct MaterialBufferData
 		JsonConverter::from_json(json["Diffuse"], Diffuse);
 		JsonConverter::from_json(json["Specular"], Specular);
 		JsonConverter::from_json(json["Albedo"], Albedo);
-		JsonConverter::from_json(json["Matallic"], Matallic);
+		JsonConverter::from_json(json["Metallic"], Metallic);
 		JsonConverter::from_json(json["Roughness"], Roughness);
 		JsonConverter::from_json(json["AmbientOcclusion"], AmbientOcclusion);
 		JsonConverter::from_json(json["Alpha"], Alpha);
@@ -96,7 +96,7 @@ struct MaterialBufferData
 		JsonConverter::to_json(json["Diffuse"], Diffuse);
 		JsonConverter::to_json(json["Specular"], Specular);
 		JsonConverter::to_json(json["Albedo"], Albedo);
-		JsonConverter::to_json(json["Matallic"], Matallic);
+		JsonConverter::to_json(json["Metallic"], Metallic);
 		JsonConverter::to_json(json["Roughness"], Roughness);
 		JsonConverter::to_json(json["AmbientOcclusion"], AmbientOcclusion);
 		JsonConverter::to_json(json["Alpha"], Alpha);
@@ -202,6 +202,7 @@ public:
 	void SetBufferIndex(int bufferIndex);
 
 	std::string GetMaterialName() { return MaterialName; }
+	MaterialTypeEnum GetMaterialType() { return MaterialType; }
 	std::string* GetMaterialNamePtr() { return &MaterialName; }
 	uint64_t GetMaterialID() { return MaterialID; }
 	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }
@@ -247,7 +248,7 @@ public:
 		else
 		{
 			JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
-			JsonConverter::from_json(json["Matallic"], material->materialTextureData.Matallic);
+			JsonConverter::from_json(json["Metallic"], material->materialTextureData.Metallic);
 			JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
 			JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
 
@@ -270,7 +271,6 @@ public:
 		}
 
 		JsonConverter::from_json(json["Alpha"], material->materialTextureData.Alpha);
-
 		if (json.contains("NormalMap"))
 		{
 			material->NormalMap = TextureManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(json.at("NormalMap"))));

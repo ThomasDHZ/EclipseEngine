@@ -22,42 +22,56 @@ Material::Material(const std::string materialName, MaterialTypeEnum materialtype
 	MaterialName = materialName;
 	MaterialType = materialtype;
 	
-	materialTextureData.Ambient = MaterialInfo.Ambient;
-	materialTextureData.Diffuse = MaterialInfo.Diffuse;
-	materialTextureData.Specular = MaterialInfo.Specular;
-	materialTextureData.Shininess = MaterialInfo.Shininess;
-	materialTextureData.Reflectivness = MaterialInfo.Reflectivness;
+	if (MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
+	{
+		materialTextureData.Ambient = MaterialInfo.Ambient;
+		materialTextureData.Diffuse = MaterialInfo.Diffuse;
+		materialTextureData.Specular = MaterialInfo.Specular;
+		materialTextureData.Shininess = MaterialInfo.Shininess;
+		materialTextureData.Reflectivness = MaterialInfo.Reflectivness;
 
-	if(MaterialInfo.DiffuseMap != nullptr)
-	{
-		materialTextureData.DiffuseMapID = MaterialInfo.DiffuseMap->GetTextureBufferIndex();
-		DiffuseMap = MaterialInfo.DiffuseMap;
+		if (MaterialInfo.DiffuseMap != nullptr)
+		{
+			materialTextureData.DiffuseMapID = MaterialInfo.DiffuseMap->GetTextureBufferIndex();
+			DiffuseMap = MaterialInfo.DiffuseMap;
+		}
+		if (MaterialInfo.SpecularMap != nullptr)
+		{
+			materialTextureData.SpecularMapID = MaterialInfo.SpecularMap->GetTextureBufferIndex();
+			SpecularMap = MaterialInfo.SpecularMap;
+		}
 	}
-	if (MaterialInfo.SpecularMap != nullptr)
+	else
 	{
-		materialTextureData.SpecularMapID = MaterialInfo.SpecularMap->GetTextureBufferIndex();
-		SpecularMap = MaterialInfo.SpecularMap;
+		materialTextureData.Albedo = MaterialInfo.Albedo;
+		materialTextureData.Metallic = MaterialInfo.Metallic;
+		materialTextureData.Roughness = MaterialInfo.Roughness;
+		materialTextureData.AmbientOcclusion = MaterialInfo.AmbientOcclusion;
+		materialTextureData.Reflectivness = MaterialInfo.Reflectivness;
+
+		if (AlbedoMap != nullptr)
+		{
+			materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+			AlbedoMap = MaterialInfo.AlbedoMap;
+		}
+		if (MetallicMap != nullptr)
+		{
+			materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+			MetallicMap = MaterialInfo.MetallicMap;
+		}
+		if (RoughnessMap != nullptr)
+		{
+			materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+			RoughnessMap = MaterialInfo.RoughnessMap;
+		}
+		if (AmbientOcclusionMap != nullptr)
+		{
+			materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
+			AmbientOcclusionMap = MaterialInfo.AmbientOcclusionMap;
+		}
 	}
-	if (AlbedoMap != nullptr)
-	{
-		materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
-		AlbedoMap = MaterialInfo.AlbedoMap;
-	}
-	if (MetallicMap != nullptr)
-	{
-		materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
-		MetallicMap = MaterialInfo.MetallicMap;
-	}
-	if (RoughnessMap != nullptr)
-	{
-		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
-		RoughnessMap = MaterialInfo.RoughnessMap;
-	}
-	if (AmbientOcclusionMap != nullptr)
-	{
-		materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
-		AmbientOcclusionMap = MaterialInfo.AmbientOcclusionMap;
-	}
+
+	materialTextureData.Alpha = MaterialInfo.Alpha;
 	if (MaterialInfo.NormalMap != nullptr)
 	{
 		materialTextureData.NormalMapID = MaterialInfo.NormalMap->GetTextureBufferIndex();
@@ -90,31 +104,38 @@ Material::~Material()
 
 void Material::MaterialBufferUpdate()
 {
+	if (MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
+	{
+		if (DiffuseMap != nullptr)
+		{
+			materialTextureData.DiffuseMapID = DiffuseMap->GetTextureBufferIndex();
+		}
+		if (SpecularMap != nullptr)
+		{
+			materialTextureData.SpecularMapID = SpecularMap->GetTextureBufferIndex();
+		}
+	}
+	else
+	{
+		if (AlbedoMap != nullptr)
+		{
+			materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+		}
+		if (MetallicMap != nullptr)
+		{
+			materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+		}
+		if (RoughnessMap != nullptr)
+		{
+			materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+		}
+		if (AmbientOcclusionMap != nullptr)
+		{
+			materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
+		}
+	}
 
-	if (DiffuseMap != nullptr)
-	{
-		materialTextureData.DiffuseMapID = DiffuseMap->GetTextureBufferIndex();
-	}
-	if (SpecularMap != nullptr)
-	{
-		materialTextureData.SpecularMapID = SpecularMap->GetTextureBufferIndex();
-	}
-	if (AlbedoMap != nullptr)
-	{
-		materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
-	}
-	if (MetallicMap != nullptr)
-	{
-		materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
-	}
-	if (RoughnessMap != nullptr)
-	{
-		materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
-	}
-	if (AmbientOcclusionMap != nullptr)
-	{
-		materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
-	}
+
 	if (NormalMap != nullptr)
 	{
 		materialTextureData.NormalMapID = NormalMap->GetTextureBufferIndex();
