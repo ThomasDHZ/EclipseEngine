@@ -515,23 +515,37 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
         vertexInputInfo.vertexBindingDescriptionCount = 0;
     }
 
-    VkPipelineColorBlendAttachmentState color_attachment[1] = {};
-    color_attachment[0].blendEnable = VK_TRUE;
-    color_attachment[0].srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    color_attachment[0].dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    color_attachment[0].colorBlendOp = VK_BLEND_OP_ADD;
-    color_attachment[0].srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    color_attachment[0].dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    color_attachment[0].alphaBlendOp = VK_BLEND_OP_ADD;
-    color_attachment[0].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-
-    VkPipelineDepthStencilStateCreateInfo depth_info = {};
-    depth_info.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-
-    VkPipelineColorBlendStateCreateInfo blend_info = {};
-    blend_info.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    blend_info.attachmentCount = 1;
-    blend_info.pAttachments = color_attachment;
+    VkPipelineDepthStencilStateCreateInfo depthStencil{};
+    depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    depthStencil.depthTestEnable = VK_TRUE;
+    depthStencil.depthWriteEnable = VK_TRUE;
+    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    depthStencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
+    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
+    {
+        depthStencil.stencilTestEnable = VK_TRUE;
+        depthStencil.back.compareOp = VK_COMPARE_OP_ALWAYS;
+        depthStencil.back.failOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.depthFailOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.passOp = VK_STENCIL_OP_REPLACE;
+        depthStencil.back.compareMask = 0xff;
+        depthStencil.back.writeMask = 0xff;
+        depthStencil.back.reference = 1;
+        depthStencil.front = depthStencil.back;
+    }
+    else
+    {
+        depthStencil.depthTestEnable = VK_TRUE;
+        depthStencil.depthWriteEnable = VK_TRUE;
+        depthStencil.depthBoundsTestEnable = VK_FALSE;
+        depthStencil.stencilTestEnable = VK_FALSE;
+        depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    }
+    if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox)
+    {
+        depthStencil.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    }
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -551,7 +565,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
     if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
     {
-        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth || 
+        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
         {
             rasterizer.cullMode = VK_CULL_MODE_NONE;
@@ -596,6 +610,11 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     multisampling.sampleShadingEnable = VK_TRUE;
     multisampling.rasterizationSamples = buildGraphicsPipelineInfo.sampleCount;
 
+    VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState{};
+    pipelineColorBlendAttachmentState.colorWriteMask = 0xF;
+    pipelineColorBlendAttachmentState.blendEnable = VK_TRUE;
+    buildGraphicsPipelineInfo.ColorAttachments.emplace_back(pipelineColorBlendAttachmentState);
+
     VkPipelineColorBlendStateCreateInfo colorBlending{};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     colorBlending.attachmentCount = static_cast<uint32_t>(buildGraphicsPipelineInfo.ColorAttachments.size());
@@ -629,14 +648,16 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     pipelineInfo.pViewportState = &viewportState;
     pipelineInfo.pRasterizationState = &rasterizer;
     pipelineInfo.pMultisampleState = &multisampling;
-    pipelineInfo.pDepthStencilState = &depth_info;
-    pipelineInfo.pColorBlendState = &blend_info;
+    pipelineInfo.pDepthStencilState = &depthStencil;
+    pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.layout = ShaderPipelineLayout;
     pipelineInfo.renderPass = buildGraphicsPipelineInfo.renderPass;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline) != VK_SUCCESS) {
+    auto a = vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline);
+
+    if (a != VK_SUCCESS) {
         throw std::runtime_error("Failed to create pipeline.");
     }
 }

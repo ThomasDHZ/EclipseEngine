@@ -32,7 +32,7 @@ void PBRRenderer::StartUp()
 	}
 
 	//depthDebugRenderPass.StartUp(depthPassRendererPass.DepthTexture);
-	frameBufferRenderPass.StartUp(meshPickerRenderPass.RenderedTexture);
+	frameBufferRenderPass.StartUp(pbrRenderPass.RenderedTexture);
 }
 
 void PBRRenderer::Update()
@@ -72,7 +72,7 @@ void PBRRenderer::RebuildRenderers()
 	}
 
 	//depthDebugRenderPass.RebuildSwapChain(depthPassRendererPass.DepthTexture);
-	frameBufferRenderPass.RebuildSwapChain(meshPickerRenderPass.RenderedTexture);
+	frameBufferRenderPass.RebuildSwapChain(pbrRenderPass.RenderedTexture);
 }
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)

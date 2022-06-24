@@ -119,7 +119,7 @@ VkAttachmentDescription RenderedColorTexture::GetAttachmentDescription()
 	VkAttachmentDescription RenderedColorTextureAttachment = {};
 	RenderedColorTextureAttachment.format = TextureByteFormat;
 	RenderedColorTextureAttachment.samples = SampleCount;
-	RenderedColorTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	RenderedColorTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	RenderedColorTextureAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	RenderedColorTextureAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	RenderedColorTextureAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
