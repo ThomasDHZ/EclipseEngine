@@ -66,6 +66,7 @@ public:
 
     void UpdateImageLayout(VkImageLayout newImageLayout);
     void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);

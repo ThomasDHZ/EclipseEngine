@@ -139,6 +139,7 @@ public:
 	Mesh(MeshLoadingInfo& meshLoader);
 	~Mesh();
 
+	std::string MeshName;
 	MeshProperties meshProperties;
 
 	void Draw(VkCommandBuffer& commandBuffer);

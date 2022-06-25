@@ -208,6 +208,9 @@ void MeshPickerRenderPass3D::Draw()
             }
         }
     }
+
+
+
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -249,8 +252,9 @@ Pixel MeshPickerRenderPass3D::ReadPixel(glm::ivec2 PixelTexCoord)
     //else
     //{
         VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         Texture::CopyTexture(commandBuffer, RenderedTexture, PickerTexture);
         PickerTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL); 
         RenderedTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);

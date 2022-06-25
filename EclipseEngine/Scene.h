@@ -30,9 +30,9 @@ class Scene
 private:
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
-	HybridRenderer hybridRenderer;
+//	HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
-	RayTraceRenderer rayTraceRenderer;
+	//RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();

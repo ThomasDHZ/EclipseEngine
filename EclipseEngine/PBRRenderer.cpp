@@ -124,9 +124,9 @@ void PBRRenderer::Destroy()
 	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
 	//depthPassRendererPass.Destroy();
-	reflectionIrradianceRenderPass.Destroy();
-	reflectionPrefilterRenderPass.Destroy();
-	pbrReflectionRenderPass.Destroy();
+	//reflectionIrradianceRenderPass.Destroy();
+	//reflectionPrefilterRenderPass.Destroy();
+	//pbrReflectionRenderPass.Destroy();
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();
 	pbrRenderPass.Destroy();

@@ -13,14 +13,14 @@ Scene::Scene()
     SceneManager::sceneType = SceneType::kPBR;
     //SceneManager::LoadScene("../Scenes/example.txt");
 
-    CubeMapLayout cubeMapfiles;
-    cubeMapfiles.Left = "../texture/skybox/right.jpg";
-    cubeMapfiles.Right = "../texture/skybox/left.jpg";
-    cubeMapfiles.Top = "../texture/skybox/top.jpg";
-    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
-    cubeMapfiles.Front = "../texture/skybox/back.jpg";
-    cubeMapfiles.Back = "../texture/skybox/front.jpg";
-    TextureManager::LoadCubeMapTexture(cubeMapfiles);
+    //CubeMapLayout cubeMapfiles;
+    //cubeMapfiles.Left = "../texture/skybox/right.jpg";
+    //cubeMapfiles.Right = "../texture/skybox/left.jpg";
+    //cubeMapfiles.Top = "../texture/skybox/top.jpg";
+    //cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
+    //cubeMapfiles.Front = "../texture/skybox/back.jpg";
+    //cubeMapfiles.Back = "../texture/skybox/front.jpg";
+    //TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
@@ -31,7 +31,7 @@ Scene::Scene()
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
 
-    auto dLight = DirectionalLightBuffer{};
+   /* auto dLight = DirectionalLightBuffer{};
     dLight.diffuse = glm::vec3(0.2f);
     dLight.specular = glm::vec3(0.5f);
 
@@ -60,7 +60,7 @@ Scene::Scene()
     LightManager::AddPointLight(plight);
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight4);*/
 
     MeshRendererManager::Update();
     ModelManager::Update();
@@ -77,8 +77,8 @@ Scene::Scene()
             blinnPhongRenderer.StartUp();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                hybridRenderer.StartUp();
-                rayTraceRenderer.StartUp();
+               // hybridRenderer.StartUp();
+              // rayTraceRenderer.StartUp();
             }
             break;
         }
@@ -120,11 +120,11 @@ void Scene::Update()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Update();
+                 //   rayTraceRenderer.Update();
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                    hybridRenderer.Update();
+                  //  hybridRenderer.Update();
                 }
                 else
                 {
@@ -147,7 +147,10 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
-    ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    if (pbrRenderer.GetColorPickerTexture() != nullptr)
+    {
+        ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    }
  /*   if (SceneManager::sceneType == SceneType::kPBR)
     {
         ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
@@ -191,14 +194,6 @@ void Scene::ImGuiUpdate()
         ImGui::Checkbox("Hybrid Mode", &GraphicsDevice::HybridRendererActive);
     }
 
-    for (auto& model : ModelManager::GetModelList())
-    {
-        ImGui::LabelText("", "Model Transform");
-        ImGui::SliderFloat3("Model position ", &model->GetModelPositionPtr()->x, -100.0f, 100.0f);
-        ImGui::SliderFloat3("Model rotation ", &model->GetModelRotationPtr()->x, 0.0f, 360.0f);
-        ImGui::SliderFloat3("Model scale ", &model->GetModelScalePtr()->x, 0.0f, 1.0f);
-    }
-
     SceneManager::ImGuiSceneHierarchy();
     MeshRendererManager::GUIUpdate();
     LightManager::GUIUpdate();
@@ -222,8 +217,8 @@ void Scene::RebuildRenderers()
             blinnPhongRenderer.RebuildRenderers();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                rayTraceRenderer.RebuildSwapChain();
-                hybridRenderer.RebuildRenderers();
+               // rayTraceRenderer.RebuildSwapChain();
+               // hybridRenderer.RebuildRenderers();
             }
             break;
         }
@@ -262,11 +257,11 @@ void Scene::Draw()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                  //  rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                    hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                   // hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
@@ -313,8 +308,8 @@ void Scene::Destroy()
             blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                hybridRenderer.Destroy();
-                rayTraceRenderer.Destroy();
+              //  hybridRenderer.Destroy();
+               // rayTraceRenderer.Destroy();
             }
             break;
         }
