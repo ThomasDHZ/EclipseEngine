@@ -208,7 +208,7 @@ void GBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> s
     SetUpCommandBuffers();
 }
 
-void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
+VkCommandBuffer GBufferRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -246,13 +246,14 @@ void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
 
-    vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
-    vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
         MeshRendererManager::SortByRenderPipeline();
         for (auto& mesh : MeshRendererManager::GetMeshList())
@@ -261,17 +262,19 @@ void GBufferRenderPass::Draw(SceneProperties& sceneProperties)
             {
                 case MeshTypeEnum::kPolygon:
                 {
-                        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipelineLayout(), 0, 1, hybridPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        DrawMesh(hybridPipeline, mesh, sceneProperties);
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipelineLayout(), 0, 1, hybridPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        DrawMesh(hybridPipeline, mesh, SceneManager::sceneProperites);
                 }
             }
         }
     }
-    vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-    if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
+    vkCmdEndRenderPass(commandBuffer);
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
+
+    return commandBuffer;
 }
 
 void GBufferRenderPass::Destroy()

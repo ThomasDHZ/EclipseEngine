@@ -16,8 +16,6 @@ private:
 
 	std::shared_ptr<GraphicsPipeline> pbrPipeline;
 	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
-	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
-	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void BuildRenderPass();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);
@@ -32,7 +30,7 @@ public:
 	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize);
 	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize);
 
-	void Draw();
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

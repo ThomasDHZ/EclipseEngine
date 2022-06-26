@@ -40,14 +40,9 @@ void RayTraceRenderer::GUIUpdate()
 
 void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-    meshPickerRenderPass.Draw();
-    CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
-
-    rayTraceRenderPass.Draw(sceneProperties);
-    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.RayTraceCommandBuffer);
-
-    FrameBufferRenderer.Draw();
-    CommandBufferSubmitList.emplace_back(FrameBufferRenderer.GetCommandBuffer());
+    CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
+    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.Draw());
+    CommandBufferSubmitList.emplace_back(FrameBufferRenderer.Draw());
 }
 
 void RayTraceRenderer::Destroy()

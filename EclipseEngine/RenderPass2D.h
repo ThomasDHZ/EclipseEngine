@@ -27,7 +27,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw(SceneProperties sceneProperties);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

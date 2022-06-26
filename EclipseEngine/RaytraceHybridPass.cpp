@@ -132,7 +132,7 @@ void RaytraceHybridPass::BuildRenderPassPipelines()
     }
 }
 
-void RaytraceHybridPass::Draw(SceneProperties& sceneProperties)
+VkCommandBuffer RaytraceHybridPass::Draw()
 {
     VkCommandBufferBeginInfo cmdBufInfo{};
     cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -157,10 +157,10 @@ void RaytraceHybridPass::Draw(SceneProperties& sceneProperties)
     hitShaderSbtEntry.stride = handleSizeAligned;
     hitShaderSbtEntry.size = handleSizeAligned;
 
-    sceneProperties.proj = glm::inverse(sceneProperties.proj);
-    sceneProperties.view = glm::inverse(sceneProperties.view);
+    SceneManager::sceneProperites.proj = glm::inverse(SceneManager::sceneProperites.proj);
+    SceneManager::sceneProperites.view = glm::inverse(SceneManager::sceneProperites.view);
 
-    vkCmdPushConstants(RayTraceCommandBuffer, RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &sceneProperties);
+    vkCmdPushConstants(RayTraceCommandBuffer, RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
     vkCmdBindPipeline(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipelineLayout(), 0, 1, RayTracePipeline->GetDescriptorSetPtr(), 0, 0);
 
@@ -170,6 +170,8 @@ void RaytraceHybridPass::Draw(SceneProperties& sceneProperties)
     RenderedShadowTexture->UpdateImageLayout(RayTraceCommandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     vkEndCommandBuffer(RayTraceCommandBuffer);
+
+    return RayTraceCommandBuffer;
 }
 
 void RaytraceHybridPass::RebuildSwapChain()

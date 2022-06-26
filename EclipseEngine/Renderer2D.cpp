@@ -37,15 +37,11 @@ void Renderer2D::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuf
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw(sceneProperites);
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	renderPass2D.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(renderPass2D.GetCommandBuffer());
-
-	frameBufferRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
+	CommandBufferSubmitList.emplace_back(renderPass2D.Draw());
+	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void Renderer2D::Destroy()

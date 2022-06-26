@@ -20,6 +20,6 @@ public:
 	void StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture);
 	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture);
 
-	void Draw();
+	VkCommandBuffer Draw();
 	void Destroy();
 };

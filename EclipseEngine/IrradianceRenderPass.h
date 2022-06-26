@@ -23,6 +23,6 @@ public:
 
 	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
 	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
-	void Draw();
+	VkCommandBuffer Draw();
 	void Destroy();
 };

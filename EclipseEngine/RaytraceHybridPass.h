@@ -5,6 +5,7 @@
 #include "RayTracingPipeline.h"
 #include "LightManager.h"
 #include "ModelManager.h"
+#include "SceneManager.h"
 
 class RaytraceHybridPass : public RenderPass
 {
@@ -21,7 +22,7 @@ public:
     ~RaytraceHybridPass();
 
     void StartUp();
-    void Draw(SceneProperties& sceneProperties);
+    VkCommandBuffer Draw();
     void RebuildSwapChain();
     void Destroy();
 };

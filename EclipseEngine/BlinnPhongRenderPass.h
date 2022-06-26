@@ -38,7 +38,7 @@ public:
 	void StartUp(std::shared_ptr<RenderedDepthTexture> depthTexture);
 	void RebuildSwapChain(std::shared_ptr<RenderedDepthTexture> depthTexture);
 
-	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

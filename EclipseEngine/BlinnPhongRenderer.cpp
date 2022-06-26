@@ -43,21 +43,13 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw();
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	depthRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(depthRenderPass.GetCommandBuffer());
-
-	blinnPhongRenderPass.Draw(sceneProperties, skyboxView);
-	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.GetCommandBuffer());
-
-	depthDebugRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.GetCommandBuffer());
-
-	frameBufferRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
+	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void BlinnPhongRenderer::Destroy()

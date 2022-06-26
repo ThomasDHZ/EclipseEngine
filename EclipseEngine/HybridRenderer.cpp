@@ -59,21 +59,13 @@ void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkComman
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
-		meshPickerRenderPass.Draw();
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.GetCommandBuffer());
+		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	GBufferRenderPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(GBufferRenderPass.GetCommandBuffer());
-
-	deferredRenderPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(deferredRenderPass.GetCommandBuffer());
-
-	raytraceHybridPass.Draw(sceneProperites);
-	CommandBufferSubmitList.emplace_back(raytraceHybridPass.RayTraceCommandBuffer);
-
-	frameBufferRenderPass.Draw();
-	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.GetCommandBuffer());
+	CommandBufferSubmitList.emplace_back(GBufferRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(deferredRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(raytraceHybridPass.Draw());
+	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void HybridRenderer::Destroy()

@@ -29,7 +29,7 @@ public:
 	void StartUp();
 	void RebuildSwapChain();
 
-	void Draw();
+	VkCommandBuffer Draw();
 	void Destroy();
 
 	Pixel ReadPixel(glm::ivec2 PixelTexCoord);

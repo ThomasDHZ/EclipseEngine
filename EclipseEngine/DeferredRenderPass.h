@@ -50,7 +50,7 @@ public:
 		std::shared_ptr<RenderedColorTexture> BloomTexture,
 		std::shared_ptr<RenderedColorTexture> ShadowTexture);
 
-	void Draw(SceneProperties& sceneProperties);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

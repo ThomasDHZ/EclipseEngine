@@ -37,7 +37,7 @@ public:
 	void StartUp(std::shared_ptr<RenderedColorTexture> shadowMap);
 	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap);
 
-	void Draw(SceneProperties& sceneProperties);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 
