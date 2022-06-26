@@ -312,39 +312,6 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/SelectedObjectShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/SelectedObjectShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-
-        if (selectObjectPipeline == nullptr)
-        {
-            selectObjectPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            selectObjectPipeline->Destroy();
-            selectObjectPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
 }
 
 void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
@@ -474,6 +441,7 @@ void PBRRenderPass::Destroy()
     pbrPipeline->Destroy();
     skyboxPipeline->Destroy();
     drawLinePipeline->Destroy();
+    outLinePipeline->Destroy();
     wireframePipeline->Destroy();
 
     RenderPass::Destroy();

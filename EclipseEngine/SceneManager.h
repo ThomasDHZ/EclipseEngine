@@ -75,6 +75,10 @@ public:
 	{
 		SkyboxMesh->Destroy();
 
+		if (environmentTexture != nullptr)
+		{
+			environmentTexture->Destroy();
+		}
 		if (BRDFTexture != nullptr)
 		{
 			BRDFTexture->Destroy();

@@ -95,9 +95,6 @@ void DepthRenderPass::BuildRenderPassPipelines()
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-
     {
 
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;

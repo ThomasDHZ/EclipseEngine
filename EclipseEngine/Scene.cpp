@@ -25,13 +25,13 @@ Scene::Scene()
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
     std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
-   // GameObjectManager::AddGameObject(obj);
+    GameObjectManager::AddGameObject(obj);
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
 
-   /* auto dLight = DirectionalLightBuffer{};
+    auto dLight = DirectionalLightBuffer{};
     dLight.diffuse = glm::vec3(0.2f);
     dLight.specular = glm::vec3(0.5f);
 
@@ -60,7 +60,7 @@ Scene::Scene()
     LightManager::AddPointLight(plight);
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);*/
+    LightManager::AddPointLight(plight4);
 
     MeshRendererManager::Update();
     ModelManager::Update();
@@ -69,12 +69,12 @@ Scene::Scene()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.StartUp();
+            //renderer2D.StartUp();
             break;
         }
         case SceneType::kBlinnPhong: 
         {
-            blinnPhongRenderer.StartUp();
+            //blinnPhongRenderer.StartUp();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                // hybridRenderer.StartUp();
@@ -111,7 +111,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Update();
+          //  renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -128,12 +128,12 @@ void Scene::Update()
                 }
                 else
                 {
-                    blinnPhongRenderer.Update();
+                    //blinnPhongRenderer.Update();
                 }
             }
             else
             {
-                blinnPhongRenderer.Update();
+                //blinnPhongRenderer.Update();
             }
             break;
         }
@@ -209,12 +209,12 @@ void Scene::RebuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.RebuildRenderers();
+           // renderer2D.RebuildRenderers();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.RebuildRenderers();
+            //blinnPhongRenderer.RebuildRenderers();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                // rayTraceRenderer.RebuildSwapChain();
@@ -247,7 +247,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+           // renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -265,12 +265,12 @@ void Scene::Draw()
                 }
                 else
                 {
-                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                 //   blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+              //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
@@ -300,12 +300,12 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Destroy();
+         //   renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.Destroy();
+            //blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
               //  hybridRenderer.Destroy();

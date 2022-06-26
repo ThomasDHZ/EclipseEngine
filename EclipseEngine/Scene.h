@@ -28,8 +28,8 @@
 class Scene
 {
 private:
-	Renderer2D renderer2D;
-	BlinnPhongRenderer blinnPhongRenderer;
+	//Renderer2D renderer2D;
+	//BlinnPhongRenderer blinnPhongRenderer;
 //	HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
 	//RayTraceRenderer rayTraceRenderer;

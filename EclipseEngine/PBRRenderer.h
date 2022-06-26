@@ -18,11 +18,11 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	//DepthRenderPass depthPassRendererPass;
+	DepthRenderPass depthPassRendererPass;
 
-	IrradianceRenderPass reflectionIrradianceRenderPass;
-	PrefilterRenderPass reflectionPrefilterRenderPass;
-	PBRReflectionRenderPass pbrReflectionRenderPass;
+	//IrradianceRenderPass reflectionIrradianceRenderPass;
+	//PrefilterRenderPass reflectionPrefilterRenderPass;
+	//PBRReflectionRenderPass pbrReflectionRenderPass;
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
