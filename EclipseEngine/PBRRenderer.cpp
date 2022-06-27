@@ -20,14 +20,14 @@ void PBRRenderer::StartUp()
 	}
 	//Reflection Pass
 	{
-		//reflectionIrradianceRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		//reflectionPrefilterRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		//pbrReflectionRenderPass.StartUp(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
+		reflectionIrradianceRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		reflectionPrefilterRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		pbrReflectionRenderPass.StartUp(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
 	}
 	//Main Render Pass
 	{
-		irradianceRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		prefilterRenderPass.StartUp(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		irradianceRenderPass.StartUp(pbrReflectionRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
+		prefilterRenderPass.StartUp(pbrReflectionRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
 		pbrRenderPass.StartUp(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 	}
 
@@ -60,14 +60,14 @@ void PBRRenderer::RebuildRenderers()
 	}
 	//Reflection Pass
 	{
-		//reflectionIrradianceRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		//reflectionPrefilterRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		//pbrReflectionRenderPass.RebuildSwapChain(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
+		reflectionIrradianceRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		reflectionPrefilterRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		pbrReflectionRenderPass.RebuildSwapChain(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
 	}
 	//Main Render Pass
 	{
-		irradianceRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		prefilterRenderPass.RebuildSwapChain(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+		irradianceRenderPass.StartUp(pbrReflectionRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
+		prefilterRenderPass.StartUp(pbrReflectionRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
 		pbrRenderPass.RebuildSwapChain(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 	}
 
@@ -88,14 +88,20 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	}
 	//Reflection Pass
 	{
-	/*	CommandBufferSubmitList.emplace_back(reflectionIrradianceRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(reflectionPrefilterRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(pbrReflectionRenderPass.Draw());*/
+		if (SceneManager::GetFrameCounter() == 1)
+		{
+			CommandBufferSubmitList.emplace_back(reflectionIrradianceRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(reflectionPrefilterRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(pbrReflectionRenderPass.Draw());
+		}
 	}
 	//Main Render Pass
 	{
-		CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+		if (SceneManager::GetFrameCounter() == 1)
+		{
+			CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+		}
 		CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
 	}
 

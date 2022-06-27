@@ -9,10 +9,10 @@ PBRReflectionRenderPass::~PBRReflectionRenderPass()
 {
 }
 
-void PBRReflectionRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize)
+void PBRReflectionRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap,  uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ReflectionCubeMapTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
     BloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
@@ -209,7 +209,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedC
 
 void PBRReflectionRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize)
 {
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
     ReflectionCubeMapTexture->RecreateRendererTexture(RenderPassResolution);
     BloomTexture->RecreateRendererTexture(RenderPassResolution);
