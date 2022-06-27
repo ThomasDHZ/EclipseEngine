@@ -8,13 +8,22 @@
 
 #include <fstream>
 
+enum RenderPassTypeEnum
+{
+	kRenderPassDynamic,
+	kRenderPassPreRender,
+	kRenderPassBake
+};
+
 class RenderPass
 {
 private:
 	VkShaderModule ReadShaderFile(const std::string& filename);
 
 protected:
+	RenderPassTypeEnum RenderPassType = RenderPassTypeEnum::kRenderPassDynamic;
 	VkRenderPass renderPass = VK_NULL_HANDLE;
+
 	std::vector<VkCommandBuffer> CommandBuffer;
 	std::vector<VkFramebuffer> RenderPassFramebuffer;
 	glm::ivec2 RenderPassResolution;
@@ -55,5 +64,6 @@ public:
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();
 
+	RenderPassTypeEnum GetRenderPassType() { return RenderPassType; }
 	VkCommandBuffer GetCommandBuffer() { return CommandBuffer[VulkanRenderer::GetCMDIndex()]; }
 };

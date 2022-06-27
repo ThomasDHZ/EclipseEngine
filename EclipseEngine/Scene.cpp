@@ -11,7 +11,7 @@ Scene::Scene()
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
     SceneManager::sceneType = SceneType::kPBR;
-    //SceneManager::LoadScene("../Scenes/example.txt");
+   //SceneManager::LoadScene("../Scenes/example.txt");
 
     //CubeMapLayout cubeMapfiles;
     //cubeMapfiles.Left = "../texture/skybox/right.jpg";
@@ -24,12 +24,85 @@ Scene::Scene()
 
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
-    GameObjectManager::AddGameObject(obj);
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
+    //GameObjectManager::AddGameObject(obj);
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
+
+    {
+
+        std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
+        IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
+        IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
+        IronmMaterial->LoadRoughnessMap("../texture/pbr/rusted_iron/roughness.png");
+        IronmMaterial->LoadAmbientOcclusionMap("../texture/pbr/rusted_iron/ao.png");
+        IronmMaterial->LoadNormalMap("../texture/pbr/rusted_iron/normal.png");
+        MaterialManager::AddMaterial(IronmMaterial);
+
+        std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
+        PlasticMaterial->LoadAlbedoMap("../texture/pbr/plastic/albedo.png");
+        PlasticMaterial->LoadMetallicMap("../texture/pbr/plastic/metallic.png");
+        PlasticMaterial->LoadRoughnessMap("../texture/pbr/plastic/roughness.png");
+        PlasticMaterial->LoadAmbientOcclusionMap("../texture/pbr/plastic/ao.png");
+        PlasticMaterial->LoadNormalMap("../texture/pbr/plastic/normal.png");
+        MaterialManager::AddMaterial(PlasticMaterial);
+
+        std::shared_ptr<Material> WallMaterial = std::make_shared<Material>(Material("WallMaterial"));
+        WallMaterial->LoadAlbedoMap("../texture/pbr/wall/albedo.png");
+        WallMaterial->LoadMetallicMap("../texture/pbr/wall/metallic.png");
+        WallMaterial->LoadRoughnessMap("../texture/pbr/wall/roughness.png");
+        WallMaterial->LoadAmbientOcclusionMap("../texture/pbr/wall/ao.png");
+        WallMaterial->LoadNormalMap("../texture/pbr/wall/normal.png");
+        MaterialManager::AddMaterial(WallMaterial);
+
+        std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
+        GoldMaterial->LoadAlbedoMap("../texture/pbr/gold/albedo.png");
+        GoldMaterial->LoadMetallicMap("../texture/pbr/gold/metallic.png");
+        GoldMaterial->LoadRoughnessMap("../texture/pbr/gold/roughness.png");
+        GoldMaterial->LoadAmbientOcclusionMap("../texture/pbr/gold/ao.png");
+        GoldMaterial->LoadNormalMap("../texture/pbr/gold/normal.png");
+        MaterialManager::AddMaterial(GoldMaterial);
+
+        std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
+        GrassMaterial->LoadAlbedoMap("../texture/pbr/grass/albedo.png");
+        GrassMaterial->LoadMetallicMap("../texture/pbr/grass/metallic.png");
+        GrassMaterial->LoadRoughnessMap("../texture/pbr/grass/roughness.png");
+        GrassMaterial->LoadAmbientOcclusionMap("../texture/pbr/grass/ao.png");
+        GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
+        MaterialManager::AddMaterial(GrassMaterial);
+
+        std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
+        auto b = static_cast<MeshRenderer*>(a.get());
+        b->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        GameObjectManager::AddGameObject(obj);
+
+        std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
+        auto b2 = static_cast<MeshRenderer*>(a2.get());
+        b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        GameObjectManager::AddGameObject(obj2);
+
+        std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
+        auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
+        auto b3 = static_cast<MeshRenderer*>(a3.get());
+        b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        GameObjectManager::AddGameObject(obj3);
+
+        std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
+        auto b4 = static_cast<MeshRenderer*>(a4.get());
+        b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        GameObjectManager::AddGameObject(obj4);
+
+        std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
+        auto b5 = static_cast<MeshRenderer*>(a2.get());
+        b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        GameObjectManager::AddGameObject(obj5);
+    }
 
     auto dLight = DirectionalLightBuffer{};
     dLight.diffuse = glm::vec3(0.2f);

@@ -28,6 +28,8 @@ class SceneManager
 private:
 
 	static float PBRCubeMapSize;
+	static uint32_t UpdatePBRMapsRefeshRate;
+	static uint32_t FrameCounter;
 
 	static std::shared_ptr<Skybox> SkyboxMesh;
 
@@ -51,6 +53,7 @@ public:
 	static void Update()
 	{
 		auto time = glfwGetTime();
+		UpdateFrameCount();
 		GameObjectManager::Update(time);
 		MeshRendererManager::Update();
 		ModelManager::Update();
@@ -118,6 +121,15 @@ public:
 		//ImGui::End();
 	}
 
+	static void UpdateFrameCount()
+	{
+		FrameCounter++;
+		if (FrameCounter == UpdatePBRMapsRefeshRate)
+		{
+			FrameCounter = 0;
+		}
+	}
+
 	static void SaveScene(const std::string FileName)
 	{
 		nlohmann::json json;
@@ -178,5 +190,6 @@ public:
 	static SceneType GetSceneType() { return sceneType; }
 	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
+	static uint32_t GetFrameCounter() { return FrameCounter; }
 };
 
