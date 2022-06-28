@@ -88,6 +88,9 @@
     <Filter Include="Header Files\Engine">
       <UniqueIdentifier>{5b3e22a4-a2bb-4c75-8bd2-7cc960facf73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenAL">
+      <UniqueIdentifier>{05c1ce06-0b15-4383-8275-c698adcabe2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

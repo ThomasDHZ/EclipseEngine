@@ -10,6 +10,7 @@
 #include "InterfaceRenderPass.h"
 #include "MaterialManager.h"
 #include "LightManager.h"
+#include "OpenAL/Include/al.h"
 
 VkRenderPass InterfaceRenderPass::RenderPass = VK_NULL_HANDLE;
 VkDescriptorPool InterfaceRenderPass::ImGuiDescriptorPool = VK_NULL_HANDLE;
