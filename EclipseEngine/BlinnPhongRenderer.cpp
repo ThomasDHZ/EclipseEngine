@@ -8,13 +8,13 @@ BlinnPhongRenderer::~BlinnPhongRenderer()
 {
 }
 
-void BlinnPhongRenderer::StartUp()
+void BlinnPhongRenderer::BuildRenderer()
 {
-	meshPickerRenderPass.StartUp();
-	depthRenderPass.StartUp();
-	blinnPhongRenderPass.StartUp(depthRenderPass.DepthTexture);
-	depthDebugRenderPass.StartUp(depthRenderPass.DepthTexture);
-	frameBufferRenderPass.StartUp(blinnPhongRenderPass.RenderedTexture);
+	meshPickerRenderPass.BuildRenderPass();
+	depthRenderPass.BuildRenderPass();
+	blinnPhongRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
+	depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
+	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture);
 }
 
 void BlinnPhongRenderer::Update()
@@ -28,15 +28,6 @@ void BlinnPhongRenderer::Update()
 
 		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
 	}
-}
-
-void BlinnPhongRenderer::RebuildRenderers()
-{
-	meshPickerRenderPass.RebuildSwapChain();
-	depthRenderPass.RebuildSwapChain();
-	blinnPhongRenderPass.RebuildSwapChain(depthRenderPass.DepthTexture);
-	depthDebugRenderPass.RebuildSwapChain(depthRenderPass.DepthTexture);
-	frameBufferRenderPass.RebuildSwapChain(blinnPhongRenderPass.RenderedTexture);
 }
 
 void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)

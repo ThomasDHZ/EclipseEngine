@@ -17,7 +17,7 @@ private:
 
 	std::shared_ptr<GraphicsPipeline> DepthPipeline;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
 public:
@@ -26,9 +26,7 @@ public:
 
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp();
-	void RebuildSwapChain();
-
+	void BuildRenderPass();
 	VkCommandBuffer Draw();
 	void Destroy();
 };

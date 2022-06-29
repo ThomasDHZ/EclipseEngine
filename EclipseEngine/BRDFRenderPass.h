@@ -5,7 +5,7 @@
 class BRDFRenderPass : public RenderPass
 {
 private:
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
 public:
@@ -14,8 +14,7 @@ public:
 
 	std::shared_ptr<GraphicsPipeline> brdfPipeline;
 
-	void StartUp(uint32_t textureSize);
-	void RebuildSwapChain(uint32_t textureSize);
+	void BuildRenderPass(uint32_t textureSize);
 	void Draw();
 	void Destroy();
 };

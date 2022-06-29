@@ -16,7 +16,7 @@ private:
 
 	std::shared_ptr<GraphicsPipeline> MeshPickerPipeline;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
 public:
@@ -26,9 +26,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
-	void StartUp();
-	void RebuildSwapChain();
-
+	void BuildRenderPass();
 	VkCommandBuffer Draw();
 	void Destroy();
 

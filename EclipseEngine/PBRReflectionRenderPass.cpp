@@ -9,25 +9,34 @@ PBRReflectionRenderPass::~PBRReflectionRenderPass()
 {
 }
 
-void PBRReflectionRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap,  uint32_t cubeMapSize)
+void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap,  uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ReflectionCubeMapTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    BloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    if (renderPass == nullptr)
+    {
+        ReflectionCubeMapTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        BloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+    }
+    else
+    {
+        ReflectionCubeMapTexture->RecreateRendererTexture(RenderPassResolution);
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ReflectionCubeMapTexture->View);
     AttachmentList.emplace_back(BloomTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap);
     SetUpCommandBuffers();
 }
 
-void PBRReflectionRenderPass::BuildRenderPass()
+void PBRReflectionRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ReflectionCubeMapTexture->GetAttachmentDescription());
@@ -205,25 +214,6 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedC
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void PBRReflectionRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize)
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    ReflectionCubeMapTexture->RecreateRendererTexture(RenderPassResolution);
-    BloomTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ReflectionCubeMapTexture->View);
-    AttachmentList.emplace_back(BloomTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap);
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer PBRReflectionRenderPass::Draw()

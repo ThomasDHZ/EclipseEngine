@@ -28,11 +28,11 @@
 class Scene
 {
 private:
-	//Renderer2D renderer2D;
-	//BlinnPhongRenderer blinnPhongRenderer;
-//	HybridRenderer hybridRenderer;
+	Renderer2D renderer2D;
+	BlinnPhongRenderer blinnPhongRenderer;
+	HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
-	//RayTraceRenderer rayTraceRenderer;
+	RayTraceRenderer rayTraceRenderer;
 
 public:
 	Scene();
@@ -41,7 +41,7 @@ public:
 	void StartUp();
 	void Update();
 	void ImGuiUpdate();
-	void RebuildRenderers();
+	void BuildRenderers();
 	void Draw();
 	void Destroy();
 };

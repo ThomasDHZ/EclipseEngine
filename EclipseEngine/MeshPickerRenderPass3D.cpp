@@ -9,25 +9,34 @@ MeshPickerRenderPass3D::~MeshPickerRenderPass3D()
 {
 }
 
-void MeshPickerRenderPass3D::StartUp()
+void MeshPickerRenderPass3D::BuildRenderPass()
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
+    if (renderPass == nullptr)
+    {
+        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
+    }
+    else
+    {
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        depthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
     AttachmentList.emplace_back(depthTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void MeshPickerRenderPass3D::BuildRenderPass()
+void MeshPickerRenderPass3D::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
@@ -132,25 +141,6 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void MeshPickerRenderPass3D::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-    depthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(depthTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer MeshPickerRenderPass3D::Draw()

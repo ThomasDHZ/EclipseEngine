@@ -8,18 +8,11 @@ RayTraceRenderer::~RayTraceRenderer()
 {
 }
 
-void RayTraceRenderer::StartUp()
+void RayTraceRenderer::BuildRenderer()
 {
-    meshPickerRenderPass.StartUp();
-    rayTraceRenderPass.StartUp();
-    FrameBufferRenderer.StartUp(rayTraceRenderPass.RayTracedTexture);
-}
-
-void RayTraceRenderer::RebuildSwapChain()
-{
-    meshPickerRenderPass.RebuildSwapChain();
-    rayTraceRenderPass.RebuildSwapChain();
-    FrameBufferRenderer.RebuildSwapChain(rayTraceRenderPass.RayTracedTexture);
+    meshPickerRenderPass.BuildRenderPass();
+    rayTraceRenderPass.BuildRenderPass();
+    FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture);
 }
 
 void RayTraceRenderer::Update()

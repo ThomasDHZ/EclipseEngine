@@ -21,8 +21,7 @@ public:
     RaytraceHybridPass();
     ~RaytraceHybridPass();
 
-    void StartUp();
+    void BuildRenderPass();
     VkCommandBuffer Draw();
-    void RebuildSwapChain();
     void Destroy();
 };

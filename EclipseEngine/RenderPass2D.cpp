@@ -8,25 +8,34 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::StartUp()
+void RenderPass2D::BuildRenderPass()
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
-    depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
+    if (renderPass == nullptr)
+    {
+        renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
+        depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
+    }
+    else
+    {
+        renderedTexture->RecreateRendererTexture(RenderPassResolution);
+        depthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(renderedTexture->View);
     AttachmentList.emplace_back(depthTexture->View);
 
-    CreateRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void RenderPass2D::CreateRenderPass()
+void RenderPass2D::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(renderedTexture->GetAttachmentDescription());
@@ -194,25 +203,6 @@ void RenderPass2D::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void RenderPass2D::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    renderedTexture->RecreateRendererTexture(RenderPassResolution);
-    depthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(renderedTexture->View);
-    AttachmentList.emplace_back(depthTexture->View);
-
-    RenderPass::Destroy();
-
-    CreateRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer RenderPass2D::Draw()

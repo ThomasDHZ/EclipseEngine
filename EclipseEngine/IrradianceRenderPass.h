@@ -8,7 +8,7 @@ class IrradianceRenderPass : public RenderPass
 private:
 	uint32_t CubeMapMipLevels = 0;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap);
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
@@ -21,8 +21,7 @@ public:
 	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
 	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
-	void StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
-	void RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

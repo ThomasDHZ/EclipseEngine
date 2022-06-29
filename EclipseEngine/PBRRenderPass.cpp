@@ -10,16 +10,28 @@ PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
+void PBRRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    if (renderPass == nullptr)
+    {
+        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    }
+    else
+    {
+        ColorTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ColorTexture->View);
@@ -28,13 +40,13 @@ void PBRRenderPass::StartUp(std::shared_ptr<RenderedCubeMapTexture> reflectionIr
     AttachmentList.emplace_back(RenderedBloomTexture->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(reflectionIrradianceTexture, reflectionPrefilterTexture);
     SetUpCommandBuffers();
 }
 
-void PBRRenderPass::BuildRenderPass()
+void PBRRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
@@ -312,31 +324,6 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void PBRRenderPass::RebuildSwapChain(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture)
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    ColorTexture->RecreateRendererTexture(RenderPassResolution);
-    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-    BloomTexture->RecreateRendererTexture(RenderPassResolution);
-    RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
-    DepthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(BloomTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(RenderedBloomTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(reflectionIrradianceTexture, reflectionPrefilterTexture);
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer PBRRenderPass::Draw()

@@ -13,14 +13,14 @@ Scene::Scene()
     SceneManager::sceneType = SceneType::kPBR;
    //SceneManager::LoadScene("../Scenes/example.txt");
 
-    //CubeMapLayout cubeMapfiles;
-    //cubeMapfiles.Left = "../texture/skybox/right.jpg";
-    //cubeMapfiles.Right = "../texture/skybox/left.jpg";
-    //cubeMapfiles.Top = "../texture/skybox/top.jpg";
-    //cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
-    //cubeMapfiles.Front = "../texture/skybox/back.jpg";
-    //cubeMapfiles.Back = "../texture/skybox/front.jpg";
-    //TextureManager::LoadCubeMapTexture(cubeMapfiles);
+    CubeMapLayout cubeMapfiles;
+    cubeMapfiles.Left = "../texture/skybox/right.jpg";
+    cubeMapfiles.Right = "../texture/skybox/left.jpg";
+    cubeMapfiles.Top = "../texture/skybox/top.jpg";
+    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
+    cubeMapfiles.Front = "../texture/skybox/back.jpg";
+    cubeMapfiles.Back = "../texture/skybox/front.jpg";
+    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
@@ -137,30 +137,7 @@ Scene::Scene()
 
     MeshRendererManager::Update();
     ModelManager::Update();
-
-    switch (SceneManager::sceneType)
-    {
-        case SceneType::kSprite2D:
-        {
-            //renderer2D.StartUp();
-            break;
-        }
-        case SceneType::kBlinnPhong: 
-        {
-            //blinnPhongRenderer.StartUp();
-            if (GraphicsDevice::IsRayTracingFeatureActive())
-            {
-               // hybridRenderer.StartUp();
-              // rayTraceRenderer.StartUp();
-            }
-            break;
-        }
-        case SceneType::kPBR:
-        {
-            pbrRenderer.StartUp();
-            break;
-        }
-    }
+    BuildRenderers();
 }
 
 Scene::~Scene()
@@ -175,7 +152,7 @@ void Scene::Update()
 {
     if (VulkanRenderer::UpdateRendererFlag)
     {
-        RebuildRenderers();
+        BuildRenderers();
     }
 
     SceneManager::Update();
@@ -184,7 +161,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-          //  renderer2D.Update();
+            renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -193,20 +170,20 @@ void Scene::Update()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                 //   rayTraceRenderer.Update();
+                    rayTraceRenderer.Update();
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                  //  hybridRenderer.Update();
+                    hybridRenderer.Update();
                 }
                 else
                 {
-                    //blinnPhongRenderer.Update();
+                    blinnPhongRenderer.Update();
                 }
             }
             else
             {
-                //blinnPhongRenderer.Update();
+                blinnPhongRenderer.Update();
             }
             break;
         }
@@ -274,7 +251,7 @@ void Scene::ImGuiUpdate()
     VulkanRenderer::ImGUILayerActive = ImGui::IsAnyItemHovered() || ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
 }
 
-void Scene::RebuildRenderers()
+void Scene::BuildRenderers()
 {
     MeshRendererManager::Update();
 
@@ -282,22 +259,22 @@ void Scene::RebuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-           // renderer2D.RebuildRenderers();
+            renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            //blinnPhongRenderer.RebuildRenderers();
+            blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-               // rayTraceRenderer.RebuildSwapChain();
-               // hybridRenderer.RebuildRenderers();
+                rayTraceRenderer.BuildRenderer();
+                hybridRenderer.BuildRenderer();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.RebuildRenderers();
+            pbrRenderer.BuildRenderer();
             break;
         }
     }
@@ -312,7 +289,7 @@ void Scene::Draw()
     VkResult result = VulkanRenderer::StartDraw();
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
-        RebuildRenderers();
+        BuildRenderers();
         return;
     }
 
@@ -330,20 +307,20 @@ void Scene::Draw()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                  //  rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                   // hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
-                 //   blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-              //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
@@ -360,7 +337,7 @@ void Scene::Draw()
     result = VulkanRenderer::SubmitDraw(CommandBufferSubmitList);
     if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
-        RebuildRenderers();
+        BuildRenderers();
         return;
     }
 }
@@ -378,11 +355,11 @@ void Scene::Destroy()
         }
         case SceneType::kBlinnPhong:
         {
-            //blinnPhongRenderer.Destroy();
+            blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-              //  hybridRenderer.Destroy();
-               // rayTraceRenderer.Destroy();
+                hybridRenderer.Destroy();
+                rayTraceRenderer.Destroy();
             }
             break;
         }

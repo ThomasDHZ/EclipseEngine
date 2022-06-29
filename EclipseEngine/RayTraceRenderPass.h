@@ -21,9 +21,8 @@ public:
     RayTraceRenderPass();
     ~RayTraceRenderPass();
 
-    void StartUp();
+    void BuildRenderPass();
     VkCommandBuffer Draw();
-    void RebuildSwapChain();
     void Destroy();
 };
 

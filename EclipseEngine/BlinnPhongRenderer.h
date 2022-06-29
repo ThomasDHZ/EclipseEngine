@@ -21,9 +21,8 @@ public:
 
 	DepthDebugRenderPass depthDebugRenderPass;
 
-	void StartUp();
+	void BuildRenderer();
 	void Update();
-	void RebuildRenderers();
 	void Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 

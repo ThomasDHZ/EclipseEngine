@@ -34,9 +34,8 @@ public:
 	PBRRenderer();
 	~PBRRenderer();
 
-	void StartUp();
+	void BuildRenderer();
 	void Update();
-	void RebuildRenderers();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 

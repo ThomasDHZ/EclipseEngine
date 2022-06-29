@@ -8,7 +8,51 @@ FrameBufferRenderPass::~FrameBufferRenderPass()
 {
 }
 
-void FrameBufferRenderPass::BuildRenderPass()
+void FrameBufferRenderPass::BuildRendererFramebuffers()
+{
+    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
+
+    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) 
+    {
+        std::vector<VkImageView> AttachmentList;
+        AttachmentList.emplace_back(VulkanRenderer::GetSwapChainImageViews()[x]);
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
+        framebufferInfo.pAttachments = AttachmentList.data();
+        framebufferInfo.width = RenderPassResolution.x;
+        framebufferInfo.height = RenderPassResolution.y;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create framebuffer!");
+        }
+    }
+
+
+}
+
+void FrameBufferRenderPass::BuildRenderPass(std::shared_ptr<RenderedColorTexture> renderedTexture)
+{
+    RenderedTexture = renderedTexture;
+
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    if (renderPass != nullptr)
+    {
+        RenderPass::Destroy();
+    }
+
+    RenderPassDesc();
+    BuildRendererFramebuffers();
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+}
+
+void FrameBufferRenderPass::RenderPassDesc()
 {
     VkAttachmentDescription colorAttachment{};
     colorAttachment.format = VK_FORMAT_B8G8R8A8_UNORM;
@@ -50,32 +94,6 @@ void FrameBufferRenderPass::BuildRenderPass()
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
     }
-}
-
-void FrameBufferRenderPass::BuildRendererFramebuffers()
-{
-    RenderPassFramebuffer.resize(VulkanRenderer::GetSwapChainImageCount());
-
-    for (size_t x = 0; x < VulkanRenderer::GetSwapChainImageCount(); x++) 
-    {
-        std::vector<VkImageView> AttachmentList;
-        AttachmentList.emplace_back(VulkanRenderer::GetSwapChainImageViews()[x]);
-
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass;
-        framebufferInfo.attachmentCount = static_cast<uint32_t>(AttachmentList.size());
-        framebufferInfo.pAttachments = AttachmentList.data();
-        framebufferInfo.width = RenderPassResolution.x;
-        framebufferInfo.height = RenderPassResolution.y;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(VulkanRenderer::GetDevice(), &framebufferInfo, nullptr, &RenderPassFramebuffer[x]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create framebuffer!");
-        }
-    }
-
-
 }
 
 void FrameBufferRenderPass::BuildRenderPassPipelines()
@@ -121,43 +139,6 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void FrameBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> renderedTexture)
-{
-    RenderedTexture = renderedTexture;
-
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    BuildRenderPass();
-    BuildRendererFramebuffers();
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-}
-
-void FrameBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> renderedTexture)
-{
-    RenderedTexture = renderedTexture;
-
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    vkDestroyRenderPass(VulkanRenderer::GetDevice(), renderPass, nullptr);
-    renderPass = VK_NULL_HANDLE;
-
-    for (auto& framebuffer : RenderPassFramebuffer)
-    {
-        vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
-        framebuffer = VK_NULL_HANDLE;
-    }
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    BuildRendererFramebuffers();
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer FrameBufferRenderPass::Draw()

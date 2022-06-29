@@ -17,8 +17,7 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void StartUp(std::shared_ptr<RenderedDepthTexture> depthTexture);
-	void RebuildSwapChain(std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPass(std::shared_ptr<RenderedDepthTexture> depthTexture);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

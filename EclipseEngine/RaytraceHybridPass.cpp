@@ -10,13 +10,21 @@ RaytraceHybridPass::~RaytraceHybridPass()
 {
 }
 
-void RaytraceHybridPass::StartUp()
+void RaytraceHybridPass::BuildRenderPass()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    RenderedShadowTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
+    if (renderPass == nullptr)
+    {
+        RenderedShadowTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
 
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
+        BuildRenderPassPipelines();
+        SetUpCommandBuffers();
+    }
+    else
+    {
+        RenderedShadowTexture->RecreateRendererTexture(RenderPassResolution);
+        BuildRenderPassPipelines();
+    }
 }
 
 void RaytraceHybridPass::SetUpCommandBuffers()
@@ -172,14 +180,6 @@ VkCommandBuffer RaytraceHybridPass::Draw()
     vkEndCommandBuffer(RayTraceCommandBuffer);
 
     return RayTraceCommandBuffer;
-}
-
-void RaytraceHybridPass::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    RenderedShadowTexture->RecreateRendererTexture(RenderPassResolution);
-    BuildRenderPassPipelines();
 }
 
 void RaytraceHybridPass::Destroy()

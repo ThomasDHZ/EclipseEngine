@@ -8,11 +8,11 @@ Renderer2D::~Renderer2D()
 {
 }
 
-void Renderer2D::StartUp()
+void Renderer2D::BuildRenderer()
 {
-	meshPickerRenderPass.StartUp();
-	renderPass2D.StartUp();
-	frameBufferRenderPass.StartUp(renderPass2D.renderedTexture);
+	meshPickerRenderPass.BuildRenderPass();
+	renderPass2D.BuildRenderPass();
+	frameBufferRenderPass.BuildRenderPass(renderPass2D.renderedTexture);
 }
 
 void Renderer2D::Update()
@@ -24,13 +24,6 @@ void Renderer2D::Update()
 		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
 		meshPickerRenderPass.ReadPixel(mouseCoord);
 	}
-}
-
-void Renderer2D::RebuildRenderers()
-{
-	meshPickerRenderPass.RebuildSwapChain();
-	renderPass2D.RebuildSwapChain();
-	frameBufferRenderPass.RebuildSwapChain(renderPass2D.renderedTexture);
 }
 
 void Renderer2D::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)

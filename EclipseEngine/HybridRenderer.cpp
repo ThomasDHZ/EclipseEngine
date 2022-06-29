@@ -8,12 +8,12 @@ HybridRenderer::~HybridRenderer()
 {
 }
 
-void HybridRenderer::StartUp()
+void HybridRenderer::BuildRenderer()
 {
-	raytraceHybridPass.StartUp();
-	meshPickerRenderPass.StartUp();
-	GBufferRenderPass.StartUp(raytraceHybridPass.RenderedShadowTexture);
-	deferredRenderPass.StartUp(GBufferRenderPass.PositionTexture,
+	raytraceHybridPass.BuildRenderPass();
+	meshPickerRenderPass.BuildRenderPass();
+	GBufferRenderPass.BuildRenderPass(raytraceHybridPass.RenderedShadowTexture);
+	deferredRenderPass.BuildRenderPass(GBufferRenderPass.PositionTexture,
 								GBufferRenderPass.TangentTexture,
 								GBufferRenderPass.BiTangentTexture,
 								GBufferRenderPass.TBNormalTexture,
@@ -22,7 +22,7 @@ void HybridRenderer::StartUp()
 								GBufferRenderPass.SpecularTexture,
 								GBufferRenderPass.BloomTexture,
 								raytraceHybridPass.RenderedShadowTexture);
-	frameBufferRenderPass.StartUp(deferredRenderPass.RenderedTexture);
+	frameBufferRenderPass.BuildRenderPass(deferredRenderPass.RenderedTexture);
 }
 
 void HybridRenderer::Update()
@@ -36,23 +36,6 @@ void HybridRenderer::Update()
 
 		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
 	}
-}
-
-void HybridRenderer::RebuildRenderers()
-{
-	raytraceHybridPass.RebuildSwapChain();
-	meshPickerRenderPass.RebuildSwapChain();
-	GBufferRenderPass.RebuildSwapChain(raytraceHybridPass.RenderedShadowTexture);
-	deferredRenderPass.RebuildSwapChain(GBufferRenderPass.PositionTexture,
-										GBufferRenderPass.TangentTexture,
-										GBufferRenderPass.BiTangentTexture,
-										GBufferRenderPass.TBNormalTexture,
-										GBufferRenderPass.NormalTexture,
-										GBufferRenderPass.AlbedoTexture,
-										GBufferRenderPass.SpecularTexture,
-										GBufferRenderPass.BloomTexture,
-										raytraceHybridPass.RenderedShadowTexture);
-	frameBufferRenderPass.RebuildSwapChain(deferredRenderPass.RenderedTexture);
 }
 
 void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)

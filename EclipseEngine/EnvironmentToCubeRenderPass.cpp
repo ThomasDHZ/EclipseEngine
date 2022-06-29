@@ -8,23 +8,31 @@ EnvironmentToCubeRenderPass::~EnvironmentToCubeRenderPass()
 {
 }
 
-void EnvironmentToCubeRenderPass::StartUp(uint32_t cubeMapSize)
+void EnvironmentToCubeRenderPass::BuildRenderPass(uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    SceneManager::CubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+    if (renderPass == nullptr)
+    {
+        SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        SceneManager::CubeMap->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(SceneManager::CubeMap->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();
 }
 
-void EnvironmentToCubeRenderPass::BuildRenderPass()
+void EnvironmentToCubeRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(SceneManager::CubeMap->GetAttachmentDescription());
@@ -139,27 +147,6 @@ void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void EnvironmentToCubeRenderPass::RebuildSwapChain(uint32_t cubeMapSize)
-{
-    SceneManager::CubeMap->Destroy();
-    EnvironmentToCubeRenderPassPipeline->Destroy();
-
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
-    SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    SceneManager::CubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(SceneManager::CubeMap->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-    Draw();
 }
 
 void EnvironmentToCubeRenderPass::Draw()

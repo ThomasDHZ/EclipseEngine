@@ -10,23 +10,31 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthRenderPass::StartUp()
+void DepthRenderPass::BuildRenderPass()
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    if (renderPass == nullptr)
+    {
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    }
+    else
+    {
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(DepthTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
-void DepthRenderPass::BuildRenderPass()
+void DepthRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
@@ -128,22 +136,6 @@ void DepthRenderPass::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void DepthRenderPass::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    DepthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer DepthRenderPass::Draw()

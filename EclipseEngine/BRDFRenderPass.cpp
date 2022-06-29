@@ -8,22 +8,30 @@ BRDFRenderPass::~BRDFRenderPass()
 {
 }
 
-void BRDFRenderPass::StartUp(uint32_t textureSize)
+void BRDFRenderPass::BuildRenderPass(uint32_t textureSize)
 {
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    if (renderPass == nullptr)
+    {
+        SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        SceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     Draw();
 }
 
-void BRDFRenderPass::BuildRenderPass()
+void BRDFRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
@@ -123,23 +131,6 @@ void BRDFRenderPass::BuildRenderPassPipelines()
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void BRDFRenderPass::RebuildSwapChain(uint32_t textureSize)
-{
-    RenderPassResolution = glm::ivec2(textureSize, textureSize);
-    SceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-    Draw();
 }
 
 void BRDFRenderPass::Draw()

@@ -8,7 +8,7 @@ DeferredRenderPass::~DeferredRenderPass()
 {
 }
 
-void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionTexture,
+void DeferredRenderPass::BuildRenderPass(std::shared_ptr<RenderedColorTexture> PositionTexture,
     std::shared_ptr<RenderedColorTexture> TangentTexture,
     std::shared_ptr<RenderedColorTexture> BiTangentTexture,
     std::shared_ptr<RenderedColorTexture> TBNormalTexture,
@@ -21,20 +21,29 @@ void DeferredRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> PositionT
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    if (renderPass == nullptr)
+    {
+        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        ColorTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ColorTexture->View);
     AttachmentList.emplace_back(RenderedTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(PositionTexture, TangentTexture, BiTangentTexture, TBNormalTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
     SetUpCommandBuffers();
 }
 
-void DeferredRenderPass::BuildRenderPass()
+void DeferredRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
@@ -174,33 +183,6 @@ void DeferredRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorT
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void DeferredRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> PositionTexture,
-    std::shared_ptr<RenderedColorTexture> TangentTexture,
-    std::shared_ptr<RenderedColorTexture> BiTangentTexture,
-    std::shared_ptr<RenderedColorTexture> TBNormalTexture,
-    std::shared_ptr<RenderedColorTexture> NormalTexture,
-    std::shared_ptr<RenderedColorTexture> AlbedoTexture,
-    std::shared_ptr<RenderedColorTexture> SpecularTexture,
-    std::shared_ptr<RenderedColorTexture> BloomTexture,
-    std::shared_ptr<RenderedColorTexture> ShadowTexture)
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    ColorTexture->RecreateRendererTexture(RenderPassResolution);
-    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(PositionTexture, TangentTexture, BiTangentTexture, TBNormalTexture, NormalTexture, AlbedoTexture, SpecularTexture, BloomTexture, ShadowTexture);
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer DeferredRenderPass::Draw()

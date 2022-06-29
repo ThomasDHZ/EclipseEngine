@@ -9,7 +9,7 @@ private:
 	std::shared_ptr<GraphicsPipeline> frameBufferPipeline;
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRendererFramebuffers();
 	void BuildRenderPassPipelines();
 
@@ -17,9 +17,7 @@ public:
 	FrameBufferRenderPass();
 	~FrameBufferRenderPass();
 
-	void StartUp(std::shared_ptr<RenderedColorTexture> RenderedTexture);
-	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> RenderedTexture);
-
+	void BuildRenderPass(std::shared_ptr<RenderedColorTexture> RenderedTexture);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

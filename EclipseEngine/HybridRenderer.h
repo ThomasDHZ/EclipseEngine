@@ -20,9 +20,8 @@ public:
 	GBufferRenderPass GBufferRenderPass;
 	DeferredRenderPass deferredRenderPass;
 
-	void StartUp();
+	void BuildRenderer();
 	void Update();
-	void RebuildRenderers();
 	void Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 

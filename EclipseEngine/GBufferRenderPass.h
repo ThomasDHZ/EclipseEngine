@@ -17,7 +17,7 @@ private:
 
 	std::shared_ptr<GraphicsPipeline> hybridPipeline;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 public:
@@ -34,7 +34,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void StartUp(std::shared_ptr<RenderedColorTexture> shadowMap);
+	void BuildRenderPass(std::shared_ptr<RenderedColorTexture> shadowMap);
 	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap);
 
 	VkCommandBuffer Draw();

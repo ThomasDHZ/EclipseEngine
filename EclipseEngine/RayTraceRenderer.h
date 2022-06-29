@@ -14,8 +14,7 @@ public:
 	~RayTraceRenderer();
 	RayTraceRenderPass rayTraceRenderPass;
 
-	void StartUp();
-	void RebuildSwapChain();
+	void BuildRenderer();
 	void Update();
 	void GUIUpdate();
 	void Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList);

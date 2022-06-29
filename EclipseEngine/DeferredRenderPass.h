@@ -14,7 +14,7 @@ private:
 
 	std::shared_ptr<GraphicsPipeline> DeferredPipeline;
 
-	void BuildRenderPass();
+	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> PositionTexture,
 		std::shared_ptr<RenderedColorTexture> TangentTexture,
 		std::shared_ptr<RenderedColorTexture> BiTangentTexture,
@@ -31,16 +31,7 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void StartUp(std::shared_ptr<RenderedColorTexture> PositionTexture,
-		std::shared_ptr<RenderedColorTexture> TangentTexture,
-		std::shared_ptr<RenderedColorTexture> BiTangentTexture,
-		std::shared_ptr<RenderedColorTexture> TBNormalTexture,
-		std::shared_ptr<RenderedColorTexture> NormalTexture,
-		std::shared_ptr<RenderedColorTexture> AlbedoTexture,
-		std::shared_ptr<RenderedColorTexture> SpecularTexture,
-		std::shared_ptr<RenderedColorTexture> BloomTexture,
-		std::shared_ptr<RenderedColorTexture> ShadowTexture);
-	void RebuildSwapChain(std::shared_ptr<RenderedColorTexture> PositionTexture,
+	void BuildRenderPass(std::shared_ptr<RenderedColorTexture> PositionTexture,
 		std::shared_ptr<RenderedColorTexture> TangentTexture,
 		std::shared_ptr<RenderedColorTexture> BiTangentTexture,
 		std::shared_ptr<RenderedColorTexture> TBNormalTexture,

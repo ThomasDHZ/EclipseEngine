@@ -10,10 +10,19 @@ RayTraceRenderPass::~RayTraceRenderPass()
 {
 }
 
-void RayTraceRenderPass::StartUp()
+void RayTraceRenderPass::BuildRenderPass()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
+
+    if (renderPass == nullptr)
+    {
+        RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
+    }
+    else
+    {
+        RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
@@ -171,14 +180,6 @@ VkCommandBuffer RayTraceRenderPass::Draw()
 
     vkEndCommandBuffer(RayTraceCommandBuffer);
     return RayTraceCommandBuffer;
-}
-
-void RayTraceRenderPass::RebuildSwapChain()
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
-    BuildRenderPassPipelines();
 }
 
 void RayTraceRenderPass::Destroy()

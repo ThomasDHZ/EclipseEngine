@@ -8,20 +8,36 @@ GBufferRenderPass::~GBufferRenderPass()
 {
 }
 
-void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
+void GBufferRenderPass::BuildRenderPass(std::shared_ptr<RenderedColorTexture> shadowMap)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
 
-    PositionTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    TangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    BiTangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    TBNormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    NormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-    AlbedoTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    SpecularTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    if (renderPass == nullptr)
+    {
+        PositionTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        TangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        BiTangentTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        TBNormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        NormalTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        AlbedoTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        SpecularTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        PositionTexture->RecreateRendererTexture(RenderPassResolution);
+        TangentTexture->RecreateRendererTexture(RenderPassResolution);
+        BiTangentTexture->RecreateRendererTexture(RenderPassResolution);
+        TBNormalTexture->RecreateRendererTexture(RenderPassResolution);
+        NormalTexture->RecreateRendererTexture(RenderPassResolution);
+        AlbedoTexture->RecreateRendererTexture(RenderPassResolution);
+        SpecularTexture->RecreateRendererTexture(RenderPassResolution);
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(PositionTexture->View);
@@ -34,13 +50,13 @@ void GBufferRenderPass::StartUp(std::shared_ptr<RenderedColorTexture> shadowMap)
     AttachmentList.emplace_back(BloomTexture->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
-    BuildRenderPass();
+    RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(shadowMap);
     SetUpCommandBuffers();
 }
 
-void GBufferRenderPass::BuildRenderPass()
+void GBufferRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(PositionTexture->GetAttachmentDescription());
@@ -173,39 +189,6 @@ void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTe
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-}
-
-void GBufferRenderPass::RebuildSwapChain(std::shared_ptr<RenderedColorTexture> shadowMap)
-{
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    PositionTexture->RecreateRendererTexture(RenderPassResolution);
-    TangentTexture->RecreateRendererTexture(RenderPassResolution);
-    BiTangentTexture->RecreateRendererTexture(RenderPassResolution);
-    TBNormalTexture->RecreateRendererTexture(RenderPassResolution);
-    NormalTexture->RecreateRendererTexture(RenderPassResolution);
-    AlbedoTexture->RecreateRendererTexture(RenderPassResolution);
-    SpecularTexture->RecreateRendererTexture(RenderPassResolution);
-    BloomTexture->RecreateRendererTexture(RenderPassResolution);
-    DepthTexture->RecreateRendererTexture(RenderPassResolution);
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(PositionTexture->View);
-    AttachmentList.emplace_back(TangentTexture->View);
-    AttachmentList.emplace_back(BiTangentTexture->View);
-    AttachmentList.emplace_back(TBNormalTexture->View);
-    AttachmentList.emplace_back(NormalTexture->View);
-    AttachmentList.emplace_back(AlbedoTexture->View);
-    AttachmentList.emplace_back(SpecularTexture->View);
-    AttachmentList.emplace_back(BloomTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPass::Destroy();
-
-    BuildRenderPass();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(shadowMap);
-    SetUpCommandBuffers();
 }
 
 VkCommandBuffer GBufferRenderPass::Draw()
