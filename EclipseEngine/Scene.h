@@ -24,6 +24,8 @@
 #include "LightManager.h"
 #include "HybridRenderer.h"
 #include "PBRRenderer.h"
+#include "SoundBuffer.h"
+#include "SoundSource.h"
 
 class Scene
 {

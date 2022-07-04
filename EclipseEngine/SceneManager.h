@@ -15,6 +15,7 @@
 #include "MaterialManager.h"
 #include "ModelManager.h"
 #include "ComponentRenderer.h"
+#include "MusicPlayer.h"
 
 enum SceneType
 {
@@ -42,8 +43,13 @@ public:
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 
+	static MusicPlayer musicPlayer;
+
 	static void StartUp()
 	{
+		musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
+		musicPlayer.Play();
+
 		SkyboxMesh = std::make_shared<Skybox>();
 		SkyboxMesh->StartUp();
 	}
@@ -57,6 +63,7 @@ public:
 		LightManager::Update();
 
 		activeCamera->Update(time);
+		musicPlayer.UpdateBufferStream();
 
 		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
 		sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();

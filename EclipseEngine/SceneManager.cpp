@@ -9,3 +9,4 @@ std::shared_ptr<RenderedCubeMapTexture> SceneManager::CubeMap = nullptr;
 ConstSkyBoxView							SceneManager::cubeMapInfo;
 SceneProperties							SceneManager::sceneProperites;
 std::shared_ptr<Camera>					SceneManager::activeCamera;
+MusicPlayer								SceneManager::musicPlayer;

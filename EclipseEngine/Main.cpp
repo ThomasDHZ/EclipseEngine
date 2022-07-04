@@ -10,7 +10,8 @@
 #include "InterfaceRenderPass.h"
 #include "MaterialManager.h"
 #include "LightManager.h"
-#include "OpenAL/Include/al.h"
+#include "SoundDevice.h"
+#include "SoundBuffer.h"
 
 VkRenderPass InterfaceRenderPass::RenderPass = VK_NULL_HANDLE;
 VkDescriptorPool InterfaceRenderPass::ImGuiDescriptorPool = VK_NULL_HANDLE;
@@ -22,6 +23,8 @@ std::vector<VkCommandBuffer> InterfaceRenderPass::ImGuiCommandBuffers;
 int main()
 {
     Window::CreateWindow(1280, 720, "Eclipse Engine");
+    SoundDevice::StartUp();
+    SoundBuffer::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
     TextureManager::StartUp();
@@ -60,6 +63,8 @@ int main()
     TextureManager::Destroy();
     InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
+    SoundBuffer::Destroy();
+    SoundDevice::Destroy();
     Window::Destroy();
 }
 

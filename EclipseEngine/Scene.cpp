@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "EnvironmentTexture.h"
+#include "MusicPlayer.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
@@ -30,6 +31,10 @@ Scene::Scene()
    // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
+
+    auto sound = SoundBuffer::AddSoundEffect("../Sound/spell.ogg");
+    SoundSource source;
+    source.Play(sound);
 
     {
 
