@@ -10,7 +10,7 @@ Renderer2D::~Renderer2D()
 
 void Renderer2D::BuildRenderer()
 {
-	meshPickerRenderPass.BuildRenderPass();
+	//meshPickerRenderPass.BuildRenderPass();
 	renderPass2D.BuildRenderPass();
 	frameBufferRenderPass.BuildRenderPass(renderPass2D.renderedTexture);
 }
@@ -28,10 +28,10 @@ void Renderer2D::Update()
 
 void Renderer2D::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
-	{
-		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
-	}
+	//if (VulkanRenderer::EditorModeFlag)
+	//{
+	//	CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
+	//}
 
 	CommandBufferSubmitList.emplace_back(renderPass2D.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
@@ -39,7 +39,7 @@ void Renderer2D::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuf
 
 void Renderer2D::Destroy()
 {
-	meshPickerRenderPass.Destroy();
+	//meshPickerRenderPass.Destroy();
 	renderPass2D.Destroy();
 	frameBufferRenderPass.Destroy();
 }

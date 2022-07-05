@@ -12,9 +12,45 @@ Scene::Scene()
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
     SceneManager::sceneType = SceneType::kSprite2D;
+
+    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
+    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
+    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+    MaterialManager::AddMaterial(material);
+
+
+    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
+    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
+    MaterialManager::AddMaterial(material2);
+
+    std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
+    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b = static_cast<SpriteRenderer*>(a.get());
+    b->GetModel()->GetMeshList()[0]->SetMaterial(material2);
+     GameObjectManager::AddGameObject(obj);
+ 
+    std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b2 = static_cast<SpriteRenderer*>(a2.get());
+    b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    GameObjectManager::AddGameObject(obj2);
+    obj2->SetPosition(-10.0f, 0.0f);
+
+    std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(1.0f), 0));
+    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b3 = static_cast<SpriteRenderer*>(a3.get());
+    b3->GetModel()->GetMeshList()[0]->SetMaterial(material2);
+    GameObjectManager::AddGameObject(obj3);
+
+    std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+    auto b4 = static_cast<SpriteRenderer*>(a4.get());
+    b4->GetModel()->GetMeshList()[0]->SetMaterial(material);
+    GameObjectManager::AddGameObject(obj4);
+
 //   SceneManager::LoadScene("../Scenes/example.txt");
 
-    /*CubeMapLayout cubeMapfiles;
+    CubeMapLayout cubeMapfiles;
     cubeMapfiles.Left = "../texture/skybox/right.jpg";
     cubeMapfiles.Right = "../texture/skybox/left.jpg";
     cubeMapfiles.Top = "../texture/skybox/top.jpg";
@@ -23,20 +59,20 @@ Scene::Scene()
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);*/
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
     //GameObjectManager::AddGameObject(obj);
-   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
-   // std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
-  //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
+    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
 
-   /* auto sound = SoundEffectManager::AddSoundEffect("../Sound/spell.ogg");
-    SoundSource source;
-    source.Play(sound);
+    //auto sound = SoundEffectManager::AddSoundEffect("../Sound/spell.ogg");
+    //SoundSource source;
+    //source.Play(sound);
 
-    {
+  /*  {
 
         std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
         IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
@@ -78,31 +114,31 @@ Scene::Scene()
         GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
         MaterialManager::AddMaterial(GrassMaterial);
 
-        std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        std::shared_ptr<GameObject3D> obj = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
         auto b = static_cast<MeshRenderer*>(a.get());
         b->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         GameObjectManager::AddGameObject(obj);
 
-        std::shared_ptr<GameObject> obj2 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        std::shared_ptr<GameObject3D> obj2 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
         auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
         auto b2 = static_cast<MeshRenderer*>(a2.get());
         b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         GameObjectManager::AddGameObject(obj2);
 
-        std::shared_ptr<GameObject> obj3 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
+        std::shared_ptr<GameObject3D> obj3 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
         auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
         auto b3 = static_cast<MeshRenderer*>(a3.get());
         b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
         GameObjectManager::AddGameObject(obj3);
 
-        std::shared_ptr<GameObject> obj4 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        std::shared_ptr<GameObject3D> obj4 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
         auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
         auto b4 = static_cast<MeshRenderer*>(a4.get());
         b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         GameObjectManager::AddGameObject(obj4);
 
-        std::shared_ptr<GameObject> obj5 = std::make_shared<GameObject>(GameObject("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
         auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
         auto b5 = static_cast<MeshRenderer*>(a2.get());
         b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
@@ -303,7 +339,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-           // renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+           renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -356,7 +392,7 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-         //   renderer2D.Destroy();
+            renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:

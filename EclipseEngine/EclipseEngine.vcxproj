@@ -163,6 +163,8 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
+    <ClCompile Include="GameObject2D.cpp" />
+    <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
@@ -245,6 +247,8 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="EnvironmentTexture.h" />
+    <ClInclude Include="GameObject2D.h" />
+    <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />

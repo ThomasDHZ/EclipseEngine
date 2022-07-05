@@ -8,6 +8,7 @@ class GameObject
 private:
 	static uint64_t GameObjectIDCounter;
 
+protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
 	std::vector<std::shared_ptr<Component>> ComponentList;
@@ -18,25 +19,11 @@ public:
 	GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a);
 	GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a);
 	GameObject(const std::string Name);
-	GameObject(const std::string Name, glm::vec2 position, uint32_t zIndex);
-	GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t zIndex);
-	GameObject(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t zIndex);
-	GameObject(const std::string Name, glm::vec3 position);
-	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation);
-	GameObject(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-	GameObject(const std::string Name, const std::string filePath);
-	GameObject(const std::string Name, const std::string filePath, glm::vec3 position);
-	GameObject(const std::string Name, const std::string filePath, glm::vec3 position, glm::vec3 rotation);
-	GameObject(const std::string Name, const std::string filePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 
 	virtual void Update(float DeltaTime);
 	void Destroy();
-
-	void AddMesh(std::shared_ptr<Mesh> mesh);
-	void RemoveMesh(std::shared_ptr<Mesh> mesh);
-	void TransferMesh(GameObject ToGameObject, std::shared_ptr<Mesh> mesh);
 
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
