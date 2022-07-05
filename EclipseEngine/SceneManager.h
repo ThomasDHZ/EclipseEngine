@@ -81,6 +81,7 @@ public:
 	static void Destory()
 	{
 		SkyboxMesh->Destroy();
+		musicPlayer.Destroy();
 
 		if (environmentTexture != nullptr)
 		{
@@ -98,6 +99,23 @@ public:
 
 	static void ImGuiSceneHierarchy()
 	{
+		ImGui::Begin("Sound Window");
+		if (ImGui::Button("Play"))
+		{
+			musicPlayer.Play();
+		}
+
+		if (ImGui::Button("Pause"))
+		{
+			musicPlayer.Pause();
+		}
+
+		if (ImGui::Button("Stop"))
+		{
+			musicPlayer.Stop();
+		}
+		ImGui::End();
+
 		//ImGui::Begin("Scene");
 	
 		//for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)

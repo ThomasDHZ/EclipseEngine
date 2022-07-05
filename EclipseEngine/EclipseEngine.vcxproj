@@ -220,7 +220,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="SoundBuffer.cpp" />
+    <ClCompile Include="SoundEffectManager.cpp" />
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
@@ -311,7 +311,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Skybox.h" />
-    <ClInclude Include="SoundBuffer.h" />
+    <ClInclude Include="SoundEffectManager.h" />
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpotLight.h" />

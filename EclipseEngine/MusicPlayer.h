@@ -24,6 +24,8 @@ public:
 
 	void StartUp(const char* filename);
 	void Play();
+	void Pause();
+	void Stop();
 	void UpdateBufferStream();
 	void Destroy();
 };

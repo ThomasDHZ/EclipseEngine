@@ -11,10 +11,10 @@ Scene::Scene()
     //camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
-    SceneManager::sceneType = SceneType::kPBR;
-   //SceneManager::LoadScene("../Scenes/example.txt");
+    SceneManager::sceneType = SceneType::kSprite2D;
+//   SceneManager::LoadScene("../Scenes/example.txt");
 
-    CubeMapLayout cubeMapfiles;
+    /*CubeMapLayout cubeMapfiles;
     cubeMapfiles.Left = "../texture/skybox/right.jpg";
     cubeMapfiles.Right = "../texture/skybox/left.jpg";
     cubeMapfiles.Top = "../texture/skybox/top.jpg";
@@ -23,7 +23,7 @@ Scene::Scene()
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     TextureManager::LoadCubeMapTexture(cubeMapfiles);
 
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);*/
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
     //GameObjectManager::AddGameObject(obj);
@@ -32,7 +32,7 @@ Scene::Scene()
   //  std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
 
-    auto sound = SoundBuffer::AddSoundEffect("../Sound/spell.ogg");
+   /* auto sound = SoundEffectManager::AddSoundEffect("../Sound/spell.ogg");
     SoundSource source;
     source.Play(sound);
 
@@ -138,7 +138,7 @@ Scene::Scene()
     LightManager::AddPointLight(plight);
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight4);*/
 
     MeshRendererManager::Update();
     ModelManager::Update();
@@ -223,6 +223,7 @@ void Scene::ImGuiUpdate()
     //    }
     //}
     //ImGui::End();
+
 
     ImGui::Begin("File Window");
     if (ImGui::Button("Save"))

@@ -6,15 +6,15 @@
 #include <vector>
 #include <sndfile.h>
 
-class SoundBuffer
+class SoundEffectManager
 {
 private:
 	static std::vector<ALuint> SoundEffectBufferList;
 
 public:
 
-	SoundBuffer();
-	~SoundBuffer();
+	SoundEffectManager();
+	~SoundEffectManager();
 
 	static ALuint AddSoundEffect(const char* filename);
 	static bool RemoveSoundEffect(const ALuint& buffer);

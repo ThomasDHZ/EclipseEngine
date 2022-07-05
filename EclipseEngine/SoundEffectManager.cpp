@@ -1,16 +1,16 @@
-#include "SoundBuffer.h"
+#include "SoundEffectManager.h"
 
-std::vector<ALuint> SoundBuffer::SoundEffectBufferList;
+std::vector<ALuint> SoundEffectManager::SoundEffectBufferList;
 
-SoundBuffer::SoundBuffer()
+SoundEffectManager::SoundEffectManager()
 {
 }
 
-SoundBuffer::~SoundBuffer()
+SoundEffectManager::~SoundEffectManager()
 {
 }
 
-ALuint SoundBuffer::AddSoundEffect(const char* filename)
+ALuint SoundEffectManager::AddSoundEffect(const char* filename)
 {
 	SNDFILE* SoundFile = nullptr;
 	SF_INFO SoundFileInfo = {};
@@ -97,7 +97,7 @@ ALuint SoundBuffer::AddSoundEffect(const char* filename)
 	return Buffer;
 }
 
-bool SoundBuffer::RemoveSoundEffect(const ALuint& buffer)
+bool SoundEffectManager::RemoveSoundEffect(const ALuint& buffer)
 {
 	for (int x = 0; x < SoundEffectBufferList.size(); x++)
 	{
@@ -111,13 +111,13 @@ bool SoundBuffer::RemoveSoundEffect(const ALuint& buffer)
 	return false;
 }
 
-void SoundBuffer::StartUp()
+void SoundEffectManager::StartUp()
 {
 	alDeleteBuffers(SoundEffectBufferList.size(), SoundEffectBufferList.data());
 	SoundEffectBufferList.clear();
 }
 
-void SoundBuffer::Destroy()
+void SoundEffectManager::Destroy()
 {
 	alDeleteBuffers(SoundEffectBufferList.size(), SoundEffectBufferList.data());
 	SoundEffectBufferList.clear();

@@ -60,11 +60,7 @@ void MusicPlayer::StartUp(const char* filename)
 
 	frame_size = ((size_t)BufferSamples * (size_t)SoundFileInfo.channels) * sizeof(short);
 	MemoryBuffer = static_cast<short*>(malloc(frame_size));
-}
 
-void MusicPlayer::Play()
-{
-	alGetError();
 	alSourceRewind(Source);
 	alSourcei(Source, AL_BUFFER, 0);
 
@@ -88,11 +84,25 @@ void MusicPlayer::Play()
 	}
 
 	alSourceQueueBuffers(Source, x, SoundBuffers);
+}
+
+void MusicPlayer::Play()
+{
 	alSourcePlay(Source);
 	if (alGetError() != AL_NO_ERROR)
 	{
 		std::cout << "Couldn't start playback." << std::endl;
 	}
+}
+
+void MusicPlayer::Pause()
+{
+	alSourcePause(Source);
+}
+
+void MusicPlayer::Stop()
+{
+	alSourceStop(Source);
 }
 
 void MusicPlayer::UpdateBufferStream()
@@ -102,6 +112,12 @@ void MusicPlayer::UpdateBufferStream()
 
 	alGetError();
 	alGetSourcei(Source, AL_SOURCE_STATE, &state);
+	if (state == AL_STOPPED || 
+		state == AL_PAUSED)
+	{
+		return;
+	}
+
 	alGetSourcei(Source, AL_BUFFERS_PROCESSED, &processed);
 	if (alGetError() != AL_NO_ERROR)
 	{
@@ -129,7 +145,8 @@ void MusicPlayer::UpdateBufferStream()
 		}
 	}
 
-	if (state != AL_PLAYING && state != AL_PAUSED)
+	if (state != AL_PLAYING && 
+		state != AL_PAUSED)
 	{
 		ALint queued;
 		alGetSourcei(Source, AL_BUFFERS_QUEUED, &queued);

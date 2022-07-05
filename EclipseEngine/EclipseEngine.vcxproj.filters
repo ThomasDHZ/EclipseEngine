@@ -333,14 +333,14 @@
     <ClCompile Include="VulkanSwapChain.cpp">
       <Filter>Source Files\Engine\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="SoundBuffer.cpp">
-      <Filter>Source Files\Engine\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="SoundSource.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="MusicPlayer.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEffectManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -611,14 +611,14 @@
     <ClInclude Include="VulkanRenderer.h">
       <Filter>Header Files\Engine\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="SoundBuffer.h">
-      <Filter>Header Files\Engine\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="SoundSource.h">
       <Filter>Header Files\Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="MusicPlayer.h">
       <Filter>Header Files\Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEffectManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@
 #include "MaterialManager.h"
 #include "LightManager.h"
 #include "SoundDevice.h"
-#include "SoundBuffer.h"
+#include "SoundEffectManager.h"
 
 VkRenderPass InterfaceRenderPass::RenderPass = VK_NULL_HANDLE;
 VkDescriptorPool InterfaceRenderPass::ImGuiDescriptorPool = VK_NULL_HANDLE;
@@ -24,7 +24,7 @@ int main()
 {
     Window::CreateWindow(1280, 720, "Eclipse Engine");
     SoundDevice::StartUp();
-    SoundBuffer::StartUp();
+    SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
     TextureManager::StartUp();
@@ -63,7 +63,7 @@ int main()
     TextureManager::Destroy();
     InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
-    SoundBuffer::Destroy();
+    SoundEffectManager::Destroy();
     SoundDevice::Destroy();
     Window::Destroy();
 }
