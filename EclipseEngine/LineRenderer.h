@@ -1,7 +1,8 @@
 #pragma once
-#include "ComponentRenderer.h"
+#include "Component.h"
+#include "Mesh.h"
 
-class LineRenderer : public ComponentRenderer
+class LineRenderer : public Component
 {
 private:
 public:
@@ -22,7 +23,7 @@ public:
 
 	virtual void to_json(nlohmann::json& json) override
 	{
-		ComponentRenderer::to_json(json);
+		//ComponentRenderer::to_json(json);
 	}
 
 };

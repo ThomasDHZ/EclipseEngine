@@ -178,7 +178,7 @@
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="PBRReflectionRenderPass.cpp" />
     <ClCompile Include="PBRRenderer.cpp" />
@@ -267,7 +267,7 @@
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PBRReflectionRenderPass.h" />
     <ClInclude Include="PBRRenderer.h" />

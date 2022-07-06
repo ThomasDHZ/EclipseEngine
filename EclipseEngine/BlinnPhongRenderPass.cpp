@@ -24,11 +24,12 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedDepthTexture>
     }
     else
     {
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);    ColorTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);   
+        ColorTexture->RecreateRendererTexture(RenderPassResolution);
         BloomTexture->RecreateRendererTexture(RenderPassResolution);
         RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);        RenderPass::Destroy();
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);        
+        RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
@@ -124,7 +125,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, ModelManager::GetAccelerationStructureHandlePtr());
+    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();

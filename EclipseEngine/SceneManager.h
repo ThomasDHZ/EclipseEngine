@@ -13,7 +13,7 @@
 #include "GameObjectManager.h"
 #include "LightManager.h"
 #include "MaterialManager.h"
-#include "ModelManager.h"
+#include "TopLevelAccelerationStructureManager.h"
 #include "ComponentRenderer.h"
 #include "MusicPlayer.h"
 
@@ -59,7 +59,7 @@ public:
 		auto time = glfwGetTime();
 		GameObjectManager::Update(time);
 		MeshRendererManager::Update();
-		ModelManager::Update();
+		TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
 		activeCamera->Update(time);
@@ -193,7 +193,6 @@ public:
 		MaterialManager::DestroyScene();
 		TextureManager::DestroyScene();
 		GameObjectManager::DestroyScene();
-		ModelManager::DestroyScene();
 		MeshRendererManager::DestroyScene();
 		LightManager::DestroyScene();
 

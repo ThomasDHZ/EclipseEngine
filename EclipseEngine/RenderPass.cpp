@@ -32,7 +32,7 @@ std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_p
     {
         const auto component = obj->GetComponentByType(ComponentType::kSpriteRenderer);
         const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-        MeshDrawList = spriteRenderer->GetSpriteList();
+        MeshDrawList.emplace_back(spriteRenderer->GetSprite());
     }
     else
     {

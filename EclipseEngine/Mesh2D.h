@@ -23,7 +23,8 @@ private:
 
 public:
 	Mesh2D();
-	Mesh2D(std::shared_ptr<Material> SpriteMaterial);
+	Mesh2D(uint64_t parentGameObjectID);
+	Mesh2D(std::shared_ptr<Material> SpriteMaterial, uint64_t parentGameObjectID);
 	~Mesh2D();
 
 	void Update();

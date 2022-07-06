@@ -252,7 +252,7 @@ VkCommandBuffer RenderPass2D::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
-                    case MeshTypeEnum::kPolygon:
+                    case MeshTypeEnum::kSprite:
                     {
                         if (VulkanRenderer::WireframeModeFlag)
                         {

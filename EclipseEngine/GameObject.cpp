@@ -31,20 +31,20 @@ GameObject::GameObject(const std::string Name)
 
 GameObject::GameObject(nlohmann::json& json)
 {
-	GenerateID();
-	json.at("ObjectName").get_to(ObjectName);
+	//GenerateID();
+	//json.at("ObjectName").get_to(ObjectName);
 
-	for (int x = 0; x < json["ComponentList"].size(); x++)
-	{
-		ComponentType type = ComponentType::kNullComponent;
-		json["ComponentList"][x].at("componentType").get_to(type);
+	//for (int x = 0; x < json["ComponentList"].size(); x++)
+	//{
+	//	ComponentType type = ComponentType::kNullComponent;
+	//	json["ComponentList"][x].at("componentType").get_to(type);
 
-		switch (type)
-		{
-			case ComponentType::kSpriteRenderer: {break; }
-			case ComponentType::kMeshRenderer: AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(json["ComponentList"][x], GameObjectID))); break;
-		}
-	}
+	//	switch (type)
+	//	{
+	//		case ComponentType::kSpriteRenderer: {break; }
+	//		case ComponentType::kMeshRenderer: AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(json["ComponentList"][x], GameObjectID))); break;
+	//	}
+	//}
 }
 
 GameObject::~GameObject()

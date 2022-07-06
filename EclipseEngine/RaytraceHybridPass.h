@@ -4,7 +4,7 @@
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
 #include "LightManager.h"
-#include "ModelManager.h"
+#include "TopLevelAccelerationStructureManager.h"
 #include "SceneManager.h"
 
 class RaytraceHybridPass : public RenderPass

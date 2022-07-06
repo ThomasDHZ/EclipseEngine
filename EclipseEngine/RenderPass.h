@@ -3,7 +3,7 @@
 #include "VulkanBuffer.h"
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
-#include "ModelManager.h"
+#include "TopLevelAccelerationStructureManager.h"
 #include "SceneManager.h"
 
 #include <fstream>

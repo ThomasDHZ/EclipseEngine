@@ -1,11 +1,11 @@
 #pragma once
-#include "ComponentRenderer.h"
+#include "Component.h"
 #include "Mesh2D.h"
 
-class SpriteRenderer : public ComponentRenderer
+class SpriteRenderer : public Component
 {
 private:
-	std::vector<std::shared_ptr<Mesh>> SpriteList;
+	std::shared_ptr<Mesh> Sprite;
 
 public:
 	SpriteRenderer(uint64_t GameObjectID);
@@ -18,11 +18,12 @@ public:
 	void Update(float DeltaTime) override;
 	void Destroy() override;
 
-	std::vector<std::shared_ptr<Mesh>> GetSpriteList() { return SpriteList; }
+	void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);
+	std::shared_ptr<Mesh> GetSprite() { return Sprite; }
 
 	virtual void to_json(nlohmann::json& json) override
 	{
-		ComponentRenderer::to_json(json);
+		Component::to_json(json);
 	}
 };
 

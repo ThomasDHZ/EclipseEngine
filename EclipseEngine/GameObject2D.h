@@ -30,6 +30,6 @@ public:
 	//glm::vec2* GetSpriteRotationPtr();
 	//glm::vec2* GetSpriteScalePtr();
 
-	//std::shared_ptr<Material> GetSpriteMaterial();
+	std::shared_ptr<Material> GetSpriteMaterial();
 };
 

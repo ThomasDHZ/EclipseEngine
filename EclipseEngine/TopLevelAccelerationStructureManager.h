@@ -2,27 +2,17 @@
 #include "VulkanRenderer.h"
 #include "Model.h"
 #include "GraphicsPipeline.h"
+#include "MeshRenderer.h"
 
-class ModelManager
+class TopLevelAccelerationStructureManager
 {
 private: 
     static AccelerationStructureBuffer TopLevelAccelerationStructure;
     static VulkanBuffer InstancesBuffer;
 
-	static std::vector<std::shared_ptr<Model>> ModelList;
 public:
-
-	static void AddModel(std::shared_ptr<Model> model)
-	{
-		ModelList.emplace_back(model);
-	}
-
     static void Update()
     {
-        for (auto& model : ModelList)
-        {
-            model->Update();
-        }
 
     /*    if (VulkanRenderer::UpdateTLAS)
         {*/
@@ -33,36 +23,19 @@ public:
         VulkanRenderer::UpdateTLAS = false;
 	}
 
-	static std::shared_ptr<Model> GetModelByMesh(std::shared_ptr<Mesh> mesh)
-	{
-		for (auto& model : ModelList)
-		{
-			model->DoesMeshExistInModel(mesh);
-		}
-	}
-
-    static std::shared_ptr<Model> GetModelByID(uint64_t ModelID)
-    {
-        for (auto model : ModelList)
-        {
-            if (model->GetModelID() == ModelID)
-            {
-                return model;
-            }
-        }
-
-        return nullptr;
-    }
-
     static void UpdateTopLevelAccelerationStructure()
     {
         if (GraphicsDevice::IsRayTracingFeatureActive())
         {
             uint32_t PrimitiveCount = 1;
             std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
-            for (int x = 0; x < ModelManager::GetModelList().size(); x++)
+            for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
             {
-                ModelManager::GetModelList()[x]->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
+                if (auto component = GameObjectManager::GetGameObjectList()[x]->GetComponentByType(ComponentType::kMeshRenderer))
+                {
+                    auto meshRenderer = static_cast<MeshRenderer*>(component.get());
+                    meshRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
+                }
             }
 
             VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};
@@ -138,31 +111,6 @@ public:
         TopLevelAccelerationStructure.Destroy();
     }
 
-    static void DestroyScene()
-    {
-        for (int x = ModelList.size() - 1; x >= 0; x--)
-        {
-            ModelList[x]->Destroy();
-            ModelList.erase(ModelList.begin() + x);
-        }
-        TopLevelAccelerationStructure.Destroy();
-    }
-
-    static void DestroyModel(uint64_t ModelID)
-    {
-        std::shared_ptr<Model> model = GetModelByID(ModelID);
-        model->Destroy();
-        for (int x = ModelList.size() - 1; x >= 0; x--)
-        {
-            if (model == ModelList[x])
-            {
-                ModelList.erase(ModelList.begin() + x);
-                break;
-            }
-        }
-    }
-
-	static std::vector<std::shared_ptr<Model>> GetModelList() { return ModelList; }
     static VkAccelerationStructureKHR* GetAccelerationStructureHandlePtr() { return TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr(); }
 };
 

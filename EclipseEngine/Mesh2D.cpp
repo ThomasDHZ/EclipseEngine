@@ -1,11 +1,35 @@
 #include "Mesh2D.h"
 #include "Math.h"
 
-Mesh2D::Mesh2D() : Mesh(MeshTypeEnum::kSprite)
+Mesh2D::Mesh2D() : Mesh(MeshTypeEnum::kSprite, 0)
 {
 }
 
-Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr) : Mesh(MeshTypeEnum::kSprite)
+Mesh2D::Mesh2D(uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, parentGameObjectID)
+{
+	GenerateID();
+	GenerateColorID();
+
+	VertexList = vertices;
+	IndexList = indices;
+
+	ParentModelID = -1;
+	ParentGameObjectID = -1;
+	VertexCount = VertexList.size();
+	IndexCount = IndexList.size();
+
+	material = MaterialManager::GetDefaultMaterial();
+
+	MeshTransformMatrix = glm::mat4(1.0f);
+	MeshTransformMatrix = glm::transpose(MeshTransformMatrix);
+
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+}
+
+Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, parentGameObjectID)
 {
 	GenerateID();
 	GenerateColorID();

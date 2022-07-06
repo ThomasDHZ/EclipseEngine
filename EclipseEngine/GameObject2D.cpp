@@ -72,14 +72,14 @@ GameObject2D::~GameObject2D()
 //	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
 //	spriteRenderer->GetModel()->GetMeshList()[0]->SetMeshScale(glm::vec3(scale.x, scale.y, 1.0f));
 //}
-//
-//void GameObject2D::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
-//{
-//	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
-//	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-//	spriteRenderer->GetModel()->GetMeshList()[0]->SetMaterial(SpriteMaterial);
-//}
-//
+
+void GameObject2D::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	spriteRenderer->SetSpriteMaterial(SpriteMaterial);
+}
+
 //float GameObject2D::GetSpriteDepth()
 //{
 //	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);

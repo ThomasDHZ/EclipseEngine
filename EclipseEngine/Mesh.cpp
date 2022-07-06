@@ -7,9 +7,10 @@ Mesh::Mesh()
 {
 }
 
-Mesh::Mesh(MeshTypeEnum meshType)
+Mesh::Mesh(MeshTypeEnum meshType, uint64_t parentGameObjectID)
 {
 	MeshType = meshType;
+	ParentGameObjectID = parentGameObjectID;
 }
 
 Mesh::Mesh(std::vector<LineVertex>& vertices)

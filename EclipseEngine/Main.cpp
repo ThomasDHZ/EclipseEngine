@@ -57,7 +57,7 @@ int main()
     scene.Destroy();
 
     SceneManager::Destory();
-    ModelManager::Destroy();
+    TopLevelAccelerationStructureManager::Destroy();
     LightManager::Destory();
     MaterialManager::Destroy();
     TextureManager::Destroy();

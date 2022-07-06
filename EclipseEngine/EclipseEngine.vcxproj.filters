@@ -201,7 +201,7 @@
     <ClCompile Include="MeshRendererManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
+    <ClCompile Include="TopLevelAccelerationStructureManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="MeshPickerRenderPass3D.cpp">
@@ -485,7 +485,7 @@
     <ClInclude Include="MeshRendererManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
+    <ClInclude Include="TopLevelAccelerationStructureManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="MeshPickerRenderPass3D.h">
