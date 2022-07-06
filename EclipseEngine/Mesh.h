@@ -13,6 +13,7 @@
 enum MeshTypeEnum
 {
 	kUnkown,
+	kSprite,
 	kPolygon,
 	kSkybox,
 	kLine
@@ -60,18 +61,8 @@ private:
 	static uint64_t MeshIDCounter;
 
 	Pixel MeshColorID = NullPixel;
-	bool SelectedMesh = false;
 
-	void GenerateColorID();
 	void UpdateMeshBottomLevelAccelerationStructure();
-
-	static std::mutex PushMeshMutex;
-	static std::vector<std::future<void>> FutureList;
-	static void LoadVerticesAsync(std::vector<MeshVertex> Vertices, const int index, nlohmann::json json)
-	{
-		std::lock_guard<std::mutex> lock(PushMeshMutex);
-		Vertices[index].from_json(json["Vertex"][index]);
-	}
 
 	void from_json(nlohmann::json& json)
 	{
@@ -98,8 +89,9 @@ protected:
 	uint32_t TriangleCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
+	bool SelectedMesh = false;
 
-	MeshTypeEnum meshType;
+	MeshTypeEnum MeshType;
 
 	std::vector<MeshVertex> VertexList;
 	std::vector<uint32_t> IndexList;
@@ -118,8 +110,6 @@ protected:
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer TransformBuffer;
 	VulkanBuffer TransformInverseBuffer;
-	VulkanBuffer BoneWeightBuffer;
-	VulkanBuffer BoneTransformBuffer;
 
 	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
@@ -128,10 +118,11 @@ protected:
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
 	void GenerateID();
-
+	void GenerateColorID();
 public:
 
 	Mesh();
+	Mesh(MeshTypeEnum meshType);
 	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	Mesh(std::vector<LineVertex>& vertices);
 	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
@@ -142,10 +133,12 @@ public:
 	std::string MeshName;
 	MeshProperties meshProperties;
 
+	virtual void Update();
+	virtual void Update(const glm::mat4& ModelMatrix);
+	virtual void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	virtual void Destroy();
+
 	void Draw(VkCommandBuffer& commandBuffer);
-	void Update(const glm::mat4& ModelMatrix);
-	void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
-	void Destroy();
 
 	void SetSelectedMesh(bool selected);
 	void SetParentGameObjectID(uint64_t GameObjectID);
@@ -164,7 +157,7 @@ public:
 	uint64_t GetMeshID() { return MeshID; }
 	uint64_t GetParentModelID() { return ParentModelID; }
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
-	MeshTypeEnum GetMeshType() { return meshType; }
+	MeshTypeEnum GetMeshType() { return MeshType; }
 	Pixel GetMeshColorID() { return MeshColorID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
@@ -176,9 +169,9 @@ public:
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	MeshProperties GetMeshProperties() { return meshProperties; }
 
-	glm::vec3* GetMeshPosition() { return &MeshPosition; }
-	glm::vec3* GetMeshRotation() { return &MeshRotation; }
-	glm::vec3* GetMeshScale() { return &MeshScale; };
+	glm::vec3 GetPosition() { return MeshPosition; }
+	glm::vec3 GetRotation() { return MeshRotation; }
+	glm::vec3 GetScale() { return MeshScale; }
 	glm::vec2* GetUVOffset() { return &meshProperties.UVOffset; }
 	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }
 	glm::vec2* GetUVFlip() { return &meshProperties.UVFlip; }
@@ -188,7 +181,7 @@ public:
 	public:
 		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
 		{
-			return  mesh1->meshType < mesh2->meshType;
+			return  mesh1->MeshType < mesh2->MeshType;
 		}
 	};
 

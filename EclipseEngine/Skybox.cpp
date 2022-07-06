@@ -68,7 +68,7 @@ void Skybox::StartUp()
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 	BoneCount = 0;
-	meshType = MeshTypeEnum::kPolygon;
+	MeshType = MeshTypeEnum::kPolygon;
 
 	material = MaterialManager::GetDefaultMaterial();
 

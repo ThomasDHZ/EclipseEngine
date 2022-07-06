@@ -2,11 +2,14 @@
 #include "Math.h"
 
 uint64_t Mesh::MeshIDCounter = 0;
-std::mutex Mesh::PushMeshMutex;
-std::vector<std::future<void>> Mesh::FutureList;
 
 Mesh::Mesh()
 {
+}
+
+Mesh::Mesh(MeshTypeEnum meshType)
+{
+	MeshType = meshType;
 }
 
 Mesh::Mesh(std::vector<LineVertex>& vertices)
@@ -25,7 +28,7 @@ Mesh::Mesh(std::vector<LineVertex>& vertices)
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 	BoneCount = 0;
 
-	meshType = MeshTypeEnum::kLine;
+	MeshType = MeshTypeEnum::kLine;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -59,7 +62,7 @@ Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 	BoneCount = 0;
 
-	meshType = MeshTypeEnum::kLine;
+	MeshType = MeshTypeEnum::kLine;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -87,7 +90,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
 	BoneCount = 0;
 
-	meshType = MeshTypeEnum::kPolygon;
+	MeshType = MeshTypeEnum::kPolygon;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -149,7 +152,7 @@ Mesh::Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, st
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
 	BoneCount = 0;
-	meshType = MeshTypeEnum::kPolygon;
+	MeshType = MeshTypeEnum::kPolygon;
 
 	material = MaterialManager::GetDefaultMaterial();
 
@@ -212,7 +215,7 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 	IndexCount = meshLoader.indices.size();
 	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;
 	BoneCount = meshLoader.BoneCount;
-	meshType = meshLoader.meshType;
+	MeshType = meshLoader.meshType;
 
 	material = meshLoader.materialPtr;
 
@@ -224,11 +227,11 @@ Mesh::Mesh(MeshLoadingInfo& meshLoader)
 	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	
-	if (BoneCount != 0)
-	{
-		BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	}
+	//if (BoneCount != 0)
+	//{
+	//	BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	//	BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	//}
 	
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
@@ -446,14 +449,14 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 	}
 	MeshPropertiesBuffer.Update(meshProperties);
 
-	if (BoneList.size() != 0)
-	{
-		for (auto bone : BoneList)
-		{
-			BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
-		}
-		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
-	}
+	//if (BoneList.size() != 0)
+	//{
+	//	for (auto bone : BoneList)
+	//	{
+	//		BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
+	//	}
+	//	BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
+	//}
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
@@ -498,6 +501,10 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 	}
 }
 
+void Mesh::Update()
+{
+}
+
 void Mesh::Destroy()
 {
 	VertexBuffer.DestoryBuffer();
@@ -515,14 +522,14 @@ void Mesh::Destroy()
 	{
 		TransformInverseBuffer.DestoryBuffer();
 	}
-	if(BoneTransformBuffer.Buffer != nullptr)
-	{
-		BoneTransformBuffer.DestoryBuffer();
-	}
-	if (BoneWeightBuffer.Buffer != nullptr)
-	{
-		BoneWeightBuffer.DestoryBuffer();
-	}
+	//if(BoneTransformBuffer.Buffer != nullptr)
+	//{
+	//	BoneTransformBuffer.DestoryBuffer();
+	//}
+	//if (BoneWeightBuffer.Buffer != nullptr)
+	//{
+	//	BoneWeightBuffer.DestoryBuffer();
+	//}
 	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() != VK_NULL_HANDLE)
 	{
 		BottomLevelAccelerationBuffer.Destroy();

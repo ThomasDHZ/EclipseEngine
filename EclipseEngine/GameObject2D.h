@@ -18,12 +18,16 @@ public:
 	void SetRotation(glm::vec2 rotation);
 	void SetScale(float x, float y);
 	void SetScale(glm::vec2 Scale);
-	void SetSprite(std::shared_ptr<Material> Sprite);
+	void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);
 
-	glm::vec2 GetPosition();
 	float GetDepth();
+	glm::vec2 GetPosition();
 	glm::vec2 GetRotation();
 	glm::vec2 GetScale();
-	std::shared_ptr<Material> GetSprite();
+	float* GetDepthPtr();
+	glm::vec2* GetPositionPtr();
+	glm::vec2* GetRotationPtr();
+	glm::vec2* GetScalePtr();
+	std::shared_ptr<Material> GetSpriteMaterial();
 };
 

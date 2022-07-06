@@ -169,7 +169,10 @@
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="LineMesh.cpp" />
     <ClCompile Include="LineRenderer.cpp" />
+    <ClCompile Include="Mesh2D.cpp" />
+    <ClCompile Include="Mesh3D.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
@@ -255,7 +258,10 @@
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
+    <ClInclude Include="LineMesh.h" />
     <ClInclude Include="LineRenderer.h" />
+    <ClInclude Include="Mesh2D.h" />
+    <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="MeshPickerRenderPass2D.h" />
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRendererManager.h" />

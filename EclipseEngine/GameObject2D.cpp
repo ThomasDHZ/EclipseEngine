@@ -73,45 +73,80 @@ void GameObject2D::SetScale(glm::vec2 scale)
 	spriteRenderer->GetModel()->GetMeshList()[0]->SetMeshScale(glm::vec3(scale.x, scale.y, 1.0f));
 }
 
-void GameObject2D::SetSprite(std::shared_ptr<Material> Sprite)
+void GameObject2D::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
 {
 	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
 	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-	spriteRenderer->GetModel()->GetMeshList()[0]->SetMaterial(Sprite);
-}
-
-glm::vec2 GameObject2D::GetPosition()
-{
-	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
-	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-	const auto position = spriteRenderer->GetModel()->GetMeshList()[0]->GetMeshPosition();
-	return glm::vec2(position->x, position->y);
+	spriteRenderer->GetModel()->GetMeshList()[0]->SetMaterial(SpriteMaterial);
 }
 
 float GameObject2D::GetDepth()
 {
 	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
 	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-	return spriteRenderer->GetModel()->GetMeshList()[0]->GetMeshPosition()->z;
+	return spriteRenderer->GetModel()->GetMeshList()[0]->GetPosition().z;
+}
+
+glm::vec2 GameObject2D::GetPosition()
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	auto position = spriteRenderer->GetModel()->GetMeshList()[0]->GetPosition();
+	return glm::vec2(position.x, position.y);
 }
 
 glm::vec2 GameObject2D::GetRotation()
 {
 	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
 	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-	const auto rotation = spriteRenderer->GetModel()->GetMeshList()[0]->GetMeshRotation();
-	return glm::vec2(rotation->x, rotation->y);
+	auto rotation = spriteRenderer->GetModel()->GetMeshList()[0]->GetRotation();
+	return glm::vec2(rotation.x, rotation.y);
 }
 
 glm::vec2 GameObject2D::GetScale()
 {
 	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
 	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-	const auto scale = spriteRenderer->GetModel()->GetMeshList()[0]->GetMeshScale();
-	return glm::vec2(scale->x, scale->y);
+	auto scale = spriteRenderer->GetModel()->GetMeshList()[0]->GetScale();
+	return glm::vec2(scale.x, scale.y);
 }
 
-std::shared_ptr<Material> GameObject2D::GetSprite()
+float* GameObject2D::GetDepthPtr()
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	auto Depth = spriteRenderer->GetModel()->GetMeshList()[0]->GetPosition().z;
+	return &Depth;
+}
+
+glm::vec2* GameObject2D::GetPositionPtr()
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	const auto position = spriteRenderer->GetModel()->GetMeshList()[0]->GetPosition();
+	auto positionRef = glm::vec2(position.x, position.y);
+	return &positionRef;
+}
+
+glm::vec2* GameObject2D::GetRotationPtr()
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	const auto rotation = spriteRenderer->GetModel()->GetMeshList()[0]->GetRotation();
+	auto rotationRef = glm::vec2(rotation.x, rotation.y);
+	return &rotationRef;
+}
+
+glm::vec2* GameObject2D::GetScalePtr()
+{
+	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
+	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+	auto scale = spriteRenderer->GetModel()->GetMeshList()[0]->GetScale();
+	auto scaleRef = glm::vec2(scale.x, scale.y);
+	return &scaleRef;
+}
+
+std::shared_ptr<Material> GameObject2D::GetSpriteMaterial()
 {
 	const auto component = GetComponentByType(ComponentType::kSpriteRenderer);
 	const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
