@@ -248,7 +248,7 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    const VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
@@ -261,19 +261,23 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
         DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), SceneManager::cubeMapInfo);
 
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        for (auto& obj : GameObjectManager::GetGameObjectList())
         {
-            switch (mesh->GetMeshType())
+            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
+            for (auto& mesh : MeshDrawList)
             {
-                case MeshTypeEnum::kPolygon:
+                switch (mesh->GetMeshType())
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(pbrPipeline, mesh, SceneManager::sceneProperites);
-                    break;
+
+                    case MeshTypeEnum::kPolygon:
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, pbrPipeline, mesh, SceneManager::sceneProperites);
+                        break;
+                    }
+                    default: break;
                 }
-                default: break;
             }
         }
     }

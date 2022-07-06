@@ -279,7 +279,7 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 		MaterialInfo.EmissionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 	}
 
-	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialnone, MaterialInfo);
+	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialBlinnPhong, MaterialInfo);
 	return MaterialManager::GetMaterialByID(materialID);
 }
 
@@ -453,6 +453,21 @@ bool Model::DoesMeshExistInModel(std::shared_ptr<Mesh> mesh)
 		}
 	}
 	return false;
+}
+
+void Model::SetModelPosition(glm::vec3 modelPosition)
+{
+	ModelPosition = modelPosition;
+}
+
+void Model::SetModelRotation(glm::vec3 modelRotation)
+{
+	ModelRotation = modelRotation;
+}
+
+void Model::SetModelScale(glm::vec3 modelScale)
+{
+	ModelScale = modelScale;
 }
 
 glm::mat4 Model::TransposeModelMatrix()

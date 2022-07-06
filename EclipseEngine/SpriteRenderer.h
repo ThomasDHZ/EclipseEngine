@@ -1,20 +1,11 @@
 #pragma once
 #include "ComponentRenderer.h"
-#include "Model.h"
+#include "Mesh2D.h"
 
 class SpriteRenderer : public ComponentRenderer
 {
 private:
-	std::vector<MeshVertex> vertices = {
-			{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-			{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-			{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-			{{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-	};
-
-	std::vector<uint32_t> indices = {
-0, 1, 2, 2, 3, 0
-	};
+	std::vector<std::shared_ptr<Mesh>> SpriteList;
 
 public:
 	SpriteRenderer(uint64_t GameObjectID);
@@ -26,6 +17,8 @@ public:
 
 	void Update(float DeltaTime) override;
 	void Destroy() override;
+
+	std::vector<std::shared_ptr<Mesh>> GetSpriteList() { return SpriteList; }
 
 	virtual void to_json(nlohmann::json& json) override
 	{

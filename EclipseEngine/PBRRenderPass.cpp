@@ -1,5 +1,7 @@
 #include "PBRRenderPass.h"
 #include "LightManager.h"
+#include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 
 
 PBRRenderPass::PBRRenderPass() : RenderPass()
@@ -361,7 +363,7 @@ VkCommandBuffer PBRRenderPass::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    const VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
@@ -374,41 +376,44 @@ VkCommandBuffer PBRRenderPass::Draw()
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
         DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), SceneManager::cubeMapInfo);
 
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        for (auto& obj : GameObjectManager::GetGameObjectList())
         {
-            switch (mesh->GetMeshType())
+            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
+            for (auto& mesh : MeshDrawList)
             {
-            case MeshTypeEnum::kPolygon:
-            {
-                if (VulkanRenderer::WireframeModeFlag)
+                switch (mesh->GetMeshType())
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(wireframePipeline, mesh, SceneManager::sceneProperites);
-                }
-                else
-                {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(pbrPipeline, mesh, SceneManager::sceneProperites);
-
-                    if (MeshRendererManager::GetSelectedMesh() == mesh)
+                    case MeshTypeEnum::kPolygon:
                     {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        DrawMesh(outLinePipeline, mesh, SceneManager::sceneProperites);
+                        if (VulkanRenderer::WireframeModeFlag)
+                        {
+                            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
+                            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                            GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
+                        }
+                        else
+                        {
+                            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
+                            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                            GameObjectManager::DrawMesh(commandBuffer, pbrPipeline, mesh, SceneManager::sceneProperites);
+
+                            if (MeshRendererManager::GetSelectedMesh() == mesh)
+                            {
+                                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipeline());
+                                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                                GameObjectManager::DrawMesh(commandBuffer, outLinePipeline, mesh, SceneManager::sceneProperites);
+                            }
+                        }
+                        break;
+                    }
+                    case MeshTypeEnum::kLine:
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawLine(commandBuffer, drawLinePipeline, mesh, SceneManager::sceneProperites);
+                        break;
                     }
                 }
-                break;
-            }
-            case MeshTypeEnum::kLine:
-            {
-                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                DrawLine(drawLinePipeline, mesh, SceneManager::sceneProperites);
-                break;
-            }
             }
         }
     }

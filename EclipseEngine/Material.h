@@ -157,6 +157,7 @@ public:
 
 	Material();
 	Material(const std::string materialName);
+	Material(const std::string materialName, MaterialTypeEnum materialtype);
 	Material(const std::string materialName, MaterialTypeEnum materialtype, MaterialProperties& MaterialInfo);
 	~Material();
 

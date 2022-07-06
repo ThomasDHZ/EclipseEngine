@@ -169,7 +169,7 @@ VkCommandBuffer DepthRenderPass::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    const VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
@@ -178,24 +178,27 @@ VkCommandBuffer DepthRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        for (auto& obj : GameObjectManager::GetGameObjectList())
         {
-            switch (mesh->GetMeshType())
+            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
+            for (auto& mesh : MeshDrawList)
             {
-                case MeshTypeEnum::kPolygon:
+                switch (mesh->GetMeshType())
                 {
-                    DirectionalLightProjection directionalLightProjection;
-                    directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
+                    case MeshTypeEnum::kPolygon:
+                    {
+                        DirectionalLightProjection directionalLightProjection;
+                        directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
 
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawDepthMesh(DepthPipeline, mesh, directionalLightProjection);
-                    break;
-                }
-                default:
-                {
-                    break;
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawDepthMesh(commandBuffer, DepthPipeline, mesh, directionalLightProjection);
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
                 }
             }
         }

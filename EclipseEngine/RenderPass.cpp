@@ -1,5 +1,7 @@
 #include "RenderPass.h"
 #include "MeshRendererManager.h"
+#include "SpriteRenderer.h"
+#include "MeshRenderer.h"
 
 RenderPass::RenderPass()
 {
@@ -22,6 +24,27 @@ void RenderPass::Destroy()
     }
 }
 
+std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_ptr<GameObject> obj)
+{
+    std::vector<std::shared_ptr<Mesh>> MeshDrawList;
+    const auto component = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+    if (component != nullptr)
+    {
+        const auto component = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+        const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+        MeshDrawList = spriteRenderer->GetSpriteList();
+    }
+    else
+    {
+        const auto component = obj->GetComponentByType(ComponentType::kMeshRenderer);
+        const auto meshRenderer = static_cast<MeshRenderer*>(component.get());
+        const auto model = meshRenderer->GetModel();
+        MeshDrawList = model->GetMeshList();
+    }
+
+    return MeshDrawList;
+}
+
 void RenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)
 {
     VkSubmitInfo submitInfo{};
@@ -38,21 +61,6 @@ void RenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)
     vkQueueSubmit(VulkanRenderer::GetGraphicsQueue(), 1, &submitInfo, fence);
     vkWaitForFences(VulkanRenderer::GetDevice(), 1, &fence, VK_TRUE, UINT64_MAX);
     vkDestroyFence(VulkanRenderer::GetDevice(), fence, nullptr);
-}
-
-void RenderPass::DrawDepthMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection & directionalLightProjection)
-{
-    MeshRendererManager::DrawDepthMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, directionalLightProjection);
-}
-
-void RenderPass::DrawMesh(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
-{
-    MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);
-}
-
-void RenderPass::DrawLine(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
-{
-    MeshRendererManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], pipeline, mesh, sceneProperties);
 }
 
 void RenderPass::DrawSkybox(std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh)

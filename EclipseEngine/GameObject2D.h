@@ -11,23 +11,25 @@ public:
 	GameObject2D(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth);
 	~GameObject2D();
 
-	void SetPosition(float x, float y);
-	void SetPosition(glm::vec2 position);
-	void SetDepth(float Depth);
-	void SetRotation(float x, float y);
-	void SetRotation(glm::vec2 rotation);
-	void SetScale(float x, float y);
-	void SetScale(glm::vec2 Scale);
+	void SetSpritePosition(float x, float y);
+	void SetSpritePosition(glm::vec2 position);
+	void SetSpriteDepth(float Depth);
+	void SetSpriteRotation(float x, float y);
+	void SetSpriteRotation(glm::vec2 rotation);
+	void SetSpriteScale(float x, float y);
+	void SetSpriteScale(glm::vec2 Scale);
 	void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);
 
-	float GetDepth();
-	glm::vec2 GetPosition();
-	glm::vec2 GetRotation();
-	glm::vec2 GetScale();
-	float* GetDepthPtr();
-	glm::vec2* GetPositionPtr();
-	glm::vec2* GetRotationPtr();
-	glm::vec2* GetScalePtr();
-	std::shared_ptr<Material> GetSpriteMaterial();
+	//float GetSpriteDepth();
+	//glm::vec2 GetSpritePosition();
+	//glm::vec2 GetSpriteRotation();
+	//glm::vec2 GetSpriteScale();
+
+	//float* GetSpriteDepthPtr();
+	//glm::vec2* GetSpritePositionPtr();
+	//glm::vec2* GetSpriteRotationPtr();
+	//glm::vec2* GetSpriteScalePtr();
+
+	//std::shared_ptr<Material> GetSpriteMaterial();
 };
 

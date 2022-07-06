@@ -175,7 +175,7 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    const VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
@@ -184,17 +184,20 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        for (auto& obj : GameObjectManager::GetGameObjectList())
         {
-            switch (mesh->GetMeshType())
+            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
+            for (auto& mesh : MeshDrawList)
             {
-                case MeshTypeEnum::kPolygon:
+                switch (mesh->GetMeshType())
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    DrawMesh(MeshPickerPipeline, mesh, SceneManager::sceneProperites);
-                    break;
+                    case MeshTypeEnum::kPolygon:
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, MeshPickerPipeline, mesh, SceneManager::sceneProperites);
+                        break;
+                    }
                 }
             }
         }

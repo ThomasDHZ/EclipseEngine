@@ -112,6 +112,10 @@ public:
 
 	bool DoesMeshExistInModel(std::shared_ptr<Mesh> mesh);
 
+	void SetModelPosition(glm::vec3 modelPosition);
+	void SetModelRotation(glm::vec3 modelRotation);
+	void SetModelScale(glm::vec3 modelScale);
+
 	glm::mat4 TransposeModelMatrix();
 	uint64_t GetModelID() { return ModelID; }
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
@@ -119,6 +123,9 @@ public:
 
 	std::string GetModelFilePath() { return ModelFilePath; }
 	glm::mat4 GetModelMatrix() { return ModelTransform; }
+	glm::vec3 GetModelPosition() { return ModelPosition; }
+	glm::vec3 GetModelRotation() { return ModelRotation; }
+	glm::vec3 GetModelScale() { return ModelScale; }
 	glm::vec3* GetModelPositionPtr() { return &ModelPosition; }
 	glm::vec3* GetModelRotationPtr() { return &ModelRotation; }
 	glm::vec3* GetModelScalePtr() { return &ModelScale; }

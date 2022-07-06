@@ -11,42 +11,41 @@ Scene::Scene()
     //camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
-    SceneManager::sceneType = SceneType::kSprite2D;
+    SceneManager::sceneType = SceneType::kBlinnPhong;
 
-    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
-    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
-    MaterialManager::AddMaterial(material);
+ //   std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial", MaterialTypeEnum::kMaterialBlinnPhong));
+ //   material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
+ //   material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+ //   MaterialManager::AddMaterial(material);
 
 
-    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
-    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
-    MaterialManager::AddMaterial(material2);
+ //   std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2", MaterialTypeEnum::kMaterialBlinnPhong));
+ //   material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
+ //   MaterialManager::AddMaterial(material2);
 
-    std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
-    auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
-    auto b = static_cast<SpriteRenderer*>(a.get());
-    b->GetModel()->GetMeshList()[0]->SetMaterial(material2);
-     GameObjectManager::AddGameObject(obj);
- 
-    std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(2.0f, 0.0f), 1));
-    auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
-    auto b2 = static_cast<SpriteRenderer*>(a2.get());
-    b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
-    GameObjectManager::AddGameObject(obj2);
-    obj2->SetPosition(-10.0f, 0.0f);
+ //   std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
+ //   auto a = obj->GetComponentByType(ComponentType::kSpriteRenderer);
+ //   auto b = static_cast<SpriteRenderer*>(a.get());
+ ////   b->GetModel()->GetMeshList()[0]->SetMaterial(material2);
+ //    GameObjectManager::AddGameObject(obj);
+ //
+ //   std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+ //   auto a2 = obj2->GetComponentByType(ComponentType::kSpriteRenderer);
+ //   auto b2 = static_cast<SpriteRenderer*>(a2.get());
+ //  // b2->GetModel()->GetMeshList()[0]->SetMaterial(material);
+ //   GameObjectManager::AddGameObject(obj2);
 
-    std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(1.0f), 0));
-    auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
-    auto b3 = static_cast<SpriteRenderer*>(a3.get());
-    b3->GetModel()->GetMeshList()[0]->SetMaterial(material2);
-    GameObjectManager::AddGameObject(obj3);
+ //   std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(1.0f), 0));
+ //   auto a3 = obj3->GetComponentByType(ComponentType::kSpriteRenderer);
+ //   auto b3 = static_cast<SpriteRenderer*>(a3.get());
+ //  // b3->GetModel()->GetMeshList()[0]->SetMaterial(material2);
+ //   GameObjectManager::AddGameObject(obj3);
 
-    std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(2.0f, 1.0f), 2));
-    auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
-    auto b4 = static_cast<SpriteRenderer*>(a4.get());
-    b4->GetModel()->GetMeshList()[0]->SetMaterial(material);
-    GameObjectManager::AddGameObject(obj4);
+ //   std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+ //   auto a4 = obj4->GetComponentByType(ComponentType::kSpriteRenderer);
+ //   auto b4 = static_cast<SpriteRenderer*>(a4.get());
+ //  // b4->GetModel()->GetMeshList()[0]->SetMaterial(material);
+ //   GameObjectManager::AddGameObject(obj4);
 
 //   SceneManager::LoadScene("../Scenes/example.txt");
 
@@ -63,7 +62,8 @@ Scene::Scene()
 
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/RayReflectionTest.obj"));
     //GameObjectManager::AddGameObject(obj);
-    //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Sponza/Sponza.gltf"));
+    std::shared_ptr<GameObject3D> obj = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Sponza/Sponza.gltf"));
+    GameObjectManager::AddGameObject(obj);
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/vulkanscene_shadow.obj"));
     //std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject("Testobject", "../Models/Cerberus/Cerberus_LP.FBX"));
 
@@ -72,7 +72,7 @@ Scene::Scene()
     //SoundSource source;
     //source.Play(sound);
 
-  /*  {
+   /* {
 
         std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
         IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
@@ -143,7 +143,7 @@ Scene::Scene()
         auto b5 = static_cast<MeshRenderer*>(a2.get());
         b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
         GameObjectManager::AddGameObject(obj5);
-    }
+    }*/
 
     auto dLight = DirectionalLightBuffer{};
     dLight.diffuse = glm::vec3(0.2f);
@@ -174,7 +174,7 @@ Scene::Scene()
     LightManager::AddPointLight(plight);
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);*/
+    LightManager::AddPointLight(plight4);
 
     MeshRendererManager::Update();
     ModelManager::Update();

@@ -165,6 +165,7 @@
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />

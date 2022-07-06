@@ -26,7 +26,7 @@ public:
 
     /*    if (VulkanRenderer::UpdateTLAS)
         {*/
-            UpdateUpTopLevelAccelerationStructure();
+        UpdateTopLevelAccelerationStructure();
        /* }*/
 
         VulkanRenderer::UpdateBLAS = false;
@@ -54,7 +54,7 @@ public:
         return nullptr;
     }
 
-    static void UpdateUpTopLevelAccelerationStructure()
+    static void UpdateTopLevelAccelerationStructure()
     {
         if (GraphicsDevice::IsRayTracingFeatureActive())
         {

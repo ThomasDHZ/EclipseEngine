@@ -238,16 +238,16 @@ VkCommandBuffer GBufferRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        MeshRendererManager::SortByRenderPipeline();
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        for (auto& obj : GameObjectManager::GetGameObjectList())
         {
-            switch (mesh->GetMeshType())
+            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
+            for (auto& mesh : MeshDrawList)
             {
-                case MeshTypeEnum::kPolygon:
+                switch (mesh->GetMeshType())
                 {
                         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipeline());
                         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipelineLayout(), 0, 1, hybridPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        DrawMesh(hybridPipeline, mesh, SceneManager::sceneProperites);
+                        GameObjectManager::DrawMesh(commandBuffer, hybridPipeline, mesh, SceneManager::sceneProperites);
                 }
             }
         }

@@ -5,23 +5,18 @@
 class MeshRenderer : public ComponentRenderer
 {
 private:
-	std::vector<MeshVertex> vertices = {
-			{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-			{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-			{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-			{{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-	};
+	std::shared_ptr<Model> model;
+	
+	void UpdateTopLevelAccelerationStructure();
 
-	std::vector<uint32_t> indices = {
- 0, 1, 3, 
-		1, 2, 3
-	};
+	void from_json(nlohmann::json& json)
+	{
+		Component::from_json(json);
+		model = std::make_shared<Model>(Model(json.at("Model"), ParentGameObjectID));
+		ModelManager::AddModel(model);
+	}
 
 public:
-	MeshRenderer(uint64_t GameObjectID);
-	MeshRenderer(glm::vec3 position, uint64_t GameObjectID);
-	MeshRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
-	MeshRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
 	MeshRenderer(const std::string& FilePath, uint64_t GameObjectID);
 	MeshRenderer(const std::string& FilePath, glm::vec3 position, uint64_t GameObjectID);
 	MeshRenderer(const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
@@ -32,9 +27,12 @@ public:
 	void Update(float DeltaTime) override;
 	void Destroy() override;
 
+	std::shared_ptr<Model> GetModel() { return model; }
+
 	virtual void to_json(nlohmann::json& json) override
 	{
-		ComponentRenderer::to_json(json);
+		Component::to_json(json);
+		model->to_json(json["Model"]);
 	}
 };
 
