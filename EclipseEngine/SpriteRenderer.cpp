@@ -4,7 +4,7 @@
 
 SpriteRenderer::SpriteRenderer(uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
 {
-	Sprite = std::make_shared<Mesh>(Mesh(vertices, indices));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
 	MeshRendererManager::AddMesh(Sprite);
 }
 
