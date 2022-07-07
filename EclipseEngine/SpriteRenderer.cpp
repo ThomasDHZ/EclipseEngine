@@ -5,31 +5,7 @@
 SpriteRenderer::SpriteRenderer(uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
 {
 	Sprite = std::make_shared<Mesh>(Mesh(vertices, indices));
-	//model = std::make_shared<Model>(Model(Sprite, GameObjectID));
-}
-
-SpriteRenderer::SpriteRenderer(glm::vec3 position, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
-{
-	Sprite = std::make_shared<Mesh>(Mesh(vertices, indices));
-	//model = std::make_shared<Model>(Model(Sprite, GameObjectID));
-	//model->ModelPosition = position;
-}
-
-SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
-{
-	Sprite = std::make_shared<Mesh>(Mesh(vertices, indices));
-	//model = std::make_shared<Model>(Model(Sprite, GameObjectID));
-	//model->ModelPosition = position;
-	//model->ModelRotation = rotation;
-}
-
-SpriteRenderer::SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
-{
-	Sprite = std::make_shared<Mesh>(Mesh(vertices, indices));
-	//model = std::make_shared<Model>(Model(Sprite, GameObjectID));
-	//model->ModelPosition = position;
-	//model->ModelRotation = rotation;
-	//model->ModelScale = scale;
+	MeshRendererManager::AddMesh(Sprite);
 }
 
 

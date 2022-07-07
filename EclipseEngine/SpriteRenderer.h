@@ -19,9 +19,6 @@ private:
 	};
 public:
 	SpriteRenderer(uint64_t GameObjectID);
-	SpriteRenderer(glm::vec3 position, uint64_t GameObjectID);
-	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID);
-	SpriteRenderer(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID);
 	SpriteRenderer(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~SpriteRenderer();
 
