@@ -36,9 +36,9 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::Update(float DeltaTime)
+void MeshRenderer::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
 {
-	model->Update();
+	model->Update(GameObjectMatrix);
 }
 
 void MeshRenderer::Destroy()

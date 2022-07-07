@@ -51,11 +51,28 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Update(float DeltaTime)
+void GameObject::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
 {
 	for (auto& comp : ComponentList)
 	{
-		comp->Update(DeltaTime);
+		if (comp->GetComponentType() == ComponentType::kSpriteRenderer ||
+			comp->GetComponentType() == ComponentType::kMeshRenderer)
+		{
+			if(comp->GetComponentType() == ComponentType::kSpriteRenderer)
+			{
+				const auto spriteRenderer = static_cast<SpriteRenderer*>(comp.get());
+				spriteRenderer->Update(GameObjectMatrix, DeltaTime);
+			}
+			else if(comp->GetComponentType() == ComponentType::kMeshRenderer)
+			{
+				const auto meshRenderer = static_cast<MeshRenderer*>(comp.get());
+				meshRenderer->Update(GameObjectMatrix, DeltaTime);
+			}
+		}
+		else
+		{
+			comp->Update(DeltaTime);
+		}
 	}
 }
 
@@ -91,6 +108,21 @@ void GameObject::GenerateID()
 {
 	GameObjectIDCounter++;
 	GameObjectID = GameObjectIDCounter;
+}
+
+void GameObject::SetGameObjectPosition(glm::vec3 gameObjectPosition)
+{
+	GameObjectPosition = gameObjectPosition;
+}
+
+void GameObject::SetGameObjectRotation(glm::vec3 gameObjectRotation)
+{
+	GameObjectRotation = gameObjectRotation;
+}
+
+void GameObject::SetGameObjectScale(glm::vec3 gameObjectScale)
+{
+	GameObjectScale = gameObjectScale;
 }
 
 std::shared_ptr<Component> GameObject::GetComponentByType(ComponentType componentType)

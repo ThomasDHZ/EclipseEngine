@@ -79,6 +79,7 @@ struct MeshProperties
 	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 ModelTransform = glm::mat4(1.0f);
+	alignas(16) glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);

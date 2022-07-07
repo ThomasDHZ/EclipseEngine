@@ -134,8 +134,8 @@ public:
 	MeshProperties meshProperties;
 
 	virtual void Update();
-	virtual void Update(const glm::mat4& ModelMatrix);
-	virtual void Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
+	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	virtual void Destroy();
 
 	void Draw(VkCommandBuffer& commandBuffer);

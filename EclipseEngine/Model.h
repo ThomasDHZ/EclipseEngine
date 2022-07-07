@@ -106,7 +106,7 @@ public:
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
-	void Update();
+	void Update(const glm::mat4& GameObjectMatrix);
 	void UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList);
 	void Destroy();
 

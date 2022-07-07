@@ -25,7 +25,7 @@ public:
 	SpriteRenderer(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~SpriteRenderer();
 
-	void Update(float DeltaTime) override;
+	void Update(const glm::mat4& GameObjectMatrix, float DeltaTime);
 	void Destroy() override;
 
 	void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);

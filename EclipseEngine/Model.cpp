@@ -385,7 +385,7 @@ void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 {
 }
 
-void Model::Update()
+void Model::Update(const glm::mat4& GameObjectMatrix)
 {
 	const glm::mat4 LastTransform = ModelTransform;
 	ModelTransform = glm::mat4(1.0f);
@@ -405,14 +405,14 @@ void Model::Update()
 		//AnimationPlayer.Update();
 		for (auto& mesh : MeshList)
 		{
-			mesh->Update(ModelTransform, BoneList);
+			mesh->Update(GameObjectMatrix, ModelTransform, BoneList);
 		}
 	}
 	else
 	{
 		for (auto& mesh : MeshList)
 		{
-			mesh->Update(ModelTransform);
+			mesh->Update(GameObjectMatrix, ModelTransform);
 		}
 	}
 }

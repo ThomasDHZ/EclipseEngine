@@ -13,7 +13,7 @@ layout(push_constant) uniform MeshInfo
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
-} Mesh;
+} sceneData;
 
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
@@ -21,22 +21,29 @@ layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties;
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
-layout (location = 3) in vec4 aTangent;
-layout (location = 4) in vec4 aBitangent;
-layout (location = 5) in vec3 Color;
+layout (location = 3) in vec3 aTangent;
+layout (location = 4) in vec3 aBitangent;
+layout (location = 5) in vec3 aColor;
 
 layout(location = 0) out vec3 FragPos;
 layout(location = 1) out vec2 TexCoords;
 layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
+layout(location = 5) out vec3 Color;
 
 void main() 
 {
-    FragPos = vec3(meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform * meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0));    
+    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
+    Color = aColor;
     TexCoords = aTexCoords;
-    Normal = aNormal;
-	Tangent = aTangent.rgb;
-	BiTangent = aBitangent.rgb;
-    gl_Position =   meshBuffer[Mesh.MeshIndex].meshProperties.MeshReflectionMatrix[gl_ViewIndex] * meshBuffer[Mesh.MeshIndex].meshProperties.ModelTransform *  meshBuffer[Mesh.MeshIndex].meshProperties.MeshTransform  * vec4(inPosition, 1.0);
+    Normal = mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * aNormal;
+	Tangent = aTangent;
+	BiTangent = aBitangent;
+    gl_Position = sceneData.proj * 
+                  sceneData.view *                
+                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  vec4(inPosition, 1.0);
 }

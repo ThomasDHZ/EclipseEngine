@@ -22,7 +22,7 @@ public:
 	MeshRenderer(nlohmann::json json, uint64_t GameObjectID);
 	virtual ~MeshRenderer();
 
-	void Update(float DeltaTime) override;
+	void Update(const glm::mat4& GameObjectMatrix, float DeltaTime);
 	void Destroy() override;
 
 	std::shared_ptr<Model> GetModel() { return model; }

@@ -57,7 +57,7 @@ Mesh2D::~Mesh2D()
 {
 }
 
-void Mesh2D::Update()
+void Mesh2D::Update(const glm::mat4& GameObjectMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, glm::vec3(MeshPosition.x, MeshPosition.y, 0.0f));
@@ -67,6 +67,7 @@ void Mesh2D::Update()
 
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = glm::mat4(1.0f);
+	meshProperties.GameObjectTransform = GameObjectMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 
 	if (SelectedMesh)

@@ -29,6 +29,10 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 
 void main() {
 
-    gl_Position = DLight[0].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
+    gl_Position = DLight[0].directionalLight.lightSpaceMatrix * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  vec4(inPosition, 1.0);
 
 }

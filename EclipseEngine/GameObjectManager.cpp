@@ -55,7 +55,7 @@
 {
 	for (auto obj : objList)
 	{
-		obj->Update(DeltaTime);
+		obj->Update(obj->GetGameObjectMatrix(), DeltaTime);
 	}
 }
 

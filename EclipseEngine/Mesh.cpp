@@ -359,7 +359,7 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 	}
 }
 
-void Mesh::Update(const glm::mat4& ModelMatrix)
+void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
@@ -387,6 +387,7 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
+	meshProperties.GameObjectTransform = GameObjectMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 
 	if (SelectedMesh)
@@ -415,7 +416,7 @@ void Mesh::Update(const glm::mat4& ModelMatrix)
 	}
 }
 
-void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
@@ -438,6 +439,7 @@ void Mesh::Update(const glm::mat4& ModelMatrix, const std::vector<std::shared_pt
 
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
+	meshProperties.GameObjectTransform = GameObjectMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 
 	if (SelectedMesh)
