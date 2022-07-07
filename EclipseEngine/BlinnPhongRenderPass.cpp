@@ -333,6 +333,22 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
+                case MeshTypeEnum::kSprite:
+                {
+                    if (VulkanRenderer::WireframeModeFlag)
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
+                    }
+                    else
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                    }
+                    break;
+                }
                     case MeshTypeEnum::kPolygon:
                     {
                         if (VulkanRenderer::WireframeModeFlag)
