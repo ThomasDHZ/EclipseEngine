@@ -170,8 +170,10 @@
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="LightManager.cpp" />
-    <ClCompile Include="LineMesh.cpp" />
-    <ClCompile Include="LineRenderer.cpp" />
+    <ClCompile Include="LineMesh2D.cpp" />
+    <ClCompile Include="LineMesh3D.cpp" />
+    <ClCompile Include="LineRenderer2D.cpp" />
+    <ClCompile Include="LineRenderer3D.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="Mesh3D.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
@@ -225,7 +227,7 @@
     <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SkyboxMesh.cpp" />
     <ClCompile Include="SoundEffectManager.cpp" />
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
@@ -259,8 +261,10 @@
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
-    <ClInclude Include="LineMesh.h" />
-    <ClInclude Include="LineRenderer.h" />
+    <ClInclude Include="LineMesh2D.h" />
+    <ClInclude Include="LineMesh3D.h" />
+    <ClInclude Include="LineRenderer2D.h" />
+    <ClInclude Include="LineRenderer3D.h" />
     <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="MeshPickerRenderPass2D.h" />
@@ -321,7 +325,7 @@
     <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SkyboxMesh.h" />
     <ClInclude Include="SoundEffectManager.h" />
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />

@@ -136,26 +136,26 @@ public:
 
 	void to_json(nlohmann::json& json)
 	{
-		JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
+		//JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
 
-		//glm::mat4 ModelTransform = glm::mat4(1.0f);
+		////glm::mat4 ModelTransform = glm::mat4(1.0f);
 
-		for (int x = 0; x < MeshList.size(); x++)
-		{
-			MeshList[x]->to_json(json["MeshList"][x]);
-		}
-		//for (int x = 0; x < BoneList.size(); x++)
+		//for (int x = 0; x < MeshList.size(); x++)
 		//{
-		//	BoneList[x]->to_json(json["BoneList"][x]);
+		//	MeshList[x]->to_json(json["MeshList"][x]);
 		//}
-		//for (int x = 0; x < NodeMapList.size(); x++)
-		//{
-		//	NodeMapList[x].to_json(json["NodeMapList"][x]);
-		//}
+		////for (int x = 0; x < BoneList.size(); x++)
+		////{
+		////	BoneList[x]->to_json(json["BoneList"][x]);
+		////}
+		////for (int x = 0; x < NodeMapList.size(); x++)
+		////{
+		////	NodeMapList[x].to_json(json["NodeMapList"][x]);
+		////}
 
-		JsonConverter::to_json(json["ModelPosition"], ModelPosition);
-		JsonConverter::to_json(json["ModelRotation"], ModelRotation);
-		JsonConverter::to_json(json["ModelScale"], ModelScale);
+		//JsonConverter::to_json(json["ModelPosition"], ModelPosition);
+		//JsonConverter::to_json(json["ModelRotation"], ModelRotation);
+		//JsonConverter::to_json(json["ModelScale"], ModelScale);
 	}
 };
 

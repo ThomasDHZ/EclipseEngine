@@ -322,7 +322,7 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 
 void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -332,7 +332,7 @@ void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 
 void Model::AddMesh(std::vector<LineVertex>& vertices)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);

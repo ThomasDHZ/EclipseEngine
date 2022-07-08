@@ -2,7 +2,7 @@
 
 SceneType								SceneManager::sceneType;
 float                                   SceneManager::PBRCubeMapSize =  256.0f*2;
-std::shared_ptr<Skybox>                 SceneManager::SkyboxMesh;
+std::shared_ptr<SkyboxMesh>             SceneManager::skyboxMesh;
 std::shared_ptr<EnvironmentTexture>     SceneManager::environmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>   SceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture> SceneManager::CubeMap = nullptr;

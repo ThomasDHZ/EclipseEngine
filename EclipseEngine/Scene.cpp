@@ -8,8 +8,8 @@ Scene::Scene()
 {
 
 
-    //camera = OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f);
-    SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
+    SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 1.0f));
+ //   SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
     SceneManager::sceneType = SceneType::kSprite2D;
 
@@ -25,10 +25,9 @@ Scene::Scene()
 
     std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
     obj->SetGameObjectMaterial(material);
-    obj->SetGameObjectPosition(10.0f, 0.0f);
      GameObjectManager::AddGameObject(obj);
  
-    std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(2.0f, 0.0f), 1));
+    std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(1.0f, 0.0f), 1));
     obj2->SetGameObjectMaterial(material);
     GameObjectManager::AddGameObject(obj2);
 
@@ -36,7 +35,7 @@ Scene::Scene()
     obj3->SetGameObjectMaterial(material2);
     GameObjectManager::AddGameObject(obj3);
 
-    std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(2.0f, 1.0f), 2));
+    std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(1.0f, 1.0f), 2));
     obj4->SetGameObjectMaterial(material2);
     GameObjectManager::AddGameObject(obj4);
 

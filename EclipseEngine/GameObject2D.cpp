@@ -10,6 +10,11 @@ GameObject2D::GameObject2D(const std::string Name) : GameObject(Name)
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(GameObjectID)));
 }
 
+GameObject2D::GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint)
+{
+	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(GameObjectID)));
+}
+
 GameObject2D::GameObject2D(const std::string Name, glm::vec2 position, uint32_t Depth) : GameObject(Name, glm::vec3(position.x, position.y, Depth))
 {
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(GameObjectID)));

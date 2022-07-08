@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "Skybox.h"
+#include "SkyboxMesh.h"
 
 class IrradianceRenderPass : public RenderPass
 {

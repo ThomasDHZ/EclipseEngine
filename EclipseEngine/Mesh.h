@@ -62,20 +62,20 @@ private:
 
 	Pixel MeshColorID = NullPixel;
 
-	void from_json(nlohmann::json& json)
-	{
-		JsonConverter::from_json(json["MeshPosition"], MeshPosition);
-		JsonConverter::from_json(json["MeshRotation"], MeshRotation);
-		JsonConverter::from_json(json["MeshScale"], MeshScale);
-		JsonConverter::from_json(json["MeshTransformMatrix"], MeshTransformMatrix);
+	//void from_json(nlohmann::json& json)
+	//{
+	//	JsonConverter::from_json(json["MeshPosition"], MeshPosition);
+	//	JsonConverter::from_json(json["MeshRotation"], MeshRotation);
+	//	JsonConverter::from_json(json["MeshScale"], MeshScale);
+	//	JsonConverter::from_json(json["MeshTransformMatrix"], MeshTransformMatrix);
 
-		meshProperties.from_json(json["MeshProperties"]);
+	//	meshProperties.from_json(json["MeshProperties"]);
 
-		std::string FilePath = "";
-		json["MaterialPath"].get_to(FilePath);
+	//	std::string FilePath = "";
+	//	json["MaterialPath"].get_to(FilePath);
 
-		MaterialManager::LoadMaterial(FilePath);
-	}
+	//	MaterialManager::LoadMaterial(FilePath);
+	//}
 
 protected:
 
@@ -95,10 +95,6 @@ protected:
 	std::vector<uint32_t> IndexList;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
-
-	glm::vec3 MeshPosition = glm::vec3(0.0f);
-	glm::vec3 MeshRotation = glm::vec3(0.0f);
-	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
 	
@@ -122,8 +118,6 @@ public:
 
 	Mesh();
 	Mesh(MeshTypeEnum meshType, uint64_t ParentGameObjectID);
-	Mesh(std::vector<LineVertex>& vertices);
-	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	~Mesh();
 
 	std::string MeshName;
@@ -165,34 +159,34 @@ public:
 	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }
 	glm::vec2* GetUVFlip() { return &meshProperties.UVFlip; }
 
-	class MeshTypeSort
-	{
-	public:
-		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
-		{
-			return  mesh1->MeshType < mesh2->MeshType;
-		}
-	};
+	//class MeshTypeSort
+	//{
+	//public:
+	//	bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
+	//	{
+	//		return  mesh1->MeshType < mesh2->MeshType;
+	//	}
+	//};
 
-	class ZSorting
-	{
-	public:
-		bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
-		{
-			return mesh1->MeshPosition.z < mesh2->MeshPosition.z;
-		}
-	};
+	//class ZSorting
+	//{
+	//public:
+	//	bool operator()(std::shared_ptr<Mesh> mesh1, std::shared_ptr<Mesh> mesh2)
+	//	{
+	//		return mesh1->MeshPosition.z < mesh2->MeshPosition.z;
+	//	}
+	//};
 
-	void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
-		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
-		JsonConverter::to_json(json["MeshScale"], MeshScale);
-		JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
+	//void to_json(nlohmann::json& json)
+	//{
+	//	JsonConverter::to_json(json["MeshPosition"], MeshPosition);
+	//	JsonConverter::to_json(json["MeshRotation"], MeshRotation);
+	//	JsonConverter::to_json(json["MeshScale"], MeshScale);
+	//	JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
 
-		meshProperties.to_json(json["MeshProperties"]);
+	//	meshProperties.to_json(json["MeshProperties"]);
 
-		json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
-	}
+	//	json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
+	//}
 };
 

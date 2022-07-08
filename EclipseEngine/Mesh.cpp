@@ -13,69 +13,6 @@ Mesh::Mesh(MeshTypeEnum meshType, uint64_t parentGameObjectID)
 	ParentGameObjectID = parentGameObjectID;
 }
 
-Mesh::Mesh(std::vector<LineVertex>& vertices)
-{
-	GenerateID();
-	GenerateColorID();
-
-	IndexList = {
-
-	};
-
-	ParentModelID = -1;
-	ParentGameObjectID = -1;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
-	BoneCount = 0;
-
-	MeshType = MeshTypeEnum::kLine;
-
-	material = MaterialManager::GetDefaultMaterial();
-
-	glm::mat4 MeshTransform = glm::mat4(1.0f);
-	MeshTransform = glm::transpose(MeshTransform);
-
-	if (GraphicsDevice::IsRayTracingFeatureActive())
-	{
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	}
-}
-
-Mesh::Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
-{
-	GenerateID();
-	GenerateColorID();
-
-	std::vector<LineVertex> VertexList2 = {
-	{{StartPoint}, {1.0f, 0.0f, 0.0f}},
-	{{EndPoint}, {0.0f, 1.0f, 0.0f}}
-	};
-
-	IndexList = {
-
-	};
-
-	ParentModelID = -1;
-	ParentGameObjectID = -1;
-	VertexCount = VertexList2.size();
-	IndexCount = IndexList.size();
-	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
-	BoneCount = 0;
-
-	MeshType = MeshTypeEnum::kLine;
-
-	material = MaterialManager::GetDefaultMaterial();
-
-	glm::mat4 MeshTransform = glm::mat4(1.0f);
-	MeshTransform = glm::transpose(MeshTransform);
-
-	if (GraphicsDevice::IsRayTracingFeatureActive())
-	{
-		VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	}
-}
-
 Mesh::~Mesh()
 {
 }
@@ -165,121 +102,6 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 	}
 }
 
-void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
-{
-	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
-
-	if (meshProperties.MeshTransform != TransformMatrix)
-	{
-		VulkanRenderer::UpdateBLAS = true;
-	}
-
-	glm::vec2 XNearFar = glm::vec2(-3.0f, 3.0f);
-	glm::vec2 YNearFar = glm::vec2(-3.0f, 3.0f);
-	glm::vec2 ZNearFar = glm::vec2(-3.0f, 3.0f);
-
-	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
-	meshProperties.MeshReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	meshProperties.MeshReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-	meshProperties.MeshReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
-	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
-	meshProperties.GameObjectTransform = GameObjectMatrix;
-	meshProperties.materialBufferData = material->GetMaterialTextureData();
-
-	if (SelectedMesh)
-	{
-		meshProperties.SelectedObjectBufferIndex = 1;
-	}
-	else
-	{
-		meshProperties.SelectedObjectBufferIndex = 0;
-	}
-
-	MeshPropertiesBuffer.Update(meshProperties);
-
-	MeshTransformMatrix = meshProperties.MeshTransform;
-
-	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-
-	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
-	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-
-	if (VulkanRenderer::UpdateBLAS &&
-		IndexCount != 0)
-	{
-		UpdateMeshBottomLevelAccelerationStructure();
-	}
-}
-
-void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
-{
-	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
-
-	glm::vec2 XNearFar = glm::vec2(-10.0f, 10.0f);
-	glm::vec2 YNearFar = glm::vec2(-10.0f, 10.0f);
-	glm::vec2 ZNearFar = glm::vec2(-10.0f, 10.0f);
-
-	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
-	meshProperties.MeshReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	meshProperties.MeshReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-	meshProperties.MeshReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
-	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
-	meshProperties.GameObjectTransform = GameObjectMatrix;
-	meshProperties.materialBufferData = material->GetMaterialTextureData();
-
-	if (SelectedMesh)
-	{
-		meshProperties.SelectedObjectBufferIndex = 1;
-	}
-	else
-	{
-		meshProperties.SelectedObjectBufferIndex = 0;
-	}
-	MeshPropertiesBuffer.Update(meshProperties);
-
-	//if (BoneList.size() != 0)
-	//{
-	//	for (auto bone : BoneList)
-	//	{
-	//		BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
-	//	}
-	//	BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
-	//}
-
-	MeshTransformMatrix = meshProperties.MeshTransform;
-	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
-
-	if (GraphicsDevice::IsRayTracerActive() &&
-		IndexCount != 0)
-	{
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-		UpdateMeshBottomLevelAccelerationStructure();
-	}
-}
-
 void Mesh::GenerateID()
 {
 	MeshIDCounter++;
@@ -308,6 +130,14 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 	}
+}
+
+void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+{
+}
+
+void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+{
 }
 
 void Mesh::Destroy()

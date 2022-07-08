@@ -6,7 +6,7 @@
 #include "MeshRendererManager.h"
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
-#include "Skybox.h"
+#include "SkyboxMesh.h"
 
 class BlinnPhongRenderPass : public RenderPass
 {

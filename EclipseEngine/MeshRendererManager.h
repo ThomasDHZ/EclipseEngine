@@ -3,6 +3,7 @@
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
 #include "Mesh3D.h"
+#include "LineMesh3D.h"
 
 class MeshRendererManager
 {
@@ -13,7 +14,7 @@ public:
 
 	static std::shared_ptr<Mesh> AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
 		MeshList.emplace_back(mesh);
 
 		return mesh;
@@ -21,7 +22,7 @@ public:
 
 	static std::shared_ptr<Mesh> AddMesh(std::vector<LineVertex>& vertices)
 	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices));
+		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
 		MeshList.emplace_back(mesh);
 
 		return mesh;
@@ -72,18 +73,18 @@ public:
 
 	static void Update()
 	{
-		SortByZIndex();
+	//	SortByZIndex();
 	}
 
-	static void SortByZIndex()
-	{
-		std::sort(MeshList.begin(), MeshList.end(), Mesh::ZSorting{});
-	}
+	//static void SortByZIndex()
+	//{
+	//	//std::sort(MeshList.begin(), MeshList.end(), Mesh::ZSorting{});
+	//}
 
-	static void SortByRenderPipeline()
-	{
-		std::sort(MeshList.begin(), MeshList.end(), Mesh::MeshTypeSort{});
-	}
+	//static void SortByRenderPipeline()
+	//{
+	//	//std::sort(MeshList.begin(), MeshList.end(), Mesh::MeshTypeSort{});
+	//}
 
 	static void GUIUpdate()
 	{

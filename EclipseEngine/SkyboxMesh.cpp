@@ -1,13 +1,13 @@
-#include "Skybox.h"
-Skybox::Skybox() : Mesh()
+#include "SkyboxMesh.h"
+SkyboxMesh::SkyboxMesh() : Mesh3D()
 {
 }
 
-Skybox::~Skybox()
+SkyboxMesh::~SkyboxMesh()
 {
 }
 
-void Skybox::StartUp()
+void SkyboxMesh::StartUp()
 {
 	const std::vector<MeshVertex> SkyBoxVertices =
 	{

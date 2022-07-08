@@ -228,7 +228,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="LineRenderer.cpp">
+    <ClCompile Include="LineRenderer3D.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
@@ -272,9 +272,6 @@
     </ClCompile>
     <ClCompile Include="EnvironmentTexture.cpp">
       <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Skybox.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
@@ -348,9 +345,6 @@
     <ClCompile Include="GameObject3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LineMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -365,6 +359,18 @@
     </ClCompile>
     <ClCompile Include="Mesh3D.cpp">
       <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="LineMesh3D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxMesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="LineMesh2D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="LineRenderer2D.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -512,7 +518,7 @@
     <ClInclude Include="ReadableTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="LineRenderer.h">
+    <ClInclude Include="LineRenderer3D.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
@@ -559,9 +565,6 @@
     </ClInclude>
     <ClInclude Include="CubeMapTexture.h">
       <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Skybox.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PBRRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
@@ -644,9 +647,6 @@
     <ClInclude Include="GameObject3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
@@ -658,6 +658,18 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LineMesh3D.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxMesh.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LineMesh2D.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LineRenderer2D.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

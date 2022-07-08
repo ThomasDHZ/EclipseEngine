@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "LineRenderer.h"
+#include "LineRenderer3D.h"
 #include "SpriteRenderer.h"
 #include "MeshRenderer.h"
 
@@ -13,14 +13,14 @@ GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexLi
 {
 	ObjectName = Name;
 	GenerateID();
-	AddComponent(std::make_shared<LineRenderer>(LineRenderer(VertexList, GameObjectID)));
+	AddComponent(std::make_shared<LineRenderer3D>(LineRenderer3D(VertexList, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a)
 {
 	ObjectName = Name;
 	GenerateID();
-	AddComponent(std::make_shared<LineRenderer>(LineRenderer(StartLine, EndLine, GameObjectID)));
+	AddComponent(std::make_shared<LineRenderer3D>(LineRenderer3D(StartLine, EndLine, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name)

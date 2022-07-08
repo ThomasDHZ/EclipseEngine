@@ -8,7 +8,7 @@
 
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
-#include "Skybox.h"
+#include "SkyboxMesh.h"
 
 #include "GameObjectManager.h"
 #include "LightManager.h"
@@ -30,7 +30,7 @@ private:
 
 	static float PBRCubeMapSize;
 
-	static std::shared_ptr<Skybox> SkyboxMesh;
+	static std::shared_ptr<SkyboxMesh> skyboxMesh;
 
 public:
 	static SceneType sceneType;
@@ -50,8 +50,8 @@ public:
 		musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
 		musicPlayer.Play();
 
-		SkyboxMesh = std::make_shared<Skybox>();
-		SkyboxMesh->StartUp();
+		skyboxMesh = std::make_shared<SkyboxMesh>();
+		skyboxMesh->StartUp();
 	}
 
 	static void Update()
@@ -80,7 +80,7 @@ public:
 
 	static void Destory()
 	{
-		SkyboxMesh->Destroy();
+		skyboxMesh->Destroy();
 		musicPlayer.Destroy();
 
 		if (environmentTexture != nullptr)
@@ -200,7 +200,7 @@ public:
 	}
 
 	static SceneType GetSceneType() { return sceneType; }
-	static std::shared_ptr<Skybox> GetSkyboxMesh() { return SkyboxMesh; };
+	static std::shared_ptr<SkyboxMesh> GetSkyboxMesh() { return skyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 };
 
