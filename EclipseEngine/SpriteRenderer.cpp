@@ -11,7 +11,6 @@ SpriteRenderer::SpriteRenderer(uint64_t GameObjectID) : Component(GameObjectID, 
 
 SpriteRenderer::SpriteRenderer(nlohmann::json& json, uint64_t GameObjectID) : Component(GameObjectID, json, ComponentSubType::kRenderedObject)
 {
-	//mesh = Mesh(vertices, indices);
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -21,16 +20,14 @@ SpriteRenderer::~SpriteRenderer()
 void SpriteRenderer::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
 {
 	Sprite->Update(GameObjectMatrix, glm::mat4(1.0f));
-	//model->Update(GameObjectMatrix);
 }
 
 void SpriteRenderer::Destroy()
 {
 	Sprite->Destroy();
-	//model->Destroy();
 }
 
 void SpriteRenderer::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
 {
-	//Sprite->SetMaterial(SpriteMaterial);
+	Sprite->SetMaterial(SpriteMaterial);
 }

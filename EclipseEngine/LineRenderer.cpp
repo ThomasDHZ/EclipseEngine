@@ -14,8 +14,8 @@ LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, uint64_t GameObje
 
 LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, glm::vec3 position, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
-	mesh->SetMeshPosition(position);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
+	//mesh->SetMeshPosition(position);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);
@@ -23,9 +23,9 @@ LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, glm::vec3 positio
 
 LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
-	mesh->SetMeshPosition(position);
-	mesh->SetMeshRotation(rotation);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
+	//mesh->SetMeshPosition(position);
+	//mesh->SetMeshRotation(rotation);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);
@@ -33,10 +33,10 @@ LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, glm::vec3 positio
 
 LineRenderer::LineRenderer(std::vector<LineVertex> VertexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
-	mesh->SetMeshPosition(position);
-	mesh->SetMeshRotation(rotation);
-	mesh->SetMeshScale(scale);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
+	//mesh->SetMeshPosition(position);
+	//mesh->SetMeshRotation(rotation);
+	//mesh->SetMeshScale(scale);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);
@@ -51,8 +51,8 @@ LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, uint64_t Ga
 
 LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, glm::vec3 position, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
-	mesh->SetMeshPosition(position);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	//mesh->SetMeshPosition(position);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);
@@ -60,9 +60,9 @@ LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, glm::vec3 p
 
 LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, glm::vec3 position, glm::vec3 rotation, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
-	mesh->SetMeshPosition(position);
-	mesh->SetMeshRotation(rotation);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	//mesh->SetMeshPosition(position);
+	//mesh->SetMeshRotation(rotation);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);
@@ -70,10 +70,10 @@ LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, glm::vec3 p
 
 LineRenderer::LineRenderer(glm::vec3 StartPoint, glm::vec3 EndPoint, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer, ComponentSubType::kRenderedObject)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
-	mesh->SetMeshPosition(position);
-	mesh->SetMeshRotation(rotation);
-	mesh->SetMeshScale(scale);
+	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
+	//mesh->SetMeshPosition(position);
+	//mesh->SetMeshRotation(rotation);
+	//mesh->SetMeshScale(scale);
 
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
 	//ModelManager::AddModel(model);

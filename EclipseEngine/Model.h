@@ -6,6 +6,7 @@
 #include "MeshRendererManager.h"
 #include "Converters.h"
 #include "Mesh.h"
+#include "Mesh3D.h"
 #include "Bone.h"
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
@@ -58,7 +59,7 @@ private:
 
 	void from_json(nlohmann::json& json, uint64_t GameObjectID)
 	{
-		JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
+		/*JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
 		LoadModel(ModelFilePath, GameObjectID);
 
 		for (int x = 0; x < json["MeshList"].size(); x++)
@@ -80,7 +81,7 @@ private:
 
 		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
 		JsonConverter::from_json(json["ModelRotation"], ModelRotation);
-		JsonConverter::from_json(json["ModelScale"], ModelScale);
+		JsonConverter::from_json(json["ModelScale"], ModelScale);*/
 	}
 
 public:
@@ -112,6 +113,9 @@ public:
 
 	bool DoesMeshExistInModel(std::shared_ptr<Mesh> mesh);
 
+	void SetModelPosition(float x, float y, float z);
+	void SetModelRotation(float x, float y, float z);
+	void SetModelScale(float x, float y, float z);
 	void SetModelPosition(glm::vec3 modelPosition);
 	void SetModelRotation(glm::vec3 modelRotation);
 	void SetModelScale(glm::vec3 modelScale);

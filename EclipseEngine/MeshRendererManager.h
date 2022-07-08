@@ -2,6 +2,7 @@
 #include "VulkanRenderer.h"
 #include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
+#include "Mesh3D.h"
 
 class MeshRendererManager
 {
@@ -28,7 +29,7 @@ public:
 
 	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
 		MeshList.emplace_back(mesh);
 
 		return mesh;
@@ -36,7 +37,7 @@ public:
 
 	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 		MeshList.emplace_back(mesh);
 
 		return mesh;
@@ -44,7 +45,7 @@ public:
 
 	static std::shared_ptr<Mesh> AddMesh(MeshLoadingInfo meshLoader)
 	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(meshLoader));
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
 		MeshList.emplace_back(mesh);
 
 		return mesh;

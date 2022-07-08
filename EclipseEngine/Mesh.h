@@ -62,8 +62,6 @@ private:
 
 	Pixel MeshColorID = NullPixel;
 
-	void UpdateMeshBottomLevelAccelerationStructure();
-
 	void from_json(nlohmann::json& json)
 	{
 		JsonConverter::from_json(json["MeshPosition"], MeshPosition);
@@ -119,21 +117,18 @@ protected:
 
 	void GenerateID();
 	void GenerateColorID();
+	void UpdateMeshBottomLevelAccelerationStructure();
 public:
 
 	Mesh();
 	Mesh(MeshTypeEnum meshType, uint64_t ParentGameObjectID);
-	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	Mesh(std::vector<LineVertex>& vertices);
-	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
-	Mesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
-	Mesh(MeshLoadingInfo& meshLoader);
+	Mesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	~Mesh();
 
 	std::string MeshName;
 	MeshProperties meshProperties;
 
-	virtual void Update();
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	virtual void Destroy();
@@ -146,9 +141,6 @@ public:
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
 	void SetMaterial(const std::string& MaterialPath);
-	void SetMeshPosition(glm::vec3 position);
-	void SetMeshRotation(glm::vec3 rotation);
-	void SetMeshScale(glm::vec3 scale);
 
 	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
 	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
@@ -169,9 +161,6 @@ public:
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	MeshProperties GetMeshProperties() { return meshProperties; }
 
-	glm::vec3 GetPosition() { return MeshPosition; }
-	glm::vec3 GetRotation() { return MeshRotation; }
-	glm::vec3 GetScale() { return MeshScale; }
 	glm::vec2* GetUVOffset() { return &meshProperties.UVOffset; }
 	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }
 	glm::vec2* GetUVFlip() { return &meshProperties.UVFlip; }

@@ -342,7 +342,7 @@ void Model::AddMesh(std::vector<LineVertex>& vertices)
 
 void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -352,7 +352,7 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 
 void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(vertices, indices, materialPtr));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -362,7 +362,7 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 
 void Model::AddMesh(MeshLoadingInfo& meshLoader)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(meshLoader));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
 
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -453,6 +453,21 @@ bool Model::DoesMeshExistInModel(std::shared_ptr<Mesh> mesh)
 		}
 	}
 	return false;
+}
+
+void Model::SetModelPosition(float x, float y, float z)
+{
+	ModelPosition = glm::vec3(x, y, z);
+}
+
+void Model::SetModelRotation(float x, float y, float z)
+{
+	ModelRotation = glm::vec3(x, y, z);
+}
+
+void Model::SetModelScale(float x, float y, float z)
+{
+	ModelScale = glm::vec3(x, y, z);
 }
 
 void Model::SetModelPosition(glm::vec3 modelPosition)

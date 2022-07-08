@@ -27,7 +27,7 @@ public:
 	Mesh2D(std::shared_ptr<Material> SpriteMaterial, uint64_t parentGameObjectID);
 	~Mesh2D();
 
-	void Update(const glm::mat4& GameObjectMatrix);
+	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 
 	void SetPosition(float x, float y);
 	void SetPosition(glm::vec2 position);
