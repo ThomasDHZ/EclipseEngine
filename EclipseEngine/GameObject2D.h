@@ -7,10 +7,19 @@ private:
 public:
 	GameObject2D();
 	GameObject2D(const std::string Name);
-	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint);
 	GameObject2D(const std::string Name, glm::vec2 position, uint32_t Depth);
 	GameObject2D(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t Depth);
 	GameObject2D(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth);
+
+	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint);
+	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint, glm::vec2 position);
+	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint, glm::vec2 position, glm::vec2 rotation);
+	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
+
+	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList);
+	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position);
+	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position, glm::vec2 rotation);
+	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
 	~GameObject2D();
 
 	void SetGameObjectPosition(float x, float y);

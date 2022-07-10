@@ -1,4 +1,5 @@
 #include "RenderPass2D.h"
+#include "LinePipeline.h"
 
 RenderPass2D::RenderPass2D() : RenderPass()
 {
@@ -158,12 +159,12 @@ void RenderPass2D::BuildRenderPassPipelines()
 
         if (drawLinePipeline == nullptr)
         {
-            drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+            drawLinePipeline = std::make_shared<DrawLinePipeline>(DrawLinePipeline(renderPass, buildGraphicsPipelineInfo));
         }
         else
         {
             drawLinePipeline->Destroy();
-            drawLinePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+            drawLinePipeline->UpdateGraphicsPipeLine(renderPass, buildGraphicsPipelineInfo);
         }
 
         for (auto& shader : PipelineShaderStageList)

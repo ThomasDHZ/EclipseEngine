@@ -2,6 +2,8 @@
 #include "MeshRendererManager.h"
 #include "SpriteRenderer.h"
 #include "MeshRenderer.h"
+#include "LineRenderer2D.h"
+#include "LineRenderer3D.h"
 
 RenderPass::RenderPass()
 {
@@ -27,19 +29,32 @@ void RenderPass::Destroy()
 std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_ptr<GameObject> obj)
 {
     std::vector<std::shared_ptr<Mesh>> MeshDrawList;
-    const auto component = obj->GetComponentByType(ComponentType::kSpriteRenderer);
-    if (component != nullptr)
+    const auto componentSubType = obj->GetComponentBySubType(ComponentSubType::kRenderedObject);
+    if (componentSubType->GetComponentSubType() == ComponentSubType::kRenderedObject)
     {
-        const auto component = obj->GetComponentByType(ComponentType::kSpriteRenderer);
-        const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
-        MeshDrawList.emplace_back(spriteRenderer->GetSprite());
-    }
-    else
-    {
-        const auto component = obj->GetComponentByType(ComponentType::kMeshRenderer);
-        const auto meshRenderer = static_cast<MeshRenderer*>(component.get());
-        const auto model = meshRenderer->GetModel();
-        MeshDrawList = model->GetMeshList();
+        std::shared_ptr<Component> component = nullptr;
+        if (component = obj->GetComponentByType(ComponentType::kSpriteRenderer))
+        {
+            const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+            MeshDrawList.emplace_back(spriteRenderer->GetSprite());
+        }
+        else if (component = obj->GetComponentByType(ComponentType::kMeshRenderer))
+        {
+            const auto meshRenderer = static_cast<MeshRenderer*>(component.get());
+            const auto model = meshRenderer->GetModel();
+            MeshDrawList = model->GetMeshList();
+        }
+        else if (component = obj->GetComponentByType(ComponentType::kLineRenderer2D))
+        {
+            const auto lineRenderer = static_cast<LineRenderer2D*>(component.get());
+            MeshDrawList.emplace_back(lineRenderer->GetLine());
+        }
+        //else if (component = obj->GetComponentByType(ComponentType::kLineRenderer3D))
+        //{
+        //    const auto lineRenderer = static_cast<LineRenderer3D*>(component.get());
+        //    const auto line = lineRenderer->GetLine();
+        //    MeshDrawList = line->GetMeshList();
+        //}
     }
 
     return MeshDrawList;

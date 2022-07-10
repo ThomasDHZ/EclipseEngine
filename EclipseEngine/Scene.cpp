@@ -23,21 +23,24 @@ Scene::Scene()
     material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
     MaterialManager::AddMaterial(material2);
 
-    std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
-    obj->SetGameObjectMaterial(material);
-     GameObjectManager::AddGameObject(obj);
+    //std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
+    //obj->SetGameObjectMaterial(material);
+    // GameObjectManager::AddGameObject(obj);
  
-    std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(1.0f, 0.0f), 1));
-    obj2->SetGameObjectMaterial(material);
-    GameObjectManager::AddGameObject(obj2);
+    //std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(1.0f, 0.0f), 1));
+    //obj2->SetGameObjectMaterial(material);
+    //GameObjectManager::AddGameObject(obj2);
 
-    std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(1.0f), 0));
-    obj3->SetGameObjectMaterial(material2);
-    GameObjectManager::AddGameObject(obj3);
+    //std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(1.0f), 0));
+    //obj3->SetGameObjectMaterial(material2);
+    //GameObjectManager::AddGameObject(obj3);
 
-    std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(1.0f, 1.0f), 2));
-    obj4->SetGameObjectMaterial(material2);
-    GameObjectManager::AddGameObject(obj4);
+    //std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(1.0f, 1.0f), 2));
+    //obj4->SetGameObjectMaterial(material2);
+    //GameObjectManager::AddGameObject(obj4);
+
+    std::shared_ptr<GameObject2D> obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(0.0f, 1.0f), glm::vec2(5.0f)));
+    GameObjectManager::AddGameObject(obj5);
 
 //   SceneManager::LoadScene("../Scenes/example.txt");
 

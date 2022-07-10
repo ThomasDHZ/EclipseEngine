@@ -372,6 +372,9 @@
     <ClCompile Include="LineRenderer2D.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="LinePipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -670,6 +673,9 @@
     </ClInclude>
     <ClInclude Include="LineRenderer2D.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LinePipeline.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
