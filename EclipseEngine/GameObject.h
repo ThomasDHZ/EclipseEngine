@@ -8,15 +8,15 @@ class GameObject
 private:
 	static uint64_t GameObjectIDCounter;
 
-	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
-	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
-	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
-	glm::vec3 GameObjectScale = glm::vec3(1.0f);
-
 protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
 	std::vector<std::shared_ptr<Component>> ComponentList;
+
+	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
+	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
+	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
+	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
 	void SetGameObjectPosition(float x, float y, float z);
 	void SetGameObjectRotation(float x, float y, float z);
@@ -38,10 +38,12 @@ public:
 	GameObject();
 	GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a);
 	GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a);
+
 	GameObject(const std::string Name);
 	GameObject(const std::string Name, glm::vec3 Position);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
+
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 

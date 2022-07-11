@@ -74,6 +74,10 @@ public:
 	static void Update()
 	{
 	//	SortByZIndex();
+		//for (auto mesh : MeshList)
+		//{
+		//	mesh->Update(glm::mat4(1.0f), glm::mat4(1.0f));
+		//}
 	}
 
 	//static void SortByZIndex()

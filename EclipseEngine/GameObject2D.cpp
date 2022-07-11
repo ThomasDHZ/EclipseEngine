@@ -70,6 +70,21 @@ GameObject2D::~GameObject2D()
 {
 }
 
+void GameObject2D::Update(float DeltaTime)
+{
+	if (auto spriteRendererComponent = GetComponentByType(ComponentType::kSpriteRenderer))
+	{
+		auto spriteRenderer = static_cast<SpriteRenderer*>(spriteRendererComponent.get());
+		spriteRenderer->Update(GameObjectTransform, DeltaTime);
+	}
+
+	if (auto lineRenderer2DComponent = GetComponentByType(ComponentType::kLineRenderer2D))
+	{
+		auto lineRenderer2D = static_cast<LineRenderer2D*>(lineRenderer2DComponent.get());
+		lineRenderer2D->Update(GameObjectTransform, DeltaTime);
+	}
+}
+
 void GameObject2D::SetGameObjectPosition(float x, float y)
 {
 	GameObject::SetGameObjectPosition(x,y, GameObject::GetGameObjectPosition().z);

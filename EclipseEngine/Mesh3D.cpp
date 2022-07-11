@@ -206,11 +206,11 @@ Mesh3D::~Mesh3D()
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
+	TransformMatrix = glm::translate(ModelMatrix, MeshPosition);
+	TransformMatrix = glm::rotate(ModelMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(ModelMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::rotate(ModelMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	TransformMatrix = glm::scale(ModelMatrix, MeshScale);
 
 	if (meshProperties.MeshTransform != TransformMatrix)
 	{

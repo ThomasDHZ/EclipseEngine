@@ -22,6 +22,8 @@ public:
 	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
 	~GameObject2D();
 
+	virtual void Update(float DeltaTime) override;
+
 	void SetGameObjectPosition(float x, float y);
 	void SetGameObjectPosition(glm::vec2 position);
 	void SetGameObjectDepth(float Depth);

@@ -94,6 +94,7 @@ public:
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
+	Model(std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
 	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 

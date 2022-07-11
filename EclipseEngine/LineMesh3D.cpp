@@ -25,7 +25,7 @@ LineMesh3D::LineMesh3D(std::vector<LineVertex>& vertices)
 
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 
@@ -70,11 +70,11 @@ LineMesh3D::~LineMesh3D()
 void LineMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	TransformMatrix = glm::scale(TransformMatrix, glm::vec3(MeshScale.x, MeshScale.y, 1.0f));
+	TransformMatrix = glm::translate(GameObjectMatrix, MeshPosition);
+	TransformMatrix = glm::rotate(GameObjectMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(GameObjectMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::rotate(GameObjectMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	TransformMatrix = glm::scale(GameObjectMatrix, glm::vec3(MeshScale.x, MeshScale.y, 1.0f));
 
 	if (SelectedMesh)
 	{

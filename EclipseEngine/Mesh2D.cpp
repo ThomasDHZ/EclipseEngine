@@ -10,8 +10,8 @@ Mesh2D::Mesh2D(uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, parent
 	GenerateID();
 	GenerateColorID();
 
-	VertexList = vertices;
-	IndexList = indices;
+	VertexList = SpriteVertexList;
+	IndexList = SpriteIndexList;
 
 	ParentModelID = -1;
 	ParentGameObjectID = -1;
@@ -32,8 +32,8 @@ Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectI
 	GenerateID();
 	GenerateColorID();
 
-	VertexList = vertices;
-	IndexList = indices;
+	VertexList = SpriteVertexList;
+	IndexList = SpriteIndexList;
 
 	ParentModelID = -1;
 	ParentGameObjectID = -1;
@@ -56,10 +56,10 @@ Mesh2D::~Mesh2D()
 void Mesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, glm::vec3(MeshPosition.x, MeshPosition.y, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::scale(TransformMatrix, glm::vec3(MeshScale.x, MeshScale.y, 1.0f));
+	TransformMatrix = glm::translate(GameObjectMatrix, glm::vec3(MeshPosition.x, MeshPosition.y, 0.0f));
+	TransformMatrix = glm::rotate(GameObjectMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(GameObjectMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::scale(GameObjectMatrix, glm::vec3(MeshScale.x, MeshScale.y, 1.0f));
 
 	if (SelectedMesh)
 	{

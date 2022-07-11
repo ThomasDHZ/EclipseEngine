@@ -1,5 +1,9 @@
 #include "LineMesh2D.h"
 
+LineMesh2D::LineMesh2D()
+{
+}
+
 LineMesh2D::LineMesh2D(std::vector<LineVertex>& vertices, uint64_t parentGameObjectID)
 {
 	GenerateID();
@@ -25,7 +29,7 @@ LineMesh2D::LineMesh2D(std::vector<LineVertex>& vertices, uint64_t parentGameObj
 
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(MeshVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 
