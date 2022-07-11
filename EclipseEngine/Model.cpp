@@ -398,11 +398,11 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 {
 	const glm::mat4 LastTransform = ModelTransform;
 	ModelTransform = glm::mat4(1.0f);
-	ModelTransform = glm::translate(GameObjectMatrix, ModelPosition);
-	ModelTransform = glm::rotate(GameObjectMatrix, glm::radians(ModelRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	ModelTransform = glm::rotate(GameObjectMatrix, glm::radians(ModelRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	ModelTransform = glm::rotate(GameObjectMatrix, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	ModelTransform = glm::scale(GameObjectMatrix, ModelScale);
+	ModelTransform = glm::translate(ModelTransform, ModelPosition);
+	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	ModelTransform = glm::scale(ModelTransform, ModelScale);
 
 	if (LastTransform != ModelTransform)
 	{

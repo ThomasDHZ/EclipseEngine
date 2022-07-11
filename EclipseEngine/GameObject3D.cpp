@@ -52,6 +52,8 @@ GameObject3D::~GameObject3D()
 
 void GameObject3D::Update(float DeltaTime)
 {
+	GameObject::Update(DeltaTime);
+
 	if (auto meshRendererComponent = GetComponentByType(ComponentType::kMeshRenderer))
 	{
 		auto meshRenderer = static_cast<MeshRenderer*>(meshRendererComponent.get());

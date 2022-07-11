@@ -183,21 +183,17 @@ VkCommandBuffer MeshPickerRenderPass2D::Draw()
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     {
-        for (auto& obj : GameObjectManager::GetGameObjectList())
+        for (auto& mesh : MeshRendererManager::GetMeshList())
         {
-            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
-            for (auto& mesh : MeshDrawList)
+            switch (mesh->GetMeshType())
             {
-                switch (mesh->GetMeshType())
-                {
-                    case MeshTypeEnum::kPolygon:
-                    {
-                        vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], MeshPickerPipeline, mesh, SceneManager::sceneProperites);
-                        break;
-                    }
-                }
+            case MeshTypeEnum::kPolygon:
+            {
+                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
+                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                GameObjectManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], MeshPickerPipeline, mesh, SceneManager::sceneProperites);
+                break;
+            }
             }
         }
     }

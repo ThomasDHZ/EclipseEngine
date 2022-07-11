@@ -178,28 +178,24 @@ VkCommandBuffer DepthRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        for (auto& obj : GameObjectManager::GetGameObjectList())
+        for (auto& mesh : MeshRendererManager::GetMeshList())
         {
-            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
-            for (auto& mesh : MeshDrawList)
+            switch (mesh->GetMeshType())
             {
-                switch (mesh->GetMeshType())
-                {
-                    case MeshTypeEnum::kPolygon:
-                    {
-                        DirectionalLightProjection directionalLightProjection;
-                        directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
+            case MeshTypeEnum::kPolygon:
+            {
+                DirectionalLightProjection directionalLightProjection;
+                directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
 
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawDepthMesh(commandBuffer, DepthPipeline, mesh, directionalLightProjection);
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
+                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
+                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                GameObjectManager::DrawDepthMesh(commandBuffer, DepthPipeline, mesh, directionalLightProjection);
+                break;
+            }
+            default:
+            {
+                break;
+            }
             }
         }
     }

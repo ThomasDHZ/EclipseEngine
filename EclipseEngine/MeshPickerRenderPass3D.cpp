@@ -184,21 +184,17 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        for (auto& obj : GameObjectManager::GetGameObjectList())
+        for (auto& mesh : MeshRendererManager::GetMeshList())
         {
-            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
-            for (auto& mesh : MeshDrawList)
+            switch (mesh->GetMeshType())
             {
-                switch (mesh->GetMeshType())
-                {
-                    case MeshTypeEnum::kPolygon:
-                    {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(commandBuffer, MeshPickerPipeline, mesh, SceneManager::sceneProperites);
-                        break;
-                    }
-                }
+            case MeshTypeEnum::kPolygon:
+            {
+                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
+                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                GameObjectManager::DrawMesh(commandBuffer, MeshPickerPipeline, mesh, SceneManager::sceneProperites);
+                break;
+            }
             }
         }
     }

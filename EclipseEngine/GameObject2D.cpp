@@ -72,6 +72,8 @@ GameObject2D::~GameObject2D()
 
 void GameObject2D::Update(float DeltaTime)
 {
+	GameObject::Update(DeltaTime);
+
 	if (auto spriteRendererComponent = GetComponentByType(ComponentType::kSpriteRenderer))
 	{
 		auto spriteRenderer = static_cast<SpriteRenderer*>(spriteRendererComponent.get());

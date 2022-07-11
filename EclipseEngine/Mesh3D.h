@@ -13,9 +13,6 @@ protected:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 
-	glm::vec3 MeshPosition = glm::vec3(0.0f);
-	glm::vec3 MeshRotation = glm::vec3(0.0f);
-	glm::vec3 MeshScale = glm::vec3(1.0f);
 
 public:
 	Mesh3D();
@@ -23,6 +20,10 @@ public:
 	Mesh3D(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	Mesh3D(MeshLoadingInfo& meshLoader);
 	~Mesh3D();
+
+	glm::vec3 MeshPosition = glm::vec3(0.0f);
+	glm::vec3 MeshRotation = glm::vec3(0.0f);
+	glm::vec3 MeshScale = glm::vec3(1.0f);
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList) override;

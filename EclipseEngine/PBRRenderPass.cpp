@@ -376,44 +376,40 @@ VkCommandBuffer PBRRenderPass::Draw()
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
         DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), SceneManager::cubeMapInfo);
 
-        for (auto& obj : GameObjectManager::GetGameObjectList())
+        for (auto& mesh : MeshRendererManager::GetMeshList())
         {
-            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
-            for (auto& mesh : MeshDrawList)
+            switch (mesh->GetMeshType())
             {
-                switch (mesh->GetMeshType())
+            case MeshTypeEnum::kPolygon:
+            {
+                if (VulkanRenderer::WireframeModeFlag)
                 {
-                    case MeshTypeEnum::kPolygon:
-                    {
-                        if (VulkanRenderer::WireframeModeFlag)
-                        {
-                            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                            GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
-                        }
-                        else
-                        {
-                            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
-                            vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                            GameObjectManager::DrawMesh(commandBuffer, pbrPipeline, mesh, SceneManager::sceneProperites);
+                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
+                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                    GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
+                }
+                else
+                {
+                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipeline());
+                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pbrPipeline->GetShaderPipelineLayout(), 0, 1, pbrPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                    GameObjectManager::DrawMesh(commandBuffer, pbrPipeline, mesh, SceneManager::sceneProperites);
 
-                            if (MeshRendererManager::GetSelectedMesh() == mesh)
-                            {
-                                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipeline());
-                                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                                GameObjectManager::DrawMesh(commandBuffer, outLinePipeline, mesh, SceneManager::sceneProperites);
-                            }
-                        }
-                        break;
-                    }
-                    case MeshTypeEnum::kLine:
+                    if (MeshRendererManager::GetSelectedMesh() == mesh)
                     {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawLine(commandBuffer, drawLinePipeline, mesh, SceneManager::sceneProperites);
-                        break;
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, outLinePipeline->GetShaderPipelineLayout(), 0, 1, outLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, outLinePipeline, mesh, SceneManager::sceneProperites);
                     }
                 }
+                break;
+            }
+            case MeshTypeEnum::kLine:
+            {
+                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
+                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
+                GameObjectManager::DrawLine(commandBuffer, drawLinePipeline, mesh, SceneManager::sceneProperites);
+                break;
+            }
             }
         }
     }

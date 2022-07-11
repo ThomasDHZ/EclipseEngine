@@ -104,28 +104,6 @@ void GameObject::Update(float DeltaTime)
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-
-	for (auto& comp : ComponentList)
-	{
-		if (comp->GetComponentType() == ComponentType::kSpriteRenderer ||
-			comp->GetComponentType() == ComponentType::kMeshRenderer)
-		{
-			if(comp->GetComponentType() == ComponentType::kSpriteRenderer)
-			{
-				const auto spriteRenderer = static_cast<SpriteRenderer*>(comp.get());
-				spriteRenderer->Update(GameObjectTransform, DeltaTime);
-			}
-			else if(comp->GetComponentType() == ComponentType::kMeshRenderer)
-			{
-				const auto meshRenderer = static_cast<MeshRenderer*>(comp.get());
-				meshRenderer->Update(GameObjectTransform, DeltaTime);
-			}
-		}
-		else
-		{
-			comp->Update(DeltaTime);
-		}
-	}
 }
 
 void GameObject::Destroy()

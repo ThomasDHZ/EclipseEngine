@@ -11,7 +11,7 @@ class BlinnPhongRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
-	DepthRenderPass depthRenderPass;
+	//DepthRenderPass depthRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
@@ -19,7 +19,7 @@ public:
 	BlinnPhongRenderer();
 	~BlinnPhongRenderer();
 
-	DepthDebugRenderPass depthDebugRenderPass;
+//	DepthDebugRenderPass depthDebugRenderPass;
 
 	void BuildRenderer();
 	void Update();

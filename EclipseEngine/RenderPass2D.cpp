@@ -246,10 +246,8 @@ VkCommandBuffer RenderPass2D::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        for (auto& obj : GameObjectManager::GetGameObjectList())
-        {
-            const std::vector<std::shared_ptr<Mesh>> MeshDrawList = GetObjectRenderList(obj);
-            for (auto& mesh : MeshDrawList)
+
+            for (auto& mesh : MeshRendererManager::GetMeshList())
             {
                 switch (mesh->GetMeshType())
                 {
@@ -294,7 +292,7 @@ VkCommandBuffer RenderPass2D::Draw()
                 }
                 }
             }
-        }
+        
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {

@@ -14,9 +14,6 @@ protected:
 	std::vector<std::shared_ptr<Component>> ComponentList;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
-	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
-	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
-	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
 	void SetGameObjectPosition(float x, float y, float z);
 	void SetGameObjectRotation(float x, float y, float z);
@@ -43,6 +40,10 @@ public:
 	GameObject(const std::string Name, glm::vec3 Position);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
+
+	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
+	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
+	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
