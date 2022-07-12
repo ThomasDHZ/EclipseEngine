@@ -169,6 +169,7 @@
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
+    <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
+    <ClInclude Include="Level2DRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="LineMesh2D.h" />

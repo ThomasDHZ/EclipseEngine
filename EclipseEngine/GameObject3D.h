@@ -6,7 +6,7 @@ class GameObject3D : public GameObject
 private:
 public:
 
-	std::vector<MeshVertex> vertices = {
+	std::vector<Vertex3D> vertices = {
 	{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
 	{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
 	{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
@@ -19,10 +19,10 @@ public:
 
 	GameObject3D();
 
-	GameObject3D(const std::string Name, std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList);
-	GameObject3D(const std::string Name, std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position);
-	GameObject3D(const std::string Name, std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation);
-	GameObject3D(const std::string Name, std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	GameObject3D(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList);
+	GameObject3D(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position);
+	GameObject3D(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation);
+	GameObject3D(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
 	GameObject3D(const std::string Name, const std::string filePath);
 	GameObject3D(const std::string Name, const std::string filePath, glm::vec3 position);

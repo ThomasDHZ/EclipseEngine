@@ -15,7 +15,7 @@ private:
 	}
 
 public:
-	MeshRenderer(std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
+	MeshRenderer(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
 	MeshRenderer(const std::string& FilePath, uint64_t GameObjectID);
 	MeshRenderer(nlohmann::json json, uint64_t GameObjectID);
 	virtual ~MeshRenderer();

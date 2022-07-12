@@ -38,7 +38,7 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
 		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
 		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(MeshVertex);
+		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex3D);
 		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
 		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
 

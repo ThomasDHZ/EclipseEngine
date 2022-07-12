@@ -51,10 +51,10 @@ private:
 	void GenerateID();
 	void LoadModel(const std::string& FilePath, uint64_t GameObjectID);
 	void LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* scene);
-	std::vector<MeshVertex> LoadVertices(aiMesh* mesh);
+	std::vector<Vertex3D> LoadVertices(aiMesh* mesh);
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
-	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<MeshVertex>& VertexList);
-	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<MeshVertex>& VertexList);
+	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList);
+	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList);
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
 	void from_json(nlohmann::json& json, uint64_t GameObjectID)
@@ -94,15 +94,15 @@ public:
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
-	Model(std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
+	Model(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
 	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
 	void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	void AddMesh(std::vector<LineVertex>& vertices);
-	void AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
-	void AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
+	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	void AddMesh(MeshLoadingInfo& meshLoader);
 
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);

@@ -8,7 +8,7 @@ private:
 	VulkanBuffer BoneTransformBuffer;
 
 protected:
-	std::vector<MeshVertex> VertexList;
+	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
@@ -16,8 +16,8 @@ protected:
 
 public:
 	Mesh3D();
-	Mesh3D(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices);
-	Mesh3D(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
+	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	Mesh3D(MeshLoadingInfo& meshLoader);
 	~Mesh3D();
 

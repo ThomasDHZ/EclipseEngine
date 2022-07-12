@@ -46,7 +46,7 @@ struct LineVertex {
     }
 };
 
-struct MeshVertex 
+struct Vertex3D
 {
     glm::vec3 Position = glm::vec3(0.0f);
     float PositionPadding = 0.0f;
@@ -64,7 +64,7 @@ struct MeshVertex
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(MeshVertex);
+        bindingDescription.stride = sizeof(Vertex3D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
         return bindingDescription;
@@ -79,37 +79,37 @@ struct MeshVertex
         AttributeDescription.binding = 0;
         AttributeDescription.location = 0;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, Position);
+        AttributeDescription.offset = offsetof(Vertex3D, Position);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 1;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, Normal);
+        AttributeDescription.offset = offsetof(Vertex3D, Normal);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 2;
         AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, UV);
+        AttributeDescription.offset = offsetof(Vertex3D, UV);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 3;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, Tangant);
+        AttributeDescription.offset = offsetof(Vertex3D, Tangant);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 4;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, BiTangant);
+        AttributeDescription.offset = offsetof(Vertex3D, BiTangant);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 5;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
-        AttributeDescription.offset = offsetof(MeshVertex, Color);
+        AttributeDescription.offset = offsetof(Vertex3D, Color);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;

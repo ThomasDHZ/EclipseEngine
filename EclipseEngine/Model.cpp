@@ -22,7 +22,7 @@ Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::vector<MeshVertex> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID)
+Model::Model(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID)
 {
 	GenerateID();
 	ParentGameObjectID = GameObjectID;
@@ -91,13 +91,13 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 	}
 }
 
-std::vector<MeshVertex> Model::LoadVertices(aiMesh* mesh)
+std::vector<Vertex3D> Model::LoadVertices(aiMesh* mesh)
 {
-	std::vector<MeshVertex> VertexList;
+	std::vector<Vertex3D> VertexList;
 
 	for (int x = 0; x < mesh->mNumVertices; x++)
 	{
-		MeshVertex vertex;
+		Vertex3D vertex;
 		vertex.Position = glm::vec3{ mesh->mVertices[x].x, mesh->mVertices[x].y, mesh->mVertices[x].z };
 		vertex.Normal = glm::vec3{ mesh->mNormals[x].x, mesh->mNormals[x].y, mesh->mNormals[x].z };
 		//vertex.Color = glm::vec3{ mesh->mColors[x]->r, mesh->mColors[x]->g, mesh->mColors[x]->b };
@@ -143,7 +143,7 @@ std::vector<uint32_t> Model::LoadIndices(aiMesh* mesh)
 	return IndexList;
 }
 
-void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<MeshVertex>& VertexList)
+void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList)
 {
 	for (int x = 0; x < mesh->mNumBones; x++)
 	{
@@ -153,7 +153,7 @@ void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Me
 	}
 }
 
-std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<MeshVertex>& VertexList)
+std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList)
 {
 	std::vector<MeshBoneWeights> BoneWeightList(VertexList.size());
 	for (int x = 0; x < mesh->mNumBones; x++)
@@ -349,7 +349,7 @@ void Model::AddMesh(std::vector<LineVertex>& vertices)
 	MeshRendererManager::AddMesh(mesh);
 }
 
-void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
+void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
 	
@@ -359,7 +359,7 @@ void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& in
 	MeshRendererManager::AddMesh(mesh);
 }
 
-void Model::AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 	

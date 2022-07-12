@@ -42,7 +42,7 @@ struct MeshLoadingInfo
 	uint64_t ModelID; 
 	uint64_t GameObjectID;
 
-	std::vector<MeshVertex> vertices;
+	std::vector<Vertex3D> vertices;
 	std::vector<uint32_t> indices; 
 	uint32_t BoneCount;
 	std::vector<MeshBoneWeights> BoneWeightList;
@@ -91,7 +91,7 @@ protected:
 
 	MeshTypeEnum MeshType;
 
-	std::vector<MeshVertex> VertexList;
+	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;

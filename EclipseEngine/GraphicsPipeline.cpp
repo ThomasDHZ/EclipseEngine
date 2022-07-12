@@ -494,8 +494,8 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
         {
-            bindingDescription = MeshVertex::getBindingDescription();
-            attributeDescriptions = MeshVertex::getAttributeDescriptions();
+            bindingDescription = Vertex3D::getBindingDescription();
+            attributeDescriptions = Vertex3D::getAttributeDescriptions();
         }
         else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
         {

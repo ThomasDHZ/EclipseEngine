@@ -28,7 +28,7 @@ public:
 		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices)
+	static std::shared_ptr<Mesh> AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
 		MeshList.emplace_back(mesh);
@@ -36,7 +36,7 @@ public:
 		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<MeshVertex>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+	static std::shared_ptr<Mesh> AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 		MeshList.emplace_back(mesh);
