@@ -20,7 +20,7 @@ public:
 		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<LineVertex>& vertices)
+	static std::shared_ptr<Mesh> AddMesh(std::vector<LineVertex3D>& vertices)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
 		MeshList.emplace_back(mesh);

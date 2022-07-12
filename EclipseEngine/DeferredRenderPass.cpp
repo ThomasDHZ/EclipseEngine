@@ -166,7 +166,7 @@ void DeferredRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorT
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
 
         if (DeferredPipeline == nullptr)
         {

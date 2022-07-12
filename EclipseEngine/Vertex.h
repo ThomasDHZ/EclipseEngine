@@ -5,14 +5,49 @@
 #include <glm/glm.hpp>
 #include "JsonConverter.h"
 
-struct LineVertex {
+struct LineVertex2D {
     glm::vec3 pos;
     glm::vec3 color;
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(LineVertex);
+        bindingDescription.stride = sizeof(LineVertex2D);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        return bindingDescription;
+    }
+
+    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+    {
+        std::vector<VkVertexInputAttributeDescription> AttributeDescriptionList{};
+
+        VkVertexInputAttributeDescription PositionAttribute;
+        PositionAttribute.binding = 0;
+        PositionAttribute.location = 0;
+        PositionAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        PositionAttribute.offset = offsetof(LineVertex2D, pos);
+        AttributeDescriptionList.emplace_back(PositionAttribute);
+
+        VkVertexInputAttributeDescription ColorAttribute;
+        ColorAttribute.binding = 0;
+        ColorAttribute.location = 1;
+        ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        ColorAttribute.offset = offsetof(LineVertex2D, color);
+        AttributeDescriptionList.emplace_back(ColorAttribute);
+
+        return AttributeDescriptionList;
+    }
+};
+
+struct LineVertex3D {
+    glm::vec3 pos;
+    glm::vec3 color;
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{};
+        bindingDescription.binding = 0;
+        bindingDescription.stride = sizeof(LineVertex3D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
         return bindingDescription;
@@ -26,23 +61,60 @@ struct LineVertex {
         PositionAttribute.binding = 0;
         PositionAttribute.location = 0;
         PositionAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
-        PositionAttribute.offset = offsetof(LineVertex, pos);
+        PositionAttribute.offset = offsetof(LineVertex3D, pos);
         AttributeDescriptionList.emplace_back(PositionAttribute);
 
         VkVertexInputAttributeDescription ColorAttribute;
         ColorAttribute.binding = 0;
         ColorAttribute.location = 1;
         ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
-        ColorAttribute.offset = offsetof(LineVertex, color);
+        ColorAttribute.offset = offsetof(LineVertex3D, color);
         AttributeDescriptionList.emplace_back(ColorAttribute);
 
         return AttributeDescriptionList;
     }
+};
 
-    void to_json(nlohmann::json& json)
+struct Vertex2D
+{
+    glm::vec2 Position = glm::vec2(0.0f);
+    glm::vec2 UV = glm::vec2(0.0f);
+    glm::vec3 Color = glm::vec3(1.0f);
+
+    static VkVertexInputBindingDescription getBindingDescription() {
+        VkVertexInputBindingDescription bindingDescription{};
+        bindingDescription.binding = 0;
+        bindingDescription.stride = sizeof(Vertex2D);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        return bindingDescription;
+    }
+
+    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
     {
-        JsonConverter::to_json(json["pos"], pos);
-        JsonConverter::to_json(json["color"], color);
+        std::vector<VkVertexInputAttributeDescription> AttributeDescriptions = {};
+
+        VkVertexInputAttributeDescription AttributeDescription;
+
+        AttributeDescription.binding = 0;
+        AttributeDescription.location = 0;
+        AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
+        AttributeDescription.offset = offsetof(Vertex2D, Position);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 0;
+        AttributeDescription.location = 1;
+        AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
+        AttributeDescription.offset = offsetof(Vertex2D, UV);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 0;
+        AttributeDescription.location = 2;
+        AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
+        AttributeDescription.offset = offsetof(Vertex2D, Color);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        return AttributeDescriptions;
     }
 };
 
@@ -113,25 +185,5 @@ struct Vertex3D
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;
-    }
-
-    void from_json(nlohmann::json& json)
-    {
-        JsonConverter::from_json(json["Position"], Position);
-        JsonConverter::from_json(json["Normal"], Normal);
-        JsonConverter::from_json(json["UV"], UV);
-        JsonConverter::from_json(json["Tangant"], Tangant);
-        JsonConverter::from_json(json["BiTangant"], BiTangant);
-        JsonConverter::from_json(json["Color"], Color);
-    }
-
-    void to_json(nlohmann::json& json)
-    {
-        JsonConverter::to_json(json["Position"], Position);
-        JsonConverter::to_json(json["Normal"], Normal);
-        JsonConverter::to_json(json["UV"], UV);
-        JsonConverter::to_json(json["Tangant"], Tangant);
-        JsonConverter::to_json(json["BiTangant"], BiTangant);
-        JsonConverter::to_json(json["Color"], Color);
     }
 };

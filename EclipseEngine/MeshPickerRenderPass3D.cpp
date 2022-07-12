@@ -124,7 +124,7 @@ void MeshPickerRenderPass3D::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
         if (MeshPickerPipeline == nullptr)
         {

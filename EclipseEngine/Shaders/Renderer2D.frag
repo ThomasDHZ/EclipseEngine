@@ -6,12 +6,9 @@
 
 #include "MeshProperties.glsl"
 
-layout(location = 0) in vec3 FragPos;
+layout(location = 0) in vec2 Position;
 layout(location = 1) in vec2 UV;
-layout(location = 2) in vec3 Normal;
-layout(location = 3) in vec3 Tangent;
-layout(location = 4) in vec3 BiTangent;
-layout(location = 5) in vec3 Color;
+layout(location = 2) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 

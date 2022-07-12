@@ -7,7 +7,7 @@ class LineRenderer3D : public Component
 private:
 public:
 	LineRenderer3D();
-	LineRenderer3D(std::vector<LineVertex> VertexList, uint64_t GameObjectID);
+	LineRenderer3D(std::vector<LineVertex3D> VertexList, uint64_t GameObjectID);
 	LineRenderer3D(glm::vec3 StartPoint, glm::vec3 EndPoint, uint64_t GameObjectID);
 	LineRenderer3D(nlohmann::json& json, uint64_t GameObjectID);
 	virtual ~LineRenderer3D();

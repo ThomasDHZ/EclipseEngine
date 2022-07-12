@@ -9,7 +9,7 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a)
+GameObject::GameObject(const std::string Name, std::vector<LineVertex3D>& VertexList, int a)
 {
 	ObjectName = Name;
 	GenerateID();

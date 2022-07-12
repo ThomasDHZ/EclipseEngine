@@ -485,34 +485,49 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
-    if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
+    if (buildGraphicsPipelineInfo.VertexDescriptorType == VertexDescriptorTypeEnum::kVertexNone)
     {
-        if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderWireFrame ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)
+        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vertexInputInfo.vertexBindingDescriptionCount = 0;
+    }
+    else
+    {
+        switch (buildGraphicsPipelineInfo.VertexDescriptorType)
         {
-            bindingDescription = Vertex3D::getBindingDescription();
-            attributeDescriptions = Vertex3D::getAttributeDescriptions();
+            case VertexDescriptorTypeEnum::kLine2D:
+            {
+                bindingDescription = LineVertex2D::getBindingDescription();
+                attributeDescriptions = LineVertex2D::getAttributeDescriptions();
+                break;
+            }
+            case VertexDescriptorTypeEnum::kLine3D:
+            {
+                bindingDescription = LineVertex3D::getBindingDescription();
+                attributeDescriptions = LineVertex3D::getAttributeDescriptions();
+                break;
+            }
+            case VertexDescriptorTypeEnum::kVertex2D:
+            {
+                bindingDescription = Vertex2D::getBindingDescription();
+                attributeDescriptions = Vertex2D::getAttributeDescriptions();
+                break;
+            }
+            case VertexDescriptorTypeEnum::kVertex3D:
+            {
+                bindingDescription = Vertex3D::getBindingDescription();
+                attributeDescriptions = Vertex3D::getAttributeDescriptions();
+                break;
+            }
+            default:
+            {
+                std::cout << "VertexType no found" << std::endl;
+            }
         }
-        else if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderLine)
-        {
-            bindingDescription = LineVertex::getBindingDescription();
-            attributeDescriptions = LineVertex::getAttributeDescriptions();
-        }
-
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexBindingDescriptionCount = 1;
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
         vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
         vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
-    }
-    else
-    {
-        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertexInputInfo.vertexBindingDescriptionCount = 0;
     }
 
     VkPipelineDepthStencilStateCreateInfo depthStencil{};
@@ -562,7 +577,11 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
     rasterizer.depthBiasEnable = VK_FALSE;
 
-    if (buildGraphicsPipelineInfo.IncludeVertexDescriptors)
+    if (buildGraphicsPipelineInfo.VertexDescriptorType == VertexDescriptorTypeEnum::kVertexNone)
+    {
+        rasterizer.cullMode = VK_CULL_MODE_NONE;
+    }
+    else
     {
         if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
             buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
@@ -577,10 +596,6 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
         {
             rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         }
-    }
-    else
-    {
-        rasterizer.cullMode = VK_CULL_MODE_NONE;
     }
 
 

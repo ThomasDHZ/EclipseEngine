@@ -120,6 +120,7 @@ void DepthRenderPass::BuildRenderPassPipelines()
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderDepth;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(DirectionalLightProjection);
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
         if (DepthPipeline == nullptr)
         {

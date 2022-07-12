@@ -10,7 +10,7 @@ private:
 	std::shared_ptr<Mesh> Line;
 public:
 	LineRenderer2D();
-	LineRenderer2D(std::vector<LineVertex> VertexList, uint64_t GameObjectID);
+	LineRenderer2D(std::vector<LineVertex3D> VertexList, uint64_t GameObjectID);
 	LineRenderer2D(glm::vec2 StartPoint, glm::vec2 EndPoint, uint64_t GameObjectID);
 	~LineRenderer2D();
 

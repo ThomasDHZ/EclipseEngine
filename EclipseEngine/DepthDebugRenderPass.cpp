@@ -116,7 +116,7 @@ void DepthDebugRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = 0;
-        buildGraphicsPipelineInfo.IncludeVertexDescriptors = false;
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
 
         if (DepthDebugPipeline == nullptr)
         {

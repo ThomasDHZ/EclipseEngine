@@ -4,7 +4,7 @@ LineRenderer3D::LineRenderer3D() : Component()
 {
 }
 
-LineRenderer3D::LineRenderer3D(std::vector<LineVertex> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
+LineRenderer3D::LineRenderer3D(std::vector<LineVertex3D> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
 {
 	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
 	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));

@@ -4,17 +4,19 @@
 class Mesh2D : public Mesh
 {
 private:
-	const std::vector<Vertex3D> SpriteVertexList = {
-			{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-			{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-			{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-			{{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+	const std::vector<Vertex2D> SpriteVertexList = {
+			{ {-0.5f, -0.5f},  {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f, -0.5f},  {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f} },
+			{ { 0.5f,  0.5f},  {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f} },
+			{ {-0.5f,  0.5f},  {1.0f, 1.0f}, {1.0f, 1.0f, 0.0f} }
 	};
 
 	const std::vector<uint32_t> SpriteIndexList = {
 		0, 1, 2, 2, 3, 0
 	};
 
+	std::vector<Vertex2D> VertexList;
+	std::vector<uint32_t> IndexList;
 
 	int MeshDepth = 0;
 	glm::vec2 MeshPosition = glm::vec3(0.0f);

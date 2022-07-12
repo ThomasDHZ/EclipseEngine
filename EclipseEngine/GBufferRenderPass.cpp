@@ -172,7 +172,7 @@ void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTe
         buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.IncludeVertexDescriptors = true;
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
         if (hybridPipeline == nullptr)
         {

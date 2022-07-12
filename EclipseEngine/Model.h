@@ -100,7 +100,7 @@ public:
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
 	void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
-	void AddMesh(std::vector<LineVertex>& vertices);
+	void AddMesh(std::vector<LineVertex3D>& vertices);
 	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
 	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	void AddMesh(MeshLoadingInfo& meshLoader);

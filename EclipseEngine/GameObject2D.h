@@ -16,10 +16,10 @@ public:
 	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint, glm::vec2 position, glm::vec2 rotation);
 	GameObject2D(const std::string Name, glm::vec2 StartPoint, glm::vec2 EndPoint, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
 
-	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList);
-	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position);
-	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position, glm::vec2 rotation);
-	GameObject2D(const std::string Name, std::vector<LineVertex> VertexList, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
+	GameObject2D(const std::string Name, std::vector<LineVertex3D> VertexList);
+	GameObject2D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec2 position);
+	GameObject2D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec2 position, glm::vec2 rotation);
+	GameObject2D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale);
 	~GameObject2D();
 
 	virtual void Update(float DeltaTime) override;

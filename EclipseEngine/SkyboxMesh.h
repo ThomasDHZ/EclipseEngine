@@ -5,6 +5,9 @@
 class SkyboxMesh : public Mesh3D
 {
 private:
+	std::vector<Vertex3D> VertexList;
+	std::vector<uint32_t> IndexList;
+
 public:
 	SkyboxMesh();
 	~SkyboxMesh();

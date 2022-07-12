@@ -91,8 +91,6 @@ protected:
 
 	MeshTypeEnum MeshType;
 
-	std::vector<Vertex3D> VertexList;
-	std::vector<uint32_t> IndexList;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);

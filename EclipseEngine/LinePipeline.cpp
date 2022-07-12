@@ -31,8 +31,8 @@ void DrawLinePipeline::SetUpShaderPipeLine(const VkRenderPass& renderPass)
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-    auto bindingDescription = LineVertex::getBindingDescription();
-    auto attributeDescriptions = LineVertex::getAttributeDescriptions();
+    auto bindingDescription = LineVertex3D::getBindingDescription();
+    auto attributeDescriptions = LineVertex3D::getAttributeDescriptions();
 
     vertexInputInfo.vertexBindingDescriptionCount = 1;
     vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());

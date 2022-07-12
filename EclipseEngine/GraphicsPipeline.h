@@ -4,6 +4,15 @@
 #include "TextureManager.h"
 #include "Vertex.h"
 
+enum VertexDescriptorTypeEnum
+{
+	kVertexNone,
+	kVertex2D,
+	kVertex3D,
+	kLine2D,
+	kLine3D
+};
+
 enum PipelineRendererTypeEnum
 {
 	kRenderMesh,
@@ -29,10 +38,10 @@ struct BuildGraphicsPipelineInfo
 	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
 	VkRenderPass renderPass = VK_NULL_HANDLE;
+	VertexDescriptorTypeEnum VertexDescriptorType = kVertexNone;
 	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
 	PipelineRendererTypeEnum PipelineRendererType = kRenderMesh;
 	uint32_t ConstBufferSize = 0;
-	bool IncludeVertexDescriptors = true;
 };
 
 class GraphicsPipeline

@@ -7,9 +7,10 @@ private:
 	VulkanBuffer BoneWeightBuffer;
 	VulkanBuffer BoneTransformBuffer;
 
-protected:
 	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
+
+protected:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 

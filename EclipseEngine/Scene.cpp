@@ -8,20 +8,20 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kBlinnPhong;
+    SceneManager::sceneType = SceneType::kSprite2D;
 
  //   SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 2.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
-    //std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-    //material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
-    //material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
-    //MaterialManager::AddMaterial(material);
+    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
+    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
+    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+    MaterialManager::AddMaterial(material);
 
 
-    //std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
-    //material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
-    //MaterialManager::AddMaterial(material2);
+    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2"));
+    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
+    MaterialManager::AddMaterial(material2);
 
     //std::vector<MeshVertex> vertices = {
     //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
@@ -34,20 +34,24 @@ Scene::Scene()
     //    0, 1, 2, 2, 3, 0
     //};
 
-    // std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
-    // GameObjectManager::AddGameObject(obj);
+     std::shared_ptr<GameObject2D> obj = std::make_shared<GameObject2D>(GameObject2D("Testobject", glm::vec2(0.0f), 0));
+     obj->SetGameObjectMaterial(material);
+     GameObjectManager::AddGameObject(obj);
 
-    // std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(1.0f, 0.0f), 0));
-    // GameObjectManager::AddGameObject(obj2);
+     std::shared_ptr<GameObject2D> obj2 = std::make_shared<GameObject2D>(GameObject2D("Testobject2", glm::vec2(1.0f, 0.0f), 0));
+     obj2->SetGameObjectMaterial(material2);
+     GameObjectManager::AddGameObject(obj2);
 
-    // std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(2.0f, 0.0f), 0));
-    // GameObjectManager::AddGameObject(obj3);
+     std::shared_ptr<GameObject2D> obj3 = std::make_shared<GameObject2D>(GameObject2D("Testobject3", glm::vec2(2.0f, 0.0f), 0));
+     obj3->SetGameObjectMaterial(material);
+     GameObjectManager::AddGameObject(obj3);
 
-    // std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(3.0f, 0.0f), 0));
-    // GameObjectManager::AddGameObject(obj4);
+     std::shared_ptr<GameObject2D> obj4 = std::make_shared<GameObject2D>(GameObject2D("Testobject4", glm::vec2(3.0f, 0.0f), 0));
+     obj4->SetGameObjectMaterial(material2);
+     GameObjectManager::AddGameObject(obj4);
 
-    // glm::vec2 StartPoint = glm::vec2(0.0f); 
-    // glm::vec2 EndPoint = glm::vec2(5.0f);
+     glm::vec2 StartPoint = glm::vec2(0.0f); 
+     glm::vec2 EndPoint = glm::vec2(5.0f);
 
     // std::shared_ptr<GameObject2D> obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject5", StartPoint, EndPoint));
     //GameObjectManager::AddGameObject(obj5);
@@ -65,7 +69,7 @@ Scene::Scene()
 
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/RayReflectionTest.obj")));
+   // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/RayReflectionTest.obj")));
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Sponza/Sponza.gltf")));
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/vulkanscene_shadow.obj")));
   //  GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Cerberus/Cerberus_LP.FBX")));
@@ -147,7 +151,7 @@ Scene::Scene()
     //    b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
     //    GameObjectManager::AddGameObject(obj5);
 
-       // GameObjectManager::AddGameObject(std::make_shared<GameObject2D>(GameObject2D("Testobject5", glm::vec2(0.0f), glm::vec2(5.0f))));
+    //  //  GameObjectManager::AddGameObject(std::make_shared<GameObject2D>(GameObject2D("Testobject5", glm::vec2(0.0f), glm::vec2(5.0f))));
     //}
 
     auto dLight = DirectionalLightBuffer{};

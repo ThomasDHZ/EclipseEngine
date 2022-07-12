@@ -3,12 +3,15 @@
 class LineMesh3D : public Mesh
 {
 private:
+	std::vector<Vertex3D> VertexList;
+	std::vector<uint32_t> IndexList;
+
 	glm::vec3 MeshPosition = glm::vec3(0.0f);
 	glm::vec3 MeshRotation = glm::vec3(0.0f);
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 
 public:
-	LineMesh3D(std::vector<LineVertex>& vertices);
+	LineMesh3D(std::vector<LineVertex3D>& vertices);
 	LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint);
 	~LineMesh3D();
 

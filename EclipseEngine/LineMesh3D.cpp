@@ -1,6 +1,6 @@
 #include "LineMesh3D.h"
 
-LineMesh3D::LineMesh3D(std::vector<LineVertex>& vertices)
+LineMesh3D::LineMesh3D(std::vector<LineVertex3D>& vertices)
 {
 	GenerateID();
 	GenerateColorID();
@@ -25,7 +25,7 @@ LineMesh3D::LineMesh3D(std::vector<LineVertex>& vertices)
 
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 
@@ -34,7 +34,7 @@ LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	GenerateID();
 	GenerateColorID();
 
-	std::vector<LineVertex> VertexList2 = {
+	std::vector<LineVertex3D> VertexList2 = {
 	{{StartPoint}, {1.0f, 0.0f, 0.0f}},
 	{{EndPoint}, {0.0f, 1.0f, 0.0f}}
 	};
@@ -59,7 +59,7 @@ LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint)
 
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		VertexBuffer.CreateBuffer(VertexList2.data(), VertexList2.size() * sizeof(LineVertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 

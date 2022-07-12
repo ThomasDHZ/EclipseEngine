@@ -33,7 +33,7 @@ protected:
 public:
 
 	GameObject();
-	GameObject(const std::string Name, std::vector<LineVertex>& VertexList, int a);
+	GameObject(const std::string Name, std::vector<LineVertex3D>& VertexList, int a);
 	GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a);
 
 	GameObject(const std::string Name);
