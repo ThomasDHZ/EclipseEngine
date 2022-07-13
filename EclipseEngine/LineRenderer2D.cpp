@@ -4,7 +4,7 @@ LineRenderer2D::LineRenderer2D()
 {
 }
 
-LineRenderer2D::LineRenderer2D(std::vector<LineVertex3D> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
+LineRenderer2D::LineRenderer2D(std::vector<LineVertex2D> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
 {
 	Line = std::make_shared<LineMesh2D>(LineMesh2D(VertexList, GameObjectID));
 	MeshRendererManager::AddMesh(Line);

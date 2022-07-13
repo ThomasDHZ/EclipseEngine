@@ -166,6 +166,7 @@
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GridRendererComponent.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
+    <ClInclude Include="GridRendererComponent.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
@@ -373,8 +375,10 @@
     <None Include="Shaders\IrradianceShader.frag" />
     <None Include="Shaders\IrradianceShader.vert" />
     <None Include="Shaders\Lights.glsl" />
-    <None Include="Shaders\LineRendererShader.frag" />
-    <None Include="Shaders\LineRendererShader.vert" />
+    <None Include="Shaders\LineRenderer2D.frag" />
+    <None Include="Shaders\LineRenderer2D.vert" />
+    <None Include="Shaders\LineRenderer3D.frag" />
+    <None Include="Shaders\LineRenderer3D.vert" />
     <None Include="Shaders\MeshPicker2D.frag" />
     <None Include="Shaders\MeshPicker2D.vert" />
     <None Include="Shaders\MeshPicker3D.frag" />

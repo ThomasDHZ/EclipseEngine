@@ -9,6 +9,18 @@ struct LineVertex2D {
     glm::vec3 pos;
     glm::vec3 color;
 
+    LineVertex2D(glm::vec3 Pos)
+    {
+        pos = Pos;
+        color = glm::vec3(1.0f);
+    }
+
+    LineVertex2D(glm::vec3 Pos, glm::vec3 Color)
+    {
+        pos = Pos;
+        color = Color;
+    }
+
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;

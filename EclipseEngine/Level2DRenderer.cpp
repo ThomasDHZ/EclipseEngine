@@ -10,7 +10,7 @@ Level2DRenderer::Level2DRenderer(glm::ivec2 levelTilesSize, glm::ivec2 levelTile
 	LevelTileCount = levelTileCount;
 	LevelTileSet = levelTileSet;
 
-	//std::vector<Sprite> VertexList;
+	std::vector<Vertex2D> VertexList;
 	std::vector<uint32_t> IndexList;
 }
 

@@ -378,6 +378,9 @@
     <ClCompile Include="Level2DRenderer.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="GridRendererComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -683,6 +686,9 @@
     <ClInclude Include="Level2DRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="GridRendererComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\compile.bat">
@@ -727,10 +733,10 @@
     <None Include="Shaders\closesthit.rchit">
       <Filter>Shader\RayTraceShaders</Filter>
     </None>
-    <None Include="Shaders\LineRendererShader.frag">
+    <None Include="Shaders\LineRenderer3D.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="Shaders\LineRendererShader.vert">
+    <None Include="Shaders\LineRenderer3D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\WireFrameShader.frag">
@@ -845,6 +851,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="Shaders\SelectedObjectShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\LineRenderer2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="Shaders\LineRenderer2D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
