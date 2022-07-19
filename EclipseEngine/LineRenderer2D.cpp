@@ -4,15 +4,27 @@ LineRenderer2D::LineRenderer2D()
 {
 }
 
-LineRenderer2D::LineRenderer2D(std::vector<LineVertex2D> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
+LineRenderer2D::LineRenderer2D(std::vector<LineVertex2D>& VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
 {
 	Line = std::make_shared<LineMesh2D>(LineMesh2D(VertexList, GameObjectID));
 	MeshRendererManager::AddMesh(Line);
 }
 
-LineRenderer2D::LineRenderer2D(glm::vec2 StartPoint, glm::vec2 EndPoint, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
+LineRenderer2D::LineRenderer2D(glm::vec2& StartPoint, glm::vec2& EndPoint, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
 {
 	Line = std::make_shared<LineMesh2D>(LineMesh2D(StartPoint, EndPoint, GameObjectID));
+	MeshRendererManager::AddMesh(Line);
+}
+
+LineRenderer2D::LineRenderer2D(glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& LineColor, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
+{
+	Line = std::make_shared<LineMesh2D>(LineMesh2D(StartPoint, EndPoint, LineColor, GameObjectID));
+	MeshRendererManager::AddMesh(Line);
+}
+
+LineRenderer2D::LineRenderer2D(glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& LineColor, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer2D, ComponentSubType::kRenderedObject)
+{
+	Line = std::make_shared<LineMesh2D>(LineMesh2D(StartPoint, EndPoint, LineColor, GameObjectID));
 	MeshRendererManager::AddMesh(Line);
 }
 

@@ -5,18 +5,6 @@ class GameObject3D : public GameObject
 {
 private:
 public:
-
-	std::vector<Vertex3D> vertices = {
-	{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-	{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-	{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-	{{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-	};
-
-	std::vector<uint32_t> indices = {
-	   0, 1, 2, 2, 3, 0
-	};
-
 	GameObject3D();
 
 	GameObject3D(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList);
@@ -28,6 +16,24 @@ public:
 	GameObject3D(const std::string Name, const std::string filePath, glm::vec3 position);
 	GameObject3D(const std::string Name, const std::string filePath, glm::vec3 position, glm::vec3 rotation);
 	GameObject3D(const std::string Name, const std::string filePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position, glm::vec3& rotation);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale);
+
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position, glm::vec3& rotation);
+	GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale);
+
+	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList);
+	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position);
+	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position, glm::vec3 rotation);
+	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+
+	GameObject3D(const std::string Name, int GridSize, float GridSpacing);
+	GameObject3D(const std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ);
 
 	~GameObject3D();
 

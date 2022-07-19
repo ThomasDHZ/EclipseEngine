@@ -6,23 +6,28 @@ LineRenderer3D::LineRenderer3D() : Component()
 
 LineRenderer3D::LineRenderer3D(std::vector<LineVertex3D> VertexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
 {
-	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(VertexList));
-	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
+	model = std::make_shared<Model>(Model(VertexList, ParentGameObjectID));
 
-	//ModelManager::AddModel(model);
 }
 
-LineRenderer3D::LineRenderer3D(glm::vec3 StartPoint, glm::vec3 EndPoint, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
+LineRenderer3D::LineRenderer3D(glm::vec3& StartPoint, glm::vec3& EndPoint, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
 {
-	//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(StartPoint, EndPoint));
-	//model = std::make_shared<Model>(Model(mesh, ParentGameObjectID));
-	//ModelManager::AddModel(model);
+	model = std::make_shared<Model>(Model(StartPoint, EndPoint, ParentGameObjectID));
 }
 
+LineRenderer3D::LineRenderer3D(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& LineColor, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
+{
+	model = std::make_shared<Model>(Model(StartPoint, EndPoint, LineColor, ParentGameObjectID));
+}
+
+LineRenderer3D::LineRenderer3D(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& LineColor, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kLineRenderer3D, ComponentSubType::kRenderedObject)
+{
+	model = std::make_shared<Model>(Model(StartPoint, EndPoint, LineColor, ParentGameObjectID));
+}
 
 LineRenderer3D::LineRenderer3D(nlohmann::json& json, uint64_t GameObjectID) : Component(GameObjectID, json, ComponentSubType::kRenderedObject)
 {
-	//mesh = Mesh(vertices, indices);
+	model = std::make_shared<Model>(Model(json, GameObjectID));
 }
 
 LineRenderer3D::~LineRenderer3D()
@@ -31,10 +36,10 @@ LineRenderer3D::~LineRenderer3D()
 
 void LineRenderer3D::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
 {
-//	model->Update();
+	model->Update(GameObjectMatrix);
 }
 
 void LineRenderer3D::Destroy()
 {
-	//model->Destroy();
+	model->Destroy();
 }

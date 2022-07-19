@@ -12,51 +12,45 @@ private:
 	static std::shared_ptr<Mesh> ActiveMesh;
 public:
 
-	static std::shared_ptr<Mesh> AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
+	static void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
 		MeshList.emplace_back(mesh);
-
-		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<LineVertex3D>& vertices)
+	static void AddMesh(std::vector<LineVertex3D>& vertices)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
 		MeshList.emplace_back(mesh);
-
-		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
+	static void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
 		MeshList.emplace_back(mesh);
-
-		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+	static void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 		MeshList.emplace_back(mesh);
-
-		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(MeshLoadingInfo meshLoader)
+	static void AddMesh(MeshLoadingInfo meshLoader)
 	{
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
 		MeshList.emplace_back(mesh);
-
-		return mesh;
 	}
 
-	static std::shared_ptr<Mesh> AddMesh(std::shared_ptr<Mesh> mesh)
+	static void AddMesh(std::shared_ptr<Mesh> mesh)
 	{
 		MeshList.emplace_back(mesh);
-		return mesh;
 	}
+
+	//static std::shared_ptr<Level2D> AddMesh(std::shared_ptr<Level2D> level2D)
+	//{
+	//	MeshList.emplace_back(level2D->GetLevelMesh());
+	//}
 
 	static std::shared_ptr<Mesh> GetMeshByID(uint64_t meshID)
 	{

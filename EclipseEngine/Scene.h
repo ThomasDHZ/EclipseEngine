@@ -36,7 +36,7 @@ private:
 	HybridRenderer hybridRenderer;
 	PBRRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
-
+	std::shared_ptr<GameObject3D> obj5;
 public:
 	Scene();
 	~Scene();

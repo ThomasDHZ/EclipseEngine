@@ -12,7 +12,7 @@ class RenderPass2D : public RenderPass
 {
 private:
 	std::shared_ptr<GraphicsPipeline> renderer2DPipeline;
-	std::shared_ptr<DrawLinePipeline> drawLinePipeline;
+	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;
 
 	void RenderPassDesc();

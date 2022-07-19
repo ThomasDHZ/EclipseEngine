@@ -247,15 +247,16 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
 
-	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-
-	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
-	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-
 	if (VulkanRenderer::UpdateBLAS &&
 		IndexCount != 0)
 	{
+
+		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+
+		glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
+		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+
 		UpdateMeshBottomLevelAccelerationStructure();
 	}
 }

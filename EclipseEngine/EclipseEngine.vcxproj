@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -166,10 +166,12 @@
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
-    <ClCompile Include="GridRendererComponent.cpp" />
+    <ClCompile Include="GridRenderer2DComponent.cpp" />
+    <ClCompile Include="GridRenderer3DComponent.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
+    <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
@@ -183,6 +185,7 @@
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="PBRReflectionRenderPass.cpp" />
@@ -258,11 +261,13 @@
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
-    <ClInclude Include="GridRendererComponent.h" />
+    <ClInclude Include="GridRenderer2DComponent.h" />
+    <ClInclude Include="GridRenderer3DComponent.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
     <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
+    <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
@@ -277,6 +282,7 @@
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PBRReflectionRenderPass.h" />

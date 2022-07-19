@@ -30,6 +30,56 @@ Model::Model(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, 
 	VulkanRenderer::UpdateTLAS = true;
 }
 
+Model::Model(std::vector<LineVertex3D>& vertices, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(vertices);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(glm::vec3& StartPoint, glm::vec3& EndPoint, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(StartPoint, EndPoint);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Color, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(StartPoint, EndPoint, Color);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(StartPoint, EndPoint, Color);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(int GridSize, float GridSpacing, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(GridSize, GridSpacing);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, uint64_t GameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = GameObjectID;
+	AddMesh(GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+
+
 Model::~Model()
 {
 }
@@ -339,6 +389,26 @@ void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	MeshRendererManager::AddMesh(mesh);
 }
 
+void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Color)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+
+	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
+}
+
+void Model::AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+
+	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
+}
+
 void Model::AddMesh(std::vector<LineVertex3D>& vertices)
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
@@ -363,6 +433,26 @@ void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indi
 {
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
 	
+	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
+}
+
+void Model::AddMesh(int GridSize, float GridSpacing)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(GridSize, GridSize, GridSize, GridSpacing, GridSpacing, GridSpacing));
+
+	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	MeshList.emplace_back(mesh);
+	MeshRendererManager::AddMesh(mesh);
+}
+
+void Model::AddMesh(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
+{
+	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ));
+
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);

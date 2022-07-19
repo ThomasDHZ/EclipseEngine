@@ -109,6 +109,12 @@
     <Filter Include="Header Files\Mesh">
       <UniqueIdentifier>{d9de9665-2af1-40ff-957f-6b3b18d3ae52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Level2D">
+      <UniqueIdentifier>{3e97ef51-4967-4e42-a153-883cc2bdb238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Level2D">
+      <UniqueIdentifier>{5b81075e-516d-411e-b929-e1b51d2ad31c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -378,8 +384,17 @@
     <ClCompile Include="Level2DRenderer.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="GridRendererComponent.cpp">
+    <ClCompile Include="GridRenderer2DComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GridRenderer3DComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files\Level2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2D.cpp">
+      <Filter>Source Files\Level2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -686,8 +701,17 @@
     <ClInclude Include="Level2DRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GridRendererComponent.h">
+    <ClInclude Include="GridRenderer2DComponent.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRenderer3DComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files\Level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2D.h">
+      <Filter>Header Files\Level2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
