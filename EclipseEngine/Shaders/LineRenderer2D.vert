@@ -7,11 +7,9 @@
 #include "MeshProperties.glsl"
 
 layout (location = 0) in vec2 InPosition;
-layout (location = 1) in vec3 InColor;
+layout (location = 1) in vec4 InColor;
 
-layout(location = 0) out vec2 FragPos;
-layout(location = 1) out vec2 UV;
-layout(location = 2) out vec3 Color;
+layout(location = 0) out vec4 Color;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 

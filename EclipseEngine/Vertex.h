@@ -6,16 +6,16 @@
 #include "JsonConverter.h"
 
 struct LineVertex2D {
-    glm::vec3 pos;
-    glm::vec3 color;
+    glm::vec2 pos;
+    glm::vec4 color;
 
-    LineVertex2D(glm::vec3 Pos)
+    LineVertex2D(glm::vec2 Pos)
     {
         pos = Pos;
-        color = glm::vec3(1.0f);
+        color = glm::vec4(1.0f);
     }
 
-    LineVertex2D(glm::vec3 Pos, glm::vec3 Color)
+    LineVertex2D(glm::vec2 Pos, glm::vec4 Color)
     {
         pos = Pos;
         color = Color;
@@ -37,14 +37,14 @@ struct LineVertex2D {
         VkVertexInputAttributeDescription PositionAttribute;
         PositionAttribute.binding = 0;
         PositionAttribute.location = 0;
-        PositionAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        PositionAttribute.format = VK_FORMAT_R32G32_SFLOAT;
         PositionAttribute.offset = offsetof(LineVertex2D, pos);
         AttributeDescriptionList.emplace_back(PositionAttribute);
 
         VkVertexInputAttributeDescription ColorAttribute;
         ColorAttribute.binding = 0;
         ColorAttribute.location = 1;
-        ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        ColorAttribute.format = VK_FORMAT_R32G32B32A32_SFLOAT;
         ColorAttribute.offset = offsetof(LineVertex2D, color);
         AttributeDescriptionList.emplace_back(ColorAttribute);
 
@@ -54,7 +54,19 @@ struct LineVertex2D {
 
 struct LineVertex3D {
     glm::vec3 pos;
-    glm::vec3 color;
+    glm::vec4 color;
+
+    LineVertex3D(glm::vec3 Pos)
+    {
+        pos = Pos;
+        color = glm::vec4(1.0f);
+    }
+
+    LineVertex3D(glm::vec3 Pos, glm::vec4 Color)
+    {
+        pos = Pos;
+        color = Color;
+    }
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
@@ -79,7 +91,7 @@ struct LineVertex3D {
         VkVertexInputAttributeDescription ColorAttribute;
         ColorAttribute.binding = 0;
         ColorAttribute.location = 1;
-        ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
+        ColorAttribute.format = VK_FORMAT_R32G32B32A32_SFLOAT;
         ColorAttribute.offset = offsetof(LineVertex3D, color);
         AttributeDescriptionList.emplace_back(ColorAttribute);
 

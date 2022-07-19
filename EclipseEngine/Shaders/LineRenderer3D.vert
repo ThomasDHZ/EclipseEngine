@@ -6,10 +6,10 @@
 
 #include "MeshProperties.glsl"
 
-layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec3 inColor;
+layout (location = 0) in vec3 inPosition;
+layout (location = 1) in vec4 aColor;
 
-layout(location = 0) out vec3 Color;
+layout(location = 0) out vec4 Color;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
@@ -25,10 +25,11 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-//    if(gl_VertexIndex == 0)
-//	{
-//		debugPrintfEXT(": %i \n",  meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID);
-//	}
-    gl_Position = sceneData.proj * sceneData.view * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
-    Color = inColor;
+gl_Position = sceneData.proj * 
+                  sceneData.view *                
+                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  vec4(inPosition, 1.0);
+    Color = aColor;
 }
