@@ -4,16 +4,30 @@
 class Mesh3D : public Mesh
 {
 private:
+	std::vector<Vertex3D> VertexList;
+	std::vector<uint32_t> IndexList;
+
+	VulkanBuffer TransformBuffer;
+	VulkanBuffer TransformInverseBuffer;
 	VulkanBuffer BoneWeightBuffer;
 	VulkanBuffer BoneTransformBuffer;
 
-	std::vector<Vertex3D> VertexList;
-	std::vector<uint32_t> IndexList;
+	glm::vec3 GetPosition() { return MeshPosition; }
+	glm::vec3 GetRotation() { return MeshRotation; }
+	glm::vec3 GetScale() { return MeshScale; }
 
 protected:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 
+	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
+	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
+
+	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
+	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
+	void MeshStartUp(MeshLoadingInfo& meshLoader);
+	void RTXMeshStartUp();
+	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
 	Mesh3D();
@@ -28,6 +42,7 @@ public:
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList) override;
+	virtual void Destroy() override;
 
 	void SetMeshPosition(float x, float y, float z);
 	void SetMeshRotation(float x, float y, float z);
@@ -35,9 +50,5 @@ public:
 	void SetMeshPosition(glm::vec3 position);
 	void SetMeshRotation(glm::vec3 rotation);
 	void SetMeshScale(glm::vec3 scale);
-
-	glm::vec3 GetPosition() { return MeshPosition; }
-	glm::vec3 GetRotation() { return MeshRotation; }
-	glm::vec3 GetScale() { return MeshScale; }
 };
 

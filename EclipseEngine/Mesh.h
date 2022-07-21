@@ -91,8 +91,6 @@ protected:
 
 	MeshTypeEnum MeshType;
 
-	std::vector<MeshBoneWeights> BoneWeightList;
-	std::vector<glm::mat4> BoneTransform;
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
 	
@@ -100,18 +98,11 @@ protected:
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
-	VulkanBuffer TransformBuffer;
-	VulkanBuffer TransformInverseBuffer;
-
 	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
-	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
-	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
-
 	void GenerateID();
 	void GenerateColorID();
-	void UpdateMeshBottomLevelAccelerationStructure();
 public:
 
 	Mesh();
@@ -147,11 +138,11 @@ public:
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
-	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	MeshProperties GetMeshProperties() { return meshProperties; }
+	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 
 	glm::vec2* GetUVOffset() { return &meshProperties.UVOffset; }
 	glm::vec2* GetUVScale() { return &meshProperties.UVScale; }

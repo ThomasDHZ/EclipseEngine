@@ -4,6 +4,7 @@ class LineMesh2D : public Mesh2D
 {
 private:
 
+	void SetUpMesh();
 public:
 	LineMesh2D();
 	LineMesh2D(std::vector<LineVertex2D>& lineVertexList, uint64_t parentGameObjectID);

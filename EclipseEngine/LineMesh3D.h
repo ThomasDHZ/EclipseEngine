@@ -10,7 +10,9 @@ private:
 	glm::vec3 MeshRotation = glm::vec3(0.0f);
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 
+	void SetUpMesh();
 	void BuildGrid3D(glm::vec3 GridSize, glm::vec3 GridSpacing);
+
 public:
 	LineMesh3D(std::vector<LineVertex3D>& vertices);
 	LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint);
