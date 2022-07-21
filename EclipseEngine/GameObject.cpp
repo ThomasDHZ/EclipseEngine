@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include "LineRenderer3DComponent.h"
 #include "SpriteRenderer.h"
 #include "MeshRenderer.h"
 
@@ -7,20 +6,6 @@ uint64_t GameObject::GameObjectIDCounter = 0;
 
 GameObject::GameObject()
 {
-}
-
-GameObject::GameObject(const std::string Name, std::vector<LineVertex3D>& VertexList, int a)
-{
-	ObjectName = Name;
-	GenerateID();
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(VertexList, GameObjectID)));
-}
-
-GameObject::GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a)
-{
-	ObjectName = Name;
-	GenerateID();
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartLine, EndLine, GameObjectID)));
 }
 
 GameObject::GameObject(const std::string Name)

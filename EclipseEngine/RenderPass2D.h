@@ -6,7 +6,6 @@
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
 #include "MeshRendererManager.h"
-#include "LinePipeline.h"
 
 class RenderPass2D : public RenderPass
 {

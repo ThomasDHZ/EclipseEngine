@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "GameObjectManager.h"
 #include "LineMesh2D.h"
 
 class GridRenderer2D : public GameObject

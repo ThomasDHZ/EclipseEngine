@@ -3,7 +3,6 @@
 #include "MusicPlayer.h"
 #include "Mesh2D.h"
 #include "LineMesh2D.h"
-#include "LineRenderer3DComponent.h"
 #include "LineRenderer2D.h"
 #include "GridRenderer2D.h"
 #include "LineRenderer3D.h"
@@ -74,7 +73,7 @@ Scene::Scene()
 
     //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
   //  std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
-     std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
+   //  std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
     //GameObjectManager::AddGameObject(obj5);
 
     //int width = 500;
@@ -133,7 +132,7 @@ Scene::Scene()
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/RayReflectionTest.obj")));
-   // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Sponza/Sponza.gltf")));
+    GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Sponza/Sponza.gltf")));
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/vulkanscene_shadow.obj")));
   //  GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Cerberus/Cerberus_LP.FBX")));
 
@@ -361,26 +360,26 @@ void Scene::ImGuiUpdate()
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 
-    int i = 0;
-    const auto objList = GameObjectManager::GetGameObjectList();
-    for (auto obj : GameObjectManager::GetGameObjectList())
-    {
-        auto modelRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
-            if (modelRenderer)
-            {
-                if (auto obj3D = static_cast<MeshRenderer*>(modelRenderer.get()))
-                {
-                    for (int x =0; x < obj3D->GetModel()->GetMeshList().size(); x++)
-                    {
-                        auto meshobj = static_cast<Mesh3D*>(obj3D->GetModel()->GetMeshList()[x].get());
-                        ImGui::SliderFloat3("Mesh position " + x, &meshobj->MeshPosition.x, -100.0f, 100.0f);
-                        ImGui::SliderFloat3("Mesh rotation " + x, &meshobj->MeshRotation.x, 0.0f, 360.0f);
-                        ImGui::SliderFloat3("Mesh scale " + x, &meshobj->MeshScale.x, 0.0f, 1.0f);
-                        i++;
-                    }
-                }
-            }
-    }
+    //int i = 0;
+    //const auto objList = GameObjectManager::GetGameObjectList();
+    //for (auto obj : GameObjectManager::GetGameObjectList())
+    //{
+    //    auto modelRenderer = obj->GetComponentByType(ComponentType::kMeshRenderer);
+    //        if (modelRenderer)
+    //        {
+    //            if (auto obj3D = static_cast<MeshRenderer*>(modelRenderer.get()))
+    //            {
+    //                for (int x =0; x < obj3D->GetModel()->GetMeshList().size(); x++)
+    //                {
+    //                    auto meshobj = static_cast<Mesh3D*>(obj3D->GetModel()->GetMeshList()[x].get());
+    //                    ImGui::SliderFloat3("Mesh position " + x, &meshobj->MeshPosition.x, -100.0f, 100.0f);
+    //                    ImGui::SliderFloat3("Mesh rotation " + x, &meshobj->MeshRotation.x, 0.0f, 360.0f);
+    //                    ImGui::SliderFloat3("Mesh scale " + x, &meshobj->MeshScale.x, 0.0f, 1.0f);
+    //                    i++;
+    //                }
+    //            }
+    //        }
+    //}
 
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
     if (GraphicsDevice::IsRayTracingFeatureActive())

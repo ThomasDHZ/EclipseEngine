@@ -378,9 +378,6 @@
     <ClCompile Include="LineMesh2D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="LinePipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Level2DRenderer.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -389,12 +386,6 @@
     </ClCompile>
     <ClCompile Include="Level2D.cpp">
       <Filter>Source Files\Level2D</Filter>
-    </ClCompile>
-    <ClCompile Include="LineRenderer3DComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GridRenderer3DComponent.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LineRenderer3D.cpp">
       <Filter>Source Files\MeshRenderer</Filter>
@@ -701,9 +692,6 @@
     <ClInclude Include="LineMesh2D.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="LinePipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Level2DRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -712,12 +700,6 @@
     </ClInclude>
     <ClInclude Include="Level2D.h">
       <Filter>Header Files\Level2D</Filter>
-    </ClInclude>
-    <ClInclude Include="LineRenderer3DComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GridRenderer3DComponent.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GridRenderer2D.h">
       <Filter>Header Files\MeshRenderers</Filter>

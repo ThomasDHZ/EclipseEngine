@@ -93,27 +93,15 @@ public:
 
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
-	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
-	Model(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
-	
-	Model(std::vector<LineVertex3D>& vertices, uint64_t GameObjectID);
-	Model(glm::vec3& StartPoint, glm::vec3& EndPoint, uint64_t GameObjectID);
-	Model(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Color, uint64_t GameObjectID);
-	Model(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, uint64_t GameObjectID);
-	Model(int GridSize, float GridSpacing, uint64_t GameObjectID);
-	Model(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, uint64_t GameObjectID);
+	Model(std::shared_ptr<Mesh>& mesh, uint64_t GameObjectID);
+	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t GameObjectID);
+	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t GameObjectID);
 	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
-	void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint);
-	void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Color);
-	void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color);
-	void AddMesh(std::vector<LineVertex3D>& vertices);
 	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
 	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
-	void AddMesh(int GridSize, float GridSpacing);
-	void AddMesh(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ);
 	void AddMesh(MeshLoadingInfo& meshLoader);
 
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);

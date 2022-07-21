@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "GraphicsPipeline.h"
 #include "MeshRenderer.h"
-
+#include "GameObjectManager.h"
 class TopLevelAccelerationStructureManager
 {
 private: 

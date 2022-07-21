@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "GameObjectManager.h"
 #include "LineMesh3D.h"
 
 class GridRenderer3D : public GameObject

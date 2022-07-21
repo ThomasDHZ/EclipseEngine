@@ -33,20 +33,16 @@ protected:
 public:
 
 	GameObject();
-	GameObject(const std::string Name, std::vector<LineVertex3D>& VertexList, int a);
-	GameObject(const std::string Name, glm::vec3 StartLine, glm::vec3 EndLine, int a);
-
 	GameObject(const std::string Name);
 	GameObject(const std::string Name, glm::vec3 Position);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation);
 	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
+	GameObject(nlohmann::json& json);
+	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
-
-	GameObject(nlohmann::json& json);
-	virtual ~GameObject();
 
 	virtual void Update(float DeltaTime);
 	void Destroy();

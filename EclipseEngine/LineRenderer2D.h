@@ -1,4 +1,5 @@
 #include "GameObject2D.h"
+#include "GameObjectManager.h"
 #include "LineMesh2D.h"
 
 class LineRenderer2D : public GameObject

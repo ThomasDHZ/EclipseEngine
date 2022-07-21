@@ -1,7 +1,5 @@
 #include "GameObject3D.h"
 #include "MeshRenderer.h"
-#include "LineRenderer3DComponent.h"
-#include "GridRenderer3DComponent.h"
 
 GameObject3D::GameObject3D() 
 {
@@ -47,76 +45,6 @@ GameObject3D::GameObject3D(const std::string Name, std::vector<Vertex3D> VertexL
 	AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(VertexList, IndexList, GameObjectID)));
 }
 
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position) : GameObject(Name, position)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position, glm::vec3& rotation) : GameObject(Name, position, rotation)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) : GameObject(Name, position, rotation, scale)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position) : GameObject(Name, position)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position, glm::vec3& rotation) : GameObject(Name, position, rotation)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color, glm::vec3& position, glm::vec3& rotation, glm::vec3& scale) : GameObject(Name, position, rotation, scale)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(VertexList, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position) : GameObject(Name, position)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(VertexList, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position, glm::vec3 rotation) : GameObject(Name, position, rotation)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(VertexList, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(Name, position, rotation, scale)
-{
-	AddComponent(std::make_shared<LineRenderer3DComponent>(LineRenderer3DComponent(VertexList, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, int GridSize, float GridSpacing)
-{
-	AddComponent(std::make_shared<GridRenderer3DComponent>(GridRenderer3DComponent(GridSize, GridSpacing, GameObjectID)));
-}
-
-GameObject3D::GameObject3D(const std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer3DComponent>(GridRenderer3DComponent(GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectID)));
-}
-
 GameObject3D::~GameObject3D()
 {
 }
@@ -129,12 +57,6 @@ void GameObject3D::Update(float DeltaTime)
 	{
 		auto meshRenderer = static_cast<MeshRenderer*>(meshRendererComponent.get());
 		meshRenderer->Update(GameObjectTransform, DeltaTime);
-	}
-
-	if (auto lineRenderer3DComponent = GetComponentByType(ComponentType::kLineRenderer3D))
-	{
-		auto lineRenderer3D = static_cast<LineRenderer3DComponent*>(lineRenderer3DComponent.get());
-		lineRenderer3D->Update(GameObjectTransform, DeltaTime);
 	}
 }
 

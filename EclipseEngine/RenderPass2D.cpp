@@ -1,5 +1,4 @@
 #include "RenderPass2D.h"
-#include "LinePipeline.h"
 
 RenderPass2D::RenderPass2D() : RenderPass()
 {
