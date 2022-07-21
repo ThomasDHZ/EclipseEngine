@@ -12,17 +12,17 @@ private:
 	static std::shared_ptr<Mesh> ActiveMesh;
 public:
 
-	static void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
-	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
-		MeshList.emplace_back(mesh);
-	}
+	//static void AddMesh(glm::vec3& StartPoint, glm::vec3& EndPoint)
+	//{
+	//	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
+	//	MeshList.emplace_back(mesh);
+	//}
 
-	static void AddMesh(std::vector<LineVertex3D>& vertices)
-	{
-		std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
-		MeshList.emplace_back(mesh);
-	}
+	//static void AddMesh(std::vector<LineVertex3D>& vertices)
+	//{
+	//	std::shared_ptr<Mesh> mesh = std::make_shared<LineMesh3D>(LineMesh3D(vertices));
+	//	MeshList.emplace_back(mesh);
+	//}
 
 	static void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 	{

@@ -1,5 +1,7 @@
 #pragma once
 #include "Mesh3D.h"
+#include "MeshRendererManager.h"
+
 class LineMesh3D : public Mesh3D
 {
 private:

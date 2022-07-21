@@ -5,7 +5,7 @@
 class GridRenderer2D : public GameObject
 {
 private:
-	std::shared_ptr<LineMesh2D> LineObject;
+	std::shared_ptr<LineMesh2D> GridObject;
 
 public:
 	GridRenderer2D();

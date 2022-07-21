@@ -115,6 +115,12 @@
     <Filter Include="Header Files\Level2D">
       <UniqueIdentifier>{5b81075e-516d-411e-b929-e1b51d2ad31c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MeshRenderer">
+      <UniqueIdentifier>{d4b2f50b-e645-4e1f-9e1e-4d4bc9e95ec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MeshRenderers">
+      <UniqueIdentifier>{f5fb0dc7-f0d8-441e-b136-a440d6587af2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -390,11 +396,17 @@
     <ClCompile Include="GridRenderer3DComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LineRenderer3D.cpp">
+      <Filter>Source Files\MeshRenderer</Filter>
+    </ClCompile>
     <ClCompile Include="LineRenderer2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="GridRenderer2D.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MeshRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="GridRenderer3D.cpp">
+      <Filter>Source Files\MeshRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -707,11 +719,17 @@
     <ClInclude Include="GridRenderer3DComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineRenderer2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GridRenderer2D.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\MeshRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="LineRenderer2D.h">
+      <Filter>Header Files\MeshRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="LineRenderer3D.h">
+      <Filter>Header Files\MeshRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRenderer3D.h">
+      <Filter>Header Files\MeshRenderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -44,11 +44,11 @@ std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_p
             const auto model = meshRenderer->GetModel();
             MeshDrawList = model->GetMeshList();
         }
-        else if (component = obj->GetComponentByType(ComponentType::kLineRenderer2D))
+    /*    else if (component = obj->GetComponentByType(ComponentType::kLineRenderer2D))
         {
             const auto lineRenderer = static_cast<LineRenderer2D*>(component.get());
             MeshDrawList.emplace_back(lineRenderer->GetLine());
-        }
+        }*/
         //else if (component = obj->GetComponentByType(ComponentType::kLineRenderer3D))
         //{
         //    const auto lineRenderer = static_cast<LineRenderer3D*>(component.get());

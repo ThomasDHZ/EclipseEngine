@@ -6,12 +6,14 @@
 #include "LineRenderer3DComponent.h"
 #include "LineRenderer2D.h"
 #include "GridRenderer2D.h"
+#include "LineRenderer3D.h"
+#include "GridRenderer3D.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kSprite2D;
+    SceneManager::sceneType = SceneType::kBlinnPhong;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -37,11 +39,11 @@ Scene::Scene()
        glm::vec4 Color2 = glm::vec4(1.0f, 0.0f, 1.0f, 1.3f);
        ;     obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject5", StartPoint2, EndPoint2, Color2));*/
 
-       glm::vec2 StartPoint = glm::vec2(0.0f);
-       glm::vec2 EndPoint = glm::vec2(5.0f);
-       glm::vec4 Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.3f);
-       ;   auto  obj6 = std::make_shared<LineRenderer2D>(LineRenderer2D("Testobject5", StartPoint, EndPoint, Color));
-       GameObjectManager::AddGameObject(obj6);
+       //glm::vec2 StartPoint = glm::vec2(0.0f);
+       //glm::vec2 EndPoint = glm::vec2(5.0f);
+       //glm::vec4 Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.3f);
+       //;   auto  obj6 = std::make_shared<LineRenderer2D>(LineRenderer2D("Testobject5", StartPoint, EndPoint, Color));
+       //GameObjectManager::AddGameObject(obj6);
 
     //std::vector<MeshVertex> vertices = {
     //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
@@ -72,49 +74,49 @@ Scene::Scene()
 
     //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
   //  std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
-    // std::shared_ptr<GameObject2D> obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject6", 50, 50, 1.0f, 1.0f));
+     std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
     //GameObjectManager::AddGameObject(obj5);
 
-//    int width = 500;
-//    int height = 500;
-//    float length = 10.0f;
-//    float radius = 0.5f;
-//    std::vector<LineVertex3D> VertexList;
-//    for (uint32_t y = 0; y < height; y++)
-//    {
-//        for (uint32_t x = 0; x < width; x++)
-//        {
-//            glm::vec2 coord = { (float)x / width, (float)y / height };
-//            coord = coord * 2.0f - 1.0f;
-//
-//            uint8_t r = (uint8_t)(coord.x * 255.0f);
-//            uint8_t g = (uint8_t)(coord.y * 255.0f);
-//
-//            glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-//            glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
-//
-//            float a = glm::dot(rayDirection, rayDirection);
-//            float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-//            float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
-//
-//            //Quadratic forumla discriminat
-//            //b^2 - 4ac;
-//
-//            float discriminant = (b * b) - 4.0f * a * c;
-//
-//            if (discriminant >= 0.0f)
-//            {
-//                VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
-//                VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
-//            }
-//            else
-//            {
-//                VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
-//                VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
-//            }
-//        }
-//    }
-//GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", VertexList)));
+    //int width = 500;
+    //int height = 500;
+    //float length = 10.0f;
+    //float radius = 0.5f;
+    //std::vector<LineVertex3D> VertexList;
+    //for (uint32_t y = 0; y < height; y++)
+    //{
+    //    for (uint32_t x = 0; x < width; x++)
+    //    {
+    //        glm::vec2 coord = { (float)x / width, (float)y / height };
+    //        coord = coord * 2.0f - 1.0f;
+
+    //        uint8_t r = (uint8_t)(coord.x * 255.0f);
+    //        uint8_t g = (uint8_t)(coord.y * 255.0f);
+
+    //        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+    //        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+
+    //        float a = glm::dot(rayDirection, rayDirection);
+    //        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+    //        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+
+    //        //Quadratic forumla discriminat
+    //        //b^2 - 4ac;
+
+    //        float discriminant = (b * b) - 4.0f * a * c;
+
+    //        if (discriminant >= 0.0f)
+    //        {
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+    //        }
+    //        else
+    //        {
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+    //        }
+    //    }
+    //}
+    //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
 
 
 //   SceneManager::LoadScene("../Scenes/example.txt");
