@@ -387,13 +387,13 @@
     <ClCompile Include="LineRenderer3DComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LineRenderer2DComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GridRenderer3DComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GridRenderer2DComponent.cpp">
+    <ClCompile Include="LineRenderer2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GridRenderer2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -704,13 +704,13 @@
     <ClInclude Include="LineRenderer3DComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LineRenderer2DComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GridRenderer3DComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GridRenderer2DComponent.h">
+    <ClInclude Include="LineRenderer2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRenderer2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

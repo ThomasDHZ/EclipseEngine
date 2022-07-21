@@ -10,34 +10,6 @@ public:
 	GameObject2D(const std::string Name, glm::vec2& position, uint32_t Depth);
 	GameObject2D(const std::string Name, glm::vec2& position, glm::vec2& rotation, uint32_t Depth);
 	GameObject2D(const std::string Name, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale, uint32_t Depth);
-
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position, glm::vec2& rotation);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale);
-
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position, glm::vec2& rotation);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale);
-
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position, glm::vec2& rotation);
-	GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale);
-
-	GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList);
-	GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position);
-	GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position, glm::vec2& rotation);
-	GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale);
-
-	GameObject2D(const std::string Name, int GridSize, float GridSpacing);
-	GameObject2D(const std::string Name, int GridSize, float GridSpacing, glm::vec3& Color);
-	GameObject2D(const std::string Name, int GridSize, float GridSpacing, glm::vec4& Color);
-	GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY);
-	GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec3& Color);
-	GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec4& Color);
-
 	~GameObject2D();
 
 	virtual void Update(float DeltaTime) override;

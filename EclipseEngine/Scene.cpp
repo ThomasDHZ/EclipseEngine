@@ -3,8 +3,9 @@
 #include "MusicPlayer.h"
 #include "Mesh2D.h"
 #include "LineMesh2D.h"
-#include "LineRenderer2DComponent.h"
 #include "LineRenderer3DComponent.h"
+#include "LineRenderer2D.h"
+#include "GridRenderer2D.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
@@ -25,17 +26,22 @@ Scene::Scene()
     material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
     MaterialManager::AddMaterial(material2);
 
-     glm::vec2 StartPoint = glm::vec2(0.0f);
+ /*    glm::vec2 StartPoint = glm::vec2(0.0f);
         glm::vec2 EndPoint = glm::vec2(5.0f);
         glm::vec4 Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.3f);
 ;     obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject5", StartPoint, EndPoint, Color));
-       GameObjectManager::AddGameObject(obj5);
+       GameObjectManager::AddGameObject(obj5);*/
 
-       //glm::vec2 StartPoint = glm::vec2(0.0f);
-       //glm::vec2 EndPoint = glm::vec2(5.0f);
-       //glm::vec4 Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.3f);
-       //;     obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject5", 50, .5, Color));
-       //GameObjectManager::AddGameObject(obj5);
+   /*    glm::vec2 StartPoint2 = glm::vec2(1.0f);
+       glm::vec2 EndPoint2 = glm::vec2(5.0f);
+       glm::vec4 Color2 = glm::vec4(1.0f, 0.0f, 1.0f, 1.3f);
+       ;     obj5 = std::make_shared<GameObject2D>(GameObject2D("Testobject5", StartPoint2, EndPoint2, Color2));*/
+
+       glm::vec2 StartPoint = glm::vec2(0.0f);
+       glm::vec2 EndPoint = glm::vec2(5.0f);
+       glm::vec4 Color = glm::vec4(1.0f, 0.0f, 0.0f, 1.3f);
+       ;   auto  obj6 = std::make_shared<LineRenderer2D>(LineRenderer2D("Testobject5", StartPoint, EndPoint, Color));
+       GameObjectManager::AddGameObject(obj6);
 
     //std::vector<MeshVertex> vertices = {
     //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},

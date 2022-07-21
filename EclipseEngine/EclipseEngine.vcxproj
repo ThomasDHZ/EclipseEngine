@@ -166,7 +166,7 @@
     <ClCompile Include="GameObject2D.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
-    <ClCompile Include="GridRenderer2DComponent.cpp" />
+    <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3DComponent.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
@@ -177,7 +177,7 @@
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
     <ClCompile Include="LinePipeline.cpp" />
-    <ClCompile Include="LineRenderer2DComponent.cpp" />
+    <ClCompile Include="LineRenderer2D.cpp" />
     <ClCompile Include="LineRenderer3DComponent.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="Mesh3D.cpp" />
@@ -261,7 +261,7 @@
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
-    <ClInclude Include="GridRenderer2DComponent.h" />
+    <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3DComponent.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
@@ -274,7 +274,7 @@
     <ClInclude Include="LineMesh2D.h" />
     <ClInclude Include="LineMesh3D.h" />
     <ClInclude Include="LinePipeline.h" />
-    <ClInclude Include="LineRenderer2DComponent.h" />
+    <ClInclude Include="LineRenderer2D.h" />
     <ClInclude Include="LineRenderer3DComponent.h" />
     <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="Mesh3D.h" />

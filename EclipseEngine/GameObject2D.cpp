@@ -1,7 +1,5 @@
 #include "GameObject2D.h"
 #include "SpriteRenderer.h"
-#include "LineRenderer2DComponent.h"
-#include "GridRenderer2DComponent.h"
 
 GameObject2D::GameObject2D() : GameObject()
 {
@@ -27,116 +25,6 @@ GameObject2D::GameObject2D(const std::string Name, glm::vec2& position, glm::vec
 	AddComponent(std::make_shared<SpriteRenderer>(SpriteRenderer(GameObjectID)));
 }
 
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position, glm::vec2& rotation) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position, glm::vec2& rotation) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Color, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position, glm::vec2& rotation) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& Color, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(StartPoint, EndPoint, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList) : GameObject(Name)
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(VertexList, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(VertexList, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position, glm::vec2& rotation) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(VertexList, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, std::vector<LineVertex2D>& VertexList, glm::vec2& position, glm::vec2& rotation, glm::vec2& scale) : GameObject(Name, glm::vec3(position.x, position.y, 0.0f), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
-{
-	AddComponent(std::make_shared<LineRenderer2DComponent>(LineRenderer2DComponent(VertexList, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSize, float GridSpacing) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSize, GridSize, GridSpacing, GridSpacing, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSize, float GridSpacing, glm::vec3& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSize, GridSize, GridSpacing, GridSpacing, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSize, float GridSpacing, glm::vec4& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSize, GridSize, GridSpacing, GridSpacing, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec3& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, Color, GameObjectID)));
-}
-
-GameObject2D::GameObject2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec4& Color) : GameObject(Name)
-{
-	AddComponent(std::make_shared<GridRenderer2DComponent>(GridRenderer2DComponent(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, Color, GameObjectID)));
-}
-
 GameObject2D::~GameObject2D()
 {
 }
@@ -149,12 +37,6 @@ void GameObject2D::Update(float DeltaTime)
 	{
 		auto spriteRenderer = static_cast<SpriteRenderer*>(spriteRendererComponent.get());
 		spriteRenderer->Update(GameObjectTransform, DeltaTime);
-	}
-
-	if (auto lineRenderer2DComponent = GetComponentByType(ComponentType::kLineRenderer2D))
-	{
-		auto lineRenderer2D = static_cast<LineRenderer2DComponent*>(lineRenderer2DComponent.get());
-		lineRenderer2D->Update(GameObjectTransform, DeltaTime);
 	}
 }
 
