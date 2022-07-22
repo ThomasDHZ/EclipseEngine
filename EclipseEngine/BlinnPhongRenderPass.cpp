@@ -112,7 +112,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_FALSE;
+    ColorAttachment.blendEnable = VK_TRUE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -121,7 +121,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(2, ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 
@@ -212,7 +212,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
-    {
+      {
         std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
         PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
@@ -225,8 +225,8 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderLine;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
         buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kLine3D;
 

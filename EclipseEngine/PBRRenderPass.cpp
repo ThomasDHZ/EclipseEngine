@@ -116,7 +116,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_FALSE;
+    ColorAttachment.blendEnable = VK_TRUE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -125,7 +125,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(2, ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
@@ -241,8 +241,8 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
         buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
         buildGraphicsPipelineInfo.renderPass = renderPass;
         buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderLine;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
         buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
         buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kLine3D;
 
