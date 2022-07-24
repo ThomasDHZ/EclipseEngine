@@ -7,33 +7,52 @@ Model::Model()
 {
 }
 
-Model::Model(const std::string& FilePath, uint64_t GameObjectID)
+Model::Model(const std::string& FilePath, uint64_t parentGameObjectID)
 {
 	GenerateID();
-	LoadModel(FilePath, GameObjectID);
+	LoadModel(FilePath, parentGameObjectID);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::shared_ptr<Mesh>& mesh, uint64_t GameObjectID)
+Model::Model(std::shared_ptr<Mesh> mesh, uint64_t parentGameObjectID)
 {
 	GenerateID();
-	ParentGameObjectID = GameObjectID;
+	ParentGameObjectID = parentGameObjectID;
 	AddMesh(mesh);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t GameObjectID)
+Model::Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, uint64_t parentGameObjectID)
 {
 	GenerateID();
-	ParentGameObjectID = GameObjectID;
+	ParentGameObjectID = parentGameObjectID;
+	AddMesh(mesh, material);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(std::vector<Mesh>& meshList, uint64_t parentGameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = parentGameObjectID;
+	for (auto mesh : meshList)
+	{
+		//AddMesh(mesh);
+	}
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t parentGameObjectID)
+{
+	GenerateID();
+	ParentGameObjectID = parentGameObjectID;
 	AddMesh(VertexList, IndexList);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t GameObjectID)
+Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
 {
 	GenerateID();
-	ParentGameObjectID = GameObjectID;
+	ParentGameObjectID = parentGameObjectID;
 	AddMesh(VertexList, IndexList);
 	VulkanRenderer::UpdateTLAS = true;
 }
@@ -337,9 +356,17 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 	MeshList.emplace_back(mesh);
 }
 
+void Model::AddMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material)
+{
+	mesh->SetParentModel(ModelID);
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	mesh->SetMaterial(material);
+	MeshList.emplace_back(mesh);
+}
+
 void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, ParentGameObjectID));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -348,7 +375,7 @@ void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indi
 
 void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr, ParentGameObjectID));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);

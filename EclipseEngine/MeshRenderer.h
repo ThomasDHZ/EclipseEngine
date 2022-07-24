@@ -1,34 +1,28 @@
 #pragma once
-#include "ComponentRenderer.h"
-#include "Model.h"
-
-class MeshRenderer : public Component
+#include "GameObjectManager.h"
+#include "GameObject3D.h"
+#include "Mesh3D.h"
+class MeshRenderer : public GameObject3D
 {
 private:
-	std::shared_ptr<Model> model;
-
-	void from_json(nlohmann::json& json)
-	{
-	/*	Component::from_json(json);
-		model = std::make_shared<Model>(Model(json.at("Model"), ParentGameObjectID));*/
-	//	ModelManager::AddModel(model);
-	}
+	std::shared_ptr<Mesh> mesh;
 
 public:
-	MeshRenderer(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID);
-	MeshRenderer(const std::string& FilePath, uint64_t GameObjectID);
-	MeshRenderer(nlohmann::json json, uint64_t GameObjectID);
-	virtual ~MeshRenderer();
+	MeshRenderer();
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
-	void Update(const glm::mat4& GameObjectMatrix, float DeltaTime);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	~MeshRenderer();
+
+	void Update(float DeltaTime) override;
 	void Destroy() override;
 
-	std::shared_ptr<Model> GetModel() { return model; }
-
-	//virtual void to_json(nlohmann::json& json) override
-	//{
-	///*	Component::to_json(json);
-	//	model->to_json(json["Model"]);*/
-	//}
+	std::shared_ptr<Mesh> GetMesh() { return mesh; }
 };
 

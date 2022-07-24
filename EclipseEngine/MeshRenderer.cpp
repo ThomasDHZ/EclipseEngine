@@ -1,33 +1,67 @@
 #include "MeshRenderer.h"
-#include "Vertex.h"
-
-MeshRenderer::MeshRenderer(std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kMeshRenderer, ComponentSubType::kRenderedObject)
+MeshRenderer::MeshRenderer()
 {
-	ParentGameObjectID = GameObjectID;
-	model = std::make_shared<Model>(Model(VertexList, IndexList, ParentGameObjectID));
 }
 
-MeshRenderer::MeshRenderer(const std::string& FilePath, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kMeshRenderer, ComponentSubType::kRenderedObject)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList) : GameObject3D(Name)
 {
-	ParentGameObjectID = GameObjectID;
-	model = std::make_shared<Model>(Model(FilePath, ParentGameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
 }
 
-MeshRenderer::MeshRenderer(nlohmann::json json, uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kMeshRenderer, ComponentSubType::kRenderedObject)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position) : GameObject3D(Name, position)
 {
-	Component::from_json(json);
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material) : GameObject3D(Name)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+}
+
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+{
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
 }
 
 MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
+void MeshRenderer::Update(float DeltaTime)
 {
-	model->Update(GameObjectMatrix);
+	GameObject::Update(DeltaTime);
+	mesh->Update(GameObjectTransform, glm::mat4(1.0f));
 }
 
 void MeshRenderer::Destroy()
 {
-	model->Destroy();
+	mesh->Destroy();
 }

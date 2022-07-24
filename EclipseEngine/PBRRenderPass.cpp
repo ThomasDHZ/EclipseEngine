@@ -1,7 +1,7 @@
 #include "PBRRenderPass.h"
 #include "LightManager.h"
-#include "SpriteRenderer.h"
-#include "MeshRenderer.h"
+#include "SpriteRendererComponent.h"
+#include "MeshRendererComponent.h"
 
 
 PBRRenderPass::PBRRenderPass() : RenderPass()

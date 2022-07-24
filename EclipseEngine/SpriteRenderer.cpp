@@ -1,16 +1,62 @@
 #include "SpriteRenderer.h"
-#include "Vertex.h"
-#include "Mesh2D.h"
 
-SpriteRenderer::SpriteRenderer(uint64_t GameObjectID) : Component(GameObjectID, ComponentType::kSpriteRenderer, ComponentSubType::kRenderedObject)
+SpriteRenderer::SpriteRenderer() 
 {
-	ParentGameObjectID = GameObjectID;
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(ParentGameObjectID));
-	MeshRendererManager::AddMesh(Sprite);
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name) : GameObject2D(Name)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, uint32_t Depth) : GameObject2D(Name, position, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t Depth) : GameObject2D(Name, position, rotation, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth) : GameObject2D(Name, position, rotation, scale, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material) : GameObject2D(Name)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, uint32_t Depth) : GameObject2D(Name, position, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, uint32_t Depth) : GameObject2D(Name, position, rotation, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
+}
+
+SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth) : GameObject2D(Name, position, rotation, scale, Depth)
+{
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, GameObjectID));
+	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 
-SpriteRenderer::SpriteRenderer(nlohmann::json& json, uint64_t GameObjectID) : Component(GameObjectID, json, ComponentSubType::kRenderedObject)
+
+SpriteRenderer::SpriteRenderer(nlohmann::json& json)
 {
 }
 
@@ -18,9 +64,10 @@ SpriteRenderer::~SpriteRenderer()
 {
 }
 
-void SpriteRenderer::Update(const glm::mat4& GameObjectMatrix, float DeltaTime)
+void SpriteRenderer::Update(float DeltaTime)
 {
-	Sprite->Update(GameObjectMatrix, glm::mat4(1.0f));
+	GameObject::Update(DeltaTime);
+	Sprite->Update(GameObjectTransform, glm::mat4(1.0f));
 }
 
 void SpriteRenderer::Destroy()

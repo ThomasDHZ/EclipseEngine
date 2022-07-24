@@ -2,7 +2,7 @@
 #include "VulkanRenderer.h"
 #include "Model.h"
 #include "GraphicsPipeline.h"
-#include "MeshRenderer.h"
+#include "MeshRendererComponent.h"
 #include "GameObjectManager.h"
 class TopLevelAccelerationStructureManager
 {
@@ -33,7 +33,7 @@ public:
             {
                 if (auto component = GameObjectManager::GetGameObjectList()[x]->GetComponentByType(ComponentType::kMeshRenderer))
                 {
-                    auto meshRenderer = static_cast<MeshRenderer*>(component.get());
+                    auto meshRenderer = static_cast<MeshRendererComponent*>(component.get());
                     meshRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
                 }
             }

@@ -1,7 +1,7 @@
 #include "RenderPass.h"
 #include "MeshRendererManager.h"
-#include "SpriteRenderer.h"
-#include "MeshRenderer.h"
+#include "SpriteRendererComponent.h"
+#include "MeshRendererComponent.h"
 #include "LineRenderer2D.h"
 #include "LineRenderer3D.h"
 
@@ -35,12 +35,12 @@ std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_p
         std::shared_ptr<Component> component = nullptr;
         if (component = obj->GetComponentByType(ComponentType::kSpriteRenderer))
         {
-            const auto spriteRenderer = static_cast<SpriteRenderer*>(component.get());
+            const auto spriteRenderer = static_cast<SpriteRendererComponent*>(component.get());
             MeshDrawList.emplace_back(spriteRenderer->GetSprite());
         }
         else if (component = obj->GetComponentByType(ComponentType::kMeshRenderer))
         {
-            const auto meshRenderer = static_cast<MeshRenderer*>(component.get());
+            const auto meshRenderer = static_cast<MeshRendererComponent*>(component.get());
             const auto model = meshRenderer->GetModel();
             MeshDrawList = model->GetMeshList();
         }

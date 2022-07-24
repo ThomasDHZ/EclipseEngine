@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
@@ -182,8 +183,11 @@
     <ClCompile Include="Mesh3D.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
+    <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="ModelRenderer.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
@@ -216,7 +220,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="MeshRendererComponent.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
@@ -237,7 +241,7 @@
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="SpriteRendererComponent.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -248,6 +252,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
+    <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="Converters.h" />
@@ -278,8 +283,11 @@
     <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="MeshPickerRenderPass2D.h" />
     <ClInclude Include="MeshPickerRenderPass3D.h" />
+    <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="ModelRenderer.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
@@ -317,7 +325,7 @@
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="MeshRendererComponent.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
@@ -340,7 +348,7 @@
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureManager.h" />

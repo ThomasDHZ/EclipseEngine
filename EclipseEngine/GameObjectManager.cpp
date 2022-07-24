@@ -1,6 +1,6 @@
 #include "GameObjectManager.h"
 #include "SpriteRenderer.h"
-#include "MeshRenderer.h"
+
 
  void GameObjectManager::AddGameObject(std::shared_ptr<GameObject> obj)
 {

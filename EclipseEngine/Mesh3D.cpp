@@ -5,14 +5,14 @@ Mesh3D::Mesh3D() : Mesh(MeshTypeEnum::kPolygon, 0)
 {
 }
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
+Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID)
 {
-	MeshStartUp(vertices, indices);
+	MeshStartUp(vertices, indices, parentGameObjectID);
 }
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
 {
-	MeshStartUp(vertices, indices, materialPtr);
+	MeshStartUp(vertices, indices, materialPtr, parentGameObjectID);
 }
 
 Mesh3D::Mesh3D(MeshLoadingInfo& meshLoader)
@@ -24,7 +24,7 @@ Mesh3D::~Mesh3D()
 {
 }
 
-void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
+void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID)
 {
 	GenerateID();
 	GenerateColorID();
@@ -35,7 +35,7 @@ void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>&
 	MeshType = MeshTypeEnum::kPolygon;
 	material = MaterialManager::GetDefaultMaterial();
 	ParentModelID = -1;
-	ParentGameObjectID = -1;
+	ParentGameObjectID = parentGameObjectID;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
@@ -50,7 +50,7 @@ void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>&
 	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
-void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
+void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
 {
 	GenerateID();
 	GenerateColorID();
@@ -59,7 +59,7 @@ void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>&
 	IndexList = indices;
 
 	ParentModelID = -1;
-	ParentGameObjectID = -1;
+	ParentGameObjectID = parentGameObjectID;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;

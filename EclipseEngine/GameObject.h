@@ -45,7 +45,7 @@ public:
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
 	virtual void Update(float DeltaTime);
-	void Destroy();
+	virtual void Destroy();
 
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
