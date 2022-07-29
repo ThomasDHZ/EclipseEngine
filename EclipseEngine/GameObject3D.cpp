@@ -1,5 +1,4 @@
 #include "GameObject3D.h"
-#include "MeshRendererComponent.h"
 
 GameObject3D::GameObject3D() 
 {

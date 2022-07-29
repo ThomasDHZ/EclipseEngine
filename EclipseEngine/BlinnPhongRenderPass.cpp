@@ -174,6 +174,50 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
             vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
         }
     }
+
+    {
+        VkDescriptorImageInfo ShadowMapBufferInfo;
+        ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        ShadowMapBufferInfo.imageView = depthTexture->View;
+        ShadowMapBufferInfo.sampler = depthTexture->Sampler;
+
+        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BillBoardShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BillBoardShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
+        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+        buildGraphicsPipelineInfo.renderPass = renderPass;
+        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+        buildGraphicsPipelineInfo.sampleCount = SampleCount;
+        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
+
+        if (billBoardMeshPipeline == nullptr)
+        {
+            billBoardMeshPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
+        }
+        else
+        {
+            billBoardMeshPipeline->Destroy();
+            billBoardMeshPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+        }
+
+        for (auto& shader : PipelineShaderStageList)
+        {
+            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+        }
+    }
+
     {
         VkDescriptorImageInfo SkyboxBufferInfo;
         SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -342,9 +386,18 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
                 }
                 else
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                    if (mesh->GetMeshSubType() == MeshSubTypeEnum::kNormal)
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                    }
+                    else
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipelineLayout(), 0, 1, billBoardMeshPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, billBoardMeshPipeline, mesh, SceneManager::sceneProperites);
+                    }
                 }
                 break;
             }
@@ -358,9 +411,18 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
                 }
                 else
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                    if (mesh->GetMeshSubType() == MeshSubTypeEnum::kNormal)
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                    }
+                    else
+                    {
+                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipeline());
+                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipelineLayout(), 0, 1, billBoardMeshPipeline->GetDescriptorSetPtr(), 0, nullptr);
+                        GameObjectManager::DrawMesh(commandBuffer, billBoardMeshPipeline, mesh, SceneManager::sceneProperites);
+                    }
                 }
                 break;
             }

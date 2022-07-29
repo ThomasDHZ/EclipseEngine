@@ -7,9 +7,10 @@ Mesh::Mesh()
 {
 }
 
-Mesh::Mesh(MeshTypeEnum meshType, uint64_t parentGameObjectID)
+Mesh::Mesh(MeshTypeEnum meshType, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID)
 {
 	MeshType = meshType;
+	MeshSubType = meshSubType;
 	ParentGameObjectID = parentGameObjectID;
 }
 

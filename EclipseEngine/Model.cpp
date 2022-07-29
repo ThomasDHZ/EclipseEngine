@@ -127,7 +127,10 @@ std::vector<Vertex3D> Model::LoadVertices(aiMesh* mesh)
 	{
 		Vertex3D vertex;
 		vertex.Position = glm::vec3{ mesh->mVertices[x].x, mesh->mVertices[x].y, mesh->mVertices[x].z };
-		vertex.Normal = glm::vec3{ mesh->mNormals[x].x, mesh->mNormals[x].y, mesh->mNormals[x].z };
+		if (mesh->mNormals)
+		{
+			vertex.Normal = glm::vec3{ mesh->mNormals[x].x, mesh->mNormals[x].y, mesh->mNormals[x].z };
+		}
 		//vertex.Color = glm::vec3{ mesh->mColors[x]->r, mesh->mColors[x]->g, mesh->mColors[x]->b };
 
 		if (mesh->mTangents)
@@ -366,7 +369,7 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> materi
 
 void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, ParentGameObjectID));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, MeshSubTypeEnum::kNormal, ParentGameObjectID));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);
@@ -375,7 +378,7 @@ void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indi
 
 void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
 {
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr, ParentGameObjectID));
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr, MeshSubTypeEnum::kNormal, ParentGameObjectID));
 	
 	mesh->SetParentModel(ModelID);
 	mesh->SetParentGameObjectID(ParentGameObjectID);

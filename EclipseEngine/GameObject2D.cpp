@@ -1,5 +1,4 @@
 #include "GameObject2D.h"
-#include "SpriteRendererComponent.h"
 
 GameObject2D::GameObject2D() : GameObject()
 {

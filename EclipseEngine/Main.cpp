@@ -5,7 +5,6 @@
 #include <stb_image.h>
 #include <json.hpp>
 #include "GameObject.h"
-#include "SpriteRendererComponent.h"
 #include "TextureManager.h"
 #include "InterfaceRenderPass.h"
 #include "MaterialManager.h"

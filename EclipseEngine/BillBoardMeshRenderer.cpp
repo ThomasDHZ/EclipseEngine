@@ -18,7 +18,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 
@@ -36,7 +36,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 
@@ -54,7 +54,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 
@@ -72,7 +72,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 
@@ -90,7 +90,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 
@@ -108,7 +108,7 @@ BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 B
 	   0, 1, 2, 2, 3, 0
 	};
 
-	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, GameObjectID));
+	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 }
 

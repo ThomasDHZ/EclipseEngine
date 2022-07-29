@@ -1,7 +1,5 @@
 #include "RenderPass.h"
 #include "MeshRendererManager.h"
-#include "SpriteRendererComponent.h"
-#include "MeshRendererComponent.h"
 #include "LineRenderer2D.h"
 #include "LineRenderer3D.h"
 
@@ -24,40 +22,6 @@ void RenderPass::Destroy()
         vkDestroyFramebuffer(VulkanRenderer::GetDevice(), framebuffer, nullptr);
         framebuffer = VK_NULL_HANDLE;
     }
-}
-
-std::vector<std::shared_ptr<Mesh>> RenderPass::GetObjectRenderList(std::shared_ptr<GameObject> obj)
-{
-    std::vector<std::shared_ptr<Mesh>> MeshDrawList;
-    const auto componentSubType = obj->GetComponentBySubType(ComponentSubType::kRenderedObject);
-    if (componentSubType->GetComponentSubType() == ComponentSubType::kRenderedObject)
-    {
-        std::shared_ptr<Component> component = nullptr;
-        if (component = obj->GetComponentByType(ComponentType::kSpriteRenderer))
-        {
-            const auto spriteRenderer = static_cast<SpriteRendererComponent*>(component.get());
-            MeshDrawList.emplace_back(spriteRenderer->GetSprite());
-        }
-        else if (component = obj->GetComponentByType(ComponentType::kMeshRenderer))
-        {
-            const auto meshRenderer = static_cast<MeshRendererComponent*>(component.get());
-            const auto model = meshRenderer->GetModel();
-            MeshDrawList = model->GetMeshList();
-        }
-    /*    else if (component = obj->GetComponentByType(ComponentType::kLineRenderer2D))
-        {
-            const auto lineRenderer = static_cast<LineRenderer2D*>(component.get());
-            MeshDrawList.emplace_back(lineRenderer->GetLine());
-        }*/
-        //else if (component = obj->GetComponentByType(ComponentType::kLineRenderer3D))
-        //{
-        //    const auto lineRenderer = static_cast<LineRenderer3D*>(component.get());
-        //    const auto line = lineRenderer->GetLine();
-        //    MeshDrawList = line->GetMeshList();
-        //}
-    }
-
-    return MeshDrawList;
 }
 
 void RenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)

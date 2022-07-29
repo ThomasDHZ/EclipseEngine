@@ -220,7 +220,6 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRendererComponent.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
@@ -241,7 +240,6 @@
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="SpriteRendererComponent.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
@@ -325,7 +323,6 @@
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRendererComponent.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
@@ -348,7 +345,6 @@
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="SpriteRendererComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureManager.h" />
@@ -363,6 +359,8 @@
   <ItemGroup>
     <None Include="Shaders\anyhit.rahit" />
     <None Include="Shaders\anyhit1.rahit" />
+    <None Include="Shaders\BillBoardShader.frag" />
+    <None Include="Shaders\BillBoardShader.vert" />
     <None Include="Shaders\BRDFShader.frag" />
     <None Include="Shaders\BRDFShader.vert" />
     <None Include="Shaders\closesthit.rchit" />

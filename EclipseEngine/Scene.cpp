@@ -125,10 +125,12 @@ Scene::Scene()
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/RayReflectionTest.obj")));
 
     std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Char", MaterialTypeEnum::kMaterialBlinnPhong));
-    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/CharmanderDiffuse.png");
-    material3->LoadDiffuseMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/CharmanderDiffuse.png");
-    material3->LoadNormalMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/charmanderSculptedFinal.jpg");
-  //  material3->LoadAmbientOcclusionMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/charmanderScupltedcharmandeNoser4-AO_u0_v0.bmp");
+    material3->LoadDiffuseMap("../Models/Charmander/defaultMat_Base_color.bmp");
+    material3->LoadAlbedoMap("../Models/Charmander/defaultMat_Base_color.bmp");
+  //  material3->LoadMetallicMap("../Models/Charmander/defaultMat_Metallic.bmp");
+    material3->LoadNormalMap("../Models/Charmander/defaultMat_Normal_OpenGL.bmp");
+  //  material3->LoadRoughnessMap("../Models/Charmander/defaultMat_Roughness.bmp");
+    //material3->LoadAmbientOcclusionMap("../Models/Charmander/defaultMat_Mixed_AO.bmp");
     MaterialManager::AddMaterial(material3);
 
 
@@ -136,8 +138,8 @@ Scene::Scene()
     auto b= std::make_shared<BillBoardMeshRenderer>(BillBoardMeshRenderer("Testobject2", glm::vec2(1.0f)));
     b->GetMesh()->SetMaterial(material3);
 
-       auto a = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/charmanderSculptFinal.obj"));
-       a->GetModel()->GetMeshList()[0]->SetMaterial(material3);
+       //auto a = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/charmanderSculptFinal.obj"));
+       //a->GetModel()->GetMeshList()[0]->SetMaterial(material3);
    // GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/vulkanscene_shadow.obj")));
   //  GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/Cerberus/Cerberus_LP.FBX")));
 

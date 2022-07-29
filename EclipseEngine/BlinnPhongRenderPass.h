@@ -20,6 +20,7 @@ private:
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	std::shared_ptr<GraphicsPipeline> blinnphongPipeline;
+	std::shared_ptr<GraphicsPipeline> billBoardMeshPipeline;
 	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
 	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
 	std::shared_ptr<GraphicsPipeline> wireframePipeline;

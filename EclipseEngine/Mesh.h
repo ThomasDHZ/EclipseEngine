@@ -12,11 +12,17 @@
 
 enum MeshTypeEnum
 {
-	kUnkown,
+	Unknown,
 	kSprite,
 	kPolygon,
 	kSkybox,
 	kLine
+};
+
+enum MeshSubTypeEnum
+{
+	kNormal,
+	kBillboard
 };
 
 struct MeshBoneWeights
@@ -90,6 +96,7 @@ protected:
 	bool SelectedMesh = false;
 
 	MeshTypeEnum MeshType;
+	MeshSubTypeEnum MeshSubType;
 
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
@@ -106,7 +113,7 @@ protected:
 public:
 
 	Mesh();
-	Mesh(MeshTypeEnum meshType, uint64_t ParentGameObjectID);
+	Mesh(MeshTypeEnum meshType, MeshSubTypeEnum meshSubType, uint64_t ParentGameObjectID);
 	~Mesh();
 
 	std::string MeshName;
@@ -133,6 +140,7 @@ public:
 	uint64_t GetParentModelID() { return ParentModelID; }
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	MeshTypeEnum GetMeshType() { return MeshType; }
+	MeshSubTypeEnum GetMeshSubType() { return MeshSubType; }
 	Pixel GetMeshColorID() { return MeshColorID; }
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }

@@ -2,16 +2,16 @@
 #include "Math.h"
 
 
-Mesh2D::Mesh2D() : Mesh(MeshTypeEnum::kSprite, 0)
+Mesh2D::Mesh2D() : Mesh(MeshTypeEnum::kSprite, MeshSubTypeEnum::kNormal, -1)
 {
 }
 
-Mesh2D::Mesh2D(uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, parentGameObjectID)
+Mesh2D::Mesh2D(MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, meshSubType, parentGameObjectID)
 {
 	MeshStartUp();
 }
 
-Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, parentGameObjectID)
+Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, meshSubType, parentGameObjectID)
 {
 	MeshStartUp(materialPtr);
 }
@@ -50,7 +50,6 @@ void Mesh2D::MeshStartUp(std::shared_ptr<Material> materialPtr)
 	IndexList = SpriteIndexList;
 
 	ParentModelID = -1;
-	ParentGameObjectID = -1;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	material = materialPtr;

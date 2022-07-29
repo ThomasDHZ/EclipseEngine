@@ -1,16 +1,16 @@
 #include "Mesh3D.h"
 #include "Math.h"
 
-Mesh3D::Mesh3D() : Mesh(MeshTypeEnum::kPolygon, 0)
+Mesh3D::Mesh3D() : Mesh(MeshTypeEnum::kPolygon, MeshSubTypeEnum::kNormal, 0)
 {
 }
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID)
+Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
 {
 	MeshStartUp(vertices, indices, parentGameObjectID);
 }
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
+Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
 {
 	MeshStartUp(vertices, indices, materialPtr, parentGameObjectID);
 }
@@ -35,7 +35,6 @@ void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>&
 	MeshType = MeshTypeEnum::kPolygon;
 	material = MaterialManager::GetDefaultMaterial();
 	ParentModelID = -1;
-	ParentGameObjectID = parentGameObjectID;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
@@ -59,7 +58,6 @@ void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>&
 	IndexList = indices;
 
 	ParentModelID = -1;
-	ParentGameObjectID = parentGameObjectID;
 	VertexCount = VertexList.size();
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
@@ -85,7 +83,6 @@ void Mesh3D::MeshStartUp(MeshLoadingInfo& meshLoader)
 	IndexList = meshLoader.indices;
 
 	ParentModelID = meshLoader.ModelID;
-	ParentGameObjectID = meshLoader.GameObjectID;
 	VertexCount = meshLoader.vertices.size();
 	IndexCount = meshLoader.indices.size();
 	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;
