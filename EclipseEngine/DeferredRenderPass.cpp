@@ -122,67 +122,21 @@ void DeferredRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorT
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    VkDescriptorImageInfo PositionTextureBuffer = AddTextureDescriptor(PositionTexture);
-    VkDescriptorImageInfo TangentTextureeBuffer = AddTextureDescriptor(TangentTexture);
-    VkDescriptorImageInfo BiTangentTextureBuffer = AddTextureDescriptor(BiTangentTexture);
-    VkDescriptorImageInfo TBNormalTextureBuffer = AddTextureDescriptor(TBNormalTexture);
-    VkDescriptorImageInfo NormalTextureBuffer = AddTextureDescriptor(NormalTexture);
-    VkDescriptorImageInfo AlbedoTextureBuffer = AddTextureDescriptor(AlbedoTexture);
-    VkDescriptorImageInfo SpecularTextureBuffer = AddTextureDescriptor(SpecularTexture);
-    VkDescriptorImageInfo BloomTextureBuffer = AddTextureDescriptor(BloomTexture);
-    VkDescriptorImageInfo ShadowTextureBuffer = AddTextureDescriptor(ShadowTexture);
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, PositionTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 6, TangentTextureeBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BiTangentTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 8, TBNormalTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, NormalTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, AlbedoTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 11, SpecularTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 12, BloomTextureBuffer);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 13, ShadowTextureBuffer);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
-
-        if (DeferredPipeline == nullptr)
-        {
-            DeferredPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            DeferredPipeline->Destroy();
-            DeferredPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    DeferredPipeline.InitializePipeline(PositionTexture,
+        TangentTexture,
+        BiTangentTexture,
+        TBNormalTexture,
+        NormalTexture,
+        AlbedoTexture,
+        SpecularTexture,
+        BloomTexture,
+        ShadowTexture,
+        pipelineInfo);
 }
 
 VkCommandBuffer DeferredRenderPass::Draw()
@@ -223,10 +177,7 @@ VkCommandBuffer DeferredRenderPass::Draw()
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipeline());
-    vkCmdPushConstants(commandBuffer, DeferredPipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DeferredPipeline->GetShaderPipelineLayout(), 0, 1, DeferredPipeline->GetDescriptorSetPtr(), 0, nullptr);
-    vkCmdDraw(commandBuffer, 4, 1, 0, 0);
+    DeferredPipeline.Draw(commandBuffer);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -240,7 +191,7 @@ void DeferredRenderPass::Destroy()
     ColorTexture->Destroy();
     RenderedTexture->Destroy();
 
-    DeferredPipeline->Destroy();
+    DeferredPipeline.Destroy();
 
     RenderPass::Destroy();
 }

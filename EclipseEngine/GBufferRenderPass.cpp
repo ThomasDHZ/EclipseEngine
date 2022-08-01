@@ -139,56 +139,12 @@ void GBufferRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedColorTe
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(8, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    {
-        VkDescriptorImageInfo ShadowMapBufferInfo;
-        ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        ShadowMapBufferInfo.imageView = shadowMap->View;
-        ShadowMapBufferInfo.sampler = shadowMap->Sampler;
-
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/GBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/GBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddAccelerationDescriptorSetBinding(DescriptorBindingList, 5, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (hybridPipeline == nullptr)
-        {
-            hybridPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            hybridPipeline->Destroy();
-            hybridPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    hybridPipeline.InitializePipeline(pipelineInfo);
 }
 
 VkCommandBuffer GBufferRenderPass::Draw()
@@ -242,9 +198,7 @@ VkCommandBuffer GBufferRenderPass::Draw()
         {
             switch (mesh->GetMeshType())
             {
-                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, hybridPipeline->GetShaderPipelineLayout(), 0, 1, hybridPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                GameObjectManager::DrawMesh(commandBuffer, hybridPipeline, mesh, SceneManager::sceneProperites);
+                hybridPipeline.Draw(commandBuffer, mesh);
             }
         }
     }
@@ -268,7 +222,7 @@ void GBufferRenderPass::Destroy()
     BloomTexture->Destroy();
     DepthTexture->Destroy();
 
-    hybridPipeline->Destroy();
+    hybridPipeline.Destroy();
 
     RenderPass::Destroy();
 }

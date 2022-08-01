@@ -27,7 +27,7 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 4) uniform sampler2D TextureMap[];
-layout(binding = 5) uniform sampler2D ShadowMap[];
+//layout(binding = 5) uniform sampler2D ShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -54,7 +54,7 @@ vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, ve
 vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
 vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
+/*float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
 {
     float shadow = 1.0f;
 	if ( fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0 ) 
@@ -90,6 +90,7 @@ float filterPCF(vec4 sc, int index)
 	}
 	return shadowFactor / count;
 }
+*/
 
 void main() {
 

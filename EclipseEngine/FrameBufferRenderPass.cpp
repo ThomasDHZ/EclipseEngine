@@ -105,40 +105,12 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(colorBlendAttachment);
 
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-
-        VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(RenderedTexture->View, RenderedTexture->Sampler);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
-
-        if (frameBufferPipeline == nullptr)
-        {
-            frameBufferPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            frameBufferPipeline->Destroy();
-            frameBufferPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    frameBufferPipeline.InitializePipeline(pipelineInfo, RenderedTexture);
 }
 
 VkCommandBuffer FrameBufferRenderPass::Draw()
@@ -176,17 +148,15 @@ VkCommandBuffer FrameBufferRenderPass::Draw()
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    const VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &CommandBufferBeginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
 
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, frameBufferPipeline->GetShaderPipelineLayout(), 0, 1, frameBufferPipeline->GetDescriptorSetPtr(), 0, nullptr);
-    vkCmdDraw(commandBuffer, 4, 1, 0, 0);
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    frameBufferPipeline.Draw(commandBuffer);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -197,6 +167,6 @@ VkCommandBuffer FrameBufferRenderPass::Draw()
 
 void FrameBufferRenderPass::Destroy()
 {
-    frameBufferPipeline->Destroy();
+    frameBufferPipeline.Destroy();
     RenderPass::Destroy();
 }

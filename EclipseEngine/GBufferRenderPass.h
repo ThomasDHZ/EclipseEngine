@@ -6,6 +6,7 @@
 #include "MeshRendererManager.h"
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
+#include "GBufferPipeline.h"
 
 class GBufferRenderPass : public RenderPass
 {
@@ -15,7 +16,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<GraphicsPipeline> hybridPipeline;
+	GBufferPipeline hybridPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> shadowMap);

@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedColorTexture.h"
+#include "BRDFPipeline.h"
 
 class BRDFRenderPass : public RenderPass
 {
@@ -12,7 +13,7 @@ public:
 	BRDFRenderPass();
 	~BRDFRenderPass();
 
-	std::shared_ptr<GraphicsPipeline> brdfPipeline;
+	BRDFPipeline brdfPipeline;
 
 	void BuildRenderPass(uint32_t textureSize);
 	void Draw();

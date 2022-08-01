@@ -54,6 +54,10 @@ struct SceneProperties
 	alignas(4)  float Timer = 0.0f;
 };
 
+struct BillboardSceneProperties : public SceneProperties
+{
+};
+
 struct DirectionalLightProjection
 {
 	alignas(4)  uint32_t MeshIndex;

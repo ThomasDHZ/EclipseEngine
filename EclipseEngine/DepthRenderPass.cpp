@@ -99,44 +99,12 @@ void DepthRenderPass::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(2, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    {
-
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderDepth;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(DirectionalLightProjection);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (DepthPipeline == nullptr)
-        {
-            DepthPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            DepthPipeline->Destroy();
-            DepthPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    depthPipeline.InitializePipeline(pipelineInfo);
 }
 
 VkCommandBuffer DepthRenderPass::Draw()
@@ -185,12 +153,7 @@ VkCommandBuffer DepthRenderPass::Draw()
             {
             case MeshTypeEnum::kPolygon:
             {
-                DirectionalLightProjection directionalLightProjection;
-                directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
-
-                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthPipeline->GetShaderPipelineLayout(), 0, 1, DepthPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                GameObjectManager::DrawDepthMesh(commandBuffer, DepthPipeline, mesh, directionalLightProjection);
+                depthPipeline.Draw(commandBuffer, mesh);
                 break;
             }
             default:
@@ -211,6 +174,6 @@ VkCommandBuffer DepthRenderPass::Draw()
 void DepthRenderPass::Destroy()
 {
     DepthTexture->Destroy();
-    DepthPipeline->Destroy();
+    depthPipeline.Destroy();
     RenderPass::Destroy();
 }

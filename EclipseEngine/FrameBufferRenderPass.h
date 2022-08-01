@@ -2,11 +2,12 @@
 #include "GraphicsPipeline.h"
 #include "RenderPass.h"
 #include "RenderedColorTexture.h"
+#include "FrameBufferPipeline.h"
 
 class FrameBufferRenderPass : public RenderPass
 {
 private:
-	std::shared_ptr<GraphicsPipeline> frameBufferPipeline;
+	FrameBufferPipeline frameBufferPipeline;
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
 	void RenderPassDesc();

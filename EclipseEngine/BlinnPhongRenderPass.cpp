@@ -123,205 +123,16 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-
-    {
-        VkDescriptorImageInfo ShadowMapBufferInfo;
-        ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        ShadowMapBufferInfo.imageView = depthTexture->View;
-        ShadowMapBufferInfo.sampler = depthTexture->Sampler;
-
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (blinnphongPipeline == nullptr)
-        {
-            blinnphongPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            blinnphongPipeline->Destroy();
-            blinnphongPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
-
-    {
-        VkDescriptorImageInfo ShadowMapBufferInfo;
-        ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        ShadowMapBufferInfo.imageView = depthTexture->View;
-        ShadowMapBufferInfo.sampler = depthTexture->Sampler;
-
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BillBoardShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BillBoardShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (billBoardMeshPipeline == nullptr)
-        {
-            billBoardMeshPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            billBoardMeshPipeline->Destroy();
-            billBoardMeshPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
-
-    {
-        VkDescriptorImageInfo SkyboxBufferInfo;
-        SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
-        SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
-
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(ConstSkyBoxView);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (skyboxPipeline == nullptr)
-        {
-            skyboxPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            skyboxPipeline->Destroy();
-            skyboxPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
-      {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderLine;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kLine3D;
-
-        if (drawLinePipeline == nullptr)
-        {
-            drawLinePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            drawLinePipeline->Destroy();
-            drawLinePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, MeshPropertiesmBufferList.size());
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderWireFrame;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (wireframePipeline == nullptr)
-        {
-            wireframePipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            wireframePipeline->Destroy();
-            wireframePipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    blinnphongPipeline.InitializePipeline(pipelineInfo, depthTexture);
+    skyboxPipeline.InitializePipeline(pipelineInfo);
+    linePipeline.InitializePipeline(pipelineInfo);
+    wireframePipeline.InitializePipeline(pipelineInfo);
+    billBoardPipeline.InitializePipeline(pipelineInfo);
 }
 
 VkCommandBuffer BlinnPhongRenderPass::Draw()
@@ -368,71 +179,33 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipeline());
-        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, skyboxPipeline->GetShaderPipelineLayout(), 0, 1, skyboxPipeline->GetDescriptorSetPtr(), 0, nullptr);
-        DrawSkybox(skyboxPipeline, SceneManager::GetSkyboxMesh(), SceneManager::cubeMapInfo);
-
+        skyboxPipeline.Draw(commandBuffer);
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {
             switch (mesh->GetMeshType())
             {
-            case MeshTypeEnum::kSprite:
-            {
-                if (VulkanRenderer::WireframeModeFlag)
+                case MeshTypeEnum::kPolygon:
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
-                }
-                else
-                {
-                    if (mesh->GetMeshSubType() == MeshSubTypeEnum::kNormal)
+                    if (VulkanRenderer::WireframeModeFlag)
                     {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
+                        wireframePipeline.Draw(commandBuffer, mesh);
                     }
                     else
                     {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipelineLayout(), 0, 1, billBoardMeshPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(commandBuffer, billBoardMeshPipeline, mesh, SceneManager::sceneProperites);
+                        switch (mesh->GetMeshSubType())
+                        {
+                            case MeshSubTypeEnum::kNormal:  blinnphongPipeline.Draw(commandBuffer, mesh); break;
+                            case MeshSubTypeEnum::kBillboard:  billBoardPipeline.Draw(commandBuffer, mesh); break;
+                            default: blinnphongPipeline.Draw(commandBuffer, mesh); break;
+                        }
                     }
+                    break;
                 }
-                break;
-            }
-            case MeshTypeEnum::kPolygon:
-            {
-                if (VulkanRenderer::WireframeModeFlag)
+                case MeshTypeEnum::kLine:
                 {
-                    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipeline());
-                    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, wireframePipeline->GetShaderPipelineLayout(), 0, 1, wireframePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                    GameObjectManager::DrawMesh(commandBuffer, wireframePipeline, mesh, SceneManager::sceneProperites);
+                    linePipeline.Draw(commandBuffer, mesh);
+                    break;
                 }
-                else
-                {
-                    if (mesh->GetMeshSubType() == MeshSubTypeEnum::kNormal)
-                    {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, blinnphongPipeline->GetShaderPipelineLayout(), 0, 1, blinnphongPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(commandBuffer, blinnphongPipeline, mesh, SceneManager::sceneProperites);
-                    }
-                    else
-                    {
-                        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipeline());
-                        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, billBoardMeshPipeline->GetShaderPipelineLayout(), 0, 1, billBoardMeshPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                        GameObjectManager::DrawMesh(commandBuffer, billBoardMeshPipeline, mesh, SceneManager::sceneProperites);
-                    }
-                }
-                break;
-            }
-            case MeshTypeEnum::kLine:
-            {
-                vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, drawLinePipeline->GetShaderPipelineLayout(), 0, 1, drawLinePipeline->GetDescriptorSetPtr(), 0, nullptr);
-                GameObjectManager::DrawLine(commandBuffer, drawLinePipeline, mesh, SceneManager::sceneProperites);
-                break;
-            }
             }
         }
     }
@@ -452,9 +225,11 @@ void BlinnPhongRenderPass::Destroy()
     RenderedBloomTexture->Destroy();
     DepthTexture->Destroy();
 
-    blinnphongPipeline->Destroy();
-    drawLinePipeline->Destroy();
-    wireframePipeline->Destroy();
+    blinnphongPipeline.Destroy();
+    linePipeline.Destroy();
+    skyboxPipeline.Destroy();
+    wireframePipeline.Destroy();
+    billBoardPipeline.Destroy();
 
     RenderPass::Destroy();
 }

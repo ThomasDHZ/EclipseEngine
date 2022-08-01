@@ -5,6 +5,7 @@
 #include "RenderedDepthTexture.h"
 #include "MeshRendererManager.h"
 #include "GraphicsPipeline.h"
+#include "MeshPicker2DPipeline.h"
 
 class MeshPickerRenderPass2D : public RenderPass
 {
@@ -14,7 +15,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<GraphicsPipeline> MeshPickerPipeline;
+	MeshPicker2DPipeline MeshPickerPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();

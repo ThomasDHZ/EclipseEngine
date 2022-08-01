@@ -103,6 +103,7 @@ void GraphicsPipeline::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruc
     }
 }
 
+
 void GraphicsPipeline::UpdateGraphicsPipeLine()
 {
     DescriptorPoolList.clear();
@@ -671,6 +672,42 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     }
 }
 
+void GraphicsPipeline::CreateGraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
+{
+    VkSamplerCreateInfo NullSamplerInfo = {};
+    NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    NullSamplerInfo.magFilter = VK_FILTER_NEAREST;
+    NullSamplerInfo.minFilter = VK_FILTER_NEAREST;
+    NullSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    NullSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    NullSamplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    NullSamplerInfo.anisotropyEnable = VK_TRUE;
+    NullSamplerInfo.maxAnisotropy = 16.0f;
+    NullSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    NullSamplerInfo.unnormalizedCoordinates = VK_FALSE;
+    NullSamplerInfo.compareEnable = VK_FALSE;
+    NullSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    NullSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+    NullSamplerInfo.minLod = 0;
+    NullSamplerInfo.maxLod = 0;
+    NullSamplerInfo.mipLodBias = 0;
+    if (vkCreateSampler(VulkanRenderer::GetDevice(), &NullSamplerInfo, nullptr, &NullSampler))
+    {
+        throw std::runtime_error("Failed to create Sampler.");
+    }
+
+    nullBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    nullBufferInfo.imageView = VK_NULL_HANDLE;
+    nullBufferInfo.sampler = NullSampler;
+
+    DescriptorPoolList.clear();
+    LayoutBindingInfo.clear();
+    DescriptorList.clear();
+
+    BuildDescriptorBindings(buildGraphicsPipelineInfo);
+    BuildShaderPipeLine(buildGraphicsPipelineInfo);
+}
+
 VkPipelineShaderStageCreateInfo GraphicsPipeline::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
 {
     VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
@@ -680,4 +717,111 @@ VkPipelineShaderStageCreateInfo GraphicsPipeline::CreateShader(const std::string
     vertShaderStageInfo.pName = "main";
 
     return vertShaderStageInfo;
+}
+
+void GraphicsPipeline::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+    DescriptorSetBinding.AccelerationStructureDescriptor = accelerationStructure;
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+VkDescriptorImageInfo GraphicsPipeline::AddTextureDescriptor(std::shared_ptr<Texture> texture)
+{
+    VkDescriptorImageInfo DescriptorImage{};
+    DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    DescriptorImage.imageView = texture->View;
+    DescriptorImage.sampler = texture->Sampler;
+    return DescriptorImage;
+}
+
+void GraphicsPipeline::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    DescriptorSetBinding.TextureDescriptor = TextureImageInfo;
+    DescriptorSetBinding.Count = TextureImageInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = BufferInfo;
+    DescriptorSetBinding.Count = BufferInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = BufferInfo;
+    DescriptorSetBinding.Count = BufferInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void GraphicsPipeline::AddNullDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = VK_SHADER_STAGE_ALL;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    DescriptorSetBinding.Count = 0;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }

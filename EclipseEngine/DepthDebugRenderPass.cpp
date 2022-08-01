@@ -99,40 +99,12 @@ void DepthDebugRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(depthTexture->View, depthTexture->Sampler);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthDebugShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/DepthDebugShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = 0;
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
-
-        if (DepthDebugPipeline == nullptr)
-        {
-            DepthDebugPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            DepthDebugPipeline->Destroy();
-            DepthDebugPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    depthDebugPipeline.InitializePipeline(pipelineInfo, depthTexture);
 }
 
 VkCommandBuffer DepthDebugRenderPass::Draw()
@@ -172,10 +144,8 @@ VkCommandBuffer DepthDebugRenderPass::Draw()
     }
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthDebugPipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, DepthDebugPipeline->GetShaderPipelineLayout(), 0, 1, DepthDebugPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdDraw(commandBuffer, 6, 1, 0, 0);
+    depthDebugPipeline.Draw(commandBuffer);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -187,6 +157,6 @@ VkCommandBuffer DepthDebugRenderPass::Draw()
 void DepthDebugRenderPass::Destroy()
 {
     RenderedTexture->Destroy();
-    DepthDebugPipeline->Destroy();
+    depthDebugPipeline.Destroy();
     RenderPass::Destroy();
 }

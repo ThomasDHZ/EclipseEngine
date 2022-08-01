@@ -105,42 +105,12 @@ void MeshPickerRenderPass2D::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker2DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/MeshPicker2DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex2D;
-
-        if (MeshPickerPipeline == nullptr)
-        {
-            MeshPickerPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            MeshPickerPipeline->Destroy();
-            MeshPickerPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    MeshPickerPipeline.InitializePipeline(pipelineInfo);
 }
 
 VkCommandBuffer MeshPickerRenderPass2D::Draw()
@@ -189,9 +159,7 @@ VkCommandBuffer MeshPickerRenderPass2D::Draw()
             {
             case MeshTypeEnum::kPolygon:
             {
-                vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipeline());
-                vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, MeshPickerPipeline->GetShaderPipelineLayout(), 0, 1, MeshPickerPipeline->GetDescriptorSetPtr(), 0, nullptr);
-                GameObjectManager::DrawMesh(CommandBuffer[VulkanRenderer::GetCMDIndex()], MeshPickerPipeline, mesh, SceneManager::sceneProperites);
+                MeshPickerPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()], mesh);
                 break;
             }
             }
@@ -208,7 +176,7 @@ void MeshPickerRenderPass2D::Destroy()
     RenderedTexture->Destroy();
     depthTexture->Destroy();
 
-    MeshPickerPipeline->Destroy();
+    MeshPickerPipeline.Destroy();
 
     RenderPass::Destroy();
 }

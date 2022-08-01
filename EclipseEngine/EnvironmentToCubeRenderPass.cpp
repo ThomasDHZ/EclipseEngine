@@ -109,45 +109,12 @@ void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    VkDescriptorImageInfo SkyboxBufferInfo;
-    SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = SceneManager::environmentTexture->View;
-    SkyboxBufferInfo.sampler = SceneManager::environmentTexture->Sampler;
-
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderPBRSkyBox;
-        buildGraphicsPipelineInfo.ConstBufferSize = 0;
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
-
-        if (EnvironmentToCubeRenderPassPipeline == nullptr)
-        {
-            EnvironmentToCubeRenderPassPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            EnvironmentToCubeRenderPassPipeline->Destroy();
-            EnvironmentToCubeRenderPassPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo);
 }
 
 void EnvironmentToCubeRenderPass::Draw()
@@ -186,10 +153,8 @@ void EnvironmentToCubeRenderPass::Draw()
     }
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvironmentToCubeRenderPassPipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, EnvironmentToCubeRenderPassPipeline->GetShaderPipelineLayout(), 0, 1, EnvironmentToCubeRenderPassPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    DrawSkybox(EnvironmentToCubeRenderPassPipeline, SceneManager::GetSkyboxMesh());
+    EnvironmentToCubeRenderPassPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
@@ -201,6 +166,6 @@ void EnvironmentToCubeRenderPass::Draw()
 void EnvironmentToCubeRenderPass::Destroy()
 {
     SceneManager::CubeMap->Destroy();
-    EnvironmentToCubeRenderPassPipeline->Destroy();
+    EnvironmentToCubeRenderPassPipeline.Destroy();
     RenderPass::Destroy();
 }

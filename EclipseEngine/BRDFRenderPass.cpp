@@ -99,38 +99,12 @@ void BRDFRenderPass::BuildRenderPassPipelines()
     ColorAttachmentList.clear();
     ColorAttachmentList.resize(1, ColorAttachment);
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    PipelineInfoStruct pipelineInfo{};
+    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.ColorAttachments = ColorAttachmentList;
+    pipelineInfo.SampleCount = SampleCount;
 
-    {
-        std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-        PipelineShaderStageList.emplace_back(CreateShader("Shaders/BRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
-        BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-        buildGraphicsPipelineInfo.ColorAttachments = ColorAttachmentList;
-        buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-        buildGraphicsPipelineInfo.renderPass = renderPass;
-        buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-        buildGraphicsPipelineInfo.sampleCount = SampleCount;
-        buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-        buildGraphicsPipelineInfo.ConstBufferSize = 0;
-        buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
-
-        if (brdfPipeline == nullptr)
-        {
-            brdfPipeline = std::make_shared<GraphicsPipeline>(GraphicsPipeline(buildGraphicsPipelineInfo));
-        }
-        else
-        {
-            brdfPipeline->Destroy();
-            brdfPipeline->UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-        }
-
-        for (auto& shader : PipelineShaderStageList)
-        {
-            vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
-        }
-    }
+    brdfPipeline.InitializePipeline(pipelineInfo);
 }
 
 void BRDFRenderPass::Draw()
@@ -169,10 +143,8 @@ void BRDFRenderPass::Draw()
     }
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    vkCmdBindPipeline(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, brdfPipeline->GetShaderPipeline());
-    vkCmdBindDescriptorSets(CommandBuffer[VulkanRenderer::GetCMDIndex()], VK_PIPELINE_BIND_POINT_GRAPHICS, brdfPipeline->GetShaderPipelineLayout(), 0, 1, brdfPipeline->GetDescriptorSetPtr(), 0, nullptr);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdDraw(CommandBuffer[VulkanRenderer::GetCMDIndex()], 6, 1, 0, 0);
+    brdfPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -184,6 +156,6 @@ void BRDFRenderPass::Draw()
 void BRDFRenderPass::Destroy()
 {
     SceneManager::BRDFTexture->Destroy();
-    brdfPipeline->Destroy();
+    brdfPipeline.Destroy();
     RenderPass::Destroy();
 }

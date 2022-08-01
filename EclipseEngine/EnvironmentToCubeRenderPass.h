@@ -2,6 +2,7 @@
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
 #include "SkyboxMesh.h"
+#include "EnvironmentToCubePipeline.h"
 
 class EnvironmentToCubeRenderPass : public RenderPass
 {
@@ -13,7 +14,7 @@ public:
 	EnvironmentToCubeRenderPass();
 	~EnvironmentToCubeRenderPass();
 
-	std::shared_ptr<GraphicsPipeline> EnvironmentToCubeRenderPassPipeline;
+	EnvironmentToCubePipeline EnvironmentToCubeRenderPassPipeline;
 
 	void BuildRenderPass(uint32_t cubeMapSize);
 	void Draw();

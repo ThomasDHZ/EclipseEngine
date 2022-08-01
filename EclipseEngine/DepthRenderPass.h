@@ -5,6 +5,7 @@
 #include "SkyboxMesh.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
+#include "DepthPipeline.h"
 
 
 class DepthRenderPass : public RenderPass
@@ -15,7 +16,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<GraphicsPipeline> DepthPipeline;
+	DepthPipeline depthPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();

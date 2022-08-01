@@ -7,6 +7,11 @@
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
 #include "SkyboxMesh.h"
+#include "Renderer3DPipeline.h"
+#include "SkyboxPipeline.h"
+#include "LinePipeline.h"
+#include "WireFramePipeline.h"
+#include "BillboardPipeline.h"
 
 class BlinnPhongRenderPass : public RenderPass
 {
@@ -19,11 +24,11 @@ private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
-	std::shared_ptr<GraphicsPipeline> blinnphongPipeline;
-	std::shared_ptr<GraphicsPipeline> billBoardMeshPipeline;
-	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
-	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
-	std::shared_ptr<GraphicsPipeline> wireframePipeline;
+	Renderer3DPipeline blinnphongPipeline;
+	BillboardPipeline billBoardPipeline;
+	SkyboxPipeline skyboxPipeline;
+	LinePipeline linePipeline;
+	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture);

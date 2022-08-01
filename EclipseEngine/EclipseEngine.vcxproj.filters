@@ -405,6 +405,51 @@
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>Source Files\MeshRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer3DPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="LinePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="WireFramePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="BillboardPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="GBufferPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="BRDFPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredRendererPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthDebugPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentToCubePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBufferPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="IrradiancePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshPicker2DPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshPicker3DPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -724,6 +769,51 @@
     </ClInclude>
     <ClInclude Include="MeshRenderer.h">
       <Filter>Header Files\MeshRenderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer3DPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WireFramePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BillboardPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GBufferPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BRDFPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredRendererPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthDebugPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvironmentToCubePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBufferPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IrradiancePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshPicker2DPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshPicker3DPipeline.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

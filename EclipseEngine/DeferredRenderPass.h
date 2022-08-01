@@ -6,13 +6,14 @@
 #include "MeshRendererManager.h"
 #include "LightManager.h"
 #include "GraphicsPipeline.h"
+#include "DeferredRendererPipeline.h"
 
 class DeferredRenderPass : public RenderPass
 {
 private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 
-	std::shared_ptr<GraphicsPipeline> DeferredPipeline;
+	DeferredRendererPipeline DeferredPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedColorTexture> PositionTexture,

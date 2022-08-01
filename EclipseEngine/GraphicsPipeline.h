@@ -32,6 +32,13 @@ struct ConstMeshInfo
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 };
 
+struct PipelineInfoStruct
+{
+	VkRenderPass renderPass = VK_NULL_HANDLE;
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
+	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
+};
+
 struct BuildGraphicsPipelineInfo
 {
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -66,10 +73,9 @@ protected:
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
-	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
 	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
+	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
 	VkPipelineCache PipelineCache = VK_NULL_HANDLE;
-
 	VkSampler NullSampler = VK_NULL_HANDLE;
 	VkDescriptorImageInfo nullBufferInfo;
 
@@ -90,7 +96,18 @@ protected:
 	VkWriteDescriptorSet AddTextureDescriptorSet(uint32_t BindingNumber, VkDescriptorSet& DescriptorSet, std::vector<VkDescriptorImageInfo>& TextureImageInfo);
 	VkWriteDescriptorSetAccelerationStructureKHR AddAcclerationStructureBinding(VkAccelerationStructureKHR& handle);
 	VkDescriptorImageInfo AddRayTraceReturnImageDescriptor(VkImageLayout ImageLayout, VkImageView& ImageView);
+	VkDescriptorImageInfo AddTextureDescriptor(std::shared_ptr<Texture> texture);
 	VkDescriptorImageInfo AddTextureDescriptor(VkImageView view, VkSampler sampler);
+
+	void AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
+	void AddNullDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber);
 
 public:
 
@@ -98,11 +115,12 @@ public:
 	GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	~GraphicsPipeline();
 
+	void CreateGraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	void SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2);
 
 	virtual void UpdateGraphicsPipeLine();
 	virtual void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
-	virtual void Destroy();
+    void Destroy();
 
 	VkPipelineLayout GetShaderPipelineLayout() { return ShaderPipelineLayout; }
 	VkPipeline GetShaderPipeline() { return ShaderPipeline; }

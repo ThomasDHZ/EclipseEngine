@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kBlinnPhong;
+    SceneManager::sceneType = SceneType::kPBR;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -135,8 +135,8 @@ Scene::Scene()
 
 
 
-    auto b= std::make_shared<BillBoardMeshRenderer>(BillBoardMeshRenderer("Testobject2", glm::vec2(1.0f)));
-    b->GetMesh()->SetMaterial(material3);
+    //auto b= std::make_shared<BillBoardMeshRenderer>(BillBoardMeshRenderer("Testobject2", glm::vec2(1.0f)));
+    //b->GetMesh()->SetMaterial(material3);
 
        //auto a = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "C:/Users/dotha/source/repos/EclipseEngine/Models/Charmander/charmanderSculptFinal.obj"));
        //a->GetModel()->GetMeshList()[0]->SetMaterial(material3);
@@ -150,7 +150,7 @@ Scene::Scene()
 
     {
 
-     /*   std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
+        std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
         IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
         IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
         IronmMaterial->LoadRoughnessMap("../texture/pbr/rusted_iron/roughness.png");
@@ -190,37 +190,20 @@ Scene::Scene()
         GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
         MaterialManager::AddMaterial(GrassMaterial);
 
-        std::shared_ptr<GameObject3D> obj = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        auto a = obj->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b = static_cast<MeshRenderer*>(a.get());
-        b->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        GameObjectManager::AddGameObject(obj);
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
 
-        std::shared_ptr<GameObject3D> obj2 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        auto a2 = obj2->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b2 = static_cast<MeshRenderer*>(a2.get());
-        b2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        GameObjectManager::AddGameObject(obj2);
+        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
 
-        std::shared_ptr<GameObject3D> obj3 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(0.0f, 0.0f, 0.0f)));
-        auto a3 = obj3->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b3 = static_cast<MeshRenderer*>(a3.get());
-        b3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-        GameObjectManager::AddGameObject(obj3);
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj"));
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
 
-        std::shared_ptr<GameObject3D> obj4 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        auto a4 = obj4->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b4 = static_cast<MeshRenderer*>(a4.get());
-        b4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        GameObjectManager::AddGameObject(obj4);
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
 
-        std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        auto a5 = obj5->GetComponentByType(ComponentType::kMeshRenderer);
-        auto b5 = static_cast<MeshRenderer*>(a5.get());
-        b5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        GameObjectManager::AddGameObject(obj5);*/
-
-       //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f))));
+        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
     }
 
     auto dLight = DirectionalLightBuffer{};

@@ -2,26 +2,27 @@
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
 #include "SkyboxMesh.h"
+#include "IrradiancePipeline.h"
 
 class IrradianceRenderPass : public RenderPass
 {
 private:
 	uint32_t CubeMapMipLevels = 0;
 
+	IrradiancePipeline irradiancePipeline;
+
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMap);
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
-	bool firstRun = true;
 
 public:
 	IrradianceRenderPass();
 	~IrradianceRenderPass();
 
 	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
-	std::shared_ptr<GraphicsPipeline> irradiancePipeline;
 
-	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionCubeMap, uint32_t cubeMapSize);
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };
