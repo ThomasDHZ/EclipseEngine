@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kPBR;
+    SceneManager::sceneType = SceneType::kSprite2D;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -57,10 +57,10 @@ Scene::Scene()
     // std::vector<uint32_t> indices = {
     //    0, 1, 2, 2, 3, 0
     //};
-     //std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
-     //std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
-     //std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
-     //std::shared_ptr<SpriteRenderer> obj4 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject4", material2, glm::vec2(3.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj4 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject4", material2, glm::vec2(3.0f, 0.0f), 0));
 
     //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
   //  std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
@@ -148,63 +148,63 @@ Scene::Scene()
     //SoundSource source;
     //source.Play(sound);
 
-    {
+    //{
 
-        std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
-        IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
-        IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
-        IronmMaterial->LoadRoughnessMap("../texture/pbr/rusted_iron/roughness.png");
-        IronmMaterial->LoadAmbientOcclusionMap("../texture/pbr/rusted_iron/ao.png");
-        IronmMaterial->LoadNormalMap("../texture/pbr/rusted_iron/normal.png");
-        MaterialManager::AddMaterial(IronmMaterial);
+    //    std::shared_ptr<Material> IronmMaterial = std::make_shared<Material>(Material("IronMaterial"));
+    //    IronmMaterial->LoadAlbedoMap("../texture/pbr/rusted_iron/albedo.png");
+    //    IronmMaterial->LoadMetallicMap("../texture/pbr/rusted_iron/metallic.png");
+    //    IronmMaterial->LoadRoughnessMap("../texture/pbr/rusted_iron/roughness.png");
+    //    IronmMaterial->LoadAmbientOcclusionMap("../texture/pbr/rusted_iron/ao.png");
+    //    IronmMaterial->LoadNormalMap("../texture/pbr/rusted_iron/normal.png");
+    //    MaterialManager::AddMaterial(IronmMaterial);
 
-        std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
-        PlasticMaterial->LoadAlbedoMap("../texture/pbr/plastic/albedo.png");
-        PlasticMaterial->LoadMetallicMap("../texture/pbr/plastic/metallic.png");
-        PlasticMaterial->LoadRoughnessMap("../texture/pbr/plastic/roughness.png");
-        PlasticMaterial->LoadAmbientOcclusionMap("../texture/pbr/plastic/ao.png");
-        PlasticMaterial->LoadNormalMap("../texture/pbr/plastic/normal.png");
-        MaterialManager::AddMaterial(PlasticMaterial);
+    //    std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
+    //    PlasticMaterial->LoadAlbedoMap("../texture/pbr/plastic/albedo.png");
+    //    PlasticMaterial->LoadMetallicMap("../texture/pbr/plastic/metallic.png");
+    //    PlasticMaterial->LoadRoughnessMap("../texture/pbr/plastic/roughness.png");
+    //    PlasticMaterial->LoadAmbientOcclusionMap("../texture/pbr/plastic/ao.png");
+    //    PlasticMaterial->LoadNormalMap("../texture/pbr/plastic/normal.png");
+    //    MaterialManager::AddMaterial(PlasticMaterial);
 
-        std::shared_ptr<Material> WallMaterial = std::make_shared<Material>(Material("WallMaterial"));
-        WallMaterial->LoadAlbedoMap("../texture/pbr/wall/albedo.png");
-        WallMaterial->LoadMetallicMap("../texture/pbr/wall/metallic.png");
-        WallMaterial->LoadRoughnessMap("../texture/pbr/wall/roughness.png");
-        WallMaterial->LoadAmbientOcclusionMap("../texture/pbr/wall/ao.png");
-        WallMaterial->LoadNormalMap("../texture/pbr/wall/normal.png");
-        MaterialManager::AddMaterial(WallMaterial);
+    //    std::shared_ptr<Material> WallMaterial = std::make_shared<Material>(Material("WallMaterial"));
+    //    WallMaterial->LoadAlbedoMap("../texture/pbr/wall/albedo.png");
+    //    WallMaterial->LoadMetallicMap("../texture/pbr/wall/metallic.png");
+    //    WallMaterial->LoadRoughnessMap("../texture/pbr/wall/roughness.png");
+    //    WallMaterial->LoadAmbientOcclusionMap("../texture/pbr/wall/ao.png");
+    //    WallMaterial->LoadNormalMap("../texture/pbr/wall/normal.png");
+    //    MaterialManager::AddMaterial(WallMaterial);
 
-        std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
-        GoldMaterial->LoadAlbedoMap("../texture/pbr/gold/albedo.png");
-        GoldMaterial->LoadMetallicMap("../texture/pbr/gold/metallic.png");
-        GoldMaterial->LoadRoughnessMap("../texture/pbr/gold/roughness.png");
-        GoldMaterial->LoadAmbientOcclusionMap("../texture/pbr/gold/ao.png");
-        GoldMaterial->LoadNormalMap("../texture/pbr/gold/normal.png");
-        MaterialManager::AddMaterial(GoldMaterial);
+    //    std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
+    //    GoldMaterial->LoadAlbedoMap("../texture/pbr/gold/albedo.png");
+    //    GoldMaterial->LoadMetallicMap("../texture/pbr/gold/metallic.png");
+    //    GoldMaterial->LoadRoughnessMap("../texture/pbr/gold/roughness.png");
+    //    GoldMaterial->LoadAmbientOcclusionMap("../texture/pbr/gold/ao.png");
+    //    GoldMaterial->LoadNormalMap("../texture/pbr/gold/normal.png");
+    //    MaterialManager::AddMaterial(GoldMaterial);
 
-        std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
-        GrassMaterial->LoadAlbedoMap("../texture/pbr/grass/albedo.png");
-        GrassMaterial->LoadMetallicMap("../texture/pbr/grass/metallic.png");
-        GrassMaterial->LoadRoughnessMap("../texture/pbr/grass/roughness.png");
-        GrassMaterial->LoadAmbientOcclusionMap("../texture/pbr/grass/ao.png");
-        GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
-        MaterialManager::AddMaterial(GrassMaterial);
+    //    std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
+    //    GrassMaterial->LoadAlbedoMap("../texture/pbr/grass/albedo.png");
+    //    GrassMaterial->LoadMetallicMap("../texture/pbr/grass/metallic.png");
+    //    GrassMaterial->LoadRoughnessMap("../texture/pbr/grass/roughness.png");
+    //    GrassMaterial->LoadAmbientOcclusionMap("../texture/pbr/grass/ao.png");
+    //    GrassMaterial->LoadNormalMap("../texture/pbr/grass/normal.png");
+    //    MaterialManager::AddMaterial(GrassMaterial);
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+    //    auto obj = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+    //    obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+    //    auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+    //    obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+    //    auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj"));
+    //    obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+    //    auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+    //    obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-    }
+    //    auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+    //    obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+    //}
 
     auto dLight = DirectionalLightBuffer{};
     dLight.diffuse = glm::vec3(0.2f);

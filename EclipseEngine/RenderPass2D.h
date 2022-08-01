@@ -6,13 +6,16 @@
 #include "RenderedDepthTexture.h"
 #include "GameObjectManager.h"
 #include "MeshRendererManager.h"
+#include "LinePipeline.h"
+#include "WireFramePipeline.h"
+#include "Renderer2DPipeline.h"
 
 class RenderPass2D : public RenderPass
 {
 private:
-	std::shared_ptr<GraphicsPipeline> renderer2DPipeline;
-	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
-	std::shared_ptr<GraphicsPipeline> wireframePipeline;
+	Renderer2DPipeline renderer2DPipeline;
+	LinePipeline drawLinePipeline;
+	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();

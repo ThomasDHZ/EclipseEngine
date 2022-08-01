@@ -5,6 +5,9 @@
 #include "SkyboxMesh.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
+#include "SkyboxPipeline.h"
+#include "PBRReflectionPipeline.h"
+#include "SkyboxPipeline.h"
 
 class PBRReflectionRenderPass : public RenderPass
 {
@@ -14,8 +17,8 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<GraphicsPipeline> pbrPipeline;
-	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
+	PBRReflectionPipeline pbrPipeline;
+	SkyboxPipeline skyboxPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);

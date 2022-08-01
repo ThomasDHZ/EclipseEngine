@@ -243,47 +243,6 @@ public:
 		return Pixel();
 	}
 
-	static void DrawDepthMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection& directionalLightProjection)
-	{
-		directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
-		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(DirectionalLightProjection), &directionalLightProjection);
-		mesh->Draw(cmdBuffer);
-	}
-
-	static void DrawMesh(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
-	{
-		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		sceneProperties.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
-		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-		mesh->Draw(cmdBuffer);
-	}
-
-	static void DrawLine(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
-	{
-		sceneProperties.MeshIndex = mesh->GetMeshBufferIndex();
-		sceneProperties.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
-		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-		mesh->Draw(cmdBuffer);
-	}
-
-	static void DrawSkybox(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh)
-	{
-		mesh->Draw(cmdBuffer);
-	}
-
-	static void DrawSkybox(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, ConstSkyBoxView& skyboxView)
-	{
-		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ConstSkyBoxView), &skyboxView);
-		mesh->Draw(cmdBuffer);
-	}
-
-	static void DrawSkybox(VkCommandBuffer& cmdBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, PrefilterSkyboxSettings& prefilterSkyboxSettings)
-	{
-		vkCmdPushConstants(cmdBuffer, pipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(prefilterSkyboxSettings), &prefilterSkyboxSettings);
-		mesh->Draw(cmdBuffer);
-	}
-
-
 	static void SetSelectedMesh(std::shared_ptr<Mesh> mesh)
 	{
 		if (mesh != nullptr)

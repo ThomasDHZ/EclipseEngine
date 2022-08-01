@@ -17,9 +17,6 @@ public:
 	static nlohmann::json SaveGameObjects();
 
 	static void Update(float DeltaTime);
-	static void DrawDepthMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection& directionalLightProjection);
-	static void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
-	static void DrawLine(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties);
 	static void Destroy();
 	static void DestroyScene();
 	static void DestoryGameObject(uint64_t GameObjectID);

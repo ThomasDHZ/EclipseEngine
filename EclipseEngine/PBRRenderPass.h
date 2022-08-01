@@ -5,6 +5,11 @@
 #include "SkyboxMesh.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
+#include "PBRPipeline.h"
+#include "SkyboxPipeline.h"
+#include "LinePipeline.h"
+#include "WireFramePipeline.h"
+#include "OutLinePipeline.h"
 
 
 class PBRRenderPass : public RenderPass
@@ -18,11 +23,11 @@ private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
-	std::shared_ptr<GraphicsPipeline> pbrPipeline;
-	std::shared_ptr<GraphicsPipeline> skyboxPipeline;
-	std::shared_ptr<GraphicsPipeline> drawLinePipeline;
-	std::shared_ptr<GraphicsPipeline> outLinePipeline;
-	std::shared_ptr<GraphicsPipeline> wireframePipeline;
+	PBRPipeline pbrPipeline;
+	SkyboxPipeline skyboxPipeline;
+	LinePipeline drawLinePipeline;
+	OutLinePipeline outLinePipeline;
+	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture);

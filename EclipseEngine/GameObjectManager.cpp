@@ -59,21 +59,6 @@
 	}
 }
 
- void GameObjectManager::DrawDepthMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, DirectionalLightProjection& directionalLightProjection)
- {
-	 MeshRendererManager::DrawDepthMesh(commandBuffer, pipeline, mesh, directionalLightProjection);
- }
-
- void GameObjectManager::DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
- {
-	 MeshRendererManager::DrawMesh(commandBuffer, pipeline, mesh, sceneProperties);
- }
-
- void GameObjectManager::DrawLine(VkCommandBuffer& commandBuffer, std::shared_ptr<GraphicsPipeline> pipeline, std::shared_ptr<Mesh> mesh, SceneProperties& sceneProperties)
- {
-	 MeshRendererManager::DrawMesh(commandBuffer, pipeline, mesh, sceneProperties);
- }
-
  std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetGameObjectList()
 {
 	return objList;
