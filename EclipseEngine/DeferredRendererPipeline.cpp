@@ -34,8 +34,8 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     VkDescriptorImageInfo ShadowTextureBuffer = AddTextureDescriptor(ShadowTexture);
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/DeferredRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DeferredRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DeferredRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);

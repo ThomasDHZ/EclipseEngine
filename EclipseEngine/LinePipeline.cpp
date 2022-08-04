@@ -11,8 +11,8 @@ LinePipeline::~LinePipeline()
 void LinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/LineRenderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "LineRenderer3DVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "LineRenderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
 

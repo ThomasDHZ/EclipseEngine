@@ -11,8 +11,8 @@ FrameBufferPipeline::~FrameBufferPipeline()
 void FrameBufferPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedColorTexture> renderedTexture)
 {
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader("Shaders/FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "FrameBufferVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(renderedTexture->View, renderedTexture->Sampler);
 

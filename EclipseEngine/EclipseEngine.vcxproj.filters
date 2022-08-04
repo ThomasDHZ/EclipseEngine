@@ -847,179 +847,179 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\compile.bat">
+    <None Include="..\Shaders\VertexLayout.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\VertexBuilder.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\MeshProperties.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\Lights.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\BillBoardShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BillBoardShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BRDFShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BRDFShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\CubeMap.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\CubeMap.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DeferredRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DeferredRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthCubeShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthCubeShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthDebugShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthDebugShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\EnvironmentToCubeMap.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\EnvironmentToCubeMap.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\FrameBuffer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\FrameBuffer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GBuffer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GBuffer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\IrradianceShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\IrradianceShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LineRenderer2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LineRenderer2D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LineRenderer3D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LineRenderer3D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\MeshPicker2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\MeshPicker2D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\MeshPicker3D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\MeshPicker3D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\OutlineRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\OutlineRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PrefilterShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PrefilterShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\ReflectionPBRShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\ReflectionPBRShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\Renderer2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\Renderer2D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\Renderer3D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\Renderer3D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\SelectedObjectShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\SelectedObjectShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\WireFrameShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\WireFrameShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\anyhit.rahit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\anyhit1.rahit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\closesthit.rchit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\hybridclosesthit.rchit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\miss.rmiss">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\raygen.rgen">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\shadow.rmiss">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\compile.bat">
       <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Shaders\MeshProperties.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="Shaders\anyhit.rahit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\anyhit1.rahit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\miss.rmiss">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\raygen.rgen">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\shadow.rmiss">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\FrameBuffer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\FrameBuffer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\Renderer2D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\Renderer2D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\Renderer3D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\Renderer3D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\closesthit.rchit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\LineRenderer3D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\LineRenderer3D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\WireFrameShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\WireFrameShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\MeshPicker2D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\MeshPicker2D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\MeshPicker3D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\MeshPicker3D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\Lights.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="Shaders\VertexLayout.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="Shaders\VertexBuilder.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="Shaders\hybridclosesthit.rchit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="Shaders\DeferredRenderer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DeferredRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\GBuffer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\GBuffer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\EnvironmentToCubeMap.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\EnvironmentToCubeMap.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\CubeMap.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\CubeMap.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\IrradianceShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\IrradianceShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\PrefilterShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\PrefilterShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\BRDFShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\BRDFShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\PBRRenderer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\PBRRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\ReflectionPBRShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\ReflectionPBRShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthCubeShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthCubeShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthDebugShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthDebugShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\DepthShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\OutlineRenderer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\OutlineRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\SelectedObjectShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\SelectedObjectShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\LineRenderer2D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\LineRenderer2D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\BillBoardShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="Shaders\BillBoardShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

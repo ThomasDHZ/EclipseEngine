@@ -1,6 +1,8 @@
 #include "GraphicsPipeline.h"
 #include <fstream>
 
+std::string GraphicsPipeline::BaseShaderFilePath = "../Shaders/";
+
 GraphicsPipeline::GraphicsPipeline()
 {
 }

@@ -70,6 +70,8 @@ private:
 	VkWriteDescriptorSet AddBufferDescriptorSet(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType);
 
 protected:
+	static std::string BaseShaderFilePath;
+
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
