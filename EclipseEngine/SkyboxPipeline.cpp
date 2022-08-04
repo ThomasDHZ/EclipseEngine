@@ -8,12 +8,12 @@ SkyboxPipeline::~SkyboxPipeline()
 {
 }
 
-void SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
+void SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap)
 {
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = TextureManager::GetCubeMapTextureList()[0]->View;
-    SkyboxBufferInfo.sampler = TextureManager::GetCubeMapTextureList()[0]->Sampler;
+    SkyboxBufferInfo.imageView = cubemap->View;
+    SkyboxBufferInfo.sampler = cubemap->Sampler;
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader("Shaders/CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));

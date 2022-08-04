@@ -12,7 +12,7 @@ public:
 	SkyboxPipeline();
 	~SkyboxPipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap);
 	void Draw(VkCommandBuffer& commandBuffer);
 };
 

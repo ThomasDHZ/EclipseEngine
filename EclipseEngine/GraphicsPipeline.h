@@ -99,6 +99,9 @@ protected:
 	VkDescriptorImageInfo AddTextureDescriptor(std::shared_ptr<Texture> texture);
 	VkDescriptorImageInfo AddTextureDescriptor(VkImageView view, VkSampler sampler);
 
+	void CreateGraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
+	void SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2);
+
 	void AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
@@ -115,12 +118,9 @@ public:
 	GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	~GraphicsPipeline();
 
-	void CreateGraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
-	void SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList2);
-
 	virtual void UpdateGraphicsPipeLine();
 	virtual void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
-    void Destroy();
+    virtual void Destroy();
 
 	VkPipelineLayout GetShaderPipelineLayout() { return ShaderPipelineLayout; }
 	VkPipeline GetShaderPipeline() { return ShaderPipeline; }

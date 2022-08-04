@@ -121,7 +121,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedC
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, reflectionIrradianceMap, reflectionPrefilterMap);
-    skyboxPipeline.InitializePipeline(pipelineInfo);
+    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
 VkCommandBuffer PBRReflectionRenderPass::Draw()

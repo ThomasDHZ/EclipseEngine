@@ -129,7 +129,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     pipelineInfo.SampleCount = SampleCount;
 
     blinnphongPipeline.InitializePipeline(pipelineInfo, depthTexture);
-    skyboxPipeline.InitializePipeline(pipelineInfo);
+    skyboxPipeline.InitializePipeline(pipelineInfo, TextureManager::GetCubeMapTextureList()[0]);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
     billBoardPipeline.InitializePipeline(pipelineInfo);

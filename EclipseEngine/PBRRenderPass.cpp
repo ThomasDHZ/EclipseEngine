@@ -131,7 +131,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, reflectionIrradianceTexture, reflectionPrefilterTexture);
-    skyboxPipeline.InitializePipeline(pipelineInfo);
+    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
     drawLinePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
     outLinePipeline.InitializePipeline(pipelineInfo);
