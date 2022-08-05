@@ -14,6 +14,8 @@
 class PBRRenderer
 {
 private:
+	bool RealTimeRenderingFlag = false;
+
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;

@@ -11,24 +11,45 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::BuildRenderer()
 {
 	meshPickerRenderPass.BuildRenderPass();
-	environmentToCubeRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
+	environmentToCubeRenderPass.BuildRenderPass(512);
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
 
-	//Depth Pass
+	if (!RealTimeRenderingFlag)
 	{
-		depthPassRendererPass.BuildRenderPass();
+		reflectionIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
+		reflectionPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
+		pbrReflectionRenderPass.OneTimeDraw(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, 2048.0f);
+		irradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
+		prefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
+
+		//Depth Pass
+		{
+			depthPassRendererPass.BuildRenderPass();
+		}
+
+		//Main Render Pass
+		{
+			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
+		}
 	}
-	//Reflection Pass
+	else
 	{
-		reflectionIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		reflectionPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		pbrReflectionRenderPass.BuildRenderPass(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
-	}
-	//Main Render Pass
-	{
-		irradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		prefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-		pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
+		//Depth Pass
+		{
+			depthPassRendererPass.BuildRenderPass();
+		}
+		//Reflection Pass
+		{
+			reflectionIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			reflectionPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			pbrReflectionRenderPass.BuildRenderPass(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
+		}
+		//Main Render Pass
+		{
+			irradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			prefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
+		}
 	}
 
 	//depthDebugRenderPass.BuildRenderPass(depthPassRendererPass.DepthTexture);
@@ -55,21 +76,35 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	//Depth Pass
+	if (!RealTimeRenderingFlag)
 	{
-		CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+		//Depth Pass
+		{
+			CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+		}
+		//Main Render Pass
+		{
+			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+		}
 	}
-	//Reflection Pass
+	else
 	{
+		//Depth Pass
+		{
+			CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+		}
+		//Reflection Pass
+		{
 			CommandBufferSubmitList.emplace_back(reflectionIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(reflectionPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(pbrReflectionRenderPass.Draw());
-	}
-	//Main Render Pass
-	{
+		}
+		//Main Render Pass
+		{
 			CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+		}
 	}
 
 //	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());

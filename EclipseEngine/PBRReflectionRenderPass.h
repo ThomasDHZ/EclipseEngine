@@ -31,6 +31,7 @@ public:
 	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
 
 	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize);
+	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

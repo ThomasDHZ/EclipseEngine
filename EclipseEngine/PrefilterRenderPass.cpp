@@ -36,6 +36,34 @@ void PrefilterRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture
     SetUpCommandBuffers();
 }
 
+void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+{
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
+
+    if (renderPass == nullptr)
+    {
+        DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+    }
+    else
+    {
+        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+        PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DrawToCubeMap->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(cubeMap);
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void PrefilterRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;

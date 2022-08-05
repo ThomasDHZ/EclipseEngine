@@ -32,6 +32,31 @@ void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTextur
     SetUpCommandBuffers();
 }
 
+void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+{
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+
+    if (renderPass == nullptr)
+    {
+        IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(IrradianceCubeMap->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(cubeMap);
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void IrradianceRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
