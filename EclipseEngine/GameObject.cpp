@@ -60,9 +60,11 @@ GameObject::GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rot
 
 GameObject::GameObject(nlohmann::json& json)
 {
-	//GenerateID();
-	//json.at("ObjectName").get_to(ObjectName);
-
+	GenerateID();
+	json.at("ObjectName").get_to(ObjectName);
+	JsonConverter::from_json(json["GameObjectPosition"], GameObjectPosition);
+	JsonConverter::from_json(json["GameObjectRotation"], GameObjectRotation);
+	JsonConverter::from_json(json["GameObjectScale"], GameObjectScale);
 	//for (int x = 0; x < json["ComponentList"].size(); x++)
 	//{
 	//	ComponentType type = ComponentType::kNullComponent;
@@ -78,6 +80,16 @@ GameObject::GameObject(nlohmann::json& json)
 
 GameObject::~GameObject()
 {
+}
+
+void GameObject::LoadPrefab(nlohmann::json& json)
+{
+	ObjectName = json.at("ObjectName");
+}
+
+void GameObject::SaveAsPrefab(nlohmann::json& json)
+{
+	JsonConverter::to_json(json["ObjectName"], ObjectName);
 }
 
 void GameObject::Update(float DeltaTime)

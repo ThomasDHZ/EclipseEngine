@@ -319,10 +319,6 @@ void VulkanRenderer::StartUp()
 	vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(Device, "vkCreateRayTracingPipelinesKHR"));
 }
 
-void VulkanRenderer::Update()
-{
-}
-
 VkResult VulkanRenderer::StartDraw()
 {
 	CMDIndex = (CMDIndex + 1) % MAX_FRAMES_IN_FLIGHT;
@@ -348,8 +344,6 @@ VkResult VulkanRenderer::StartDraw()
 VkResult VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-
-	Update();
 
 	VkSubmitInfo SubmitInfo{};
 	SubmitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;

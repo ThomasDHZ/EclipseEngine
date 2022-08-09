@@ -14,7 +14,7 @@
 class PBRRenderer
 {
 private:
-	bool RealTimeRenderingFlag = false;
+
 
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
@@ -40,6 +40,8 @@ public:
 	void Update();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
+
+	bool PreRenderedFlag = true;
 
 	DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }

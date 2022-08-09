@@ -29,7 +29,7 @@ void MeshPicker3DPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
     buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex2D;
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
     if (ShaderPipeline == nullptr)
     {

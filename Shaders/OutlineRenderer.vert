@@ -34,12 +34,21 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-    vec4 pos = vec4(inPosition.xyz + (aNormal * 0.01f), 1.0f);
-    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * pos);    
-    gl_Position = sceneData.proj * 
-                  sceneData.view *                   
-                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
+    Color = aColor;
+    UV = aUV;
+    Normal = aNormal;
+	Tangent = aTangent;
+	BiTangent = aBitangent;
+
+    mat4 model =  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
-                 pos;
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform;
+
+
+    
+    gl_Position = sceneData.proj * 
+                  sceneData.view *                
+                  model *
+                  vec4(inPosition, 1.0);
 }

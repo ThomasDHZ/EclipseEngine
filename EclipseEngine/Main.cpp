@@ -43,7 +43,7 @@ int main()
             scene.ImGuiUpdate();
         }
         ImGui::Render();
-        scene.Update();
+       scene.Update();
         scene.Draw();
 
     //    //GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);

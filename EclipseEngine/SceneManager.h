@@ -29,6 +29,7 @@ class SceneManager
 private:
 
 	static float PBRCubeMapSize;
+	static float PreRenderedMapSize;
 
 	static std::shared_ptr<SkyboxMesh> skyboxMesh;
 
@@ -164,6 +165,19 @@ public:
 		else std::cout << "Unable to open file";
 	}
 
+	static void SaveAsPrefab(std::shared_ptr<GameObject> obj)
+	{
+		nlohmann::json json;
+		obj->SaveAsPrefab(json);
+		std::ofstream SaveFile("../Obj/" + obj->GetObjectName() + ".txt");
+		if (SaveFile.is_open())
+		{
+			SaveFile << json;
+			SaveFile.close();
+		}
+		else std::cout << "Unable to open file";
+	}
+
 	static void LoadScene(const std::string FileName)
 	{
 		DestroyScene();
@@ -185,7 +199,21 @@ public:
 		GameObjectManager::LoadGameObjects(jsonstring);
 		//MaterialManager::LoadMaterials(jsonstring);
 		LightManager::LoadLights(jsonstring);
+	}
 
+	static void LoadPrefab(const std::string FileName)
+	{
+		std::string SceneInfo;
+		std::ifstream SceneFile;
+		SceneFile.open(FileName);
+		while (!SceneFile.eof())
+		{
+			getline(SceneFile, SceneInfo);
+		}
+		SceneFile.close();
+
+		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
+		
 	}
 
 	static void DestroyScene()
@@ -202,5 +230,6 @@ public:
 	static SceneType GetSceneType() { return sceneType; }
 	static std::shared_ptr<SkyboxMesh> GetSkyboxMesh() { return skyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
+	static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
 };
 

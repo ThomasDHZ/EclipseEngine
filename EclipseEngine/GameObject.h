@@ -44,6 +44,8 @@ public:
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
+	virtual void LoadPrefab(nlohmann::json& json);
+	virtual void SaveAsPrefab(nlohmann::json& json);
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 
@@ -52,15 +54,11 @@ public:
 
 	void GenerateID();
 
-
-
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
-
-
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return ComponentList; };
 
 	bool operator==(const GameObject& rhs) const
@@ -71,6 +69,9 @@ public:
 	virtual void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["ObjectName"], ObjectName);
+		JsonConverter::to_json(json["GameObjectPosition"], GameObjectPosition);
+		JsonConverter::to_json(json["GameObjectRotation"], GameObjectRotation);
+		JsonConverter::to_json(json["GameObjectScale"], GameObjectScale);
 
 		for (int x = 0; x < ComponentList.size(); x++)
 		{

@@ -20,8 +20,22 @@ GameObject2D::GameObject2D(const std::string Name, glm::vec2& position, glm::vec
 {
 }
 
+GameObject2D::GameObject2D(nlohmann::json& json) : GameObject(json)
+{
+}
+
 GameObject2D::~GameObject2D()
 {
+}
+
+void GameObject2D::LoadPrefab(nlohmann::json& json)
+{
+	GameObject::LoadPrefab(json);
+}
+
+void GameObject2D::SaveAsPrefab(nlohmann::json& json)
+{
+	GameObject::SaveAsPrefab(json);
 }
 
 void GameObject2D::Update(float DeltaTime)

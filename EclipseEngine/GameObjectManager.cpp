@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "SpriteRenderer.h"
+#include "ModelRenderer.h"
 
 
  void GameObjectManager::AddGameObject(std::shared_ptr<GameObject> obj)
@@ -68,7 +69,7 @@
 {
 	for (int x = 0; x < json["ObjectList"].size(); x++)
 	{
-		std::shared_ptr<GameObject> obj = std::make_shared<GameObject>(GameObject(json.at("ObjectList")[x]));
+		std::shared_ptr<ModelRenderer> obj = std::make_shared<ModelRenderer>(ModelRenderer(json.at("ObjectList")[x]));
 		objList.emplace_back(obj);
 	}
 	VulkanRenderer::UpdateRendererFlag = true;

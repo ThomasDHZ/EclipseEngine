@@ -54,5 +54,14 @@ public:
 	void SetMeshPosition(glm::vec3 position);
 	void SetMeshRotation(glm::vec3 rotation);
 	void SetMeshScale(glm::vec3 scale);
+
+	virtual void to_json(nlohmann::json& json) override
+	{
+		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
+		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
+		JsonConverter::to_json(json["MeshScale"], MeshScale);
+
+		Mesh::to_json(json);
+	}
 };
 

@@ -27,6 +27,7 @@ void OutLinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderStencil;
     buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
     if (ShaderPipeline == nullptr)
     {

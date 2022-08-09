@@ -126,9 +126,6 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderBatch2D.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="InterfaceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -478,9 +475,6 @@
     </ClInclude>
     <ClInclude Include="GameController.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderBatch2D.h">
-      <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="InterfaceRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>

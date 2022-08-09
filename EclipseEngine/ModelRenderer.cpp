@@ -124,13 +124,23 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
-ModelRenderer::ModelRenderer(nlohmann::json json, uint64_t GameObjectID) 
+ModelRenderer::ModelRenderer(nlohmann::json json) : GameObject3D(json)
 {
-	
+	from_json(json);
 }
 
 ModelRenderer::~ModelRenderer()
 {
+}
+
+void ModelRenderer::LoadPrefab(nlohmann::json& json)
+{
+	model->LoadPrefab(json);
+}
+
+void ModelRenderer::SaveAsPrefab(nlohmann::json& json)
+{
+	//model->m(json);
 }
 
 void ModelRenderer::Update(float DeltaTime)

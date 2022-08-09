@@ -12,15 +12,15 @@ void PBRRenderer::BuildRenderer()
 {
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(512);
-	brdfRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
 
-	if (!RealTimeRenderingFlag)
+	if (PreRenderedFlag)
 	{
-		reflectionIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
-		reflectionPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
-		pbrReflectionRenderPass.OneTimeDraw(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, 2048.0f);
-		irradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
-		prefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 2048.0f);
+		brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
+		reflectionIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		reflectionPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		pbrReflectionRenderPass.OneTimeDraw(reflectionIrradianceRenderPass.IrradianceCubeMap, reflectionPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
 
 		//Depth Pass
 		{
@@ -34,6 +34,7 @@ void PBRRenderer::BuildRenderer()
 	}
 	else
 	{
+		brdfRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
 		//Depth Pass
 		{
 			depthPassRendererPass.BuildRenderPass();
@@ -67,6 +68,11 @@ void PBRRenderer::Update()
 
 		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
 	}
+
+	if (MeshRendererManager::GetSelectedMesh())
+	{
+		MeshRendererManager::GetSelectedMesh()->SetSelectedMesh(true);
+	}
 }
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
@@ -76,7 +82,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	if (!RealTimeRenderingFlag)
+	if (PreRenderedFlag)
 	{
 		//Depth Pass
 		{
@@ -107,7 +113,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		}
 	}
 
-//	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 

@@ -34,5 +34,5 @@ layout(push_constant) uniform SceneData
 
 void main()
 { 
-    outColor = vec4(vec3(1.0f, 0.0f, 0.0f), 1.0f); 
+    outColor = vec4(vec3(1.0f, 0.0f, 0.0f), 0.35f); 
 }

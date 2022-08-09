@@ -58,7 +58,6 @@ public:
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();
 
-	std::vector<std::shared_ptr<Mesh>> GetObjectRenderList(std::shared_ptr<GameObject> obj);
 	RenderPassTypeEnum GetRenderPassType() { return RenderPassType; }
 	VkCommandBuffer GetCommandBuffer() { return CommandBuffer[VulkanRenderer::GetCMDIndex()]; }
 };

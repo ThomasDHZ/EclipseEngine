@@ -10,9 +10,7 @@ private:
 
 	void from_json(nlohmann::json& json)
 	{
-		/*	Component::from_json(json);
-			model = std::make_shared<Model>(Model(json.at("Model"), ParentGameObjectID));*/
-			//	ModelManager::AddModel(model);
+		model = std::make_shared<Model>(Model(json.at("Model"), GameObjectID));
 	}
 
 public:
@@ -41,17 +39,19 @@ public:
 	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position);
 	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation);
 	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-	ModelRenderer(nlohmann::json json, uint64_t GameObjectID);
+	ModelRenderer(nlohmann::json json);
 	virtual ~ModelRenderer();
 
-	void Update(float DeltaTime) override;
-	void Destroy() override;
+	virtual void LoadPrefab(nlohmann::json& json) override;
+	virtual void SaveAsPrefab(nlohmann::json& json) override;
+	virtual void Update(float DeltaTime) override;
+	virtual void Destroy() override;
 
 	std::shared_ptr<Model> GetModel() { return model; }
 
-	//virtual void to_json(nlohmann::json& json) override
-	//{
-	///*	Component::to_json(json);
-	//	model->to_json(json["Model"]);*/
-	//}
+	virtual void to_json(nlohmann::json& json) override
+	{
+		GameObject3D::to_json(json);
+		model->to_json(json["Model"]);
+	}
 };

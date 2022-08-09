@@ -74,7 +74,6 @@ public:
 	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
 
 	static void StartUp();
-	static void Update();
 	static void RebuildSwapChain();
 	static VkResult StartDraw();
 	static VkResult SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);

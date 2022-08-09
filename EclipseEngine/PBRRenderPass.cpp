@@ -187,28 +187,28 @@ VkCommandBuffer PBRRenderPass::Draw()
         {
             switch (mesh->GetMeshType())
             {
-            case MeshTypeEnum::kPolygon:
-            {
-                if (VulkanRenderer::WireframeModeFlag)
+                case MeshTypeEnum::kPolygon:
+                {
+                    if (VulkanRenderer::WireframeModeFlag)
+                    {
+                        wireframePipeline.Draw(commandBuffer, mesh);
+                    }
+                    else
+                    {
+                        if (MeshRendererManager::GetSelectedMesh() == mesh)
+                        {
+                            outLinePipeline.Draw(commandBuffer, mesh);
+                        }
+                        pbrPipeline.Draw(commandBuffer, mesh);
+                    
+                    }
+                    break;
+                }
+                case MeshTypeEnum::kLine:
                 {
                     wireframePipeline.Draw(commandBuffer, mesh);
+                    break;
                 }
-                else
-                {
-                    pbrPipeline.Draw(commandBuffer, mesh);
-
-                    if (MeshRendererManager::GetSelectedMesh() == mesh)
-                    {
-                        outLinePipeline.Draw(commandBuffer, mesh);
-                    }
-                }
-                break;
-            }
-            case MeshTypeEnum::kLine:
-            {
-                wireframePipeline.Draw(commandBuffer, mesh);
-                break;
-            }
             }
         }
     }

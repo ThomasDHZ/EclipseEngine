@@ -227,7 +227,7 @@ public:
 		material->GenerateID();
 
 		JsonConverter::from_json(json["MaterialName"], material->MaterialName);
-		material->MaterialType == MaterialTypeEnum::kMaterialPBR;
+		material->MaterialType == json["MaterialType"].get_to(material->MaterialType);
 
 		if (material->MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
 		{
@@ -248,10 +248,10 @@ public:
 		}
 		else
 		{
-			JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
-			JsonConverter::from_json(json["Metallic"], material->materialTextureData.Metallic);
-			JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
-			JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
+			//JsonConverter::from_json(json["Albedo"], material->materialTextureData.Albedo);
+			//JsonConverter::from_json(json["Metallic"], material->materialTextureData.Metallic);
+			//JsonConverter::from_json(json["Roughness"], material->materialTextureData.Roughness);
+			//JsonConverter::from_json(json["AmbientOcclusion"], material->materialTextureData.AmbientOcclusion);
 
 			if (json.contains("AlbedoMap"))
 			{

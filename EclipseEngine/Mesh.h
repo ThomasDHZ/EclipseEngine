@@ -174,16 +174,12 @@ public:
 	//	}
 	//};
 
-	//void to_json(nlohmann::json& json)
-	//{
-	//	JsonConverter::to_json(json["MeshPosition"], MeshPosition);
-	//	JsonConverter::to_json(json["MeshRotation"], MeshRotation);
-	//	JsonConverter::to_json(json["MeshScale"], MeshScale);
-	//	JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
+	virtual void to_json(nlohmann::json& json)
+	{
+		JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
 
-	//	meshProperties.to_json(json["MeshProperties"]);
-
-	//	json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
-	//}
+		meshProperties.to_json(json["MeshProperties"]);
+		json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
+	}
 };
 
