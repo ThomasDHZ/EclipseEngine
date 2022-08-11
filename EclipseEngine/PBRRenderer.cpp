@@ -15,6 +15,8 @@ void PBRRenderer::BuildRenderer()
 
 	if (PreRenderedFlag)
 	{
+		SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
+
 		brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 		skyBoxIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
 		skyBoxPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
@@ -34,12 +36,13 @@ void PBRRenderer::BuildRenderer()
 
 		//Main Render Pass
 		{
-			SceneManager::sceneProperites.PBRMaxMipLevel = prefilterRenderPass.PrefilterCubeMap->GetMipLevels();
 			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 		}
 	}
 	else
 	{
+		SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
+
 		brdfRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
 		//Depth Pass
 		{
@@ -49,16 +52,12 @@ void PBRRenderer::BuildRenderer()
 		{
 			geoIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
 			geoPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-
-			SceneManager::sceneProperites.PBRMaxMipLevel = 4;
 			geoPBRRenderPass.BuildRenderPass(geoIrradianceRenderPass.IrradianceCubeMap, geoPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
 		}
 		//Main Render Pass
 		{
 			irradianceRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
 			prefilterRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
-
-			SceneManager::sceneProperites.PBRMaxMipLevel = 4;
 			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 		}
 	}

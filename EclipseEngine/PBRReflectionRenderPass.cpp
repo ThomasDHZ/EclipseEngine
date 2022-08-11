@@ -12,7 +12,7 @@ PBRReflectionRenderPass::~PBRReflectionRenderPass()
 void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap,  uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = glm::vec2(cubeMapSize);
 
     if (renderPass == nullptr)
     {
@@ -39,7 +39,7 @@ void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTex
 void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = glm::vec2(cubeMapSize);
 
     if (renderPass == nullptr)
     {

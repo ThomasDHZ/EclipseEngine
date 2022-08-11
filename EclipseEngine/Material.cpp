@@ -61,24 +61,24 @@ Material::Material(const std::string materialName, MaterialTypeEnum materialtype
 		materialTextureData.AmbientOcclusion = MaterialInfo.AmbientOcclusion;
 		materialTextureData.Reflectivness = MaterialInfo.Reflectivness;
 
-		if (AlbedoMap != nullptr)
+		if (MaterialInfo.AlbedoMap != nullptr)
 		{
-			materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
+			materialTextureData.AlbedoMapID = MaterialInfo.AlbedoMap->GetTextureBufferIndex();
 			AlbedoMap = MaterialInfo.AlbedoMap;
 		}
-		if (MetallicMap != nullptr)
+		if (MaterialInfo.MetallicMap != nullptr)
 		{
-			materialTextureData.MetallicMapID = MetallicMap->GetTextureBufferIndex();
+			materialTextureData.MetallicMapID = MaterialInfo.MetallicMap->GetTextureBufferIndex();
 			MetallicMap = MaterialInfo.MetallicMap;
 		}
-		if (RoughnessMap != nullptr)
+		if (MaterialInfo.RoughnessMap != nullptr)
 		{
-			materialTextureData.RoughnessMapID = RoughnessMap->GetTextureBufferIndex();
+			materialTextureData.RoughnessMapID = MaterialInfo.RoughnessMap->GetTextureBufferIndex();
 			RoughnessMap = MaterialInfo.RoughnessMap;
 		}
-		if (AmbientOcclusionMap != nullptr)
+		if (MaterialInfo.AmbientOcclusionMap != nullptr)
 		{
-			materialTextureData.AmbientOcclusionMapID = AmbientOcclusionMap->GetTextureBufferIndex();
+			materialTextureData.AmbientOcclusionMapID = MaterialInfo.AmbientOcclusionMap->GetTextureBufferIndex();
 			AmbientOcclusionMap = MaterialInfo.AmbientOcclusionMap;
 		}
 	}
