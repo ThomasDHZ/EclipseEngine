@@ -22,9 +22,13 @@ private:
 
 	DepthRenderPass depthPassRendererPass;
 
-	IrradianceRenderPass reflectionIrradianceRenderPass;
-	PrefilterRenderPass reflectionPrefilterRenderPass;
-	PBRReflectionRenderPass pbrReflectionRenderPass;
+	IrradianceRenderPass skyBoxIrradianceRenderPass;
+	PrefilterRenderPass skyBoxPrefilterRenderPass;
+	PBRReflectionRenderPass skyBoxPBRRenderPass;
+
+	IrradianceRenderPass geoIrradianceRenderPass;
+	PrefilterRenderPass geoPrefilterRenderPass;
+	PBRReflectionRenderPass geoPBRRenderPass;
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
@@ -41,7 +45,7 @@ public:
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
-	bool PreRenderedFlag = true;
+	bool PreRenderedFlag = false;
 
 	DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }

@@ -36,7 +36,6 @@ layout(push_constant) uniform SceneData
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
-    uint SelectedObjectBufferIndex;
     float Timer;
     float PBRMaxMipLevel;
 } sceneData;
@@ -126,8 +125,7 @@ void main()
     vec3 irradiance = texture(IrradianceMap, N).rgb;
     vec3 diffuse      = irradiance * albedo;
 
-    const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(PrefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap, R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 

@@ -30,8 +30,8 @@ layout(push_constant) uniform SceneData
     uint PointLightCount;
     uint SpotLightCount;
     float Timer;
+    float PBRMaxMipLevel;
 } sceneData;
-
 void main() 
 {
    outColor = vec4(1.0f, 0.0f, 0.0f, 0.35f);

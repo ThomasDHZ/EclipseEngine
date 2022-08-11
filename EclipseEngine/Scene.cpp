@@ -19,7 +19,7 @@ Scene::Scene()
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
-    SceneManager::LoadScene("../Scenes/example.txt");
+   // SceneManager::LoadScene("../Scenes/example.txt");
 //
 //    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial", MaterialTypeEnum::kMaterialBlinnPhong));
 //    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
@@ -121,10 +121,9 @@ Scene::Scene()
 //    cubeMapfiles.Back = "../texture/skybox/front.jpg";
 //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 //
-//    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-//
-//    //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject", "../Models/RayReflectionTest.obj")));
-//
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+
+std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -157,64 +156,64 @@ Scene::Scene()
 //    //SoundSource source;
 //    //source.Play(sound);
 //
-//    {
-//        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-//        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-//        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-//        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-//        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+    {
+        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        SceneManager::SaveAsPrefab(obj);
+
+        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        SceneManager::SaveAsPrefab(obj2);
+
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        SceneManager::SaveAsPrefab(obj3);
+
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        SceneManager::SaveAsPrefab(obj4);
+
+        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        SceneManager::SaveAsPrefab(obj5);
+    }
 //
-//        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-//        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-//        SceneManager::SaveAsPrefab(obj);
-//
-//        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-//        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-//        SceneManager::SaveAsPrefab(obj2);
-//
-//        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-//        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-//        SceneManager::SaveAsPrefab(obj3);
-//
-//        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-//        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-//        SceneManager::SaveAsPrefab(obj4);
-//
-//        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-//        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-//        SceneManager::SaveAsPrefab(obj5);
-//    }
-//
-//    auto dLight = DirectionalLightBuffer{};
-//    dLight.diffuse = glm::vec3(0.2f);
-//    dLight.specular = glm::vec3(0.5f);
-//
-//    LightManager::AddDirectionalLight(dLight);
-//
-//    PointLightBuffer plight = PointLightBuffer();
-//    plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
-//    plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-//    plight.specular = glm::vec3(1.0f);
-//
-//    PointLightBuffer plight2 = PointLightBuffer();
-//    plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
-//    plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-//    plight2.specular = glm::vec3(1.0f);
-//
-//    PointLightBuffer plight3 = PointLightBuffer();
-//    plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
-//    plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-//    plight3.specular = glm::vec3(1.0f);
-//
-//    PointLightBuffer plight4 = PointLightBuffer();
-//    plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
-//    plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-//    plight4.specular = glm::vec3(1.0f);
-//
-//    LightManager::AddPointLight(plight);
-//    LightManager::AddPointLight(plight2);
-//    LightManager::AddPointLight(plight3);
-//    LightManager::AddPointLight(plight4);
+    auto dLight = DirectionalLightBuffer{};
+    dLight.diffuse = glm::vec3(0.2f);
+    dLight.specular = glm::vec3(0.5f);
+
+    LightManager::AddDirectionalLight(dLight);
+
+    PointLightBuffer plight = PointLightBuffer();
+    plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
+    plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight.specular = glm::vec3(1.0f);
+
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
+    plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight2.specular = glm::vec3(1.0f);
+
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
+    plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight3.specular = glm::vec3(1.0f);
+
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
+    plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight4.specular = glm::vec3(1.0f);
+
+    LightManager::AddPointLight(plight);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 

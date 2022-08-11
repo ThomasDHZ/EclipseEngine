@@ -29,7 +29,12 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
+    vec3 AmbientLight;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
     float Timer;
+    float PBRMaxMipLevel;
 } sceneData;
 
 void main() {

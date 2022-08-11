@@ -41,6 +41,7 @@ layout(push_constant) uniform SceneData
     uint PointLightCount;
     uint SpotLightCount;
     float Timer;
+    float PBRMaxMipLevel;
 } sceneData;
 
 const mat4 LightBiasMatrix = mat4(

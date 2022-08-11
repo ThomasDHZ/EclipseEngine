@@ -41,6 +41,7 @@ layout(push_constant) uniform SceneData
     uint PointLightCount;
     uint SpotLightCount;
     float Timer;
+    float PBRMaxMipLevel;
 } sceneData;
 
 const mat4 LightBiasMatrix = mat4(
@@ -68,7 +69,7 @@ vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
     return shadow;
 }
 
-float filterPCF(vec4 sc, int index)
+/*float filterPCF(vec4 sc, int index)
 {
 	ivec2 texDim = textureSize(ShadowMap[index], 0);
 	float scale = 1.5;
@@ -204,8 +205,8 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 
 
     vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-    float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
-    return (ambient + (shadow) * (diffuse + specular));
+   //float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
+    return (ambient + diffuse + specular);
 }
 
 vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)

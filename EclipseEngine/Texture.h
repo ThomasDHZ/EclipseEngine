@@ -93,6 +93,7 @@ public:
     VkImageView* GetViewPtr() { return &View; }
     VkSampler* GetSamplerPtr() { return &Sampler; }
     uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }
+    uint32_t GetMipLevels() { return MipMapLevels; }
 
 
     void to_json(nlohmann::json& json)

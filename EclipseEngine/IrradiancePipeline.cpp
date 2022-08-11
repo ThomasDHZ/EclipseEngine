@@ -28,7 +28,7 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderPBRSkyBox;
-    buildGraphicsPipelineInfo.ConstBufferSize = 0;
+    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(IrradianceSkyboxSettings);
     buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
 
@@ -48,9 +48,10 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     }
 }
 
-void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer)
+void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(IrradianceSkyboxSettings), &irradiance);
     SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
 }

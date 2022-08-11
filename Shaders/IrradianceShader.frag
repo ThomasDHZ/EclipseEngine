@@ -10,6 +10,11 @@ layout(binding = 0) uniform samplerCube CubeMap;
 layout(location = 0) in vec3 WorldPos;
 layout(location = 0) out vec4 outColor;
 
+layout(push_constant) uniform IrradianceInfo
+{
+    float IrradianceSampleDelta;
+} irradianceInfo;
+
 const float PI = 3.14159265359;
 
 void main() 
@@ -22,11 +27,10 @@ void main()
     vec3 right = normalize(cross(up, N));
     up         = normalize(cross(N, right));
        
-    float sampleDelta = 0.075f;
     float nrSamples = 0.0;
-    for(float phi = 0.0; phi < 2.0 * PI; phi += sampleDelta)
+    for(float phi = 0.0; phi < 2.0 * PI; phi += irradianceInfo.IrradianceSampleDelta)
     {
-        for(float theta = 0.0; theta < 0.5 * PI; theta += sampleDelta)
+        for(float theta = 0.0; theta < 0.5 * PI; theta += irradianceInfo.IrradianceSampleDelta)
         {
             vec3 tangentSample = vec3(sin(theta) * cos(phi),  sin(theta) * sin(phi), cos(theta));
             vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N; 
