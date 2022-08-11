@@ -202,7 +202,7 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
 
             case MeshTypeEnum::kPolygon:
             {
-                pbrPipeline.Draw(commandBuffer, mesh);
+                pbrPipeline.Draw(commandBuffer, mesh, glm::vec3(0.0f));
                 break;
             }
             default: break;

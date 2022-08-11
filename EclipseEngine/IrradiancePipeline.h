@@ -8,11 +8,13 @@
 
 class IrradiancePipeline : public GraphicsPipeline
 {
+private:
+	CubeMapSamplerBuffer cubeMapSampler;
 public:
 	IrradiancePipeline();
 	~IrradiancePipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
-	void Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance);
+	void Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance, glm::vec3 CubeMapSamplerPos);
 };
 

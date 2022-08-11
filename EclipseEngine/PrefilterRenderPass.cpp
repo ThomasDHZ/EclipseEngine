@@ -203,7 +203,7 @@ VkCommandBuffer PrefilterRenderPass::Draw()
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        prefilterPipeline.Draw(commandBuffer, prefiliter);
+        prefilterPipeline.Draw(commandBuffer, prefiliter, glm::vec3(0.0f));
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

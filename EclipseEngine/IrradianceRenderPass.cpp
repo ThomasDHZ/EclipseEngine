@@ -186,7 +186,7 @@ VkCommandBuffer IrradianceRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    irradiancePipeline.Draw(commandBuffer, irradiance);
+    irradiancePipeline.Draw(commandBuffer, irradiance, glm::vec3(0.0f));
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");

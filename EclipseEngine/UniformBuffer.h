@@ -84,6 +84,11 @@ struct RayTraceSceneProperties
 	alignas(4)  float Timer;
 };
 
+struct CubeMapSampler
+{
+	alignas(16) glm::mat4 CubeMapFaceMatrix[6];
+};
+
 struct MeshProperties
 {
 	MaterialBufferData materialBufferData;
@@ -174,3 +179,4 @@ public:
 };
 
 typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;
+typedef UniformBuffer<CubeMapSampler> CubeMapSamplerBuffer;
