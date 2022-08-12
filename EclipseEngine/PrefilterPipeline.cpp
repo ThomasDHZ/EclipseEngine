@@ -58,39 +58,13 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
 void PrefilterPipeline::Draw(VkCommandBuffer& commandBuffer, PrefilterSkyboxSettings& prefiliter, glm::vec3 CubeMapSamplerPos)
 {
-    glm::mat4 MVP[6] = { {{0.000000, 0.000000, 1.010101, 1.000000},
-                       {0.000000, -1.000000, 0.000000, 0.000000},
-                       {-1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}},
-                      {{0.000000, 0.000000, -1.010101, -1.000000},
-                       {0.000000, -1.000000, 0.000000, 0.000000},
-                       {1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}},
-                      {{1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, 1.010101, 1.000000},
-                       {0.000000, 1.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}},
-                      {{1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -1.010101, -1.000000},
-                       {0.000000, -1.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}},
-                      {{1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, -1.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, 1.010101, 1.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}},
-                      {{-1.000000, 0.000000, 0.000000, 0.000000},
-                       {0.000000, -1.000000, 0.000000, 0.000000},
-                       {0.000000, 0.000000, -1.010101, -1.000000},
-                       {0.000000, 0.000000, -0.101010, 0.000000}} };
-
-
-    glm::mat4 reflectionProj = glm::ortho(-10000.0f, 10000.0f, -10000.0f, 10000.0f, -10000.0f, 10000.0f);
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = MVP[0];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = MVP[1];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = MVP[2];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = MVP[3];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = MVP[4];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = MVP[5];
+    glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), (float)2048.0f / (float)2048.0f, 0.1f, 10000.0f);
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
     cubeMapSampler.Update();
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);

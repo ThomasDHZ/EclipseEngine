@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 
 SceneType								SceneManager::sceneType;
-float                                   SceneManager::PBRCubeMapSize =  1024.0f * 2;
+float                                   SceneManager::PBRCubeMapSize =  512.0f * 2;
 float									SceneManager::PreRenderedMapSize = 2048.0f;
 std::shared_ptr<SkyboxMesh>             SceneManager::skyboxMesh;
 std::shared_ptr<EnvironmentTexture>     SceneManager::environmentTexture = nullptr;
