@@ -171,9 +171,9 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
         obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         SceneManager::SaveAsPrefab(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-        SceneManager::SaveAsPrefab(obj3);
+        //auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        //obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        //SceneManager::SaveAsPrefab(obj3);
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);

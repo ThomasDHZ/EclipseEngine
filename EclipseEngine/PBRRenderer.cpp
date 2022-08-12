@@ -50,8 +50,14 @@ void PBRRenderer::BuildRenderer()
 		}
 		//Reflection Pass
 		{
-			geoIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-			geoPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			skyBoxIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			skyBoxPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
+			skyBoxPBRRenderPass.BuildRenderPass(skyBoxIrradianceRenderPass.IrradianceCubeMap, skyBoxPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
+		}
+		//Reflection Pass 2
+		{
+			geoIrradianceRenderPass.BuildRenderPass(skyBoxPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
+			geoPrefilterRenderPass.BuildRenderPass(skyBoxPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
 			geoPBRRenderPass.BuildRenderPass(geoIrradianceRenderPass.IrradianceCubeMap, geoPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
 		}
 		//Main Render Pass
@@ -137,6 +143,12 @@ void PBRRenderer::Destroy()
 		depthPassRendererPass.Destroy();
 	}
 	//Reflection Pass
+	{
+		skyBoxIrradianceRenderPass.Destroy();
+		skyBoxPrefilterRenderPass.Destroy();
+		skyBoxPBRRenderPass.Destroy();
+	}
+	//Reflection Pass 2
 	{
 		geoIrradianceRenderPass.Destroy();
 		geoPrefilterRenderPass.Destroy();
