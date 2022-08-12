@@ -32,7 +32,7 @@ void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTextur
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
@@ -53,7 +53,7 @@ void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> c
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(cubeMap);
     SetUpCommandBuffers();
-    Draw();
+    Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -145,7 +145,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     irradiancePipeline.InitializePipeline(pipelineInfo, cubeMap);
 }
 
-VkCommandBuffer IrradianceRenderPass::Draw()
+VkCommandBuffer IrradianceRenderPass::Draw(glm::vec3 DrawPosition)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -186,7 +186,7 @@ VkCommandBuffer IrradianceRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    irradiancePipeline.Draw(commandBuffer, irradiance, glm::vec3(0.0f));
+    irradiancePipeline.Draw(commandBuffer, irradiance, DrawPosition);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");

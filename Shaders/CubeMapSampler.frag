@@ -11,8 +11,6 @@ layout(location = 1) out vec4 BloomColor;
 void main() 
 {
     vec3 color = texture(CubeMap, TexCoords).rgb;
-    color = color / (color + vec3(1.0));
-    color = pow(color, vec3(1.0/2.2)); 
     FragColor = vec4(color, 1.0f);
-    BloomColor = vec4(vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }
+//Gamma Correction done in ReflectionPBRShader.

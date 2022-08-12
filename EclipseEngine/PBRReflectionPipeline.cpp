@@ -82,7 +82,6 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
     SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
     SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
-
     glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), (float)2048.0f / (float)2048.0f, 0.1f, 10000.0f);
     cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
     cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));

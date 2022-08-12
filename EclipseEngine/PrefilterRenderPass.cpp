@@ -36,7 +36,7 @@ void PrefilterRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture
     SetUpCommandBuffers();
 }
 
-void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -60,7 +60,7 @@ void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cu
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(cubeMap);
     SetUpCommandBuffers();
-    Draw();
+    Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -149,7 +149,7 @@ void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeM
     prefilterPipeline.InitializePipeline(pipelineInfo, cubeMap);
 }
 
-VkCommandBuffer PrefilterRenderPass::Draw()
+VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
 {
     if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
         PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
@@ -203,7 +203,7 @@ VkCommandBuffer PrefilterRenderPass::Draw()
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        prefilterPipeline.Draw(commandBuffer, prefiliter, glm::vec3(0.0f));
+        prefilterPipeline.Draw(commandBuffer, prefiliter, DrawPosition);
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

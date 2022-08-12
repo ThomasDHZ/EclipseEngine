@@ -36,7 +36,7 @@ void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTex
     SetUpCommandBuffers();
 }
 
-void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize)
+void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -61,7 +61,7 @@ void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap);
     SetUpCommandBuffers();
-    Draw();
+    Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -153,7 +153,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedC
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
-VkCommandBuffer PBRReflectionRenderPass::Draw()
+VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 DrawPosition)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -202,7 +202,7 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
 
             case MeshTypeEnum::kPolygon:
             {
-                pbrPipeline.Draw(commandBuffer, mesh, glm::vec3(0.0f));
+                pbrPipeline.Draw(commandBuffer, mesh, DrawPosition);
                 break;
             }
             default: break;
