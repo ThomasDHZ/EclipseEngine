@@ -462,6 +462,9 @@
     <ClCompile Include="Renderer2DPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMapSamplerPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -839,6 +842,9 @@
     <ClInclude Include="BillboardPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
+    <ClInclude Include="CubeMapSamplerPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1014,6 +1020,12 @@
     </None>
     <None Include="..\Shaders\compile.bat">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Shaders\CubeMapSampler.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\CubeMapSampler.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,9 +1,5 @@
-//#version 460
-//#extension GL_ARB_separate_shader_objects : enable
-//#extension GL_EXT_nonuniform_qualifier : enable
-//#extension GL_EXT_scalar_block_layout : enable
-//#extension GL_EXT_debug_printf : enable
-//#extension GL_EXT_multiview : enable
+#version 460
+
 //
 //#include "SceneProperties.glsl"
 //#include "MeshProperties.glsl"
@@ -29,8 +25,8 @@
 //layout (location = 3) in vec4 aTangent;
 //layout (location = 4) in vec4 aBitangent;
 //
-//void main() 
-//{
+void main() 
+{
 ////    if(gl_VertexIndex == 0)
 ////	{
 ////        if(gl_ViewIndex == 0)
@@ -57,4 +53,4 @@
 ////        }
 ////	}
 //   gl_Position = ReflectionView.lightSpaceMatrix[gl_ViewIndex] * meshBuffer[scene.MeshIndex].meshProperties.ModelTransform * meshBuffer[scene.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
-//}
+}

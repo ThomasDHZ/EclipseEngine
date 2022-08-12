@@ -159,6 +159,7 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFPipeline.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
+    <ClCompile Include="CubeMapSamplerPipeline.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DeferredRendererPipeline.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="BRDFPipeline.h" />
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="Converters.h" />
+    <ClInclude Include="CubeMapSamplerPipeline.h" />
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DeferredRendererPipeline.h" />
     <ClInclude Include="DeferredRenderPass.h" />
@@ -405,6 +407,8 @@
     <None Include="..\Shaders\compile.bat" />
     <None Include="..\Shaders\CubeMap.frag" />
     <None Include="..\Shaders\CubeMap.vert" />
+    <None Include="..\Shaders\CubeMapSampler.frag" />
+    <None Include="..\Shaders\CubeMapSampler.vert" />
     <None Include="..\Shaders\DeferredRenderer.frag" />
     <None Include="..\Shaders\DeferredRenderer.vert" />
     <None Include="..\Shaders\DepthCubeShader.frag" />

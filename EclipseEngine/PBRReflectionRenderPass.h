@@ -8,6 +8,7 @@
 #include "SkyboxPipeline.h"
 #include "PBRReflectionPipeline.h"
 #include "SkyboxPipeline.h"
+#include "CubeMapSamplerPipeline.h"
 
 class PBRReflectionRenderPass : public RenderPass
 {
@@ -18,7 +19,7 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	PBRReflectionPipeline pbrPipeline;
-	SkyboxPipeline skyboxPipeline;
+	CubeMapSamplerPipeline skyboxPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap);
