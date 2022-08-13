@@ -23,8 +23,8 @@ struct MaterialProperties
 	float Reflectivness = 0.0f;
 
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Metallic = 0.5f;
-	float Roughness = 0.5f;
+	float Metallic = 0.0f;
+	float Roughness = 0.0f;
 	float AmbientOcclusion = 0.0f;
 	float Alpha = 1.0f;
 
@@ -49,8 +49,8 @@ struct MaterialBufferData
 	alignas(4) float Reflectivness = 0.0f;
 
 	alignas(16) glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	alignas(4) float Metallic = 0.5f;
-	alignas(4) float Roughness = 0.5f;
+	alignas(4) float Metallic = 0.0f;
+	alignas(4) float Roughness = 0.0f;
 	alignas(4) float AmbientOcclusion = 1.0f;
 	alignas(4) float Alpha = 1.0f;
 
@@ -133,8 +133,8 @@ private:
 	float Reflectivness = 0.0f;
 
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Matallic = 0.5f;
-	float Roughness = 0.5f;
+	float Matallic = 0.0f;
+	float Roughness = 0.0f;
 	float AmbientOcclusion = 1.0f;
 	float Alpha = 1.0f;
 

@@ -56,34 +56,49 @@ vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir);
 void main()
 {  
    const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
+   vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+        FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
+
+   if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
+      texture(TextureMap[material.DiffuseMapID], FinalUV).a == 0.0f)
+   {
+	 discard;
+   }
+   if(meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+   {
+        FinalUV.y = 1.0f - FinalUV.y;
+   }
+   if(meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+   {
+        FinalUV.x = 1.0f - FinalUV.x;
+   }
 
    vec3 albedo = pow(material.Albedo, vec3(2.2));
    if (material.AlbedoMapID != 0)
    {
-       albedo = pow(texture(TextureMap[material.AlbedoMapID], UV).rgb, vec3(2.2));
+       albedo = pow(texture(TextureMap[material.AlbedoMapID], FinalUV).rgb, vec3(2.2));
    }
 
    float metallic =  material.Matallic;
    if (material.MetallicMapID != 0)
    {
-     metallic = texture(TextureMap[material.MetallicMapID], UV).r;
+     metallic = texture(TextureMap[material.MetallicMapID], FinalUV).r;
    }
 
    float roughness =  material.Roughness;
    if (material.RoughnessMapID != 0)
    {
-     roughness = texture(TextureMap[material.RoughnessMapID], UV).r;
+     roughness = texture(TextureMap[material.RoughnessMapID], FinalUV).r;
    }
 
    float ao = material.AmbientOcclusion;
    if (material.AmbientOcclusionMapID != 0)
    {
-     ao = texture(TextureMap[material.AmbientOcclusionMapID], UV).r;
+     ao = texture(TextureMap[material.AmbientOcclusionMapID], FinalUV).r;
    }
 
    mat3 TBN = getTBNFromMap();
    vec3 N = Normal;
-   vec2 FinalUV = UV;
 
    vec3 ViewPos  = sceneData.CameraPos;
    vec3 FragPos2  = FragPos;

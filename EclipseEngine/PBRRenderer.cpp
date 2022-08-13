@@ -50,9 +50,9 @@ void PBRRenderer::BuildRenderer()
 		}
 		//Reflection Pass
 		{
-			skyBoxIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-			skyBoxPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize());
-			skyBoxPBRRenderPass.BuildRenderPass(skyBoxIrradianceRenderPass.IrradianceCubeMap, skyBoxPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
+			skyBoxIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
+			skyBoxPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
+			skyBoxPBRRenderPass.OneTimeDraw(skyBoxIrradianceRenderPass.IrradianceCubeMap, skyBoxPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
 		}
 		//Reflection Pass 2
 		{
@@ -114,7 +114,14 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		{
 			CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
 		}
+
 		//Reflection Pass
+		{
+			CommandBufferSubmitList.emplace_back(skyBoxIrradianceRenderPass.Draw(glm::vec3(0.0f)));
+			CommandBufferSubmitList.emplace_back(skyBoxPrefilterRenderPass.Draw(glm::vec3(0.0f)));
+			CommandBufferSubmitList.emplace_back(skyBoxPBRRenderPass.Draw(glm::vec3(0.0f)));
+		}
+		//Reflection Pass2
 		{
 			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(0.0f)));
 			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(0.0f)));
