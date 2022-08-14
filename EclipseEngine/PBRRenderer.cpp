@@ -117,15 +117,15 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 		//Reflection Pass
 		{
-			CommandBufferSubmitList.emplace_back(skyBoxIrradianceRenderPass.Draw(glm::vec3(0.0f)));
-			CommandBufferSubmitList.emplace_back(skyBoxPrefilterRenderPass.Draw(glm::vec3(0.0f)));
-			CommandBufferSubmitList.emplace_back(skyBoxPBRRenderPass.Draw(glm::vec3(0.0f)));
+			CommandBufferSubmitList.emplace_back(skyBoxIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(skyBoxPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(skyBoxPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
 		}
 		//Reflection Pass2
 		{
-			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(0.0f)));
-			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(0.0f)));
-			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(0.0f)));
+			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
 		}
 		//Main Render Pass
 		{
