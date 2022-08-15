@@ -73,3 +73,9 @@ void PrefilterPipeline::Draw(VkCommandBuffer& commandBuffer, PrefilterSkyboxSett
     vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(prefiliter), &prefiliter);
     SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
 }
+
+void PrefilterPipeline::Destroy()
+{
+    cubeMapSampler.Destroy();
+    GraphicsPipeline::Destroy();
+}

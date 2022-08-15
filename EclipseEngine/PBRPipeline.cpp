@@ -54,6 +54,7 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
     buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
     if (ShaderPipeline == nullptr)
     {

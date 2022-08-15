@@ -60,6 +60,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
     buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
     if (ShaderPipeline == nullptr)
     {
@@ -96,4 +97,10 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
     vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
     mesh->Draw(commandBuffer);
+}
+
+void PBRReflectionPipeline::Destroy()
+{
+    cubeMapSampler.Destroy();
+    GraphicsPipeline::Destroy();
 }

@@ -10,62 +10,33 @@ PBRRenderer::~PBRRenderer()
 
 void PBRRenderer::BuildRenderer()
 {
+	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
+
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(512);
+	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
-	if (PreRenderedFlag)
+	//Depth Pass
 	{
-		SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-
-		brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
+		depthPassRendererPass.BuildRenderPass();
+	}
+	//Skybox Pass
+	{
 		skyBoxIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
 		skyBoxPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
 		skyBoxPBRRenderPass.OneTimeDraw(skyBoxIrradianceRenderPass.IrradianceCubeMap, skyBoxPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
-
-		geoIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
-		geoPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
-		geoPBRRenderPass.OneTimeDraw(geoIrradianceRenderPass.IrradianceCubeMap, geoPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
-
+	}
+	//Geometry Pass
+	{
+		geoIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
+		geoPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
+		geoPBRRenderPass.OneTimeDraw(geoIrradianceRenderPass.IrradianceCubeMap, geoPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
+	}
+	//Main Render Pass
+	{
 		irradianceRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
 		prefilterRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f));
-
-		//Depth Pass
-		{
-			depthPassRendererPass.BuildRenderPass();
-		}
-
-		//Main Render Pass
-		{
-			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
-		}
-	}
-	else
-	{
-		SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-
-		brdfRenderPass.BuildRenderPass(SceneManager::GetPBRCubeMapSize());
-		//Depth Pass
-		{
-			depthPassRendererPass.BuildRenderPass();
-		}
-		//Reflection Pass
-		{
-			skyBoxIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
-			skyBoxPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
-			skyBoxPBRRenderPass.OneTimeDraw(skyBoxIrradianceRenderPass.IrradianceCubeMap, skyBoxPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize(), glm::vec3(0.0f));
-		}
-		//Reflection Pass 2
-		{
-			geoIrradianceRenderPass.BuildRenderPass(skyBoxPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
-			geoPrefilterRenderPass.BuildRenderPass(skyBoxPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
-			geoPBRRenderPass.BuildRenderPass(geoIrradianceRenderPass.IrradianceCubeMap, geoPrefilterRenderPass.PrefilterCubeMap, SceneManager::GetPBRCubeMapSize());
-		}
-		//Main Render Pass
-		{
-			irradianceRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
-			prefilterRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPBRCubeMapSize());
-			pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
-		}
+		pbrRenderPass.BuildRenderPass(irradianceRenderPass.IrradianceCubeMap, prefilterRenderPass.PrefilterCubeMap);
 	}
 
 	//depthDebugRenderPass.BuildRenderPass(depthPassRendererPass.DepthTexture);
@@ -99,13 +70,38 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	if (PreRenderedFlag)
 	{
-		//Depth Pass
+		if (!UpdatePreRenderer)
 		{
-			CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+			//Depth Pass
+			{
+				CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+			}
+			//Main Render Pass
+			{
+				CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			}
 		}
-		//Main Render Pass
+		else
 		{
-			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			//Depth Pass
+			{
+				CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
+			}
+
+			//Geometry Pass
+			{
+				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+			}
+			//Main Render Pass
+			{
+				CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw(glm::vec3(0.0f)));
+				CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw(glm::vec3(0.0f)));
+				CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			}
+
+			UpdatePreRenderer = false;
 		}
 	}
 	else
@@ -115,17 +111,11 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			CommandBufferSubmitList.emplace_back(depthPassRendererPass.Draw());
 		}
 
-		//Reflection Pass
+		//Geometry Pass
 		{
-			CommandBufferSubmitList.emplace_back(skyBoxIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(skyBoxPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(skyBoxPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-		}
-		//Reflection Pass2
-		{
-			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
 		}
 		//Main Render Pass
 		{
@@ -149,13 +139,13 @@ void PBRRenderer::Destroy()
 	{
 		depthPassRendererPass.Destroy();
 	}
-	//Reflection Pass
+	//Skybox Pass
 	{
 		skyBoxIrradianceRenderPass.Destroy();
 		skyBoxPrefilterRenderPass.Destroy();
 		skyBoxPBRRenderPass.Destroy();
 	}
-	//Reflection Pass 2
+	//Geometry Pass
 	{
 		geoIrradianceRenderPass.Destroy();
 		geoPrefilterRenderPass.Destroy();

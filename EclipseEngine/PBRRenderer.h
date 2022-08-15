@@ -45,7 +45,8 @@ public:
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
-	bool PreRenderedFlag = false;
+	bool PreRenderedFlag = true;
+	bool UpdatePreRenderer = true;
 
 	DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }

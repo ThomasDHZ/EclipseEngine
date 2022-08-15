@@ -56,40 +56,13 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
 
 void CubeMapSamplerPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
-    glm::mat4 MVP[6] = { {{0.000000, 0.000000, 1.010101, 1.000000},
-                   {0.000000, -1.000000, 0.000000, 0.000000},
-                   {-1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}},
-                  {{0.000000, 0.000000, -1.010101, -1.000000},
-                   {0.000000, -1.000000, 0.000000, 0.000000},
-                   {1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}},
-                  {{1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, 1.010101, 1.000000},
-                   {0.000000, 1.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}},
-                  {{1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -1.010101, -1.000000},
-                   {0.000000, -1.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}},
-                  {{1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, -1.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, 1.010101, 1.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}},
-                  {{-1.000000, 0.000000, 0.000000, 0.000000},
-                   {0.000000, -1.000000, 0.000000, 0.000000},
-                   {0.000000, 0.000000, -1.010101, -1.000000},
-                   {0.000000, 0.000000, -0.101010, 0.000000}} };
-
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = MVP[0];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = MVP[1];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = MVP[2];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = MVP[3];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = MVP[4];
-    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = MVP[5];
-    cubeMapSampler.Update();
-
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
     SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
+}
+
+void CubeMapSamplerPipeline::Destroy()
+{
+    cubeMapSampler.Destroy();
+    GraphicsPipeline::Destroy();
 }

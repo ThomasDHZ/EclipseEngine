@@ -124,6 +124,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
 
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
