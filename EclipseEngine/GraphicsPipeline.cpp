@@ -74,8 +74,6 @@ void GraphicsPipeline::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruc
 
             for (auto& DescriptorBinding : DescriptorBindingList)
             {
-
-
                 if (DescriptorBinding.BufferDescriptor.size() > 0)
                 {
                     DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));

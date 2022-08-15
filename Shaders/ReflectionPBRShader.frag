@@ -24,6 +24,7 @@ layout(binding = 5) uniform sampler2D TextureMap[];
 layout(binding = 6) uniform samplerCube IrradianceMap;
 layout(binding = 7) uniform samplerCube PrefilterMap;
 layout(binding = 8) uniform sampler2D BRDFMap;
+layout(binding = 9) uniform sampler2D ShadowMap;
 
 layout(push_constant) uniform SceneData
 {
@@ -42,6 +43,50 @@ layout(push_constant) uniform SceneData
 
 const float PI = 3.14159265359;
 
+const mat4 LightBiasMatrix = mat4(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.5, 0.5, 0.0, 1.0);
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset)
+{
+    float shadow = 1.0f;
+	if ( fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0 ) 
+	{
+		float dist = texture( ShadowMap, fragPosLightSpace.st + offset ).r;
+		if ( fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z ) 
+		{
+			shadow = 0.1f;
+		}
+	}
+    return shadow;
+}
+
+float filterPCF(vec4 sc)
+{
+	ivec2 texDim = textureSize(ShadowMap, 0);
+	float scale = 1.5;
+	float dx = scale * 1.0 / float(texDim.x);
+	float dy = scale * 1.0 / float(texDim.y);
+
+	float shadowFactor = 0.0;
+	int count = 0;
+	int range = 1;
+	
+	for (int x = -range; x <= range; x++)
+	{
+		for (int y = -range; y <= range; y++)
+		{
+			shadowFactor += ShadowCalculation(sc, vec2(dx*x, dy*y));
+			count++;
+		}
+	
+	}
+	return shadowFactor / count;
+}
+
+
 mat3 getTBNFromMap();
 float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
@@ -56,7 +101,7 @@ vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir);
 void main()
 {  
    const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
-      vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+   vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
    if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
@@ -213,6 +258,7 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float metallic)
 {
    vec3 Lo = vec3(0.0);
+
    for(int x = 0; x < sceneData.DirectionalLightCount; x++)
    {
         vec3 L = normalize(-DLight[x].directionalLight.direction);
@@ -233,7 +279,9 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+        vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+        float shadow = filterPCF(LightSpace/ LightSpace.w);  
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
     }
     return Lo;
 }

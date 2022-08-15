@@ -41,6 +41,9 @@ public:
 			ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
 			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 			ImGui::SliderFloat3(("DLight specular " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetSpecularPtr()->x, 0.0f, 1.0f);
+			ImGui::SliderFloat2(("DLight LeftRight " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetLeftRightPtr()->x, -200.0f, 200.0f);
+			ImGui::SliderFloat2(("DLight TopBottom " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetTopBottomPtr()->x, -200.0f, 200.0f);
+			ImGui::SliderFloat2(("DLight NearFar " + std::to_string(x)).c_str(), &DirectionalLightList[x]->GetNearFarPtr()->x, -200.0f, 200.0f);
 		}
 		for (int x = 0; x < PointLightList.size(); x++)
 		{
