@@ -14,7 +14,7 @@ private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	DepthRenderPass depthRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
-	//BlinnPhongReflectionRenderPass blinnPhongReflectionRenderPass;
+	BlinnPhongReflectionRenderPass blinnPhongReflectionRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:

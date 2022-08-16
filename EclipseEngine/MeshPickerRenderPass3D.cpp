@@ -141,7 +141,7 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
     renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 

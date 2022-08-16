@@ -41,7 +41,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

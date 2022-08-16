@@ -144,7 +144,7 @@ VkCommandBuffer FrameBufferRenderPass::Draw()
     renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = Rect2D.offset;
-    renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 

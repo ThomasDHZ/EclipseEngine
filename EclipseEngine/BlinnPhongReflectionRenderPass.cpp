@@ -9,10 +9,10 @@ BlinnPhongReflectionRenderPass::~BlinnPhongReflectionRenderPass()
 {
 }
 
-void BlinnPhongReflectionRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongReflectionRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = glm::vec2(cubeMapSize);
 
     if (renderPass == nullptr)
     {
@@ -177,7 +177,7 @@ VkCommandBuffer BlinnPhongReflectionRenderPass::Draw()
     renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 

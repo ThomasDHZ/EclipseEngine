@@ -14,6 +14,5 @@ public:
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap);
 	void Draw(VkCommandBuffer& commandBuffer);
-	virtual void Destroy();
 };
 
