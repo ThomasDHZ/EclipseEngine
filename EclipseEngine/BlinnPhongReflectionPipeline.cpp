@@ -11,17 +11,16 @@ BlinnPhongReflectionPipeline::~BlinnPhongReflectionPipeline()
 
 void BlinnPhongReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
-    VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-    MeshPropertiesmBufferBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
-    MeshPropertiesmBufferBufferInfo.offset = 0;
-    MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
+    VkDescriptorBufferInfo ViewBufferListInfo = {};
+    ViewBufferListInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
+    ViewBufferListInfo.offset = 0;
+    ViewBufferListInfo.range = VK_WHOLE_SIZE;
 
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -29,7 +28,7 @@ void BlinnPhongReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipeli
     SkyboxBufferInfo.sampler = cubemap->Sampler;
 
     VkDescriptorImageInfo ShadowMapBufferInfo;
-    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
     ShadowMapBufferInfo.imageView = depthTexture->View;
     ShadowMapBufferInfo.sampler = depthTexture->Sampler;
 
@@ -37,14 +36,15 @@ void BlinnPhongReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipeli
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "BlinnPhoneReflectVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "BlinnPhoneReflectFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesmBufferList);
+    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, ViewBufferListInfo, VK_SHADER_STAGE_VERTEX_BIT);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, ShadowMapBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;

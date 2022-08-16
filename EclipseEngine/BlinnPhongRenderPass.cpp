@@ -122,6 +122,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTextu
 
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;

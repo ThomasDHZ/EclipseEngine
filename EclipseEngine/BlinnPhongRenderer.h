@@ -21,7 +21,7 @@ public:
 	BlinnPhongRenderer();
 	~BlinnPhongRenderer();
 
-	DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthDebugRenderPass;
 
 	void BuildRenderer();
 	void Update();

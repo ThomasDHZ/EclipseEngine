@@ -17,16 +17,18 @@ void DepthRenderPass::BuildRenderPass()
 
     if (renderPass == nullptr)
     {
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        renderedDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
     }
     else
     {
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        depthTexture->RecreateRendererTexture(RenderPassResolution);
+        renderedDepthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DepthTexture->View);
+    AttachmentList.emplace_back(renderedDepthTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -37,7 +39,7 @@ void DepthRenderPass::BuildRenderPass()
 void DepthRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(renderedDepthTexture->GetAttachmentDescription());
 
 
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
@@ -162,6 +164,10 @@ VkCommandBuffer DepthRenderPass::Draw()
             }
             }
         }
+
+        renderedDepthTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyTexture(commandBuffer, renderedDepthTexture, depthTexture);
+        renderedDepthTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -173,7 +179,8 @@ VkCommandBuffer DepthRenderPass::Draw()
 
 void DepthRenderPass::Destroy()
 {
-    DepthTexture->Destroy();
+    depthTexture->Destroy();
+    renderedDepthTexture->Destroy();
     depthPipeline.Destroy();
     RenderPass::Destroy();
 }

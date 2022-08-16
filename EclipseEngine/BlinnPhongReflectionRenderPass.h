@@ -12,6 +12,8 @@
 #include "LinePipeline.h"
 #include "WireFramePipeline.h"
 #include "BillboardPipeline.h"
+#include "CubeMapSamplerPipeline.h"
+#include "BlinnPhongReflectionPipeline.h"
 
 class BlinnPhongReflectionRenderPass : public RenderPass
 {
@@ -21,14 +23,8 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedColorTexture> BloomTexture;
-
-	Renderer3DPipeline blinnphongPipeline;
-	BillboardPipeline billBoardPipeline;
-	SkyboxPipeline skyboxPipeline;
-	LinePipeline linePipeline;
-	WireFramePipeline wireframePipeline;
+	BlinnPhongReflectionPipeline blinnphongPipeline;
+	CubeMapSamplerPipeline skyboxPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
@@ -37,11 +33,10 @@ public:
 	BlinnPhongReflectionRenderPass();
 	~BlinnPhongReflectionRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
-	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedCubeMapTexture> ColorTexture;
+	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
 
-	void BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize);
+	void BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture,  uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

@@ -32,7 +32,7 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std
     BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
 
     VkDescriptorImageInfo ShadowMapBufferInfo;
-    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
     ShadowMapBufferInfo.imageView = depthTexture->View;
     ShadowMapBufferInfo.sampler = depthTexture->Sampler;
 

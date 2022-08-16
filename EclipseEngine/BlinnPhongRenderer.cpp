@@ -12,9 +12,9 @@ void BlinnPhongRenderer::BuildRenderer()
 {
 	meshPickerRenderPass.BuildRenderPass();
 	depthRenderPass.BuildRenderPass();
-	blinnPhongReflectionRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.DepthTexture, 512.0f);
-	blinnPhongRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.DepthTexture);
-	depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
+	blinnPhongReflectionRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.depthTexture, 512.0f);
+	blinnPhongRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.depthTexture);
+	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
 	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture);
 }
 
@@ -41,7 +41,7 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(blinnPhongReflectionRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
@@ -51,6 +51,6 @@ void BlinnPhongRenderer::Destroy()
 	depthRenderPass.Destroy();
 	blinnPhongReflectionRenderPass.Destroy();
 	blinnPhongRenderPass.Destroy();
-	depthDebugRenderPass.Destroy();
+	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

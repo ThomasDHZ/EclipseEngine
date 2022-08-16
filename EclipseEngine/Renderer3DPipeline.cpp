@@ -24,7 +24,7 @@ void Renderer3DPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     SkyboxBufferInfo.sampler = cubemap->Sampler;
 
     VkDescriptorImageInfo ShadowMapBufferInfo;
-    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL;
     ShadowMapBufferInfo.imageView = depthTexture->View;
     ShadowMapBufferInfo.sampler = depthTexture->Sampler;
 
