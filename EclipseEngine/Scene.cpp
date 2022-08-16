@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kPBR;
+    SceneManager::sceneType = SceneType::kBlinnPhong;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -110,17 +110,17 @@ Scene::Scene()
 //    //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
 //
 //
-////   SceneManager::LoadScene("../Scenes/example.txt");
-//
-//    CubeMapLayout cubeMapfiles;
-//    cubeMapfiles.Left = "../texture/skybox/right.jpg";
-//    cubeMapfiles.Right = "../texture/skybox/left.jpg";
-//    cubeMapfiles.Top = "../texture/skybox/top.jpg";
-//    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
-//    cubeMapfiles.Front = "../texture/skybox/back.jpg";
-//    cubeMapfiles.Back = "../texture/skybox/front.jpg";
-//    TextureManager::LoadCubeMapTexture(cubeMapfiles);
-//
+//   SceneManager::LoadScene("../Scenes/example.txt");
+
+    CubeMapLayout cubeMapfiles;
+    cubeMapfiles.Left = "../texture/skybox/right.jpg";
+    cubeMapfiles.Right = "../texture/skybox/left.jpg";
+    cubeMapfiles.Top = "../texture/skybox/top.jpg";
+    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
+    cubeMapfiles.Front = "../texture/skybox/back.jpg";
+    cubeMapfiles.Back = "../texture/skybox/front.jpg";
+    TextureManager::LoadCubeMapTexture(cubeMapfiles);
+
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
@@ -289,7 +289,7 @@ void Scene::ImGuiUpdate()
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)
     {
-        //ImGui::Image(blinnPhongRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(blinnPhongRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     //ImGui::Begin("VRAM Viewer");
     //{

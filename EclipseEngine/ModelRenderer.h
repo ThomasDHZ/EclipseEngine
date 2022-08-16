@@ -45,6 +45,7 @@ public:
 	virtual void LoadPrefab(nlohmann::json& json) override;
 	virtual void SaveAsPrefab(nlohmann::json& json) override;
 	virtual void Update(float DeltaTime) override;
+	void UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList);
 	virtual void Destroy() override;
 
 	std::shared_ptr<Model> GetModel() { return model; }

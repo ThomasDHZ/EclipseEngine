@@ -13,7 +13,7 @@
 #include "WireFramePipeline.h"
 #include "BillboardPipeline.h"
 
-class BlinnPhongRenderPass : public RenderPass
+class BlinnPhongReflectionRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -34,8 +34,8 @@ private:
 	void BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
 
 public:
-	BlinnPhongRenderPass();
-	~BlinnPhongRenderPass();
+	BlinnPhongReflectionRenderPass();
+	~BlinnPhongReflectionRenderPass();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;

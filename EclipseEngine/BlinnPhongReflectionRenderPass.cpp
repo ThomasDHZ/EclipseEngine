@@ -1,15 +1,15 @@
-#include "BlinnPhongRenderPass.h"
+#include "BlinnPhongReflectionRenderPass.h"
 
 
-BlinnPhongRenderPass::BlinnPhongRenderPass() : RenderPass()
+BlinnPhongReflectionRenderPass::BlinnPhongReflectionRenderPass() : RenderPass()
 {
 }
 
-BlinnPhongRenderPass::~BlinnPhongRenderPass()
+BlinnPhongReflectionRenderPass::~BlinnPhongReflectionRenderPass()
 {
 }
 
-void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongReflectionRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -24,11 +24,11 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubem
     }
     else
     {
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);   
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
         ColorTexture->RecreateRendererTexture(RenderPassResolution);
         BloomTexture->RecreateRendererTexture(RenderPassResolution);
         RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);        
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
@@ -45,7 +45,7 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubem
     SetUpCommandBuffers();
 }
 
-void BlinnPhongRenderPass::RenderPassDesc()
+void BlinnPhongReflectionRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
@@ -93,6 +93,16 @@ void BlinnPhongRenderPass::RenderPassDesc()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
+    const uint32_t viewMask = 0b00111111;
+    const uint32_t correlationMask = 0b00111111;
+
+    VkRenderPassMultiviewCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
+    createInfo.subpassCount = 1;
+    createInfo.pViewMasks = &viewMask;
+    createInfo.correlationMaskCount = 1;
+    createInfo.pCorrelationMasks = &correlationMask;
+
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -101,6 +111,7 @@ void BlinnPhongRenderPass::RenderPassDesc()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
+    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
@@ -108,7 +119,7 @@ void BlinnPhongRenderPass::RenderPassDesc()
     }
 }
 
-void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -135,7 +146,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTextu
     billBoardPipeline.InitializePipeline(pipelineInfo);
 }
 
-VkCommandBuffer BlinnPhongRenderPass::Draw()
+VkCommandBuffer BlinnPhongReflectionRenderPass::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -184,28 +195,28 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
         {
             switch (mesh->GetMeshType())
             {
-                case MeshTypeEnum::kPolygon:
+            case MeshTypeEnum::kPolygon:
+            {
+                if (VulkanRenderer::WireframeModeFlag)
                 {
-                    if (VulkanRenderer::WireframeModeFlag)
-                    {
-                        wireframePipeline.Draw(commandBuffer, mesh);
-                    }
-                    else
-                    {
-                        switch (mesh->GetMeshSubType())
-                        {
-                            case MeshSubTypeEnum::kNormal:  blinnphongPipeline.Draw(commandBuffer, mesh); break;
-                            case MeshSubTypeEnum::kBillboard:  billBoardPipeline.Draw(commandBuffer, mesh); break;
-                            default: blinnphongPipeline.Draw(commandBuffer, mesh); break;
-                        }
-                    }
-                    break;
+                    wireframePipeline.Draw(commandBuffer, mesh);
                 }
-                case MeshTypeEnum::kLine:
+                else
                 {
-                    linePipeline.Draw(commandBuffer, mesh);
-                    break;
+                    switch (mesh->GetMeshSubType())
+                    {
+                    case MeshSubTypeEnum::kNormal:  blinnphongPipeline.Draw(commandBuffer, mesh); break;
+                    case MeshSubTypeEnum::kBillboard:  billBoardPipeline.Draw(commandBuffer, mesh); break;
+                    default: blinnphongPipeline.Draw(commandBuffer, mesh); break;
+                    }
                 }
+                break;
+            }
+            case MeshTypeEnum::kLine:
+            {
+                linePipeline.Draw(commandBuffer, mesh);
+                break;
+            }
             }
         }
     }
@@ -217,7 +228,7 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
     return commandBuffer;
 }
 
-void BlinnPhongRenderPass::Destroy()
+void BlinnPhongReflectionRenderPass::Destroy()
 {
     ColorTexture->Destroy();
     RenderedTexture->Destroy();

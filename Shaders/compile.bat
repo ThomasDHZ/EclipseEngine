@@ -23,6 +23,12 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.vert -o ../x64/Shaders/Renderer3DVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.frag -o ../x64/Shaders/Renderer3DFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.vert -o BlinnPhoneReflectVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.frag -o BlinnPhoneReflectFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.vert -o ../x64/Shaders/BlinnPhoneReflectVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.frag -o ../x64/Shaders/BlinnPhoneReflectFrag.spv
+
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BillBoardShader.vert -o BillBoardShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BillBoardShader.frag -o BillBoardShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BillBoardShader.vert -o ../x64/Shaders/BillBoardShaderVert.spv
@@ -125,6 +131,7 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 raygen.rgen -o raygen.rgen.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 miss.rmiss -o miss.rmiss.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 shadow.rmiss -o shadow.rmiss.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 closesthit.rchit -o ../x64/Shaders/closesthit.rchit.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 hybridclosesthit.rchit -o ../x64/Shaders/hybridclosesthit.rchit.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 anyhit.rahit -o ../x64/Shaders/anyhit.rahit.spv

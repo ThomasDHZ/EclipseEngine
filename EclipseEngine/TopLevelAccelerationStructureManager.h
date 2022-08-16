@@ -1,8 +1,7 @@
 #pragma once
 #include "VulkanRenderer.h"
-#include "Model.h"
-#include "GraphicsPipeline.h"
-#include "GameObjectManager.h"
+#include "ModelRenderer.h"
+
 class TopLevelAccelerationStructureManager
 {
 private: 
@@ -30,11 +29,8 @@ public:
             std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
             for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
             {
-              /*  if (auto component = GameObjectManager::GetGameObjectList()[x]->GetComponentByType(ComponentType::kMeshRenderer))
-                {
-                    auto meshRenderer = static_cast<MeshRendererComponent*>(component.get());
-                    meshRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
-                }*/
+                    auto modelRenderer = static_cast<ModelRenderer*>(GameObjectManager::GetGameObjectList()[x].get());
+                    modelRenderer->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
             }
 
             VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};

@@ -474,6 +474,12 @@
     <ClCompile Include="GameObject3D.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinnPhongReflectionPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -857,6 +863,12 @@
     <ClInclude Include="GameObject2D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="BlinnPhongReflectionRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongReflectionPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1037,6 +1049,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\CubeMapSampler.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BlinnPhoneReflect.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BlinnPhoneReflect.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

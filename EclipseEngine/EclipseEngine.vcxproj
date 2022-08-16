@@ -156,6 +156,8 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
+    <ClCompile Include="BlinnPhongReflectionPipeline.cpp" />
+    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFPipeline.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
@@ -273,6 +275,8 @@
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
+    <ClInclude Include="BlinnPhongReflectionPipeline.h" />
+    <ClInclude Include="BlinnPhongReflectionRenderPass.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BRDFPipeline.h" />
     <ClInclude Include="BRDFRenderPass.h" />
@@ -403,6 +407,8 @@
     <None Include="..\Shaders\anyhit1.rahit" />
     <None Include="..\Shaders\BillBoardShader.frag" />
     <None Include="..\Shaders\BillBoardShader.vert" />
+    <None Include="..\Shaders\BlinnPhoneReflect.frag" />
+    <None Include="..\Shaders\BlinnPhoneReflect.vert" />
     <None Include="..\Shaders\BRDFShader.frag" />
     <None Include="..\Shaders\BRDFShader.vert" />
     <None Include="..\Shaders\closesthit.rchit" />

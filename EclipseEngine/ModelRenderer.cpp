@@ -149,6 +149,11 @@ void ModelRenderer::Update(float DeltaTime)
 	model->Update(GameObjectTransform);
 }
 
+void ModelRenderer::UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList)
+{
+	model->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
+}
+
 void ModelRenderer::Destroy()
 {
 	model->Destroy();

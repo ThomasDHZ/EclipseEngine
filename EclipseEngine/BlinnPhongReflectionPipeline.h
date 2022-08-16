@@ -6,14 +6,15 @@
 #include "SceneManager.h"
 #include "RenderedDepthTexture.h"
 
-class Renderer3DPipeline : public GraphicsPipeline
+class BlinnPhongReflectionPipeline : public GraphicsPipeline
 {
-
+private:
+	CubeMapSamplerBuffer cubeMapSampler;
 public:
-	Renderer3DPipeline();
-	~Renderer3DPipeline();
+	BlinnPhongReflectionPipeline();
+	~BlinnPhongReflectionPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos);
 };
 
