@@ -8,8 +8,6 @@
 
 class CubeMapSamplerPipeline : public GraphicsPipeline
 {
-private:
-	CubeMapSamplerBuffer cubeMapSampler;
 public:
 	CubeMapSamplerPipeline();
 	~CubeMapSamplerPipeline();
