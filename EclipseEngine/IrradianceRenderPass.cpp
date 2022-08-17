@@ -159,8 +159,7 @@ VkCommandBuffer IrradianceRenderPass::Draw(glm::vec3 DrawPosition)
     renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent.width = RenderPassResolution.x;
-    renderPassInfo.renderArea.extent.height = RenderPassResolution.y;
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 

@@ -7,14 +7,12 @@
 #include "TopLevelAccelerationStructureManager.h"
 #include "SceneManager.h"
 
-
 class RayTraceRenderPass : public RenderPass
 {
 private:
     void SetUpCommandBuffers();
     void BuildRenderPassPipelines();
 
-    std::string BaseShaderFilePath = "../Shaders/";
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
     std::shared_ptr<RenderedColorTexture> RayTracedTexture;

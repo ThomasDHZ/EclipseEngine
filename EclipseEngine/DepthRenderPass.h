@@ -18,8 +18,6 @@ private:
 
 	DepthPipeline depthPipeline;
 
-	std::shared_ptr<RenderedDepthTexture> renderedDepthTexture;
-
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
@@ -27,7 +25,7 @@ public:
 	DepthRenderPass();
 	~DepthRenderPass();
 
-		std::shared_ptr<RenderedDepthTexture> depthTexture;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw();

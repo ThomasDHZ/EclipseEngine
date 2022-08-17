@@ -13,7 +13,6 @@ private:
     void SetUpCommandBuffers();
     void BuildRenderPassPipelines();
 
-    std::string BaseShaderFilePath = "../Shaders/";
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
     std::shared_ptr<RenderedColorTexture> RenderedShadowTexture;

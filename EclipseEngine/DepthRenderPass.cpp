@@ -17,18 +17,16 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
 
     if (renderPass == nullptr)
     {
-        depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        renderedDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
     }
     else
     {
-        depthTexture->RecreateRendererTexture(RenderPassResolution);
-        renderedDepthTexture->RecreateRendererTexture(RenderPassResolution);
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(renderedDepthTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -39,7 +37,7 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
 void DepthRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(renderedDepthTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
 
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
@@ -175,8 +173,7 @@ VkCommandBuffer DepthRenderPass::Draw()
 
 void DepthRenderPass::Destroy()
 {
-    depthTexture->Destroy();
-    renderedDepthTexture->Destroy();
+    DepthTexture->Destroy();
     depthPipeline.Destroy();
     RenderPass::Destroy();
 }

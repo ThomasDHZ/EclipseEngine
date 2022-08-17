@@ -9,7 +9,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 {
 }
 
-void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -41,7 +41,7 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<CubeMapTexture> cubem
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(cubemap, depthTexture);
+    BuildRenderPassPipelines(depthTexture);
     SetUpCommandBuffers();
 }
 
@@ -108,7 +108,7 @@ void BlinnPhongRenderPass::RenderPassDesc()
     }
 }
 
-void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -122,14 +122,13 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<CubeMapTextu
 
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    blinnphongPipeline.InitializePipeline(pipelineInfo, cubemap, depthTexture);
+    blinnphongPipeline.InitializePipeline(pipelineInfo, depthTexture);
     skyboxPipeline.InitializePipeline(pipelineInfo, TextureManager::GetCubeMapTextureList()[0]);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
@@ -167,7 +166,7 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
     renderPassInfo.renderPass = renderPass;
     renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = VulkanRenderer::GetSwapChainResolution();
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 

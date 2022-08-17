@@ -16,6 +16,6 @@ public:
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
 	void Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance, glm::vec3 CubeMapSamplerPos);
-	void Destroy() override;
+	virtual void Destroy();
 };
 

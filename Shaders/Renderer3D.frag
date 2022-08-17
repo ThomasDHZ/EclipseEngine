@@ -27,8 +27,7 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 4) uniform sampler2D TextureMap[];
-layout(binding = 5) uniform samplerCube CubeMap;
-layout(binding = 6) uniform sampler2D ShadowMap;
+//layout(binding = 5) uniform sampler2D ShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -51,12 +50,17 @@ const mat4 LightBiasMatrix = mat4(
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.5, 0.0, 1.0);
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset)
+vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
+
+/*float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
 {
     float shadow = 1.0f;
 	if ( fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0 ) 
 	{
-		float dist = texture( ShadowMap, fragPosLightSpace.st + offset ).r;
+		float dist = texture( ShadowMap[index], fragPosLightSpace.st + offset ).r;
 		if ( fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z ) 
 		{
 			shadow = 0.1f;
@@ -65,9 +69,9 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset)
     return shadow;
 }
 
-float filterPCF(vec4 sc)
+/*float filterPCF(vec4 sc, int index)
 {
-	ivec2 texDim = textureSize(ShadowMap, 0);
+	ivec2 texDim = textureSize(ShadowMap[index], 0);
 	float scale = 1.5;
 	float dx = scale * 1.0 / float(texDim.x);
 	float dy = scale * 1.0 / float(texDim.y);
@@ -80,18 +84,14 @@ float filterPCF(vec4 sc)
 	{
 		for (int y = -range; y <= range; y++)
 		{
-			shadowFactor += ShadowCalculation(sc, vec2(dx*x, dy*y));
+			shadowFactor += ShadowCalculation(sc, vec2(dx*x, dy*y), index);
 			count++;
 		}
 	
 	}
 	return shadowFactor / count;
 }
-
-vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
-vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
-vec3 CalcNormalSpotLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
-vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
+*/
 
 void main() {
 
@@ -158,8 +158,8 @@ void main() {
 //   }
 //    vec3 I = normalize(FragPos2 - ViewPos);
 //    vec3 R = reflect(I, normalize(normal));
- //   vec3 Reflection = texture(CubeMap, R).rgb;
- //   result = mix(result, Reflection, .5f);
+//    vec3 Reflection = texture(CubeMap[0], R).rgb;
+//    vec3 finalMix = mix(result, Reflection, material.Reflectivness);
 
     vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
     finalResult = pow(finalResult, vec3(1.0 / 2.2f));
@@ -205,8 +205,8 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
 
 
     vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-    float shadow = filterPCF(LightSpace/ LightSpace.w);  
-    return (ambient + (shadow) * (diffuse + specular));
+   //float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
+    return (ambient + diffuse + specular);
 }
 
 vec3 CalcNormalPointLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)

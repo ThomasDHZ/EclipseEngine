@@ -13,7 +13,7 @@ public:
 	Renderer3DPipeline();
 	~Renderer3DPipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedDepthTexture> depthTexture);
 	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
 };
 

@@ -31,7 +31,7 @@ private:
 	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture);
 
 public:
 	BlinnPhongRenderPass();
@@ -41,7 +41,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void BuildRenderPass(std::shared_ptr<CubeMapTexture> cubemap, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPass(std::shared_ptr<RenderedDepthTexture> depthTexture);
 	VkCommandBuffer Draw();
 	void Destroy();
 };
