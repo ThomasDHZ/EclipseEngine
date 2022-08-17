@@ -164,6 +164,10 @@
     <ClCompile Include="CubeSamplerCamera.cpp" />
     <ClCompile Include="DeferredRendererPipeline.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
+    <ClCompile Include="DepthCubeMapDebuggerPipeline.cpp" />
+    <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
+    <ClCompile Include="DepthCubeMapPipeline.cpp" />
+    <ClCompile Include="DepthCubeMapRenderer.cpp" />
     <ClCompile Include="DepthDebugPipeline.cpp" />
     <ClCompile Include="DepthDebugRenderPass.cpp" />
     <ClCompile Include="DepthPipeline.cpp" />
@@ -282,6 +286,10 @@
     <ClInclude Include="CubeSamplerCamera.h" />
     <ClInclude Include="DeferredRendererPipeline.h" />
     <ClInclude Include="DeferredRenderPass.h" />
+    <ClInclude Include="DepthCubeMapDebuggerPipeline.h" />
+    <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
+    <ClInclude Include="DepthCubeMapPipeline.h" />
+    <ClInclude Include="DepthCubeMapRenderer.h" />
     <ClInclude Include="DepthDebugPipeline.h" />
     <ClInclude Include="DepthDebugRenderPass.h" />
     <ClInclude Include="DepthPipeline.h" />
