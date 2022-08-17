@@ -156,10 +156,10 @@ void main() {
 //   {
 //        result += CalcNormalSpotLight(material, TBN, normal, FinalUV, x);   
 //   }
-    vec3 I = normalize(FragPos2 - ViewPos);
-    vec3 R = reflect(I, normalize(normal));
-    vec3 Reflection = texture(CubeMap, R).rgb;
-    vec3 finalMix = mix(result, Reflection, material.Reflectivness);
+//    vec3 I = normalize(FragPos2 - ViewPos);
+//    vec3 R = reflect(I, normalize(normal));
+ //   vec3 Reflection = texture(CubeMap, R).rgb;
+ //   result = mix(result, Reflection, .5f);
 
     vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
     finalResult = pow(finalResult, vec3(1.0 / 2.2f));

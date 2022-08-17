@@ -164,10 +164,6 @@ VkCommandBuffer DepthRenderPass::Draw()
             }
             }
         }
-
-        renderedDepthTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyTexture(commandBuffer, renderedDepthTexture, depthTexture);
-        renderedDepthTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {

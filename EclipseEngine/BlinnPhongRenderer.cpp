@@ -13,7 +13,7 @@ void BlinnPhongRenderer::BuildRenderer()
 	meshPickerRenderPass.BuildRenderPass();
 	depthRenderPass.BuildRenderPass();
 	blinnPhongReflectionRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.depthTexture, 512.0f);
-	blinnPhongRenderPass.BuildRenderPass(TextureManager::GetCubeMapTextureList()[0], depthRenderPass.depthTexture);
+	blinnPhongRenderPass.BuildRenderPass(blinnPhongReflectionRenderPass.ColorTexture, depthRenderPass.depthTexture);
 	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
 	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture);
 }

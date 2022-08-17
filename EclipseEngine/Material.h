@@ -167,6 +167,9 @@ public:
 	void MaterialBufferUpdate();
 	void Destroy();
 
+	void SetShiniess(float shininess);
+	void SetReflectivness(float reflection);
+
 	void LoadDiffuseMap(const std::string FilePath);
 	void LoadSpecularMap(const std::string FilePath);
 	void LoadAlbedoMap(const std::string FilePath);

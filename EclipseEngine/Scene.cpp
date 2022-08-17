@@ -123,7 +123,7 @@ Scene::Scene()
 
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -158,10 +158,20 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
 //
     {
         std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        IronmMaterial->SetReflectivness(.1f);
+
         std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        PlasticMaterial->SetReflectivness(.2f);
+
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        WallMaterial->SetReflectivness(.3f);
+
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        GoldMaterial->SetReflectivness(.6f);
+
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        GrassMaterial->SetReflectivness(.9f);
+
 
         auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
