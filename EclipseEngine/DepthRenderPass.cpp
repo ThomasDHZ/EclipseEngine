@@ -10,10 +10,10 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthRenderPass::BuildRenderPass()
+void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = TextureResolution;
 
     if (renderPass == nullptr)
     {

@@ -104,8 +104,8 @@ void main()
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
-   if(texture(TextureMap[material.AlphaMapID], UV).r == 0.0f ||
-      texture(TextureMap[material.DiffuseMapID], UV).a == 0.0f)
+   if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
+      texture(TextureMap[material.DiffuseMapID], FinalUV).a == 0.0f)
    {
 	 discard;
    }

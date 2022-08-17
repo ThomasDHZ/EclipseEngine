@@ -29,7 +29,7 @@ public:
 
 		std::shared_ptr<RenderedDepthTexture> depthTexture;
 
-	void BuildRenderPass();
+	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw();
 	void Destroy();
 };
