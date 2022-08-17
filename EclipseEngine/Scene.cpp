@@ -110,20 +110,20 @@ Scene::Scene()
 //    //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
 //
 //
-//   SceneManager::LoadScene("../Scenes/example.txt");
-
-    CubeMapLayout cubeMapfiles;
-    cubeMapfiles.Left = "../texture/skybox/right.jpg";
-    cubeMapfiles.Right = "../texture/skybox/left.jpg";
-    cubeMapfiles.Top = "../texture/skybox/top.jpg";
-    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
-    cubeMapfiles.Front = "../texture/skybox/back.jpg";
-    cubeMapfiles.Back = "../texture/skybox/front.jpg";
-    TextureManager::LoadCubeMapTexture(cubeMapfiles);
-
+////   SceneManager::LoadScene("../Scenes/example.txt");
+//
+//    CubeMapLayout cubeMapfiles;
+//    cubeMapfiles.Left = "../texture/skybox/right.jpg";
+//    cubeMapfiles.Right = "../texture/skybox/left.jpg";
+//    cubeMapfiles.Top = "../texture/skybox/top.jpg";
+//    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
+//    cubeMapfiles.Front = "../texture/skybox/back.jpg";
+//    cubeMapfiles.Back = "../texture/skybox/front.jpg";
+//    TextureManager::LoadCubeMapTexture(cubeMapfiles);
+//
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -158,20 +158,10 @@ Scene::Scene()
 //
     {
         std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        IronmMaterial->SetReflectivness(.1f);
-
         std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        PlasticMaterial->SetReflectivness(.2f);
-
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        WallMaterial->SetReflectivness(.3f);
-
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        GoldMaterial->SetReflectivness(.6f);
-
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
-        GrassMaterial->SetReflectivness(.9f);
-
 
         auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
@@ -185,7 +175,7 @@ Scene::Scene()
         obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
         SceneManager::SaveAsPrefab(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/GoldBar.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         SceneManager::SaveAsPrefab(obj4);
 
@@ -295,11 +285,11 @@ void Scene::ImGuiUpdate()
     }
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-       // ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)
     {
-       // ImGui::Image(blinnPhongRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        //ImGui::Image(blinnPhongRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     //ImGui::Begin("VRAM Viewer");
     //{

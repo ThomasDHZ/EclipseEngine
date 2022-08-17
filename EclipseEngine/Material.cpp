@@ -118,12 +118,6 @@ void Material::MaterialBufferUpdate()
 {
 	if (MaterialType == MaterialTypeEnum::kMaterialBlinnPhong)
 	{
-		materialTextureData.Ambient = Ambient;
-		materialTextureData.Diffuse = Diffuse;
-		materialTextureData.Specular = Specular;
-		materialTextureData.Shininess = Shininess;
-		materialTextureData.Reflectivness = Reflectivness;
-
 		if (DiffuseMap != nullptr)
 		{
 			materialTextureData.DiffuseMapID = DiffuseMap->GetTextureBufferIndex();
@@ -135,12 +129,6 @@ void Material::MaterialBufferUpdate()
 	}
 	else
 	{
-		materialTextureData.Albedo = Albedo;
-		materialTextureData.Metallic = Matallic;
-		materialTextureData.Roughness = Roughness;
-		materialTextureData.AmbientOcclusion = AmbientOcclusion;
-		materialTextureData.Reflectivness = Reflectivness;
-
 		if (AlbedoMap != nullptr)
 		{
 			materialTextureData.AlbedoMapID = AlbedoMap->GetTextureBufferIndex();
@@ -183,16 +171,6 @@ void Material::MaterialBufferUpdate()
 void Material::Destroy()
 {
 	MaterialBuffer.DestoryBuffer();
-}
-
-void Material::SetShiniess(float shininess)
-{
-	Shininess = shininess;
-}
-
-void Material::SetReflectivness(float reflection)
-{
-	Reflectivness = reflection;
 }
 
 void Material::LoadDiffuseMap(const std::string FilePath)
