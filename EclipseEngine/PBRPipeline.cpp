@@ -8,7 +8,7 @@ PBRPipeline::~PBRPipeline()
 {
 }
 
-void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps)
+void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures)
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
@@ -18,26 +18,43 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std
 
     VkDescriptorImageInfo IrradianceMapBuffer;
     IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    IrradianceMapBuffer.imageView = reflectionIrradianceMap->View;
-    IrradianceMapBuffer.sampler = reflectionIrradianceMap->Sampler;
+    IrradianceMapBuffer.imageView = textures.IrradianceTexture->View;
+    IrradianceMapBuffer.sampler = textures.IrradianceTexture->Sampler;
 
     VkDescriptorImageInfo PrefilterBuffer;
     PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PrefilterBuffer.imageView = reflectionPrefilterMap->View;
-    PrefilterBuffer.sampler = reflectionPrefilterMap->Sampler;
+    PrefilterBuffer.imageView = textures.PrefilterTexture->View;
+    PrefilterBuffer.sampler = textures.PrefilterTexture->Sampler;
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     BRDFBuffer.imageView = SceneManager::BRDFTexture->View;
     BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
 
-    VkDescriptorImageInfo ShadowMapBufferInfo;
-    ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    ShadowMapBufferInfo.imageView = depthTexture->View;
-    ShadowMapBufferInfo.sampler = depthTexture->Sampler;
+    std::vector<VkDescriptorImageInfo> DirectionalLightShadowMaps;
+    if (textures.DirectionalLightTextureShadowMaps.size() == 0)
+    {
+        VkDescriptorImageInfo nullBuffer;
+        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        nullBuffer.imageView = VK_NULL_HANDLE;
+        nullBuffer.sampler = NullSampler;
+        DirectionalLightShadowMaps.emplace_back(nullBuffer);
+    }
+    else
+    {
+        for (auto texture : textures.DirectionalLightTextureShadowMaps)
+        {
+            VkDescriptorImageInfo DescriptorImage{};
+            DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            DescriptorImage.imageView = texture->GetView();
+            DescriptorImage.sampler = texture->GetSampler();
+            DirectionalLightShadowMaps.emplace_back(DescriptorImage);
+        }
+    }
+
 
     std::vector<VkDescriptorImageInfo> PointLightShadowMaps;
-    if (pointLightShadowMaps.size() == 0)
+    if (textures.PointLightShadowMaps.size() == 0)
     {
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -47,13 +64,34 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std
     }
     else
     {
-        for (auto texture : pointLightShadowMaps)
+        for (auto texture : textures.PointLightShadowMaps)
         {
             VkDescriptorImageInfo DescriptorImage{};
             DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             DescriptorImage.imageView = texture->GetView();
             DescriptorImage.sampler = texture->GetSampler();
             PointLightShadowMaps.emplace_back(DescriptorImage);
+        }
+    }
+
+    std::vector<VkDescriptorImageInfo> SpotLightShadowMaps;
+    if (textures.SpotLightTextureShadowMaps.size() == 0)
+    {
+        VkDescriptorImageInfo nullBuffer;
+        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        nullBuffer.imageView = VK_NULL_HANDLE;
+        nullBuffer.sampler = NullSampler;
+        SpotLightShadowMaps.emplace_back(nullBuffer);
+    }
+    else
+    {
+        for (auto texture : textures.SpotLightTextureShadowMaps)
+        {
+            VkDescriptorImageInfo DescriptorImage{};
+            DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            DescriptorImage.imageView = texture->GetView();
+            DescriptorImage.sampler = texture->GetSampler();
+            SpotLightShadowMaps.emplace_back(DescriptorImage);
         }
     }
 
@@ -71,8 +109,8 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std
     AddTextureDescriptorSetBinding(DescriptorBindingList, 5, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, ShadowMapBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+   // AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;

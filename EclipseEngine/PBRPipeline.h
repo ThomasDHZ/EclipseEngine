@@ -14,6 +14,6 @@ public:
 	PBRPipeline();
 	~PBRPipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures);
 	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
 };

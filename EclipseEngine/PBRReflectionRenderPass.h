@@ -22,7 +22,7 @@ private:
 	CubeMapSamplerPipeline skyboxPipeline;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
 	PBRReflectionRenderPass();
@@ -31,8 +31,8 @@ public:
 	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMapTexture;
 	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
 
-	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize);
-	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize, glm::vec3 DrawPosition);
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
+	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
 	VkCommandBuffer Draw(glm::vec3 DrawPosition);
 	void Destroy();
 };

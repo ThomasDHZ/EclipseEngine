@@ -189,8 +189,11 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     dLight.specular = glm::vec3(0.5f);
 
     LightManager::AddDirectionalLight(dLight);
+    LightManager::AddDirectionalLight(dLight);
+    //LightManager::AddDirectionalLight(dLight);
+    //LightManager::AddDirectionalLight(dLight);
 
-    PointLightBuffer plight = PointLightBuffer();
+ /*   PointLightBuffer plight = PointLightBuffer();
     plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
     plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
     plight.specular = glm::vec3(1.0f);
@@ -213,7 +216,7 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     LightManager::AddPointLight(plight);
     LightManager::AddPointLight(plight2);
     LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight4);*/
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
@@ -279,13 +282,14 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
-    if (pbrRenderer.GetColorPickerTexture() != nullptr)
-    {
-        ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-    }
+    //if (pbrRenderer.GetColorPickerTexture() != nullptr)
+    //{
+    //    ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-      //  ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)
     {

@@ -9,7 +9,7 @@ PBRReflectionRenderPass::~PBRReflectionRenderPass()
 {
 }
 
-void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture,  uint32_t cubeMapSize)
+void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures,  uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -32,11 +32,11 @@ void PBRReflectionRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTex
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap, depthTexture);
+    BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
 }
 
-void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -59,7 +59,7 @@ void PBRReflectionRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(reflectionIrradianceMap, reflectionPrefilterMap, depthTexture);
+    BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
     Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
@@ -129,7 +129,7 @@ void PBRReflectionRenderPass::RenderPassDesc()
 
 }
 
-void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterMap, std::shared_ptr<RenderedDepthTexture> depthTexture)
+void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -149,7 +149,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedC
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, reflectionIrradianceMap, reflectionPrefilterMap, depthTexture);
+    pbrPipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 

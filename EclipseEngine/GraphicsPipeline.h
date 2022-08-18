@@ -3,6 +3,9 @@
 #include "VulkanBuffer.h"
 #include "TextureManager.h"
 #include "Vertex.h"
+#include "RenderedCubeMapTexture.h"
+#include "RenderedDepthTexture.h"
+#include "RenderedCubeMapDepthTexture.h"
 
 enum VertexDescriptorTypeEnum
 {
@@ -49,6 +52,15 @@ struct BuildGraphicsPipelineInfo
 	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
 	PipelineRendererTypeEnum PipelineRendererType = kRenderMesh;
 	uint32_t ConstBufferSize = 0;
+};
+
+struct PBRRenderPassTextureSubmitList
+{
+	std::shared_ptr<RenderedCubeMapTexture> IrradianceTexture;
+	std::shared_ptr<RenderedCubeMapTexture> PrefilterTexture;
+	std::vector<std::shared_ptr<RenderedDepthTexture>> DirectionalLightTextureShadowMaps;
+	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> PointLightShadowMaps;
+	std::vector<std::shared_ptr<RenderedDepthTexture>> SpotLightTextureShadowMaps;
 };
 
 class GraphicsPipeline

@@ -21,8 +21,9 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	std::vector<DepthRenderPass> depthPassRenderPassList;
-	std::vector<DepthCubeMapRenderer> depthCubeMapRenderPassList;
+	std::vector<DepthRenderPass> directionalLightDepthPassRenderPassList;
+	std::vector<DepthCubeMapRenderer> pointLightDepthCubeMapRenderPassList;
+	std::vector<DepthRenderPass> spotLightDepthPassRenderPassList;
 
 	IrradianceRenderPass skyBoxIrradianceRenderPass;
 	PrefilterRenderPass skyBoxPrefilterRenderPass;
@@ -50,6 +51,7 @@ public:
 	bool PreRenderedFlag = true;
 	bool UpdatePreRenderer = true;
 
-	//DepthDebugRenderPass depthDebugRenderPass;
+	DepthDebugRenderPass depthDebugRenderPass;
+	DepthDebugRenderPass depthDebugRenderPass2;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

@@ -10,7 +10,7 @@ PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps)
+void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -42,7 +42,7 @@ void PBRRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> refl
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(reflectionIrradianceTexture, reflectionPrefilterTexture, depthTexture, pointLightShadowMaps);
+    BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
 }
 
@@ -110,7 +110,7 @@ void PBRRenderPass::RenderPassDesc()
 
 }
 
-void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps)
+void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -131,7 +131,7 @@ void PBRRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapText
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, reflectionIrradianceTexture, reflectionPrefilterTexture, depthTexture, pointLightShadowMaps);
+    pbrPipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
     drawLinePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
