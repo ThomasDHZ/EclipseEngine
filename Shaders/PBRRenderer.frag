@@ -25,7 +25,7 @@ layout(binding = 5) uniform samplerCube IrradianceMap;
 layout(binding = 6) uniform samplerCube PrefilterMap;
 layout(binding = 7) uniform sampler2D BRDFMap;
 layout(binding = 8) uniform sampler2D ShadowMap[];
-//layout(binding = 9) uniform samplerCube ShadowCubeMap;
+layout(binding = 9) uniform samplerCube PointShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -49,6 +49,15 @@ const mat4 LightBiasMatrix = mat4(
     0.0, 0.5, 0.0, 0.0,
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.5, 0.0, 1.0);
+
+vec3 gridSamplingDisk[20] = vec3[]
+(
+   vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1), 
+   vec3(1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1, 1,  0),
+   vec3(1, 0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1, 0, -1),
+   vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
+);
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
 {
@@ -87,6 +96,28 @@ float filterPCF(vec4 sc, int index)
 	return shadowFactor / count;
 }
 
+float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
+{
+    float far_plane = 500.0f;
+    vec3 fragToLight = fragPos - PLight[index].pointLight.position;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+    float viewDistance = length(viewPos - fragPos);
+    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    for(int i = 0; i < samples; ++i)
+    {
+        float closestDepth = texture(PointShadowMap[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= far_plane;   // undo mapping [0;1]
+        if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
+
+    return shadow;
+}
 
 mat3 getTBNFromMap();
 float DistributionGGX(vec3 N, vec3 H, float roughness);
@@ -312,7 +343,8 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+        float shadow = CubeShadowCalculation(FragPos, V, x);
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
    }
 
     return Lo;

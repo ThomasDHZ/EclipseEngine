@@ -24,5 +24,6 @@ public:
 
 	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw(glm::vec3 CubeSamplerPos);
+	void OneTimeDraw(glm::vec2 TextureResolution, glm::vec3 CubeSamplerPos);
 	void Destroy();
 };

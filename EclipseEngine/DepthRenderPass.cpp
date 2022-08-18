@@ -171,6 +171,32 @@ VkCommandBuffer DepthRenderPass::Draw()
     return commandBuffer;
 }
 
+void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    }
+    else
+    {
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void DepthRenderPass::Destroy()
 {
     DepthTexture->Destroy();

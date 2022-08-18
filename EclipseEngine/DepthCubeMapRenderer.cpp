@@ -170,6 +170,32 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(glm::vec3 CubeSamplerPos)
     return commandBuffer;
 }
 
+void DepthCubeMapRenderer::OneTimeDraw(glm::vec2 TextureResolution, glm::vec3 CubeSamplerPos)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
+    }
+    else
+    {
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw(CubeSamplerPos);
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void DepthCubeMapRenderer::Destroy()
 {
     DepthTexture->Destroy();

@@ -29,5 +29,6 @@ public:
 
 	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw();
+	void OneTimeDraw(glm::vec2 TextureResolution);
 	void Destroy();
 };

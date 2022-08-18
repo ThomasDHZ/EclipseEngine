@@ -189,34 +189,34 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     dLight.specular = glm::vec3(0.5f);
 
     LightManager::AddDirectionalLight(dLight);
-    LightManager::AddDirectionalLight(dLight);
+    //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
 
- /*   PointLightBuffer plight = PointLightBuffer();
+    PointLightBuffer plight = PointLightBuffer();
     plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
     plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
     plight.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight2 = PointLightBuffer();
-    plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
-    plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    plight2.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight2 = PointLightBuffer();
+    //plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
+    //plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    //plight2.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight3 = PointLightBuffer();
-    plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
-    plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    plight3.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight3 = PointLightBuffer();
+    //plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
+    //plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    //plight3.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight4 = PointLightBuffer();
-    plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
-    plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    plight4.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight4 = PointLightBuffer();
+    //plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
+    //plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    //plight4.specular = glm::vec3(1.0f);
 
     LightManager::AddPointLight(plight);
-    LightManager::AddPointLight(plight2);
-    LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);*/
+    //LightManager::AddPointLight(plight2);
+    //LightManager::AddPointLight(plight3);
+    //LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
@@ -288,8 +288,8 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-        ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-        ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        //ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)
     {

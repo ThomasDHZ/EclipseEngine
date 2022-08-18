@@ -14,13 +14,6 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
-layout(location = 0) out vec3 FragPos;
-layout(location = 1) out vec2 UV;
-layout(location = 2) out vec3 Normal;
-layout(location = 3) out vec3 Tangent;
-layout(location = 4) out vec3 BiTangent;
-layout(location = 5) out vec3 Color;
-
 layout(binding = 0) uniform CubeMapViewSampler 
 {
     mat4 CubeMapFaceMatrix[6];
