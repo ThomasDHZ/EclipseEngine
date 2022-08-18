@@ -27,3 +27,8 @@ void PointLight::Destroy()
 {
 	Light::Destroy();
 }
+
+void PointLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
+{
+	LightViewTexture = lightViewTexture;
+}

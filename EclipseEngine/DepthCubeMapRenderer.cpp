@@ -39,7 +39,6 @@ void DepthCubeMapRenderer::RenderPassDesc()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
-
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
@@ -97,7 +96,7 @@ void DepthCubeMapRenderer::BuildRenderPassPipelines()
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(2, ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;

@@ -1,56 +1,53 @@
 #version 460
+#extension GL_ARB_separate_shader_objects : enable
+#extension GL_EXT_nonuniform_qualifier : enable
+#extension GL_EXT_scalar_block_layout : enable
+#extension GL_EXT_debug_printf : enable
+#extension GL_EXT_multiview : enable
 
-//
-//#include "SceneProperties.glsl"
-//#include "MeshProperties.glsl"
-//
-//layout(push_constant) uniform LightSceneInfo
-//{
-//	uint MeshIndex;
-//    mat4 lightSpaceMatrix;
-//} scene;
-//
-//layout(binding = 0) uniform SceneDataBuffer { SceneProperties sceneData; } sceneBuffer;
-//layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-//layout(binding = 2) buffer Transform { mat4 Transform; } MeshTransform[];
-//layout(binding = 3) uniform sampler2D TextureMap[];
-//layout(binding = 4) uniform CubeSampler 
-//{
-//    mat4 lightSpaceMatrix[6];
-//} ReflectionView;
-//
-//layout (location = 0) in vec3 inPosition;
-//layout (location = 1) in vec3 aNormal;
-//layout (location = 2) in vec2 aTexCoords;
-//layout (location = 3) in vec4 aTangent;
-//layout (location = 4) in vec4 aBitangent;
-//
-void main() 
+#include "MeshProperties.glsl"
+
+layout (location = 0) in vec3 inPosition;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec2 aUV;
+layout (location = 3) in vec3 aTangent;
+layout (location = 4) in vec3 aBitangent;
+layout (location = 5) in vec3 aColor;
+
+layout(location = 0) out vec3 FragPos;
+layout(location = 1) out vec2 UV;
+layout(location = 2) out vec3 Normal;
+layout(location = 3) out vec3 Tangent;
+layout(location = 4) out vec3 BiTangent;
+layout(location = 5) out vec3 Color;
+
+layout(binding = 0) uniform CubeMapViewSampler 
 {
-////    if(gl_VertexIndex == 0)
-////	{
-////        if(gl_ViewIndex == 0)
-////        {
-////		    debugPrintfEXT("CubeDepth00: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][0][0]);
-////             debugPrintfEXT("CubeDepth01: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][0][1]);
-////              debugPrintfEXT("CubeDepth02: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][0][2]);
-////               debugPrintfEXT("CubeDepth03: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][0][3]);
-////
-////                debugPrintfEXT("CubeDepth10: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][1][0]);
-////                 debugPrintfEXT("CubeDepth11: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][1][1]);
-////                  debugPrintfEXT("CubeDepth12: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][1][2]);
-////                   debugPrintfEXT("CubeDepth13: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][1][3]);
-////
-////                    debugPrintfEXT("CubeDepth20: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][2][0]);
-////                     debugPrintfEXT("CubeDepth21: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][2][1]);
-////                      debugPrintfEXT("CubeDepth22: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][2][2]);
-////                       debugPrintfEXT("CubeDepth23: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][2][3]);
-////
-////                        debugPrintfEXT("CubeDepth30: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][3][0]);
-////                         debugPrintfEXT("CubeDepth31: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][3][1]);
-////                          debugPrintfEXT("CubeDepth32: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][3][2]);
-////                           debugPrintfEXT("CubeDepth33: %f \n", SkyboxSamples.lightSpaceMatrix[gl_ViewIndex][3][3]);
-////        }
-////	}
-//   gl_Position = ReflectionView.lightSpaceMatrix[gl_ViewIndex] * meshBuffer[scene.MeshIndex].meshProperties.ModelTransform * meshBuffer[scene.MeshIndex].meshProperties.MeshTransform * vec4(inPosition, 1.0);
+    mat4 CubeMapFaceMatrix[6];
+} cubeMapViewSampler;
+layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+
+layout(push_constant) uniform SceneData
+{
+    uint MeshIndex;
+    mat4 proj;
+    mat4 view;
+    vec3 CameraPos;
+    vec3 MeshColorID;
+    vec3 AmbientLight;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
+    float Timer;
+    float PBRMaxMipLevel;
+} sceneData;
+
+
+void main() {
+
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  vec4(inPosition, 1.0);
 }

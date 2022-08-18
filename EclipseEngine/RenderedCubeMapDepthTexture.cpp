@@ -9,18 +9,7 @@ RenderedCubeMapDepthTexture::RenderedCubeMapDepthTexture(glm::ivec2 TextureResol
 {
     MipMapLevels = mipLevels;
     SampleCount = sampleCount;
-    TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
-
-    CreateTextureImage();
-    CreateTextureView();
-    CreateTextureSampler();
-}
-
-RenderedCubeMapDepthTexture::RenderedCubeMapDepthTexture(glm::ivec2 TextureResolution, VkFormat format, VkSampleCountFlagBits sampleCount, uint32_t mipLevels) : CubeMapTexture(TextureResolution, TextureTypeEnum::kCubeMapDepthTexture)
-{
-    MipMapLevels = mipLevels;
-    SampleCount = sampleCount;
-    TextureByteFormat = format;
+    TextureByteFormat = VK_FORMAT_D32_SFLOAT;
 
     CreateTextureImage();
     CreateTextureView();
@@ -33,21 +22,21 @@ RenderedCubeMapDepthTexture::~RenderedCubeMapDepthTexture()
 
 void RenderedCubeMapDepthTexture::CreateTextureImage()
 {
-    VkImageCreateInfo TextureInfo = {};
+    VkImageCreateInfo TextureInfo{};
     TextureInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     TextureInfo.imageType = VK_IMAGE_TYPE_2D;
     TextureInfo.extent.width = Width;
     TextureInfo.extent.height = Height;
     TextureInfo.extent.depth = 1;
-    TextureInfo.mipLevels = MipMapLevels;
+    TextureInfo.mipLevels = 1;
     TextureInfo.arrayLayers = 6;
-    TextureInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
     TextureInfo.format = VK_FORMAT_D32_SFLOAT;
     TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
     TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    TextureInfo.usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    TextureInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
     TextureInfo.samples = SampleCount;
     TextureInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    TextureInfo.flags = VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
 
     Texture::CreateTextureImage(TextureInfo);
 }
@@ -57,8 +46,8 @@ void RenderedCubeMapDepthTexture::CreateTextureView()
     VkImageViewCreateInfo TextureImageViewInfo = {};
     TextureImageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     TextureImageViewInfo.image = Image;
-    TextureImageViewInfo.format = TextureByteFormat;
-    TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    TextureImageViewInfo.format = VK_FORMAT_D32_SFLOAT;
+    TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
     TextureImageViewInfo.subresourceRange.baseMipLevel = 0;
     TextureImageViewInfo.subresourceRange.levelCount = MipMapLevels;
     TextureImageViewInfo.subresourceRange.baseArrayLayer = 0;

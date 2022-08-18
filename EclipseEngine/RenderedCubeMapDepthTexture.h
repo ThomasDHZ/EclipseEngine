@@ -10,7 +10,6 @@ private:
 public:
     RenderedCubeMapDepthTexture();
     RenderedCubeMapDepthTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount, uint32_t mipLevels = 1);
-    RenderedCubeMapDepthTexture(glm::ivec2 TextureResolution, VkFormat format, VkSampleCountFlagBits sampleCount, uint32_t mipLevels = 1);
     ~RenderedCubeMapDepthTexture();
 
     void RecreateRendererTexture(glm::ivec2 TextureResolution);

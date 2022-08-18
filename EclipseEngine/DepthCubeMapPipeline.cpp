@@ -22,8 +22,8 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthCubeShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, CubeMapSamplerBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 1, CubeMapSamplerBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
@@ -32,7 +32,7 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
     buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderPBRSkyBox;
-    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(IrradianceSkyboxSettings);
+    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
     buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
 

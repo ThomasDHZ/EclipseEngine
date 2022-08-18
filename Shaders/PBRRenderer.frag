@@ -25,6 +25,7 @@ layout(binding = 5) uniform samplerCube IrradianceMap;
 layout(binding = 6) uniform samplerCube PrefilterMap;
 layout(binding = 7) uniform sampler2D BRDFMap;
 layout(binding = 8) uniform sampler2D ShadowMap;
+layout(binding = 9) uniform samplerCube ShadowCubeMap;
 
 layout(push_constant) uniform SceneData
 {

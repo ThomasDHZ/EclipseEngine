@@ -36,3 +36,8 @@ void DirectionalLight::Destroy()
 {
 	Light::Destroy();
 }
+
+void DirectionalLight::SetLightViewTexture(std::shared_ptr<RenderedDepthTexture> lightViewTexture)
+{
+	LightViewTexture = lightViewTexture;
+}

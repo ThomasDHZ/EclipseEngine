@@ -1,11 +1,12 @@
 #pragma once
 #include "Light.h"
 #include "UniformBuffer.h"
+#include "RenderedDepthTexture.h"
 
 class DirectionalLight : public Light<DirectionalLightBuffer>
 {
 private:
-
+	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
 	void from_json(nlohmann::json& json)
 	{
 		JsonConverter::from_json(json["LightName"], LightName);
@@ -32,6 +33,10 @@ public:
 
 	void Update();
 	void Destroy() override;
+
+	void SetLightViewTexture(std::shared_ptr<RenderedDepthTexture> lightViewTexture);
+
+	std::shared_ptr<RenderedDepthTexture> GetLightViewTexture() { return LightViewTexture; }
 
 	glm::vec3* GetPositionPtr() { return &LightBuffer.UniformDataInfo.position; }
 	glm::vec3* GetDirectionPtr() { return &LightBuffer.UniformDataInfo.direction; }

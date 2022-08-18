@@ -27,3 +27,8 @@ void SpotLight::Destroy()
 {
 	Light::Destroy();
 }
+
+void SpotLight::SetLightViewTexture(std::shared_ptr<RenderedDepthTexture> lightViewTexture)
+{
+	LightViewTexture = lightViewTexture;
+}

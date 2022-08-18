@@ -30,7 +30,7 @@ private:
 	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps);
 
 public:
 	PBRRenderPass();
@@ -40,7 +40,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture);
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceTexture, std::shared_ptr<RenderedCubeMapTexture> reflectionPrefilterTexture, std::shared_ptr<RenderedDepthTexture> depthTexture, std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointLightShadowMaps);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

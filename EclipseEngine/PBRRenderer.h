@@ -10,6 +10,7 @@
 #include "PBRReflectionRenderPass.h"
 #include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
+#include "DepthCubeMapRenderer.h"
 
 class PBRRenderer
 {
@@ -20,7 +21,8 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	DepthRenderPass depthPassRendererPass;
+	std::vector<DepthRenderPass> depthPassRenderPassList;
+	std::vector<DepthCubeMapRenderer> depthCubeMapRenderPassList;
 
 	IrradianceRenderPass skyBoxIrradianceRenderPass;
 	PrefilterRenderPass skyBoxPrefilterRenderPass;
@@ -48,6 +50,6 @@ public:
 	bool PreRenderedFlag = true;
 	bool UpdatePreRenderer = true;
 
-	DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
