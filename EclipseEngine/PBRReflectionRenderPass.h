@@ -30,6 +30,7 @@ public:
 
 	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMapTexture;
 	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
+	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
 	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));

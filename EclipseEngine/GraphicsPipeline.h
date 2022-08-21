@@ -21,6 +21,7 @@ enum PipelineRendererTypeEnum
 	kRenderMesh,
 	kRenderDepth,
 	kRenderSkybox,
+	kRenderDepthCubeMap,
 	kRenderPBRSkyBox,
 	kRenderWireFrame,
 	kRenderLine,
@@ -66,9 +67,6 @@ struct PBRRenderPassTextureSubmitList
 class GraphicsPipeline
 {
 private:
-	std::vector<VkDescriptorPoolSize>  DescriptorPoolList{};
-	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo{};
-	std::vector<VkWriteDescriptorSet> DescriptorList{};
 
 	VkShaderModule ReadShaderFile(const std::string& filename);
 
@@ -83,6 +81,10 @@ private:
 
 protected:
 	static std::string BaseShaderFilePath;
+
+	std::vector<VkDescriptorPoolSize>  DescriptorPoolList{};
+	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo{};
+	std::vector<VkWriteDescriptorSet> DescriptorList{};
 
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;

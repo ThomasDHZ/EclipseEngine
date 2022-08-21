@@ -585,7 +585,8 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     else
     {
         if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
-            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox)
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
+            buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepthCubeMap)
         {
             rasterizer.cullMode = VK_CULL_MODE_NONE;
         }
@@ -602,6 +603,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepthCubeMap ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderStencil)

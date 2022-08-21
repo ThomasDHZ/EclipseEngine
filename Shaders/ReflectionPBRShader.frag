@@ -343,8 +343,8 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        float shadow = CubeShadowCalculation(FragPos, V, x);
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
+       // float shadow = CubeShadowCalculation(FragPos, V, x);
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;// * shadow;
    }
 
     return Lo;

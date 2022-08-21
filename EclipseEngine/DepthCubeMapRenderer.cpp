@@ -37,7 +37,16 @@ void DepthCubeMapRenderer::BuildRenderPass(glm::vec2 TextureResolution)
 void DepthCubeMapRenderer::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+    VkAttachmentDescription DepthAttachment = {};
+    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
+    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(DepthAttachment);
 
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
@@ -67,6 +76,16 @@ void DepthCubeMapRenderer::RenderPassDesc()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
+    const uint32_t viewMask = 0b00111111;
+    const uint32_t correlationMask = 0b00111111;
+
+    VkRenderPassMultiviewCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
+    createInfo.subpassCount = 1;
+    createInfo.pViewMasks = &viewMask;
+    createInfo.correlationMaskCount = 1;
+    createInfo.pCorrelationMasks = &correlationMask;
+
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -75,10 +94,11 @@ void DepthCubeMapRenderer::RenderPassDesc()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
+    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create Buffer RenderPass.");
+        throw std::runtime_error("failed to create GBuffer RenderPass!");
     }
 
 }

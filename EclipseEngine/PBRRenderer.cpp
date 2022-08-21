@@ -62,13 +62,13 @@ void PBRRenderer::BuildRenderer()
 	}
 	//Geometry Pass
 	{
-		geoIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
-		geoPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
+		geoIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 1.0f, 1.0f));
+		geoPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 1.0f, 1.0f));
 
 		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
 
-		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 10.0f, 1.0f));
+		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 1.0f, 1.0f));
 	}
 	//Main Render Pass
 	{
@@ -155,9 +155,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 			//Geometry Pass
 			{
-				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
-				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
-				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
 			}
 			//Main Render Pass
 			{
@@ -189,9 +189,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 		//Geometry Pass
 		{
-			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 10.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
 		}
 		//Main Render Pass
 		{
