@@ -137,7 +137,7 @@ void main()
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
    if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
-      texture(TextureMap[material.DiffuseMapID], FinalUV).a == 0.0f)
+      texture(TextureMap[material.AlbedoMapID], FinalUV).a == 0.0f)
    {
 	 discard;
    }
