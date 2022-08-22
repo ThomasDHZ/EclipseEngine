@@ -185,8 +185,8 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     }
 //
     auto dLight = DirectionalLightBuffer{};
-    dLight.diffuse = glm::vec3(0.2f);
-    dLight.specular = glm::vec3(0.5f);
+    dLight.diffuse = glm::vec3(30.8f);
+    dLight.specular = glm::vec3(1.0f);
 
     LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
@@ -194,29 +194,29 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     //LightManager::AddDirectionalLight(dLight);
 
     PointLightBuffer plight = PointLightBuffer();
-    plight.position = glm::vec3(-10.0f, 10.0f, 10.0f);
-    plight.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
+    plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
+    plight.diffuse = glm::vec3(300.0f);
     plight.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight2 = PointLightBuffer();
-    //plight2.position = glm::vec3(10.0f, 10.0f, 10.0f);
-    //plight2.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight2.specular = glm::vec3(1.0f);
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
+    plight2.diffuse = glm::vec3(300.0f);
+    plight2.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight3 = PointLightBuffer();
-    //plight3.position = glm::vec3(-10.0f, -10.0f, 10.0f);
-    //plight3.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight3.specular = glm::vec3(1.0f);
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
+    plight3.diffuse = glm::vec3(300.0f);
+    plight3.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight4 = PointLightBuffer();
-    //plight4.position = glm::vec3(10.0f, -10.0f, 10.0f);
-    //plight4.diffuse = glm::vec3(300.0f, 300.0f, 300.0f);
-    //plight4.specular = glm::vec3(1.0f);
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
+    plight4.diffuse = glm::vec3(300.0f);
+    plight4.specular = glm::vec3(1.0f);
 
     LightManager::AddPointLight(plight);
-    //LightManager::AddPointLight(plight2);
-    //LightManager::AddPointLight(plight3);
-    //LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
