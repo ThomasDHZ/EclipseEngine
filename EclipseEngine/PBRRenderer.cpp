@@ -50,16 +50,6 @@ void PBRRenderer::BuildRenderer()
 	submitList.PointLightShadowMaps = pointDepthTextureList;
 	submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
 
-	//Skybox Pass
-	{
-		skyBoxIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
-		skyBoxPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
-
-		submitList.IrradianceTexture = skyBoxIrradianceRenderPass.IrradianceCubeMap;
-		submitList.PrefilterTexture = skyBoxPrefilterRenderPass.PrefilterCubeMap;
-
-		skyBoxPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
-	}
 	//Geometry Pass
 	{
 		geoIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 1.0f, 1.0f));
@@ -226,12 +216,6 @@ void PBRRenderer::Destroy()
 		{
 			spotLight.Destroy();
 		}
-	}
-	//Skybox Pass
-	{
-		skyBoxIrradianceRenderPass.Destroy();
-		skyBoxPrefilterRenderPass.Destroy();
-		skyBoxPBRRenderPass.Destroy();
 	}
 	//Geometry Pass
 	{

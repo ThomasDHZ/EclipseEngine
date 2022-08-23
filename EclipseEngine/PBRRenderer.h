@@ -25,10 +25,6 @@ private:
 	std::vector<DepthCubeMapRenderer> pointLightDepthCubeMapRenderPassList;
 	std::vector<DepthRenderPass> spotLightDepthPassRenderPassList;
 
-	IrradianceRenderPass skyBoxIrradianceRenderPass;
-	PrefilterRenderPass skyBoxPrefilterRenderPass;
-	PBRReflectionRenderPass skyBoxPBRRenderPass;
-
 	IrradianceRenderPass geoIrradianceRenderPass;
 	PrefilterRenderPass geoPrefilterRenderPass;
 	PBRReflectionRenderPass geoPBRRenderPass;
