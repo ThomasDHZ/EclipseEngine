@@ -10,7 +10,7 @@
 class PBRReflectionPipeline : public GraphicsPipeline
 {
 private: 
-	CubeMapSamplerBuffer cubeMapSampler;
+	ViewSamplerBuffer cubeMapSampler;
 	void BuildGraphicsPipeline(PipelineInfoStruct& pipelineInfoStruct);
 public:
 	PBRReflectionPipeline();

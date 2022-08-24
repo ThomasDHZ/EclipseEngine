@@ -34,7 +34,8 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
     buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
     buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
+    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderPBRSkyBox;
+    buildGraphicsPipelineInfo.ConstBufferSize = 0;
     buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
     if (ShaderPipeline == nullptr)
