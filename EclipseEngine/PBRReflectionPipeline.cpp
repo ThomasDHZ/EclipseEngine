@@ -176,7 +176,7 @@ void PBRReflectionPipeline::BuildGraphicsPipeline(PipelineInfoStruct& pipelineIn
     rasterizer.rasterizerDiscardEnable = VK_FALSE;
     rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
     rasterizer.lineWidth = 1.0f;
-    rasterizer.cullMode = VK_CULL_MODE_NONE;
+    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
     rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
     rasterizer.depthBiasEnable = VK_FALSE;
 
@@ -270,17 +270,27 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
     SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
     SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
-    glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+    //glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
-    switch (View)
-    {
-    case 0: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
-    case 1: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));  break;
-    case 2: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  break;
-    case 3: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)); break;
-    case 4: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
-    case 5: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
-    }
+    //switch (View)
+    //{
+    //case 0: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
+    //case 1: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));  break;
+    //case 2: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  break;
+    //case 3: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)); break;
+    //case 4: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
+    //case 5: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
+    //}
+    //cubeMapSampler.Update();
+
+    glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 2.0f, 10000.0f);
+
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
     cubeMapSampler.Update();
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
