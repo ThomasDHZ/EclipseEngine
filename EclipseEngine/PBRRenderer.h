@@ -44,7 +44,7 @@ public:
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 
-	bool PreRenderedFlag = true;
+	bool PreRenderedFlag = false;
 	bool UpdatePreRenderer = true;
 
 	/*DepthDebugRenderPass depthDebugRenderPass;

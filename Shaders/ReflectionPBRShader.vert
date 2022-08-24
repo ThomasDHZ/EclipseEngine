@@ -3,7 +3,6 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
-#extension GL_EXT_multiview : enable
 
 #include "MeshProperties.glsl"
 
@@ -21,11 +20,11 @@ layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
 
-layout(binding = 0) uniform CubeMapViewSampler 
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 10) uniform CubeMapViewSampler 
 {
-    mat4 CubeMapFaceMatrix[6];
+    mat4 CubeMapFaceMatrix;
 } cubeMapViewSampler;
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData
 {
@@ -34,12 +33,7 @@ layout(push_constant) uniform SceneData
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
     float Timer;
-    float PBRMaxMipLevel;
 } sceneData;
 
 void main() {
@@ -54,7 +48,7 @@ void main() {
     Normal = mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
-    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *                 
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix *               
                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 

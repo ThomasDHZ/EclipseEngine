@@ -89,6 +89,11 @@ struct CubeMapSampler
 	alignas(16) glm::mat4 CubeMapFaceMatrix[6];
 };
 
+struct ViewSampler
+{
+	alignas(16) glm::mat4 CubeMapFaceMatrix;
+};
+
 struct MeshProperties
 {
 	MaterialBufferData materialBufferData;
@@ -180,3 +185,4 @@ public:
 
 typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;
 typedef UniformBuffer<CubeMapSampler> CubeMapSamplerBuffer;
+typedef UniformBuffer<ViewSampler> ViewSamplerBuffer;

@@ -16,16 +16,16 @@ layout(location = 5) in vec3 Color;
 layout(location = 0) out vec4 outColor;
 //layout(location = 1) out vec4 outBloom;
 
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 3) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 4) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 5) uniform sampler2D TextureMap[];
-layout(binding = 6) uniform samplerCube IrradianceMap;
-layout(binding = 7) uniform samplerCube PrefilterMap;
-layout(binding = 8) uniform sampler2D BRDFMap;
-layout(binding = 9) uniform sampler2D ShadowMap;
-layout(binding = 10) uniform samplerCube PointShadowMap[];
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 4) uniform sampler2D TextureMap[];
+layout(binding = 5) uniform samplerCube IrradianceMap;
+layout(binding = 6) uniform samplerCube PrefilterMap;
+layout(binding = 7) uniform sampler2D BRDFMap;
+layout(binding = 8) uniform sampler2D ShadowMap[];
+layout(binding = 9) uniform samplerCube PointShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -59,12 +59,12 @@ vec3 gridSamplingDisk[20] = vec3[]
    vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
 );
 
-float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset)
+float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
 {
     float shadow = 1.0f;
 	if ( fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0 ) 
 	{
-		float dist = texture( ShadowMap, fragPosLightSpace.st + offset ).r;
+		float dist = texture( ShadowMap[index], fragPosLightSpace.st + offset ).r;
 		if ( fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z ) 
 		{
 			shadow = 0.1f;
@@ -73,9 +73,9 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset)
     return shadow;
 }
 
-float filterPCF(vec4 sc)
+float filterPCF(vec4 sc, int index)
 {
-	ivec2 texDim = textureSize(ShadowMap, 0);
+	ivec2 texDim = textureSize( ShadowMap[index], 0);
 	float scale = 1.5;
 	float dx = scale * 1.0 / float(texDim.x);
 	float dy = scale * 1.0 / float(texDim.y);
@@ -88,7 +88,7 @@ float filterPCF(vec4 sc)
 	{
 		for (int y = -range; y <= range; y++)
 		{
-			shadowFactor += ShadowCalculation(sc, vec2(dx*x, dy*y));
+			shadowFactor += ShadowCalculation(sc, vec2(dx*x, dy*y), index);
 			count++;
 		}
 	
@@ -312,7 +312,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
         float NdotL = max(dot(N, L), 0.0);        
 
         vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-        float shadow = filterPCF(LightSpace/ LightSpace.w);  
+        float shadow = filterPCF(LightSpace/ LightSpace.w, x);  
         Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
     }
     return Lo;
@@ -321,7 +321,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float metallic)
 {
    vec3 Lo = vec3(0.0);
-     for(int x = 0; x < sceneData.PointLightCount; x++)
+     for(int x = 0; x < 5; x++)
    {
         vec3 L = normalize(PLight[x].pointLight.position - FragPos);
         vec3 H = normalize(V + L);
@@ -343,7 +343,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float
             
         float NdotL = max(dot(N, L), 0.0);        
 
-       // float shadow = CubeShadowCalculation(FragPos, V, x);
+     // float shadow = CubeShadowCalculation(FragPos, V, x);
         Lo += (kD * albedo / PI + specular) * radiance * NdotL;// * shadow;
    }
 

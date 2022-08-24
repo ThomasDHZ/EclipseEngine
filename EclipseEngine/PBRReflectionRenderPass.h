@@ -5,10 +5,13 @@
 #include "SkyboxMesh.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
+#include "PBRPipeline.h"
 #include "SkyboxPipeline.h"
+#include "LinePipeline.h"
+#include "WireFramePipeline.h"
+#include "OutLinePipeline.h"
 #include "PBRReflectionPipeline.h"
-#include "SkyboxPipeline.h"
-#include "CubeMapSamplerPipeline.h"
+#include "CubeMapViewPipeline.h"
 
 class PBRReflectionRenderPass : public RenderPass
 {
@@ -19,7 +22,10 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	PBRReflectionPipeline pbrPipeline;
-	CubeMapSamplerPipeline skyboxPipeline;
+	CubeMapViewPipeline skyboxPipeline;
+	LinePipeline drawLinePipeline;
+	OutLinePipeline outLinePipeline;
+	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
@@ -28,13 +34,13 @@ public:
 	PBRReflectionRenderPass();
 	~PBRReflectionRenderPass();
 
-	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMapTexture;
-	std::shared_ptr<RenderedCubeMapTexture> BloomTexture;
-	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
+	std::shared_ptr<RenderedCubeMapTexture> RenderedBloomTexture;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMap;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
-	VkCommandBuffer Draw(glm::vec3 DrawPosition);
+	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 CubeMapSamplerPos = glm::vec3(0.0f));
+	VkCommandBuffer Draw(glm::vec3 CubeMapSamplerPos);
 	void Destroy();
 };
-

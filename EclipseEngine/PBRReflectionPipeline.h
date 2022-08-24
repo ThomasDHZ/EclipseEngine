@@ -5,17 +5,17 @@
 #include "LightManager.h"
 #include "SceneManager.h"
 #include "RenderedDepthTexture.h"
+#include "RenderedCubeMapDepthTexture.h"
 
 class PBRReflectionPipeline : public GraphicsPipeline
 {
-private:
-	CubeMapSamplerBuffer cubeMapSampler;
+private: 
+	ViewSamplerBuffer cubeMapSampler;
 	void BuildGraphicsPipeline(PipelineInfoStruct& pipelineInfoStruct);
 public:
 	PBRReflectionPipeline();
 	~PBRReflectionPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures);
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos);
-	virtual void Destroy();
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, int View, glm::vec3 pos);
 };

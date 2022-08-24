@@ -14,10 +14,10 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
-layout(binding = 0) uniform CubeMapViewSampler 
+layout(binding = 0) uniform ViewSampler2
 {
-    mat4 CubeMapFaceMatrix[6];
-} cubeMapViewSampler;
+    mat4 CubeMapFaceMatrix;
+} viewSampler2;
 layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData
@@ -38,7 +38,7 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
+    gl_Position = viewSampler2.CubeMapFaceMatrix * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 

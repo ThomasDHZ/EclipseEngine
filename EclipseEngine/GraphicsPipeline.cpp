@@ -596,7 +596,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
         }
         else
         {
-            rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+            rasterizer.cullMode = VK_CULL_MODE_NONE;
         }
     }
 

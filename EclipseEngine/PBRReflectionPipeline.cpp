@@ -10,6 +10,7 @@ PBRReflectionPipeline::~PBRReflectionPipeline()
 
 void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures)
 {
+
     VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
     MeshPropertiesmBufferBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
     MeshPropertiesmBufferBufferInfo.offset = 0;
@@ -57,6 +58,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         }
     }
 
+
     std::vector<VkDescriptorImageInfo> PointLightShadowMaps;
     if (textures.PointLightShadowMaps.size() == 0)
     {
@@ -99,22 +101,23 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         }
     }
 
+
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 10, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 10, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
@@ -128,60 +131,12 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
     if (ShaderPipeline == nullptr)
     {
-        VkSamplerCreateInfo NullSamplerInfo = {};
-        NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-        NullSamplerInfo.magFilter = VK_FILTER_NEAREST;
-        NullSamplerInfo.minFilter = VK_FILTER_NEAREST;
-        NullSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        NullSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        NullSamplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-        NullSamplerInfo.anisotropyEnable = VK_TRUE;
-        NullSamplerInfo.maxAnisotropy = 16.0f;
-        NullSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-        NullSamplerInfo.unnormalizedCoordinates = VK_FALSE;
-        NullSamplerInfo.compareEnable = VK_FALSE;
-        NullSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-        NullSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-        NullSamplerInfo.minLod = 0;
-        NullSamplerInfo.maxLod = 0;
-        NullSamplerInfo.mipLodBias = 0;
-        if (vkCreateSampler(VulkanRenderer::GetDevice(), &NullSamplerInfo, nullptr, &NullSampler))
-        {
-            throw std::runtime_error("Failed to create Sampler.");
-        }
-
-        nullBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        nullBufferInfo.imageView = VK_NULL_HANDLE;
-        nullBufferInfo.sampler = NullSampler;
-
-        DescriptorPoolList.clear();
-        LayoutBindingInfo.clear();
-        DescriptorList.clear();
-
-        SubmitDescriptorSet(DescriptorBindingList);
-        BuildGraphicsPipeline(pipelineInfoStruct);
+        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
     }
     else
     {
         Destroy();
-        DescriptorPoolList.clear();
-        LayoutBindingInfo.clear();
-        DescriptorList.clear();
-
-        vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
-        vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
-        vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), DescriptorPool, nullptr);
-        vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
-        vkDestroyPipelineCache(VulkanRenderer::GetDevice(), PipelineCache, nullptr);
-
-        ShaderPipeline = VK_NULL_HANDLE;
-        ShaderPipelineLayout = VK_NULL_HANDLE;
-        DescriptorPool = VK_NULL_HANDLE;
-        DescriptorSetLayout = VK_NULL_HANDLE;
-        PipelineCache = VK_NULL_HANDLE;
-
-        SubmitDescriptorSet(DescriptorBindingList);
-        BuildGraphicsPipeline(pipelineInfoStruct);
+        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
     }
 
     for (auto& shader : PipelineShaderStageList)
@@ -310,32 +265,26 @@ void PBRReflectionPipeline::BuildGraphicsPipeline(PipelineInfoStruct& pipelineIn
     }
 }
 
-void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos)
+void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, int View, glm::vec3 pos)
 {
-    if (mesh->GetMeshID() != 30)
+    SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
+    SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+
+    glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+
+    switch (View)
     {
-        SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
-        SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
-
-        glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
-
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(CubeMapSamplerPos, CubeMapSamplerPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        cubeMapSampler.Update();
-
-        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-        vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-        mesh->Draw(commandBuffer);
+    case 0: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
+    case 1: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));  break;
+    case 2: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));  break;
+    case 3: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)); break;
+    case 4: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
+    case 5: cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix = reflectionProj * glm::lookAt(pos, pos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)); break;
     }
-}
+    cubeMapSampler.Update();
 
-void PBRReflectionPipeline::Destroy()
-{
-    cubeMapSampler.Destroy();
-    GraphicsPipeline::Destroy();
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+    mesh->Draw(commandBuffer);
 }

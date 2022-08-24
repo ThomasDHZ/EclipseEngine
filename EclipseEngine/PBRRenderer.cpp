@@ -58,12 +58,12 @@ void PBRRenderer::BuildRenderer()
 		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
 
-		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize(), glm::vec3(3.3f, 1.0f, 1.0f));
+		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
 	}
 	//Main Render Pass
 	{
-		irradianceRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMapTexture, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMap, SceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(geoPBRRenderPass.ReflectionCubeMap, SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTexture = irradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
