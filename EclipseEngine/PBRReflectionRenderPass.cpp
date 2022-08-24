@@ -19,15 +19,13 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
     {
         RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
         RenderedBloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        ReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         RenderedTexture->RecreateRendererTexture(RenderPassResolution);
         RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
         DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        ReflectionCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
@@ -51,15 +49,13 @@ void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textur
     {
         RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
         RenderedBloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        ReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         RenderedTexture->RecreateRendererTexture(RenderPassResolution);
         RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
         DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        ReflectionCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
@@ -73,14 +69,25 @@ void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textur
     BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
     Draw(CubeMapSamplerPos);
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
+
 
 void PBRReflectionRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(RenderedBloomTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+    VkAttachmentDescription DepthAttachment = {};
+    DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
+    DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    DepthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    DepthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    DepthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    DepthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    DepthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    AttachmentDescriptionList.emplace_back(DepthAttachment);
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -116,6 +123,16 @@ void PBRReflectionRenderPass::RenderPassDesc()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
+    const uint32_t viewMask = 0b00111111;
+    const uint32_t correlationMask = 0b00111111;
+
+    VkRenderPassMultiviewCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
+    createInfo.subpassCount = 1;
+    createInfo.pViewMasks = &viewMask;
+    createInfo.correlationMaskCount = 1;
+    createInfo.pCorrelationMasks = &correlationMask;
+
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -124,6 +141,7 @@ void PBRReflectionRenderPass::RenderPassDesc()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
+    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
@@ -136,7 +154,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.blendEnable = VK_FALSE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -145,8 +163,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.emplace_back(ColorAttachment);
-    ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.resize(2, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
@@ -155,12 +172,9 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
-    drawLinePipeline.InitializePipeline(pipelineInfo);
-    wireframePipeline.InitializePipeline(pipelineInfo);
-    outLinePipeline.InitializePipeline(pipelineInfo);
 }
 
-VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 CubeMapSamplerPos)
+VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 DrawPosition)
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -194,45 +208,33 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 CubeMapSamplerPos)
     renderPassInfo.pClearValues = clearValues.data();
 
     VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
-    ReflectionCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    for (int x = 0; x <= 5; x++)
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to begin recording command buffer.");
+    }
+
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to begin recording command buffer.");
-        }
-
-        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-
-        skyboxPipeline.Draw(commandBuffer, x);
-
+        skyboxPipeline.Draw(commandBuffer);
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {
             switch (mesh->GetMeshType())
             {
+
             case MeshTypeEnum::kPolygon:
             {
-                pbrPipeline.Draw(commandBuffer, mesh, x, CubeMapSamplerPos);
+                pbrPipeline.Draw(commandBuffer, mesh,0 , DrawPosition);
                 break;
             }
+            default: break;
             }
         }
-
-        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyCubeMapLayer(commandBuffer, RenderedTexture, ReflectionCubeMap, x, 0);
-        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-        vkCmdEndRenderPass(commandBuffer);
-        if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-            throw std::runtime_error("Failed to record command buffer.");
-        }
-
-        OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     }
-
-    ReflectionCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
+    vkCmdEndRenderPass(commandBuffer);
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to record command buffer.");
+    }
 
     return commandBuffer;
 }

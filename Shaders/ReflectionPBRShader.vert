@@ -23,7 +23,7 @@ layout(location = 5) out vec3 Color;
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 10) uniform CubeMapViewSampler 
 {
-    mat4 CubeMapFaceMatrix;
+    mat4 CubeMapFaceMatrix[6];
 } cubeMapViewSampler;
 
 layout(push_constant) uniform SceneData
@@ -48,7 +48,7 @@ void main() {
     Normal = mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
-    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix *               
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *               
                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
