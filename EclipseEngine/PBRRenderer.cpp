@@ -25,21 +25,21 @@ void PBRRenderer::BuildRenderer()
 		directionalLightDepthPassRenderPassList.resize(LightManager::GetDirectionalLightCount());
 		for (auto& directionalLight : directionalLightDepthPassRenderPassList)
 		{
-			directionalLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
+			directionalLight.OneTimeDraw(glm::vec2(512.0f, 512.0f));
 			directionalDepthTextureList.emplace_back(directionalLight.DepthTexture);
 		}
 
 		pointLightDepthCubeMapRenderPassList.resize(LightManager::GetPointLightCount());
 		for(auto& pointLight : pointLightDepthCubeMapRenderPassList)
 		{
-			pointLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
+			pointLight.OneTimeDraw(glm::vec2(512.0f, 512.0f), glm::vec3(3.3f, 1.0f, 1.0f));
 			pointDepthTextureList.emplace_back(pointLight.DepthTexture);
 		}
 
 		spotLightDepthPassRenderPassList.resize(LightManager::GetSpotLightCount());
 		for (auto& spotLight : spotLightDepthPassRenderPassList)
 		{
-			spotLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
+			spotLight.OneTimeDraw(glm::vec2(512.0f, 512.0f));
 			spotDepthTextureList.emplace_back(spotLight.DepthTexture);
 		}
 

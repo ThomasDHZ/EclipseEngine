@@ -107,17 +107,17 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 10, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 10, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;

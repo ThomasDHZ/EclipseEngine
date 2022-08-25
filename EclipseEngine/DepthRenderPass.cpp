@@ -142,7 +142,7 @@ VkCommandBuffer DepthRenderPass::Draw()
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
-
+    DepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
@@ -164,6 +164,7 @@ VkCommandBuffer DepthRenderPass::Draw()
         }
     }
     vkCmdEndRenderPass(commandBuffer);
+    DepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }

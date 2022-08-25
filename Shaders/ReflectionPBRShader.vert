@@ -21,11 +21,12 @@ layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
 
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 10) uniform CubeMapViewSampler 
+layout(binding = 0) uniform CubeMapViewSampler 
 {
     mat4 CubeMapFaceMatrix[6];
 } cubeMapViewSampler;
+layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+
 
 layout(push_constant) uniform SceneData
 {

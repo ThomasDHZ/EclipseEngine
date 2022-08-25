@@ -454,6 +454,167 @@ void Texture::UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout 
 	TextureImageLayout = newImageLayout;
 }
 
+void Texture::UpdateDepthImageLayout(VkImageLayout newImageLayout)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier ImageMemoryBarrier = {};
+	ImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	ImageMemoryBarrier.oldLayout = TextureImageLayout;
+	ImageMemoryBarrier.newLayout = newImageLayout;
+	ImageMemoryBarrier.image = Image;
+	ImageMemoryBarrier.subresourceRange = ImageSubresourceRange;
+	ImageMemoryBarrier.srcAccessMask = 0;
+	ImageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdPipelineBarrier(SingleCommand, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &ImageMemoryBarrier);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+	if (result == VK_SUCCESS)
+	{
+		TextureImageLayout = newImageLayout;
+	}
+}
+
+void Texture::UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = oldImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
+
+void Texture::UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = TextureImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
+
+void Texture::UpdateDepthCubeMapLayout(VkImageLayout newImageLayout)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 6;
+
+	VkImageMemoryBarrier ImageMemoryBarrier = {};
+	ImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	ImageMemoryBarrier.oldLayout = TextureImageLayout;
+	ImageMemoryBarrier.newLayout = newImageLayout;
+	ImageMemoryBarrier.image = Image;
+	ImageMemoryBarrier.subresourceRange = ImageSubresourceRange;
+	ImageMemoryBarrier.srcAccessMask = 0;
+	ImageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdPipelineBarrier(SingleCommand, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &ImageMemoryBarrier);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+	if (result == VK_SUCCESS)
+	{
+		TextureImageLayout = newImageLayout;
+	}
+}
+
+void Texture::UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 6;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = TextureImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
+
+void Texture::UpdateDepthCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = MipLevel;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 6;
+
+	VkImageMemoryBarrier ImageMemoryBarrier = {};
+	ImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	ImageMemoryBarrier.oldLayout = TextureImageLayout;
+	ImageMemoryBarrier.newLayout = newImageLayout;
+	ImageMemoryBarrier.image = Image;
+	ImageMemoryBarrier.subresourceRange = ImageSubresourceRange;
+	ImageMemoryBarrier.srcAccessMask = 0;
+	ImageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdPipelineBarrier(SingleCommand, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &ImageMemoryBarrier);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+	if (result == VK_SUCCESS)
+	{
+		TextureImageLayout = newImageLayout;
+	}
+}
+
+void Texture::UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	ImageSubresourceRange.baseMipLevel = MipLevel;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 6;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = TextureImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
 
 void Texture::Destroy()
 {

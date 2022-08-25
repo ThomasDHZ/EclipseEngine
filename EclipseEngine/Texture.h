@@ -71,6 +71,13 @@ public:
     void UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
+    void UpdateDepthImageLayout(VkImageLayout newImageLayout);
+    void UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
+    void UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
+    void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout);
+    void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
+    void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
+    void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
     void Destroy();
 
     void SetTextureBufferIndex(uint64_t bufferIndex);
