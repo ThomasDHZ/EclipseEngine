@@ -107,6 +107,11 @@ void Mesh::SetMaterial(const std::string& MaterialPath)
 	material = MaterialManager::LoadMaterial(MaterialPath);
 }
 
+void Mesh::SetReflectionPoint(glm::vec3 reflectionPoint)
+{
+	ReflectionPoint = reflectionPoint;
+}
+
 void  Mesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)
 {
 	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};

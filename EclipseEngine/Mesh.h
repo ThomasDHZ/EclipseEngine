@@ -98,6 +98,7 @@ protected:
 	MeshTypeEnum MeshType;
 	MeshSubTypeEnum MeshSubType;
 
+	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
 	
@@ -131,6 +132,7 @@ public:
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
 	void SetMaterial(const std::string& MaterialPath);
+	void SetReflectionPoint(glm::vec3 reflectionPoint);
 
 	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
 	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);
@@ -147,6 +149,7 @@ public:
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
+	glm::vec3 GetReflectionPoint() { return ReflectionPoint; }
 
 	std::shared_ptr<Material> GetMaterial() { return material; }
 	MeshProperties GetMeshProperties() { return meshProperties; }

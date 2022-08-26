@@ -489,6 +489,9 @@
     <ClCompile Include="CubeMapViewPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PBRRealTimeRenderer.cpp">
+      <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -886,6 +889,9 @@
     </ClInclude>
     <ClInclude Include="CubeMapViewPipeline.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRRealTimeRenderer.h">
+      <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

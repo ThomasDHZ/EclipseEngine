@@ -177,6 +177,7 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
         SceneManager::SaveAsPrefab(obj4);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));

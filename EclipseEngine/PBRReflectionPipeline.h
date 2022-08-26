@@ -17,5 +17,5 @@ public:
 	~PBRReflectionPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures);
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, int View, glm::vec3 pos);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> drawMesh, std::shared_ptr<Mesh> reflectingMesh);
 };
