@@ -32,7 +32,7 @@ void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTextur
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
@@ -53,7 +53,7 @@ void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> c
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(cubeMap);
     SetUpCommandBuffers();
-    Draw(DrawPosition);
+    Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -145,14 +145,14 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     irradiancePipeline.InitializePipeline(pipelineInfo, cubeMap);
 }
 
-VkCommandBuffer IrradianceRenderPass::Draw(glm::vec3 DrawPosition)
+VkCommandBuffer IrradianceRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
     std::array<VkClearValue, 1> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[0].color = { {0.0f, 1.0f, 0.0f, 1.0f} };
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -185,7 +185,7 @@ VkCommandBuffer IrradianceRenderPass::Draw(glm::vec3 DrawPosition)
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    irradiancePipeline.Draw(commandBuffer, irradiance, DrawPosition);
+    irradiancePipeline.Draw(commandBuffer, irradiance);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");

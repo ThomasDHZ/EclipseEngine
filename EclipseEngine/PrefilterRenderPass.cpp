@@ -170,7 +170,7 @@ VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
     PrefilterCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
     std::array<VkClearValue, 1> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[0].color = { {1.0f, 0.0f, 0.0f, 1.0f} };
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -202,7 +202,7 @@ VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        prefilterPipeline.Draw(commandBuffer, prefiliter, DrawPosition);
+        prefilterPipeline.Draw(commandBuffer, prefiliter);
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

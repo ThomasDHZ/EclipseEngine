@@ -172,7 +172,7 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
         SceneManager::SaveAsPrefab(obj2);
 
         auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         SceneManager::SaveAsPrefab(obj3);
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
@@ -181,7 +181,7 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
         SceneManager::SaveAsPrefab(obj4);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         SceneManager::SaveAsPrefab(obj5);
     }
 //

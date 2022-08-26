@@ -49,10 +49,20 @@ void PBRRenderer::BuildRenderer()
 	submitList.PointLightShadowMaps = pointDepthTextureList;
 	submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
 
+	//SkyBox Pass
+	{
+		skyIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		skyPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+
+		submitList.IrradianceTexture = skyIrradianceRenderPass.IrradianceCubeMap;
+		submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
+
+		skyPBRRenderPass.BuildRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
+	}
 	//Geometry Pass
 	{
-		geoIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
-		geoPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		geoIrradianceRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+		geoPrefilterRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
@@ -145,8 +155,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			//Geometry Pass
 			{
 				auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
-				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 100.0f, 1.0f)));
-				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 100.0f, 1.0f)));
+				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
+				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
 			}
 			//Main Render Pass
@@ -177,11 +187,18 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			}
 		}
 
+		//SkyBox Pass
+		{
+			auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
+			CommandBufferSubmitList.emplace_back(skyIrradianceRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(skyPrefilterRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(skyPBRRenderPass.Draw(reflectingMesh));
+		}
 		//Geometry Pass
 		{
 			auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
-			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
-			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw(glm::vec3(3.3f, 1.0f, 1.0f)));
+			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
 		}
 		//Main Render Pass
