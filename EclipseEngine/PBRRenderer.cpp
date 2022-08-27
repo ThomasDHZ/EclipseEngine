@@ -17,7 +17,7 @@ void PBRRenderer::BuildRenderer()
 	std::vector<std::shared_ptr<RenderedDepthTexture>> spotDepthTextureList;
 
 	meshPickerRenderPass.BuildRenderPass();
-	environmentToCubeRenderPass.BuildRenderPass(512);
+	environmentToCubeRenderPass.BuildRenderPass(4096.0f/4);
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
@@ -234,6 +234,12 @@ void PBRRenderer::Destroy()
 		{
 			spotLight.Destroy();
 		}
+	}
+	//Sky Pass
+	{
+		skyIrradianceRenderPass.Destroy();
+		skyPrefilterRenderPass.Destroy();
+		skyPBRRenderPass.Destroy();
 	}
 	//Geometry Pass
 	{

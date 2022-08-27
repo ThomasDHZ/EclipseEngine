@@ -57,6 +57,5 @@ void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSe
 }
 void IrradiancePipeline::Destroy()
 {
-    cubeMapSampler.Destroy();
     GraphicsPipeline::Destroy();
 }

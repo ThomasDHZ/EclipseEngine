@@ -8,8 +8,6 @@
 
 class IrradiancePipeline : public GraphicsPipeline
 {
-private:
-	CubeMapSamplerBuffer cubeMapSampler;
 public:
 	IrradiancePipeline();
 	~IrradiancePipeline();

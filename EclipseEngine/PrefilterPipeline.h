@@ -8,7 +8,6 @@
 
 class PrefilterPipeline : public GraphicsPipeline
 {
-private:
 public:
 	PrefilterPipeline();
 	~PrefilterPipeline();

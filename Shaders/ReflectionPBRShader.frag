@@ -224,11 +224,6 @@ void main()
     vec3 ambient = (kD * diffuse + specular) * ao;
     
     vec3 color = ambient + Lo;
-
-    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
-    {
-        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
-    }
     outColor = vec4(color, 1.0f);
 }
 
