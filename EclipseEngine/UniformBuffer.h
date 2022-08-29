@@ -66,8 +66,8 @@ struct BillboardSceneProperties : public SceneProperties
 
 struct DirectionalLightProjection
 {
-	alignas(4)  uint32_t MeshIndex;
-	alignas(16) glm::mat4 lightProjectionMatrix;
+	alignas(4) uint32_t MeshIndex;
+	alignas(4) uint32_t LightIndex;
 };
 
 struct ConstSkyBoxView

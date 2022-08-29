@@ -13,6 +13,8 @@ private:
 
 	DepthCubeMapPipeline depthCubeMapPipeline;
 
+	std::shared_ptr<RenderedCubeMapDepthTexture> RenderPassDepthTexture;
+
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
@@ -20,10 +22,10 @@ public:
 	DepthCubeMapRenderer();
 	~DepthCubeMapRenderer();
 
-	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
+	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> DepthCubeMapTextureList;
 
 	void BuildRenderPass(glm::vec2 TextureResolution);
-	VkCommandBuffer Draw(glm::vec3 CubeSamplerPos);
-	void OneTimeDraw(glm::vec2 TextureResolution, glm::vec3 CubeSamplerPos);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<PointLight>> PointLightList);
+	void OneTimeDraw(glm::vec2 TextureResolution, std::vector<std::shared_ptr<PointLight>> PointLightList);
 	void Destroy();
 };

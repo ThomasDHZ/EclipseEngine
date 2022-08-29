@@ -11,43 +11,21 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-
-	std::vector<std::shared_ptr<RenderedDepthTexture>> directionalDepthTextureList;
-	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointDepthTextureList;
-	std::vector<std::shared_ptr<RenderedDepthTexture>> spotDepthTextureList;
-
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f/4);
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
 	{
-		directionalLightDepthPassRenderPassList.resize(LightManager::GetDirectionalLightCount());
-		for (auto& directionalLight : directionalLightDepthPassRenderPassList)
-		{
-			directionalLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
-			directionalDepthTextureList.emplace_back(directionalLight.DepthTexture);
-		}
-
-		pointLightDepthCubeMapRenderPassList.resize(LightManager::GetPointLightCount());
-		for(auto& pointLight : pointLightDepthCubeMapRenderPassList)
-		{
-			pointLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
-			pointDepthTextureList.emplace_back(pointLight.DepthTexture);
-		}
-
-		spotLightDepthPassRenderPassList.resize(LightManager::GetSpotLightCount());
-		for (auto& spotLight : spotLightDepthPassRenderPassList)
-		{
-			spotLight.BuildRenderPass(glm::vec2(512.0f, 512.0f));
-			spotDepthTextureList.emplace_back(spotLight.DepthTexture);
-		}
+		DepthPassRenderPass.OneTimeDraw(glm::vec2(512.0f, 512.0f));
+		DepthCubeMapRenderPass.OneTimeDraw(glm::vec2(512.0f, 512.0f), LightManager::GetPointLights());
+		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
 	}
 
 	PBRRenderPassTextureSubmitList submitList;
-	submitList.DirectionalLightTextureShadowMaps = directionalDepthTextureList;
-	submitList.PointLightShadowMaps = pointDepthTextureList;
-	submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
+	submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
+	submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
+//	submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
 
 	//SkyBox Pass
 	{
@@ -80,8 +58,6 @@ void PBRRenderer::BuildRenderer()
 		pbrRenderPass.BuildRenderPass(submitList);
 	}
 
-	//depthDebugRenderPass.BuildRenderPass(directionalLightDepthPassRenderPassList[0].DepthTexture);
-	//depthDebugRenderPass2.BuildRenderPass(directionalLightDepthPassRenderPassList[1].DepthTexture);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
 }
 
@@ -116,18 +92,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		{
 			//Depth Pass
 			{
-				for (int x = 0; x < LightManager::GetDirectionalLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(directionalLightDepthPassRenderPassList[x].Draw());
-				}
-				for (int x = 0; x < LightManager::GetPointLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(pointLightDepthCubeMapRenderPassList[x].Draw(LightManager::GetPointLights()[x]->GetPosition()));
-				}
-				for (int x = 0; x < LightManager::GetSpotLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
-				}
+				CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
+				CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+				//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 			}
 			//Main Render Pass
 			{
@@ -138,18 +105,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		{
 			//Depth Pass
 			{
-				for (int x = 0; x < LightManager::GetDirectionalLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(directionalLightDepthPassRenderPassList[x].Draw());
-				}
-				for (int x = 0; x < LightManager::GetPointLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(pointLightDepthCubeMapRenderPassList[x].Draw(LightManager::GetPointLights()[x]->GetPosition()));
-				}
-				for (int x = 0; x < LightManager::GetSpotLightCount(); x++)
-				{
-					CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
-				}
+				CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
+				CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+				//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 			}
 
 			//Geometry Pass
@@ -173,18 +131,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	{
 		//Depth Pass
 		{
-			for (int x = 0; x < LightManager::GetDirectionalLightCount(); x++)
-			{
-				CommandBufferSubmitList.emplace_back(directionalLightDepthPassRenderPassList[x].Draw());
-			}
-			for (int x = 0; x < LightManager::GetPointLightCount(); x++)
-			{
-				CommandBufferSubmitList.emplace_back(pointLightDepthCubeMapRenderPassList[x].Draw(LightManager::GetPointLights()[x]->GetPosition()));
-			}
-			for (int x = 0; x < LightManager::GetSpotLightCount(); x++)
-			{
-				CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
-			}
+			CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+			//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 		}
 
 		//SkyBox Pass
@@ -222,18 +171,9 @@ void PBRRenderer::Destroy()
 
 	//Depth Pass
 	{
-		for (auto& directionalLight : directionalLightDepthPassRenderPassList)
-		{
-			directionalLight.Destroy();
-		}
-		for (auto pointLight : pointLightDepthCubeMapRenderPassList)
-		{
-			pointLight.Destroy();
-		}
-		for (auto& spotLight : spotLightDepthPassRenderPassList)
-		{
-			spotLight.Destroy();
-		}
+		DepthPassRenderPass.Destroy();
+		DepthCubeMapRenderPass.Destroy();
+		spotLightDepthPassRenderPassList.Destroy();
 	}
 	//Sky Pass
 	{

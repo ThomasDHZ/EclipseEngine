@@ -16,6 +16,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
+	std::shared_ptr<RenderedDepthTexture> RenderPassDepthTexture;
 	DepthPipeline depthPipeline;
 
 	void RenderPassDesc();
@@ -25,7 +26,7 @@ public:
 	DepthRenderPass();
 	~DepthRenderPass();
 
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
 
 	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw();

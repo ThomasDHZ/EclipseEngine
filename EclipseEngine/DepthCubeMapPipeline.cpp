@@ -230,10 +230,11 @@ void DepthCubeMapPipeline::BuildGraphicsPipeline(PipelineInfoStruct& pipelineInf
     }
 }
 
-void DepthCubeMapPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos)
+void DepthCubeMapPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos, uint32_t x)
 {
-    SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
-    SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+    DirectionalLightProjection directionalLightProjection;
+    directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
+    directionalLightProjection.LightIndex = x;
 
     glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 25.0f);
 

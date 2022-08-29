@@ -17,16 +17,32 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
 
     if (renderPass == nullptr)
     {
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : LightManager::GetDirectionalLights())
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
     }
     else
     {
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+
+        for (auto& depthTexture : DepthTextureList)
+        {
+            depthTexture->Destroy();
+        }
+        DepthTextureList.clear();
+        for (auto& light : LightManager::GetDirectionalLights())
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+
         RenderPass::Destroy();
     }
 
+
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DepthTexture->View);
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -34,10 +50,53 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
     SetUpCommandBuffers();
 }
 
+void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : LightManager::GetDirectionalLights())
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+
+        for (auto& depthTexture : DepthTextureList)
+        {
+            depthTexture->Destroy();
+        }
+        DepthTextureList.clear();
+        for (auto& light : LightManager::GetDirectionalLights())
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+
+        RenderPass::Destroy();
+    }
+
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
+
 void DepthRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderPassDepthTexture->GetAttachmentDescription());
 
 
     VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
@@ -142,29 +201,36 @@ VkCommandBuffer DepthRenderPass::Draw()
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
-    DepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+    for (int x = 0; x < DepthTextureList.size(); x++)
     {
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         {
-            switch (mesh->GetMeshType())
+            for (auto& mesh : MeshRendererManager::GetMeshList())
             {
-            case MeshTypeEnum::kPolygon:
-            {
-                depthPipeline.Draw(commandBuffer, mesh);
-                break;
-            }
-            default:
-            {
-                break;
-            }
+                switch (mesh->GetMeshType())
+                {
+                case MeshTypeEnum::kPolygon:
+                {
+                    depthPipeline.Draw(commandBuffer, mesh, x);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+                }
             }
         }
+        vkCmdEndRenderPass(commandBuffer);
+
+        RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, DepthTextureList[x]);
+        DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     }
-    vkCmdEndRenderPass(commandBuffer);
-    DepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
@@ -172,35 +238,9 @@ VkCommandBuffer DepthRenderPass::Draw()
     return commandBuffer;
 }
 
-void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
-{
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = TextureResolution;
-
-    if (renderPass == nullptr)
-    {
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-    }
-    else
-    {
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-    Draw();
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-}
-
 void DepthRenderPass::Destroy()
 {
-    DepthTexture->Destroy();
+    RenderPassDepthTexture->Destroy();
     depthPipeline.Destroy();
     RenderPass::Destroy();
 }

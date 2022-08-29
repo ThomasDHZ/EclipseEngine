@@ -14,14 +14,10 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
-layout(push_constant) uniform SceneData
+layout(push_constant) uniform DepthSceneData
 {
     uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    float Timer;
+    uint LightIndex;
 } sceneData;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
@@ -29,7 +25,7 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 
 void main() {
 
-    gl_Position = DLight[0].directionalLight.lightSpaceMatrix * 
+    gl_Position = DLight[sceneData.LightIndex].directionalLight.lightSpaceMatrix * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 

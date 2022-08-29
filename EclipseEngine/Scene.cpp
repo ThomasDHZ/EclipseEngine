@@ -186,11 +186,17 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     }
 //
     auto dLight = DirectionalLightBuffer{};
+    dLight.direction = glm::vec3(0.0f, -1.0f, 0.0f);
     dLight.diffuse = glm::vec3(30.8f);
     dLight.specular = glm::vec3(1.0f);
 
+    auto dLight2 = DirectionalLightBuffer{};
+    dLight2.direction = glm::vec3(-1.0f, -1.0f, 0.0f);
+    dLight2.diffuse = glm::vec3(30.8f);
+    dLight2.specular = glm::vec3(1.0f);
+
     LightManager::AddDirectionalLight(dLight);
-    //LightManager::AddDirectionalLight(dLight);
+    LightManager::AddDirectionalLight(dLight2);
     //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
 

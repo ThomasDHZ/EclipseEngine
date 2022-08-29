@@ -48,11 +48,11 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     }
 }
 
-void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh)
+void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, uint32_t x)
 {
     DirectionalLightProjection directionalLightProjection;
-    directionalLightProjection.lightProjectionMatrix = glm::mat4(1.0f);
     directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
+    directionalLightProjection.LightIndex = x;
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);

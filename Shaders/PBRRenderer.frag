@@ -321,7 +321,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float metallic)
 {
    vec3 Lo = vec3(0.0);
-     for(int x = 0; x < 5; x++)
+     for(int x = 0; x < sceneData.PointLightCount; x++)
    {
         vec3 L = normalize(PLight[x].pointLight.position - FragPos);
         vec3 H = normalize(V + L);

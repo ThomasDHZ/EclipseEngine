@@ -21,9 +21,9 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	std::vector<DepthRenderPass> directionalLightDepthPassRenderPassList;
-	std::vector<DepthCubeMapRenderer> pointLightDepthCubeMapRenderPassList;
-	std::vector<DepthRenderPass> spotLightDepthPassRenderPassList;
+	DepthRenderPass DepthPassRenderPass;
+	DepthCubeMapRenderer DepthCubeMapRenderPass;
+	DepthRenderPass spotLightDepthPassRenderPassList;
 
 	IrradianceRenderPass skyIrradianceRenderPass;
 	PrefilterRenderPass skyPrefilterRenderPass;
