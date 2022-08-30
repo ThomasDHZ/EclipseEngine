@@ -242,18 +242,6 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		VulkanRenderer::UpdateBLAS = true;
 	}
 
-	glm::vec2 XNearFar = glm::vec2(-3.0f, 3.0f);
-	glm::vec2 YNearFar = glm::vec2(-3.0f, 3.0f);
-	glm::vec2 ZNearFar = glm::vec2(-3.0f, 3.0f);
-
-	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
-	meshProperties.MeshReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	meshProperties.MeshReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-	meshProperties.MeshReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;
 	meshProperties.GameObjectTransform = GameObjectMatrix;
@@ -294,18 +282,6 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
-
-	glm::vec2 XNearFar = glm::vec2(-10.0f, 10.0f);
-	glm::vec2 YNearFar = glm::vec2(-10.0f, 10.0f);
-	glm::vec2 ZNearFar = glm::vec2(-10.0f, 10.0f);
-
-	glm::mat4 reflectionProj = glm::ortho(XNearFar.x, XNearFar.y, YNearFar.x, YNearFar.y, ZNearFar.x, ZNearFar.y);
-	meshProperties.MeshReflectionMatrix[0] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[1] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[2] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	meshProperties.MeshReflectionMatrix[3] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-	meshProperties.MeshReflectionMatrix[4] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	meshProperties.MeshReflectionMatrix[5] = reflectionProj * glm::lookAt(MeshPosition, MeshPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
 	meshProperties.MeshTransform = TransformMatrix;
 	meshProperties.ModelTransform = ModelMatrix;

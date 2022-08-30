@@ -25,13 +25,13 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<PointLigh
     }
     else
     {
-        RenderPass::Destroy();
-
+        ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
         for (auto& light : PointLightList)
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
         }
+        RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
@@ -58,13 +58,13 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<PointLight>> 
     }
     else
     {
-        RenderPass::Destroy();
-
+        ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
         for (auto& light : PointLightList)
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
         }
+        RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
@@ -170,6 +170,15 @@ void DepthCubeMapRenderer::BuildRenderPassPipelines()
     depthCubeMapPipeline.InitializePipeline(pipelineInfo);
 }
 
+void DepthCubeMapRenderer::ClearTextureList()
+{
+    for (auto& depthTexture : DepthCubeMapTextureList)
+    {
+        depthTexture->Destroy();
+    }
+    DepthCubeMapTextureList.clear();
+}
+
 VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLight>> PointLightList)
 {
 
@@ -244,11 +253,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLigh
 
 void DepthCubeMapRenderer::Destroy()
 {
-    for (auto& depthTexture : DepthCubeMapTextureList)
-    {
-        depthTexture->Destroy();
-    }
-    DepthCubeMapTextureList.clear();
+    ClearTextureList();
 
     RenderPassDepthTexture->Destroy();
     depthCubeMapPipeline.Destroy();

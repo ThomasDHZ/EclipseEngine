@@ -17,6 +17,7 @@ private:
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
+	void ClearTextureList();
 
 public:
 	DepthCubeMapRenderer();

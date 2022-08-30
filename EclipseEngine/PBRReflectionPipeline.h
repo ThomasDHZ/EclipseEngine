@@ -11,11 +11,12 @@ class PBRReflectionPipeline : public GraphicsPipeline
 {
 private: 
 	CubeMapSamplerBuffer cubeMapSampler;
-	void BuildGraphicsPipeline(PipelineInfoStruct& pipelineInfoStruct);
+
 public:
 	PBRReflectionPipeline();
 	~PBRReflectionPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures);
 	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> drawMesh, std::shared_ptr<Mesh> reflectingMesh);
+	virtual void Destroy();
 };

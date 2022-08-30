@@ -55,7 +55,3 @@ void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSe
     vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(IrradianceSkyboxSettings), &irradiance);
     SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
 }
-void IrradiancePipeline::Destroy()
-{
-    GraphicsPipeline::Destroy();
-}

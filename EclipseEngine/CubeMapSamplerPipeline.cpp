@@ -44,7 +44,7 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
     }
     else
     {
-        Destroy();
+        GraphicsPipeline::Destroy();
         UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
     }
 
