@@ -17,8 +17,8 @@ void PBRRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.OneTimeDraw(glm::vec2(512.0f, 512.0f));
-		DepthCubeMapRenderPass.OneTimeDraw(glm::vec2(512.0f, 512.0f), LightManager::GetPointLights());
+		DepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f, 512.0f));
+		DepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f, 512.0f));
 		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
 	}
 
@@ -173,7 +173,7 @@ void PBRRenderer::Destroy()
 	{
 		DepthPassRenderPass.Destroy();
 		DepthCubeMapRenderPass.Destroy();
-		spotLightDepthPassRenderPassList.Destroy();
+		//spotLightDepthPassRenderPassList.Destroy();
 	}
 	//Sky Pass
 	{

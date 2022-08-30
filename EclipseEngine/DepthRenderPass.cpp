@@ -10,7 +10,7 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
+void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -18,26 +18,19 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
     if (renderPass == nullptr)
     {
         RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : LightManager::GetDirectionalLights())
+        for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
         }
     }
     else
     {
+        RenderPass::Destroy();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-
-        for (auto& depthTexture : DepthTextureList)
-        {
-            depthTexture->Destroy();
-        }
-        DepthTextureList.clear();
-        for (auto& light : LightManager::GetDirectionalLights())
+        for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
         }
-
-        RenderPass::Destroy();
     }
 
 
@@ -50,7 +43,7 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
     SetUpCommandBuffers();
 }
 
-void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
+void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -58,28 +51,20 @@ void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
     if (renderPass == nullptr)
     {
         RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : LightManager::GetDirectionalLights())
+        for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
         }
     }
     else
     {
+        RenderPass::Destroy();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-
-        for (auto& depthTexture : DepthTextureList)
-        {
-            depthTexture->Destroy();
-        }
-        DepthTextureList.clear();
-        for (auto& light : LightManager::GetDirectionalLights())
+        for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
         }
-
-        RenderPass::Destroy();
     }
-
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderPassDepthTexture->View);
@@ -240,6 +225,12 @@ VkCommandBuffer DepthRenderPass::Draw()
 
 void DepthRenderPass::Destroy()
 {
+    for (auto& depthTexture : DepthTextureList)
+    {
+        depthTexture->Destroy();
+    }
+    DepthTextureList.clear();
+
     RenderPassDepthTexture->Destroy();
     depthPipeline.Destroy();
     RenderPass::Destroy();
