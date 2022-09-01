@@ -17,8 +17,8 @@ void PBRRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f, 512.0f));
-		DepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f, 512.0f));
+		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(2048.0f));
+		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(2048.0f));
 		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
 	}
 

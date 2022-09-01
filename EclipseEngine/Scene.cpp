@@ -157,32 +157,40 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
 //    //source.Play(sound);
 //
     {
-        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        //std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        SceneManager::SaveAsPrefab(obj);
+        //auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        //obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        //SceneManager::SaveAsPrefab(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        SceneManager::SaveAsPrefab(obj2);
+        //auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        //obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        //SceneManager::SaveAsPrefab(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        SceneManager::SaveAsPrefab(obj3);
+        //auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        //obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        //SceneManager::SaveAsPrefab(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
-        SceneManager::SaveAsPrefab(obj4);
+        //auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        //obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        //MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
+        //SceneManager::SaveAsPrefab(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        SceneManager::SaveAsPrefab(obj5);
+        //auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        //obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        //SceneManager::SaveAsPrefab(obj5);
+
+        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+    MaterialManager::SaveMaterial(material3);
+
+    auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/plain.obj", glm::vec3(6.0f, 10.0f, 0.0f)));
+obj5->GetModel()->GetMeshList()[0]->SetMaterial(material3);
+SceneManager::SaveAsPrefab(obj5);
     }
 //
     auto dLight = DirectionalLightBuffer{};
@@ -200,30 +208,30 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
     //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
 
-    PointLightBuffer plight = PointLightBuffer();
-    plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
-    plight.diffuse = glm::vec3(300.0f);
-    plight.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight = PointLightBuffer();
+    //plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
+    //plight.diffuse = glm::vec3(300.0f);
+    //plight.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight2 = PointLightBuffer();
-    plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
-    plight2.diffuse = glm::vec3(300.0f);
-    plight2.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight2 = PointLightBuffer();
+    //plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
+    //plight2.diffuse = glm::vec3(300.0f);
+    //plight2.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight3 = PointLightBuffer();
-    plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
-    plight3.diffuse = glm::vec3(300.0f);
-    plight3.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight3 = PointLightBuffer();
+    //plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
+    //plight3.diffuse = glm::vec3(300.0f);
+    //plight3.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight4 = PointLightBuffer();
-    plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
-    plight4.diffuse = glm::vec3(300.0f);
-    plight4.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight4 = PointLightBuffer();
+    //plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
+    //plight4.diffuse = glm::vec3(300.0f);
+    //plight4.specular = glm::vec3(1.0f);
 
-    LightManager::AddPointLight(plight);
-    LightManager::AddPointLight(plight2);
-    LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
+    //LightManager::AddPointLight(plight);
+    //LightManager::AddPointLight(plight2);
+    //LightManager::AddPointLight(plight3);
+    //LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 

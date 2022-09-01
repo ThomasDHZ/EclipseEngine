@@ -30,6 +30,7 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<PointLigh
         for (auto& light : PointLightList)
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
         RenderPass::Destroy();
     }
@@ -63,6 +64,7 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<PointLight>> 
         for (auto& light : PointLightList)
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
         RenderPass::Destroy();
     }

@@ -14,10 +14,13 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
-layout(binding = 0) uniform ViewSampler2
+layout(location = 0) out vec3 FragPos;
+layout(location = 1) out vec2 UV;
+
+layout(binding = 0) uniform ViewSampler
 {
     mat4 CubeMapFaceMatrix;
-} viewSampler2;
+} viewSampler;
 layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData
@@ -28,8 +31,13 @@ layout(push_constant) uniform SceneData
 
 
 void main() {
-
-    gl_Position = viewSampler2.CubeMapFaceMatrix[sceneData.LightIndex] * 
+    FragPos = vec3(viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
+                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
+                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                   vec4(inPosition.xyz, 1.0));    
+    UV = aUV;
+    gl_Position = viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 

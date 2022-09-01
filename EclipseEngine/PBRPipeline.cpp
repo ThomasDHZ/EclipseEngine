@@ -75,16 +75,16 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBR
     }
 
     std::vector<VkDescriptorImageInfo> SpotLightShadowMaps;
-    if (textures.SpotLightTextureShadowMaps.size() == 0)
-    {
-        VkDescriptorImageInfo nullBuffer;
-        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
-        SpotLightShadowMaps.emplace_back(nullBuffer);
-    }
-    else
-    {
+    //if (textures.SpotLightTextureShadowMaps.size() == 0)
+    //{
+    //    VkDescriptorImageInfo nullBuffer;
+    //    nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    //    nullBuffer.imageView = VK_NULL_HANDLE;
+    //    nullBuffer.sampler = NullSampler;
+    //    SpotLightShadowMaps.emplace_back(nullBuffer);
+    //}
+    //else
+    //{
         for (auto texture : textures.SpotLightTextureShadowMaps)
         {
             VkDescriptorImageInfo DescriptorImage{};
@@ -93,7 +93,7 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBR
             DescriptorImage.sampler = texture->GetSampler();
             SpotLightShadowMaps.emplace_back(DescriptorImage);
         }
-    }
+    //}
 
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
@@ -110,7 +110,10 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBR
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 8, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    if (SpotLightShadowMaps.size() > 0)
+    {
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    }
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
