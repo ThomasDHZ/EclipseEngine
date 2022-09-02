@@ -102,6 +102,8 @@ protected:
 	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
 
+	std::vector<InstancingDataStruct> InstanceDataVectors;
+	std::vector<InstancedData3D> InstancedDataList;
 	
 	std::shared_ptr<Material> material;
 
@@ -113,6 +115,8 @@ protected:
 
 	void GenerateID();
 	void GenerateColorID();
+	void InstancingStartUp(InstancingDataStruct& instanceData);
+
 public:
 
 	Mesh();

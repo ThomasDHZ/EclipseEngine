@@ -39,14 +39,14 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    FragPos = vec3(mat4(1.0f) * vec4(inPosition.xyz, 1.0));    
+    FragPos = vec3(IntanceMatrix * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
-    Normal = mat3(mat4(1.0f)) * aNormal;
+    Normal = mat3(IntanceMatrix) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
     gl_Position = sceneData.proj * 
                   sceneData.view *                
-                  mat4(1.0f) * 
+                  IntanceMatrix * 
                   vec4(inPosition, 1.0);
 }

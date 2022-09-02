@@ -495,9 +495,6 @@
     <ClCompile Include="PBRInstancePipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="InstanceMesh3D.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -901,9 +898,6 @@
     </ClInclude>
     <ClInclude Include="PBRInstancePipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="InstanceMesh3D.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

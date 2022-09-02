@@ -160,3 +160,24 @@ void Mesh::GetMeshIndexBuffer(std::vector<VkDescriptorBufferInfo>& IndexBufferLi
 
 	BufferIndex = IndexBufferList.size() - 1;
 }
+
+void Mesh::InstancingStartUp(InstancingDataStruct& instanceData)
+{
+	for (auto& instance : instanceData.instanceMeshDataList)
+	{
+		InstancedData3D instanceData2;
+
+		glm::mat4 TransformMatrix = glm::mat4(1.0f);
+		TransformMatrix = glm::translate(TransformMatrix, instance.InstancePosition);
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
+
+		instanceData2.InstanceModel = instanceData.GameObjectMatrix * instanceData.ModelMatrix * TransformMatrix;
+		InstancedDataList.emplace_back(instanceData2);
+	}
+
+	const uint32_t a = InstancedDataList.size() * sizeof(InstancedData3D);
+	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+}

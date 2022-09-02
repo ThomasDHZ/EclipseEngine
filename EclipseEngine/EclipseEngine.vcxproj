@@ -186,7 +186,6 @@
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
     <ClCompile Include="GBufferRenderPass.cpp" />
-    <ClCompile Include="InstanceMesh3D.cpp" />
     <ClCompile Include="IrradiancePipeline.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="Level2D.cpp" />
@@ -309,7 +308,6 @@
     <ClInclude Include="GBufferPipeline.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
-    <ClInclude Include="InstanceMesh3D.h" />
     <ClInclude Include="IrradiancePipeline.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="HybridRenderer.h" />
