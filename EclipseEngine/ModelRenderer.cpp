@@ -78,25 +78,53 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Mesh>& mesh, gl
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList) : GameObject3D(Name)
 {
-	model = std::make_shared<Model>(Model(VertexList, IndexList, GameObjectID));
+	MeshLoadingInfo meshLoader = {};
+	meshLoader.vertices = VertexList;
+	meshLoader.indices = IndexList;
+	meshLoader.meshType = MeshTypeEnum::kPolygon;
+	meshLoader.meshSubType = MeshSubTypeEnum::kNormal;
+	meshLoader.GameObjectID = GameObjectID;
+
+	model = std::make_shared<Model>(Model(meshLoader));
 	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position) : GameObject3D(Name, position)
 {
-	model = std::make_shared<Model>(Model(VertexList, IndexList, GameObjectID));
+	MeshLoadingInfo meshLoader = {};
+	meshLoader.vertices = VertexList;
+	meshLoader.indices = IndexList;
+	meshLoader.meshType = MeshTypeEnum::kPolygon;
+	meshLoader.meshSubType = MeshSubTypeEnum::kNormal;
+	meshLoader.GameObjectID = GameObjectID;
+
+	model = std::make_shared<Model>(Model(meshLoader));
 	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
 {
-	model = std::make_shared<Model>(Model(VertexList, IndexList, GameObjectID));
+	MeshLoadingInfo meshLoader = {};
+	meshLoader.vertices = VertexList;
+	meshLoader.indices = IndexList;
+	meshLoader.meshType = MeshTypeEnum::kPolygon;
+	meshLoader.meshSubType = MeshSubTypeEnum::kNormal;
+	meshLoader.GameObjectID = GameObjectID;
+
+	model = std::make_shared<Model>(Model(meshLoader));
 	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
 {
-	model = std::make_shared<Model>(Model(VertexList, IndexList, GameObjectID));
+	MeshLoadingInfo meshLoader = {};
+	meshLoader.vertices = VertexList;
+	meshLoader.indices = IndexList;
+	meshLoader.meshType = MeshTypeEnum::kPolygon;
+	meshLoader.meshSubType = MeshSubTypeEnum::kNormal;
+	meshLoader.GameObjectID = GameObjectID;
+
+	model = std::make_shared<Model>(Model(meshLoader));
 	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 

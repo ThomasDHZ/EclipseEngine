@@ -45,17 +45,18 @@ struct MeshBoneWeights
 
 struct MeshLoadingInfo
 {
-	uint64_t ModelID; 
-	uint64_t GameObjectID;
+	uint64_t ModelID = -1; 
+	uint64_t GameObjectID = -1;
 
 	std::vector<Vertex3D> vertices;
 	std::vector<uint32_t> indices; 
-	uint32_t BoneCount;
+	uint32_t BoneCount = 0;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
-	glm::mat4 MeshTransform;
-	std::shared_ptr<Material> materialPtr;
+	glm::mat4 MeshTransform = glm::mat4(1.0f);
+	std::shared_ptr<Material> materialPtr = MaterialManager::GetDefaultMaterial();
 	MeshTypeEnum meshType;
+	MeshSubTypeEnum meshSubType;
 
 	MeshLoadingInfo() {}
 

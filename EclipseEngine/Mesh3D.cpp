@@ -5,16 +5,6 @@ Mesh3D::Mesh3D() : Mesh(MeshTypeEnum::kPolygon, MeshSubTypeEnum::kNormal, 0)
 {
 }
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
-{
-	MeshStartUp(vertices, indices, parentGameObjectID);
-}
-
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
-{
-	MeshStartUp(vertices, indices, materialPtr, parentGameObjectID);
-}
-
 Mesh3D::Mesh3D(MeshLoadingInfo& meshLoader)
 {
 	MeshStartUp(meshLoader);
@@ -22,56 +12,6 @@ Mesh3D::Mesh3D(MeshLoadingInfo& meshLoader)
 
 Mesh3D::~Mesh3D()
 {
-}
-
-void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID)
-{
-	GenerateID();
-	GenerateColorID();
-
-	VertexList = vertices;
-	IndexList = indices;
-
-	MeshType = MeshTypeEnum::kPolygon;
-	material = MaterialManager::GetDefaultMaterial();
-	ParentModelID = -1;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
-	BoneCount = 0;
-
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	RTXMeshStartUp();
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
-}
-
-void Mesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
-{
-	GenerateID();
-	GenerateColorID();
-
-	VertexList = vertices;
-	IndexList = indices;
-
-	ParentModelID = -1;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
-	BoneCount = 0;
-	MeshType = MeshTypeEnum::kPolygon;
-	material = MaterialManager::GetDefaultMaterial();
-
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	RTXMeshStartUp();
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
 void Mesh3D::MeshStartUp(MeshLoadingInfo& meshLoader)
@@ -82,6 +22,9 @@ void Mesh3D::MeshStartUp(MeshLoadingInfo& meshLoader)
 	VertexList = meshLoader.vertices;
 	IndexList = meshLoader.indices;
 
+	MeshType = meshLoader.meshType;
+	MeshSubType = meshLoader.meshSubType;
+	ParentGameObjectID = meshLoader.GameObjectID;
 	ParentModelID = meshLoader.ModelID;
 	VertexCount = meshLoader.vertices.size();
 	IndexCount = meshLoader.indices.size();
