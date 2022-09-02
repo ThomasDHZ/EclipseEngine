@@ -1,63 +1,36 @@
 #include "Mesh2D.h"
 #include "Math.h"
 
-
-Mesh2D::Mesh2D() : Mesh(MeshTypeEnum::kSprite, MeshSubTypeEnum::kNormal, -1)
+Mesh2D::Mesh2D()
 {
 }
 
-Mesh2D::Mesh2D(MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, meshSubType, parentGameObjectID)
+Mesh2D::Mesh2D(SpriteLoader& spriteLoader) 
 {
-	MeshStartUp();
-}
+	GenerateID();
+	GenerateColorID();
 
-Mesh2D::Mesh2D(std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kSprite, meshSubType, parentGameObjectID)
-{
-	MeshStartUp(materialPtr);
+	ParentGameObjectID = spriteLoader.GameObjectID;
+
+	MeshType = MeshTypeEnum::kSprite;
+	MeshSubType = MeshSubTypeEnum::kNormal;
+
+	VertexList = SpriteVertexList;
+	IndexList = SpriteIndexList;
+
+	ParentModelID = -1;
+	VertexCount = VertexList.size();
+	IndexCount = IndexList.size();
+	material = spriteLoader.materialPtr;
+
+	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
 Mesh2D::~Mesh2D()
 {
-}
-
-void Mesh2D::MeshStartUp()
-{
-	GenerateID();
-	GenerateColorID();
-
-	VertexList = SpriteVertexList;
-	IndexList = SpriteIndexList;
-
-	material = MaterialManager::GetDefaultMaterial();
-	MeshType = MeshTypeEnum::kPolygon;
-	ParentModelID = -1;
-	ParentGameObjectID = -1;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
-}
-
-void Mesh2D::MeshStartUp(std::shared_ptr<Material> materialPtr)
-{
-	GenerateID();
-	GenerateColorID();
-
-	VertexList = SpriteVertexList;
-	IndexList = SpriteIndexList;
-
-	ParentModelID = -1;
-	VertexCount = VertexList.size();
-	IndexCount = IndexList.size();
-	material = materialPtr;
-
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
 void Mesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
