@@ -10,7 +10,6 @@ private:
 	std::vector<InstancingDataStruct> InstanceDataVectors;
 	std::vector<InstancedData3D> InstancedDataList;
 
-	VulkanBuffer InstanceBuffer;
 	VulkanBuffer TransformBuffer;
 	VulkanBuffer TransformInverseBuffer;
 
@@ -33,8 +32,5 @@ public:
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Destroy() override;
-
-	VkBuffer GetInstanceBuffer() { return InstanceBuffer.GetBuffer(); }
-	VkBuffer* GetInstanceBufferPtr() { return InstanceBuffer.GetBufferPtr(); }
 };
 

@@ -107,6 +107,7 @@ protected:
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
+	VulkanBuffer InstanceBuffer;
 	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
@@ -150,6 +151,8 @@ public:
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
 	VkBuffer* GetMeshVertexBufferPtr() { return VertexBuffer.GetBufferPtr(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
+	VkBuffer GetInstanceBuffer() { return InstanceBuffer.GetBuffer(); }
+	VkBuffer* GetInstanceBufferPtr() { return InstanceBuffer.GetBufferPtr(); }
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	glm::vec3 GetReflectionPoint() { return ReflectionPoint; }
 

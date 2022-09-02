@@ -525,8 +525,11 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
                 bindingDescriptions = Vertex3D::getBindingDescriptions();
                 bindingDescriptions.emplace_back(InstancedData3D::getBindingDescriptions()[0]);
 
-                attributeDescriptions = InstancedData3D::getAttributeDescriptions();
-                attributeDescriptions.emplace_back(Vertex3D::getAttributeDescriptions()[0]);
+                attributeDescriptions = Vertex3D::getAttributeDescriptions();
+                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[0]);
+                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[1]);
+                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[2]);
+                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[3]);
                 break;
             }
             default:

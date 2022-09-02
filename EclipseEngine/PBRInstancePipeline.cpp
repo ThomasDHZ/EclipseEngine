@@ -143,13 +143,11 @@ void PBRInstancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
 
 void PBRInstancePipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh)
 {
-    auto instanceMesh = static_cast<InstanceMesh3D*>(mesh.get());
-
     SceneManager::sceneProperites.MeshIndex = mesh->GetMeshBufferIndex();
     SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
     vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-    mesh->InstanceDraw(commandBuffer, instanceMesh->GetInstanceBufferPtr());
+    mesh->InstanceDraw(commandBuffer, mesh->GetInstanceBufferPtr());
 }
