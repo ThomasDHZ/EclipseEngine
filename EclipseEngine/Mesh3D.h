@@ -24,12 +24,19 @@ protected:
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
+	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID);
+	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID);
 	void MeshStartUp(MeshLoadingInfo& meshLoader);
 	void RTXMeshStartUp();
 	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
 	Mesh3D();
+	Mesh3D(std::vector<Vertex3D>& vertices, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
+	Mesh3D(std::vector<Vertex3D>& vertices, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
+
+	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
+	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
 	Mesh3D(MeshLoadingInfo& meshLoader);
 	~Mesh3D();
 

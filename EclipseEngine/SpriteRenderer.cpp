@@ -2,86 +2,55 @@
 
 SpriteRenderer::SpriteRenderer() 
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-	
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name) : GameObject2D(Name)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, uint32_t Depth) : GameObject2D(Name, position, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t Depth) : GameObject2D(Name, position, rotation, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth) : GameObject2D(Name, position, rotation, scale, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material) : GameObject2D(Name)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-	spriteLoader.materialPtr = material; 
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, uint32_t Depth) : GameObject2D(Name, position, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-	spriteLoader.materialPtr = material;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, uint32_t Depth) : GameObject2D(Name, position, rotation, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-	spriteLoader.materialPtr = material;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 
 SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth) : GameObject2D(Name, position, rotation, scale, Depth)
 {
-	SpriteLoader spriteLoader = {};
-	spriteLoader.GameObjectID = GameObjectID;
-	spriteLoader.materialPtr = material;
-
-	Sprite = std::make_shared<Mesh2D>(Mesh2D(spriteLoader));
+	Sprite = std::make_shared<Mesh2D>(Mesh2D(material, MeshSubTypeEnum::kNormal, GameObjectID));
 	GameObjectManager::AddGameObject(std::make_shared<SpriteRenderer>(*this));
 }
 

@@ -98,12 +98,15 @@ public:
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, uint64_t GameObjectID);
 	Model(std::vector<Mesh>& meshList, uint64_t GameObjectID);
-	Model(MeshLoadingInfo& meshLoader);
+	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t GameObjectID);
+	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t GameObjectID);
 	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(std::shared_ptr<Mesh> mesh);
 	void AddMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
+	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
+	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
 	void AddMesh(MeshLoadingInfo& meshLoader);
 
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);

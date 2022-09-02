@@ -132,6 +132,7 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
+    pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
     drawLinePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
@@ -203,6 +204,11 @@ VkCommandBuffer PBRRenderPass::Draw()
                         pbrPipeline.Draw(commandBuffer, mesh);
                     
                     }
+                    break;
+                }
+                case MeshTypeEnum::kPolygonInstanced:
+                {
+                    pbrInstancePipeline.Draw(commandBuffer, mesh);
                     break;
                 }
                 case MeshTypeEnum::kLine:

@@ -15,6 +15,7 @@ enum MeshTypeEnum
 	Unknown,
 	kSprite,
 	kPolygon,
+	kPolygonInstanced,
 	kSkybox,
 	kLine
 };
@@ -45,18 +46,17 @@ struct MeshBoneWeights
 
 struct MeshLoadingInfo
 {
-	uint64_t ModelID = -1; 
-	uint64_t GameObjectID = -1;
+	uint64_t ModelID; 
+	uint64_t GameObjectID;
 
 	std::vector<Vertex3D> vertices;
 	std::vector<uint32_t> indices; 
-	uint32_t BoneCount = 0;
+	uint32_t BoneCount;
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
-	glm::mat4 MeshTransform = glm::mat4(1.0f);
-	std::shared_ptr<Material> materialPtr = MaterialManager::GetDefaultMaterial();
+	glm::mat4 MeshTransform;
+	std::shared_ptr<Material> materialPtr;
 	MeshTypeEnum meshType;
-	MeshSubTypeEnum meshSubType;
 
 	MeshLoadingInfo() {}
 
@@ -126,7 +126,7 @@ public:
 	virtual void Destroy();
 
 	void Draw(VkCommandBuffer& commandBuffer);
-
+	void InstanceDraw(VkCommandBuffer& commandBuffer, VkBuffer* InstanceBuffer);
 	void SetSelectedMesh(bool selected);
 	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);
@@ -148,6 +148,7 @@ public:
 	uint32_t GetMeshBufferIndex() { return BufferIndex; }
 	VkBuffer GetMeshPropertiesBuffer() { return MeshPropertiesBuffer.GetVulkanBufferData().GetBuffer(); }
 	VkBuffer GetMeshVertexBuffer() { return VertexBuffer.GetBuffer(); }
+	VkBuffer* GetMeshVertexBufferPtr() { return VertexBuffer.GetBufferPtr(); }
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	glm::vec3 GetReflectionPoint() { return ReflectionPoint; }

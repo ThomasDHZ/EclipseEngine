@@ -10,6 +10,7 @@
 #include "LinePipeline.h"
 #include "WireFramePipeline.h"
 #include "OutLinePipeline.h"
+#include "PBRInstancePipeline.h"
 
 
 class PBRRenderPass : public RenderPass
@@ -24,6 +25,7 @@ private:
 	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	PBRPipeline pbrPipeline;
+	PBRInstancePipeline pbrInstancePipeline;
 	SkyboxPipeline skyboxPipeline;
 	LinePipeline drawLinePipeline;
 	OutLinePipeline outLinePipeline;

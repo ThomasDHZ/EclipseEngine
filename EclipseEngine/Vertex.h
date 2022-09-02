@@ -5,11 +5,21 @@
 #include <glm/glm.hpp>
 #include "JsonConverter.h"
 
+struct InstanceMeshDataStruct
+{
+    glm::vec3 InstancePosition = glm::vec3(0.0f);
+    glm::vec3 InstanceRotation = glm::vec3(0.0f);
+    glm::vec3 InstanceScale = glm::vec3(0.0f);
+    InstanceMeshDataStruct() {};
+};
+
 struct InstancingDataStruct
 {
-    glm::vec3 InstancePosition;
-    glm::vec3 InstanceRotation;
-    glm::vec3 InstanceScale;
+    glm::mat4 GameObjectMatrix = glm::mat4(1.0f);
+    glm::mat4 ModelMatrix = glm::mat4(1.0f);
+    std::vector<InstanceMeshDataStruct> instanceMeshDataList;
+
+    InstancingDataStruct() {};
 };
 
 struct LineVertex2D {
@@ -235,8 +245,9 @@ struct Vertex3D
     }
 };
 
-struct InstancedData3D : public Vertex3D
+struct InstancedData3D
 {
+    InstancedData3D() {};
     glm::mat4 InstanceModel = glm::mat4(1.0f);
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() 

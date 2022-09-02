@@ -12,6 +12,7 @@ enum VertexDescriptorTypeEnum
 	kVertexNone,
 	kVertex2D,
 	kVertex3D,
+	kVertex3DInstance,
 	kLine2D,
 	kLine3D
 };
@@ -19,6 +20,7 @@ enum VertexDescriptorTypeEnum
 enum PipelineRendererTypeEnum
 {
 	kRenderMesh,
+	kRenderInstanceMesh,
 	kRenderDepth,
 	kRenderSkybox,
 	kRenderDepthCubeMap,

@@ -1,30 +1,25 @@
 #include "InstanceMesh3D.h"
 #include "Math.h"
 
-InstanceMesh3D::InstanceMesh3D() : Mesh(MeshTypeEnum::kPolygon, MeshSubTypeEnum::kNormal, 0)
+InstanceMesh3D::InstanceMesh3D() : Mesh(MeshTypeEnum::kPolygonInstanced, MeshSubTypeEnum::kNormal, 0)
 {
 }
 
-InstanceMesh3D::InstanceMesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::vector<InstancingDataStruct> instanceData, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
+InstanceMesh3D::InstanceMesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygonInstanced, meshSubType, parentGameObjectID)
 {
 	MeshStartUp(vertices, indices, instanceData, parentGameObjectID);
 }
 
-InstanceMesh3D::InstanceMesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::vector<InstancingDataStruct> instanceData, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygon, meshSubType, parentGameObjectID)
+InstanceMesh3D::InstanceMesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID) : Mesh(MeshTypeEnum::kPolygonInstanced, meshSubType, parentGameObjectID)
 {
 	MeshStartUp(vertices, indices, instanceData, materialPtr, parentGameObjectID);
-}
-
-InstanceMesh3D::InstanceMesh3D(MeshLoadingInfo& meshLoader)
-{
-	MeshStartUp(meshLoader);
 }
 
 InstanceMesh3D::~InstanceMesh3D()
 {
 }
 
-void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::vector<InstancingDataStruct> instanceData, uint64_t parentGameObjectID)
+void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, uint64_t parentGameObjectID)
 {
 	GenerateID();
 	GenerateColorID();
@@ -32,7 +27,7 @@ void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<ui
 	VertexList = vertices;
 	IndexList = indices;
 
-	MeshType = MeshTypeEnum::kPolygon;
+	MeshType = MeshTypeEnum::kPolygonInstanced;
 	material = MaterialManager::GetDefaultMaterial();
 	ParentModelID = -1;
 	VertexCount = VertexList.size();
@@ -41,7 +36,6 @@ void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<ui
 	BoneCount = 0;
 
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -51,7 +45,7 @@ void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<ui
 	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
-void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::vector<InstancingDataStruct> instanceData, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
+void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
 {
 	GenerateID();
 	GenerateColorID();
@@ -64,11 +58,10 @@ void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<ui
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(indices.size()) / 3;
 	BoneCount = 0;
-	MeshType = MeshTypeEnum::kPolygon;
+	MeshType = MeshTypeEnum::kPolygonInstanced;
 	material = MaterialManager::GetDefaultMaterial();
 
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -78,40 +71,25 @@ void InstanceMesh3D::MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<ui
 	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
-void InstanceMesh3D::MeshStartUp(MeshLoadingInfo& meshLoader)
+void InstanceMesh3D::InstancingStartUp(InstancingDataStruct& instanceData)
 {
-	GenerateID();
-	GenerateColorID();
-
-	VertexList = meshLoader.vertices;
-	IndexList = meshLoader.indices;
-
-	ParentModelID = meshLoader.ModelID;
-	VertexCount = meshLoader.vertices.size();
-	IndexCount = meshLoader.indices.size();
-	TriangleCount = static_cast<uint32_t>(meshLoader.indices.size()) / 3;
-	BoneCount = meshLoader.BoneCount;
-	MeshType = meshLoader.meshType;
-	material = meshLoader.materialPtr;
-
-	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformInverseBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	//InstancingStartUp(meshLoader.instanceData);
-	RTXMeshStartUp();
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
-}
-
-void InstanceMesh3D::InstancingStartUp(std::vector<InstancingDataStruct>& instanceDataVectors)
-{
-	
-	for (auto& instance : InstanceDataVectors)
+	for (auto& instance : instanceData.instanceMeshDataList)
 	{
+		InstancedData3D instanceData2;
 
+		glm::mat4 TransformMatrix = glm::mat4(1.0f);
+		TransformMatrix = glm::translate(TransformMatrix, instance.InstancePosition);
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
+
+		instanceData2.InstanceModel = instanceData.GameObjectMatrix * instanceData.ModelMatrix * TransformMatrix;
+		InstancedDataList.emplace_back(instanceData2);
 	}
+
+	const uint32_t a = InstancedDataList.size() * sizeof(InstancedData3D);
+	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 void InstanceMesh3D::RTXMeshStartUp()

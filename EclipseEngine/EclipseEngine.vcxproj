@@ -209,7 +209,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="PBRInstancePipeline.cpp" />
-    <ClCompile Include="PBRInstanceRenderPass.cpp" />
     <ClCompile Include="PBRPipeline.cpp" />
     <ClCompile Include="PBRRealTimeRenderer.cpp" />
     <ClCompile Include="PBRReflectionPipeline.cpp" />
@@ -337,7 +336,6 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="PBRInstancePipeline.h" />
-    <ClInclude Include="PBRInstanceRenderPass.h" />
     <ClInclude Include="PBRPipeline.h" />
     <ClInclude Include="PBRRealTimeRenderer.h" />
     <ClInclude Include="PBRReflectionPipeline.h" />

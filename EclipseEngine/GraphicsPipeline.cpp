@@ -520,6 +520,15 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
                 attributeDescriptions = Vertex3D::getAttributeDescriptions();
                 break;
             }
+            case VertexDescriptorTypeEnum::kVertex3DInstance:
+            {
+                bindingDescriptions = Vertex3D::getBindingDescriptions();
+                bindingDescriptions.emplace_back(InstancedData3D::getBindingDescriptions()[0]);
+
+                attributeDescriptions = InstancedData3D::getAttributeDescriptions();
+                attributeDescriptions.emplace_back(Vertex3D::getAttributeDescriptions()[0]);
+                break;
+            }
             default:
             {
                 std::cout << "VertexType no found" << std::endl;
@@ -603,6 +612,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
 
 
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderInstanceMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepthCubeMap ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
