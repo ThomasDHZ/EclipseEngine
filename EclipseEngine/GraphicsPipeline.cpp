@@ -268,6 +268,7 @@ VkDescriptorSetLayout GraphicsPipeline::CreateDescriptorSetLayout(std::vector<De
     }
 
     VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = static_cast<uint32_t>(LayoutBindingList.size());
     layoutInfo.pBindings = LayoutBindingList.data();
@@ -482,7 +483,7 @@ void GraphicsPipeline::BuildDescriptorBindings(BuildGraphicsPipelineInfo& buildG
 
 void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo)
 {
-    VkVertexInputBindingDescription bindingDescription;
+    std::vector<VkVertexInputBindingDescription> bindingDescriptions;
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
@@ -497,25 +498,25 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
         {
             case VertexDescriptorTypeEnum::kLine2D:
             {
-                bindingDescription = LineVertex2D::getBindingDescription();
+                bindingDescriptions = LineVertex2D::getBindingDescriptions();
                 attributeDescriptions = LineVertex2D::getAttributeDescriptions();
                 break;
             }
             case VertexDescriptorTypeEnum::kLine3D:
             {
-                bindingDescription = LineVertex3D::getBindingDescription();
+                bindingDescriptions = LineVertex3D::getBindingDescriptions();
                 attributeDescriptions = LineVertex3D::getAttributeDescriptions();
                 break;
             }
             case VertexDescriptorTypeEnum::kVertex2D:
             {
-                bindingDescription = Vertex2D::getBindingDescription();
+                bindingDescriptions = Vertex2D::getBindingDescriptions();
                 attributeDescriptions = Vertex2D::getAttributeDescriptions();
                 break;
             }
             case VertexDescriptorTypeEnum::kVertex3D:
             {
-                bindingDescription = Vertex3D::getBindingDescription();
+                bindingDescriptions = Vertex3D::getBindingDescriptions();
                 attributeDescriptions = Vertex3D::getAttributeDescriptions();
                 break;
             }
@@ -525,9 +526,9 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
             }
         }
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-        vertexInputInfo.vertexBindingDescriptionCount = 1;
+        vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
+        vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-        vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
         vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
     }
 

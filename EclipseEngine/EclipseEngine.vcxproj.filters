@@ -492,6 +492,15 @@
     <ClCompile Include="PBRRealTimeRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="PBRInstanceRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRInstancePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceMesh3D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -893,6 +902,15 @@
     <ClInclude Include="PBRRealTimeRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
+    <ClInclude Include="PBRInstanceRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRInstancePipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceMesh3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1079,6 +1097,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\CubeMapView.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRInstanceRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRInstanceRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

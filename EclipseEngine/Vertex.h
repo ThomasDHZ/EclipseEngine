@@ -5,6 +5,13 @@
 #include <glm/glm.hpp>
 #include "JsonConverter.h"
 
+struct InstancingDataStruct
+{
+    glm::vec3 InstancePosition;
+    glm::vec3 InstanceRotation;
+    glm::vec3 InstanceScale;
+};
+
 struct LineVertex2D {
     glm::vec2 pos;
     glm::vec4 color;
@@ -21,13 +28,17 @@ struct LineVertex2D {
         color = Color;
     }
 
-    static VkVertexInputBindingDescription getBindingDescription() {
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
         VkVertexInputBindingDescription bindingDescription{};
+
         bindingDescription.binding = 0;
         bindingDescription.stride = sizeof(LineVertex2D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        bindingDescriptionList.emplace_back(bindingDescription);
 
-        return bindingDescription;
+        return bindingDescriptionList;
     }
 
     static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
@@ -68,13 +79,17 @@ struct LineVertex3D {
         color = Color;
     }
 
-    static VkVertexInputBindingDescription getBindingDescription() {
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
         VkVertexInputBindingDescription bindingDescription{};
+
         bindingDescription.binding = 0;
         bindingDescription.stride = sizeof(LineVertex3D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        bindingDescriptionList.emplace_back(bindingDescription);
 
-        return bindingDescription;
+        return bindingDescriptionList;
     }
 
     static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions() 
@@ -105,13 +120,17 @@ struct Vertex2D
     glm::vec2 UV = glm::vec2(0.0f);
     glm::vec3 Color = glm::vec3(1.0f);
 
-    static VkVertexInputBindingDescription getBindingDescription() {
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
         VkVertexInputBindingDescription bindingDescription{};
+
         bindingDescription.binding = 0;
         bindingDescription.stride = sizeof(Vertex2D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        bindingDescriptionList.emplace_back(bindingDescription);
 
-        return bindingDescription;
+        return bindingDescriptionList;
     }
 
     static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
@@ -157,13 +176,17 @@ struct Vertex3D
     glm::vec3 Color = glm::vec3(1.0f);
     float ColorPadding = 0.0f;
 
-    static VkVertexInputBindingDescription getBindingDescription() {
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
         VkVertexInputBindingDescription bindingDescription{};
+
         bindingDescription.binding = 0;
         bindingDescription.stride = sizeof(Vertex3D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        bindingDescriptionList.emplace_back(bindingDescription);
 
-        return bindingDescription;
+        return bindingDescriptionList;
     }
 
     static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
@@ -206,6 +229,57 @@ struct Vertex3D
         AttributeDescription.location = 5;
         AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
         AttributeDescription.offset = offsetof(Vertex3D, Color);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        return AttributeDescriptions;
+    }
+};
+
+struct InstancedData3D : public Vertex3D
+{
+    glm::mat4 InstanceModel = glm::mat4(1.0f);
+
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() 
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
+        VkVertexInputBindingDescription bindingDescription{};
+
+        bindingDescription.binding = 1;
+        bindingDescription.stride = sizeof(InstancedData3D);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+        bindingDescriptionList.emplace_back(bindingDescription);
+
+        return bindingDescriptionList;
+    }
+
+    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+    {
+        std::vector<VkVertexInputAttributeDescription> AttributeDescriptions = {};
+
+        VkVertexInputAttributeDescription AttributeDescription;
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 6;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 0;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 7;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 1;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 8;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 2;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 9;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 3;
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;

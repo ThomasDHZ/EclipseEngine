@@ -11,7 +11,6 @@ class DepthCubeMapPipeline : public GraphicsPipeline
 private:
 	CubeMapSamplerBuffer cubeMapSampler;
 
-	void BuildGraphicsPipeline(PipelineInfoStruct& pipelineInfoStruct);
 public:
 	DepthCubeMapPipeline();
 	~DepthCubeMapPipeline();
