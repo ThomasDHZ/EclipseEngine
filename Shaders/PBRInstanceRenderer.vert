@@ -35,10 +35,6 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-// if(gl_VertexIndex == 0)
-//	{
-//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
-//	}
     FragPos = vec3(IntanceMatrix * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;

@@ -91,6 +91,7 @@ protected:
 	uint64_t ParentGameObjectID = 0;
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
+	uint32_t InstanceCount = 0;
 	uint32_t TriangleCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t BufferIndex = 0;
@@ -131,7 +132,7 @@ public:
 	virtual void Destroy();
 
 	void Draw(VkCommandBuffer& commandBuffer);
-	void InstanceDraw(VkCommandBuffer& commandBuffer, VkBuffer* InstanceBuffer);
+	void InstanceDraw(VkCommandBuffer& commandBuffer);
 	void SetSelectedMesh(bool selected);
 	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);

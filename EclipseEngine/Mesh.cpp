@@ -48,11 +48,11 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer)
 	}
 }
 
-void Mesh::InstanceDraw(VkCommandBuffer& commandBuffer, VkBuffer* InstanceBuffer)
+void Mesh::InstanceDraw(VkCommandBuffer& commandBuffer)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, VertexBuffer.GetBufferPtr(), offsets);
-	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer, offsets);
+	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);
 	if (IndexCount == 0)
 	{
 		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
@@ -60,7 +60,7 @@ void Mesh::InstanceDraw(VkCommandBuffer& commandBuffer, VkBuffer* InstanceBuffer
 	else
 	{
 		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
-		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
+		vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
 	}
 }
 
@@ -178,6 +178,6 @@ void Mesh::InstancingStartUp(InstancingDataStruct& instanceData)
 		InstancedDataList.emplace_back(instanceData2);
 	}
 
-	const uint32_t a = InstancedDataList.size() * sizeof(InstancedData3D);
+	InstanceCount = InstancedDataList.size();
 	InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }

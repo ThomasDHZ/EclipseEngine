@@ -188,11 +188,11 @@ Scene::Scene()
     InstancingDataStruct instance = {};
     instance.GameObjectMatrix = glm::mat4(1.0f);
     instance.ModelMatrix = glm::mat4(1.0f);
-    for (int x = 0; x < 5; x++)
+    for (int x = 0; x < 50; x++)
     {
-        for (int y = 0; y < 5; y++)
+        for (int y = 0; y < 50; y++)
         {
-            for (int z = 0; z < 5; z++)
+            for (int z = 0; z < 50; z++)
             {
                 InstanceMeshDataStruct instanceMeshDataStruct = {};
                 instanceMeshDataStruct.InstancePosition = glm::vec3(float(x), float(y), float(z));

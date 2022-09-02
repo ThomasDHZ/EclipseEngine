@@ -9,7 +9,7 @@ struct InstanceMeshDataStruct
 {
     glm::vec3 InstancePosition = glm::vec3(0.0f);
     glm::vec3 InstanceRotation = glm::vec3(0.0f);
-    glm::vec3 InstanceScale = glm::vec3(0.0f);
+    glm::vec3 InstanceScale = glm::vec3(1.0f);
     InstanceMeshDataStruct() {};
 };
 
