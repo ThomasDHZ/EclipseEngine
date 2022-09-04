@@ -12,6 +12,7 @@ layout(location = 2) in vec3 Normal;
 layout(location = 3) in vec3 Tangent;
 layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
+layout(location = 6) in int MaterialID;
 
 layout(location = 0) out vec4 outColor;
 //layout(location = 1) out vec4 outBloom;

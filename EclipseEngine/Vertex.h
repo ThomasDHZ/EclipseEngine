@@ -15,6 +15,7 @@ struct InstanceMeshDataStruct
 
 struct InstancingDataStruct
 {
+    uint64_t MaterialID = 0;
     std::vector<InstanceMeshDataStruct> instanceMeshDataList;
 
     InstancingDataStruct() {};
@@ -246,7 +247,9 @@ struct Vertex3D
 struct InstancedData3D
 {
     InstancedData3D() {};
+
     glm::mat4 InstanceModel = glm::mat4(1.0f);
+    uint32_t MaterialID = 0;
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions() 
     {
@@ -289,6 +292,12 @@ struct InstancedData3D
         AttributeDescription.location = 9;
         AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
         AttributeDescription.offset = sizeof(glm::vec4) * 3;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 10;
+        AttributeDescription.format = VK_FORMAT_R32_SINT;
+        AttributeDescription.offset = sizeof(InstancedData3D) - sizeof(uint32_t);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;

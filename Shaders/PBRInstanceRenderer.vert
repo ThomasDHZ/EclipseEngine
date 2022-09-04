@@ -13,6 +13,7 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 layout (location = 6) in mat4 IntanceMatrix;
+layout (location = 10) in int aMaterialID;
 
 layout(location = 0) out vec3 FragPos;
 layout(location = 1) out vec2 UV;
@@ -20,6 +21,7 @@ layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
+layout(location = 6) out int MaterialID;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
@@ -45,4 +47,5 @@ void main() {
                   sceneData.view *                
                   IntanceMatrix * 
                   vec4(inPosition, 1.0);
+   MaterialID = aMaterialID;
 }
