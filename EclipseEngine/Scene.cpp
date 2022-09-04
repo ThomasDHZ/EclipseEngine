@@ -124,7 +124,7 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -158,63 +158,63 @@ Scene::Scene()
 //    //source.Play(sound);
 //
     {
-        //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        //std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        //auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        //obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        //SceneManager::SaveAsPrefab(obj);
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        SceneManager::SaveAsPrefab(obj);
 
-        //auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        //obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        //SceneManager::SaveAsPrefab(obj2);
+        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        SceneManager::SaveAsPrefab(obj2);
 
-        //auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        //obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        //SceneManager::SaveAsPrefab(obj3);
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        SceneManager::SaveAsPrefab(obj3);
 
-        //auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        //obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        //MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
-        //SceneManager::SaveAsPrefab(obj4);
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
+        SceneManager::SaveAsPrefab(obj4);
 
-        //auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        //obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        //SceneManager::SaveAsPrefab(obj5);
+        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        SceneManager::SaveAsPrefab(obj5);
 
-    InstancingDataStruct instance = {};
-    for (int x = 0; x < 50; x++)
-    {
-        for (int y = 0; y < 50; y++)
-        {
-            for (int z = 0; z < 50; z++)
-            {
-                InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x), float(y), float(z));
-                instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-            }
-        }
-    }
+    //InstancingDataStruct instance = {};
+    //for (int x = 0; x < 50; x++)
+    //{
+    //    for (int y = 0; y < 50; y++)
+    //    {
+    //        for (int z = 0; z < 50; z++)
+    //        {
+    //            InstanceMeshDataStruct instanceMeshDataStruct = {};
+    //            instanceMeshDataStruct.InstancePosition = glm::vec3(float(x), float(y), float(z));
+    //            instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+    //        }
+    //    }
+    //}
 
-        std::vector<Vertex3D> vertices = {
-        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-    };
+    //    std::vector<Vertex3D> vertices = {
+    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    //};
 
-     std::vector<uint32_t> indices = {
-        0, 1, 2, 2, 3, 0
-    };
+    // std::vector<uint32_t> indices = {
+    //    0, 1, 2, 2, 3, 0
+    //};
 
-        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-    MaterialManager::SaveMaterial(material3);
+    //    std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+    //MaterialManager::SaveMaterial(material3);
 
-    auto obj5 = std::make_shared<MeshRenderer>(MeshRenderer("Grass", vertices, indices, instance, material3));
+    //auto obj5 = std::make_shared<MeshRenderer>(MeshRenderer("Grass", vertices, indices, instance, material3));
     }
 //
     auto dLight = DirectionalLightBuffer{};

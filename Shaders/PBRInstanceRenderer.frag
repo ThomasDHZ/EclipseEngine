@@ -311,7 +311,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+        vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
         float shadow = filterPCF(LightSpace/ LightSpace.w, x);  
         Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
     }

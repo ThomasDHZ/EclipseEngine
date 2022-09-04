@@ -59,7 +59,7 @@ Vertex BuildVertexInfo()
 	const vec3 barycentricCoords = vec3(1.0f - attribs.x - attribs.y, attribs.x, attribs.y);
 
 	vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
-	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
+	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.GameObjectTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
 	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
 	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
     vertex.Tangant = v0.Tangant * barycentricCoords.x + v1.Tangant * barycentricCoords.y + v2.Tangant * barycentricCoords.z;
@@ -94,9 +94,9 @@ void main()
         FinalUV.x = 1.0f - FinalUV.x;
    }
 
-   vec3 T = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vec3(vertex.Tangant));
-   vec3 B = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
-   vec3 N = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vertex.Normal);
+   vec3 T = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.GameObjectTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vec3(vertex.Tangant));
+   vec3 B = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.GameObjectTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
+   vec3 N = normalize(mat3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.GameObjectTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform) * vertex.Normal);
    mat3 TBN = transpose(mat3(T, B, N));
    
    vec3 normal = vertex.Normal;
