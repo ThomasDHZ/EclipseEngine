@@ -27,7 +27,7 @@ private:
 	PBRPipeline pbrPipeline;
 	PBRInstancePipeline pbrInstancePipeline;
 	SkyboxPipeline skyboxPipeline;
-	LinePipeline drawLinePipeline;
+	LinePipeline linePipeline;
 	OutLinePipeline outLinePipeline;
 	WireFramePipeline wireframePipeline;
 

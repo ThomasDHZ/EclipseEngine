@@ -69,46 +69,46 @@ Scene::Scene()
 //   //  std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
 //    //GameObjectManager::AddGameObject(obj5);
 //
-//    //int width = 500;
-//    //int height = 500;
-//    //float length = 10.0f;
-//    //float radius = 0.5f;
-//    //std::vector<LineVertex3D> VertexList;
-//    //for (uint32_t y = 0; y < height; y++)
-//    //{
-//    //    for (uint32_t x = 0; x < width; x++)
-//    //    {
-//    //        glm::vec2 coord = { (float)x / width, (float)y / height };
-//    //        coord = coord * 2.0f - 1.0f;
-//
-//    //        uint8_t r = (uint8_t)(coord.x * 255.0f);
-//    //        uint8_t g = (uint8_t)(coord.y * 255.0f);
-//
-//    //        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-//    //        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
-//
-//    //        float a = glm::dot(rayDirection, rayDirection);
-//    //        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-//    //        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
-//
-//    //        //Quadratic forumla discriminat
-//    //        //b^2 - 4ac;
-//
-//    //        float discriminant = (b * b) - 4.0f * a * c;
-//
-//    //        if (discriminant >= 0.0f)
-//    //        {
-//    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
-//    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
-//    //        }
-//    //        else
-//    //        {
-//    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
-//    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
-//    //        }
-//    //    }
-//    //}
-//    //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
+    //int width = 500;
+    //int height = 500;
+    //float length = 10.0f;
+    //float radius = 0.5f;
+    //std::vector<LineVertex3D> VertexList;
+    //for (uint32_t y = 0; y < height; y++)
+    //{
+    //    for (uint32_t x = 0; x < width; x++)
+    //    {
+    //        glm::vec2 coord = { (float)x / width, (float)y / height };
+    //        coord = coord * 2.0f - 1.0f;
+
+    //        uint8_t r = (uint8_t)(coord.x * 255.0f);
+    //        uint8_t g = (uint8_t)(coord.y * 255.0f);
+
+    //        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+    //        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+
+    //        float a = glm::dot(rayDirection, rayDirection);
+    //        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+    //        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+
+    //        //Quadratic forumla discriminat
+    //        //b^2 - 4ac;
+
+    //        float discriminant = (b * b) - 4.0f * a * c;
+
+    //        if (discriminant >= 0.0f)
+    //        {
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+    //        }
+    //        else
+    //        {
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+    //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+    //        }
+    //    }
+    //}
+    //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
 //
 //
 ////   SceneManager::LoadScene("../Scenes/example.txt");
@@ -124,7 +124,7 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -164,57 +164,57 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        SceneManager::SaveAsPrefab(obj);
+       // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+       // obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+       // SceneManager::SaveAsPrefab(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        SceneManager::SaveAsPrefab(obj2);
+       // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+       // obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+       // SceneManager::SaveAsPrefab(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        SceneManager::SaveAsPrefab(obj3);
+       // auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+       // obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // SceneManager::SaveAsPrefab(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
-        SceneManager::SaveAsPrefab(obj4);
+       // auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+       // obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       //// MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
+       // SceneManager::SaveAsPrefab(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        SceneManager::SaveAsPrefab(obj5);
+       // auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+       // obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // SceneManager::SaveAsPrefab(obj5);
 
-    //InstancingDataStruct instance = {};
-    //for (int x = 0; x < 50; x++)
-    //{
-    //    for (int y = 0; y < 50; y++)
-    //    {
-    //        for (int z = 0; z < 50; z++)
-    //        {
-    //            InstanceMeshDataStruct instanceMeshDataStruct = {};
-    //            instanceMeshDataStruct.InstancePosition = glm::vec3(float(x), float(y), float(z));
-    //            instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-    //        }
-    //    }
-    //}
+    InstancingDataStruct instance = {};
+    for (int x = 0; x < 50; x++)
+    {
+        for (int y = 0; y < 50; y++)
+        {
+            for (int z = 0; z < 50; z++)
+            {
+                InstanceMeshDataStruct instanceMeshDataStruct = {};
+                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
+                instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+            }
+        }
+    }
 
-    //    std::vector<Vertex3D> vertices = {
-    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-    //};
+        std::vector<Vertex3D> vertices = {
+        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    };
 
-    // std::vector<uint32_t> indices = {
-    //    0, 1, 2, 2, 3, 0
-    //};
+     std::vector<uint32_t> indices = {
+        0, 1, 2, 2, 3, 0
+    };
 
-    //    std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-    //MaterialManager::SaveMaterial(material3);
+ /*       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");*/
+ /*   MaterialManager::SaveMaterial(WallMaterial);*/
 
-    //auto obj5 = std::make_shared<MeshRenderer>(MeshRenderer("Grass", vertices, indices, instance, material3));
+    auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
     }
 //
     auto dLight = DirectionalLightBuffer{};

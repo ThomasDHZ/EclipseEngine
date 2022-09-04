@@ -7,10 +7,10 @@ Model::Model()
 {
 }
 
-Model::Model(const std::string& FilePath, uint64_t parentGameObjectID)
+Model::Model(ModelLoader& modelLoader)
 {
 	GenerateID();
-	LoadModel(FilePath, parentGameObjectID);
+	LoadModel(modelLoader);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
@@ -69,7 +69,7 @@ void Model::GenerateID()
 	ModelID = ModelIDCounter;
 }
 
-void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* scene)
+void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scene)
 {
 	uint32_t TotalVertex = 0;
 	uint32_t TotalIndex = 0;
@@ -106,9 +106,17 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 		meshLoader.VerticeList = vertices;
 		meshLoader.IndexList = indices;
 
-		meshLoader.MeshType = MeshTypeEnum::kPolygon;
-		meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
-
+		if (modelLoader.instanceData.instanceMeshDataList.size() == 0)
+		{
+			meshLoader.MeshType = MeshTypeEnum::kPolygon;
+			meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
+		}
+		else
+		{
+			meshLoader.instanceData = modelLoader.instanceData;
+			meshLoader.MeshType = MeshTypeEnum::kPolygonInstanced;
+			meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
+		}
 		//uint32_t BoneCount;
 		//std::vector<MeshBoneWeights> BoneWeightList;
 		//std::vector<glm::mat4> BoneTransform;
@@ -116,7 +124,7 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 
 		/*if (LoadMaterial)
 		{*/
-			auto material = LoadMaterial(FilePath, mesh, scene);
+			auto material = LoadMaterial(modelLoader.FilePath, mesh, scene);
 			meshLoader.MaterialPtr = material;
 	/*	}*/
 
@@ -125,7 +133,7 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 
 	for (uint32_t x = 0; x < node->mNumChildren; x++)
 	{
-		LoadMesh(FilePath, node->mChildren[x], scene);
+		LoadMesh(modelLoader, node->mChildren[x], scene);
 	}
 }
 
@@ -333,24 +341,24 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 	return MaterialManager::GetMaterialByID(materialID);
 }
 
-void Model::LoadModel(const std::string& FilePath, uint64_t GameObjectID)
+void Model::LoadModel(ModelLoader& modelLoader)
 {
-	ModelFilePath = FilePath;
+	ModelFilePath = modelLoader.FilePath;
 
 	Assimp::Importer ModelImporter;
 
-	const aiScene* Scene = ModelImporter.ReadFile(FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* Scene = ModelImporter.ReadFile(ModelFilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 	if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
 	{
 		std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
 		return;
 	}
 
-	ParentGameObjectID = GameObjectID;
+	ParentGameObjectID = modelLoader.ParentGameObjectID;
 	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 	//LoadNodeTree(Scene->mRootNode);
 	//LoadAnimations(Scene);
-	LoadMesh(FilePath, Scene->mRootNode, Scene);
+	LoadMesh(modelLoader, Scene->mRootNode, Scene);
 	VulkanRenderer::UpdateTLAS = true;
 	//if (AnimationList.size() > 0)
 	//{

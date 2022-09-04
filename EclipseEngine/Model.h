@@ -32,6 +32,19 @@ struct NodeMap
 	}
 };
 
+struct ModelLoader
+{
+	uint64_t ParentGameObjectID = 0;
+
+	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
+	glm::mat4 MeshTransform = glm::mat4(1.0f);
+
+	std::string FilePath;
+	InstancingDataStruct instanceData;
+
+	MeshTypeEnum MeshType;
+};
+
 class Model
 {
 private:
@@ -50,8 +63,8 @@ private:
 	std::vector<NodeMap> NodeMapList;
 
 	void GenerateID();
-	void LoadModel(const std::string& FilePath, uint64_t GameObjectID);
-	void LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* scene);
+	void LoadModel(ModelLoader& modelLoader);
+	void LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scene);
 	std::vector<Vertex3D> LoadVertices(aiMesh* mesh);
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
 	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList);
@@ -60,7 +73,7 @@ private:
 
 	void from_json(nlohmann::json& json, uint64_t GameObjectID)
 	{
-		JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
+		/*JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
 		LoadModel(ModelFilePath, GameObjectID);
 
 		for (int x = 0; x < json["MeshList"].size(); x++)
@@ -84,7 +97,7 @@ private:
 
 		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
 		JsonConverter::from_json(json["ModelRotation"], ModelRotation);
-		JsonConverter::from_json(json["ModelScale"], ModelScale);
+		JsonConverter::from_json(json["ModelScale"], ModelScale);*/
 	}
 
 public:
@@ -95,7 +108,7 @@ public:
 	glm::vec3 ModelScale = glm::vec3(1.0f);
 
 	Model();
-	Model(const std::string& FilePath, uint64_t GameObjectID);
+	Model(ModelLoader& modelLoader);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
 	Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID);
 	Model(MeshLoader3D& meshLoader);
