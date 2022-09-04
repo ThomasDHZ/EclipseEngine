@@ -229,9 +229,9 @@ void main()
 
 mat3 getTBNFromMap()
 {
-   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
-   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
-   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
+   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
+   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
+   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
    return mat3(T, B, N);
 }
 
@@ -304,7 +304,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+        vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
         float shadow = filterPCF(LightSpace/ LightSpace.w, x);  
         Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
     }

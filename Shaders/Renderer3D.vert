@@ -38,15 +38,14 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
+    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
     Normal = aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
 
-    mat4 model =  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
+    mat4 model =  
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform;
 
 

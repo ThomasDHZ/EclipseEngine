@@ -29,14 +29,10 @@ layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directional
 void main() {
 
     FragPos = vec3(DLight[sceneData.LightIndex].directionalLight.lightSpaceMatrix * 
-                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                    meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                    vec4(inPosition.xyz, 1.0));    
     UV = aUV;
     gl_Position = DLight[sceneData.LightIndex].directionalLight.lightSpaceMatrix * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
 

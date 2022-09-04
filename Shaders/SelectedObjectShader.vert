@@ -35,8 +35,6 @@ layout(push_constant) uniform SceneData
 void main() {
     gl_Position = sceneData.proj * 
                   sceneData.view *                
-                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
     Color = aColor;

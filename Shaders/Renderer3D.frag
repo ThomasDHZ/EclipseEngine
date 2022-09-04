@@ -114,9 +114,9 @@ void main() {
         FinalUV.x = 1.0f - FinalUV.x;
    }
 
-   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
-   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
-   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
+   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
+   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
+   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
    mat3 TBN = transpose(mat3(T, B, N));
    
    vec3 normal = Normal;
@@ -204,7 +204,7 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
     float LightDistance = length(LightPos - FragPos2);
 
 
-    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+    vec4 LightSpace = (LightBiasMatrix *  DLight[index].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
    //float shadow = filterPCF(LightSpace/ LightSpace.w, index);  
     return (ambient + diffuse + specular);
 }

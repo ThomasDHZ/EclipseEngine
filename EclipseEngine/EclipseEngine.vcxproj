@@ -417,6 +417,8 @@
     <None Include="..\Shaders\anyhit1.rahit" />
     <None Include="..\Shaders\BillBoardShader.frag" />
     <None Include="..\Shaders\BillBoardShader.vert" />
+    <None Include="..\Shaders\BlinnPhoneReflect.frag" />
+    <None Include="..\Shaders\BlinnPhoneReflect.vert" />
     <None Include="..\Shaders\BRDFShader.frag" />
     <None Include="..\Shaders\BRDFShader.vert" />
     <None Include="..\Shaders\closesthit.rchit" />

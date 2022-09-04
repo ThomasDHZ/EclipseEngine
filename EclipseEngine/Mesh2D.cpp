@@ -62,6 +62,9 @@ void Mesh2D::MeshStartUp(std::shared_ptr<Material> materialPtr)
 
 void Mesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = ModelMatrix;
+
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, glm::vec3(MeshPosition.x, MeshPosition.y, 0.0f));
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -77,9 +80,7 @@ void Mesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		meshProperties.SelectedObjectBufferIndex = 0;
 	}
 
-	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
-	meshProperties.GameObjectTransform = GameObjectMatrix;
+	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 	MeshPropertiesBuffer.Update(meshProperties);
 }

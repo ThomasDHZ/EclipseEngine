@@ -71,9 +71,9 @@ const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperti
         FinalUV.x = 1.0f - FinalUV.x;
    }
 
-   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
-   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
-   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform *meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
+   vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(Tangent));
+   vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(BiTangent));
+   vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * Normal);
    mat3 TBN = transpose(mat3(T, B, N));
    outTangent = vec4(T, 1.0f);
    outBiTangent = vec4(B, 1.0f);

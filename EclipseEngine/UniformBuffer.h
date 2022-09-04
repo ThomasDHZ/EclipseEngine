@@ -93,8 +93,6 @@ struct MeshProperties
 {
 	MaterialBufferData materialBufferData;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
-	alignas(16) glm::mat4 ModelTransform = glm::mat4(1.0f);
-	alignas(16) glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);
@@ -115,7 +113,6 @@ struct MeshProperties
 	{
 		materialBufferData.from_json(json["materialBufferData"]);
 		JsonConverter::from_json(json["MeshTransform"], MeshTransform);
-		JsonConverter::from_json(json["ModelTransform"], ModelTransform);
 		JsonConverter::from_json(json["UVOffset"], UVOffset);
 		JsonConverter::from_json(json["UVScale"], UVScale);
 		JsonConverter::from_json(json["UVFlip"], UVFlip);
@@ -128,7 +125,6 @@ struct MeshProperties
 	{
 		materialBufferData.to_json(json["materialBufferData"]);
 		JsonConverter::to_json(json["MeshTransform"], MeshTransform);
-		JsonConverter::to_json(json["ModelTransform"], ModelTransform);
 		JsonConverter::to_json(json["UVOffset"], UVOffset);
 		JsonConverter::to_json(json["UVScale"], UVScale);
 		JsonConverter::to_json(json["UVFlip"], UVFlip);

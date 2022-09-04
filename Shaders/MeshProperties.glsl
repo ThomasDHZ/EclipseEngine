@@ -28,8 +28,6 @@ struct MeshProperties
 {
 	MaterialProperties materialProperties;
 	mat4 MeshTransform;
-	mat4 ModelTransform;
-	mat4 GameObjectTransform;
 	mat4 MeshReflectionMatrix[6];
 	vec2 UVOffset;
 	vec2 UVScale;

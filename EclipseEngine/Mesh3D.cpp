@@ -206,6 +206,14 @@ void Mesh3D::UpdateMeshBottomLevelAccelerationStructure()
 
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	if (MeshID == 27)
+	{
+		int a = 34;
+	}
+
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = ModelMatrix;
+
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -218,9 +226,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		VulkanRenderer::UpdateBLAS = true;
 	}
 
-	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
-	meshProperties.GameObjectTransform = GameObjectMatrix;
+	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 
 	if (SelectedMesh)
@@ -252,6 +258,9 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = ModelMatrix;
+
 	glm::mat4 TransformMatrix = glm::mat4(1.0f);
 	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -259,9 +268,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
-	meshProperties.MeshTransform = TransformMatrix;
-	meshProperties.ModelTransform = ModelMatrix;
-	meshProperties.GameObjectTransform = GameObjectMatrix;
+	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
 	meshProperties.materialBufferData = material->GetMaterialTextureData();
 
 	if (SelectedMesh)

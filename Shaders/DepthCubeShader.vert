@@ -32,14 +32,10 @@ layout(push_constant) uniform SceneData
 
 void main() {
     FragPos = vec3(viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
-                   meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                   meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                    meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                    vec4(inPosition.xyz, 1.0));    
     UV = aUV;
     gl_Position = viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.GameObjectTransform * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.ModelTransform * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
 }
