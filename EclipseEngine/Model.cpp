@@ -14,46 +14,47 @@ Model::Model(const std::string& FilePath, uint64_t parentGameObjectID)
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::shared_ptr<Mesh> mesh, uint64_t parentGameObjectID)
+Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 {
 	GenerateID();
-	ParentGameObjectID = parentGameObjectID;
+
+	ParentGameObjectID = GameObjectID;
+	GameObjectTransform = glm::mat4(1.0f);
+
 	AddMesh(mesh);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, uint64_t parentGameObjectID)
+Model::Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID)
 {
 	GenerateID();
-	ParentGameObjectID = parentGameObjectID;
-	AddMesh(mesh, material);
+
+	ParentGameObjectID = GameObjectID;
+	GameObjectTransform = glm::mat4(1.0f);
+
+	AddMeshList(meshList);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::vector<Mesh>& meshList, uint64_t parentGameObjectID)
+Model::Model(MeshLoader3D& meshLoader)
 {
 	GenerateID();
-	ParentGameObjectID = parentGameObjectID;
-	for (auto mesh : meshList)
-	{
-		//AddMesh(mesh);
-	}
+
+	ParentGameObjectID = meshLoader.ParentGameObjectID;
+	GameObjectTransform = meshLoader.GameObjectTransform;
+
+	AddMesh(meshLoader);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
-Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t parentGameObjectID)
+Model::Model(std::vector<MeshLoader3D>& meshLoaderList)
 {
 	GenerateID();
-	ParentGameObjectID = parentGameObjectID;
-	AddMesh(VertexList, IndexList);
-	VulkanRenderer::UpdateTLAS = true;
-}
 
-Model::Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID)
-{
-	GenerateID();
-	ParentGameObjectID = parentGameObjectID;
-	AddMesh(VertexList, IndexList);
+	ParentGameObjectID = meshLoaderList[0].ParentGameObjectID;
+	GameObjectTransform = meshLoaderList[0].GameObjectTransform;
+
+	AddMeshList(meshLoaderList);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
@@ -94,20 +95,29 @@ void Model::LoadMesh(const std::string& FilePath, aiNode* node, const aiScene* s
 			}
 		}
 
+		MeshLoader3D meshLoader;
+		meshLoader.ParentGameObjectID = ParentGameObjectID;
+		meshLoader.ParentModelID = ModelID;
 
-		MeshLoadingInfo meshLoader;
-		meshLoader.ModelID = ModelID;
-		meshLoader.vertices = vertices;
-		meshLoader.indices = indices;
-		meshLoader.BoneCount = BoneList.size();
-		meshLoader.BoneWeightList = boneWeights;
+		meshLoader.GameObjectTransform = GameObjectTransform;
+		meshLoader.ModelTransform = ModelTransform;
 		meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
-		meshLoader.meshType = MeshTypeEnum::kPolygon;
+
+		meshLoader.VerticeList = vertices;
+		meshLoader.IndexList = indices;
+
+		meshLoader.MeshType = MeshTypeEnum::kPolygon;
+		meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
+
+		//uint32_t BoneCount;
+		//std::vector<MeshBoneWeights> BoneWeightList;
+		//std::vector<glm::mat4> BoneTransform;
+
 
 		/*if (LoadMaterial)
 		{*/
 			auto material = LoadMaterial(FilePath, mesh, scene);
-			meshLoader.materialPtr = material;
+			meshLoader.MaterialPtr = material;
 	/*	}*/
 
 		AddMesh(meshLoader);
@@ -352,46 +362,48 @@ void Model::LoadModel(const std::string& FilePath, uint64_t GameObjectID)
 	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
 
-void Model::AddMesh(std::shared_ptr<Mesh> mesh)
+void Model::AddMesh(MeshLoader3D& meshLoader)
 {
-	mesh->SetParentModel(ModelID);
-	mesh->SetParentGameObjectID(ParentGameObjectID);
-	MeshList.emplace_back(mesh);
-}
-
-void Model::AddMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material)
-{
-	mesh->SetParentModel(ModelID);
-	mesh->SetParentGameObjectID(ParentGameObjectID);
-	mesh->SetMaterial(material);
-	MeshList.emplace_back(mesh);
-}
-
-void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices)
-{
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, MeshSubTypeEnum::kNormal, ParentGameObjectID));
-	
-	mesh->SetParentModel(ModelID);
-	mesh->SetParentGameObjectID(ParentGameObjectID);
-	MeshList.emplace_back(mesh);
-}
-
-void Model::AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr)
-{
-	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(vertices, indices, materialPtr, MeshSubTypeEnum::kNormal, ParentGameObjectID));
-	
-	mesh->SetParentModel(ModelID);
-	mesh->SetParentGameObjectID(ParentGameObjectID);
-	MeshList.emplace_back(mesh);
-}
-
-void Model::AddMesh(MeshLoadingInfo& meshLoader)
-{
+	meshLoader.ParentModelID = ModelID;
+	meshLoader.ModelTransform = ModelTransform;
 	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
 
-	mesh->SetParentModel(ModelID);
-	mesh->SetParentGameObjectID(ParentGameObjectID);
 	MeshList.emplace_back(mesh);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+void Model::AddMeshList(std::vector<MeshLoader3D>& meshLoaderList)
+{
+	for (auto& meshLoader : meshLoaderList)
+	{
+		meshLoader.ParentModelID = ModelID;
+		meshLoader.ModelTransform = ModelTransform;
+		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
+
+		MeshList.emplace_back(mesh);
+	}
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+void Model::AddMesh(std::shared_ptr<Mesh> mesh)
+{
+	mesh->SetParentGameObjectID(ParentGameObjectID);
+	mesh->SetParentModel(ModelID);
+
+	MeshList.emplace_back(mesh);
+	VulkanRenderer::UpdateTLAS = true;
+}
+
+void Model::AddMeshList(std::vector<std::shared_ptr<Mesh>>& meshList)
+{
+	for (auto& mesh : meshList)
+	{
+		mesh->SetParentGameObjectID(ParentGameObjectID);
+		mesh->SetParentModel(ModelID);
+
+		MeshList.emplace_back(mesh);
+	}
+	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)

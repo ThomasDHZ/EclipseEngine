@@ -2,6 +2,28 @@
 #include "Mesh.h"
 #include "MeshRendererManager.h"
 
+struct MeshLoader3D
+{
+	uint64_t ParentGameObjectID = 0;
+	uint64_t ParentModelID = 0;
+
+	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
+	glm::mat4 ModelTransform = glm::mat4(1.0f);
+	glm::mat4 MeshTransform = glm::mat4(1.0f);
+
+	std::vector<Vertex3D> VerticeList;
+	std::vector<uint32_t> IndexList;
+	std::shared_ptr<Material> MaterialPtr = MaterialManager::GetDefaultMaterial();
+	InstancingDataStruct instanceData;
+
+	MeshTypeEnum MeshType;
+	MeshSubTypeEnum MeshSubType;
+
+	uint32_t BoneCount = 0;
+	std::vector<MeshBoneWeights> BoneWeightList;
+	std::vector<glm::mat4> BoneTransform;
+};
+
 class Mesh3D : public Mesh
 {
 private:
@@ -17,6 +39,7 @@ private:
 	glm::vec3 GetRotation() { return MeshRotation; }
 	glm::vec3 GetScale() { return MeshScale; }
 
+
 protected:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
@@ -24,21 +47,14 @@ protected:
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
-	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, uint64_t parentGameObjectID);
-	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID);
-	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, uint64_t parentGameObjectID);
-	void MeshStartUp(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, uint64_t parentGameObjectID);
-	void MeshStartUp(MeshLoadingInfo& meshLoader);
+	void InstancingStartUp(InstancingDataStruct& instanceData);
+	void AnimationStartUp(MeshLoader3D& meshLoader);
 	void RTXMeshStartUp();
 	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
 	Mesh3D();
-	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
-	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
-	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
-	Mesh3D(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
-	Mesh3D(MeshLoadingInfo& meshLoader);
+	Mesh3D(MeshLoader3D& meshLoader);
 	~Mesh3D();
 
 	glm::vec3 MeshPosition = glm::vec3(0.0f);

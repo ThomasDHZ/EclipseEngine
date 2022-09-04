@@ -44,24 +44,6 @@ struct MeshBoneWeights
 	}
 };
 
-struct MeshLoadingInfo
-{
-	uint64_t ModelID; 
-	uint64_t GameObjectID;
-
-	std::vector<Vertex3D> vertices;
-	std::vector<uint32_t> indices; 
-	uint32_t BoneCount;
-	std::vector<MeshBoneWeights> BoneWeightList;
-	std::vector<glm::mat4> BoneTransform;
-	glm::mat4 MeshTransform;
-	std::shared_ptr<Material> materialPtr;
-	MeshTypeEnum meshType;
-
-	MeshLoadingInfo() {}
-
-};
-
 class Mesh
 {
 private:
@@ -85,10 +67,9 @@ private:
 	//}
 
 protected:
-
-	uint64_t MeshID = 0;
-	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
+	uint64_t ParentModelID = 0;
+	uint64_t MeshID = 0;
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t InstanceCount = 0;
@@ -100,10 +81,12 @@ protected:
 	MeshTypeEnum MeshType;
 	MeshSubTypeEnum MeshSubType;
 
-	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
+	glm::mat4 GameObjectTransformMatrix = glm::mat4(1.0f);
+	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
+	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
 
-	std::vector<InstancingDataStruct> InstanceDataVectors;
+	std::vector<InstancingDataStruct> InstanceData;
 	std::vector<InstancedData3D> InstancedDataList;
 	
 	std::shared_ptr<Material> material;

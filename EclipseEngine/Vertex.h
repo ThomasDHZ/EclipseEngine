@@ -15,8 +15,6 @@ struct InstanceMeshDataStruct
 
 struct InstancingDataStruct
 {
-    glm::mat4 GameObjectMatrix = glm::mat4(1.0f);
-    glm::mat4 ModelMatrix = glm::mat4(1.0f);
     std::vector<InstanceMeshDataStruct> instanceMeshDataList;
 
     InstancingDataStruct() {};

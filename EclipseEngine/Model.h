@@ -42,6 +42,7 @@ private:
 	uint64_t ModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 
+	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;
@@ -96,18 +97,17 @@ public:
 	Model();
 	Model(const std::string& FilePath, uint64_t GameObjectID);
 	Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID);
-	Model(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, uint64_t GameObjectID);
-	Model(std::vector<Mesh>& meshList, uint64_t GameObjectID);
-	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, uint64_t GameObjectID);
-	Model(std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, std::shared_ptr<Material> materialPtr, uint64_t GameObjectID);
+	Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID);
+	Model(MeshLoader3D& meshLoader);
+	Model(std::vector<MeshLoader3D>& meshLoaderList);
 	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
+	void AddMesh(MeshLoader3D& meshLoader);
 	void AddMesh(std::shared_ptr<Mesh> mesh);
-	void AddMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
-	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices);
-	void AddMesh(std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
-	void AddMesh(MeshLoadingInfo& meshLoader);
+
+	void AddMeshList(std::vector<MeshLoader3D>& meshLoaderList);
+	void AddMeshList(std::vector<std::shared_ptr<Mesh>>& mesh);
 
 	void DeleteMesh(std::shared_ptr<Mesh> mesh);
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);

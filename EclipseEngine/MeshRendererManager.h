@@ -10,11 +10,6 @@ private:
 	static std::shared_ptr<Mesh> ActiveMesh;
 public:
 
-	static void AddMesh(MeshLoadingInfo meshLoader)
-	{
-		//std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-		//MeshList.emplace_back(mesh);
-	}
 
 	static void AddMesh(std::shared_ptr<Mesh> mesh)
 	{

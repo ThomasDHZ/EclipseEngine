@@ -186,8 +186,6 @@ Scene::Scene()
         //SceneManager::SaveAsPrefab(obj5);
 
     InstancingDataStruct instance = {};
-    instance.GameObjectMatrix = glm::mat4(1.0f);
-    instance.ModelMatrix = glm::mat4(1.0f);
     for (int x = 0; x < 50; x++)
     {
         for (int y = 0; y < 50; y++)
