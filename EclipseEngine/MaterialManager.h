@@ -86,15 +86,15 @@ public:
 	static std::vector<VkDescriptorBufferInfo>  GetMaterialBufferList()
 	{
 		std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};
-		for (auto material : MaterialList)
+		for (int x = 0; x < MaterialList.size(); x++)
 		{
 			VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-			MeshPropertiesmBufferBufferInfo.buffer = material->GetMaterialBuffer();
+			MeshPropertiesmBufferBufferInfo.buffer = MaterialList[x]->GetMaterialBuffer();
 			MeshPropertiesmBufferBufferInfo.offset = 0;
 			MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 			MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferBufferInfo);
 
-			material->SetBufferIndex(MeshPropertiesmBufferList.size());
+			MaterialList[x]->SetBufferIndex(x);
 		}
 
 		return MeshPropertiesmBufferList;
