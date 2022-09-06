@@ -22,6 +22,7 @@ enum PipelineRendererTypeEnum
 	kRenderMesh,
 	kRenderInstanceMesh,
 	kRenderDepth,
+	kRenderInstanceDepth,
 	kRenderSkybox,
 	kRenderDepthCubeMap,
 	kRenderPBRSkyBox,

@@ -171,6 +171,7 @@
     <ClCompile Include="DepthCubeMapRenderer.cpp" />
     <ClCompile Include="DepthDebugPipeline.cpp" />
     <ClCompile Include="DepthDebugRenderPass.cpp" />
+    <ClCompile Include="DepthInstancedPipeline.cpp" />
     <ClCompile Include="DepthPipeline.cpp" />
     <ClCompile Include="DepthRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="DepthCubeMapRenderer.h" />
     <ClInclude Include="DepthDebugPipeline.h" />
     <ClInclude Include="DepthDebugRenderPass.h" />
+    <ClInclude Include="DepthInstancedPipeline.h" />
     <ClInclude Include="DepthPipeline.h" />
     <ClInclude Include="DepthRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -435,6 +437,8 @@
     <None Include="..\Shaders\DepthCubeShader.vert" />
     <None Include="..\Shaders\DepthDebugShader.frag" />
     <None Include="..\Shaders\DepthDebugShader.vert" />
+    <None Include="..\Shaders\DepthIntencedShader.frag" />
+    <None Include="..\Shaders\DepthIntencedShader.vert" />
     <None Include="..\Shaders\DepthShader.frag" />
     <None Include="..\Shaders\DepthShader.vert" />
     <None Include="..\Shaders\EnvironmentToCubeMap.frag" />

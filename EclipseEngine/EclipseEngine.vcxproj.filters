@@ -177,9 +177,6 @@
     <ClCompile Include="ComponentRenderer.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -493,6 +490,12 @@
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="PBRInstancePipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthInstancedPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
@@ -899,6 +902,9 @@
     <ClInclude Include="PBRInstancePipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
+    <ClInclude Include="DepthInstancedPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1093,11 +1099,17 @@
     <None Include="..\Shaders\PBRInstanceRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\BlinnPhoneReflect.frag">
-      <Filter>Shader</Filter>
+    <None Include="..\Shaders\DepthIntencedShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\DepthIntencedShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\BlinnPhoneReflect.vert">
-      <Filter>Shader</Filter>
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BlinnPhoneReflect.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

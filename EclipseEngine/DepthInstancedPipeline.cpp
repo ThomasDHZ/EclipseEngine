@@ -1,0 +1,64 @@
+#include "DepthInstancedPipeline.h"
+
+DepthInstancedPipeline::DepthInstancedPipeline()
+{
+}
+
+DepthInstancedPipeline::~DepthInstancedPipeline()
+{
+}
+
+void DepthInstancedPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
+{
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+
+    std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthIntencedShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthIntencedShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+
+    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+
+    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+    buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
+    buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+    buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderInstanceDepth;
+    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(DirectionalLightProjection);
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3DInstance;
+
+    if (ShaderPipeline == nullptr)
+    {
+        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    }
+    else
+    {
+        Destroy();
+        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    }
+
+    for (auto& shader : PipelineShaderStageList)
+    {
+        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+    }
+}
+
+void DepthInstancedPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, uint32_t x)
+{
+    DirectionalLightProjection directionalLightProjection;
+    directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
+    directionalLightProjection.LightIndex = x;
+
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(DirectionalLightProjection), &directionalLightProjection);
+    mesh->InstanceDraw(commandBuffer);
+}

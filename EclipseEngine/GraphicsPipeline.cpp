@@ -530,6 +530,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
                 attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[1]);
                 attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[2]);
                 attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[3]);
+                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[4]);
                 break;
             }
             default:
@@ -617,6 +618,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderInstanceMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
+        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderInstanceDepth ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepthCubeMap ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||

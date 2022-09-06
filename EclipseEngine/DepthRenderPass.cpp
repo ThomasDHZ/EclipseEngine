@@ -151,6 +151,7 @@ void DepthRenderPass::BuildRenderPassPipelines()
     pipelineInfo.SampleCount = SampleCount;
 
     depthPipeline.InitializePipeline(pipelineInfo);
+    depthInstancedPipeline.InitializePipeline(pipelineInfo);
 }
 
 void DepthRenderPass::ClearTextureList()
@@ -207,15 +208,20 @@ VkCommandBuffer DepthRenderPass::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
-                case MeshTypeEnum::kPolygon:
-                {
-                    depthPipeline.Draw(commandBuffer, mesh, x);
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
+                    case MeshTypeEnum::kPolygon:
+                    {
+                        depthPipeline.Draw(commandBuffer, mesh, x);
+                        break;
+                    }
+                    case MeshTypeEnum::kPolygonInstanced:
+                    {
+                        depthInstancedPipeline.Draw(commandBuffer, mesh, x);
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
                 }
             }
         }
