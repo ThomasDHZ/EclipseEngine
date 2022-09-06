@@ -16,7 +16,8 @@ layout(location = 5) in vec3 Color;
 layout(location = 0) out vec4 outColor;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 1) uniform sampler2D TextureMap[];
+layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 2) uniform sampler2D TextureMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -35,6 +36,8 @@ layout(push_constant) uniform SceneData
 
 void main() 
 {
-   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
+   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
+   MaterialProperties material = materialBuffer[materialID].materialProperties;
+   uint alpha = material.AlphaMapID;
    outColor = vec4(sceneData.MeshColorID, texture(TextureMap[alpha], UV).r);
 }

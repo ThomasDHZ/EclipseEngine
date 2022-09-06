@@ -81,7 +81,7 @@ void Mesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	}
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.materialBufferData = material->GetMaterialTextureData();
+	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 	MeshPropertiesBuffer.Update(meshProperties);
 }
 

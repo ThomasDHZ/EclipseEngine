@@ -228,7 +228,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	}
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.materialBufferData = material->GetMaterialTextureData();
+	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex() - 1;
 
 	if (SelectedMesh)
 	{
@@ -270,7 +270,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.materialBufferData = material->GetMaterialTextureData();
+	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex() - 1;
 
 	if (SelectedMesh)
 	{

@@ -13,7 +13,8 @@ layout(location = 2) in vec3 Color;
 layout(location = 0) out vec4 outColor;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 1) uniform sampler2D TextureMap[];
+layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 2) uniform sampler2D TextureMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -31,8 +32,12 @@ layout(push_constant) uniform SceneData
 } sceneData;
 
 void main() {
-   uint diffuse = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID;
-   uint alpha = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.AlphaMapID;
+
+   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
+   MaterialProperties material = materialBuffer[materialID].materialProperties;
+
+   uint diffuse = material.DiffuseMapID;
+   uint alpha = material.AlphaMapID;
 
    vec3 result = texture(TextureMap[diffuse], UV).rgb;
    	 vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);

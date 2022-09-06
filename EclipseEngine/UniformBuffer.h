@@ -91,7 +91,7 @@ struct CubeMapSampler
 
 struct MeshProperties
 {
-	MaterialBufferData materialBufferData;
+	alignas(4) uint32_t MaterialBufferIndex;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
@@ -111,7 +111,6 @@ struct MeshProperties
 	}
 	void from_json(nlohmann::json& json)
 	{
-		materialBufferData.from_json(json["materialBufferData"]);
 		JsonConverter::from_json(json["MeshTransform"], MeshTransform);
 		JsonConverter::from_json(json["UVOffset"], UVOffset);
 		JsonConverter::from_json(json["UVScale"], UVScale);
@@ -123,7 +122,6 @@ struct MeshProperties
 
 	void to_json(nlohmann::json& json)
 	{
-		materialBufferData.to_json(json["materialBufferData"]);
 		JsonConverter::to_json(json["MeshTransform"], MeshTransform);
 		JsonConverter::to_json(json["UVOffset"], UVOffset);
 		JsonConverter::to_json(json["UVScale"], UVScale);

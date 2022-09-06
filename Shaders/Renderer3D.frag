@@ -23,11 +23,12 @@ layout(location = 0) out vec4 outColor;
 //layout(location = 1) out vec4 outBloom;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 1) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 2) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 3) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 4) uniform sampler2D TextureMap[];
-//layout(binding = 5) uniform sampler2D ShadowMap[];
+layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 2) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 3) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 4) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 5) uniform sampler2D TextureMap[];
+//layout(binding = 6) uniform sampler2D ShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -96,7 +97,9 @@ vec2 ParallaxMapping(MaterialProperties material, vec2 texCoords, vec3 viewDir);
 void main() {
 
 //debugPrintfEXT(": %i \n", sceneData.MeshIndex);
-   const MaterialProperties material = meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties;
+   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
+   MaterialProperties material = materialBuffer[materialID].materialProperties;
+
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 

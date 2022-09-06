@@ -124,7 +124,7 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -221,7 +221,7 @@ Scene::Scene()
  /*   MaterialManager::SaveMaterial(WallMaterial);*/
 
     auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
-    auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
+    //auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 //
     auto dLight = DirectionalLightBuffer{};

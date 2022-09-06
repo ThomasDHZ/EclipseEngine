@@ -40,10 +40,11 @@ layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
 layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
 layout(binding = 3) buffer Indices { uint i[]; } indices[];
 layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 8) uniform sampler2D TextureMap[];
+layout(binding = 5) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 6) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 7) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 8) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 9) uniform sampler2D TextureMap[];
 
 Vertex BuildVertexInfo()
 {
@@ -75,7 +76,9 @@ vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords,
 
 void main()
 {
-   const MaterialProperties material = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.materialProperties;
+   const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
+   MaterialProperties material = materialBuffer[materialID].materialProperties;
+
 	Vertex vertex = BuildVertexInfo();
        vec2 FinalUV = vertex.UV + meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVOffset;
         FinalUV *= meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVScale;

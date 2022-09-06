@@ -1099,16 +1099,16 @@
     <None Include="..\Shaders\PBRInstanceRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\BlinnPhoneReflect.frag">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shaders\BlinnPhoneReflect.vert">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="..\Shaders\DepthIntencedShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\DepthIntencedShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BlinnPhoneReflect.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\BlinnPhoneReflect.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
