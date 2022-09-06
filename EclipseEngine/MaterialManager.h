@@ -83,7 +83,7 @@ public:
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
-	static std::vector<VkDescriptorBufferInfo>  GetMaterialemBufferList()
+	static std::vector<VkDescriptorBufferInfo>  GetMaterialBufferList()
 	{
 		std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList{};
 		for (auto material : MaterialList)

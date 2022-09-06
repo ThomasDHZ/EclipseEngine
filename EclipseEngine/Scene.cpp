@@ -158,11 +158,11 @@ Scene::Scene()
 //    //source.Play(sound);
 //
     {
-        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+   /*     std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
         std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");*/
 
        // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
        // obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
@@ -185,18 +185,24 @@ Scene::Scene()
        // obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
        // SceneManager::SaveAsPrefab(obj5);
 
+
+        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+        MaterialManager::AddMaterial(material3);
+
     InstancingDataStruct instance = {};
-    for (int x = 0; x < 50; x++)
+    for (int x = 0; x < 5; x++)
     {
-        for (int y = 0; y < 50; y++)
-        {
-            for (int z = 0; z < 50; z++)
+     /*   for (int y = 0; y < 50; y++)
+        {*/
+            for (int z = 0; z < 5; z++)
             {
                 InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
+                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(1.0f * 10.0f), float(z * 3.0f));
                 instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+                instance.MaterialID = material3->GetMaterialBufferIndex();
             }
-        }
+        //}
     }
 
         std::vector<Vertex3D> vertices = {
@@ -215,6 +221,7 @@ Scene::Scene()
  /*   MaterialManager::SaveMaterial(WallMaterial);*/
 
     auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
+    auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 //
     auto dLight = DirectionalLightBuffer{};
@@ -274,6 +281,7 @@ void Scene::StartUp()
 
 void Scene::Update()
 {
+    auto a = MaterialManager::GetMaterialList();
     if (VulkanRenderer::UpdateRendererFlag)
     {
         BuildRenderers();
@@ -327,7 +335,7 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-        //ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)

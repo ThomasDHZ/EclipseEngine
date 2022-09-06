@@ -526,11 +526,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
                 bindingDescriptions.emplace_back(InstancedData3D::getBindingDescriptions()[0]);
 
                 attributeDescriptions = Vertex3D::getAttributeDescriptions();
-                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[0]);
-                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[1]);
-                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[2]);
-                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[3]);
-                attributeDescriptions.emplace_back(InstancedData3D::getAttributeDescriptions()[4]);
+                attributeDescriptions = InstancedData3D::AddInstnacingAttributeDescription(attributeDescriptions);
                 break;
             }
             default:
@@ -618,7 +614,6 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildGraph
     if (buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderInstanceMesh ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepth ||
-        buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderInstanceDepth ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderDepthCubeMap ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderSkybox ||
         buildGraphicsPipelineInfo.PipelineRendererType == PipelineRendererTypeEnum::kRenderPBRSkyBox ||

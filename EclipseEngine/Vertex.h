@@ -7,6 +7,7 @@
 
 struct InstanceMeshDataStruct
 {
+    uint64_t MaterialID = 0;
     glm::vec3 InstancePosition = glm::vec3(0.0f);
     glm::vec3 InstanceRotation = glm::vec3(0.0f);
     glm::vec3 InstanceScale = glm::vec3(1.0f);
@@ -15,9 +16,8 @@ struct InstanceMeshDataStruct
 
 struct InstancingDataStruct
 {
-    uint64_t MaterialID = 0;
     std::vector<InstanceMeshDataStruct> instanceMeshDataList;
-
+    uint64_t MaterialID = 0;
     InstancingDataStruct() {};
 };
 
@@ -264,10 +264,8 @@ struct InstancedData3D
         return bindingDescriptionList;
     }
 
-    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+    static std::vector<VkVertexInputAttributeDescription> AddInstnacingAttributeDescription(std::vector<VkVertexInputAttributeDescription>& AttributeDescriptions)
     {
-        std::vector<VkVertexInputAttributeDescription> AttributeDescriptions = {};
-
         VkVertexInputAttributeDescription AttributeDescription;
 
         AttributeDescription.binding = 1;

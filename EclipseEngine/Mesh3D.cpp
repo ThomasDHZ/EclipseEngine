@@ -58,6 +58,7 @@ void Mesh3D::InstancingStartUp(InstancingDataStruct& instanceData)
 			TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
 
 			instanceData2.InstanceModel = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
+			instanceData2.MaterialID = instanceData.MaterialID;
 			InstancedDataList.emplace_back(instanceData2);
 		}
 

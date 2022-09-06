@@ -51,7 +51,6 @@ public:
 	bool PreRenderedFlag = false;
 	bool UpdatePreRenderer = true;
 
-	/*DepthDebugRenderPass depthDebugRenderPass;
-	DepthDebugRenderPass depthDebugRenderPass2;*/
+	DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

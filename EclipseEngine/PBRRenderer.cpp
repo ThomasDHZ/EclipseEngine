@@ -58,6 +58,7 @@ void PBRRenderer::BuildRenderer()
 		pbrRenderPass.BuildRenderPass(submitList);
 	}
 
+	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
 }
 
@@ -158,8 +159,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		}
 	}
 
-	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass2.Draw());
+	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
@@ -194,7 +194,6 @@ void PBRRenderer::Destroy()
 		pbrRenderPass.Destroy();
 	}
 	 
-	//depthDebugRenderPass.Destroy();
-	//depthDebugRenderPass2.Destroy();
+	depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

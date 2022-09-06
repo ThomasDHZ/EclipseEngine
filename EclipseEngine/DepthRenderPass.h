@@ -8,6 +8,7 @@
 #include "DepthPipeline.h"
 #include "DepthInstancedPipeline.h"
 
+
 class DepthRenderPass : public RenderPass
 {
 private:
