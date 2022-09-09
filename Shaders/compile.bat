@@ -44,6 +44,16 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 PBRInstanceRenderer.vert -o ../x64/Shaders/PBRInstanceRendererVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 PBRInstanceRenderer.frag -o ../x64/Shaders/PBRInstanceRendererFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ReflectionPBRShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ReflectionPBRShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ../x64/Shaders/ReflectionPBRShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ../x64/Shaders/ReflectionPBRShaderFrag.spv
+
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ReflectionPBRInstanceShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ReflectionPBRInstanceShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ../x64/Shaders/ReflectionPBRInstanceShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ../x64/Shaders/ReflectionPBRInstanceShaderFrag.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthShader.vert -o DepthShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthShader.frag -o DepthShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthShader.vert -o ../x64/Shaders/DepthShaderVert.spv
@@ -63,11 +73,6 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthDebugShader.frag -o DepthDebugShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthDebugShader.vert -o ../x64/Shaders/DepthDebugShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthDebugShader.frag -o ../x64/Shaders/DepthDebugShaderFrag.spv
-
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ReflectionPBRShaderVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ReflectionPBRShaderFrag.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ../x64/Shaders/ReflectionPBRShaderVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ../x64/Shaders/ReflectionPBRShaderFrag.spv
 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.vert -o GBufferVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.frag -o GBufferFrag.spv

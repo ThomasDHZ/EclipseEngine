@@ -34,7 +34,6 @@ Mesh3D::Mesh3D(MeshLoader3D& meshLoader)
 	RTXMeshStartUp();
 	AnimationStartUp(meshLoader);
 	InstancingStartUp(meshLoader.instanceData);
-	MeshRendererManager::AddMesh(std::make_shared<Mesh>(*this));
 }
 
 Mesh3D::~Mesh3D()
@@ -207,8 +206,9 @@ void Mesh3D::UpdateMeshBottomLevelAccelerationStructure()
 
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	if (MeshID == 27)
+	if (MeshID == 30)
 	{
+		auto aptr = *this;
 		int a = 34;
 	}
 
@@ -221,6 +221,10 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
+
+	reflectionPoint = glm::vec3(GameObjectTransformMatrix[3][0], GameObjectTransformMatrix[3][1], GameObjectTransformMatrix[3][2]) +
+					  glm::vec3(ModelTransformMatrix[3][0], ModelTransformMatrix[3][1], ModelTransformMatrix[3][2]) +
+					  MeshPosition + ReflectionPoint;
 
 	if (meshProperties.MeshTransform != TransformMatrix)
 	{

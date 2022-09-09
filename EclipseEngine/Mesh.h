@@ -109,6 +109,7 @@ public:
 
 	std::string MeshName;
 	MeshProperties meshProperties;
+	glm::vec3 reflectionPoint = glm::vec3(0.0f);
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);

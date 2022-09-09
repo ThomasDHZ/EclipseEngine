@@ -7,49 +7,41 @@ ModelRenderer::ModelRenderer()
 ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh) : GameObject3D(Name)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position) : GameObject3D(Name, position)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh) : GameObject3D(Name)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, glm::vec3 position) : GameObject3D(Name, position)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData) : GameObject3D(Name)
@@ -63,7 +55,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position) : GameObject3D(Name, position)
@@ -77,7 +68,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -91,7 +81,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -105,7 +94,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material) : GameObject3D(Name)
@@ -120,7 +108,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
@@ -135,7 +122,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -150,7 +136,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -165,7 +150,6 @@ ModelRenderer::ModelRenderer(const std::string Name, std::vector<Vertex3D>& Vert
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	model = std::make_shared<Model>(Model(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath) : GameObject3D(Name)
@@ -176,7 +160,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.GameObjectTransform = GetGameObjectMatrix();
 	
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position) : GameObject3D(Name, position)
@@ -187,7 +170,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.GameObjectTransform = GetGameObjectMatrix();
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -198,7 +180,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.GameObjectTransform = GetGameObjectMatrix();
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -209,7 +190,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.GameObjectTransform = GetGameObjectMatrix();
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData) : GameObject3D(Name)
@@ -221,7 +201,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.instanceData = instanceData;
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData, glm::vec3 position) : GameObject3D(Name, position)
@@ -233,7 +212,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.instanceData = instanceData;
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -245,7 +223,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.instanceData = instanceData;
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -257,7 +234,6 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	modelLoader.instanceData = instanceData;
 
 	model = std::make_shared<Model>(Model(modelLoader));
-	GameObjectManager::AddGameObject(std::make_shared<ModelRenderer>(*this));
 }
 
 ModelRenderer::ModelRenderer(nlohmann::json json) : GameObject3D(json)

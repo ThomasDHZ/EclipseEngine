@@ -13,7 +13,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(std::make_shared<Mesh3D>(Mesh3D(meshLoader)));
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position) : GameObject3D(Name, position)
@@ -26,7 +26,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -39,7 +39,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -52,7 +52,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material) : GameObject3D(Name)
@@ -66,7 +66,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
@@ -80,7 +80,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -94,7 +94,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -108,7 +108,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData) : GameObject3D(Name)
@@ -122,7 +122,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position) : GameObject3D(Name, position)
@@ -136,7 +136,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -150,7 +150,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -164,7 +164,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material) : GameObject3D(Name)
@@ -179,7 +179,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
@@ -194,7 +194,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
@@ -209,7 +209,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
@@ -224,7 +224,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	GameObjectManager::AddGameObject(std::make_shared<MeshRenderer>(*this));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::~MeshRenderer()
