@@ -196,6 +196,13 @@ GameObjectManager::AddGameObject(a);
         MaterialManager::AddMaterial(material3);
 
     InstancingDataStruct instance = {};
+    std::vector<std::shared_ptr<Material>> instanceMaterialList;
+    instanceMaterialList.emplace_back(IronmMaterial);
+    instanceMaterialList.emplace_back(PlasticMaterial);
+    instanceMaterialList.emplace_back(WallMaterial);
+    instanceMaterialList.emplace_back(GoldMaterial);
+    instanceMaterialList.emplace_back(GrassMaterial);
+
     for (int x = 0; x < 5; x++)
     {
      /*   for (int y = 0; y < 50; y++)
@@ -203,9 +210,9 @@ GameObjectManager::AddGameObject(a);
             for (int z = 0; z < 5; z++)
             {
                 InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(1.0f * 10.0f), float(z * 3.0f));
+                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(0.0f), float(z * 3.0f));
                 instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-                instance.MaterialID = material3->GetMaterialBufferIndex();
+                instance.MaterialList = instanceMaterialList;
             }
         //}
     }

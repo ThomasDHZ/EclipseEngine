@@ -171,6 +171,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
+    pbrInstancedPipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
@@ -227,6 +228,11 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMe
                 pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh);
                 break;
             }
+            case MeshTypeEnum::kPolygonInstanced:
+            {
+                pbrInstancedPipeline.Draw(commandBuffer, mesh, reflectingMesh);
+                break;
+            }
             default: break;
             }
         }
@@ -246,10 +252,8 @@ void PBRReflectionRenderPass::Destroy()
     DepthTexture->Destroy();
 
     pbrPipeline.Destroy();
+    pbrInstancedPipeline.Destroy();
     skyboxPipeline.Destroy();
-    drawLinePipeline.Destroy();
-    outLinePipeline.Destroy();
-    wireframePipeline.Destroy();
 
     RenderPass::Destroy();
 }

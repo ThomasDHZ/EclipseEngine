@@ -208,6 +208,7 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
+    <ClCompile Include="PBRInstancedReflectionPipeline.cpp" />
     <ClCompile Include="PBRInstancePipeline.cpp" />
     <ClCompile Include="PBRPipeline.cpp" />
     <ClCompile Include="PBRRealTimeRenderer.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
+    <ClInclude Include="PBRInstancedReflectionPipeline.h" />
     <ClInclude Include="PBRInstancePipeline.h" />
     <ClInclude Include="PBRPipeline.h" />
     <ClInclude Include="PBRRealTimeRenderer.h" />
@@ -470,6 +472,8 @@
     <None Include="..\Shaders\PrefilterShader.frag" />
     <None Include="..\Shaders\PrefilterShader.vert" />
     <None Include="..\Shaders\raygen.rgen" />
+    <None Include="..\Shaders\ReflectionPBRInstanceShader.frag" />
+    <None Include="..\Shaders\ReflectionPBRInstanceShader.vert" />
     <None Include="..\Shaders\ReflectionPBRShader.frag" />
     <None Include="..\Shaders\ReflectionPBRShader.vert" />
     <None Include="..\Shaders\Renderer2D.frag" />
