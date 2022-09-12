@@ -49,20 +49,16 @@ Scene::Scene()
 //       //;   auto  obj6 = std::make_shared<LineRenderer2D>(LineRenderer2D("Testobject5", StartPoint, EndPoint, Color));
 //       //GameObjectManager::AddGameObject(obj6);
 //
-    //std::vector<Vertex3D> vertices = {
-    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-    //};
-
-    // std::vector<uint32_t> indices = {
-    //    0, 1, 2, 2, 3, 0
-    //};
-
-    // std::shared_ptr<MeshRenderer> obj = std::make_shared<MeshRenderer>(MeshRenderer("Testobject", vertices, indices, glm::vec3(0.0f)));
-    //GameObjectManager::AddGameObject(obj);
- 
+//    //std::vector<MeshVertex> vertices = {
+//    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+//    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+//    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+//    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+//    //};
+//
+//    // std::vector<uint32_t> indices = {
+//    //    0, 1, 2, 2, 3, 0
+//    //};
 //     //std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
 //     //std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
 //     //std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
@@ -128,8 +124,8 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-auto a = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
-GameObjectManager::AddGameObject(a);
+auto model = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+GameObjectManager::AddGameObject(model);
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -163,7 +159,7 @@ GameObjectManager::AddGameObject(a);
 //    //source.Play(sound);
 //
     {
-       std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
         std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
@@ -178,16 +174,16 @@ GameObjectManager::AddGameObject(a);
         GameObjectManager::AddGameObject(obj2);
 
         auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         GameObjectManager::AddGameObject(obj3);
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        MeshRendererManager::GetMeshByID(30)->SetReflectionPoint(glm::vec3(3.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj4);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         GameObjectManager::AddGameObject(obj5);
 
 
@@ -196,13 +192,6 @@ GameObjectManager::AddGameObject(a);
         MaterialManager::AddMaterial(material3);
 
     InstancingDataStruct instance = {};
-    std::vector<std::shared_ptr<Material>> instanceMaterialList;
-    instanceMaterialList.emplace_back(IronmMaterial);
-    instanceMaterialList.emplace_back(PlasticMaterial);
-    instanceMaterialList.emplace_back(WallMaterial);
-    instanceMaterialList.emplace_back(GoldMaterial);
-    instanceMaterialList.emplace_back(GrassMaterial);
-
     for (int x = 0; x < 5; x++)
     {
      /*   for (int y = 0; y < 50; y++)
@@ -210,22 +199,34 @@ GameObjectManager::AddGameObject(a);
             for (int z = 0; z < 5; z++)
             {
                 InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(0.0f), float(z * 3.0f));
+                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(1.0f * 10.0f), float(z * 3.0f));
                 instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-                instance.MaterialList = instanceMaterialList;
+                instance.MaterialID = material3->GetMaterialBufferIndex();
             }
         //}
     }
+
+        std::vector<Vertex3D> vertices = {
+        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    };
+
+     std::vector<uint32_t> indices = {
+        0, 1, 2, 2, 3, 0
+    };
 
  /*       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
     material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");*/
  /*   MaterialManager::SaveMaterial(WallMaterial);*/
 
-    auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
-    GameObjectManager::AddGameObject(obj6);
-   // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
+    auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
+    GameObjectManager::AddGameObject(obj7);
+    //auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 //
+    auto a = GameObjectManager::GetGameObjectList();
     auto dLight = DirectionalLightBuffer{};
     dLight.direction = glm::vec3(0.0f, -1.0f, 0.0f);
     dLight.diffuse = glm::vec3(30.8f);
@@ -353,7 +354,7 @@ void Scene::ImGuiUpdate()
     //    }
     //}
     //ImGui::End();
-   
+
 
     ImGui::Begin("File Window");
     if (ImGui::Button("Save"))

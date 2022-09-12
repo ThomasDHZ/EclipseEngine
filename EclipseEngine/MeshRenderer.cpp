@@ -13,7 +13,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 	mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
-	MeshRendererManager::AddMesh(std::make_shared<Mesh3D>(Mesh3D(meshLoader)));
+	MeshRendererManager::AddMesh(mesh);
 }
 
 MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position) : GameObject3D(Name, position)

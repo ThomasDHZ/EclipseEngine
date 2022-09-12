@@ -19,6 +19,11 @@ private:
 	std::vector<Vertex2D> VertexList;
 	std::vector<uint32_t> IndexList;
 
+	int MeshDepth = 0;
+	glm::vec2 MeshPosition = glm::vec3(0.0f);
+	glm::vec2 MeshRotation = glm::vec3(0.0f);
+	glm::vec2 MeshScale = glm::vec3(1.0f);
+
 protected:
 	void MeshStartUp();
 	void MeshStartUp(std::shared_ptr<Material> materialPtr);
@@ -27,11 +32,6 @@ public:
 	Mesh2D(MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
 	Mesh2D(std::shared_ptr<Material> SpriteMaterial, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
 	~Mesh2D();
-
-	int MeshDepth = 0;
-	glm::vec2 MeshPosition = glm::vec3(0.0f);
-	glm::vec2 MeshRotation = glm::vec3(0.0f);
-	glm::vec2 MeshScale = glm::vec3(1.0f);
 
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 

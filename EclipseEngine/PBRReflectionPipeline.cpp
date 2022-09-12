@@ -11,10 +11,10 @@ PBRReflectionPipeline::~PBRReflectionPipeline()
 void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures)
 {
 
-    VkDescriptorBufferInfo SkyboxBufferInfo = {};
-    SkyboxBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
-    SkyboxBufferInfo.offset = 0;
-    SkyboxBufferInfo.range = VK_WHOLE_SIZE;
+    VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
+    MeshPropertiesmBufferBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
+    MeshPropertiesmBufferBufferInfo.offset = 0;
+    MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
@@ -107,8 +107,8 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
-    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
+ std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, DirectionalLightBufferInfoList);
@@ -121,7 +121,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     AddTextureDescriptorSetBinding(DescriptorBindingList, 10, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     if (SpotLightShadowMaps.size() > 0)
     {
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 11, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     }
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
@@ -158,7 +158,7 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
         SceneManager::sceneProperites.MeshIndex = drawMesh->GetMeshBufferIndex();
         SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(drawMesh->GetMeshColorID());
 
-        const glm::vec3 reflectPos = reflectingMesh->reflectionPoint;
+        const glm::vec3 reflectPos = reflectingMesh->GetReflectionPoint();
         glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
