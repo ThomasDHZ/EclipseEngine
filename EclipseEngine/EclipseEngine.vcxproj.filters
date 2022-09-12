@@ -498,9 +498,6 @@
     <ClCompile Include="DepthInstancedPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="PBRInstancedReflectionPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -908,9 +905,6 @@
     <ClInclude Include="DepthInstancedPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="PBRInstancedReflectionPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1116,12 +1110,6 @@
     </None>
     <None Include="..\Shaders\BlinnPhoneReflect.frag">
       <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\ReflectionPBRInstanceShader.frag">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shaders\ReflectionPBRInstanceShader.vert">
-      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

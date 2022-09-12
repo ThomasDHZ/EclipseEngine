@@ -13,7 +13,6 @@
 #include "PBRReflectionPipeline.h"
 #include "CubeMapViewPipeline.h"
 #include "CubeMapSamplerPipeline.h"
-#include "PBRInstancedReflectionPipeline.h"
 
 class PBRReflectionRenderPass : public RenderPass
 {
@@ -24,8 +23,10 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	PBRReflectionPipeline pbrPipeline;
-	PBRInstancedReflectionPipeline pbrInstancedPipeline;
 	CubeMapSamplerPipeline skyboxPipeline;
+	LinePipeline drawLinePipeline;
+	OutLinePipeline outLinePipeline;
+	WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
