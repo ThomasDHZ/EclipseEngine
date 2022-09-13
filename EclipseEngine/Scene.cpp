@@ -16,21 +16,21 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kPBR;
+    SceneManager::sceneType = SceneType::kSprite2D;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
    // SceneManager::LoadScene("../Scenes/example.txt");
 //
-//    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial", MaterialTypeEnum::kMaterialBlinnPhong));
-//    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
-//    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
-//    MaterialManager::AddMaterial(material);
-//
-//
-//    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2", MaterialTypeEnum::kMaterialBlinnPhong));
-//    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
-//    MaterialManager::AddMaterial(material2);
+    std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial", MaterialTypeEnum::kMaterialBlinnPhong));
+    material->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Diffuse.png");
+    material->LoadAlphaMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/Mario_Alpha.png");
+    MaterialManager::AddMaterial(material);
+
+
+    std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("TestMaterial2", MaterialTypeEnum::kMaterialBlinnPhong));
+    material2->LoadDiffuseMap("C:/Users/dotha/source/repos/VulkanGraphics/texture/space-cruiser-panels2_albedo.png");
+    MaterialManager::AddMaterial(material2);
 //
 // /*    glm::vec2 StartPoint = glm::vec2(0.0f);
 //        glm::vec2 EndPoint = glm::vec2(5.0f);
@@ -59,10 +59,10 @@ Scene::Scene()
 //    // std::vector<uint32_t> indices = {
 //    //    0, 1, 2, 2, 3, 0
 //    //};
-//     //std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
-//     //std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
-//     //std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
-//     //std::shared_ptr<SpriteRenderer> obj4 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject4", material2, glm::vec2(3.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
+     std::shared_ptr<SpriteRenderer> obj4 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject4", material2, glm::vec2(3.0f, 0.0f), 0));
 //
 //    //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
 //  //  std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
@@ -124,7 +124,7 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+//std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -186,41 +186,41 @@ std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza
        // SceneManager::SaveAsPrefab(obj5);
 
 
-        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-        MaterialManager::AddMaterial(material3);
+    //    std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+    //    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+    //    MaterialManager::AddMaterial(material3);
 
-    InstancingDataStruct instance = {};
-    for (int x = 0; x < 5; x++)
-    {
-     /*   for (int y = 0; y < 50; y++)
-        {*/
-            for (int z = 0; z < 5; z++)
-            {
-                InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(1.0f * 10.0f), float(z * 3.0f));
-                instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-                instance.MaterialID = material3->GetMaterialBufferIndex();
-            }
-        //}
-    }
+    //InstancingDataStruct instance = {};
+    //for (int x = 0; x < 5; x++)
+    //{
+    // /*   for (int y = 0; y < 50; y++)
+    //    {*/
+    //        for (int z = 0; z < 5; z++)
+    //        {
+    //            InstanceMeshDataStruct instanceMeshDataStruct = {};
+    //            instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(1.0f * 10.0f), float(z * 3.0f));
+    //            instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+    //            instance.MaterialID = material3->GetMaterialBufferIndex();
+    //        }
+    //    //}
+    //}
 
-        std::vector<Vertex3D> vertices = {
-        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-    };
+    //    std::vector<Vertex3D> vertices = {
+    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    //};
 
-     std::vector<uint32_t> indices = {
-        0, 1, 2, 2, 3, 0
-    };
+    // std::vector<uint32_t> indices = {
+    //    0, 1, 2, 2, 3, 0
+    //};
 
  /*       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
     material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");*/
  /*   MaterialManager::SaveMaterial(WallMaterial);*/
 
-    auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
+    //auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
     //auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 //
