@@ -80,7 +80,7 @@ Scene::Scene()
      GameObjectManager::AddGameObject(obj5);
 
 
-     auto obj6 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
+     auto obj6 = std::make_shared<GridRenderer2D>(GridRenderer2D("Testobject6", 50, 1.0f));
      GameObjectManager::AddGameObject(obj6);
     //GameObjectManager::AddGameObject(obj5);
 //
