@@ -19,7 +19,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 BillBoardSize, glm::vec3 position) : GameObject3D(Name, position)
@@ -37,7 +36,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 BillBoardSize, glm::vec3 position, glm::vec3 scale) : GameObject3D(Name, position, glm::vec3(0.0f), scale)
@@ -55,7 +53,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 BillBoardSize, std::shared_ptr<Material> material) : GameObject3D(Name)
@@ -73,7 +70,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 BillBoardSize, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
@@ -91,7 +87,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::BillBoardMeshRenderer(const std::string Name, glm::vec2 BillBoardSize, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 scale) : GameObject3D(Name, position, glm::vec3(0.0f), scale)
@@ -109,7 +104,6 @@
 //	};
 //
 //	mesh = std::make_shared<Mesh3D>(Mesh3D(VertexList, IndexList, material, MeshSubTypeEnum::kBillboard, GameObjectID));
-//	GameObjectManager::AddGameObject(std::make_shared<BillBoardMeshRenderer>(*this));
 //}
 //
 //BillBoardMeshRenderer::~BillBoardMeshRenderer()

@@ -390,7 +390,6 @@ void Model::AddMeshList(std::vector<MeshLoader3D>& meshLoaderList)
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh3D>(Mesh3D(meshLoader));
 
 		MeshList.emplace_back(mesh);
-		MeshRendererManager::AddMesh(mesh);
 	}
 	VulkanRenderer::UpdateTLAS = true;
 }
@@ -401,7 +400,6 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 	mesh->SetParentModel(ModelID);
 
 	MeshList.emplace_back(mesh);
-	MeshRendererManager::AddMesh(mesh);
 	VulkanRenderer::UpdateTLAS = true;
 }
 
@@ -413,7 +411,6 @@ void Model::AddMeshList(std::vector<std::shared_ptr<Mesh>>& meshList)
 		mesh->SetParentModel(ModelID);
 
 		MeshList.emplace_back(mesh);
-		MeshRendererManager::AddMesh(mesh);
 	}
 	VulkanRenderer::UpdateTLAS = true;
 }
@@ -461,6 +458,7 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 		for (auto& mesh : MeshList)
 		{
 			mesh->Update(GameObjectMatrix, ModelTransform);
+			auto a = 34;
 		}
 	}
 }

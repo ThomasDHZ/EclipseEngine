@@ -1,5 +1,8 @@
 #include "Mesh3D.h"
 #include "Math.h"
+#include <stdio.h>      /* printf, scanf, puts, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 Mesh3D::Mesh3D()
 {
@@ -56,8 +59,10 @@ void Mesh3D::InstancingStartUp(InstancingDataStruct& instanceData)
 			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 			TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
 
+			const auto matID = rand() % instanceData.MaterialList.size();
+
 			instanceData2.InstanceModel = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-			instanceData2.MaterialID = instanceData.MaterialID;
+			instanceData2.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
 			InstancedDataList.emplace_back(instanceData2);
 		}
 
@@ -206,11 +211,6 @@ void Mesh3D::UpdateMeshBottomLevelAccelerationStructure()
 
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	if (MeshID == 27)
-	{
-		int a = 34;
-	}
-
 	GameObjectTransformMatrix = GameObjectMatrix;
 	ModelTransformMatrix = ModelMatrix;
 
@@ -220,6 +220,10 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
+
+	reflectionPoint = glm::vec3(GameObjectTransformMatrix[3][0], GameObjectTransformMatrix[3][1], GameObjectTransformMatrix[3][2]) +
+					  glm::vec3(ModelTransformMatrix[3][0], ModelTransformMatrix[3][1], ModelTransformMatrix[3][2]) +
+					  MeshPosition + ReflectionPoint;
 
 	if (meshProperties.MeshTransform != TransformMatrix)
 	{

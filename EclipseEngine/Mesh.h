@@ -44,6 +44,22 @@ struct MeshBoneWeights
 	}
 };
 
+struct InstanceMeshDataStruct
+{
+	uint64_t MaterialBufferIndex = 0;
+	glm::vec3 InstancePosition = glm::vec3(0.0f);
+	glm::vec3 InstanceRotation = glm::vec3(0.0f);
+	glm::vec3 InstanceScale = glm::vec3(1.0f);
+	InstanceMeshDataStruct() {};
+};
+
+struct InstancingDataStruct
+{
+	std::vector<InstanceMeshDataStruct> instanceMeshDataList;
+	std::vector<std::shared_ptr<Material>> MaterialList;
+	InstancingDataStruct() {};
+};
+
 class Mesh
 {
 private:
@@ -109,6 +125,7 @@ public:
 
 	std::string MeshName;
 	MeshProperties meshProperties;
+	glm::vec3 reflectionPoint = glm::vec3(0.0f);
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);

@@ -5,22 +5,6 @@
 #include <glm/glm.hpp>
 #include "JsonConverter.h"
 
-struct InstanceMeshDataStruct
-{
-    uint64_t MaterialID = 0;
-    glm::vec3 InstancePosition = glm::vec3(0.0f);
-    glm::vec3 InstanceRotation = glm::vec3(0.0f);
-    glm::vec3 InstanceScale = glm::vec3(1.0f);
-    InstanceMeshDataStruct() {};
-};
-
-struct InstancingDataStruct
-{
-    std::vector<InstanceMeshDataStruct> instanceMeshDataList;
-    uint64_t MaterialID = 0;
-    InstancingDataStruct() {};
-};
-
 struct LineVertex2D {
     glm::vec2 pos;
     glm::vec4 color;

@@ -1,14 +1,14 @@
-#include "PBRReflectionPipeline.h"
+#include "PBRInstancedReflectionPipeline.h"
 
-PBRReflectionPipeline::PBRReflectionPipeline()
+PBRInstancedReflectionPipeline::PBRInstancedReflectionPipeline()
 {
 }
 
-PBRReflectionPipeline::~PBRReflectionPipeline()
+PBRInstancedReflectionPipeline::~PBRInstancedReflectionPipeline()
 {
 }
 
-void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures)
+void PBRInstancedReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures)
 {
 
     VkDescriptorBufferInfo SkyboxBufferInfo = {};
@@ -104,8 +104,8 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRInstanceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "ReflectionPBRInstanceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
@@ -130,9 +130,9 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
     buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
     buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderInstanceMesh;
     buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
+    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3DInstance;
 
     if (ShaderPipeline == nullptr)
     {
@@ -150,7 +150,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     }
 }
 
-void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> drawMesh, std::shared_ptr<Mesh> reflectingMesh)
+void PBRInstancedReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> drawMesh, std::shared_ptr<Mesh> reflectingMesh)
 {
     if (reflectingMesh != nullptr &&
         drawMesh->GetMeshID() != reflectingMesh->GetMeshID())
@@ -172,11 +172,11 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
         vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-        drawMesh->Draw(commandBuffer);
+        drawMesh->InstanceDraw(commandBuffer);
     }
 }
 
-void PBRReflectionPipeline::Destroy()
+void PBRInstancedReflectionPipeline::Destroy()
 {
     cubeMapSampler.Destroy();
     GraphicsPipeline::Destroy();
