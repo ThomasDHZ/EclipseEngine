@@ -60,14 +60,29 @@ Scene::Scene()
 //    //    0, 1, 2, 2, 3, 0
 //    //};
      std::shared_ptr<SpriteRenderer> obj = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject", material, glm::vec2(0.0f), 0));
+     GameObjectManager::AddGameObject(obj);
+
      std::shared_ptr<SpriteRenderer> obj2 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject2", material2, glm::vec2(1.0f, 0.0f), 0));
+     GameObjectManager::AddGameObject(obj2);
+
      std::shared_ptr<SpriteRenderer> obj3 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject3", material, glm::vec2(2.0f, 0.0f), 0));
+     GameObjectManager::AddGameObject(obj3);
+
      std::shared_ptr<SpriteRenderer> obj4 = std::make_shared<SpriteRenderer>(SpriteRenderer("Testobject4", material2, glm::vec2(3.0f, 0.0f), 0));
-//
-//    //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
-//  //  std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
-//   //  std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
-//    //GameObjectManager::AddGameObject(obj5);
+     GameObjectManager::AddGameObject(obj4);
+
+    //GameObjectManager::AddGameObject(std::make_shared<GameObject3D>(GameObject3D("Testobject5", glm::vec3(0.0f), glm::vec3(5.0f, 5.0f, 5.0f))));
+    //std::shared_ptr<GameObject3D> obj5 = std::make_shared<GameObject3D>(GameObject3D("Testobject6", 5, .25));
+
+     auto start = glm::vec2(0.0f);
+     auto end = glm::vec2(5.0f);
+     auto obj5 = std::make_shared<LineRenderer2D>(LineRenderer2D("Testobject6", start, end));
+     GameObjectManager::AddGameObject(obj5);
+
+
+     auto obj6 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
+     GameObjectManager::AddGameObject(obj6);
+    //GameObjectManager::AddGameObject(obj5);
 //
     //int width = 500;
     //int height = 500;
