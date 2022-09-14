@@ -16,7 +16,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(std::make_shared<Mesh3D>(Mesh3D(meshLoader)));
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position) : GameObject3D(Name, position)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -29,7 +29,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -42,7 +42,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -69,7 +69,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -83,7 +83,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -97,7 +97,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexL
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -125,7 +125,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position) : GameObject3D(Name, position)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -139,7 +139,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -153,7 +153,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -182,7 +182,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position) : GameObject3D(Name, position)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -197,7 +197,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;
@@ -212,7 +212,7 @@ MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& Vertex
 	MeshRendererManager::AddMesh(mesh);
 }
 
-MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+MeshRenderer::MeshRenderer(const std::string Name, std::vector<Vertex3D>& VertexList, std::vector<uint32_t>& IndexList, InstancingDataStruct& instanceData, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	MeshLoader3D meshLoader{};
 	meshLoader.ParentGameObjectID = GameObjectID;

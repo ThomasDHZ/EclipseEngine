@@ -9,17 +9,17 @@ ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh)
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position) : GameObject3D(Name, position)
+ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+ModelRenderer::ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	model = std::make_shared<Model>(Model(mesh, GameObjectID));
 }
@@ -162,7 +162,7 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	model = std::make_shared<Model>(Model(modelLoader));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position) : GameObject3D(Name, position)
+ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position) : GameObject3D(Name, position)
 {
 	ModelLoader modelLoader = {};
 	modelLoader.FilePath = FilePath;
@@ -172,7 +172,7 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	model = std::make_shared<Model>(Model(modelLoader));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation) : GameObject3D(Name, position, rotation)
+ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, position, rotation)
 {
 	ModelLoader modelLoader = {};
 	modelLoader.FilePath = FilePath;
@@ -182,7 +182,7 @@ ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath
 	model = std::make_shared<Model>(Model(modelLoader));
 }
 
-ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject3D(Name, position, rotation, scale)
+ModelRenderer::ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, position, rotation, scale)
 {
 	ModelLoader modelLoader = {};
 	modelLoader.FilePath = FilePath;

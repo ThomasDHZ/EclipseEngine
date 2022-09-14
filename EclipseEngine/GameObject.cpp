@@ -13,7 +13,7 @@ GameObject::GameObject(const std::string Name)
 	GenerateID();
 }
 
-GameObject::GameObject(const std::string Name, glm::vec3 Position)
+GameObject::GameObject(const std::string Name, const glm::vec3& Position)
 {
 	GenerateID();
 	ObjectName = Name;
@@ -27,7 +27,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 Position)
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation)
+GameObject::GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation)
 {
 	GenerateID();
 	ObjectName = Name;
@@ -42,7 +42,7 @@ GameObject::GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rot
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale)
+GameObject::GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
 {
 	GenerateID();
 	ObjectName = Name;
@@ -151,17 +151,17 @@ void GameObject::SetGameObjectScale(float x, float y, float z)
 	GameObjectScale = glm::vec3(x, y, z);
 }
 
-void GameObject::SetGameObjectPosition(glm::vec3 gameObjectPosition)
+void GameObject::SetGameObjectPosition(const glm::vec3& gameObjectPosition)
 {
 	GameObjectPosition = gameObjectPosition;
 }
 
-void GameObject::SetGameObjectRotation(glm::vec3 gameObjectRotation)
+void GameObject::SetGameObjectRotation(const glm::vec3& gameObjectRotation)
 {
 	GameObjectRotation = gameObjectRotation;
 }
 
-void GameObject::SetGameObjectScale(glm::vec3 gameObjectScale)
+void GameObject::SetGameObjectScale(const glm::vec3& gameObjectScale)
 {
 	GameObjectScale = gameObjectScale;
 }

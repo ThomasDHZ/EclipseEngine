@@ -139,7 +139,7 @@ public:
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
 	void SetMaterial(const std::string& MaterialPath);
-	void SetReflectionPoint(glm::vec3 reflectionPoint);
+	void SetReflectionPoint(const glm::vec3& reflectionPoint);
 
 	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
 	void GetMeshVertexBuffer(std::vector<VkDescriptorBufferInfo>& VertexBufferList);

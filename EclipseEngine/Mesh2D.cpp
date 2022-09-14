@@ -86,7 +86,7 @@ void Mesh2D::SetPosition(float x, float y)
 	MeshPosition = glm::vec2(x, y);
 }
 
-void Mesh2D::SetPosition(glm::vec2 position)
+void Mesh2D::SetPosition(const glm::vec2& position)
 {
 	MeshPosition = position;
 }
@@ -101,7 +101,7 @@ void Mesh2D::SetRotation(float x, float y)
 	MeshRotation = glm::vec2(x, y);
 }
 
-void Mesh2D::SetRotation(glm::vec2 rotation)
+void Mesh2D::SetRotation(const glm::vec2& rotation)
 {
 	MeshRotation = rotation;
 }
@@ -111,7 +111,7 @@ void Mesh2D::SetScale(float x, float y)
 	MeshScale = glm::vec2(x, y);
 }
 
-void Mesh2D::SetScale(glm::vec2 Scale)
+void Mesh2D::SetScale(const glm::vec2& Scale)
 {
 	MeshScale = Scale;
 }

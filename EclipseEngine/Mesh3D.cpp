@@ -246,18 +246,18 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
 
-	if (VulkanRenderer::UpdateBLAS &&
-		IndexCount != 0)
-	{
+	//if (VulkanRenderer::UpdateBLAS &&
+	//	IndexCount != 0)
+	//{
 
-		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+	//	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 
-		glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+	//	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
+	//	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+	//	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
-		UpdateMeshBottomLevelAccelerationStructure();
-	}
+	//	UpdateMeshBottomLevelAccelerationStructure();
+	//}
 }
 
 void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
@@ -297,14 +297,14 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (GraphicsDevice::IsRayTracerActive() &&
-		IndexCount != 0)
-	{
-		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-		UpdateMeshBottomLevelAccelerationStructure();
-	}
+	//if (GraphicsDevice::IsRayTracerActive() &&
+	//	IndexCount != 0)
+	//{
+	//	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
+	//	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
+	//	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
+	//	UpdateMeshBottomLevelAccelerationStructure();
+	//}
 }
 
 void Mesh3D::Destroy()

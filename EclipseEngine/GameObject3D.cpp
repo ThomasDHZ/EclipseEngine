@@ -8,15 +8,15 @@ GameObject3D::GameObject3D(const std::string Name) : GameObject(Name)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, glm::vec3 position) : GameObject(Name, position)
+GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position) : GameObject(Name, position)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, glm::vec3 position, glm::vec3 rotation) : GameObject(Name, position, rotation)
+GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, position, rotation)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(Name, position, rotation, scale)
+GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, position, rotation, scale)
 {
 }
 
@@ -58,17 +58,17 @@ void GameObject3D::SetGameObjectScale(float x, float y, float z)
 	GameObject::SetGameObjectScale(x, y, z);
 }
 
-void GameObject3D::SetGameObjectPosition(glm::vec3 gameObjectPosition)
+void GameObject3D::SetGameObjectPosition(const glm::vec3& gameObjectPosition)
 {
 	GameObject::SetGameObjectPosition(gameObjectPosition);
 }
 
-void GameObject3D::SetGameObjectRotation(glm::vec3 gameObjectRotation)
+void GameObject3D::SetGameObjectRotation(const glm::vec3& gameObjectRotation)
 {
 	GameObject::SetGameObjectRotation(gameObjectRotation);
 }
 
-void GameObject3D::SetGameObjectScale(glm::vec3 gameObjectScale)
+void GameObject3D::SetGameObjectScale(const glm::vec3& gameObjectScale)
 {
 	GameObject::SetGameObjectScale(gameObjectScale);
 }

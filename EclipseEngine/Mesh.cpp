@@ -123,7 +123,7 @@ void Mesh::SetMaterial(const std::string& MaterialPath)
 	material = MaterialManager::LoadMaterial(MaterialPath);
 }
 
-void Mesh::SetReflectionPoint(glm::vec3 reflectionPoint)
+void Mesh::SetReflectionPoint(const glm::vec3& reflectionPoint)
 {
 	ReflectionPoint = reflectionPoint;
 }

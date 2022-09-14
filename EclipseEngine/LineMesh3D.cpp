@@ -11,7 +11,7 @@ LineMesh3D::LineMesh3D(std::vector<LineVertex3D>& vertices)
 	SetUpMesh();
 }
 
-LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint)
+LineMesh3D::LineMesh3D(const glm::vec3& StartPoint, const glm::vec3& EndPoint)
 {
 	LineVertexList =
 	{
@@ -25,7 +25,7 @@ LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint)
 	SetUpMesh();
 }
 
-LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Color)
+LineMesh3D::LineMesh3D(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& Color)
 {
 	LineVertexList =
 	{
@@ -39,7 +39,7 @@ LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec3& Co
 	SetUpMesh();
 }
 
-LineMesh3D::LineMesh3D(glm::vec3& StartPoint, glm::vec3& EndPoint, glm::vec4& Color)
+LineMesh3D::LineMesh3D(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
 {
 	LineVertexList =
 	{
@@ -152,18 +152,18 @@ void LineMesh3D::SetMeshScale(float x, float y, float z)
 	MeshScale = glm::vec3(x, y, z);
 }
 
-void LineMesh3D::SetMeshPosition(glm::vec3 position)
+void LineMesh3D::SetMeshPosition(const glm::vec3& position)
 {
 	MeshPosition = position;
 }
 
 
-void LineMesh3D::SetMeshRotation(glm::vec3 rotation)
+void LineMesh3D::SetMeshRotation(const glm::vec3& rotation)
 {
 	MeshRotation = rotation;
 }
 
-void LineMesh3D::SetMeshScale(glm::vec3 scale)
+void LineMesh3D::SetMeshScale(const glm::vec3& scale)
 {
 	MeshScale = scale;
 }

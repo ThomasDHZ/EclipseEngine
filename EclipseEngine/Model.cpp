@@ -516,17 +516,17 @@ void Model::SetModelScale(float x, float y, float z)
 	ModelScale = glm::vec3(x, y, z);
 }
 
-void Model::SetModelPosition(glm::vec3 modelPosition)
+void Model::SetModelPosition(const glm::vec3& modelPosition)
 {
 	ModelPosition = modelPosition;
 }
 
-void Model::SetModelRotation(glm::vec3 modelRotation)
+void Model::SetModelRotation(const glm::vec3& modelRotation)
 {
 	ModelRotation = modelRotation;
 }
 
-void Model::SetModelScale(glm::vec3 modelScale)
+void Model::SetModelScale(const glm::vec3& modelScale)
 {
 	ModelScale = modelScale;
 }

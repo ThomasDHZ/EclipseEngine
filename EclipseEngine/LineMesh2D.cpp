@@ -15,7 +15,7 @@ LineMesh2D::LineMesh2D(std::vector<LineVertex2D>& lineVertexList, uint64_t paren
 	SetUpMesh();
 }
 
-LineMesh2D::LineMesh2D(glm::vec2& StartPoint, glm::vec2& EndPoint, uint64_t parentGameObjectID)
+LineMesh2D::LineMesh2D(const glm::vec2& StartPoint, const glm::vec2& EndPoint, uint64_t parentGameObjectID)
 {
 	LineVertexList =
 	{
@@ -29,7 +29,7 @@ LineMesh2D::LineMesh2D(glm::vec2& StartPoint, glm::vec2& EndPoint, uint64_t pare
 	SetUpMesh();
 }
 
-LineMesh2D::LineMesh2D(glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& LineColor, uint64_t parentGameObjectID)
+LineMesh2D::LineMesh2D(const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& LineColor, uint64_t parentGameObjectID)
 {
 	LineVertexList =
 	{
@@ -43,7 +43,7 @@ LineMesh2D::LineMesh2D(glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec3& Li
 	SetUpMesh();
 }
 
-LineMesh2D::LineMesh2D(glm::vec2& StartPoint, glm::vec2& EndPoint, glm::vec4& LineColor, uint64_t parentGameObjectID)
+LineMesh2D::LineMesh2D(const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& LineColor, uint64_t parentGameObjectID)
 {
 	LineVertexList =
 	{
@@ -82,7 +82,7 @@ LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float G
 	SetUpMesh();
 }
 
-LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec3& LineColor, uint64_t parentGameObjectID)
+LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec3& LineColor, uint64_t parentGameObjectID)
 {
 	uint32_t indexCount = 0;
 	for (int x = 0; x <= GridSizeX; x++)
@@ -107,7 +107,7 @@ LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float G
 	SetUpMesh();
 }
 
-LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::vec4& LineColor, uint64_t parentGameObjectID)
+LineMesh2D::LineMesh2D(int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec4& LineColor, uint64_t parentGameObjectID)
 {
 	uint32_t indexCount = 0;
 	for (int x = 0; x <= GridSizeX; x++)

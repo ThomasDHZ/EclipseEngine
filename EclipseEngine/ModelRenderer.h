@@ -16,9 +16,9 @@ private:
 public:
 	ModelRenderer();
 	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position);
+	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation);
+	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
 	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh);
 	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, glm::vec3 position);
@@ -36,9 +36,9 @@ public:
 	ModelRenderer(const std::string Name, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 
 	ModelRenderer(const std::string Name, const std::string& FilePath);
-	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position);
-	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation);
-	ModelRenderer(const std::string Name, const std::string& FilePath, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position);
+	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation);
+	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
 	ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData);
 	ModelRenderer(const std::string Name, const std::string& FilePath, InstancingDataStruct& instanceData, glm::vec3 position);

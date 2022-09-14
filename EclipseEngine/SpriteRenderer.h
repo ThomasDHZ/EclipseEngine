@@ -11,14 +11,14 @@ private:
 public:
 	SpriteRenderer();
 	SpriteRenderer(const std::string Name);
-	SpriteRenderer(const std::string Name, glm::vec2 position, uint32_t Depth);
-	SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, uint32_t Depth);
-	SpriteRenderer(const std::string Name, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth);
+	SpriteRenderer(const std::string Name, const glm::vec2& position, uint32_t Depth);
+	SpriteRenderer(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
+	SpriteRenderer(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
 
 	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material);
-	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, uint32_t Depth);
-	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, uint32_t Depth);
-	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, glm::vec2 position, glm::vec2 rotation, glm::vec2 scale, uint32_t Depth);
+	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, uint32_t Depth);
+	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
+	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
 	SpriteRenderer(nlohmann::json& json);
 	virtual ~SpriteRenderer();
 

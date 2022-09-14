@@ -169,7 +169,7 @@ GameObjectManager::AddGameObject(a);
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        /*auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
         GameObjectManager::AddGameObject(obj);
 
@@ -188,7 +188,7 @@ GameObjectManager::AddGameObject(a);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
         obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        GameObjectManager::AddGameObject(obj5);*/
+        GameObjectManager::AddGameObject(obj5);
 
 
         std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));

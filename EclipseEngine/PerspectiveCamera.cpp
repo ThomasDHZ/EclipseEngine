@@ -4,7 +4,7 @@ PerspectiveCamera::PerspectiveCamera()
 {
 }
 
-PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm::vec3 position) : Camera(Name)
+PerspectiveCamera::PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position) : Camera(Name)
 {
     Width = ScreenSize.x;
     Height = ScreenSize.y;
@@ -24,7 +24,7 @@ PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm
     Pitch = 0.0f;
 }
 
-PerspectiveCamera::PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm::vec3 position, float pitch, float yaw) : Camera(Name)
+PerspectiveCamera::PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position, float pitch, float yaw) : Camera(Name)
 {
     Width = ScreenSize.x;
     Height = ScreenSize.y;

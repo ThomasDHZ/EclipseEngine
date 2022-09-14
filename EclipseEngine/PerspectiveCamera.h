@@ -21,8 +21,8 @@ protected:
 
 public:
     PerspectiveCamera();
-    PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm::vec3 position);
-    PerspectiveCamera(std::string Name, glm::vec2 ScreenSize, glm::vec3 position, float pitch, float yaw);
+    PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position);
+    PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position, float pitch, float yaw);
     ~PerspectiveCamera();
 
     void Update(float deltaTime) override;

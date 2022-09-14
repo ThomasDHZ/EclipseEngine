@@ -18,9 +18,9 @@ protected:
 	void SetGameObjectPosition(float x, float y, float z);
 	void SetGameObjectRotation(float x, float y, float z);
 	void SetGameObjectScale(float x, float y, float z);
-	void SetGameObjectPosition(glm::vec3 gameObjectPosition);
-	void SetGameObjectRotation(glm::vec3 gameObjectRotation);
-	void SetGameObjectScale(glm::vec3 gameObjectScale);
+	void SetGameObjectPosition(const glm::vec3& gameObjectPosition);
+	void SetGameObjectRotation(const glm::vec3& gameObjectRotation);
+	void SetGameObjectScale(const glm::vec3& gameObjectScale);
 
 	glm::mat4 GetGameObjectMatrix() { return GameObjectTransform; }
 	glm::vec3 GetGameObjectPosition() { return GameObjectPosition; }
@@ -34,9 +34,9 @@ public:
 
 	GameObject();
 	GameObject(const std::string Name);
-	GameObject(const std::string Name, glm::vec3 Position);
-	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation);
-	GameObject(const std::string Name, glm::vec3 Position, glm::vec3 Rotation, glm::vec3 Scale);
+	GameObject(const std::string Name, const glm::vec3& Position);
+	GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation);
+	GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 

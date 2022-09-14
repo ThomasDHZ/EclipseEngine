@@ -36,12 +36,12 @@ public:
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 
 	void SetPosition(float x, float y);
-	void SetPosition(glm::vec2 position);
+	void SetPosition(const glm::vec2& position);
 	void SetDepth(float Depth);
 	void SetRotation(float x, float y);
-	void SetRotation(glm::vec2 rotation);
+	void SetRotation(const glm::vec2& rotation);
 	void SetScale(float x, float y);
-	void SetScale(glm::vec2 Scale);
+	void SetScale(const glm::vec2& Scale);
 
 	float GetDepth() { return MeshDepth; }
 	glm::vec2 GetPosition() { return MeshPosition; }

@@ -134,9 +134,9 @@ public:
 	void SetModelPosition(float x, float y, float z);
 	void SetModelRotation(float x, float y, float z);
 	void SetModelScale(float x, float y, float z);
-	void SetModelPosition(glm::vec3 modelPosition);
-	void SetModelRotation(glm::vec3 modelRotation);
-	void SetModelScale(glm::vec3 modelScale);
+	void SetModelPosition(const glm::vec3& modelPosition);
+	void SetModelRotation(const glm::vec3& modelRotation);
+	void SetModelScale(const glm::vec3& modelScale);
 
 	glm::mat4 TransposeModelMatrix();
 	uint64_t GetModelID() { return ModelID; }
