@@ -54,7 +54,7 @@ void main() {
 	Tangent = aTangent;
 	BiTangent = aBitangent;
     gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *              
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  IntanceMatrix * 
                   vec4(inPosition, 1.0);
     MaterialID = aMaterialID;
 }

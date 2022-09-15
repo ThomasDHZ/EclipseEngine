@@ -134,9 +134,7 @@ vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir);
 
 void main()
 {  
-   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
-   MaterialProperties material = materialBuffer[materialID].materialProperties;
-   
+   MaterialProperties material = materialBuffer[MaterialID].materialProperties;
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 

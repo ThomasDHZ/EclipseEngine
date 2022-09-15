@@ -1117,11 +1117,11 @@
     <None Include="..\Shaders\BlinnPhoneReflect.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\ReflectionPBRInstanceShader.frag">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="..\Shaders\ReflectionPBRInstanceShader.vert">
-      <Filter>Shader</Filter>
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\ReflectionPBRInstanceShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>
