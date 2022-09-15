@@ -8,29 +8,11 @@
 #include "Mesh.h"
 #include "Mesh3D.h"
 #include "Bone.h"
+#include "Animation3D.h"
+#include "AnimationPlayer3D.h"
+#include "ComputeAnimationPipeline.h"
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
-
-struct NodeMap
-{
-	std::string NodeString;
-	aiMatrix4x4 NodeTransform;
-	int ParentNodeID;
-	int NodeID;
-	std::vector<int> ChildNodeList;
-	int MeshID;
-
-	void from_json(nlohmann::json& json)
-	{
-	}
-
-	void to_json(nlohmann::json& json)
-	{
-		//JsonConverter::to_json(json["NodeString"], NodeString);
-		//JsonConverter::to_json(json["NodeTransform"], NodeTransform);
-		//JsonConverter::to_json(json["ModelScale"], ModelScale);
-	}
-};
 
 struct ModelLoader
 {
@@ -57,19 +39,28 @@ private:
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
+	glm::mat4 GlobalInverseTransformMatrix = glm::mat4(1.0f);
 
 	std::vector<std::shared_ptr<Mesh>> MeshList;
 	std::vector<std::shared_ptr<Bone>> BoneList;
+	std::vector<Animation3D> AnimationList;
 	std::vector<NodeMap> NodeMapList;
+
+	AnimationPlayer3D AnimationPlayer;
+	ComputeAnimationPipeline AnimationRenderer;
 
 	void GenerateID();
 	void LoadModel(ModelLoader& modelLoader);
 	void LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scene);
 	std::vector<Vertex3D> LoadVertices(aiMesh* mesh);
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
+	void LoadNodeTree(const aiNode* Node, int parentNodeID = -1);
+	void LoadAnimations(const aiScene* scene);
 	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList);
 	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList);
+	void LoadBoneTransform(const int NodeID, const glm::mat4& ParentMatrix);
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
+
 
 	void from_json(nlohmann::json& json, uint64_t GameObjectID)
 	{
@@ -182,7 +173,7 @@ public:
 		}
 		for (int x = 0; x < NodeMapList.size(); x++)
 		{
-			NodeMapList[x].to_json(json["NodeMapList"][x]);
+			//NodeMapList[x].to_json(json["NodeMapList"][x]);
 		}
 
 		JsonConverter::to_json(json["ModelPosition"], ModelPosition);

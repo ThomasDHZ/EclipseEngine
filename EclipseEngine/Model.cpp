@@ -91,7 +91,7 @@ void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scen
 		{
 			if (nodeMap.NodeString == node->mName.C_Str())
 			{
-				//MeshList.back()->MeshID = nodeMap.NodeID;
+			//	MeshList.back()->MeshID = nodeMap.NodeID;
 			}
 		}
 
@@ -192,13 +192,88 @@ std::vector<uint32_t> Model::LoadIndices(aiMesh* mesh)
 	return IndexList;
 }
 
+void Model::LoadNodeTree(const aiNode* Node, int parentNodeID)
+{
+	NodeMap node;
+	node.NodeID = NodeMapList.size();
+	node.ParentNodeID = parentNodeID;
+	node.NodeString = Node->mName.C_Str();
+	node.NodeTransform = Node->mTransformation;
+	if (parentNodeID != -1)
+	{
+		NodeMapList[parentNodeID].ChildNodeList.emplace_back(node.NodeID);
+	}
+	NodeMapList.emplace_back(node);
+
+	for (int x = 0; x < Node->mNumChildren; x++)
+	{
+		LoadNodeTree(Node->mChildren[x], node.NodeID);
+	}
+}
+
+void Model::LoadAnimations(const aiScene* scene)
+{
+	for (int x = 0; x < scene->mNumAnimations; x++)
+	{
+		aiAnimation* assImpAnimation = scene->mAnimations[x];
+
+		Animation3D animation = Animation3D();
+		animation.TicksPerSec = assImpAnimation->mTicksPerSecond;
+		animation.AnimationTime = assImpAnimation->mDuration * animation.TicksPerSec;
+
+		for (int y = 0; y < assImpAnimation->mNumChannels; y++)
+		{
+			KeyFrame keyframe;
+			aiNodeAnim* channel = assImpAnimation->mChannels[y];
+
+			for (auto bone : BoneList)
+			{
+				if (channel->mNodeName.C_Str() == bone->BoneName)
+				{
+					keyframe.BoneName = channel->mNodeName.C_Str();
+					keyframe.BoneId = bone->BoneID;
+					break;
+				}
+			}
+
+			for (int z = 0; z < channel->mNumPositionKeys; z++)
+			{
+				KeyFrameInfo PosKeyFrame;
+				PosKeyFrame.Time = channel->mPositionKeys[z].mTime;
+				PosKeyFrame.AnimationInfo = aiVector3D(channel->mPositionKeys[z].mValue.x, channel->mPositionKeys[z].mValue.y, channel->mPositionKeys[z].mValue.z);
+				keyframe.BonePosition.emplace_back(PosKeyFrame);
+			}
+
+			for (int z = 0; z < channel->mNumRotationKeys; z++)
+			{
+				KeyFrameRotationInfo RotKeyFrame;
+				RotKeyFrame.Time = channel->mRotationKeys[z].mTime;
+				RotKeyFrame.AnimationInfo = aiQuaternion(channel->mRotationKeys[z].mValue.w, channel->mRotationKeys[z].mValue.x, channel->mRotationKeys[z].mValue.y, channel->mRotationKeys[z].mValue.z);
+				keyframe.BoneRotation.emplace_back(RotKeyFrame);
+			}
+
+			for (int z = 0; z < channel->mNumScalingKeys; z++)
+			{
+				KeyFrameInfo ScaleKeyFrame;
+				ScaleKeyFrame.Time = channel->mScalingKeys[z].mTime;
+				ScaleKeyFrame.AnimationInfo = aiVector3D(channel->mScalingKeys[z].mValue.x, channel->mScalingKeys[z].mValue.y, channel->mScalingKeys[z].mValue.z);
+				keyframe.BoneScale.emplace_back(ScaleKeyFrame);
+			}
+
+			animation.AddBoneKeyFrame(keyframe);
+		}
+
+		AnimationList.emplace_back(animation);
+	}
+}
+
 void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList)
 {
 	for (int x = 0; x < mesh->mNumBones; x++)
 	{
 		bool Exists = false;
 		auto node = RootNode->FindNode(mesh->mBones[x]->mName.data);
-		//BoneList.emplace_back(std::make_shared<Bone>(mesh->mBones[x]->mName.data, x, Converter::AssimpToGLMMatrixConverter(mesh->mBones[x]->mOffsetMatrix)));
+		BoneList.emplace_back(std::make_shared<Bone>(mesh->mBones[x]->mName.data, x, Converter::AssimpToGLMMatrixConverter(mesh->mBones[x]->mOffsetMatrix)));
 	}
 }
 
@@ -244,6 +319,17 @@ std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Ve
 	}
 
 	return BoneWeightList;
+}
+
+void Model::LoadBoneTransform(const int NodeID, const glm::mat4& ParentMatrix)
+{
+	glm::mat4 glmTransform = Converter::AssimpToGLMMatrixConverter(NodeMapList[NodeID].NodeTransform);
+	glm::mat4 GlobalTransform = ParentMatrix * glmTransform;
+
+	for (int x = 0; x < NodeMapList[NodeID].ChildNodeList.size(); x++)
+	{
+		LoadBoneTransform(NodeMapList[NodeID].ChildNodeList[x], GlobalTransform);
+	}
 }
 
 std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene)
@@ -355,17 +441,17 @@ void Model::LoadModel(ModelLoader& modelLoader)
 	}
 
 	ParentGameObjectID = modelLoader.ParentGameObjectID;
-	//glm::mat4 GlobalInverseTransformMatrix = AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
-	//LoadNodeTree(Scene->mRootNode);
-	//LoadAnimations(Scene);
+	glm::mat4 GlobalInverseTransformMatrix = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	LoadNodeTree(Scene->mRootNode);
+	LoadAnimations(Scene);
 	LoadMesh(modelLoader, Scene->mRootNode, Scene);
 	VulkanRenderer::UpdateTLAS = true;
-	//if (AnimationList.size() > 0)
-	//{
-	//	AnimatedModel = true;
-	//	AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
-	//	AnimationRenderer = AnimatorCompute(MeshList[0]);
-	//}
+	if (AnimationList.size() > 0)
+	{
+	/*	AnimatedModel = true;
+		AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
+		AnimationRenderer = AnimatorCompute(MeshList[0]);*/
+	}
 
 	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
@@ -447,7 +533,7 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 
 	if (BoneList.size() > 0)
 	{
-		//AnimationPlayer.Update();
+		AnimationPlayer.Update();
 		for (auto& mesh : MeshList)
 		{
 			mesh->Update(GameObjectMatrix, ModelTransform, BoneList);
@@ -458,7 +544,6 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 		for (auto& mesh : MeshList)
 		{
 			mesh->Update(GameObjectMatrix, ModelTransform);
-			auto a = 34;
 		}
 	}
 }

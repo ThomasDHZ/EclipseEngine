@@ -154,11 +154,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="Animation3D.cpp" />
+    <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFPipeline.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
+    <ClCompile Include="ComputeAnimationPipeline.cpp" />
     <ClCompile Include="CubeMapSamplerPipeline.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="CubeMapViewPipeline.cpp" />
@@ -280,11 +283,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
+    <ClInclude Include="Animation3D.h" />
+    <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BRDFPipeline.h" />
     <ClInclude Include="BRDFRenderPass.h" />
+    <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="CubeMapSamplerPipeline.h" />
     <ClInclude Include="CubeMapTexture.h" />

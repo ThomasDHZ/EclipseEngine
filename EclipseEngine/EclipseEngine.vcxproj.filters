@@ -501,6 +501,15 @@
     <ClCompile Include="PBRInstancedReflectionPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationPlayer3D.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation3D.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeAnimationPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -909,6 +918,15 @@
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="PBRInstancedReflectionPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation3D.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationPlayer3D.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeAnimationPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

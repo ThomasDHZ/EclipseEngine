@@ -128,8 +128,11 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/Buildings-Night-Vis-4K.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-auto a = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", "../Models/TestAnimModel/model.dae"));
 GameObjectManager::AddGameObject(a);
+
+//auto a = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+//GameObjectManager::AddGameObject(a);
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -162,69 +165,69 @@ GameObjectManager::AddGameObject(a);
 //    //SoundSource source;
 //    //source.Play(sound);
 //
-    {
-       std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+ //   {
+ //      std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+ //       std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+ //       std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+ //       std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+ //       std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        GameObjectManager::AddGameObject(obj);
+ //       auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+ //       obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+ //       GameObjectManager::AddGameObject(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        GameObjectManager::AddGameObject(obj2);
+ //       auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+ //       obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+ //       GameObjectManager::AddGameObject(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-        GameObjectManager::AddGameObject(obj3);
+ //       auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+ //       obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+ //       GameObjectManager::AddGameObject(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        GameObjectManager::AddGameObject(obj4);
+ //       auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+ //       obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+ //       obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+ //       GameObjectManager::AddGameObject(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        GameObjectManager::AddGameObject(obj5);
+ //       auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+ //       obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+ //       GameObjectManager::AddGameObject(obj5);
 
 
-        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-        MaterialManager::AddMaterial(material3);
+ //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+ //       material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+ //       MaterialManager::AddMaterial(material3);
 
-    InstancingDataStruct instance = {};
-    std::vector<std::shared_ptr<Material>> instanceMaterialList;
-    instanceMaterialList.emplace_back(IronmMaterial);
-    instanceMaterialList.emplace_back(PlasticMaterial);
-    instanceMaterialList.emplace_back(WallMaterial);
-    instanceMaterialList.emplace_back(GoldMaterial);
-    instanceMaterialList.emplace_back(GrassMaterial);
+ ////   InstancingDataStruct instance = {};
+ ////   std::vector<std::shared_ptr<Material>> instanceMaterialList;
+ ////   instanceMaterialList.emplace_back(IronmMaterial);
+ ////   instanceMaterialList.emplace_back(PlasticMaterial);
+ ////   instanceMaterialList.emplace_back(WallMaterial);
+ ////   instanceMaterialList.emplace_back(GoldMaterial);
+ ////   instanceMaterialList.emplace_back(GrassMaterial);
 
-    for (int x = 0; x < 5; x++)
-    {
-     /*   for (int y = 0; y < 50; y++)
-        {*/
-            for (int z = 0; z < 5; z++)
-            {
-                InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(0.0f), float(z * 3.0f));
-                instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-                instance.MaterialList = instanceMaterialList;
-            }
-        //}
-    }
+ ////   for (int x = 0; x < 5; x++)
+ ////   {
+ ////    /*   for (int y = 0; y < 50; y++)
+ ////       {*/
+ ////           for (int z = 0; z < 5; z++)
+ ////           {
+ ////               InstanceMeshDataStruct instanceMeshDataStruct = {};
+ ////               instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(0.0f), float(z * 3.0f));
+ ////               instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+ ////               instance.MaterialList = instanceMaterialList;
+ ////           }
+ ////       //}
+ ////   }
 
- /*       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-    material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");*/
- /*   MaterialManager::SaveMaterial(WallMaterial);*/
+ /////*       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+ ////   material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");*/
+ /////*   MaterialManager::SaveMaterial(WallMaterial);*/
 
-    auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
-    GameObjectManager::AddGameObject(obj6);
-   // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
-    }
+ ////   auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", "../Models/sphere.obj", instance));
+ //   //GameObjectManager::AddGameObject(obj6);
+ //  // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
+ //   }
 //
     auto dLight = DirectionalLightBuffer{};
     dLight.direction = glm::vec3(0.0f, -1.0f, 0.0f);
