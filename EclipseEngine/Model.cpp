@@ -87,14 +87,6 @@ void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scen
 		TotalVertex += vertices.size();
 		TotalIndex += indices.size();
 
-		for (auto nodeMap : NodeMapList)
-		{
-			if (nodeMap.NodeString == node->mName.C_Str())
-			{
-			//	MeshList.back()->MeshID = nodeMap.NodeID;
-			}
-		}
-
 		MeshLoader3D meshLoader;
 		meshLoader.ParentGameObjectID = ParentGameObjectID;
 		meshLoader.ParentModelID = ModelID;
@@ -117,9 +109,8 @@ void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scen
 			meshLoader.MeshType = MeshTypeEnum::kPolygonInstanced;
 			meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 		}
-		//uint32_t BoneCount;
-		//std::vector<MeshBoneWeights> BoneWeightList;
-		//std::vector<glm::mat4> BoneTransform;
+		meshLoader.BoneCount = BoneList.size();
+		meshLoader.BoneWeightList = boneWeights;
 
 
 		/*if (LoadMaterial)
@@ -321,14 +312,14 @@ std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Ve
 	return BoneWeightList;
 }
 
-void Model::LoadBoneTransform(const int NodeID, const glm::mat4& ParentMatrix)
+void Model::LoadBoneMeshTransform(const int NodeID, const glm::mat4& ParentMatrix)
 {
 	glm::mat4 glmTransform = Converter::AssimpToGLMMatrixConverter(NodeMapList[NodeID].NodeTransform);
 	glm::mat4 GlobalTransform = ParentMatrix * glmTransform;
 
 	for (int x = 0; x < NodeMapList[NodeID].ChildNodeList.size(); x++)
 	{
-		LoadBoneTransform(NodeMapList[NodeID].ChildNodeList[x], GlobalTransform);
+		LoadBoneMeshTransform(NodeMapList[NodeID].ChildNodeList[x], GlobalTransform);
 	}
 }
 
@@ -445,15 +436,14 @@ void Model::LoadModel(ModelLoader& modelLoader)
 	LoadNodeTree(Scene->mRootNode);
 	LoadAnimations(Scene);
 	LoadMesh(modelLoader, Scene->mRootNode, Scene);
-	VulkanRenderer::UpdateTLAS = true;
 	if (AnimationList.size() > 0)
 	{
-	/*	AnimatedModel = true;
 		AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
-		AnimationRenderer = AnimatorCompute(MeshList[0]);*/
+		AnimationRenderer = ComputeAnimationPipeline(static_cast<Mesh3D*>(MeshList[0].get()));
 	}
 
-	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::AddMesh(MeshLoader3D& meshLoader)
@@ -538,6 +528,7 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 		{
 			mesh->Update(GameObjectMatrix, ModelTransform, BoneList);
 		}
+		AnimationRenderer.Compute();
 	}
 	else
 	{
@@ -568,6 +559,10 @@ void Model::UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationSt
 
 void Model::Destroy()
 {
+	if (BoneList.size() > 0)
+	{
+		AnimationRenderer.Destroy();
+	}
 	for (auto& mesh : MeshList)
 	{
 		mesh->Destroy();

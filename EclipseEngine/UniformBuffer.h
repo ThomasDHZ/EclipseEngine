@@ -136,10 +136,10 @@ template <class T>
 class UniformBuffer
 {
 private: 
-	VulkanBuffer VulkanBufferData;
+
 
 public:
-
+	VulkanBuffer VulkanBufferData;
 	T UniformDataInfo;
 
 	UniformBuffer()
@@ -170,6 +170,7 @@ public:
 	}
 
 	VulkanBuffer GetVulkanBufferData() { return VulkanBufferData; }
+	VulkanBuffer* GetVulkanBufferDataPtr() { return &VulkanBufferData; }
 };
 
 typedef UniformBuffer<MeshProperties> MeshPropertiesUniformBuffer;

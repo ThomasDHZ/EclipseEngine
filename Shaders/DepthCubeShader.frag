@@ -9,7 +9,7 @@
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
 
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
 

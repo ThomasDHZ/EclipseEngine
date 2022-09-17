@@ -243,8 +243,12 @@ VkCommandBuffer DepthRenderPass::Draw()
 void DepthRenderPass::Destroy()
 {
     ClearTextureList();
-
+    for (auto& depthTexture : DepthTextureList)
+    {
+        depthTexture->Destroy();
+    }
     RenderPassDepthTexture->Destroy();
     depthPipeline.Destroy();
+    depthInstancedPipeline.Destroy();
     RenderPass::Destroy();
 }

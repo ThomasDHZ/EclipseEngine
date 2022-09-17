@@ -23,7 +23,7 @@ private:
 
 	DepthRenderPass DepthPassRenderPass;
 	DepthCubeMapRenderer DepthCubeMapRenderPass;
-	DepthRenderPass spotLightDepthPassRenderPassList;
+	//DepthRenderPass spotLightDepthPassRenderPassList;
 
 	IrradianceRenderPass skyIrradianceRenderPass;
 	PrefilterRenderPass skyPrefilterRenderPass;
@@ -51,6 +51,6 @@ public:
 	bool PreRenderedFlag = false;
 	bool UpdatePreRenderer = true;
 
-	DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthDebugRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

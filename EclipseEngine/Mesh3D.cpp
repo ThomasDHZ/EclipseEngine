@@ -76,8 +76,7 @@ void Mesh3D::AnimationStartUp(MeshLoader3D& meshLoader)
 	if (BoneCount > 0)
 	{
 		BoneWeightList = meshLoader.BoneWeightList;
-		BoneTransform = meshLoader.BoneTransform;
-		BoneWeightList = meshLoader.BoneWeightList;
+		BoneTransform.resize(BoneCount, glm::mat4(1.0f));
 
 		BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -285,14 +284,14 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	}
 	MeshPropertiesBuffer.Update(meshProperties);
 
-	//if (BoneList.size() != 0)
-	//{
-	//	for (auto bone : BoneList)
-	//	{
-	//		BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
-	//	}
-	//	BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
-	//}
+	if (BoneList.size() != 0)
+	{
+		for (auto bone : BoneList)
+		{
+			BoneTransform[bone->BoneID] = bone->FinalTransformMatrix;
+		}
+		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
+	}
 
 	MeshTransformMatrix = meshProperties.MeshTransform;
 	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);

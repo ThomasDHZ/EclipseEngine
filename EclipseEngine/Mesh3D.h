@@ -21,7 +21,6 @@ struct MeshLoader3D
 
 	uint32_t BoneCount = 0;
 	std::vector<MeshBoneWeights> BoneWeightList;
-	std::vector<glm::mat4> BoneTransform;
 };
 
 class Mesh3D : public Mesh
@@ -29,11 +28,6 @@ class Mesh3D : public Mesh
 private:
 	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
-
-	VulkanBuffer TransformBuffer;
-	VulkanBuffer TransformInverseBuffer;
-	VulkanBuffer BoneWeightBuffer;
-	VulkanBuffer BoneTransformBuffer;
 
 	glm::vec3 GetPosition() { return MeshPosition; }
 	glm::vec3 GetRotation() { return MeshRotation; }
@@ -57,6 +51,11 @@ public:
 	Mesh3D(MeshLoader3D& meshLoader);
 	~Mesh3D();
 
+	VulkanBuffer TransformBuffer;
+	VulkanBuffer TransformInverseBuffer;
+	VulkanBuffer BoneWeightBuffer;
+	VulkanBuffer BoneTransformBuffer;
+
 	glm::vec3 MeshPosition = glm::vec3(0.0f);
 	glm::vec3 MeshRotation = glm::vec3(0.0f);
 	glm::vec3 MeshScale = glm::vec3(1.0f);
@@ -71,6 +70,13 @@ public:
 	void SetMeshPosition(glm::vec3 position);
 	void SetMeshRotation(glm::vec3 rotation);
 	void SetMeshScale(glm::vec3 scale);
+
+	VulkanBuffer* GetTransformBufferPtr() { return &TransformBuffer; }
+	VulkanBuffer* GetTransformInverseBufferPtr() { return &TransformInverseBuffer; }
+	VulkanBuffer* GetBoneWeightBufferPtr() { return &BoneWeightBuffer; }
+	VulkanBuffer* GetBoneTransformBufferPtr() { return &BoneTransformBuffer; }
+
+	std::vector<Vertex3D> GetVertexList() { return VertexList; }
 
 	virtual void to_json(nlohmann::json& json) override
 	{

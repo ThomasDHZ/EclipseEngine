@@ -60,7 +60,7 @@ public:
 		auto time = glfwGetTime();
 		GameObjectManager::Update(time);
 		MeshRendererManager::Update();
-		TopLevelAccelerationStructureManager::Update();
+		//TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
 		activeCamera->Update(time);

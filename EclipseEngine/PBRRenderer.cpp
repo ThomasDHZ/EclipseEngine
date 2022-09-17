@@ -25,7 +25,7 @@ void PBRRenderer::BuildRenderer()
 	PBRRenderPassTextureSubmitList submitList;
 	submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
 	submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
-//	submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
+	//submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
 
 	//SkyBox Pass
 	{
@@ -58,7 +58,7 @@ void PBRRenderer::BuildRenderer()
 		pbrRenderPass.BuildRenderPass(submitList);
 	}
 
-	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
+//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
 }
 
@@ -113,7 +113,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 			//Geometry Pass
 			{
-				auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
+				auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
@@ -139,14 +139,14 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 		//SkyBox Pass
 		{
-			auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
+			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 			CommandBufferSubmitList.emplace_back(skyIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(skyPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(skyPBRRenderPass.Draw(reflectingMesh));
 		}
 		//Geometry Pass
 		{
-			auto reflectingMesh = MeshRendererManager::GetMeshByID(30);
+			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
@@ -159,7 +159,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		}
 	}
 
-	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
@@ -194,6 +194,6 @@ void PBRRenderer::Destroy()
 		pbrRenderPass.Destroy();
 	}
 	 
-	depthDebugRenderPass.Destroy();
+	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

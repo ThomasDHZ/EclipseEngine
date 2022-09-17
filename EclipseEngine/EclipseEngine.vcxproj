@@ -423,6 +423,7 @@
     <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\animate.comp" />
     <None Include="..\Shaders\anyhit.rahit" />
     <None Include="..\Shaders\anyhit1.rahit" />
     <None Include="..\Shaders\BillBoardShader.frag" />

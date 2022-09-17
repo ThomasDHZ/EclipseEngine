@@ -127,6 +127,9 @@
     <Filter Include="Source Files\GameObjects">
       <UniqueIdentifier>{d4b2f50b-e645-4e1f-9e1e-4d4bc9e95ec8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\ComputeShaders">
+      <UniqueIdentifier>{b4a60ae6-8a5a-4415-a22e-92dc21a94e6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -508,7 +511,7 @@
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
     <ClCompile Include="ComputeAnimationPipeline.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -905,9 +908,6 @@
     <ClInclude Include="DepthCubeMapRenderer.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="CubeMapViewPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PBRRealTimeRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
@@ -926,8 +926,11 @@
     <ClInclude Include="AnimationPlayer3D.h">
       <Filter>Header Files\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="CubeMapViewPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
     <ClInclude Include="ComputeAnimationPipeline.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1140,6 +1143,9 @@
     </None>
     <None Include="..\Shaders\ReflectionPBRInstanceShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\animate.comp">
+      <Filter>Shader\ComputeShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,7 +1,4 @@
 #include "RenderPass.h"
-#include "MeshRendererManager.h"
-#include "LineRenderer2D.h"
-#include "LineRenderer3D.h"
 
 RenderPass::RenderPass()
 {

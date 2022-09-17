@@ -58,7 +58,7 @@ private:
 	void LoadAnimations(const aiScene* scene);
 	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList);
 	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList);
-	void LoadBoneTransform(const int NodeID, const glm::mat4& ParentMatrix);
+	void LoadBoneMeshTransform(const int NodeID, const glm::mat4& ParentMatrix);
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
 

@@ -236,6 +236,7 @@ void PBRRenderPass::Destroy()
     DepthTexture->Destroy();
 
     pbrPipeline.Destroy();
+    pbrInstancePipeline.Destroy();
     skyboxPipeline.Destroy();
     linePipeline.Destroy();
     outLinePipeline.Destroy();

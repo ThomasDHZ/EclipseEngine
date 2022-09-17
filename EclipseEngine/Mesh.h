@@ -100,6 +100,9 @@ protected:
 	glm::mat4 GameObjectTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
+	std::vector<glm::mat4> BoneTransform;
+	std::vector<MeshBoneWeights> BoneWeightList;
+
 	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
 
 	std::vector<InstancingDataStruct> InstanceData;
@@ -107,15 +110,10 @@ protected:
 	
 	std::shared_ptr<Material> material;
 
-	VulkanBuffer VertexBuffer;
-	VulkanBuffer IndexBuffer;
-	VulkanBuffer InstanceBuffer;
-	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
-	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
+
 
 	void GenerateID();
 	void GenerateColorID();
-	void InstancingStartUp(InstancingDataStruct& instanceData);
 
 public:
 
@@ -126,6 +124,12 @@ public:
 	std::string MeshName;
 	MeshProperties meshProperties;
 	glm::vec3 reflectionPoint = glm::vec3(0.0f);
+
+	VulkanBuffer VertexBuffer;
+	VulkanBuffer IndexBuffer;
+	VulkanBuffer InstanceBuffer;
+	MeshPropertiesUniformBuffer MeshPropertiesBuffer;
+	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
@@ -158,6 +162,12 @@ public:
 	VkBuffer GetMeshIndiceBuffer() { return IndexBuffer.GetBuffer(); }
 	VkBuffer GetInstanceBuffer() { return InstanceBuffer.GetBuffer(); }
 	VkBuffer* GetInstanceBufferPtr() { return InstanceBuffer.GetBufferPtr(); }
+	VulkanBuffer GetVertexVulkanBuffer() { return VertexBuffer; }
+	VulkanBuffer* GetVertexVulkanBufferPtr() { return &VertexBuffer; }
+	VulkanBuffer GetIndexVulkanBuffer() { return IndexBuffer; }
+	VulkanBuffer* GetIndexVulkanBufferPtr() { return &IndexBuffer; }
+	VulkanBuffer GetInstanceVulkanBuffer() { return InstanceBuffer; }
+	VulkanBuffer* GetInstanceVulkanBufferPtr() { return &InstanceBuffer; }
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	glm::vec3 GetReflectionPoint() { return ReflectionPoint; }
 

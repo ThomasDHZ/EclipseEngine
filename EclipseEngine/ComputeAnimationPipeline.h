@@ -1,21 +1,21 @@
 #pragma once
 #include "GraphicsPipeline.h"
-#include "Mesh.h"
+#include "Mesh3D.h"
 
 class ComputeAnimationPipeline : public GraphicsPipeline
 {
 private:
-	std::shared_ptr<VulkanBuffer> VertexBufferCopy;
-	std::shared_ptr<Mesh> mesh;
+	VulkanBuffer* VertexBufferCopy;
+	Mesh3D* mesh;
+
+	VkCommandBuffer commandBuffer;
 
 	void SetUpDescriptorBindings();
 	void CreateShaderPipeLine();
-
 public:
 	ComputeAnimationPipeline();
-	ComputeAnimationPipeline(std::shared_ptr<Mesh> meshptr);
+	ComputeAnimationPipeline(Mesh3D* meshptr);
 	~ComputeAnimationPipeline();
 
-	VkCommandBuffer commandBuffer;
 	void Compute();
 };

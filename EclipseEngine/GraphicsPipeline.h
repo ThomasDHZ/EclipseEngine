@@ -83,11 +83,19 @@ private:
 	VkWriteDescriptorSet AddBufferDescriptorSet(uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType);
 
 protected:
-	static std::string BaseShaderFilePath;
-
 	std::vector<VkDescriptorPoolSize>  DescriptorPoolList{};
 	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo{};
 	std::vector<VkWriteDescriptorSet> DescriptorList{};
+
+
+
+public:
+
+	GraphicsPipeline();
+	GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
+	~GraphicsPipeline();
+
+	static std::string BaseShaderFilePath;
 
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
@@ -130,12 +138,6 @@ protected:
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 	void AddNullDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber);
-
-public:
-
-	GraphicsPipeline();
-	GraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
-	~GraphicsPipeline();
 
 	virtual void UpdateGraphicsPipeLine();
 	virtual void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
