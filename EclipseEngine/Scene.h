@@ -25,6 +25,7 @@
 #include "PBRRenderer.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
+#include "PBRRealTimeRenderer.h"
 
 class Scene
 {
@@ -32,7 +33,8 @@ private:
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 	HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
+//	PBRRenderer pbrRenderer;
+	PBRRealTimeRenderer pbrRealTimeRenderer;
 	RayTraceRenderer rayTraceRenderer;
 	std::shared_ptr<GameObject2D> obj5;
 public:

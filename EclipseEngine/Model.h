@@ -61,6 +61,8 @@ private:
 	void LoadBoneMeshTransform(const int NodeID, const glm::mat4& ParentMatrix);
 	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
+	void BoneWeightPlacement(std::vector<MeshBoneWeights>& VertexList, unsigned int vertexID, unsigned int bone_id, float weight);
+
 
 	void from_json(nlohmann::json& json, uint64_t GameObjectID)
 	{

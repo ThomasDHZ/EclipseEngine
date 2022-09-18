@@ -268,6 +268,19 @@ void Model::LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Ve
 	}
 }
 
+void Model::BoneWeightPlacement(std::vector<MeshBoneWeights>& meshBoneWeight, unsigned int vertexID, unsigned int bone_id, float weight)
+{
+	for (unsigned int i = 0; i < MAX_BONE_VERTEX_COUNT; i++)
+	{
+		if (meshBoneWeight[vertexID].BoneWeights[i] == 0.0)
+		{
+			meshBoneWeight[vertexID].BoneID[i] = bone_id;
+			meshBoneWeight[vertexID].BoneWeights[i] = weight;
+			return;
+		}
+	}
+}
+
 std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList)
 {
 	std::vector<MeshBoneWeights> BoneWeightList(VertexList.size());
@@ -281,15 +294,7 @@ std::vector<MeshBoneWeights> Model::LoadBoneWeights(aiMesh* mesh, std::vector<Ve
 		{
 			unsigned int vertexID = bone->mWeights[y].mVertexId;
 			float weight = bone->mWeights[y].mWeight;
-
-			for (unsigned int z = 0; z < MAX_BONE_VERTEX_COUNT; z++)
-			{
-				if (BoneWeightList[vertexID].BoneWeights[z] == 0.0)
-				{
-					BoneWeightList[vertexID].BoneID[z] = x;
-					BoneWeightList[vertexID].BoneWeights[z] = weight;
-				}
-			}
+			BoneWeightPlacement(BoneWeightList, vertexID, x, weight);
 		}
 	}
 
@@ -527,6 +532,7 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 		for (auto& mesh : MeshList)
 		{
 			mesh->Update(GameObjectMatrix, ModelTransform, BoneList);
+
 		}
 		AnimationRenderer.Compute();
 	}

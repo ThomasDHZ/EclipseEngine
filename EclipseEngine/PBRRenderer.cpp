@@ -87,45 +87,18 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}
 
-	if (PreRenderedFlag)
+
+	if (!UpdatePreRenderer)
 	{
-		if (!UpdatePreRenderer)
+		//Depth Pass
 		{
-			//Depth Pass
-			{
-				CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
-				//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
-			}
-			//Main Render Pass
-			{
-				CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
-			}
+			CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+			//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 		}
-		else
+		//Main Render Pass
 		{
-			//Depth Pass
-			{
-				CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
-				//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
-			}
-
-			//Geometry Pass
-			{
-				auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
-				CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
-			}
-			//Main Render Pass
-			{
-				CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
-				CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
-			}
-
-			UpdatePreRenderer = false;
+			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
 		}
 	}
 	else
@@ -137,13 +110,6 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 		}
 
-		//SkyBox Pass
-		{
-			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
-			CommandBufferSubmitList.emplace_back(skyIrradianceRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(skyPrefilterRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(skyPBRRenderPass.Draw(reflectingMesh));
-		}
 		//Geometry Pass
 		{
 			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
@@ -157,6 +123,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
 		}
+
+		UpdatePreRenderer = false;
 	}
 
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
