@@ -18,17 +18,20 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
     if (renderPass == nullptr)
     {
         RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        RenderedBloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
         DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
         DepthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(RenderedBloomTexture->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
     RenderPassDesc();
@@ -45,17 +48,20 @@ void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textur
     if (renderPass == nullptr)
     {
         RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        RenderedBloomTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
         DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
         DepthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(RenderedBloomTexture->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
     RenderPassDesc();
@@ -71,7 +77,7 @@ void PBRReflectionRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
-
+    AttachmentDescriptionList.emplace_back(RenderedBloomTexture->GetAttachmentDescription());
     VkAttachmentDescription DepthAttachment = {};
     DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
     DepthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
@@ -85,8 +91,9 @@ void PBRReflectionRenderPass::RenderPassDesc()
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -156,7 +163,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(1, ColorAttachment);
+    ColorAttachmentList.resize(2, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
@@ -175,9 +182,10 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMe
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 2> clearValues{};
+    std::array<VkClearValue, 3> clearValues{};
     clearValues[0].color = { {0.2f, 0.3f, 0.3f, 1.0f} };
-    clearValues[1].depthStencil = { 1.0f, 0 };
+    clearValues[1].color = { {0.2f, 0.3f, 0.3f, 1.0f} };
+    clearValues[2].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -240,6 +248,7 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMe
 void PBRReflectionRenderPass::Destroy()
 {
     RenderedTexture->Destroy();
+    RenderedBloomTexture->Destroy();
     DepthTexture->Destroy();
 
     pbrPipeline.Destroy();

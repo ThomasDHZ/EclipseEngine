@@ -20,6 +20,7 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
+//layout(location = 1) out vec4 outBloom;
 
 layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
@@ -166,6 +167,8 @@ void main() {
     vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
     finalResult = pow(finalResult, vec3(1.0 / 2.2f));
     outColor = vec4(finalResult, material.AlphaMapID);
+//    outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
 }
 
 vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)

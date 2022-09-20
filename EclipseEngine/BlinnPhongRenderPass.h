@@ -22,6 +22,7 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
+	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	Renderer3DPipeline blinnphongPipeline;
 	BillboardPipeline billBoardPipeline;
@@ -37,6 +38,7 @@ public:
 	~BlinnPhongRenderPass();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void BuildRenderPass(std::shared_ptr<RenderedDepthTexture> depthTexture);

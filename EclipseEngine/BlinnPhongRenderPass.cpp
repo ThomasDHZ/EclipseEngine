@@ -18,19 +18,25 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedDepthTexture>
     {
         ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
         RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+        RenderedBloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
         DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
     }
     else
     {
         RenderedTexture->RecreateRendererTexture(RenderPassResolution);   
         ColorTexture->RecreateRendererTexture(RenderPassResolution);
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderedBloomTexture->RecreateRendererTexture(RenderPassResolution);
         DepthTexture->RecreateRendererTexture(RenderPassResolution);        
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ColorTexture->View);
+    AttachmentList.emplace_back(BloomTexture->View);
     AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(RenderedBloomTexture->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
     RenderPassDesc();
@@ -43,16 +49,20 @@ void BlinnPhongRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(BloomTexture->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(RenderedBloomTexture->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
     std::vector<VkAttachmentReference> MultiSampleReferenceList;
-    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 2, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 3, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 4, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -132,11 +142,12 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 4> clearValues{};
+    std::array<VkClearValue, 5> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
     clearValues[1].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
     clearValues[2].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
-    clearValues[3].depthStencil = { 1.0f, 0 };
+    clearValues[3].color = { {0.0f, 0.0f, 0.0f, 0.0f} };
+    clearValues[4].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -210,6 +221,8 @@ void BlinnPhongRenderPass::Destroy()
 {
     ColorTexture->Destroy();
     RenderedTexture->Destroy();
+    BloomTexture->Destroy();
+    RenderedBloomTexture->Destroy();
     DepthTexture->Destroy();
 
     blinnphongPipeline.Destroy();

@@ -10,7 +10,6 @@ struct MaterialProperties
 	float Matallic;
 	float Roughness;
 	float AmbientOcclusion;
-	vec3 Emission;
 	float Alpha;
 
 	uint DiffuseMapID;

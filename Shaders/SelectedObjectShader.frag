@@ -13,6 +13,7 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outBloom;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) uniform sampler2D TextureMap[];
