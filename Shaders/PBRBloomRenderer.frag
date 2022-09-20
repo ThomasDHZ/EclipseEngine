@@ -231,7 +231,14 @@ vec3 emission = material.Emission;
 
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);
     
-    vec3 color = emission;
+    vec3 color = ambient + Lo;
+    if(color.r < 1.0f ||
+       color.g < 1.0f ||
+       color.b < 1.0f)
+    {
+       color = vec3(0.0f);
+    }
+
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
 
