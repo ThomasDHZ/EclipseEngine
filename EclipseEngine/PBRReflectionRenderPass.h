@@ -35,7 +35,6 @@ public:
 	~PBRReflectionRenderPass();
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
-	std::shared_ptr<RenderedCubeMapTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);

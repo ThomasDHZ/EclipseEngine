@@ -6,7 +6,6 @@ layout(binding = 0) uniform samplerCube CubeMap;
 layout(location = 0) in vec3 TexCoords;
 
 layout(location = 0) out vec4 FragColor;
-layout(location = 1) out vec4 BloomColor;
 
 void main() 
 {
@@ -14,5 +13,4 @@ void main()
     color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2)); 
     FragColor = vec4(color, 1.0f);
-    BloomColor = vec4(vec3(0.0f, 0.0f, 0.0f), 1.0f);
 }

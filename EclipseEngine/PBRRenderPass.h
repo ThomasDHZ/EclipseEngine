@@ -22,7 +22,6 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	PBRPipeline pbrPipeline;
 	PBRInstancePipeline pbrInstancePipeline;
@@ -39,7 +38,6 @@ public:
 	~PBRRenderPass();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
-	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
