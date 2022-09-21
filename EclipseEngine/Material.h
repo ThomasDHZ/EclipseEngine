@@ -26,6 +26,7 @@ struct MaterialProperties
 	float Metallic = 0.0f;
 	float Roughness = 0.0f;
 	float AmbientOcclusion = 0.0f;
+	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;
@@ -52,6 +53,7 @@ struct MaterialBufferData
 	alignas(4) float Metallic = 0.0f;
 	alignas(4) float Roughness = 0.0f;
 	alignas(4) float AmbientOcclusion = 1.0f;
+	alignas(16) glm::vec3 Emission = glm::vec3(0.0f);
 	alignas(4) float Alpha = 1.0f;
 
 	alignas(4) uint32_t DiffuseMapID = DefaultTextureID;
@@ -136,6 +138,7 @@ private:
 	float Matallic = 0.0f;
 	float Roughness = 0.0f;
 	float AmbientOcclusion = 1.0f;
+	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
 
 	std::shared_ptr<Texture> DiffuseMap = nullptr;

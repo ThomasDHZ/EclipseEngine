@@ -83,6 +83,7 @@ Material::Material(const std::string materialName, MaterialTypeEnum materialtype
 		}
 	}
 
+	materialTextureData.Emission = MaterialInfo.Emission;
 	materialTextureData.Alpha = MaterialInfo.Alpha;
 	if (MaterialInfo.NormalMap != nullptr)
 	{

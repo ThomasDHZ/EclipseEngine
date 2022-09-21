@@ -177,6 +177,12 @@ void main()
      ao = texture(TextureMap[material.AmbientOcclusionMapID], FinalUV).r;
    }
 
+   vec3 emission = material.Emission;
+   if (material.EmissionMapID != 0)
+   {
+       emission = texture(TextureMap[material.EmissionMapID], FinalUV).rgb;
+   }
+
    mat3 TBN = getTBNFromMap();
    vec3 N = Normal;
 
@@ -224,7 +230,7 @@ void main()
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-    vec3 ambient = (kD * diffuse + specular) * ao;
+    vec3 ambient = emission + ((kD * diffuse + specular) * ao);
     
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0f));

@@ -166,32 +166,33 @@ GameObjectManager::AddGameObject(a);
 //    //source.Play(sound);
 //
     {
-       //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-       // std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-       // std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-       // std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-       // std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+       std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        IronmMaterial->LoadEmissionMap("../texture/matrix.jpg");
 
-       // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
-       // obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-       // GameObjectManager::AddGameObject(obj);
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        GameObjectManager::AddGameObject(obj);
 
-       // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
-       // obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-       // GameObjectManager::AddGameObject(obj2);
+        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        GameObjectManager::AddGameObject(obj2);
 
-       // auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
-       // obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
-       // GameObjectManager::AddGameObject(obj3);
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        GameObjectManager::AddGameObject(obj3);
 
-       // auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
-       // obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-       // obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-       // GameObjectManager::AddGameObject(obj4);
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+        obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        GameObjectManager::AddGameObject(obj4);
 
-       // auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
-       // obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-       // GameObjectManager::AddGameObject(obj5);
+        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        GameObjectManager::AddGameObject(obj5);
 
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
