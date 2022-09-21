@@ -6,7 +6,6 @@ layout(binding = 0) uniform samplerCube CubeMap;
 layout(location = 0) in vec3 TexCoords;
 
 layout(location = 0) out vec4 FragColor;
-layout(location = 1) out vec4 BloomColor;
 
 void main() 
 {

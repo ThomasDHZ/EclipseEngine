@@ -143,7 +143,7 @@ void DepthRenderPass::BuildRenderPassPipelines()
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.resize(2, ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
