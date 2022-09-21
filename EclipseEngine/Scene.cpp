@@ -335,6 +335,7 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
+    ImGui::Image(pbrRealTimeRenderer.GetBloomTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //if (pbrRenderer.GetColorPickerTexture() != nullptr)
     //{
     //    ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));

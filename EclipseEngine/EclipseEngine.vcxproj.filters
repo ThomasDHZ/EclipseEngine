@@ -513,6 +513,12 @@
     <ClCompile Include="ComputeAnimationPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="PBRBloomPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRBloomRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -932,6 +938,12 @@
     <ClInclude Include="ComputeAnimationPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
+    <ClInclude Include="PBRBloomPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBloomRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1146,6 +1158,12 @@
     </None>
     <None Include="..\Shaders\animate.comp">
       <Filter>Shader\ComputeShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRBloomRenderer.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRBloomRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -55,6 +55,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
 
 		pbrRenderPass.BuildRenderPass(submitList);
+		pbrBloomRenderPass.BuildRenderPass(submitList);
 	}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
@@ -112,6 +113,7 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 		CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+		CommandBufferSubmitList.emplace_back(pbrBloomRenderPass.Draw());
 	}
 
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());

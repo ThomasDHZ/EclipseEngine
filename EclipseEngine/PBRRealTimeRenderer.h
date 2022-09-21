@@ -9,6 +9,8 @@
 #include "PBRReflectionRenderPass.h"
 #include "PBRRenderPass.h"
 #include "FrameBufferRenderPass.h"
+#include "PBRBloomRenderPass.h"
+
 class PBRRealTimeRenderer
 {
 private:
@@ -31,6 +33,7 @@ private:
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
+	PBRBloomRenderPass pbrBloomRenderPass;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
@@ -47,5 +50,6 @@ public:
 	bool UpdatePreRenderer = true;
 
 	//DepthDebugRenderPass depthDebugRenderPass;
+	std::shared_ptr<RenderedColorTexture> GetBloomTexture() { return pbrBloomRenderPass.RenderedTexture; }
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

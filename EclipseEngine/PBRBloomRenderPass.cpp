@@ -1,16 +1,16 @@
-#include "PBRRenderPass.h"
+#include "PBRBloomRenderPass.h"
 #include "LightManager.h"
 
 
-PBRRenderPass::PBRRenderPass() : RenderPass()
+PBRBloomRenderPass::PBRBloomRenderPass() : RenderPass()
 {
 }
 
-PBRRenderPass::~PBRRenderPass()
+PBRBloomRenderPass::~PBRBloomRenderPass()
 {
 }
 
-void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
+void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -40,7 +40,7 @@ void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
     SetUpCommandBuffers();
 }
 
-void PBRRenderPass::RenderPassDesc()
+void PBRBloomRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
@@ -100,7 +100,7 @@ void PBRRenderPass::RenderPassDesc()
 
 }
 
-void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
+void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -120,15 +120,10 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, textures);
-    pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
-    linePipeline.InitializePipeline(pipelineInfo);
-    wireframePipeline.InitializePipeline(pipelineInfo);
-    outLinePipeline.InitializePipeline(pipelineInfo);
+    pbrBloomPipeline.InitializePipeline(pipelineInfo, textures);
 }
 
-VkCommandBuffer PBRRenderPass::Draw()
+VkCommandBuffer PBRBloomRenderPass::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -170,39 +165,15 @@ VkCommandBuffer PBRRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     {
-        skyboxPipeline.Draw(commandBuffer);
-
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {
             switch (mesh->GetMeshType())
             {
-                case MeshTypeEnum::kPolygon:
-                {
-                    if (VulkanRenderer::WireframeModeFlag)
-                    {
-                        wireframePipeline.Draw(commandBuffer, mesh);
-                    }
-                    else
-                    {
-                        if (MeshRendererManager::GetSelectedMesh() == mesh)
-                        {
-                            outLinePipeline.Draw(commandBuffer, mesh);
-                        }
-                        pbrPipeline.Draw(commandBuffer, mesh);
-                    
-                    }
-                    break;
-                }
-                case MeshTypeEnum::kPolygonInstanced:
-                {
-                    pbrInstancePipeline.Draw(commandBuffer, mesh);
-                    break;
-                }
-                case MeshTypeEnum::kLine:
-                {
-                    linePipeline.Draw(commandBuffer, mesh);
-                    break;
-                }
+            case MeshTypeEnum::kPolygon:
+            {
+                pbrBloomPipeline.Draw(commandBuffer, mesh);
+                break;
+            }
             }
         }
     }
@@ -214,18 +185,13 @@ VkCommandBuffer PBRRenderPass::Draw()
     return commandBuffer;
 }
 
-void PBRRenderPass::Destroy()
+void PBRBloomRenderPass::Destroy()
 {
     ColorTexture->Destroy();
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
 
-    pbrPipeline.Destroy();
-    pbrInstancePipeline.Destroy();
-    skyboxPipeline.Destroy();
-    linePipeline.Destroy();
-    outLinePipeline.Destroy();
-    wireframePipeline.Destroy();
+    pbrBloomPipeline.Destroy();
 
     RenderPass::Destroy();
 }

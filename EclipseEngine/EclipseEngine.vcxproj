@@ -211,6 +211,8 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
+    <ClCompile Include="PBRBloomPipeline.cpp" />
+    <ClCompile Include="PBRBloomRenderPass.cpp" />
     <ClCompile Include="PBRInstancedReflectionPipeline.cpp" />
     <ClCompile Include="PBRInstancePipeline.cpp" />
     <ClCompile Include="PBRPipeline.cpp" />
@@ -342,6 +344,8 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
+    <ClInclude Include="PBRBloomPipeline.h" />
+    <ClInclude Include="PBRBloomRenderPass.h" />
     <ClInclude Include="PBRInstancedReflectionPipeline.h" />
     <ClInclude Include="PBRInstancePipeline.h" />
     <ClInclude Include="PBRPipeline.h" />
@@ -472,6 +476,8 @@
     <None Include="..\Shaders\miss.rmiss" />
     <None Include="..\Shaders\OutlineRenderer.frag" />
     <None Include="..\Shaders\OutlineRenderer.vert" />
+    <None Include="..\Shaders\PBRBloomRenderer.frag" />
+    <None Include="..\Shaders\PBRBloomRenderer.vert" />
     <None Include="..\Shaders\PBRInstanceRenderer.frag" />
     <None Include="..\Shaders\PBRInstanceRenderer.vert" />
     <None Include="..\Shaders\PBRRenderer.frag" />
