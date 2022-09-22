@@ -318,6 +318,32 @@ void Texture::UpdateImageLayout(VkImageLayout newImageLayout)
 	}
 }
 
+void Texture::UpdateImageLayout(VkImageLayout newImageLayout, uint32_t MipLevel)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	ImageSubresourceRange.baseMipLevel = MipLevel;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier ImageMemoryBarrier = {};
+	ImageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	ImageMemoryBarrier.oldLayout = TextureImageLayout;
+	ImageMemoryBarrier.newLayout = newImageLayout;
+	ImageMemoryBarrier.image = Image;
+	ImageMemoryBarrier.subresourceRange = ImageSubresourceRange;
+	ImageMemoryBarrier.srcAccessMask = 0;
+	ImageMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdPipelineBarrier(SingleCommand, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &ImageMemoryBarrier);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+	if (result == VK_SUCCESS)
+	{
+		TextureImageLayout = newImageLayout;
+	}
+}
+
 void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout)
 {
 	VkImageSubresourceRange ImageSubresourceRange{};
@@ -339,11 +365,53 @@ void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout ol
 	TextureImageLayout = newImageLayout;
 }
 
+void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, uint32_t MipLevel)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	ImageSubresourceRange.baseMipLevel = MipLevel;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = oldImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
+
 void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout)
 {
 	VkImageSubresourceRange ImageSubresourceRange{};
 	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	ImageSubresourceRange.baseMipLevel = 0;
+	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
+	ImageSubresourceRange.layerCount = 1;
+
+	VkImageMemoryBarrier barrier = {};
+	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+	barrier.oldLayout = TextureImageLayout;
+	barrier.newLayout = newImageLayout;
+	barrier.image = Image;
+	barrier.subresourceRange = ImageSubresourceRange;
+	barrier.srcAccessMask = 0;
+	barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0, nullptr, 0, nullptr, 1, &barrier);
+	TextureImageLayout = newImageLayout;
+}
+
+void Texture::UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel)
+{
+	VkImageSubresourceRange ImageSubresourceRange{};
+	ImageSubresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	ImageSubresourceRange.baseMipLevel = MipLevel;
 	ImageSubresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
 	ImageSubresourceRange.layerCount = 1;
 
@@ -632,6 +700,26 @@ void Texture::Destroy()
 void Texture::SetTextureBufferIndex(uint64_t bufferIndex)
 {
 	TextureBufferIndex = bufferIndex;
+}
+
+void Texture::CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel)
+{
+	VkImageCopy copyImage{};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstSubresource.mipLevel = MipLevel;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = (uint32_t)static_cast<float>(srcTexture->Width * std::pow(0.5f, MipLevel));
+	copyImage.extent.height = (uint32_t)static_cast<float>(srcTexture->Height * std::pow(0.5f, MipLevel));
+	copyImage.extent.depth = 1;
+
+	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 
 void Texture::CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture)

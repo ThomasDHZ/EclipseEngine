@@ -1,5 +1,5 @@
 #include "PBRBloomRenderPass.h"
-#include "LightManager.h"
+#include "SkyboxMesh.h"
 
 
 PBRBloomRenderPass::PBRBloomRenderPass() : RenderPass()
@@ -10,28 +10,26 @@ PBRBloomRenderPass::~PBRBloomRenderPass()
 {
 }
 
-void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
+void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     if (renderPass == nullptr)
     {
-        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        DrawToCubeMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        PrefilterCubeMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        ColorTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+        PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(DrawToCubeMap->View);
     AttachmentList.emplace_back(DepthTexture->View);
 
     RenderPassDesc();
@@ -40,27 +38,51 @@ void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& texture
     SetUpCommandBuffers();
 }
 
+void PBRBloomRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+{
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
+
+    if (renderPass == nullptr)
+    {
+        DrawToCubeMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        PrefilterCubeMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+        PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(DrawToCubeMap->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(textures);
+    SetUpCommandBuffers();
+    Draw(DrawPosition);
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void PBRBloomRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DrawToCubeMap->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    std::vector<VkAttachmentReference> MultiSampleReferenceList;
-    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
     subpassDescription.pColorAttachments = ColorRefsList.data();
     subpassDescription.pDepthStencilAttachment = &depthReference;
-    subpassDescription.pResolveAttachments = MultiSampleReferenceList.data();
 
     std::vector<VkSubpassDependency> DependencyList;
 
@@ -97,14 +119,13 @@ void PBRBloomRenderPass::RenderPassDesc()
     {
         throw std::runtime_error("Failed to create Buffer RenderPass.");
     }
-
 }
 
 void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.blendEnable = VK_FALSE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -113,7 +134,7 @@ void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
@@ -123,63 +144,83 @@ void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList
     pbrBloomPipeline.InitializePipeline(pipelineInfo, textures);
 }
 
-VkCommandBuffer PBRBloomRenderPass::Draw()
+VkCommandBuffer PBRBloomRenderPass::Draw(glm::vec3 DrawPosition)
 {
+    if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
+        PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+    {
+        DrawToCubeMap->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        PrefilterCubeMap->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+    }
 
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 3> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[2].depthStencil = { 1.0f, 0 };
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
 
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = (float)RenderPassResolution.x;
-    viewport.height = (float)RenderPassResolution.y;
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
+    PrefilterCubeMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
-    VkRect2D rect2D{};
-    rect2D.offset = { 0, 0 };
-    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { {1.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[1].depthStencil = { 1.0f, 0 };
 
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetCMDIndex()];
     renderPassInfo.renderArea.offset = { 0, 0 };
     renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to begin recording command buffer.");
-    }
+    VkRect2D rect2D{};
+    rect2D.extent.width = RenderPassResolution.x;
+    rect2D.extent.height = RenderPassResolution.y;
+    rect2D.offset.x = 0.0f;
+    rect2D.offset.y = 0.0f;
 
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+    PrefilterSkyboxSettings prefiliter;
+    for (unsigned int mip = 0; mip < CubeMapMipLevels; mip++)
     {
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+        VkViewport viewport{};
+        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
+        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
+
+        prefiliter.SkyboxSize = RenderPassResolution.x;
+        prefiliter.roughness = (float)mip / (float)(CubeMapMipLevels - 1);
+
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         {
-            switch (mesh->GetMeshType())
+            for (auto& mesh : MeshRendererManager::GetMeshList())
             {
-            case MeshTypeEnum::kPolygon:
-            {
-                pbrBloomPipeline.Draw(commandBuffer, mesh);
-                break;
-            }
+                switch (mesh->GetMeshType())
+                {
+                case MeshTypeEnum::kPolygon:
+                {
+                    pbrBloomPipeline.Draw(commandBuffer, mesh);
+                    break;
+                }
+                }
             }
         }
+        vkCmdEndRenderPass(commandBuffer);
+
+        DrawToCubeMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyTexture(commandBuffer, DrawToCubeMap, PrefilterCubeMap, mip);
+        DrawToCubeMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
-    vkCmdEndRenderPass(commandBuffer);
+    PrefilterCubeMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to record command buffer.");
+        throw std::runtime_error("failed to record command buffer!");
     }
 
     return commandBuffer;
@@ -187,11 +228,8 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
 
 void PBRBloomRenderPass::Destroy()
 {
-    ColorTexture->Destroy();
-    RenderedTexture->Destroy();
-    DepthTexture->Destroy();
-
+    DrawToCubeMap->Destroy();
+    PrefilterCubeMap->Destroy();
     pbrBloomPipeline.Destroy();
-
     RenderPass::Destroy();
 }

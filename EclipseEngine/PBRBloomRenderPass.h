@@ -5,26 +5,24 @@
 class PBRBloomRenderPass : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkVertexInputBindingDescription VertexInputBindingDescription;
-	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
-	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
-
-	PBRBloomPipeline pbrBloomPipeline;
+	uint32_t CubeMapMipLevels = 0;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
+
+	std::shared_ptr<RenderedColorTexture> DrawToCubeMap;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	PBRBloomPipeline pbrBloomPipeline;
 
 public:
 	PBRBloomRenderPass();
 	~PBRBloomRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
-	VkCommandBuffer Draw();
+	std::shared_ptr<RenderedColorTexture> PrefilterCubeMap;
+
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
+	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
+	VkCommandBuffer Draw(glm::vec3 DrawPosition = glm::vec3(0.0f));
 	void Destroy();
 };

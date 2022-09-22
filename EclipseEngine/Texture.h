@@ -65,24 +65,32 @@ public:
     ~Texture();
 
     void UpdateImageLayout(VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
+    void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, uint32_t MipLevel);
+
     void UpdateCubeMapLayout(VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
+
     void UpdateDepthImageLayout(VkImageLayout newImageLayout);
     void UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
+
     void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout);
     void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
+
     void Destroy();
 
     void SetTextureBufferIndex(uint64_t bufferIndex);
 
     static void CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
+    static void CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);
     static void CopyDepthTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);

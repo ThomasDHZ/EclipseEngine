@@ -10,6 +10,8 @@ RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkForma
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
+
+	MipMapLevels = 1;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	TextureByteFormat = TextureFormat;
@@ -26,6 +28,26 @@ RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkForma
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
+
+	MipMapLevels = 1;
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = sampleCount;
+	TextureByteFormat = TextureFormat;
+
+	CreateTextureImage();
+	CreateTextureView();
+	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+}
+
+RenderedColorTexture::RenderedColorTexture(glm::ivec2 TextureResolution, VkFormat TextureFormat, VkSampleCountFlagBits sampleCount, uint32_t mipLevels) : Texture(kRenderedColorTexture)
+{
+	Width = TextureResolution.x;
+	Height = TextureResolution.y;
+	Depth = 1;
+
+	MipMapLevels = mipLevels;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = sampleCount;
 	TextureByteFormat = TextureFormat;
@@ -49,7 +71,7 @@ void RenderedColorTexture::CreateTextureImage()
 	TextureInfo.extent.width = Width;
 	TextureInfo.extent.height = Height;
 	TextureInfo.extent.depth = 1;
-	TextureInfo.mipLevels = 1;
+	TextureInfo.mipLevels = MipMapLevels;
 	TextureInfo.arrayLayers = 1;
 	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	TextureInfo.samples = SampleCount;
