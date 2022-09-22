@@ -10,9 +10,9 @@ PBRBloomRenderPass::~PBRBloomRenderPass()
 {
 }
 
-void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
 {
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     if (renderPass == nullptr)
@@ -38,9 +38,9 @@ void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& texture
     SetUpCommandBuffers();
 }
 
-void PBRBloomRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+void PBRBloomRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures)
 {
-    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     if (renderPass == nullptr)
@@ -63,7 +63,7 @@ void PBRBloomRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, u
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
-    Draw(DrawPosition);
+    Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -144,7 +144,7 @@ void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList
     pbrBloomPipeline.InitializePipeline(pipelineInfo, textures);
 }
 
-VkCommandBuffer PBRBloomRenderPass::Draw(glm::vec3 DrawPosition)
+VkCommandBuffer PBRBloomRenderPass::Draw()
 {
     if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
         PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)

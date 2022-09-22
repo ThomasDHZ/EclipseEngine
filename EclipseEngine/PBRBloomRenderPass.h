@@ -21,8 +21,8 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> PrefilterCubeMap;
 
-	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
-	VkCommandBuffer Draw(glm::vec3 DrawPosition = glm::vec3(0.0f));
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
+	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures);
+	VkCommandBuffer Draw();
 	void Destroy();
 };

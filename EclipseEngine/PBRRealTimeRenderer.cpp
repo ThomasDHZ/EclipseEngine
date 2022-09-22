@@ -55,7 +55,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
 
 		pbrRenderPass.BuildRenderPass(submitList);
-		pbrBloomRenderPass.BuildRenderPass(submitList, 1024.0f);
+		pbrBloomRenderPass.BuildRenderPass(submitList);
 	}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
