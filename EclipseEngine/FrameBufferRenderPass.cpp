@@ -52,6 +52,25 @@ void FrameBufferRenderPass::BuildRenderPass(std::shared_ptr<RenderedColorTexture
     SetUpCommandBuffers();
 }
 
+void FrameBufferRenderPass::BuildRenderPass(std::shared_ptr<RenderedColorTexture> renderedTexture, std::shared_ptr<RenderedColorTexture> bloomTexture)
+{
+    RenderedTexture = renderedTexture;
+    BloomTexture = bloomTexture;
+
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    if (renderPass != nullptr)
+    {
+        RenderPass::Destroy();
+    }
+
+    RenderPassDesc();
+    BuildRendererFramebuffers();
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+}
+
 void FrameBufferRenderPass::RenderPassDesc()
 {
     VkAttachmentDescription colorAttachment{};
@@ -110,7 +129,7 @@ void FrameBufferRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    frameBufferPipeline.InitializePipeline(pipelineInfo, RenderedTexture);
+    frameBufferPipeline.InitializePipeline(pipelineInfo, RenderedTexture, BloomTexture);
 }
 
 VkCommandBuffer FrameBufferRenderPass::Draw()

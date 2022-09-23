@@ -50,6 +50,6 @@ public:
 	bool UpdatePreRenderer = true;
 
 	//DepthDebugRenderPass depthDebugRenderPass;
-	std::shared_ptr<RenderedColorTexture> GetBloomTexture() { return pbrBloomRenderPass.PrefilterCubeMap; }
+	std::shared_ptr<RenderedColorTexture> GetBloomTexture() { return pbrBloomRenderPass.BloomMap; }
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
