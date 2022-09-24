@@ -10,6 +10,7 @@
 #include "PBRRenderPass.h"
 #include "FrameBufferRenderPass.h"
 #include "PBRBloomRenderPass.h"
+#include "BlurRenderPass.h"
 
 class PBRRealTimeRenderer
 {
@@ -34,6 +35,7 @@ private:
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
 	PBRBloomRenderPass pbrBloomRenderPass;
+	BlurRenderPass blurRenderPass;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 

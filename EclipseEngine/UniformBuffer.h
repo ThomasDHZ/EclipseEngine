@@ -60,6 +60,12 @@ struct SceneProperties
 	alignas(4)  float PBRMaxMipLevel = 0.0f;
 };
 
+struct BloomSettings
+{
+	alignas(4)  uint32_t Horizantal = 0;
+	alignas(4)  uint32_t MipLevel = 0;
+};
+
 struct BillboardSceneProperties : public SceneProperties
 {
 };
