@@ -18,7 +18,6 @@ void main()
                    texture(Texture[7], UV).rgb +
                    texture(Texture[8], UV).rgb +
                    texture(Texture[9], UV).rgb +
-                   texture(Texture[10], UV).rgb +
-                   texture(Texture[11], UV).rgb;
+                   texture(Texture[10], UV).rgb;
      outColor = vec4(result, 1.0);
 }

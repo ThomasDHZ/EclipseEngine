@@ -62,7 +62,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 	}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
-	frameBufferRenderPass.BuildRenderPass(blurRenderPass2.BlurredTextureList[0], blurRenderPass2.BlurredTextureList[0]);
+	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
 }
 
 void PBRRealTimeRenderer::Update()

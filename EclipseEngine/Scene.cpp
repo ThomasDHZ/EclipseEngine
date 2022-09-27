@@ -131,8 +131,8 @@ Scene::Scene()
     auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", "../Models/TestAnimModel/model.dae"));
 GameObjectManager::AddGameObject(a);
 
-//auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
-//GameObjectManager::AddGameObject(b);
+auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+GameObjectManager::AddGameObject(b);
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");

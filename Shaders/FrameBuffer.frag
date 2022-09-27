@@ -15,5 +15,7 @@ const float Exposure = 1.0f;
 void main() 
 {
     vec3 Color = texture(FrameBufferTexture, TexCoords).rgb;
-    outColor = vec4(Color, 1.0f);
+    vec3 Bloom = texture(BloomTexture, TexCoords).rgb;
+    vec3 result = Color + Bloom;
+    outColor = vec4(result, 1.0f);
 }
