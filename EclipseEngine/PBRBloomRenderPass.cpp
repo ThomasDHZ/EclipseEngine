@@ -18,13 +18,19 @@ void PBRBloomRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& texture
     if (renderPass == nullptr)
     {
         DrawToBloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        BloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, TextureMapMipLevels));
+        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+        {
+            BloomMapList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         DrawToBloomMap->RecreateRendererTexture(RenderPassResolution);
-        BloomMap->RecreateRendererTexture(RenderPassResolution);
+        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+        {
+            BloomMapList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         RenderPass::Destroy();
     }
 
@@ -46,13 +52,19 @@ void PBRBloomRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures)
     if (renderPass == nullptr)
     {
         DrawToBloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        BloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, TextureMapMipLevels));
+        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+        {
+            BloomMapList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
         DrawToBloomMap->RecreateRendererTexture(RenderPassResolution);
-        BloomMap->RecreateRendererTexture(RenderPassResolution);
+        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+        {
+            BloomMapList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         RenderPass::Destroy();
     }
 
@@ -147,10 +159,13 @@ void PBRBloomRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList
 VkCommandBuffer PBRBloomRenderPass::Draw()
 {
     if (DrawToBloomMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
-        BloomMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
+        BloomMapList[0]->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     {
         DrawToBloomMap->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        BloomMap->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+        {
+            BloomMapList[mip]->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+        }
     }
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -162,7 +177,10 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
         throw std::runtime_error("failed to begin recording command buffer!");
     }
 
-    BloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+    {
+        BloomMapList[mip]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    }
 
     std::array<VkClearValue, 2> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
@@ -210,10 +228,15 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyTexture(commandBuffer, DrawToBloomMap, BloomMap, mip);
+        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BloomMapList[mip], 0);
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
-    BloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+
+
+    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+    {
+        BloomMapList[mip]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    }
 
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
@@ -225,7 +248,10 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
 void PBRBloomRenderPass::Destroy()
 {
     DrawToBloomMap->Destroy();
-    BloomMap->Destroy();
+    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
+    {
+        BloomMapList[mip]->Destroy();
+    }
     DepthTexture->Destroy();
 
     pbrBloomPipeline.Destroy();

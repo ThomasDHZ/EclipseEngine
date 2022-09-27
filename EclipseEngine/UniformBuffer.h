@@ -62,8 +62,14 @@ struct SceneProperties
 
 struct BloomSettings
 {
+	alignas(16) float blurScale = 1.0f;
+	alignas(16) float blurStrength = 1.0f;
 	alignas(4)  uint32_t Horizantal = 0;
-	alignas(4)  uint32_t MipLevel = 0;
+};
+
+struct BloomIndexSettings
+{
+	alignas(4) uint32_t TextureIndex = 0;
 };
 
 struct BillboardSceneProperties : public SceneProperties

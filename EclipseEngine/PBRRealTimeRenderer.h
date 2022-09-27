@@ -11,6 +11,7 @@
 #include "FrameBufferRenderPass.h"
 #include "PBRBloomRenderPass.h"
 #include "BlurRenderPass.h"
+#include "BloomCombineRenderPass.h"
 
 class PBRRealTimeRenderer
 {
@@ -36,6 +37,8 @@ private:
 	PBRRenderPass pbrRenderPass;
 	PBRBloomRenderPass pbrBloomRenderPass;
 	BlurRenderPass blurRenderPass;
+	BlurRenderPass blurRenderPass2;
+	BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
@@ -52,6 +55,6 @@ public:
 	bool UpdatePreRenderer = true;
 
 	//DepthDebugRenderPass depthDebugRenderPass;
-	std::shared_ptr<RenderedColorTexture> GetBloomTexture() { return pbrBloomRenderPass.BloomMap; }
+	std::shared_ptr<RenderedColorTexture> GetBloomTexture() { return pbrBloomRenderPass.BloomMapList[0]; }
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

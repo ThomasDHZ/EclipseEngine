@@ -19,7 +19,7 @@ public:
 	~PBRBloomRenderPass();
 
 
-	std::shared_ptr<RenderedColorTexture> BloomMap;
+	std::vector<std::shared_ptr<RenderedColorTexture>> BloomMapList;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
 	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures);

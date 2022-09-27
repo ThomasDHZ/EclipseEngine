@@ -1,38 +1,29 @@
-#include "BlurRenderPass.h"
+#include "BloomCombineRenderPass.h"
 
-BlurRenderPass::BlurRenderPass() : RenderPass()
+BloomCombineRenderPass::BloomCombineRenderPass() : RenderPass()
 {
 }
 
-BlurRenderPass::~BlurRenderPass()
+BloomCombineRenderPass::~BloomCombineRenderPass()
 {
 }
 
-void BlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
+void BloomCombineRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    TextureMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     if (renderPass == nullptr)
     {
-        DrawToBloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-        {
-            BlurredTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
-        }
+        BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        DrawToBloomMap->RecreateRendererTexture(RenderPassResolution);
-        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-        {
-            BlurredTextureList[mip]->RecreateRendererTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))));
-        }
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DrawToBloomMap->View);
+    AttachmentList.emplace_back(BloomTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -40,44 +31,35 @@ void BlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTe
     SetUpCommandBuffers();
 }
 
-void BlurRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList, float horizontalpass)
+void BloomCombineRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-    TextureMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
 
     if (renderPass == nullptr)
     {
-        DrawToBloomMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-        {
-            BlurredTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
-        }
+        BloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        DrawToBloomMap->RecreateRendererTexture(RenderPassResolution);
-        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-        {
-            BlurredTextureList[mip]->RecreateRendererTexture(glm::vec2(static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip)), static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip))));
-        }
+        BloomTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DrawToBloomMap->View);
+    AttachmentList.emplace_back(BloomTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(textureList);
     SetUpCommandBuffers();
-    Draw(horizontalpass);
+    Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void BlurRenderPass::RenderPassDesc()
+void BloomCombineRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(DrawToBloomMap->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(BloomTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -124,7 +106,7 @@ void BlurRenderPass::RenderPassDesc()
     }
 }
 
-void BlurRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
+void BloomCombineRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -144,21 +126,11 @@ void BlurRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<Render
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    blurPipeline.InitializePipeline(pipelineInfo, textureList);
+    bloomPipeline.InitializePipeline(pipelineInfo, textureList);
 }
 
-VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
+VkCommandBuffer BloomCombineRenderPass::Draw()
 {
-    if (DrawToBloomMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
-        BlurredTextureList[0]->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-    {
-        DrawToBloomMap->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-        {
-            BlurredTextureList[mip]->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
-        }
-    }
-
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -166,11 +138,6 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
-    }
-
-    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-    {
-        BlurredTextureList[mip]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     }
 
     std::array<VkClearValue, 1> clearValues{};
@@ -191,35 +158,20 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     rect2D.offset.x = 0.0f;
     rect2D.offset.y = 0.0f;
 
-    BloomSettings settings{};
-    settings.Horizantal = horizontalpass;
-    settings.blurScale = 2.3f;
-    settings.blurStrength = 1.2f;
+    VkViewport viewport{};
+    viewport.width = RenderPassResolution.x;
+    viewport.height = RenderPassResolution.y;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
 
-    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-    {
-        VkViewport viewport{};
-        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
-        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
-        viewport.minDepth = 0.0f;
-        viewport.maxDepth = 1.0f;
+    BloomIndexSettings bloom;
+    bloom.TextureIndex = 0;
 
-        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        blurPipeline.Draw(commandBuffer, settings);
-        vkCmdEndRenderPass(commandBuffer);
-
-        DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BlurredTextureList[mip], 0);
-        DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    }
-
-    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-    {
-        BlurredTextureList[mip]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    }
-
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    bloomPipeline.Draw(commandBuffer, bloom);
+    vkCmdEndRenderPass(commandBuffer);
 
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
@@ -228,14 +180,9 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     return commandBuffer;
 }
 
-void BlurRenderPass::Destroy()
+void BloomCombineRenderPass::Destroy()
 {
-    DrawToBloomMap->Destroy();
-    for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
-    {
-        BlurredTextureList[mip]->Destroy();
-    }
-
-    blurPipeline.Destroy();
+    BloomTexture->Destroy();
+    bloomPipeline.Destroy();
     RenderPass::Destroy();
 }

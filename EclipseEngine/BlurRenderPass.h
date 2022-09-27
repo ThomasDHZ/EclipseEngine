@@ -8,7 +8,7 @@ private:
 	uint32_t TextureMapMipLevels = 0;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<Texture> texture);
+	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList);
 
 	std::shared_ptr<RenderedColorTexture> DrawToBloomMap;
 	BloomBlurPipeline blurPipeline;
@@ -18,10 +18,10 @@ public:
 	~BlurRenderPass();
 
 
-	std::shared_ptr<RenderedColorTexture> BlurredTexture;
+	std::vector<std::shared_ptr<RenderedColorTexture>> BlurredTextureList;
 
-	void BuildRenderPass(std::shared_ptr<Texture> texture);
-	void OneTimeDraw(std::shared_ptr<Texture> texture);
-	VkCommandBuffer Draw();
+	void BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>>textureList);
+	void OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList, float horizontalpass);
+	VkCommandBuffer Draw(float horizontalpass);
 	void Destroy();
 };

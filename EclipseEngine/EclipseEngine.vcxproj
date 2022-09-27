@@ -159,6 +159,8 @@
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
     <ClCompile Include="BloomBlurPipeline.cpp" />
+    <ClCompile Include="BloomCombinePipeline.cpp" />
+    <ClCompile Include="BloomCombineRenderPass.cpp" />
     <ClCompile Include="BlurRenderPass.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFPipeline.cpp" />
@@ -292,6 +294,8 @@
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
     <ClInclude Include="BloomBlurPipeline.h" />
+    <ClInclude Include="BloomCombinePipeline.h" />
+    <ClInclude Include="BloomCombineRenderPass.h" />
     <ClInclude Include="BlurRenderPass.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BRDFPipeline.h" />
@@ -431,6 +435,8 @@
     <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\AdditionShader.frag" />
+    <None Include="..\Shaders\AdditionShader.vert" />
     <None Include="..\Shaders\animate.comp" />
     <None Include="..\Shaders\anyhit.rahit" />
     <None Include="..\Shaders\anyhit1.rahit" />
