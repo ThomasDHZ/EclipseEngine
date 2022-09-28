@@ -5,11 +5,13 @@
 
 class BloomCombinePipeline : public GraphicsPipeline
 {
+private:
+	BloomIndexSettings bloomTextureCount;
 
 public:
 	BloomCombinePipeline();
 	~BloomCombinePipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedColorTexture>> textureList);
-	void Draw(VkCommandBuffer& commandBuffer, BloomIndexSettings& bloomSettings);
+	void Draw(VkCommandBuffer& commandBuffer);
 };

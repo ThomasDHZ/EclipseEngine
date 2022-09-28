@@ -24,7 +24,9 @@ void BloomCombinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
         BlurTextureBuffer.sampler = texture->Sampler;
 
         blurTextureBufferList.emplace_back(BlurTextureBuffer);
+        bloomTextureCount.TextureCount += 1;
     }
+
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, blurTextureBufferList);
@@ -55,10 +57,10 @@ void BloomCombinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     }
 }
 
-void BloomCombinePipeline::Draw(VkCommandBuffer& commandBuffer, BloomIndexSettings& bloomSettings)
+void BloomCombinePipeline::Draw(VkCommandBuffer& commandBuffer)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BloomIndexSettings), &bloomSettings);
+    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BloomIndexSettings), &bloomTextureCount);
     vkCmdDraw(commandBuffer, 6, 1, 0, 0);
 }

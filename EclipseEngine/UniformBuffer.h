@@ -68,7 +68,7 @@ struct GaussianBlurSettings
 
 struct BloomIndexSettings
 {
-	alignas(4) uint32_t TextureIndex = 0;
+	alignas(4) uint32_t TextureCount = 0;
 };
 
 struct BillboardSceneProperties : public SceneProperties
