@@ -722,12 +722,12 @@ void Texture::CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Textur
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 
-void Texture::CopyMipLevelToTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel)
+void Texture::CopyMipLevelToTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture)
 {
 	VkImageCopy copyImage{};
 	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 	copyImage.srcSubresource.baseArrayLayer = 0;
-	copyImage.srcSubresource.mipLevel = MipLevel;
+	copyImage.srcSubresource.mipLevel = 0;
 	copyImage.srcSubresource.layerCount = 1;
 	copyImage.srcOffset = { 0, 0, 0 };
 

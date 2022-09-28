@@ -11,4 +11,4 @@ ConstSkyBoxView							SceneManager::cubeMapInfo;
 SceneProperties							SceneManager::sceneProperites;
 std::shared_ptr<Camera>					SceneManager::activeCamera;
 MusicPlayer								SceneManager::musicPlayer;
-BloomSettings							SceneManager::bloomsettings;
+GaussianBlurSettings					SceneManager::bloomsettings;

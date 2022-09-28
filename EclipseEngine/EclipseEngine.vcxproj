@@ -158,10 +158,10 @@
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
-    <ClCompile Include="BloomBlurPipeline.cpp" />
+    <ClCompile Include="GaussianBlurPipeline.cpp" />
     <ClCompile Include="BloomCombinePipeline.cpp" />
     <ClCompile Include="BloomCombineRenderPass.cpp" />
-    <ClCompile Include="BlurRenderPass.cpp" />
+    <ClCompile Include="GaussianBlurRenderPass.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFPipeline.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
@@ -295,10 +295,10 @@
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
-    <ClInclude Include="BloomBlurPipeline.h" />
+    <ClInclude Include="GaussianBlurPipeline.h" />
     <ClInclude Include="BloomCombinePipeline.h" />
     <ClInclude Include="BloomCombineRenderPass.h" />
-    <ClInclude Include="BlurRenderPass.h" />
+    <ClInclude Include="GaussianBlurRenderPass.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="BRDFPipeline.h" />
     <ClInclude Include="BRDFRenderPass.h" />
@@ -449,8 +449,6 @@
     <None Include="..\Shaders\BillBoardShader.vert" />
     <None Include="..\Shaders\BlinnPhoneReflect.frag" />
     <None Include="..\Shaders\BlinnPhoneReflect.vert" />
-    <None Include="..\Shaders\BloomBlur.frag" />
-    <None Include="..\Shaders\BloomBlur.vert" />
     <None Include="..\Shaders\BRDFShader.frag" />
     <None Include="..\Shaders\BRDFShader.vert" />
     <None Include="..\Shaders\closesthit.rchit" />
@@ -475,6 +473,8 @@
     <None Include="..\Shaders\EnvironmentToCubeMap.vert" />
     <None Include="..\Shaders\FrameBuffer.frag" />
     <None Include="..\Shaders\FrameBuffer.vert" />
+    <None Include="..\Shaders\GaussianBlur.frag" />
+    <None Include="..\Shaders\GaussianBlur.vert" />
     <None Include="..\Shaders\GBuffer.frag" />
     <None Include="..\Shaders\GBuffer.vert" />
     <None Include="..\Shaders\hybridclosesthit.rchit" />

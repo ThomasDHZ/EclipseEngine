@@ -1,14 +1,14 @@
-#include "BlurRenderPass.h"
+#include "GaussianBlurRenderPass.h"
 
-BlurRenderPass::BlurRenderPass() : RenderPass()
+GaussianBlurRenderPass::GaussianBlurRenderPass() : RenderPass()
 {
 }
 
-BlurRenderPass::~BlurRenderPass()
+GaussianBlurRenderPass::~GaussianBlurRenderPass()
 {
 }
 
-void BlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
+void GaussianBlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     TextureMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -40,7 +40,7 @@ void BlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTe
     SetUpCommandBuffers();
 }
 
-void BlurRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList, float horizontalpass)
+void GaussianBlurRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     TextureMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -70,11 +70,11 @@ void BlurRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTextur
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(textureList);
     SetUpCommandBuffers();
-    Draw(horizontalpass);
+    Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void BlurRenderPass::RenderPassDesc()
+void GaussianBlurRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(DrawToBloomMap->GetAttachmentDescription());
@@ -124,7 +124,7 @@ void BlurRenderPass::RenderPassDesc()
     }
 }
 
-void BlurRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
+void GaussianBlurRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -147,7 +147,7 @@ void BlurRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<Render
     blurPipeline.InitializePipeline(pipelineInfo, textureList);
 }
 
-VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
+VkCommandBuffer GaussianBlurRenderPass::Draw()
 {
     if (DrawToBloomMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
         BlurredTextureList[0]->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
@@ -191,9 +191,6 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     rect2D.offset.x = 0.0f;
     rect2D.offset.y = 0.0f;
 
-    BloomSettings settings = SceneManager::bloomsettings;
-    settings.Horizantal = horizontalpass;
-
     for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
     {
         VkViewport viewport{};
@@ -205,11 +202,11 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        blurPipeline.Draw(commandBuffer, settings);
+        blurPipeline.Draw(commandBuffer);
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BlurredTextureList[mip], 0);
+        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BlurredTextureList[mip]);
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 
@@ -226,7 +223,7 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     return commandBuffer;
 }
 
-void BlurRenderPass::Destroy()
+void GaussianBlurRenderPass::Destroy()
 {
     DrawToBloomMap->Destroy();
     for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)

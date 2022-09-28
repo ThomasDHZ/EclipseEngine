@@ -10,7 +10,6 @@ layout(push_constant) uniform BloomSettings
 {
     float blurScale;
     float blurStrength;
-    uint horizontal;
 } bloomSettings;
 
 const float blurWeights[25] = float[] (
@@ -32,9 +31,9 @@ void main()
      vec2 tex_offset = 1.0 / textureSize(BloomTexture, 0) * bloomSettings.blurScale;
 
      vec3 result = vec3(0.0f);
-     for(int i = 1; i < 25; i++)
+     for(int x = 1; x < 25; x++)
      {
-        result += (texture(BloomTexture, UV + (tex_offset * offsets[i])).rgb) * blurWeights[i] * bloomSettings.blurStrength;
+        result += (texture(BloomTexture, UV + (tex_offset * offsets[x])).rgb) * blurWeights[x] * bloomSettings.blurStrength;
      }
 
      outColor = vec4(result, 1.0);

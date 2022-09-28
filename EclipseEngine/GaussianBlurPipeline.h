@@ -2,13 +2,13 @@
 #include "GraphicsPipeline.h"
 #include "UniformBuffer.h"
 #include "RenderedColorTexture.h"
-class BloomBlurPipeline : public GraphicsPipeline
+class GaussianBlurPipeline : public GraphicsPipeline
 {
 
 public:
-	BloomBlurPipeline();
-	~BloomBlurPipeline();
+	GaussianBlurPipeline();
+	~GaussianBlurPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedColorTexture>> textureList);
-	void Draw(VkCommandBuffer& commandBuffer, BloomSettings& bloomSettings);
+	void Draw(VkCommandBuffer& commandBuffer);
 };

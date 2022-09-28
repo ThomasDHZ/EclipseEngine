@@ -519,10 +519,10 @@
     <ClCompile Include="PBRBloomRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="BloomBlurPipeline.cpp">
+    <ClCompile Include="GaussianBlurPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="BlurRenderPass.cpp">
+    <ClCompile Include="GaussianBlurRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="BloomCombinePipeline.cpp">
@@ -941,9 +941,6 @@
     <ClInclude Include="DepthInstancedPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="PBRInstancedReflectionPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Animation3D.h">
       <Filter>Header Files\Animation</Filter>
     </ClInclude>
@@ -959,29 +956,32 @@
     <ClInclude Include="PBRBloomPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="PBRBloomRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BloomBlurPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlurRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BloomCombinePipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BloomCombineRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PBRBloomReflectionPipeline.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="BloomCombineRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="PBRBloomReflectionRenderPass.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBloomRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlurRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlurPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomCombinePipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBloomReflectionPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRInstancedReflectionPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1204,16 +1204,16 @@
     <None Include="..\Shaders\PBRBloomRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\BloomBlur.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\BloomBlur.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\AdditionShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\AdditionShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GaussianBlur.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GaussianBlur.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

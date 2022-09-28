@@ -1,6 +1,5 @@
 #pragma once
 #include "RenderPass.h"
-#include "BloomBlurPipeline.h"
 #include "BloomCombinePipeline.h"
 
 class BloomCombineRenderPass  : public RenderPass

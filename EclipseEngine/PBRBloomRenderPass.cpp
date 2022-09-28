@@ -228,7 +228,7 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BloomMapList[mip], 0);
+        Texture::CopyMipLevelToTexture(commandBuffer, DrawToBloomMap, BloomMapList[mip]);
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
 

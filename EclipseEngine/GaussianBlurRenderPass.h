@@ -1,8 +1,8 @@
 #pragma once
 #include "RenderPass.h"
-#include "BloomBlurPipeline.h"
+#include "GaussianBlurPipeline.h"
 
-class BlurRenderPass : public RenderPass
+class GaussianBlurRenderPass : public RenderPass
 {
 private:
 	uint32_t TextureMapMipLevels = 0;
@@ -11,17 +11,16 @@ private:
 	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedColorTexture>> textureList);
 
 	std::shared_ptr<RenderedColorTexture> DrawToBloomMap;
-	BloomBlurPipeline blurPipeline;
+	GaussianBlurPipeline blurPipeline;
 
 public:
-	BlurRenderPass();
-	~BlurRenderPass();
-
+	GaussianBlurRenderPass();
+	~GaussianBlurRenderPass();
 
 	std::vector<std::shared_ptr<RenderedColorTexture>> BlurredTextureList;
 
 	void BuildRenderPass(std::vector<std::shared_ptr<RenderedColorTexture>>textureList);
-	void OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList, float horizontalpass);
-	VkCommandBuffer Draw(float horizontalpass);
+	void OneTimeDraw(std::vector<std::shared_ptr<RenderedColorTexture>> textureList);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
