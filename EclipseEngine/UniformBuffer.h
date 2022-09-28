@@ -62,9 +62,9 @@ struct SceneProperties
 
 struct BloomSettings
 {
-	alignas(16) float blurScale = 1.0f;
-	alignas(16) float blurStrength = 1.0f;
-	alignas(4)  uint32_t Horizantal = 0;
+	alignas(4) float blurScale = 1.0f;
+	alignas(4) float blurStrength = 1.0f;
+	alignas(4) uint32_t Horizantal = 0;
 };
 
 struct BloomIndexSettings

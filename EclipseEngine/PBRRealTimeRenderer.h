@@ -37,7 +37,6 @@ private:
 	PBRRenderPass pbrRenderPass;
 	PBRBloomRenderPass pbrBloomRenderPass;
 	BlurRenderPass blurRenderPass;
-	BlurRenderPass blurRenderPass2;
 	BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;

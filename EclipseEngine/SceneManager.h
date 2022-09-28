@@ -39,7 +39,8 @@ public:
 
 	static SceneProperties sceneProperites;
 	static ConstSkyBoxView cubeMapInfo;
-
+	static BloomSettings bloomsettings
+		;
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;

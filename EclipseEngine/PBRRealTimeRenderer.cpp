@@ -57,8 +57,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 		pbrRenderPass.BuildRenderPass(submitList);
 		pbrBloomRenderPass.BuildRenderPass(submitList);
 		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-		blurRenderPass2.BuildRenderPass(blurRenderPass.BlurredTextureList);
-		bloomCombinePipeline.BuildRenderPass(blurRenderPass2.BlurredTextureList);
+		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
 	}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
@@ -118,7 +117,6 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 		CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(pbrBloomRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(blurRenderPass.Draw(0.0f));
-		CommandBufferSubmitList.emplace_back(blurRenderPass2.Draw(1.0f));
 		CommandBufferSubmitList.emplace_back(bloomCombinePipeline.Draw());
 	}
 

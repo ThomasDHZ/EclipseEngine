@@ -216,6 +216,8 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
+    <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
+    <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomRenderPass.cpp" />
     <ClCompile Include="PBRInstancedReflectionPipeline.cpp" />
     <ClCompile Include="PBRInstancePipeline.cpp" />
@@ -353,6 +355,8 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
+    <ClInclude Include="PBRBloomReflectionPipeline.h" />
+    <ClInclude Include="PBRBloomReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomRenderPass.h" />
     <ClInclude Include="PBRInstancedReflectionPipeline.h" />
     <ClInclude Include="PBRInstancePipeline.h" />
@@ -362,6 +366,7 @@
     <ClInclude Include="PrefilterPipeline.h" />
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="Renderer3DPipeline.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SkyboxPipeline.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Tile.h" />
@@ -512,6 +517,9 @@
     <None Include="..\Shaders\VertexLayout.glsl" />
     <None Include="..\Shaders\WireFrameShader.frag" />
     <None Include="..\Shaders\WireFrameShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EclipseEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

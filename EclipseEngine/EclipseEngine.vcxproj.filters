@@ -531,6 +531,12 @@
     <ClCompile Include="BloomCombineRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="PBRBloomReflectionRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRBloomReflectionPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -968,6 +974,15 @@
     <ClInclude Include="BloomCombineRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBloomReflectionPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBloomReflectionRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1201,5 +1216,10 @@
     <None Include="..\Shaders\AdditionShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EclipseEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

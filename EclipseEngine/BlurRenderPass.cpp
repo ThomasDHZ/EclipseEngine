@@ -191,10 +191,8 @@ VkCommandBuffer BlurRenderPass::Draw(float horizontalpass)
     rect2D.offset.x = 0.0f;
     rect2D.offset.y = 0.0f;
 
-    BloomSettings settings{};
+    BloomSettings settings = SceneManager::bloomsettings;
     settings.Horizantal = horizontalpass;
-    settings.blurScale = 2.3f;
-    settings.blurStrength = 1.2f;
 
     for (unsigned int mip = 0; mip < TextureMapMipLevels; mip++)
     {

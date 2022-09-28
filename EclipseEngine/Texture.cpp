@@ -740,6 +740,27 @@ void Texture::CopyMipLevelToTexture(VkCommandBuffer& commandBuffer, std::shared_
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 
+void Texture::CopyMipLevelToCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.srcSubresource.baseArrayLayer = 0;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 6;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 6;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = dstTexture->Width;
+	copyImage.extent.height = dstTexture->Height;
+	copyImage.extent.depth = 1;
+	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+}
+
 void Texture::CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture)
 {
 	VkImageCopy copyImage{};

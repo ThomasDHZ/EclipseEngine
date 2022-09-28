@@ -2,10 +2,6 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_EXT_nonuniform_qualifier : enable
 
-#include "VertexLayout.glsl"
-#include "MeshProperties.glsl"
-#include "Lights.glsl"
-
 layout(location = 0) in vec2 UV;
 layout(location = 0) out vec4 outColor;
 layout(binding = 0) uniform sampler2D BloomTexture;
@@ -17,27 +13,28 @@ layout(push_constant) uniform BloomSettings
     uint horizontal;
 } bloomSettings;
 
-float weight[5] = float[] (0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
+const float blurWeights[25] = float[] (
+	0.00390625f, 0.01562500f, 0.02343750f, 0.01562500f, 0.00390625f,
+	0.01562500f, 0.06250000f, 0.09375000f, 0.06250000f, 0.01562500f,
+	0.02343750f, 0.09375000f, 0.14062500f, 0.09375000f, 0.02343750f,
+	0.01562500f, 0.06250000f, 0.09375000f, 0.06250000f, 0.01562500f,
+    0.00390625f, 0.01562500f, 0.02343750f, 0.01562500f, 0.00390625f);
+
+const vec2 offsets[25] = { 
+    {-2.0f, -2.0f}, {-1.0f, -2.0f}, { 0.0f, -2.0f}, { 1.0f, -2.0f}, { 1.0f, -2.0f},
+    {-2.0f, -1.0f}, {-1.0f, -1.0f}, { 0.0f, -1.0f}, { 1.0f, -1.0f}, { 1.0f, -1.0f},
+    {-2.0f,  0.0f}, {-1.0f,  0.0f}, { 0.0f,  0.0f}, { 1.0f,  0.0f}, { 1.0f,  0.0f},
+    {-2.0f,  1.0f}, {-1.0f,  1.0f}, { 0.0f,  1.0f}, { 1.0f,  1.0f}, { 1.0f,  1.0f},
+    {-2.0f,  2.0f}, {-1.0f,  2.0f}, { 0.0f,  2.0f}, { 1.0f,  2.0f}, { 1.0f,  2.0f}};
 
 void main()
 {  
-     vec2 tex_offset = 1.0 / textureSize(BloomTexture, 0) * bloomSettings.blurScale; 
-     vec3 result = texture(BloomTexture, UV).rgb * weight[0];
-     if(bloomSettings.horizontal == 1)
+     vec2 tex_offset = 1.0 / textureSize(BloomTexture, 0) * bloomSettings.blurScale;
+
+     vec3 result = vec3(0.0f);
+     for(int i = 1; i < 25; i++)
      {
-         for(int i = 1; i < 5; ++i)
-         {
-            result += texture(BloomTexture, UV + vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-            result += texture(BloomTexture, UV - vec2(tex_offset.x * i, 0.0)).rgb * weight[i];
-         }
-     }
-     else
-     {
-         for(int i = 1; i < 5; ++i)
-         {
-             result += texture(BloomTexture, UV + vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-             result += texture(BloomTexture, UV - vec2(0.0, tex_offset.y * i)).rgb * weight[i];
-         }
+        result += (texture(BloomTexture, UV + (tex_offset * offsets[i])).rgb) * blurWeights[i] * bloomSettings.blurStrength;
      }
 
      outColor = vec4(result, 1.0);

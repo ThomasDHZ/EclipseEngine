@@ -335,6 +335,12 @@ void Scene::Update()
 
 void Scene::ImGuiUpdate()
 {
+    SceneManager::bloomsettings.blurScale;
+
+    ImGui::SliderFloat("DLight position ", &SceneManager::bloomsettings.blurScale, 0.0f, 50.0f);
+    ImGui::SliderFloat("DLight direction ", &SceneManager::bloomsettings.blurStrength, 0.01f, 2.0f);
+
+
     ImGui::Image(pbrRealTimeRenderer.GetBloomTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //if (pbrRenderer.GetColorPickerTexture() != nullptr)
     //{
