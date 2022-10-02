@@ -171,7 +171,7 @@ GameObjectManager::AddGameObject(b);
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
-        IronmMaterial->LoadEmissionMap("../texture/matrix.jpg");
+     //   IronmMaterial->LoadEmissionMap("../texture/matrix.jpg");
 
         auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
@@ -194,6 +194,22 @@ GameObjectManager::AddGameObject(b);
         obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
         GameObjectManager::AddGameObject(obj5);
 
+
+        ModelLoader loader{};
+        loader.FilePath = "../Models/cube.obj";
+        loader.MeshType = MeshTypeEnum::kLightDebug;
+
+        auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("PLight1", loader, glm::vec3(-118.49f, 16.47f, 39.53f)));
+        GameObjectManager::AddGameObject(obj6);
+
+        auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("PLight2", loader, glm::vec3(-121.08f, 16.47f, -44.34)));
+        GameObjectManager::AddGameObject(obj7);
+
+        auto obj8 = std::make_shared<ModelRenderer>(ModelRenderer("PLight3", loader, glm::vec3(110.98f, 16.47f, 39.53f)));
+        GameObjectManager::AddGameObject(obj8);
+
+        auto obj9 = std::make_shared<ModelRenderer>(ModelRenderer("PLight4", loader, glm::vec3(110.98f, 16.47f, -44.34)));
+        GameObjectManager::AddGameObject(obj9);
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
  //       material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
@@ -245,30 +261,30 @@ GameObjectManager::AddGameObject(b);
     //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
 
-    //PointLightBuffer plight = PointLightBuffer();
-    //plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
-    //plight.diffuse = glm::vec3(300.0f);
-    //plight.specular = glm::vec3(1.0f);
+    PointLightBuffer plight = PointLightBuffer();
+    plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
+    plight.diffuse = glm::vec3(300.0f);
+    plight.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight2 = PointLightBuffer();
-    //plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
-    //plight2.diffuse = glm::vec3(300.0f);
-    //plight2.specular = glm::vec3(1.0f);
+    PointLightBuffer plight2 = PointLightBuffer();
+    plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
+    plight2.diffuse = glm::vec3(300.0f);
+    plight2.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight3 = PointLightBuffer();
-    //plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
-    //plight3.diffuse = glm::vec3(300.0f);
-    //plight3.specular = glm::vec3(1.0f);
+    PointLightBuffer plight3 = PointLightBuffer();
+    plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
+    plight3.diffuse = glm::vec3(300.0f);
+    plight3.specular = glm::vec3(1.0f);
 
-    //PointLightBuffer plight4 = PointLightBuffer();
-    //plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
-    //plight4.diffuse = glm::vec3(300.0f);
-    //plight4.specular = glm::vec3(1.0f);
+    PointLightBuffer plight4 = PointLightBuffer();
+    plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
+    plight4.diffuse = glm::vec3(300.0f);
+    plight4.specular = glm::vec3(1.0f);
 
-    //LightManager::AddPointLight(plight);
-    //LightManager::AddPointLight(plight2);
-    //LightManager::AddPointLight(plight3);
-    //LightManager::AddPointLight(plight4);
+    LightManager::AddPointLight(plight);
+    LightManager::AddPointLight(plight2);
+    LightManager::AddPointLight(plight3);
+    LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 

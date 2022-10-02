@@ -16,6 +16,7 @@ enum MeshTypeEnum
 	kSprite,
 	kPolygon,
 	kPolygonInstanced,
+	kLightDebug,
 	kSkybox,
 	kLine
 };

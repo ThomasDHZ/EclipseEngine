@@ -11,6 +11,7 @@
 #include "WireFramePipeline.h"
 #include "OutLinePipeline.h"
 #include "PBRInstancePipeline.h"
+#include "LightDebugPipeline.h"
 
 
 class PBRRenderPass : public RenderPass
@@ -26,6 +27,7 @@ private:
 
 	PBRPipeline pbrPipeline;
 	PBRInstancePipeline pbrInstancePipeline;
+	LightDebugPipeline lightDebugPipeline;
 	SkyboxPipeline skyboxPipeline;
 	LinePipeline linePipeline;
 	OutLinePipeline outLinePipeline;

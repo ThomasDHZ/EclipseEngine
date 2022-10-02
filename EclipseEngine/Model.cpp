@@ -90,25 +90,14 @@ void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scen
 		MeshLoader3D meshLoader;
 		meshLoader.ParentGameObjectID = ParentGameObjectID;
 		meshLoader.ParentModelID = ModelID;
-
 		meshLoader.GameObjectTransform = GameObjectTransform;
 		meshLoader.ModelTransform = ModelTransform;
 		meshLoader.MeshTransform = Converter::AssimpToGLMMatrixConverter(node->mTransformation);
-
 		meshLoader.VerticeList = vertices;
 		meshLoader.IndexList = indices;
-
-		if (modelLoader.instanceData.instanceMeshDataList.size() == 0)
-		{
-			meshLoader.MeshType = MeshTypeEnum::kPolygon;
-			meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
-		}
-		else
-		{
-			meshLoader.instanceData = modelLoader.instanceData;
-			meshLoader.MeshType = MeshTypeEnum::kPolygonInstanced;
-			meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
-		}
+		meshLoader.instanceData = modelLoader.instanceData;
+		meshLoader.MeshType = modelLoader.MeshType;
+		meshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 		meshLoader.BoneCount = BoneList.size();
 		meshLoader.BoneWeightList = boneWeights;
 

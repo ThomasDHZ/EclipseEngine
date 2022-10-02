@@ -489,9 +489,6 @@
     <ClCompile Include="DepthCubeMapPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="CubeMapViewPipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PBRRealTimeRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
@@ -535,6 +532,9 @@
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="PBRBloomReflectionPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="LightDebugPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
@@ -983,6 +983,9 @@
     <ClInclude Include="PBRInstancedReflectionPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
+    <ClInclude Include="LightDebugPipeline.h">
+      <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\VertexLayout.glsl">
@@ -1214,6 +1217,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\GaussianBlur.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LightDebugShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LightDebugShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

@@ -122,6 +122,7 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
     pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
+    lightDebugPipeline.InitializePipeline(pipelineInfo);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
@@ -198,6 +199,11 @@ VkCommandBuffer PBRRenderPass::Draw()
                     pbrInstancePipeline.Draw(commandBuffer, mesh);
                     break;
                 }
+                case MeshTypeEnum::kLightDebug:
+                {
+                    lightDebugPipeline.Draw(commandBuffer, mesh);
+                    break;
+                }
                 case MeshTypeEnum::kLine:
                 {
                     linePipeline.Draw(commandBuffer, mesh);
@@ -222,6 +228,7 @@ void PBRRenderPass::Destroy()
 
     pbrPipeline.Destroy();
     pbrInstancePipeline.Destroy();
+    lightDebugPipeline.Destroy();
     skyboxPipeline.Destroy();
     linePipeline.Destroy();
     outLinePipeline.Destroy();

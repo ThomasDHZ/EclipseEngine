@@ -20,6 +20,16 @@ public:
 	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
 	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, MeshTypeEnum meshType);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, MeshTypeEnum meshType, const glm::vec3& position);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, MeshTypeEnum meshType, const glm::vec3& position, const glm::vec3& rotation);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, MeshTypeEnum meshType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, MeshTypeEnum meshType);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, MeshTypeEnum meshType, const glm::vec3& position);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, MeshTypeEnum meshType, const glm::vec3& position, const glm::vec3& rotation);
+	MeshRenderer(const std::string Name, std::vector<Vertex3D> VertexList, std::vector<uint32_t> IndexList, std::shared_ptr<Material> material, MeshTypeEnum meshType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
 	MeshRenderer(const std::string Name, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData);
 	MeshRenderer(const std::string Name, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, const glm::vec3& position);
 	MeshRenderer(const std::string Name, std::vector<Vertex3D>& vertices, std::vector<uint32_t>& indices, InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation);
