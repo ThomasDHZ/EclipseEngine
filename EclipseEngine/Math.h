@@ -1,10 +1,16 @@
 #pragma once
 #include <vulkan/vulkan_core.h>
 #include <glm/glm.hpp>
+#include <cmath>
 
 class EngineMath
 {
 public:
+    static float Distance3D(const glm::vec3& pos1, const glm::vec3& pos2)
+    {
+        return std::sqrtf(pow(pos2.x - pos1.x, 2) + pow(pos2.y - pos2.y, 2) + pow(pos2.z - pos2.z, 2));
+    }
+
     static VkTransformMatrixKHR GLMToVkTransformMatrix(glm::mat4& matrix)
     {
         return VkTransformMatrixKHR

@@ -1,6 +1,6 @@
 #include "DepthCubeMapRenderer.h"
 #include "LightManager.h"
-
+#include "Math.h"
 
 DepthCubeMapRenderer::DepthCubeMapRenderer() : RenderPass()
 {
@@ -228,7 +228,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLigh
                 {
                 case MeshTypeEnum::kPolygon:
                 {
-                    depthCubeMapPipeline.Draw(commandBuffer, mesh, PointLightList[0]->GetPosition(), 0);
+                    depthCubeMapPipeline.Draw(commandBuffer, mesh, PointLightList[x]->GetPosition(), x);
                     break;
                 }
                 default:

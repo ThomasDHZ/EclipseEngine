@@ -128,12 +128,12 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-   /* ModelLoader loader{};
+    ModelLoader loader{};
     loader.FilePath = "../Models/TestAnimModel/model.dae";
     loader.MeshType = MeshTypeEnum::kPolygon;
 
     auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-GameObjectManager::AddGameObject(a);*/
+GameObjectManager::AddGameObject(a);
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
@@ -359,6 +359,10 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
+        if(ImGui::Button("Update Renderer"))   
+        { 
+            pbrRenderer.UpdateRenderer = true;
+        }
        // ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }

@@ -35,7 +35,7 @@ void PBRRenderer::BuildRenderer()
 		submitList.IrradianceTexture = skyIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
 
-		skyPBRRenderPass.BuildRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
+		skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	{
@@ -45,7 +45,7 @@ void PBRRenderer::BuildRenderer()
 		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
 
-		geoPBRRenderPass.BuildRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
+		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
 	}
 	//Main Render Pass
 	{
@@ -62,7 +62,7 @@ void PBRRenderer::BuildRenderer()
 	}
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
-	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, pbrRenderPass.RenderedTexture);
+	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
 }
 
 void PBRRenderer::Update()
@@ -91,7 +91,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	}
 
 
-	if (!UpdatePreRenderer)
+	if (!UpdateRenderer)
 	{
 		//Depth Pass
 		{
@@ -102,6 +102,9 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		//Main Render Pass
 		{
 			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			//CommandBufferSubmitList.emplace_back(pbrBloomRenderPass.Draw());
+			//CommandBufferSubmitList.emplace_back(blurRenderPass.Draw());
+			//CommandBufferSubmitList.emplace_back(bloomCombinePipeline.Draw());
 		}
 	}
 	else
@@ -114,12 +117,12 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		}
 
 		//Geometry Pass
-	/*	{
+		{
 			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
-		}*/
+		}
 		//Main Render Pass
 		{
 			CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
@@ -130,7 +133,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 			CommandBufferSubmitList.emplace_back(bloomCombinePipeline.Draw());
 		}
 
-		UpdatePreRenderer = false;
+		UpdateRenderer = false;
 	}
 
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
