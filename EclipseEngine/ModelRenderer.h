@@ -26,46 +26,6 @@ public:
 	ModelRenderer(const std::string Name, ModelLoader& modelLoader, const glm::vec3& position, const glm::vec3& rotation);
 	ModelRenderer(const std::string Name, ModelLoader& modelLoader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, std::shared_ptr<Mesh> mesh, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh);
-	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, const glm::vec3& position);
-	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, std::vector<std::shared_ptr<Mesh>>& mesh, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, std::shared_ptr<Material> materialPtr, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::vector<Vertex3D>& vertices, const std::vector<uint32_t>& indices, const InstancingDataStruct& instanceData, std::shared_ptr<Material> materialPtr, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::string& FilePath);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(const std::string Name, const std::string& FilePath, const InstancingDataStruct& instanceData);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const InstancingDataStruct& instanceData, const glm::vec3& position);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation);
-	ModelRenderer(const std::string Name, const std::string& FilePath, const InstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
 	ModelRenderer(nlohmann::json json);
 	virtual ~ModelRenderer();
 

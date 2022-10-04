@@ -1,12 +1,17 @@
 #pragma once
 #include "Light.h"
 #include "UniformBuffer.h"
+#include "GameObjectManager.h"
 #include "RenderedCubeMapDepthTexture.h"
+#include "Model.h"
+#include "ModelRenderer.h"
 
 class PointLight : public Light<PointLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedCubeMapDepthTexture> LightViewTexture;
+	std::shared_ptr<GameObject> debugMesh;
+
 	void from_json(nlohmann::json& json)
 	{
 		JsonConverter::from_json(json["LightName"], LightName);
@@ -29,6 +34,7 @@ public:
 	void Destroy() override;
 
 	void SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture);
+
 
 	std::shared_ptr<RenderedCubeMapDepthTexture> GetLightViewTexture() { return LightViewTexture; }
 

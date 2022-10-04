@@ -537,6 +537,9 @@
     <ClCompile Include="LightDebugPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -985,6 +988,9 @@
     </ClInclude>
     <ClInclude Include="LightDebugPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Header Files\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

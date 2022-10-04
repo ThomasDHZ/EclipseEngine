@@ -128,10 +128,18 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", "../Models/TestAnimModel/model.dae"));
-GameObjectManager::AddGameObject(a);
+   /* ModelLoader loader{};
+    loader.FilePath = "../Models/TestAnimModel/model.dae";
+    loader.MeshType = MeshTypeEnum::kPolygon;
 
-auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", "../Models/Sponza/sponza.obj"));
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+GameObjectManager::AddGameObject(a);*/
+
+    ModelLoader loader2{};
+    loader2.FilePath = "../Models/Sponza/sponza.obj";
+    loader2.MeshType = MeshTypeEnum::kPolygon;
+
+auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
 GameObjectManager::AddGameObject(b);
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
@@ -173,43 +181,30 @@ GameObjectManager::AddGameObject(b);
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
      //   IronmMaterial->LoadEmissionMap("../texture/matrix.jpg");
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", "../Models/sphere.obj", glm::vec3(-6.0f, 0.0f, 0.0f)));
+        ModelLoader loader1{};
+        loader1.FilePath = "../Models/sphere.obj";
+        loader1.MeshType = MeshTypeEnum::kPolygon;
+
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
         GameObjectManager::AddGameObject(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", "../Models/sphere.obj", glm::vec3(-3.0f, 0.0f, 0.0f)));
+        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
         obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         GameObjectManager::AddGameObject(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", "../Models/sphere.obj"));
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", loader1));
         obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
         GameObjectManager::AddGameObject(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", "../Models/sphere.obj", glm::vec3(3.0f, 0.0f, 0.0f)));
+        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", "../Models/sphere.obj", glm::vec3(6.0f, 0.0f, 0.0f)));
+        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
         obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
         GameObjectManager::AddGameObject(obj5);
-
-
-        ModelLoader loader{};
-        loader.FilePath = "../Models/cube.obj";
-        loader.MeshType = MeshTypeEnum::kLightDebug;
-
-        auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("PLight1", loader, glm::vec3(-118.49f, 16.47f, 39.53f)));
-        GameObjectManager::AddGameObject(obj6);
-
-        auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("PLight2", loader, glm::vec3(-121.08f, 16.47f, -44.34)));
-        GameObjectManager::AddGameObject(obj7);
-
-        auto obj8 = std::make_shared<ModelRenderer>(ModelRenderer("PLight3", loader, glm::vec3(110.98f, 16.47f, 39.53f)));
-        GameObjectManager::AddGameObject(obj8);
-
-        auto obj9 = std::make_shared<ModelRenderer>(ModelRenderer("PLight4", loader, glm::vec3(110.98f, 16.47f, -44.34)));
-        GameObjectManager::AddGameObject(obj9);
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
  //       material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
@@ -262,7 +257,7 @@ GameObjectManager::AddGameObject(b);
     //LightManager::AddDirectionalLight(dLight);
 
     PointLightBuffer plight = PointLightBuffer();
-    plight.position = glm::vec3(-118.49f, 16.47f, 39.53f);
+    plight.position = glm::vec3(-121.08f, 16.47f, -44.34);
     plight.diffuse = glm::vec3(300.0f);
     plight.specular = glm::vec3(1.0f);
 
@@ -343,7 +338,7 @@ void Scene::Update()
         }
         case SceneType::kPBR:
         {
-            pbrRealTimeRenderer.Update();
+            pbrRenderer.Update();
             break;
         }
     }
@@ -357,7 +352,7 @@ void Scene::ImGuiUpdate()
     ImGui::SliderFloat("DLight direction ", &SceneManager::bloomsettings.blurStrength, 0.01f, 2.0f);
 
 
-    ImGui::Image(pbrRealTimeRenderer.GetBloomTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+    //ImGui::Image(pbrRenderer.GetBloomTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //if (pbrRenderer.GetColorPickerTexture() != nullptr)
     //{
     //    ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
@@ -443,7 +438,7 @@ void Scene::BuildRenderers()
         }
         case SceneType::kPBR:
         {
-            pbrRealTimeRenderer.BuildRenderer();
+            pbrRenderer.BuildRenderer();
             break;
         }
     }
@@ -495,7 +490,7 @@ void Scene::Draw()
         }
         case SceneType::kPBR:
         {
-            pbrRealTimeRenderer.Draw(CommandBufferSubmitList);
+            pbrRenderer.Draw(CommandBufferSubmitList);
             break;
         }
     }
@@ -534,7 +529,7 @@ void Scene::Destroy()
         }
         case SceneType::kPBR:
         {
-            pbrRealTimeRenderer.Destroy();
+            pbrRenderer.Destroy();
             break;
         }
     }

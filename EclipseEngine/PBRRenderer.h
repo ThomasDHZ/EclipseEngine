@@ -11,6 +11,9 @@
 #include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
 #include "DepthCubeMapRenderer.h"
+#include "PBRBloomRenderPass.h"
+#include "GaussianBlurRenderPass.h"
+#include "BloomCombineRenderPass.h"
 
 class PBRRenderer
 {
@@ -36,6 +39,9 @@ private:
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
+	PBRBloomRenderPass pbrBloomRenderPass;
+	GaussianBlurRenderPass blurRenderPass;
+	BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 

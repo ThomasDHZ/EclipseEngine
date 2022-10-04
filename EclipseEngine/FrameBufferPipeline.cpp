@@ -51,11 +51,16 @@ void FrameBufferPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "FrameBufferFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     VkDescriptorImageInfo RenderedTextureBufferInfo = AddTextureDescriptor(renderedTexture->View, renderedTexture->Sampler);
-    VkDescriptorImageInfo BloomTextureBufferInfo = AddTextureDescriptor(bloomTexture->View, bloomTexture->Sampler);
+    
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 1, BloomTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    
+    if (bloomTexture != nullptr)
+    {
+        VkDescriptorImageInfo BloomTextureBufferInfo = AddTextureDescriptor(bloomTexture->View, bloomTexture->Sampler);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 1, BloomTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    }
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;

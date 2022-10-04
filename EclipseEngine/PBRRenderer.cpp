@@ -17,8 +17,8 @@ void PBRRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(2048.0f));
-		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(2048.0f));
+		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
+		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
 		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
 	}
 
@@ -29,8 +29,8 @@ void PBRRenderer::BuildRenderer()
 
 	//SkyBox Pass
 	{
-		skyIrradianceRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
-		skyPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		skyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+		skyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTexture = skyIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
@@ -39,8 +39,8 @@ void PBRRenderer::BuildRenderer()
 	}
 	//Geometry Pass
 	{
-		geoIrradianceRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
-		geoPrefilterRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+		geoIrradianceRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+		geoPrefilterRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
@@ -56,10 +56,13 @@ void PBRRenderer::BuildRenderer()
 		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
 
 		pbrRenderPass.BuildRenderPass(submitList);
+		pbrBloomRenderPass.BuildRenderPass(submitList);
+		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
 	}
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
-	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
+	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, pbrRenderPass.RenderedTexture);
 }
 
 void PBRRenderer::Update()
@@ -111,17 +114,20 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		}
 
 		//Geometry Pass
-		{
+	/*	{
 			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
-		}
+		}*/
 		//Main Render Pass
 		{
 			CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(pbrBloomRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(blurRenderPass.Draw());
+			CommandBufferSubmitList.emplace_back(bloomCombinePipeline.Draw());
 		}
 
 		UpdatePreRenderer = false;
@@ -160,6 +166,9 @@ void PBRRenderer::Destroy()
 		irradianceRenderPass.Destroy();
 		prefilterRenderPass.Destroy();
 		pbrRenderPass.Destroy();
+		pbrBloomRenderPass.Destroy();
+		blurRenderPass.Destroy();
+		bloomCombinePipeline.Destroy();
 	}
 	 
 	//depthDebugRenderPass.Destroy();

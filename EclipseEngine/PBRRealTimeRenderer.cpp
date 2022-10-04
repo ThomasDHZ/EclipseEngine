@@ -16,8 +16,8 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(2048.0f));
-		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(2048.0f));
+		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512));
+		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512));
 		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
 	}
 
@@ -154,6 +154,8 @@ void PBRRealTimeRenderer::Destroy()
 		prefilterRenderPass.Destroy();
 		pbrRenderPass.Destroy();
 		pbrBloomRenderPass.Destroy();
+		blurRenderPass.Destroy();
+		bloomCombinePipeline.Destroy();
 	}
 
 	//depthDebugRenderPass.Destroy();
