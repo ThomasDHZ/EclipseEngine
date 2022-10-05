@@ -23,7 +23,6 @@ private:
 
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	CubeToEnvironmentRenderPass cubeToEnvironmentRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	DepthRenderPass DepthPassRenderPass;
@@ -61,5 +60,6 @@ public:
 	bool UpdateRenderer = true;
 
 	//DepthDebugRenderPass depthDebugRenderPass;
+	CubeToEnvironmentRenderPass cubeToEnvironmentRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

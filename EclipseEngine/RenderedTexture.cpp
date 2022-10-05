@@ -40,6 +40,22 @@ RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlag
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
+RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount, VkFormat format)
+{
+	Width = TextureResolution.x;
+	Height = TextureResolution.y;
+	Depth = 1;
+	TextureByteFormat = format;
+	TextureImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	SampleCount = sampleCount;
+
+	CreateTextureImage();
+	CreateTextureView();
+	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+}
+
 RenderedTexture::~RenderedTexture()
 {
 }
@@ -179,6 +195,25 @@ void RenderedTexture::BakeColorTexture(const char* filename, BakeTextureFormat t
 	BakeTexture->Destroy();
 }
 
-void RenderedTexture::BakeCubeMapTexture(const char* filename)
+void RenderedTexture::BakeEnvironmentMapTexture(const char* filename)
 {
+	std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount, VK_FORMAT_R32G32B32A32_SFLOAT));
+
+	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+	VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+
+	VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
+	VkSubresourceLayout subResourceLayout;
+	vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), BakeTexture->Image, &subResource, &subResourceLayout);
+
+	const float* data;
+	vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+	stbi_write_hdr(filename, Width, Height, STBI_rgb_alpha, data);
+	BakeTexture->Destroy();
 }

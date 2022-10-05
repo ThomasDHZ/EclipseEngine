@@ -13,9 +13,9 @@ const vec2 invAtan = vec2(0.1591, 0.3183);
 
 void main() 
 {
-     vec3 cubmapTexCoords = vec3(0.0f);
-     cubmapTexCoords.x = -sin(UV.x * PI * 2.0f) * sin(UV.y * PI);
-     cubmapTexCoords.y = cos(UV.y * PI);
-     cubmapTexCoords.z = -cos(UV.x * PI * 2.0f) * sin(UV.y * PI);
-     FragColor =  vec4(texture(cubeMap, cubmapTexCoords).rgb, 1.0f);
+     vec3 cubemapTexCoords = vec3(0.0f);
+     cubemapTexCoords.x = -sin(UV.x * PI * 2.0f) * sin(UV.y * PI);
+     cubemapTexCoords.y = cos(UV.y * PI);
+     cubemapTexCoords.z = -cos(UV.x * PI * 2.0f) * sin(UV.y * PI);
+     FragColor =  vec4(texture(cubeMap, cubemapTexCoords).rgb, 1.0f);
 }

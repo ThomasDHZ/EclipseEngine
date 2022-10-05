@@ -21,10 +21,11 @@ public:
     RenderedTexture();
     RenderedTexture(glm::ivec2 TextureResolution);
     RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount);
+    RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount, VkFormat format);
     ~RenderedTexture();
 
     void RecreateRendererTexture(glm::vec2 TextureResolution);
     void BakeDepthTexture(const char* filename, BakeTextureFormat textureFormat);
     void BakeColorTexture(const char* filename, BakeTextureFormat textureFormat);
-    void BakeCubeMapTexture(const char* filename);
+    void BakeEnvironmentMapTexture(const char* filename);
 };

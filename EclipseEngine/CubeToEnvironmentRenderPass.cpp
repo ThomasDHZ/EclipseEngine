@@ -15,7 +15,7 @@ void CubeToEnvironmentRenderPass::BuildRenderPass(const glm::vec2& environmentMa
 
     if (renderPass == nullptr)
     {
-        environmentMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        environmentMap = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {

@@ -126,21 +126,21 @@ Scene::Scene()
 //    cubeMapfiles.Back = "../texture/skybox/front.jpg";
 //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 //
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-
-    ModelLoader loader{};
-    loader.FilePath = "../Models/TestAnimModel/model.dae";
-    loader.MeshType = MeshTypeEnum::kPolygon;
-
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-GameObjectManager::AddGameObject(a);
-
-    ModelLoader loader2{};
-    loader2.FilePath = "../Models/Sponza/sponza.obj";
-    loader2.MeshType = MeshTypeEnum::kPolygon;
-
-auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
-GameObjectManager::AddGameObject(b);
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/EnvironmentMap.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+//
+//    ModelLoader loader{};
+//    loader.FilePath = "../Models/TestAnimModel/model.dae";
+//    loader.MeshType = MeshTypeEnum::kPolygon;
+//
+//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+//GameObjectManager::AddGameObject(a);
+//
+//    ModelLoader loader2{};
+//    loader2.FilePath = "../Models/Sponza/sponza.obj";
+//    loader2.MeshType = MeshTypeEnum::kPolygon;
+//
+//auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
+//GameObjectManager::AddGameObject(b);
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -367,7 +367,7 @@ void Scene::ImGuiUpdate()
         {
             pbrRenderer.BakeTextures("TestBake.bmp");
         }
-       // ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(pbrRenderer.cubeToEnvironmentRenderPass.environmentMap->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)
