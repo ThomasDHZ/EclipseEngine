@@ -22,7 +22,7 @@
 #include "RayTraceRenderer.h"
 #include "LightManager.h"
 #include "HybridRenderer.h"
-#include "PBRRenderer.h"
+#include "PBREditorRenderer.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
 #include "PBRRealTimeRenderer.h"
@@ -33,7 +33,7 @@ private:
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 	HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
+	PBREditorRenderer pbrRenderer;
 //	PBRRealTimeRenderer pbrRealTimeRenderer;
 	RayTraceRenderer rayTraceRenderer;
 	std::shared_ptr<GameObject2D> obj5;

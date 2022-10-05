@@ -1,5 +1,6 @@
 #pragma once
 #include "Texture.h"
+#include "stb_image_write.h"
 
 class RenderedTexture : public Texture
 {
@@ -14,4 +15,5 @@ public:
     ~RenderedTexture();
 
     void RecreateRendererTexture(glm::vec2 TextureResolution);
+    void BakeTexture(const char* filename);
 };

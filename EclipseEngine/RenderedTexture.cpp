@@ -1,12 +1,13 @@
 #include "RenderedTexture.h"
 #include "ImGui/imgui_impl_vulkan.h"
+#include "ReadableTexture.h"
 
 RenderedTexture::RenderedTexture()
 {
 
 }
 
-RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution) : Texture()
+RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
@@ -23,7 +24,7 @@ RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution) : Texture()
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture()
+RenderedTexture::RenderedTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount) : Texture(kRenderedColorTexture)
 {
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
@@ -114,4 +115,24 @@ void RenderedTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 	CreateTextureSampler();
 
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+}
+
+void RenderedTexture::BakeTexture(const char* filename)
+{
+	//std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount));
+
+	//VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+
+	//BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	//UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	//Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
+	//BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+	//UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+	//VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+
+	//const char* data;
+	//vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+
+	//stbi_write_bmp(filename, Width, Height, STBI_rgb_alpha, data);
+	//BakeTexture->Destroy();
 }

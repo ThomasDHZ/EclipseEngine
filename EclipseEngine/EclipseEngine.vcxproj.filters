@@ -270,7 +270,7 @@
     <ClCompile Include="EnvironmentTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="PBRRenderer.cpp">
+    <ClCompile Include="PBREditorRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="PBRRenderPass.cpp">
@@ -710,7 +710,7 @@
     <ClInclude Include="CubeMapTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="PBRRenderer.h">
+    <ClInclude Include="PBREditorRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="PBRRenderPass.h">

@@ -1,7 +1,7 @@
 #pragma once
-#include "Texture.h"
+#include "RenderedTexture.h"
 
-class RenderedColorTexture : public Texture
+class RenderedColorTexture : public RenderedTexture
 {
 private:
     void CreateTextureImage();

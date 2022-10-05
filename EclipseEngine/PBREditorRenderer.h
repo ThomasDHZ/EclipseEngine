@@ -15,7 +15,7 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 
-class PBRRenderer
+class PBREditorRenderer
 {
 private:
 
@@ -46,8 +46,10 @@ private:
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
-	PBRRenderer();
-	~PBRRenderer();
+	PBREditorRenderer();
+	~PBREditorRenderer();
+
+	void BakeTextures(const char* FileName);
 
 	void BuildRenderer();
 	void Update();

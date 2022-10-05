@@ -1,14 +1,14 @@
-#include "PBRRenderer.h"
+#include "PBREditorRenderer.h"
 
-PBRRenderer::PBRRenderer()
+PBREditorRenderer::PBREditorRenderer()
 {
 }
 
-PBRRenderer::~PBRRenderer()
+PBREditorRenderer::~PBREditorRenderer()
 {
 }
 
-void PBRRenderer::BuildRenderer()
+void PBREditorRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
@@ -65,7 +65,7 @@ void PBRRenderer::BuildRenderer()
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
 }
 
-void PBRRenderer::Update()
+void PBREditorRenderer::Update()
 {
 	if (VulkanRenderer::EditorModeFlag &&
 		!VulkanRenderer::ImGUILayerActive &&
@@ -83,7 +83,7 @@ void PBRRenderer::Update()
 	}
 }
 
-void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+void PBREditorRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (VulkanRenderer::EditorModeFlag)
 	{
@@ -140,7 +140,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
-void PBRRenderer::Destroy()
+void PBREditorRenderer::Destroy()
 {
 	meshPickerRenderPass.Destroy();
 	environmentToCubeRenderPass.Destroy();
@@ -176,4 +176,9 @@ void PBRRenderer::Destroy()
 	 
 	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
+}
+
+void PBREditorRenderer::BakeTextures(const char* FileName)
+{
+	pbrRenderPass.RenderedTexture->BakeTexture(FileName);
 }

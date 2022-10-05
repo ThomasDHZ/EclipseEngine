@@ -234,7 +234,7 @@
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="PBRReflectionRenderPass.cpp" />
-    <ClCompile Include="PBRRenderer.cpp" />
+    <ClCompile Include="PBREditorRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
@@ -376,7 +376,7 @@
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PBRReflectionRenderPass.h" />
-    <ClInclude Include="PBRRenderer.h" />
+    <ClInclude Include="PBREditorRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
