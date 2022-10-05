@@ -158,6 +158,8 @@
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
+    <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
+    <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="GaussianBlurPipeline.cpp" />
     <ClCompile Include="BloomCombinePipeline.cpp" />
     <ClCompile Include="BloomCombineRenderPass.cpp" />
@@ -296,6 +298,8 @@
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
+    <ClInclude Include="CubeToEnvironmentPipeline.h" />
+    <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="GaussianBlurPipeline.h" />
     <ClInclude Include="BloomCombinePipeline.h" />
     <ClInclude Include="BloomCombineRenderPass.h" />
@@ -460,6 +464,8 @@
     <None Include="..\Shaders\CubeMap.vert" />
     <None Include="..\Shaders\CubeMapSampler.frag" />
     <None Include="..\Shaders\CubeMapSampler.vert" />
+    <None Include="..\Shaders\CubeMapToEnvironment.frag" />
+    <None Include="..\Shaders\CubeMapToEnvironment.vert" />
     <None Include="..\Shaders\CubeMapView.frag" />
     <None Include="..\Shaders\CubeMapView.vert" />
     <None Include="..\Shaders\DeferredRenderer.frag" />

@@ -117,22 +117,68 @@ void RenderedTexture::RecreateRendererTexture(glm::vec2 TextureResolution)
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-void RenderedTexture::BakeTexture(const char* filename)
+void RenderedTexture::BakeDepthTexture(const char* filename, BakeTextureFormat textureFormat)
 {
-	//std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount));
+	std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount));
 
-	//VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
 
-	//BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	//UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-	//Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
-	//BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
-	//UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-	//VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+	VulkanRenderer::EndSingleTimeCommands(commandBuffer);
 
-	//const char* data;
-	//vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+	VkImageSubresource subResource{ VK_IMAGE_ASPECT_DEPTH_BIT, 0, 0 };
+	VkSubresourceLayout subResourceLayout;
+	vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), BakeTexture->Image, &subResource, &subResourceLayout);
 
-	//stbi_write_bmp(filename, Width, Height, STBI_rgb_alpha, data);
-	//BakeTexture->Destroy();
+	const char* data;
+	vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+
+	switch (textureFormat)
+	{
+		case BakeTextureFormat::Bake_BMP: stbi_write_bmp(filename, Width, Height, STBI_grey, data); break;
+		case BakeTextureFormat::Bake_JPG: stbi_write_jpg(filename, Width, Height, STBI_grey, data, 100); break;
+		case BakeTextureFormat::Bake_PNG: stbi_write_png(filename, Width, Height, STBI_grey, data, STBI_grey * Width); break;
+		case BakeTextureFormat::Bake_TGA: stbi_write_tga(filename, Width, Height, STBI_grey, data); break;
+	}
+
+	BakeTexture->Destroy();
+}
+
+void RenderedTexture::BakeColorTexture(const char* filename, BakeTextureFormat textureFormat)
+{
+	std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount));
+
+	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
+	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
+	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+	VulkanRenderer::EndSingleTimeCommands(commandBuffer);
+
+	VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
+	VkSubresourceLayout subResourceLayout;
+	vkGetImageSubresourceLayout(VulkanRenderer::GetDevice(), BakeTexture->Image, &subResource, &subResourceLayout);
+
+	const char* data;
+	vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+
+	switch (textureFormat)
+	{
+		case BakeTextureFormat::Bake_BMP: stbi_write_bmp(filename, Width, Height, STBI_rgb_alpha, data); break;
+		case BakeTextureFormat::Bake_JPG: stbi_write_jpg(filename, Width, Height, STBI_rgb_alpha, data, 100); break;
+		case BakeTextureFormat::Bake_PNG: stbi_write_png(filename, Width, Height, STBI_rgb_alpha, data, STBI_rgb_alpha * Width); break;
+		case BakeTextureFormat::Bake_TGA: stbi_write_tga(filename, Width, Height, STBI_rgb_alpha, data); break;
+	}
+
+	BakeTexture->Destroy();
+}
+
+void RenderedTexture::BakeCubeMapTexture(const char* filename)
+{
 }

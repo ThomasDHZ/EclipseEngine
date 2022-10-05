@@ -365,7 +365,7 @@ void Scene::ImGuiUpdate()
         }
         if (ImGui::Button("Bake"))
         {
-            pbrRenderer.BakeTextures("TestBake");
+            pbrRenderer.BakeTextures("TestBake.bmp");
         }
        // ImGui::Image(pbrRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));

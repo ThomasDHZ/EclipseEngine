@@ -114,7 +114,7 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBR
     AddTextureDescriptorSetBinding(DescriptorBindingList, 9, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     if (SpotLightShadowMaps.size() > 0)
     {
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     }
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};

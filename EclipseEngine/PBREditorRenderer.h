@@ -14,6 +14,7 @@
 #include "PBRBloomRenderPass.h"
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
+#include "CubeToEnvironmentRenderPass.h"
 
 class PBREditorRenderer
 {
@@ -22,6 +23,7 @@ private:
 
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	CubeToEnvironmentRenderPass cubeToEnvironmentRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	DepthRenderPass DepthPassRenderPass;

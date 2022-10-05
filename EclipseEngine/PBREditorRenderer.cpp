@@ -13,6 +13,8 @@ void PBREditorRenderer::BuildRenderer()
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f/4);
+	cubeToEnvironmentRenderPass.BuildRenderPass(glm::vec2(4098.0f * 2, 4098.0f), SceneManager::CubeMap);
+	cubeToEnvironmentRenderPass.environmentMap->BakeColorTexture("EnvironmentMap.bmp", Bake_BMP);
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
@@ -180,5 +182,5 @@ void PBREditorRenderer::Destroy()
 
 void PBREditorRenderer::BakeTextures(const char* FileName)
 {
-	pbrRenderPass.RenderedTexture->BakeTexture(FileName);
+	//pbrRenderPass.RenderedTexture->BakeTextureBMP(FileName, );
 }

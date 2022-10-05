@@ -1,6 +1,15 @@
 #pragma once
 #include "Texture.h"
 #include "stb_image_write.h"
+#include <fstream>
+
+enum BakeTextureFormat
+{
+    Bake_BMP,
+    Bake_JPG,
+    Bake_PNG,
+    Bake_TGA
+};
 
 class RenderedTexture : public Texture
 {
@@ -15,5 +24,7 @@ public:
     ~RenderedTexture();
 
     void RecreateRendererTexture(glm::vec2 TextureResolution);
-    void BakeTexture(const char* filename);
+    void BakeDepthTexture(const char* filename, BakeTextureFormat textureFormat);
+    void BakeColorTexture(const char* filename, BakeTextureFormat textureFormat);
+    void BakeCubeMapTexture(const char* filename);
 };

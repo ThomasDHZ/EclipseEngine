@@ -129,6 +129,11 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 EnvironmentToCubeMap.vert -o ../x64/Shaders/EnvironmentToCubeMapVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 EnvironmentToCubeMap.frag -o ../x64/Shaders/EnvironmentToCubeMapFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 CubeMapToEnvironment.vert -o CubeMapToEnvironmentVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 CubeMapToEnvironment.frag -o CubeMapToEnvironmentFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 CubeMapToEnvironment.vert -o ../x64/Shaders/CubeMapToEnvironmentVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 CubeMapToEnvironment.frag -o ../x64/Shaders/CubeMapToEnvironmentFrag.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DeferredRenderer.vert -o DeferredRendererVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DeferredRenderer.frag -o DeferredRendererFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DeferredRenderer.vert -o ../x64/Shaders/DeferredRendererVert.spv
