@@ -49,7 +49,7 @@ void TextureAtlus::CopyCellToCubeMapSide(std::shared_ptr<CubeMapTexture> texture
 
 std::shared_ptr<Texture> TextureAtlus::CreateTextureFromTextureAtlus(const glm::ivec2& cellToTransfer)
 {
-	std::shared_ptr<ReadableTexture> newTexture = std::make_shared<ReadableTexture>(ReadableTexture(cellToTransfer, VK_SAMPLE_COUNT_1_BIT));
+	std::shared_ptr<Texture> newTexture = std::make_shared<Texture>(Texture2D(Pixel(0, 0, 0, 255), glm::ivec2(TextureCellSize.x, TextureCellSize.y), VkFormat::VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kReadableTexture));
 
 	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
 

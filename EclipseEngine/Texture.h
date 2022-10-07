@@ -30,7 +30,12 @@ enum TextureTypeEnum
 
 struct TextureLoader
 {
-
+    Pixel ClearColor;
+    int Width;
+    int Height;
+    int Depth;
+    VkFormat TextureFormat;
+    TextureTypeEnum TextureType;
 };
 
 class Texture
@@ -40,6 +45,9 @@ private:
     uint64_t TextureID = 0;
     uint64_t TextureBufferIndex = 0;
 
+    void LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format);
+    void LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format);
+    void LoadTexture(const std::vector<glm::vec4>& pixels, const glm::ivec2& Resolution, VkFormat format);
     void LoadTexture(std::string TextureLocation, VkFormat format);
     void GenerateMipmaps();
 
@@ -65,7 +73,9 @@ protected:
 
 public:
     Texture();
-   // Texture(const Pixel& ClearColor, )
+    Texture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType);
+    Texture(const std::vector<Pixel> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);
+    Texture(const std::vector<glm::vec4> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);
     Texture(TextureTypeEnum textureType);
     Texture(nlohmann::json& json);
     Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);

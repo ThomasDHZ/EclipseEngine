@@ -145,10 +145,10 @@ GameObjectManager::AddGameObject(b);
 
 
     auto ads = TextureManager::LoadTextureAtlus("../texture/ReflectionMapTest8k_Side1.png", glm::ivec2(256));
-    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(0, 0));
+    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(24, 25));
     //BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::ivec2(256.0f), VK_SAMPLE_COUNT_1_BIT));
     //ads->CopyCellToTexture(BakeTexture, glm::ivec2(0, 0));
-   auto arwe = ads->GetTextureID();
+  //auto arwe = ads->GetTextureID();
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -375,7 +375,7 @@ void Scene::ImGuiUpdate()
             pbrRenderer.BakeTextures("TestBake.bmp");
         }
         ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
-        ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        //ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)

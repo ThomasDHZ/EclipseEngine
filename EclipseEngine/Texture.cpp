@@ -9,8 +9,8 @@ Texture::Texture()
 	FilePath = "";
 	TextureName = "";
 	GenerateID();
-	Width = 0;
-	Height = 0;
+	Width = 1;
+	Height = 1;
 	Depth = 1;
 
 	TextureType = TextureTypeEnum::kUndefinedTexture;
@@ -18,6 +18,30 @@ Texture::Texture()
 	TextureByteFormat = VK_FORMAT_UNDEFINED;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+}
+
+Texture::Texture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType)
+{
+	GenerateID();
+
+	TextureType = textureType;
+	Width = Resolution.x;
+	Height = Resolution.y;
+	Depth = 1;
+
+	TextureType = textureType;
+	StartTextureByteFormat = format;
+	TextureByteFormat = format;
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+
+	LoadTexture(ClearColor, Resolution, format);
+}
+
+Texture::Texture(const std::vector<Pixel> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType)
+{
+	TextureType = textureType;
+	GenerateID();
 }
 
 Texture::Texture(TextureTypeEnum textureType)
@@ -73,6 +97,69 @@ Texture::Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFor
 Texture::~Texture()
 {
 }
+
+void Texture::LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format)
+{
+	VkDeviceSize imageSize = Resolution.x * Resolution.y * sizeof(Pixel);
+	
+	std::vector<Pixel> pixels(Width * Height, ClearColor);
+	VulkanBuffer StagingBuffer(&pixels[0], imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	VkImageCreateInfo ImageCreateInfo = {};
+	ImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	ImageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+	ImageCreateInfo.extent.width = Width;
+	ImageCreateInfo.extent.height = Height;
+	ImageCreateInfo.extent.depth = Depth;
+	ImageCreateInfo.mipLevels = 1;
+	ImageCreateInfo.arrayLayers = 1;
+	ImageCreateInfo.format = format;
+	ImageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	ImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	ImageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	ImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	ImageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+	CreateTextureImage(ImageCreateInfo);
+	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	CopyBufferToImage(StagingBuffer.GetBuffer());
+
+	StagingBuffer.DestoryBuffer();
+}
+
+//void Texture::LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format)
+//{
+//	VkDeviceSize imageSize = Width * Height * sizeof(Pixel);
+//
+//	VulkanBuffer StagingBuffer;
+//	StagingBuffer.CreateBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &Pixels[0]);
+//
+//	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(Width, Height)))) + 1;
+//
+//	VkImageCreateInfo TextureInfo = {};
+//	TextureInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+//	TextureInfo.imageType = VK_IMAGE_TYPE_2D;
+//	TextureInfo.extent.width = Width;
+//	TextureInfo.extent.height = Height;
+//	TextureInfo.extent.depth = Depth;
+//	TextureInfo.mipLevels = MipMapLevels;
+//	TextureInfo.arrayLayers = 1;
+//	TextureInfo.format = format;
+//	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+//	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+//	TextureInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+//	TextureInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+//	TextureInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+//
+//	Texture::CreateTextureImage(TextureInfo);
+//
+//	TransitionImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+//	CopyBufferToImage(StagingBuffer.Buffer);
+//
+//	StagingBuffer.DestoryBuffer();
+//
+//	GenerateMipmaps(format);
+//}
 
 void Texture::LoadTexture(std::string TextureLocation, VkFormat format)
 {
@@ -712,6 +799,7 @@ void Texture::CopyTexture(VkCommandBuffer& commandBuffer, Texture* srcTexture, T
 	copyImage.extent.width = srcTexture->Width;
 	copyImage.extent.height = srcTexture->Height;
 	copyImage.extent.depth = 1;
+
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 

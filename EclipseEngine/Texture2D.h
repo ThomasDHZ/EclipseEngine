@@ -8,6 +8,7 @@ protected:
 public:
     Texture2D();
     Texture2D(nlohmann::json& json);
+    Texture2D(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType);
     Texture2D(const std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);
     ~Texture2D();
 
