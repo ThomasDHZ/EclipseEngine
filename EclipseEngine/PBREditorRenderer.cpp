@@ -182,5 +182,5 @@ void PBREditorRenderer::Destroy()
 
 void PBREditorRenderer::BakeTextures(const char* FileName)
 {
-	//pbrRenderPass.RenderedTexture->BakeTextureBMP(FileName, );
+	pbrRenderPass.RenderedTexture->BakeColorTexture(FileName, BakeTextureFormat::Bake_BMP);
 }

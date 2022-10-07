@@ -9,6 +9,7 @@ private:
     void CreateTextureSampler();
 public:
     ReadableTexture();
+    ReadableTexture(const Pixel& pixel, glm::ivec2 TextureResolution);
     ReadableTexture(glm::ivec2 TextureResolution);
     ReadableTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount);
     ReadableTexture(glm::ivec2 TextureResolution, VkSampleCountFlagBits sampleCount, VkFormat format);

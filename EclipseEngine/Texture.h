@@ -3,10 +3,12 @@
 #include "ImGui/imgui_impl_vulkan.h"
 #include "stb_image.h"
 #include <json.hpp>
+#include "Pixel.h"
 
 enum TextureTypeEnum
 {
     kUndefinedTexture,
+    kTextureAtlus,
     kRenderedColorTexture,
     kRenderedDepthTexture,
     kReadableTexture,
@@ -24,6 +26,11 @@ enum TextureTypeEnum
     kCubeMapDepthTexture,
     kEnvironmentTexture,
     kRenderedCubeMap
+};
+
+struct TextureLoader
+{
+
 };
 
 class Texture
@@ -58,6 +65,7 @@ protected:
 
 public:
     Texture();
+   // Texture(const Pixel& ClearColor, )
     Texture(TextureTypeEnum textureType);
     Texture(nlohmann::json& json);
     Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);
@@ -89,6 +97,8 @@ public:
 
     void SetTextureBufferIndex(uint64_t bufferIndex);
 
+    static void CopyTexture(VkCommandBuffer& commandBuffer, Texture* srcTexture, Texture* dstTexture);
+    static void CopyTexture(VkCommandBuffer& commandBuffer, Texture* srcTexture, Texture* dstTexture, uint32_t MipLevel);
     static void CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);
 
@@ -121,6 +131,9 @@ public:
     VkSampler* GetSamplerPtr() { return &Sampler; }
     uint64_t GetTextureBufferIndex() { return TextureBufferIndex; }
     uint32_t GetMipLevels() { return MipMapLevels; }
+    int GetWidth() { return Width; }
+    int GetHeight() { return Height; }
+    int GetDepth() { return Depth; }
 
 
     void to_json(nlohmann::json& json)

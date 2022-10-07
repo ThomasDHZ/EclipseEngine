@@ -4,6 +4,7 @@
 #include "Texture2D.h"
 #include "CubeMapTexture.h"
 #include "EnvironmentTexture.h"
+#include "TextureAtlus.h"
 
 class TextureManager
 {
@@ -104,6 +105,16 @@ public:
 		}
 
 		const std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(TextureLocation, textureType, format));
+		Texture2DList.emplace_back(texture);
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+		return texture;
+	}
+
+	static std::shared_ptr<TextureAtlus> LoadTextureAtlus(const std::string& TextureLocation, const glm::ivec2& TextureCellSize)
+	{
+		const std::shared_ptr<TextureAtlus> texture = std::make_shared<TextureAtlus>(TextureAtlus(TextureLocation, TextureCellSize));
 		Texture2DList.emplace_back(texture);
 
 		UpdateBufferIndex();

@@ -166,13 +166,32 @@ void RenderedTexture::BakeDepthTexture(const char* filename, BakeTextureFormat t
 
 void RenderedTexture::BakeColorTexture(const char* filename, BakeTextureFormat textureFormat)
 {
-	std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(Width, Height), SampleCount));
+	std::shared_ptr<ReadableTexture> BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::vec2(32768.0f/2), SampleCount));
 
 	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
 
 	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-	Texture::CopyTexture(commandBuffer, this, BakeTexture.get());
+
+	VkImageCopy copyImage{};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset.x = 256.0f;
+	copyImage.srcOffset.y = 256.0f;
+	copyImage.srcOffset.z = 0.0f;
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset.x = 0.0f;
+	copyImage.dstOffset.y = 0.0f;
+	copyImage.dstOffset.z = 0.0f;
+
+	copyImage.extent.width = this->Width;
+	copyImage.extent.height = this->Height;
+	copyImage.extent.depth = 1;
+
+	vkCmdCopyImage(commandBuffer, this->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, BakeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+
 	BakeTexture->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
 	UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 	VulkanRenderer::EndSingleTimeCommands(commandBuffer);

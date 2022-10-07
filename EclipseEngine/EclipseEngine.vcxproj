@@ -232,6 +232,7 @@
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="TextureAtlus.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
@@ -376,6 +377,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="SkyboxPipeline.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="TextureAtlus.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />

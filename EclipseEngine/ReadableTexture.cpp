@@ -5,6 +5,10 @@ ReadableTexture::ReadableTexture()
 
 }
 
+ReadableTexture::ReadableTexture(const Pixel& pixel, glm::ivec2 TextureResolution)
+{
+}
+
 ReadableTexture::ReadableTexture(glm::ivec2 TextureResolution) : Texture(kReadableTexture)
 {
 	Width = TextureResolution.x;

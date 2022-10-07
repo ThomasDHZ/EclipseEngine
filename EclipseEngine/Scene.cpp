@@ -11,6 +11,7 @@
 #include "ModelRenderer.h"
 #include "BillBoardMeshRenderer.h"
 #include "MeshRenderer.h"
+#include "ReadableTexture.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
@@ -127,20 +128,27 @@ Scene::Scene()
 //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/EnvironmentMap.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-//
-//    ModelLoader loader{};
-//    loader.FilePath = "../Models/TestAnimModel/model.dae";
-//    loader.MeshType = MeshTypeEnum::kPolygon;
-//
-//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-//GameObjectManager::AddGameObject(a);
-//
-//    ModelLoader loader2{};
-//    loader2.FilePath = "../Models/Sponza/sponza.obj";
-//    loader2.MeshType = MeshTypeEnum::kPolygon;
-//
-//auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
-//GameObjectManager::AddGameObject(b);
+
+    ModelLoader loader{};
+    loader.FilePath = "../Models/TestAnimModel/model.dae";
+    loader.MeshType = MeshTypeEnum::kPolygon;
+
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+GameObjectManager::AddGameObject(a);
+
+    ModelLoader loader2{};
+    loader2.FilePath = "../Models/Sponza/sponza.obj";
+    loader2.MeshType = MeshTypeEnum::kPolygon;
+
+auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
+GameObjectManager::AddGameObject(b);
+
+
+    auto ads = TextureManager::LoadTextureAtlus("../texture/ReflectionMapTest8k_Side1.png", glm::ivec2(256));
+    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(0, 0));
+    //BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::ivec2(256.0f), VK_SAMPLE_COUNT_1_BIT));
+    //ads->CopyCellToTexture(BakeTexture, glm::ivec2(0, 0));
+   auto arwe = ads->GetTextureID();
 //    //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("HyruleShield", MaterialTypeEnum::kMaterialPBR));
 //    //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_BaseColor.bmp");
 //    //material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/Models/Shield/hyruleshieldNormalDone_Material.004_Metallic.bmp");
@@ -179,7 +187,6 @@ Scene::Scene()
         std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
         std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
         std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
-     //   IronmMaterial->LoadEmissionMap("../texture/matrix.jpg");
 
         ModelLoader loader1{};
         loader1.FilePath = "../Models/sphere.obj";
@@ -256,30 +263,30 @@ Scene::Scene()
     //LightManager::AddDirectionalLight(dLight);
     //LightManager::AddDirectionalLight(dLight);
 
-    PointLightBuffer plight = PointLightBuffer();
-    plight.position = glm::vec3(-121.08f, 16.47f, -44.34);
-    plight.diffuse = glm::vec3(300.0f);
-    plight.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight = PointLightBuffer();
+    //plight.position = glm::vec3(-121.08f, 16.47f, -44.34);
+    //plight.diffuse = glm::vec3(300.0f);
+    //plight.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight2 = PointLightBuffer();
-    plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
-    plight2.diffuse = glm::vec3(300.0f);
-    plight2.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight2 = PointLightBuffer();
+    //plight2.position = glm::vec3(-121.08f, 16.47f, -44.34);
+    //plight2.diffuse = glm::vec3(300.0f);
+    //plight2.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight3 = PointLightBuffer();
-    plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
-    plight3.diffuse = glm::vec3(300.0f);
-    plight3.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight3 = PointLightBuffer();
+    //plight3.position = glm::vec3(110.98f, 16.47f, 39.53f);
+    //plight3.diffuse = glm::vec3(300.0f);
+    //plight3.specular = glm::vec3(1.0f);
 
-    PointLightBuffer plight4 = PointLightBuffer();
-    plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
-    plight4.diffuse = glm::vec3(300.0f);
-    plight4.specular = glm::vec3(1.0f);
+    //PointLightBuffer plight4 = PointLightBuffer();
+    //plight4.position = glm::vec3(110.98f, 16.47f, -44.34);
+    //plight4.diffuse = glm::vec3(300.0f);
+    //plight4.specular = glm::vec3(1.0f);
 
-    LightManager::AddPointLight(plight);
-    LightManager::AddPointLight(plight2);
-    LightManager::AddPointLight(plight3);
-    LightManager::AddPointLight(plight4);
+    //LightManager::AddPointLight(plight);
+    //LightManager::AddPointLight(plight2);
+    //LightManager::AddPointLight(plight3);
+    //LightManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
@@ -367,7 +374,8 @@ void Scene::ImGuiUpdate()
         {
             pbrRenderer.BakeTextures("TestBake.bmp");
         }
-        ImGui::Image(pbrRenderer.cubeToEnvironmentRenderPass.environmentMap->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
+        ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }
     else if (SceneManager::sceneType == SceneType::kBlinnPhong)

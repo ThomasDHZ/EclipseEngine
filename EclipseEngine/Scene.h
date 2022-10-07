@@ -37,6 +37,7 @@ private:
 //	PBRRealTimeRenderer pbrRealTimeRenderer;
 	RayTraceRenderer rayTraceRenderer;
 	std::shared_ptr<GameObject2D> obj5;
+	std::shared_ptr<Texture> BakeTexture;
 public:
 	Scene();
 	~Scene();
