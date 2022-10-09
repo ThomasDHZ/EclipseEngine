@@ -15,11 +15,24 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
+#include "PBRBakeReflectionRenderPass.h"
 
 class PBREditorRenderer
 {
 private:
+	PBRRenderPassTextureSubmitList bakesubmitList;
+	DepthRenderPass bakeDepthPassRenderPass;
+	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
 
+	IrradianceRenderPass bakeskyIrradianceRenderPass;
+	PrefilterRenderPass bakeskyPrefilterRenderPass;
+	PBRReflectionRenderPass bakeskyPBRRenderPass;
+
+	IrradianceRenderPass bakegeoIrradianceRenderPass;
+	PrefilterRenderPass bakegeoPrefilterRenderPass;
+	PBRReflectionRenderPass bakegeoPBRRenderPass;
+
+	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
 
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
@@ -50,7 +63,7 @@ public:
 	PBREditorRenderer();
 	~PBREditorRenderer();
 
-	void BakeTextures(const char* FileName);
+	std::shared_ptr<BakedTexture> BakeTextures(const char* FileName);
 
 	void BuildRenderer();
 	void Update();

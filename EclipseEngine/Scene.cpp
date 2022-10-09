@@ -372,9 +372,12 @@ void Scene::ImGuiUpdate()
         }
         if (ImGui::Button("Bake"))
         {
-            pbrRenderer.BakeTextures("TestBake.bmp");
+            BakeTexture = pbrRenderer.BakeTextures("TestBake.bmp");
         }
-        ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
+ /*       if (BakeTexture != nullptr)
+        {
+            ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
+        }*/
         //ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }

@@ -161,8 +161,6 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> DirectionalLightBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
 			if (DirectionalLightList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -178,11 +176,7 @@ public:
 					light->GetLightPropertiesBuffer(DirectionalLightBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update DirectionalLightBuffer unless pipelines in the process of being rebuild." << std::endl;
-		}
+
 		return DirectionalLightBufferList;
 	}
 
@@ -190,8 +184,6 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> PointLightBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
 			if (PointLightList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -207,11 +199,7 @@ public:
 					light->GetLightPropertiesBuffer(PointLightBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update PointLightBuffer unless pipelines in the process of being rebuild." << std::endl;
-		}
+
 		return PointLightBufferList;
 	}
 
@@ -219,8 +207,6 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> SpotLightBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
 			if (SpotLightList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -236,11 +222,7 @@ public:
 					light->GetLightPropertiesBuffer(SpotLightBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update SpotLight unless pipelines in the process of being rebuild." << std::endl;
-		}
+
 		return SpotLightBufferList;
 	}
 

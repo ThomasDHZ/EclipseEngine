@@ -17,6 +17,49 @@ void PBREditorRenderer::BuildRenderer()
 	cubeToEnvironmentRenderPass.environmentMap->BakeEnvironmentMapTexture("EnvironmentMap.hdr");
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
+
+
+	///Bake pipleineSetUp
+		//Depth Pass
+	{
+		bakeDepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
+		bakeDepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f));
+		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
+	}
+
+
+	bakesubmitList.DirectionalLightTextureShadowMaps = bakeDepthPassRenderPass.DepthTextureList;
+	bakesubmitList.PointLightShadowMaps = bakeDepthCubeMapRenderPass.DepthCubeMapTextureList;
+	//submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
+
+	//SkyBox Pass
+	{
+		bakeskyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
+		bakeskyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
+
+		bakesubmitList.IrradianceTexture = bakeskyIrradianceRenderPass.IrradianceCubeMap;
+		bakesubmitList.PrefilterTexture = bakeskyPrefilterRenderPass.PrefilterCubeMap;
+
+		bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, SceneManager::GetPreRenderedMapSize());
+	}
+	//Geometry Pass
+	{
+		bakegeoIrradianceRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
+		bakegeoPrefilterRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
+
+		bakesubmitList.IrradianceTexture = bakegeoIrradianceRenderPass.IrradianceCubeMap;
+		bakesubmitList.PrefilterTexture = bakegeoPrefilterRenderPass.PrefilterCubeMap;
+
+		bakegeoPBRRenderPass.OneTimeDraw(bakesubmitList, 256.0f);
+	}
+
+	///
+
+
+
+
+
+
 	//Depth Pass
 	{
 		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
@@ -175,12 +218,26 @@ void PBREditorRenderer::Destroy()
 		blurRenderPass.Destroy();
 		bloomCombinePipeline.Destroy();
 	}
+
+	bakeDepthPassRenderPass.Destroy();
+	bakeDepthCubeMapRenderPass.Destroy();
+	bakeskyIrradianceRenderPass.Destroy();
+	bakeskyPrefilterRenderPass.Destroy();
+	bakeskyPBRRenderPass.Destroy();
+	bakegeoIrradianceRenderPass.Destroy();
+	bakegeoPrefilterRenderPass.Destroy();
+	bakegeoPBRRenderPass.Destroy();
+
 	 
 	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }
 
-void PBREditorRenderer::BakeTextures(const char* FileName)
+std::shared_ptr<BakedTexture> PBREditorRenderer::BakeTextures(const char* FileName)
 {
-	pbrRenderPass.RenderedTexture->BakeColorTexture(FileName, BakeTextureFormat::Bake_BMP);
+
+	BakeReflectionRenderPass.BakeReflectionMaps(bakesubmitList, 256.0f);
+	
+
+	return std::shared_ptr<BakedTexture>();
 }

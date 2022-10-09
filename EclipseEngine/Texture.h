@@ -25,7 +25,8 @@ enum TextureTypeEnum
     kCubeMapTexture,
     kCubeMapDepthTexture,
     kEnvironmentTexture,
-    kRenderedCubeMap
+    kRenderedCubeMap,
+    kBakedTexture
 };
 
 struct TextureLoader

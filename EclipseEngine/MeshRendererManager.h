@@ -259,8 +259,6 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
 			if (MeshList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -276,11 +274,7 @@ public:
 					mesh->GetMeshPropertiesBuffer(MeshPropertiesBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update MeshBuffers unless pipelines in the process of being rebuild." << std::endl;
-		}
+
 		return MeshPropertiesBufferList;
 	}
 
@@ -288,8 +282,6 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> VertexBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
 			if (MeshList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -305,11 +297,7 @@ public:
 					mesh->GetMeshVertexBuffer(VertexBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
-		}
+		
 		return VertexBufferList;
 	}
 
@@ -317,8 +305,7 @@ public:
 	{
 		std::vector<VkDescriptorBufferInfo> IndexBufferList{};
 
-		if (VulkanRenderer::UpdateRendererFlag)
-		{
+
 			if (MeshList.size() == 0)
 			{
 				VkDescriptorBufferInfo nullBuffer;
@@ -334,11 +321,6 @@ public:
 					mesh->GetMeshIndexBuffer(IndexBufferList);
 				}
 			}
-		}
-		else
-		{
-			std::cout << "Can't update IndexBuffers unless pipelines in the process of being rebuild." << std::endl;
-		}
 		return IndexBufferList;
 	}
 

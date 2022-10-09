@@ -240,11 +240,11 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLigh
         }
         vkCmdEndRenderPass(commandBuffer);
 
-    //    RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-    //    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-    //    Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
-    //    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    //    RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

@@ -156,6 +156,7 @@
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Animation3D.cpp" />
     <ClCompile Include="AnimationPlayer3D.cpp" />
+    <ClCompile Include="BakedTexture.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="PBRBakeReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
@@ -297,6 +299,7 @@
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="Animation3D.h" />
     <ClInclude Include="AnimationPlayer3D.h" />
+    <ClInclude Include="BakedTexture.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
@@ -362,6 +365,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PBRBakeReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
     <ClInclude Include="PBRBloomReflectionPipeline.h" />
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />

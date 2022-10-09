@@ -549,6 +549,12 @@
     <ClCompile Include="TextureAtlus.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="BakedTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRBakeReflectionRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -1009,6 +1015,12 @@
     </ClInclude>
     <ClInclude Include="TextureAtlus.h">
       <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="BakedTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRBakeReflectionRenderPass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
