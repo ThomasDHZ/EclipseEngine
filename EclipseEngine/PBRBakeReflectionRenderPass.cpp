@@ -64,7 +64,8 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
 
             VkImageCopy copyImage{};
             copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copyImage.srcSubresource.layerCount = y;
+            copyImage.srcSubresource.layerCount = 6;
+            copyImage.srcSubresource.baseArrayLayer = y;
 
             copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             copyImage.dstSubresource.layerCount = 1;
