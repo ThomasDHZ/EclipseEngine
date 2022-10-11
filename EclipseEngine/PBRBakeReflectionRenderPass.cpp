@@ -32,7 +32,6 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
         for (const auto& mesh : MeshRendererManager::GetMeshList())
         {
             ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-            ReflectionCubeMapList.back()->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
         RenderPass::Destroy();
     }
@@ -57,14 +56,17 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
     VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
     for (int y = 0; y < 6; y++)
     {
+        BakeTextureList[y]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
         for (int x = 0; x < ReflectionCubeMapList.size(); x++)
         {
-            BakeTextureList[y]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-            ReflectionCubeMapList[x]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            ReflectionCubeMapList[x]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
+            BakeTextureList[y]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+            ReflectionCubeMapList[x]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 
             VkImageCopy copyImage{};
             copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-            copyImage.srcSubresource.layerCount = 6;
+            copyImage.srcSubresource.layerCount = 1;
             copyImage.srcSubresource.baseArrayLayer = y;
 
             copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -80,8 +82,8 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
 
             vkCmdCopyImage(commandBuffer, ReflectionCubeMapList[x]->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, BakeTextureList[y]->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 
-            BakeTextureList[y]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_GENERAL);
-            ReflectionCubeMapList[x]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+            BakeTextureList[y]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_GENERAL);
+            ReflectionCubeMapList[x]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
         }
     }
     VulkanRenderer::EndSingleTimeCommands(commandBuffer);

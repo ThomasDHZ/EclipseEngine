@@ -20,27 +20,12 @@
 class PBREditorRenderer
 {
 private:
-	PBRRenderPassTextureSubmitList bakesubmitList;
-	DepthRenderPass bakeDepthPassRenderPass;
-	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
-
-	IrradianceRenderPass bakeskyIrradianceRenderPass;
-	PrefilterRenderPass bakeskyPrefilterRenderPass;
-	PBRReflectionRenderPass bakeskyPBRRenderPass;
-
-	IrradianceRenderPass bakegeoIrradianceRenderPass;
-	PrefilterRenderPass bakegeoPrefilterRenderPass;
-	PBRReflectionRenderPass bakegeoPBRRenderPass;
-
-	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
-
 	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	DepthRenderPass DepthPassRenderPass;
 	DepthCubeMapRenderer DepthCubeMapRenderPass;
-	//DepthRenderPass spotLightDepthPassRenderPassList;
 
 	IrradianceRenderPass skyIrradianceRenderPass;
 	PrefilterRenderPass skyPrefilterRenderPass;
@@ -63,7 +48,7 @@ public:
 	PBREditorRenderer();
 	~PBREditorRenderer();
 
-	std::shared_ptr<BakedTexture> BakeTextures(const char* FileName);
+	void BakeTextures(const char* FileName);
 
 	void BuildRenderer();
 	void Update();
@@ -72,7 +57,5 @@ public:
 
 	bool UpdateRenderer = true;
 
-	//DepthDebugRenderPass depthDebugRenderPass;
-	CubeToEnvironmentRenderPass cubeToEnvironmentRenderPass;
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

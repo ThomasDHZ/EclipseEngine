@@ -145,7 +145,7 @@ GameObjectManager::AddGameObject(b);
 
 
     auto ads = TextureManager::LoadTextureAtlus("../texture/ReflectionMapTest8k_Side1.png", glm::ivec2(256));
-    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(24, 25));
+//    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(24, 25));
     //BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::ivec2(256.0f), VK_SAMPLE_COUNT_1_BIT));
     //ads->CopyCellToTexture(BakeTexture, glm::ivec2(0, 0));
   //auto arwe = ads->GetTextureID();
@@ -317,7 +317,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Update();
+            //renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -326,20 +326,20 @@ void Scene::Update()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Update();
+                   // rayTraceRenderer.Update();
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                    hybridRenderer.Update();
+                //    hybridRenderer.Update();
                 }
                 else
                 {
-                    blinnPhongRenderer.Update();
+                //    blinnPhongRenderer.Update();
                 }
             }
             else
             {
-                blinnPhongRenderer.Update();
+              //  blinnPhongRenderer.Update();
             }
             break;
         }
@@ -372,7 +372,7 @@ void Scene::ImGuiUpdate()
         }
         if (ImGui::Button("Bake"))
         {
-            BakeTexture = pbrRenderer.BakeTextures("TestBake.bmp");
+            pbrRenderer.BakeTextures("TestBake.bmp");
         }
  /*       if (BakeTexture != nullptr)
         {
@@ -442,16 +442,16 @@ void Scene::BuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.BuildRenderer();
+           // renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.BuildRenderer();
+            //blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                rayTraceRenderer.BuildRenderer();
-                hybridRenderer.BuildRenderer();
+                //rayTraceRenderer.BuildRenderer();
+                //hybridRenderer.BuildRenderer();
             }
             break;
         }
@@ -480,7 +480,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-           renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+         //  renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -490,20 +490,20 @@ void Scene::Draw()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    //rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                    hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                   // hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
-                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                  //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+               // blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
@@ -533,16 +533,16 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Destroy();
+           // renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.Destroy();
+           // blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                hybridRenderer.Destroy();
-                rayTraceRenderer.Destroy();
+              //  hybridRenderer.Destroy();
+               // rayTraceRenderer.Destroy();
             }
             break;
         }
