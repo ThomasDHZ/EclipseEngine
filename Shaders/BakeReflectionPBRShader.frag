@@ -30,6 +30,7 @@ layout(binding = 11) uniform samplerCube PointShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
+    uint Counter;
     uint MeshIndex;
     mat4 proj;
     mat4 view;
