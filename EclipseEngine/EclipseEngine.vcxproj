@@ -219,6 +219,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
     <ClCompile Include="PBRBakeReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="BakedTexture.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
+    <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="GaussianBlurPipeline.h" />
@@ -365,6 +367,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="PBRBakeReflectionPipeline.h" />
     <ClInclude Include="PBRBakeReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
     <ClInclude Include="PBRBloomReflectionPipeline.h" />
@@ -458,6 +461,8 @@
     <None Include="..\Shaders\animate.comp" />
     <None Include="..\Shaders\anyhit.rahit" />
     <None Include="..\Shaders\anyhit1.rahit" />
+    <None Include="..\Shaders\BakeReflectionPBRShader.frag" />
+    <None Include="..\Shaders\BakeReflectionPBRShader.vert" />
     <None Include="..\Shaders\BillBoardShader.frag" />
     <None Include="..\Shaders\BillBoardShader.vert" />
     <None Include="..\Shaders\BlinnPhoneReflect.frag" />

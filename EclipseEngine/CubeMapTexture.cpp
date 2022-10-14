@@ -23,6 +23,8 @@ CubeMapTexture::CubeMapTexture(CubeMapLayout CubeMapFiles) : Texture(TextureType
 	LoadTexture(CubeMapFiles, TextureByteFormat);
 	CreateTextureView(TextureByteFormat);
 	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 CubeMapTexture::CubeMapTexture(glm::ivec2 TextureResolution, TextureTypeEnum textureType) : Texture(textureType)
@@ -38,6 +40,8 @@ CubeMapTexture::CubeMapTexture(glm::ivec2 TextureResolution, TextureTypeEnum tex
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
 CubeMapTexture::~CubeMapTexture()

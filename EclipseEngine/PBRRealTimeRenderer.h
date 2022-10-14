@@ -12,6 +12,7 @@
 #include "PBRBloomRenderPass.h"
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
+#include "PBRBakeReflectionRenderPass.h"
 
 class PBRRealTimeRenderer
 {
@@ -30,7 +31,7 @@ private:
 
 	IrradianceRenderPass geoIrradianceRenderPass;
 	PrefilterRenderPass geoPrefilterRenderPass;
-	PBRReflectionRenderPass geoPBRRenderPass;
+	PBRBakeReflectionRenderPass geoPBRRenderPass;
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

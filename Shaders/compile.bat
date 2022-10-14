@@ -54,6 +54,11 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.vert -o ../x64/Shaders/ReflectionPBRShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRShader.frag -o ../x64/Shaders/ReflectionPBRShaderFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BakeReflectionPBRShader.vert -o BakeReflectionPBRShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BakeReflectionPBRShader.frag -o BakeReflectionPBRShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BakeReflectionPBRShader.vert -o ../x64/Shaders/BakeReflectionPBRShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BakeReflectionPBRShader.frag -o ../x64/Shaders/BakeReflectionPBRShaderFrag.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRInstanceShader.vert -o ReflectionPBRInstanceShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRInstanceShader.frag -o ReflectionPBRInstanceShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ReflectionPBRInstanceShader.vert -o ../x64/Shaders/ReflectionPBRInstanceShaderVert.spv

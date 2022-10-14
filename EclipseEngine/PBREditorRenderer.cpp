@@ -175,15 +175,15 @@ void PBREditorRenderer::Destroy()
 
 void PBREditorRenderer::BakeTextures(const char* FileName)
 {
-	DepthRenderPass bakeDepthPassRenderPass;
-	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
-	IrradianceRenderPass bakeskyIrradianceRenderPass;
-	PrefilterRenderPass bakeskyPrefilterRenderPass;
-	PBRReflectionRenderPass bakeskyPBRRenderPass;
-	IrradianceRenderPass bakegeoIrradianceRenderPass;
-	PrefilterRenderPass bakegeoPrefilterRenderPass;
-	PBRReflectionRenderPass bakegeoPBRRenderPass;
-	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
+	//DepthRenderPass bakeDepthPassRenderPass;
+	//DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
+	//IrradianceRenderPass bakeskyIrradianceRenderPass;
+	//PrefilterRenderPass bakeskyPrefilterRenderPass;
+	//PBRReflectionRenderPass bakeskyPBRRenderPass;
+	//IrradianceRenderPass bakegeoIrradianceRenderPass;
+	//PrefilterRenderPass bakegeoPrefilterRenderPass;
+	//PBRReflectionRenderPass bakegeoPBRRenderPass;
+	//PBRBakeReflectionRenderPass BakeReflectionRenderPass;
 
 	//Depth Pass
 	{
@@ -218,12 +218,12 @@ void PBREditorRenderer::BakeTextures(const char* FileName)
 
 	BakeReflectionRenderPass.BakeReflectionMaps(bakesubmitList, 256.0f);
 	
-	bakeDepthPassRenderPass.Destroy();
-	bakeDepthCubeMapRenderPass.Destroy();
-	bakeskyIrradianceRenderPass.Destroy();
-	bakeskyPrefilterRenderPass.Destroy();
-	bakeskyPBRRenderPass.Destroy();
-	bakegeoIrradianceRenderPass.Destroy();
-	bakegeoPrefilterRenderPass.Destroy();
-	bakegeoPBRRenderPass.Destroy();
+	//bakeDepthPassRenderPass.Destroy();
+	//bakeDepthCubeMapRenderPass.Destroy();
+	//bakeskyIrradianceRenderPass.Destroy();
+	//bakeskyPrefilterRenderPass.Destroy();
+	//bakeskyPBRRenderPass.Destroy();
+	//bakegeoIrradianceRenderPass.Destroy();
+	//bakegeoPrefilterRenderPass.Destroy();
+	//bakegeoPBRRenderPass.Destroy();
 }

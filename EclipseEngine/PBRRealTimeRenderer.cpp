@@ -48,8 +48,8 @@ void PBRRealTimeRenderer::BuildRenderer()
 	}
 	//Main Render Pass
 	{
-		irradianceRenderPass.BuildRenderPass(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.BuildRenderPass(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapList[0], SceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapList[0], SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTexture = irradianceRenderPass.IrradianceCubeMap;
 		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
@@ -105,10 +105,10 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 	}
 	//Geometry Pass
 	{
-		auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
+		//auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 		CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
+		CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw());
 	}
 	//Main Render Pass
 	{

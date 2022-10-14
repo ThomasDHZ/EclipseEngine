@@ -117,6 +117,7 @@ public:
 
     static void CopyDepthTexture(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
 
+    static void CopyCubeMap(std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);
 
@@ -125,6 +126,8 @@ public:
 
     static void CopyMipLevelToCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMapLayer(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t layer, uint32_t MipLevel);
+
+    void ImGuiShowTexture(const ImVec2& TextureDisplaySize);
 
     VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
     VkImage Image = VK_NULL_HANDLE;

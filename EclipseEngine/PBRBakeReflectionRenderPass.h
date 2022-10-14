@@ -14,6 +14,7 @@
 #include "CubeMapViewPipeline.h"
 #include "CubeMapSamplerPipeline.h"
 #include "PBRInstancedReflectionPipeline.h"
+#include "PBRBakeReflectionPipeline.h"
 
 class PBRBakeReflectionRenderPass : public RenderPass
 {
@@ -23,8 +24,7 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	PBRReflectionPipeline pbrPipeline;
-	PBRInstancedReflectionPipeline pbrInstancedPipeline;
+	PBRBakeReflectionPipeline pbrPipeline;
 	CubeMapSamplerPipeline skyboxPipeline;
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
@@ -40,6 +40,7 @@ public:
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> ReflectionCubeMapList;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
 	void BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();

@@ -10,6 +10,42 @@ PBRBakeReflectionRenderPass::~PBRBakeReflectionRenderPass()
 {
 }
 
+void PBRBakeReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = glm::vec2(cubeMapSize);
+
+    if (renderPass == nullptr)
+    {
+        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        for (const auto& mesh : MeshRendererManager::GetMeshList())
+        {
+            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (const auto& mesh : MeshRendererManager::GetMeshList())
+        {
+            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+        }
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(textures);
+    SetUpCommandBuffers();
+}
+
 void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
@@ -222,7 +258,6 @@ void PBRBakeReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureS
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
-    pbrInstancedPipeline.InitializePipeline(pipelineInfo, textures);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
@@ -274,11 +309,10 @@ VkCommandBuffer PBRBakeReflectionRenderPass::Draw()
 
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-
     for (int x = 0; x < MeshRendererManager::GetMeshList().size(); x++)
     {
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        
+
         const std::shared_ptr<Mesh> reflectingMesh = MeshRendererManager::GetMeshList()[x];
         skyboxPipeline.Draw(commandBuffer);
         for (auto& mesh : MeshRendererManager::GetMeshList())
@@ -289,12 +323,7 @@ VkCommandBuffer PBRBakeReflectionRenderPass::Draw()
 
             case MeshTypeEnum::kPolygon:
             {
-                pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh);
-                break;
-            }
-            case MeshTypeEnum::kPolygonInstanced:
-            {
-                pbrInstancedPipeline.Draw(commandBuffer, mesh, reflectingMesh);
+                pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh, x);
                 break;
             }
             default: break;
@@ -308,11 +337,10 @@ VkCommandBuffer PBRBakeReflectionRenderPass::Draw()
         ReflectionCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
-    
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
-
+   
     return commandBuffer;
 }
 
@@ -322,7 +350,6 @@ void PBRBakeReflectionRenderPass::Destroy()
     DepthTexture->Destroy();
 
     pbrPipeline.Destroy();
-    pbrInstancedPipeline.Destroy();
     skyboxPipeline.Destroy();
 
     RenderPass::Destroy();

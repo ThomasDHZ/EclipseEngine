@@ -56,6 +56,15 @@ public:
 	void Destroy();
 
 	bool UpdateRenderer = true;
+	DepthRenderPass bakeDepthPassRenderPass;
+	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
+	IrradianceRenderPass bakeskyIrradianceRenderPass;
+	PrefilterRenderPass bakeskyPrefilterRenderPass;
+	PBRReflectionRenderPass bakeskyPBRRenderPass;
+	IrradianceRenderPass bakegeoIrradianceRenderPass;
+	PrefilterRenderPass bakegeoPrefilterRenderPass;
+	PBRReflectionRenderPass bakegeoPBRRenderPass;
+	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
 
 	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
