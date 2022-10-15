@@ -10,7 +10,7 @@
 class PBRReflectionPipeline : public GraphicsPipeline
 {
 private: 
-	CubeMapSamplerBuffer cubeMapSampler;
+	std::vector<CubeMapSamplerBuffer> cubeMapSamplerList;
 
 public:
 	PBRReflectionPipeline();

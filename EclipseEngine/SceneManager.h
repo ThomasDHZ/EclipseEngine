@@ -48,10 +48,8 @@ public:
 
 	static void StartUp()
 	{
-		//musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
-		//std::cout << "break musicPlayer" << std::endl;
-		//musicPlayer.Play();
-		//std::cout << "break musicPlayer.Play" << std::endl;
+		musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
+		musicPlayer.Play();
 
 		skyboxMesh = std::make_shared<SkyboxMesh>();
 		skyboxMesh->StartUp();

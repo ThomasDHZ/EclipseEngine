@@ -86,7 +86,7 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
     std::vector<std::shared_ptr<BakedTexture>> BakeTextureList;
     for (int TextureLayer = 0; TextureLayer < 6; TextureLayer++)
     {
-        BakeTextureList.emplace_back(std::make_shared<BakedTexture>(BakedTexture(Pixel(255, 0, 0, 255), glm::vec2(8192/4))));
+        BakeTextureList.emplace_back(std::make_shared<BakedTexture>(BakedTexture(Pixel(255, 0, 0, 255), glm::vec2(8192))));
     }
 
     VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
@@ -97,7 +97,7 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
         BakeTextureList[layer]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
         for(const auto& reflectionCubeMap : ReflectionCubeMapList)
         {
-            if (x == 8)
+            if (x == 32)
             {
                 x = 0;
                 y++;

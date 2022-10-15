@@ -127,14 +127,14 @@ Scene::Scene()
 //    cubeMapfiles.Back = "../texture/skybox/front.jpg";
 //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 //
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/EnvironmentMap.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    ModelLoader loader{};
-    loader.FilePath = "../Models/TestAnimModel/model.dae";
-    loader.MeshType = MeshTypeEnum::kPolygon;
-
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-GameObjectManager::AddGameObject(a);
+//    ModelLoader loader{};
+//    loader.FilePath = "../Models/TestAnimModel/model.dae";
+//    loader.MeshType = MeshTypeEnum::kPolygon;
+//
+//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+//GameObjectManager::AddGameObject(a);
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
@@ -144,8 +144,8 @@ auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
 GameObjectManager::AddGameObject(b);
 
 
-    auto ads = TextureManager::LoadTextureAtlus("../texture/ReflectionMapTest8k_Side1.png", glm::ivec2(256));
-//    BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(24, 25));
+    //auto ads = TextureManager::LoadTextureAtlus("../texture/TestReflectionBakeLayer0.bmp", glm::ivec2(256));
+    //BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(31, 1));
     //BakeTexture = std::make_shared<ReadableTexture>(ReadableTexture(glm::ivec2(256.0f), VK_SAMPLE_COUNT_1_BIT));
     //ads->CopyCellToTexture(BakeTexture, glm::ivec2(0, 0));
   //auto arwe = ads->GetTextureID();
@@ -194,14 +194,17 @@ GameObjectManager::AddGameObject(b);
 
         auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+        obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj);
 
         auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
         obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj2);
 
         auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", loader1));
         obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj3);
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
@@ -211,6 +214,7 @@ GameObjectManager::AddGameObject(b);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
         obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+        obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         GameObjectManager::AddGameObject(obj5);
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
@@ -345,7 +349,7 @@ void Scene::Update()
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Update();
+           // pbrRenderer.Update();
             break;
         }
     }
@@ -366,18 +370,18 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-        if(ImGui::Button("Update Renderer"))   
+ /*       if(ImGui::Button("Update Renderer"))   
         { 
             pbrRenderer.UpdateRenderer = true;
         }
         if (ImGui::Button("Bake"))
         {
             pbrRenderer.BakeTextures("TestBake.bmp");
-        }
-        if(pbrRenderer.BakeReflectionRenderPass.ReflectionCubeMapList.size() > 0)
+        }*/
+       /* if(BakeTexture != nullptr)
         {
-            ImGui::Image(pbrRenderer.BakeReflectionRenderPass.ReflectionCubeMapList[0]->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
-        }
+            ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
+        }*/
         //ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
         //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     }

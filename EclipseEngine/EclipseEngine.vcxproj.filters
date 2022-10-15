@@ -558,6 +558,9 @@
     <ClCompile Include="PBRBakeReflectionPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PBRPlayRenderer.cpp">
+      <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -1029,6 +1032,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PBRBakeReflectionPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRPlayRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

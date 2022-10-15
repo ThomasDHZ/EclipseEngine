@@ -17,7 +17,7 @@
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRBakeReflectionRenderPass.h"
 
-class PBREditorRenderer
+class PBRPlayRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
@@ -26,14 +26,6 @@ private:
 
 	DepthRenderPass DepthPassRenderPass;
 	DepthCubeMapRenderer DepthCubeMapRenderPass;
-
-	IrradianceRenderPass skyIrradianceRenderPass;
-	PrefilterRenderPass skyPrefilterRenderPass;
-	PBRReflectionRenderPass skyPBRRenderPass;
-
-	IrradianceRenderPass geoIrradianceRenderPass;
-	PrefilterRenderPass geoPrefilterRenderPass;
-	PBRReflectionRenderPass geoPBRRenderPass;
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
@@ -45,17 +37,10 @@ private:
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
-	PBREditorRenderer();
-	~PBREditorRenderer();
-
-	void BakeTextures(const char* FileName);
+	PBRPlayRenderer();
+	~PBRPlayRenderer();
 
 	void BuildRenderer();
-	void Update();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
-
-	bool UpdateRenderer = true;
-
-	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
