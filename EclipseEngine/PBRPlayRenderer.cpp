@@ -41,13 +41,13 @@ void PBRPlayRenderer::BuildCubeMaps()
 	{
 		textureAtlasList[layer].UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
 	}
-	for (int y = 0; y < textureAtlasList[0].GetTextureHeightCellCount(); y++)
+	for (auto& reflectionCubeMap : cubeMapTextureList)
 	{
-		for (int x = 0; x < textureAtlasList[0].GetTextureWidthCellCount(); x++)
+		for (int y = 0; y < textureAtlasList[0].GetTextureHeightCellCount(); y++)
 		{
-			for (int layer = 0; layer < 6; layer++)
+			for (int x = 0; x < textureAtlasList[0].GetTextureWidthCellCount(); x++)
 			{
-				for (auto& reflectionCubeMap : cubeMapTextureList)
+				for (int layer = 0; layer < 6; layer++)
 				{
 					VkImageCopy copyImage{};
 
