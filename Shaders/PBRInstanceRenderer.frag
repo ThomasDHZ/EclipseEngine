@@ -23,8 +23,8 @@ layout(binding = 2) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 3) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 4) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 5) uniform sampler2D TextureMap[];
-layout(binding = 6) uniform samplerCube IrradianceMap;
-layout(binding = 7) uniform samplerCube PrefilterMap;
+layout(binding = 6) uniform samplerCube IrradianceMap[];
+layout(binding = 7) uniform samplerCube PrefilterMap[];
 layout(binding = 8) uniform sampler2D BRDFMap;
 layout(binding = 9) uniform sampler2D ShadowMap[];
 layout(binding = 10) uniform samplerCube PointShadowMap[];
@@ -222,10 +222,10 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap, N).rgb;
+    vec3 irradiance = texture(IrradianceMap[0], N).rgb;
     vec3 diffuse      = irradiance * albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap, R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap[0], R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 

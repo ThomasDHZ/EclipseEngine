@@ -23,15 +23,47 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
-    VkDescriptorImageInfo IrradianceMapBuffer;
-    IrradianceMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    IrradianceMapBuffer.imageView = textures.IrradianceTexture->View;
-    IrradianceMapBuffer.sampler = textures.IrradianceTexture->Sampler;
+    std::vector<VkDescriptorImageInfo> IrradianceMapBufferList;
+    if (textures.IrradianceTextureList.size() == 0)
+    {
+        VkDescriptorImageInfo nullBuffer;
+        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        nullBuffer.imageView = VK_NULL_HANDLE;
+        nullBuffer.sampler = NullSampler;
+        IrradianceMapBufferList.emplace_back(nullBuffer);
+    }
+    else
+    {
+        for (auto IrradianceMap : textures.IrradianceTextureList)
+        {
+            VkDescriptorImageInfo SkyboxBufferInfo;
+            SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            SkyboxBufferInfo.imageView = IrradianceMap->View;
+            SkyboxBufferInfo.sampler = IrradianceMap->Sampler;
+            IrradianceMapBufferList.emplace_back(SkyboxBufferInfo);
+        }
+    }
 
-    VkDescriptorImageInfo PrefilterBuffer;
-    PrefilterBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PrefilterBuffer.imageView = textures.PrefilterTexture->View;
-    PrefilterBuffer.sampler = textures.PrefilterTexture->Sampler;
+    std::vector<VkDescriptorImageInfo> PrefilterMapBufferList;
+    if (textures.IrradianceTextureList.size() == 0)
+    {
+        VkDescriptorImageInfo nullBuffer;
+        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        nullBuffer.imageView = VK_NULL_HANDLE;
+        nullBuffer.sampler = NullSampler;
+        PrefilterMapBufferList.emplace_back(nullBuffer);
+    }
+    else
+    {
+        for (auto PrefilterMap : textures.PrefilterTextureList)
+        {
+            VkDescriptorImageInfo SkyboxBufferInfo;
+            SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            SkyboxBufferInfo.imageView = PrefilterMap->View;
+            SkyboxBufferInfo.sampler = PrefilterMap->Sampler;
+            PrefilterMapBufferList.emplace_back(SkyboxBufferInfo);
+        }
+    }
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -115,8 +147,8 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, SpotLightBufferInfoList);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, IrradianceMapBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, PrefilterBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 7, IrradianceMapBufferList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 8, PrefilterMapBufferList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 9, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 10, DirectionalLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     if (SpotLightShadowMaps.size() > 0)

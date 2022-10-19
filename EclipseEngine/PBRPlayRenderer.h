@@ -36,6 +36,7 @@ private:
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
+	void BuildCubeMaps();
 public:
 	PBRPlayRenderer();
 	~PBRPlayRenderer();

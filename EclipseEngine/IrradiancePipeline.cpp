@@ -7,19 +7,37 @@ IrradiancePipeline::~IrradiancePipeline()
 {
 }
 
-void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> cubeMap)
+void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubeMapList)
 {
-    VkDescriptorImageInfo SkyboxBufferInfo;
-    SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = cubeMap->View;
-    SkyboxBufferInfo.sampler = cubeMap->Sampler;
+
+
+    std::vector<VkDescriptorImageInfo> SkyboxBufferInfoList;
+    if (cubeMapList.size() == 0)
+    {
+        VkDescriptorImageInfo nullBuffer;
+        nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        nullBuffer.imageView = VK_NULL_HANDLE;
+        nullBuffer.sampler = NullSampler;
+        SkyboxBufferInfoList.emplace_back(nullBuffer);
+    }
+    else
+    {
+        for (auto cubeMap : cubeMapList)
+        {
+            VkDescriptorImageInfo SkyboxBufferInfo;
+            SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            SkyboxBufferInfo.imageView = cubeMap->View;
+            SkyboxBufferInfo.sampler = cubeMap->Sampler;
+            SkyboxBufferInfoList.emplace_back(SkyboxBufferInfo);
+        }
+    }
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfoList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;

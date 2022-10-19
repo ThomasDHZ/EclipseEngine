@@ -349,7 +349,7 @@ void Scene::Update()
         }
         case SceneType::kPBR:
         {
-           // pbrRenderer.Update();
+            //pbrRenderer.Update();
             break;
         }
     }

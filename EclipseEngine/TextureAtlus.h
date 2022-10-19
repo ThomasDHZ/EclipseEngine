@@ -6,6 +6,8 @@
 class TextureAtlus : public Texture2D
 {
 	private:
+		float TextureWidthCellCount;
+		float TextureHeightCellCount;
 		glm::ivec2 TextureCellSize = glm::ivec2(0.0f);
 
 	public:
@@ -18,5 +20,9 @@ class TextureAtlus : public Texture2D
 
 		std::shared_ptr<Texture> CreateTextureFromTextureAtlus(const glm::ivec2& cellToTransfer);
 		std::shared_ptr<CubeMapTexture> CreateCubeMapTextureFromTextureAtlus(VkCommandBuffer& commandBuffer);
+
+		glm::ivec2 GetTextureCellSize() { return TextureCellSize; }
+		float GetTextureWidthCellCount() { return TextureWidthCellCount; }
+		float GetTextureHeightCellCount() { return TextureHeightCellCount; }
 };
 

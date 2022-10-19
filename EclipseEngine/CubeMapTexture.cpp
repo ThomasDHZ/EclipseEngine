@@ -29,8 +29,8 @@ CubeMapTexture::CubeMapTexture(CubeMapLayout CubeMapFiles) : Texture(TextureType
 
 CubeMapTexture::CubeMapTexture(glm::ivec2 TextureResolution, TextureTypeEnum textureType) : Texture(textureType)
 {
-	FilePath = "3";
-	TextureName = "w";
+	FilePath = "";
+	TextureName = "";
 	GenerateID();
 
 	Width = TextureResolution.x;

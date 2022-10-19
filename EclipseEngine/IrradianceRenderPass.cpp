@@ -9,49 +9,53 @@ IrradianceRenderPass::~IrradianceRenderPass()
 {
 }
 
-void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
     if (renderPass == nullptr)
     {
-        IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
     }
     else
     {
-        IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
+        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(IrradianceCubeMap->View);
+    AttachmentList.emplace_back(DrawToCubeMap->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(cubeMap);
+    BuildRenderPassPipelines(cubeMapList);
     SetUpCommandBuffers();
 }
 
-void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
     if (renderPass == nullptr)
     {
-        IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
     }
     else
     {
-        IrradianceCubeMap->RecreateRendererTexture(RenderPassResolution);
+        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
+        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(IrradianceCubeMap->View);
+    AttachmentList.emplace_back(DrawToCubeMap->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(cubeMap);
+    BuildRenderPassPipelines(cubeMapList);
     SetUpCommandBuffers();
     Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
@@ -62,7 +66,7 @@ void IrradianceRenderPass::RenderPassDesc()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    AttachmentDescriptionList.emplace_back(IrradianceCubeMap->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(DrawToCubeMap->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -122,7 +126,7 @@ void IrradianceRenderPass::RenderPassDesc()
 }
 
 
-void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMap)
+void IrradianceRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -142,7 +146,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    irradiancePipeline.InitializePipeline(pipelineInfo, cubeMap);
+    irradiancePipeline.InitializePipeline(pipelineInfo, cubeMapList);
 }
 
 VkCommandBuffer IrradianceRenderPass::Draw()
@@ -182,21 +186,34 @@ VkCommandBuffer IrradianceRenderPass::Draw()
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
     }
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    irradiancePipeline.Draw(commandBuffer, irradiance);
-    vkCmdEndRenderPass(commandBuffer);
+    for (int x= 0; x < IrradianceCubeMap.size(); x++)
+    {
+        irradiance.CubeMapId = x;
+        IrradianceCubeMap[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        irradiancePipeline.Draw(commandBuffer, irradiance);
+        vkCmdEndRenderPass(commandBuffer);
+
+        DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyCubeMap(commandBuffer, DrawToCubeMap, IrradianceCubeMap[x]);
+        DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+        IrradianceCubeMap[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+    }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
+
 
     return commandBuffer;
 }
 
 void IrradianceRenderPass::Destroy()
 {
-    IrradianceCubeMap->Destroy();
+    DrawToCubeMap->Destroy();
     irradiancePipeline.Destroy();
     RenderPass::Destroy();
 }

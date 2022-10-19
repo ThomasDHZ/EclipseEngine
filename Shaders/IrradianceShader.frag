@@ -5,13 +5,14 @@
 #extension GL_EXT_debug_printf : enable
 #extension GL_EXT_multiview : enable
 
-layout(binding = 0) uniform samplerCube CubeMap;
+layout(binding = 0) uniform samplerCube CubeMap[];
 
 layout(location = 0) in vec3 WorldPos;
 layout(location = 0) out vec4 outColor;
 
 layout(push_constant) uniform IrradianceInfo
 {
+    uint CubeMapId;
     float IrradianceSampleDelta;
 } irradianceInfo;
 
@@ -39,7 +40,7 @@ void main()
             // tangent space to world
             vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N; 
 
-            irradiance += texture(CubeMap, sampleVec).rgb * cos(theta) * sin(theta);
+            irradiance += texture(CubeMap[irradianceInfo.CubeMapId], sampleVec).rgb * cos(theta) * sin(theta);
             nrSamples++;
         }
     }

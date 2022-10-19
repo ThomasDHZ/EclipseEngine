@@ -6,11 +6,12 @@
 
 layout(push_constant) uniform PrefilterInfo
 {
+    uint CubeMapId;
     uint SkyboxSize;
 	float Roughness;
 } Prefilter;
 
-layout(binding = 0) uniform samplerCube CubeMap;
+layout(binding = 0) uniform samplerCube CubeMap[];
 
 layout(location = 0) in vec3 WorldPos;
 layout(location = 0) out vec4 outColor;
@@ -98,7 +99,7 @@ void main()
 
             float mipLevel = Prefilter.Roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel); 
             
-            prefilteredColor += textureLod(CubeMap, L, mipLevel).rgb * NdotL;
+            prefilteredColor += textureLod(CubeMap[Prefilter.CubeMapId], L, mipLevel).rgb * NdotL;
             totalWeight      += NdotL;
         }
     }

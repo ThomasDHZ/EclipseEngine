@@ -12,6 +12,6 @@ public:
 	PrefilterPipeline();
 	~PrefilterPipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList);
 	void Draw(VkCommandBuffer& commandBuffer, PrefilterSkyboxSettings& prefiliter);
 };

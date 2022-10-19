@@ -25,39 +25,39 @@ void PBREditorRenderer::BuildRenderer()
 	submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
 	submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
 
-	//SkyBox Pass
-	{
-		skyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
-		skyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+	////SkyBox Pass
+	//{
+	//	skyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+	//	skyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
 
-		submitList.IrradianceTexture = skyIrradianceRenderPass.IrradianceCubeMap;
-		submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
+	//	submitList.IrradianceTexture = skyIrradianceRenderPass.IrradianceCubeMap;
+	//	submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
 
-		skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
-	}
-	//Geometry Pass
-	{
-		geoIrradianceRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
-		geoPrefilterRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+	//	skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+	//}
+	////Geometry Pass
+	//{
+	//	geoIrradianceRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+	//	geoPrefilterRenderPass.OneTimeDraw(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
 
-		submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
-		submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
+	//	submitList.IrradianceTexture = geoIrradianceRenderPass.IrradianceCubeMap;
+	//	submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
 
-		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
-	}
-	//Main Render Pass
-	{
-		irradianceRenderPass.OneTimeDraw(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+	//	geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+	//}
+	////Main Render Pass
+	//{
+	//	irradianceRenderPass.OneTimeDraw(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+	//	prefilterRenderPass.OneTimeDraw(geoPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
 
-		submitList.IrradianceTexture = irradianceRenderPass.IrradianceCubeMap;
-		submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
+	//	submitList.IrradianceTexture = irradianceRenderPass.IrradianceCubeMap;
+	//	submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
 
-		pbrRenderPass.BuildRenderPass(submitList);
-		pbrBloomRenderPass.BuildRenderPass(submitList);
-		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
-	}
+	//	pbrRenderPass.BuildRenderPass(submitList);
+	//	pbrBloomRenderPass.BuildRenderPass(submitList);
+	//	blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+	//	bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
+	//}
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
@@ -185,45 +185,45 @@ void PBREditorRenderer::BakeTextures(const char* FileName)
 	PBRReflectionRenderPass bakegeoPBRRenderPass;
 	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
 
-	//Depth Pass
-	{
-		bakeDepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-		bakeDepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f));
-	}
+	////Depth Pass
+	//{
+	//	bakeDepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
+	//	bakeDepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f));
+	//}
 
-	PBRRenderPassTextureSubmitList bakesubmitList;
-	bakesubmitList.DirectionalLightTextureShadowMaps = bakeDepthPassRenderPass.DepthTextureList;
-	bakesubmitList.PointLightShadowMaps = bakeDepthCubeMapRenderPass.DepthCubeMapTextureList;
+	//PBRRenderPassTextureSubmitList bakesubmitList;
+	//bakesubmitList.DirectionalLightTextureShadowMaps = bakeDepthPassRenderPass.DepthTextureList;
+	//bakesubmitList.PointLightShadowMaps = bakeDepthCubeMapRenderPass.DepthCubeMapTextureList;
 
-	//SkyBox Pass
-	{
-		bakeskyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
-		bakeskyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
+	////SkyBox Pass
+	//{
+	//	bakeskyIrradianceRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
+	//	bakeskyPrefilterRenderPass.OneTimeDraw(SceneManager::CubeMap, 256.0f);
 
-		bakesubmitList.IrradianceTexture = bakeskyIrradianceRenderPass.IrradianceCubeMap;
-		bakesubmitList.PrefilterTexture = bakeskyPrefilterRenderPass.PrefilterCubeMap;
+	//	bakesubmitList.IrradianceTexture = bakeskyIrradianceRenderPass.IrradianceCubeMap;
+	//	bakesubmitList.PrefilterTexture = bakeskyPrefilterRenderPass.PrefilterCubeMap;
 
-		bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, SceneManager::GetPreRenderedMapSize());
-	}
-	//Geometry Pass
-	{
-		bakegeoIrradianceRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
-		bakegeoPrefilterRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
+	//	bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, SceneManager::GetPreRenderedMapSize());
+	//}
+	////Geometry Pass
+	//{
+	//	bakegeoIrradianceRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
+	//	bakegeoPrefilterRenderPass.OneTimeDraw(bakeskyPBRRenderPass.RenderedTexture, 256.0f);
 
-		bakesubmitList.IrradianceTexture = bakegeoIrradianceRenderPass.IrradianceCubeMap;
-		bakesubmitList.PrefilterTexture = bakegeoPrefilterRenderPass.PrefilterCubeMap;
+	//	bakesubmitList.IrradianceTexture = bakegeoIrradianceRenderPass.IrradianceCubeMap;
+	//	bakesubmitList.PrefilterTexture = bakegeoPrefilterRenderPass.PrefilterCubeMap;
 
-		bakegeoPBRRenderPass.OneTimeDraw(bakesubmitList, 256.0f);
-	}
+	//	bakegeoPBRRenderPass.OneTimeDraw(bakesubmitList, 256.0f);
+	//}
 
-	BakeReflectionRenderPass.BakeReflectionMaps(bakesubmitList, 256.0f);
-	
-	bakeDepthPassRenderPass.Destroy();
-	bakeDepthCubeMapRenderPass.Destroy();
-	bakeskyIrradianceRenderPass.Destroy();
-	bakeskyPrefilterRenderPass.Destroy();
-	bakeskyPBRRenderPass.Destroy();
-	bakegeoIrradianceRenderPass.Destroy();
-	bakegeoPrefilterRenderPass.Destroy();
-	bakegeoPBRRenderPass.Destroy();
+	//BakeReflectionRenderPass.BakeReflectionMaps(bakesubmitList, 256.0f);
+	//
+	//bakeDepthPassRenderPass.Destroy();
+	//bakeDepthCubeMapRenderPass.Destroy();
+	//bakeskyIrradianceRenderPass.Destroy();
+	//bakeskyPrefilterRenderPass.Destroy();
+	//bakeskyPBRRenderPass.Destroy();
+	//bakegeoIrradianceRenderPass.Destroy();
+	//bakegeoPrefilterRenderPass.Destroy();
+	//bakegeoPBRRenderPass.Destroy();
 }

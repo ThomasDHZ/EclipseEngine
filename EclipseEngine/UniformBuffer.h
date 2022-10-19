@@ -36,11 +36,13 @@ struct SpotLightBuffer {
 
 struct IrradianceSkyboxSettings
 {
+	alignas(4) uint32_t CubeMapId = 0;
 	alignas(4) float IrradianceSampleDelta = 0.075f;
 };
 
 struct PrefilterSkyboxSettings
 {
+	alignas(4) uint32_t CubeMapId = 0;
 	alignas(4) uint32_t SkyboxSize = 0.0f;
 	alignas(4) float roughness = 0.0f;
 };
