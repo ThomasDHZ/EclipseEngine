@@ -121,6 +121,7 @@ struct CubeMapSampler
 struct MeshProperties
 {
 	alignas(4) uint32_t MaterialBufferIndex;
+	alignas(4) uint32_t SkyBoxIndex = 0;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);

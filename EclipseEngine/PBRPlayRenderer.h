@@ -20,15 +20,12 @@
 class PBRPlayRenderer
 {
 private:
-	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	DepthRenderPass DepthPassRenderPass;
 	DepthCubeMapRenderer DepthCubeMapRenderPass;
 
-	IrradianceRenderPass irradianceRenderPass;
-	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
 	PBRBloomRenderPass pbrBloomRenderPass;
 	GaussianBlurRenderPass blurRenderPass;
@@ -41,7 +38,12 @@ public:
 	PBRPlayRenderer();
 	~PBRPlayRenderer();
 
+	IrradianceRenderPass irradianceRenderPass;
+	PrefilterRenderPass prefilterRenderPass;
+	std::vector<std::shared_ptr<RenderedColorTexture>> debugTextureList;
+
 	void BuildRenderer();
+	void Update();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 };

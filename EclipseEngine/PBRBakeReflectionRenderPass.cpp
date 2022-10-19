@@ -46,7 +46,7 @@ void PBRBakeReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList
     SetUpCommandBuffers();
 }
 
-void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -86,7 +86,7 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
     std::vector<std::shared_ptr<BakedTexture>> BakeTextureList;
     for (int TextureLayer = 0; TextureLayer < 6; TextureLayer++)
     {
-        BakeTextureList.emplace_back(std::make_shared<BakedTexture>(BakedTexture(Pixel(255, 0, 0, 255), glm::vec2(8192))));
+        BakeTextureList.emplace_back(std::make_shared<BakedTexture>(BakedTexture(Pixel(255, 0, 0, 255), glm::vec2(bakedTextureAtlusSize))));
     }
 
     VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
@@ -97,7 +97,7 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
         BakeTextureList[layer]->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
         for(const auto& reflectionCubeMap : ReflectionCubeMapList)
         {
-            if (x == 32)
+            if (x == bakedTextureAtlusSize / cubeMapSize)
             {
                 x = 0;
                 y++;
@@ -143,20 +143,12 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
         const char* data;
         vkMapMemory(VulkanRenderer::GetDevice(), BakeTextureList[TextureLayer]->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
 
-        std::string layertext;
-        switch (TextureLayer)
-        {
-        case 0: layertext = "0"; break;
-        case 1: layertext = "1"; break;
-        case 2: layertext = "2"; break;
-        case 3: layertext = "3"; break;
-        case 4: layertext = "4"; break;
-        case 5: layertext = "5"; break;
-        }
         std::string textureloc = "TestReflectionBakeLayer";
-        textureloc.append(layertext);
+        textureloc.append(std::to_string(TextureLayer));
         textureloc.append(".bmp");
         stbi_write_bmp(textureloc.c_str(), BakeTextureList[TextureLayer]->GetWidth(), BakeTextureList[TextureLayer]->GetHeight(), STBI_rgb_alpha, data);
+
+        BakeTextureList[TextureLayer]->Destroy();
     }
 }
 

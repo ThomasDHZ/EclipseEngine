@@ -16,12 +16,18 @@ void IrradianceRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedC
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            IrradianceCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            IrradianceCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         RenderPass::Destroy();
     }
 
@@ -41,12 +47,18 @@ void IrradianceRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeM
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            IrradianceCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        IrradianceCubeMap.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            IrradianceCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+        }
         RenderPass::Destroy();
     }
 
@@ -186,10 +198,10 @@ VkCommandBuffer IrradianceRenderPass::Draw()
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
     }
-    for (int x= 0; x < IrradianceCubeMap.size(); x++)
+    for (int x= 0; x < IrradianceCubeMapList.size(); x++)
     {
         irradiance.CubeMapId = x;
-        IrradianceCubeMap[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+        IrradianceCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
 
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
@@ -198,10 +210,10 @@ VkCommandBuffer IrradianceRenderPass::Draw()
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        Texture::CopyCubeMap(commandBuffer, DrawToCubeMap, IrradianceCubeMap[x]);
+        Texture::CopyCubeMap(commandBuffer, DrawToCubeMap, IrradianceCubeMapList[x]);
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-        IrradianceCubeMap[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+        IrradianceCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
     }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");

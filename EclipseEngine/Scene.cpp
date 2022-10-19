@@ -195,26 +195,31 @@ GameObjectManager::AddGameObject(b);
         auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
         obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
         GameObjectManager::AddGameObject(obj);
 
         auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+        obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj2->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 26;
         GameObjectManager::AddGameObject(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("WallSphere", loader1));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(WallMaterial);
+        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Plastic", loader1));
+        obj3->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
         obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj3->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 27;
         GameObjectManager::AddGameObject(obj3);
 
         auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
         obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
         obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj4->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 28;
         GameObjectManager::AddGameObject(obj4);
 
         auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
         obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
         obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
         GameObjectManager::AddGameObject(obj5);
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
@@ -349,7 +354,7 @@ void Scene::Update()
         }
         case SceneType::kPBR:
         {
-            //pbrRenderer.Update();
+            pbrRenderer.Update();
             break;
         }
     }
@@ -370,14 +375,14 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
- /*       if(ImGui::Button("Update Renderer"))   
-        { 
-            pbrRenderer.UpdateRenderer = true;
-        }
-        if (ImGui::Button("Bake"))
-        {
-            pbrRenderer.BakeTextures("TestBake.bmp");
-        }*/
+        //if(ImGui::Button("Update Renderer"))   
+        //{ 
+        //    pbrRenderer.UpdateRenderer = true;
+        //}
+        //if (ImGui::Button("Bake"))
+        //{
+        //    pbrRenderer.BakeTextures("TestBake.bmp");
+        //}
        /* if(BakeTexture != nullptr)
         {
             ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));

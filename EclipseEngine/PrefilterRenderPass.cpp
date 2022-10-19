@@ -18,13 +18,18 @@ void PrefilterRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedCu
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        }
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        for(int x = 0; x < cubeMapList.size(); x++)
-        PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        }
         RenderPass::Destroy();
     }
 
@@ -45,13 +50,18 @@ void PrefilterRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMa
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        for (int x = 0; x < cubeMapList.size(); x++)
+        {
+            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        }
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
         for (int x = 0; x < cubeMapList.size(); x++)
+        {
             PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
+        }
         RenderPass::Destroy();
     }
 

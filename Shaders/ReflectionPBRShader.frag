@@ -14,7 +14,6 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
-//layout(location = 1) out vec4 outBloom;
 
 layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
@@ -223,10 +222,10 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap[0], N).rgb;
+    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], N).rgb;
     vec3 diffuse      = irradiance * albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[0], R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 

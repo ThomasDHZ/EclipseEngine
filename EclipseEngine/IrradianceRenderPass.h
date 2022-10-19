@@ -20,7 +20,7 @@ public:
 	IrradianceRenderPass();
 	~IrradianceRenderPass();
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceCubeMap;
+	std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceCubeMapList;
 
 	void BuildRenderPass(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize);
 	void OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize);

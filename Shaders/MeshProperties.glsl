@@ -28,6 +28,7 @@ struct MaterialProperties
 struct MeshProperties
 {
 	uint MaterialBufferIndex;
+	uint SkyBoxIndex;
 	mat4 MeshTransform;
 	mat4 MeshReflectionMatrix[6];
 	vec2 UVOffset;
