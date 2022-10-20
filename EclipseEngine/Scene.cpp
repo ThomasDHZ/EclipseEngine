@@ -375,14 +375,14 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-        //if(ImGui::Button("Update Renderer"))   
-        //{ 
-        //    pbrRenderer.UpdateRenderer = true;
-        //}
-        //if (ImGui::Button("Bake"))
-        //{
-        //    pbrRenderer.BakeTextures("TestBake.bmp");
-        //}
+        if(ImGui::Button("Update Renderer"))   
+        { 
+            pbrRenderer.UpdateRenderer = true;
+        }
+        if (ImGui::Button("Bake"))
+        {
+            pbrRenderer.BakeTextures("TestBake.bmp");
+        }
        /* if(BakeTexture != nullptr)
         {
             ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));

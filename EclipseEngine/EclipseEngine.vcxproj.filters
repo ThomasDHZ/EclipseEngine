@@ -561,6 +561,9 @@
     <ClCompile Include="PBRPlayRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="TextureBaker.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -1035,6 +1038,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PBRPlayRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureBaker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

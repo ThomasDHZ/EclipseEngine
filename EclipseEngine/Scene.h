@@ -34,8 +34,8 @@ private:
 //	Renderer2D renderer2D;
 //	BlinnPhongRenderer blinnPhongRenderer;
 //	HybridRenderer hybridRenderer;
-	PBRPlayRenderer pbrRenderer;
-	//PBREditorRenderer pbrRenderer;
+//	PBRPlayRenderer pbrRenderer;
+	PBREditorRenderer pbrRenderer;
 //	PBRRealTimeRenderer pbrRenderer;
 //	RayTraceRenderer rayTraceRenderer;
 	std::shared_ptr<GameObject2D> obj5;

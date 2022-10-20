@@ -26,57 +26,46 @@ void PBRPlayRenderer::BuildCubeMaps()
 	for (int x = 0; x < textureAtlasList[0].GetTextureWidthCellCount() * textureAtlasList[0].GetTextureHeightCellCount(); x++)
 	{
 		cubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(textureAtlasList[0].GetTextureCellSize(), VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT)));
-		debugTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(textureAtlasList[0].GetTextureCellSize(), VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT)));
 	}
 
+	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
+	for (auto& reflectionCubeMap : cubeMapTextureList)
 	{
-		VkCommandBuffer updateImageCommandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-		for (auto& reflectionCubeMap : cubeMapTextureList)
-		{
-			reflectionCubeMap->UpdateCubeMapLayout(updateImageCommandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-			reflectionCubeMap->UpdateCubeMapLayout(updateImageCommandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-		}
-		for (auto& texture : debugTextureList)
-		{
-			texture->UpdateImageLayout(updateImageCommandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
-			texture->UpdateImageLayout(updateImageCommandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-		}
-		VulkanRenderer::EndSingleTimeCommands(updateImageCommandBuffer);
+		reflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+		reflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	}
+	for (int layer = 0; layer < 6; layer++)
 	{
-		VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
-		for (int layer = 0; layer < 6; layer++)
+		textureAtlasList[layer].UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	}
+	for (int y = 0; y < textureAtlasList[0].GetTextureHeightCellCount(); y++)
+	{
+		for (int x = 0; x < textureAtlasList[0].GetTextureWidthCellCount(); x++)
 		{
-			textureAtlasList[layer].UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-		}
-		for (int y = 0; y < textureAtlasList[0].GetTextureHeightCellCount(); y++)
-		{
-			for (int x = 0; x < textureAtlasList[0].GetTextureWidthCellCount(); x++)
+			const uint32_t index = x + (y * textureAtlasList[0].GetTextureWidthCellCount());
+			for (int layer = 0; layer < 6; layer++)
 			{
-				const uint32_t index = x + (y * textureAtlasList[0].GetTextureWidthCellCount());
-				for (int layer = 0; layer < 6; layer++)
-				{
-					VkImageCopy copyImage{};
+				VkImageCopy copyImage{};
 
-					copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-					copyImage.srcSubresource.layerCount = 1;
+				copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				copyImage.srcSubresource.layerCount = 1;
 
-					copyImage.srcOffset.x = x * textureAtlasList[0].GetTextureCellSize().x;
-					copyImage.srcOffset.y = y * textureAtlasList[0].GetTextureCellSize().y;
-					copyImage.srcOffset.z = 0;
+				copyImage.srcOffset.x = x * textureAtlasList[0].GetTextureCellSize().x;
+				copyImage.srcOffset.y = y * textureAtlasList[0].GetTextureCellSize().y;
+				copyImage.srcOffset.z = 0;
 
-					copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-					copyImage.dstSubresource.layerCount = 1;
-					copyImage.dstSubresource.baseArrayLayer = layer;
+				copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+				copyImage.dstSubresource.layerCount = 1;
+				copyImage.dstSubresource.baseArrayLayer = layer;
 
-					copyImage.extent.width = cubeMapTextureList[index]->GetWidth();
-					copyImage.extent.height = cubeMapTextureList[index]->GetHeight();
-					copyImage.extent.depth = 1;
+				copyImage.extent.width = cubeMapTextureList[index]->GetWidth();
+				copyImage.extent.height = cubeMapTextureList[index]->GetHeight();
+				copyImage.extent.depth = 1;
 
-					vkCmdCopyImage(commandBuffer, textureAtlasList[layer].Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, cubeMapTextureList[index]->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
-				}
+				vkCmdCopyImage(commandBuffer, textureAtlasList[layer].Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, cubeMapTextureList[index]->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 			}
 		}
+
 		for (int layer = 0; layer < 6; layer++)
 		{
 			textureAtlasList[layer].UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
@@ -91,7 +80,7 @@ void PBRPlayRenderer::BuildCubeMaps()
 	irradianceRenderPass.OneTimeDraw(cubeMapTextureList, SceneManager::GetPreRenderedMapSize());
 	prefilterRenderPass.OneTimeDraw(cubeMapTextureList, SceneManager::GetPreRenderedMapSize());
 
-	for(auto cubeMap : cubeMapTextureList)
+	for (auto cubeMap : cubeMapTextureList)
 	{
 		cubeMap->Destroy();
 	}
@@ -132,6 +121,8 @@ void PBRPlayRenderer::Update()
 
 void PBRPlayRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
+	CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
 	CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }

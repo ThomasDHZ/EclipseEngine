@@ -15,6 +15,7 @@
 #include "CubeMapSamplerPipeline.h"
 #include "PBRInstancedReflectionPipeline.h"
 #include "PBRBakeReflectionPipeline.h"
+#include "TextureBaker.h"
 
 class PBRBakeReflectionRenderPass : public RenderPass
 {

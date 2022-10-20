@@ -40,7 +40,6 @@ public:
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
-	std::vector<std::shared_ptr<RenderedColorTexture>> debugTextureList;
 
 	void BuildRenderer();
 	void Update();
