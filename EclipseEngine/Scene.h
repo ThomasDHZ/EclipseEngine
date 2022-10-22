@@ -34,9 +34,9 @@ private:
 //	Renderer2D renderer2D;
 //	BlinnPhongRenderer blinnPhongRenderer;
 //	HybridRenderer hybridRenderer;
-//	PBRPlayRenderer pbrRenderer;
+	//PBRPlayRenderer pbrRenderer;
 	PBREditorRenderer pbrRenderer;
-//	PBRRealTimeRenderer pbrRenderer;
+	//PBRRealTimeRenderer pbrRenderer;
 //	RayTraceRenderer rayTraceRenderer;
 	std::shared_ptr<GameObject2D> obj5;
 	std::shared_ptr<Texture> BakeTexture;

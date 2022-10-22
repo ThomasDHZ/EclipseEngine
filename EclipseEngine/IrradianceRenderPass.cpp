@@ -225,6 +225,10 @@ VkCommandBuffer IrradianceRenderPass::Draw()
 
 void IrradianceRenderPass::Destroy()
 {
+    for (auto IrradianceCubeMap : IrradianceCubeMapList)
+    {
+        IrradianceCubeMap->Destroy();
+    }
     DrawToCubeMap->Destroy();
     irradiancePipeline.Destroy();
     RenderPass::Destroy();

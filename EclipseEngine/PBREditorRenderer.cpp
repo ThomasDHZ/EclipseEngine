@@ -45,42 +45,44 @@ void PBREditorRenderer::BuildRenderer()
 		submitList.IrradianceTextureList = geoIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = geoPrefilterRenderPass.PrefilterCubeMapList;
 
-		geoPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+		ReflectionPreRenderPass.PreRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
 	}
 	//Main Render Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { geoPBRRenderPass.RenderedTexture };
-		irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
 
 		pbrRenderPass.BuildRenderPass(submitList);
-		pbrBloomRenderPass.BuildRenderPass(submitList);
-		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
+		//pbrBloomRenderPass.BuildRenderPass(submitList);
+		//blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+		//bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
 	}
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
-	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
+	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
 }
 
 void PBREditorRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
-		!VulkanRenderer::ImGUILayerActive &&
-		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+	if (VulkanRenderer::EditorModeFlag)
 	{
-		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-		const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+		if (VulkanRenderer::EditorModeFlag &&
+			!VulkanRenderer::ImGUILayerActive &&
+			Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
+			const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
 
-		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
-	}
+			MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
+		}
 
-	if (MeshRendererManager::GetSelectedMesh())
-	{
-		MeshRendererManager::GetSelectedMesh()->SetSelectedMesh(true);
+		if (MeshRendererManager::GetSelectedMesh())
+		{
+			MeshRendererManager::GetSelectedMesh()->SetSelectedMesh(true);
+		}
 	}
 }
 
@@ -117,19 +119,15 @@ void PBREditorRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitLi
 
 		//Geometry Pass
 		{
-			auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 			CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw(reflectingMesh));
+			CommandBufferSubmitList.emplace_back(ReflectionPreRenderPass.Draw());
 		}
 		//Main Render Pass
 		{
 			CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 			CommandBufferSubmitList.emplace_back(pbrRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(pbrBloomRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(blurRenderPass.Draw());
-			CommandBufferSubmitList.emplace_back(bloomCombinePipeline.Draw());
 		}
 
 		UpdateRenderer = false;
@@ -160,16 +158,16 @@ void PBREditorRenderer::Destroy()
 	{
 		geoIrradianceRenderPass.Destroy();
 		geoPrefilterRenderPass.Destroy();
-		geoPBRRenderPass.Destroy();
+		ReflectionPreRenderPass.Destroy();
 	}
 	//Main Render Pass
 	{
 		irradianceRenderPass.Destroy();
 		prefilterRenderPass.Destroy();
 		pbrRenderPass.Destroy();
-		pbrBloomRenderPass.Destroy();
-		blurRenderPass.Destroy();
-		bloomCombinePipeline.Destroy();
+		//pbrBloomRenderPass.Destroy();
+		//blurRenderPass.Destroy();
+		//bloomCombinePipeline.Destroy();
 	}
 	 
 	//depthDebugRenderPass.Destroy();
@@ -186,7 +184,7 @@ void PBREditorRenderer::BakeTextures(const char* FileName)
 	IrradianceRenderPass bakegeoIrradianceRenderPass;
 	PrefilterRenderPass bakegeoPrefilterRenderPass;
 	PBRReflectionRenderPass bakegeoPBRRenderPass;
-	PBRBakeReflectionRenderPass BakeReflectionRenderPass;
+	PBRReflectionPreRenderPass BakeReflectionRenderPass;
 
 	//Depth Pass
 	{

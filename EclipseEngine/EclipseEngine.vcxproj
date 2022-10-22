@@ -220,7 +220,7 @@
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
-    <ClCompile Include="PBRBakeReflectionRenderPass.cpp" />
+    <ClCompile Include="PBRReflectionPreRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
@@ -370,7 +370,7 @@
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PBRBakeReflectionPipeline.h" />
-    <ClInclude Include="PBRBakeReflectionRenderPass.h" />
+    <ClInclude Include="PBRReflectionPreRenderPass.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
     <ClInclude Include="PBRBloomReflectionPipeline.h" />
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />

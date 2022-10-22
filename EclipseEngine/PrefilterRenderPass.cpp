@@ -238,8 +238,11 @@ VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
 
 void PrefilterRenderPass::Destroy()
 {
+    for (auto prefilterMap : PrefilterCubeMapList)
+    {
+        prefilterMap->Destroy();
+    }
     DrawToCubeMap->Destroy();
-    PrefilterCubeMapList[0]->Destroy();
     prefilterPipeline.Destroy();
     RenderPass::Destroy();
 }

@@ -17,7 +17,7 @@
 #include "PBRBakeReflectionPipeline.h"
 #include "TextureBaker.h"
 
-class PBRBakeReflectionRenderPass : public RenderPass
+class PBRReflectionPreRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -35,13 +35,14 @@ private:
 	void ClearTextureList();
 
 public:
-	PBRBakeReflectionRenderPass();
-	~PBRBakeReflectionRenderPass();
+	PBRReflectionPreRenderPass();
+	~PBRReflectionPreRenderPass();
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> ReflectionCubeMapList;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
+	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
 	void BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize);
 	VkCommandBuffer Draw();
 	void Destroy();

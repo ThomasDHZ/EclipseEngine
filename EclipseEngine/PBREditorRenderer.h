@@ -15,7 +15,7 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
-#include "PBRBakeReflectionRenderPass.h"
+#include "PBRReflectionPreRenderPass.h"
 
 class PBREditorRenderer
 {
@@ -33,14 +33,14 @@ private:
 
 	IrradianceRenderPass geoIrradianceRenderPass;
 	PrefilterRenderPass geoPrefilterRenderPass;
-	PBRReflectionRenderPass geoPBRRenderPass;
+	PBRReflectionPreRenderPass ReflectionPreRenderPass;
 
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
-	PBRBloomRenderPass pbrBloomRenderPass;
-	GaussianBlurRenderPass blurRenderPass;
-	BloomCombineRenderPass bloomCombinePipeline;
+	//PBRBloomRenderPass pbrBloomRenderPass;
+	//GaussianBlurRenderPass blurRenderPass;
+	//BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 

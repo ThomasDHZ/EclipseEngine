@@ -1,16 +1,16 @@
-#include "PBRBakeReflectionRenderPass.h"
+#include "PBRReflectionPreRenderPass.h"
 #include "LightManager.h"
 
 
-PBRBakeReflectionRenderPass::PBRBakeReflectionRenderPass() : RenderPass()
+PBRReflectionPreRenderPass::PBRReflectionPreRenderPass() : RenderPass()
 {
 }
 
-PBRBakeReflectionRenderPass::~PBRBakeReflectionRenderPass()
+PBRReflectionPreRenderPass::~PBRReflectionPreRenderPass()
 {
 }
 
-void PBRBakeReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRReflectionPreRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -46,7 +46,45 @@ void PBRBakeReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList
     SetUpCommandBuffers();
 }
 
-void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize)
+void PBRReflectionPreRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = glm::vec2(cubeMapSize);
+
+    if (renderPass == nullptr)
+    {
+        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+        for (const auto& mesh : MeshRendererManager::GetMeshList())
+        {
+            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (const auto& mesh : MeshRendererManager::GetMeshList())
+        {
+            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+        }
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderedTexture->View);
+    AttachmentList.emplace_back(DepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(textures);
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
+void PBRReflectionPreRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
@@ -86,7 +124,7 @@ void PBRBakeReflectionRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitL
 }
 
 
-void PBRBakeReflectionRenderPass::RenderPassDesc()
+void PBRReflectionPreRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
@@ -162,7 +200,7 @@ void PBRBakeReflectionRenderPass::RenderPassDesc()
 
 }
 
-void PBRBakeReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
+void PBRReflectionPreRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -186,7 +224,7 @@ void PBRBakeReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureS
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
-void PBRBakeReflectionRenderPass::ClearTextureList()
+void PBRReflectionPreRenderPass::ClearTextureList()
 {
     for (auto& reflectionTexture : ReflectionCubeMapList)
     {
@@ -195,7 +233,7 @@ void PBRBakeReflectionRenderPass::ClearTextureList()
     ReflectionCubeMapList.clear();
 }
 
-VkCommandBuffer PBRBakeReflectionRenderPass::Draw()
+VkCommandBuffer PBRReflectionPreRenderPass::Draw()
 {
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -269,8 +307,13 @@ VkCommandBuffer PBRBakeReflectionRenderPass::Draw()
     return commandBuffer;
 }
 
-void PBRBakeReflectionRenderPass::Destroy()
+void PBRReflectionPreRenderPass::Destroy()
 {
+    for (auto reflectionMap : ReflectionCubeMapList)
+    {
+        reflectionMap->Destroy();
+    }
+
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
 

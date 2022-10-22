@@ -552,7 +552,7 @@
     <ClCompile Include="BakedTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="PBRBakeReflectionRenderPass.cpp">
+    <ClCompile Include="PBRReflectionPreRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="PBRBakeReflectionPipeline.cpp">
@@ -1028,7 +1028,7 @@
     <ClInclude Include="BakedTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="PBRBakeReflectionRenderPass.h">
+    <ClInclude Include="PBRReflectionPreRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleLogger.h">

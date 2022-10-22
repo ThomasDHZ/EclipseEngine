@@ -15,17 +15,28 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
-#include "PBRBakeReflectionRenderPass.h"
+#include "PBRReflectionPreRenderPass.h"
 
 class PBRPlayRenderer
 {
 private:
+
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	DepthRenderPass DepthPassRenderPass;
 	DepthCubeMapRenderer DepthCubeMapRenderPass;
 
+	IrradianceRenderPass skyIrradianceRenderPass;
+	PrefilterRenderPass skyPrefilterRenderPass;
+	PBRReflectionRenderPass skyPBRRenderPass;
+
+	IrradianceRenderPass geoIrradianceRenderPass;
+	PrefilterRenderPass geoPrefilterRenderPass;
+	PBRReflectionPreRenderPass ReflectionPreRenderPass;
+
+	IrradianceRenderPass irradianceRenderPass;
+	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
 	PBRBloomRenderPass pbrBloomRenderPass;
 	GaussianBlurRenderPass blurRenderPass;
@@ -38,8 +49,7 @@ public:
 	PBRPlayRenderer();
 	~PBRPlayRenderer();
 
-	IrradianceRenderPass irradianceRenderPass;
-	PrefilterRenderPass prefilterRenderPass;
+	bool UpdateRenderer = true;
 
 	void BuildRenderer();
 	void Update();

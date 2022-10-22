@@ -16,50 +16,49 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512));
-		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512));
-		//spotLightDepthPassRenderPassList.BuildRenderPass(glm::vec2(512.0f, 512.0f));
+		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
+		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
 	}
 
 	PBRRenderPassTextureSubmitList submitList;
 	submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
 	submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
-	//submitList.SpotLightTextureShadowMaps = spotDepthTextureList;
 
-	//std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubeMapList;
-	////SkyBox Pass
-	//{
-	//	skyIrradianceRenderPass.BuildRenderPass(cubeMapList, SceneManager::GetPreRenderedMapSize());
-	//	skyPrefilterRenderPass.BuildRenderPass(SceneManager::CubeMap, SceneManager::GetPreRenderedMapSize());
+	//SkyBox Pass
+	{
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
+		skyIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		skyPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 
-	//	submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMap;
-	//	submitList.PrefilterTexture = skyPrefilterRenderPass.PrefilterCubeMap;
+		submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMapList;
+		submitList.PrefilterTextureList = skyPrefilterRenderPass.PrefilterCubeMapList;
 
-	//	skyPBRRenderPass.BuildRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
-	//}
-	////Geometry Pass
-	//{
-	//	geoIrradianceRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
-	//	geoPrefilterRenderPass.BuildRenderPass(skyPBRRenderPass.RenderedTexture, SceneManager::GetPreRenderedMapSize());
+		skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+	}
+	//Geometry Pass
+	{
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
+		geoIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		geoPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 
-	//	submitList.IrradianceTextureList = geoIrradianceRenderPass.IrradianceCubeMap;
-	//	submitList.PrefilterTexture = geoPrefilterRenderPass.PrefilterCubeMap;
+		submitList.IrradianceTextureList = geoIrradianceRenderPass.IrradianceCubeMapList;
+		submitList.PrefilterTextureList = geoPrefilterRenderPass.PrefilterCubeMapList;
 
-	//	geoPBRRenderPass.BuildRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
-	//}
-	////Main Render Pass
-	//{
-	//	irradianceRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapList[0], SceneManager::GetPreRenderedMapSize());
-	//	prefilterRenderPass.BuildRenderPass(geoPBRRenderPass.ReflectionCubeMapList[0], SceneManager::GetPreRenderedMapSize());
+		ReflectionPreRenderPass.PreRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
+	}
+	//Main Render Pass
+	{
+		irradianceRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
 
-	//	submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMap;
-	//	submitList.PrefilterTexture = prefilterRenderPass.PrefilterCubeMap;
+		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
+		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
 
-	//	pbrRenderPass.BuildRenderPass(submitList);
-	//	pbrBloomRenderPass.BuildRenderPass(submitList);
-	//	blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-	//	bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
-	//}
+		pbrRenderPass.BuildRenderPass(submitList);
+		pbrBloomRenderPass.BuildRenderPass(submitList);
+		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
+	}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
@@ -109,7 +108,7 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 		//auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 		CommandBufferSubmitList.emplace_back(geoIrradianceRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(geoPrefilterRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(geoPBRRenderPass.Draw());
+		CommandBufferSubmitList.emplace_back(ReflectionPreRenderPass.Draw());
 	}
 	//Main Render Pass
 	{
@@ -147,7 +146,7 @@ void PBRRealTimeRenderer::Destroy()
 	{
 		geoIrradianceRenderPass.Destroy();
 		geoPrefilterRenderPass.Destroy();
-		geoPBRRenderPass.Destroy();
+		ReflectionPreRenderPass.Destroy();
 	}
 	//Main Render Pass
 	{
