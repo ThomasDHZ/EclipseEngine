@@ -12,3 +12,4 @@ SceneProperties							SceneManager::sceneProperites;
 std::shared_ptr<Camera>					SceneManager::activeCamera;
 MusicPlayer								SceneManager::musicPlayer;
 GaussianBlurSettings					SceneManager::bloomsettings;
+bool									SceneManager::EditorModeFlag = true;

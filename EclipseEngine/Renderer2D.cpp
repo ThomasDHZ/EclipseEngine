@@ -17,7 +17,7 @@ void Renderer2D::BuildRenderer()
 
 void Renderer2D::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
+	if (SceneManager::EditorModeFlag &&
 		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{

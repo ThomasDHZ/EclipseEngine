@@ -66,7 +66,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 void PBRRealTimeRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
+	if (SceneManager::EditorModeFlag &&
 		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -84,7 +84,7 @@ void PBRRealTimeRenderer::Update()
 
 void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
+	if (SceneManager::EditorModeFlag)
 	{
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}

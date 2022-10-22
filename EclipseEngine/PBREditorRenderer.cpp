@@ -67,9 +67,9 @@ void PBREditorRenderer::BuildRenderer()
 
 void PBREditorRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag)
+	if (SceneManager::EditorModeFlag)
 	{
-		if (VulkanRenderer::EditorModeFlag &&
+		if (SceneManager::EditorModeFlag &&
 			!VulkanRenderer::ImGUILayerActive &&
 			Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 		{
@@ -88,7 +88,7 @@ void PBREditorRenderer::Update()
 
 void PBREditorRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
+	if (SceneManager::EditorModeFlag)
 	{
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}

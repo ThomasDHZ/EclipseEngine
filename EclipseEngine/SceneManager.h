@@ -43,6 +43,7 @@ public:
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
+	static bool EditorModeFlag;
 
 	static MusicPlayer musicPlayer;
 

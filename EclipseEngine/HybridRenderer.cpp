@@ -27,7 +27,7 @@ void HybridRenderer::BuildRenderer()
 
 void HybridRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
+	if (SceneManager::EditorModeFlag &&
 		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -40,7 +40,7 @@ void HybridRenderer::Update()
 
 void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
+	if (SceneManager::EditorModeFlag)
 	{
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}

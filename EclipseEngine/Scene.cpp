@@ -299,7 +299,6 @@ GameObjectManager::AddGameObject(b);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
-    VulkanRenderer::EditorModeFlag = false;
     MeshRendererManager::Update();
     TopLevelAccelerationStructureManager::Update();
     BuildRenderers();
@@ -376,14 +375,28 @@ void Scene::ImGuiUpdate()
     //}
     if (SceneManager::sceneType == SceneType::kPBR)
     {
-  /*      if(ImGui::Button("Update Renderer"))   
-        { 
-            pbrRenderer.UpdateRenderer = true;
-        }
-        if (ImGui::Button("Bake"))
+        if (SceneManager::EditorModeFlag)
         {
-            pbrRenderer.BakeTextures("TestBake.bmp");
-        }*/
+            if (ImGui::Button("Play Mode"))
+            {
+                SceneManager::EditorModeFlag = false;
+            }
+            if (ImGui::Button("Update Renderer"))
+            {
+                pbrRenderer.UpdateRenderer = true;
+            }
+            if (ImGui::Button("Bake"))
+            {
+                pbrRenderer.BakeTextures("TestBake.bmp");
+            }
+        }
+        else
+        {
+            if (ImGui::Button("Editor Mode"))
+            {
+                SceneManager::EditorModeFlag = true;
+            }
+        }
        /* if(BakeTexture != nullptr)
         {
             ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));

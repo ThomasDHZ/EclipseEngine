@@ -19,7 +19,7 @@ void BlinnPhongRenderer::BuildRenderer()
 
 void BlinnPhongRenderer::Update()
 {
-	if (VulkanRenderer::EditorModeFlag &&
+	if (SceneManager::EditorModeFlag &&
 		!VulkanRenderer::ImGUILayerActive &&
 		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
 	{
@@ -32,7 +32,7 @@ void BlinnPhongRenderer::Update()
 
 void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	if (VulkanRenderer::EditorModeFlag)
+	if (SceneManager::EditorModeFlag)
 	{
 		CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
 	}

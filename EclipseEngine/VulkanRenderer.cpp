@@ -61,7 +61,6 @@ bool VulkanRenderer::WireframeModeFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
 bool VulkanRenderer::UpdateBLAS = true;
 bool VulkanRenderer::UpdateTLAS = true;
-bool VulkanRenderer::EditorModeFlag = true;
 
 PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
 PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;
