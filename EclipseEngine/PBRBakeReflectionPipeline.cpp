@@ -247,6 +247,9 @@ void PBRBakeReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared
 
 void PBRBakeReflectionPipeline::Destroy()
 {
-    cubeMapSamplerList[0].Destroy();
+    for (auto& cubeMapSampler : cubeMapSamplerList)
+    {
+        cubeMapSampler.Destroy();
+    }
     GraphicsPipeline::Destroy();
 }

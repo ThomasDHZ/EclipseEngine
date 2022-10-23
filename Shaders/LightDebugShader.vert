@@ -13,10 +13,6 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 layout (location = 5) in vec3 aColor;
 
-layout(location = 0) out vec2 FragPos;
-layout(location = 1) out vec2 UV;
-layout(location = 2) out vec3 Color;
-
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData

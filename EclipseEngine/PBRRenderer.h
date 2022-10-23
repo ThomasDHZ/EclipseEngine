@@ -17,10 +17,10 @@
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
 
-class PBRPlayRenderer
+class PBRRenderer
 {
 private:
-
+	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
@@ -38,21 +38,24 @@ private:
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
-	PBRBloomRenderPass pbrBloomRenderPass;
-	GaussianBlurRenderPass blurRenderPass;
-	BloomCombineRenderPass bloomCombinePipeline;
+	//PBRBloomRenderPass pbrBloomRenderPass;
+	//GaussianBlurRenderPass blurRenderPass;
+	//BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
-	void BuildCubeMaps();
 public:
-	PBRPlayRenderer();
-	~PBRPlayRenderer();
+	PBRRenderer();
+	~PBRRenderer();
 
-	bool UpdateRenderer = true;
+	void BakeTextures(const char* FileName);
 
 	void BuildRenderer();
 	void Update();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
+
+	bool UpdateRenderer = true;
+
+	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

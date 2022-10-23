@@ -270,7 +270,7 @@
     <ClCompile Include="EnvironmentTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="PBREditorRenderer.cpp">
+    <ClCompile Include="PBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="PBRRenderPass.cpp">
@@ -558,9 +558,6 @@
     <ClCompile Include="PBRBakeReflectionPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PBRPlayRenderer.cpp">
-      <Filter>Source Files\Renderer\Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="TextureBaker.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
@@ -734,7 +731,7 @@
     <ClInclude Include="CubeMapTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="PBREditorRenderer.h">
+    <ClInclude Include="PBRRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="PBRRenderPass.h">
@@ -1035,9 +1032,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PBRBakeReflectionPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PBRPlayRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureBaker.h">

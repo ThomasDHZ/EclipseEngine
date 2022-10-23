@@ -1,14 +1,14 @@
-#include "PBREditorRenderer.h"
+#include "PBRRenderer.h"
 
-PBREditorRenderer::PBREditorRenderer()
+PBRRenderer::PBRRenderer()
 {
 }
 
-PBREditorRenderer::~PBREditorRenderer()
+PBRRenderer::~PBRRenderer()
 {
 }
 
-void PBREditorRenderer::BuildRenderer()
+void PBRRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
@@ -65,7 +65,7 @@ void PBREditorRenderer::BuildRenderer()
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture);
 }
 
-void PBREditorRenderer::Update()
+void PBRRenderer::Update()
 {
 	if (SceneManager::EditorModeFlag)
 	{
@@ -86,7 +86,7 @@ void PBREditorRenderer::Update()
 	}
 }
 
-void PBREditorRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (SceneManager::EditorModeFlag)
 	{
@@ -137,7 +137,7 @@ void PBREditorRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitLi
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
-void PBREditorRenderer::Destroy()
+void PBRRenderer::Destroy()
 {
 	meshPickerRenderPass.Destroy();
 	environmentToCubeRenderPass.Destroy();
@@ -174,7 +174,7 @@ void PBREditorRenderer::Destroy()
 	frameBufferRenderPass.Destroy();
 }
 
-void PBREditorRenderer::BakeTextures(const char* FileName)
+void PBRRenderer::BakeTextures(const char* FileName)
 {
 	DepthRenderPass bakeDepthPassRenderPass;
 	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
@@ -198,7 +198,7 @@ void PBREditorRenderer::BakeTextures(const char* FileName)
 
 	//SkyBox Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
 		bakeskyIrradianceRenderPass.OneTimeDraw(cubemap, 256.0f);
 		bakeskyPrefilterRenderPass.OneTimeDraw(cubemap, 256.0f);
 
