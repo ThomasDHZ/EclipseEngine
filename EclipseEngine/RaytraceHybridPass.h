@@ -11,7 +11,7 @@ class RaytraceHybridPass : public RenderPass
 {
 private:
     void SetUpCommandBuffers();
-    void BuildRenderPassPipelines();
+    void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture);
 
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
@@ -20,8 +20,8 @@ public:
 
     RaytraceHybridPass();
     ~RaytraceHybridPass();
-
-    void BuildRenderPass();
+    static std::string BaseShaderFilePath;
+    void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture);
     VkCommandBuffer Draw();
     void Destroy();
 };

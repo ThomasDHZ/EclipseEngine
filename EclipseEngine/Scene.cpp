@@ -129,12 +129,12 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-//    ModelLoader loader{};
-//    loader.FilePath = "../Models/TestAnimModel/model.dae";
-//    loader.MeshType = MeshTypeEnum::kPolygon;
-//
-//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-//GameObjectManager::AddGameObject(a);
+    ModelLoader loader{};
+    loader.FilePath = "../Models/TestAnimModel/model.dae";
+    loader.MeshType = MeshTypeEnum::kPolygon;
+
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+GameObjectManager::AddGameObject(a);
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
@@ -335,20 +335,20 @@ void Scene::Update()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                   // rayTraceRenderer.Update();
+                    rayTraceRenderer.Update();
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
-                //    hybridRenderer.Update();
+                    hybridRenderer.Update();
                 }
                 else
                 {
-                //    blinnPhongRenderer.Update();
+                    blinnPhongRenderer.Update();
                 }
             }
             else
             {
-              //  blinnPhongRenderer.Update();
+                blinnPhongRenderer.Update();
             }
             break;
         }
@@ -470,11 +470,11 @@ void Scene::BuildRenderers()
         }
         case SceneType::kBlinnPhong:
         {
-            //blinnPhongRenderer.BuildRenderer();
+            blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                //rayTraceRenderer.BuildRenderer();
-                //hybridRenderer.BuildRenderer();
+                rayTraceRenderer.BuildRenderer();
+                hybridRenderer.BuildRenderer();
             }
             break;
         }
@@ -512,7 +512,7 @@ void Scene::Draw()
             {
                 if (GraphicsDevice::IsRayTracerActive())
                 {
-                    //rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (GraphicsDevice::IsHybridRendererActive())
                 {
@@ -520,12 +520,12 @@ void Scene::Draw()
                 }
                 else
                 {
-                  //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-               // blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
@@ -560,11 +560,11 @@ void Scene::Destroy()
         }
         case SceneType::kBlinnPhong:
         {
-           // blinnPhongRenderer.Destroy();
+            blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-              //  hybridRenderer.Destroy();
-               // rayTraceRenderer.Destroy();
+                //  hybridRenderer.Destroy();
+                rayTraceRenderer.Destroy();
             }
             break;
         }

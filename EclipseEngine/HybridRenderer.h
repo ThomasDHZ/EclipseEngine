@@ -5,11 +5,13 @@
 #include "GBufferRenderPass.h"
 #include "RaytraceHybridPass.h"
 #include "DeferredRenderPass.h"
+#include "EnvironmentToCubeRenderPass.h"
 
 class HybridRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	RaytraceHybridPass raytraceHybridPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
@@ -19,7 +21,7 @@ public:
 
 	GBufferRenderPass GBufferRenderPass;
 	DeferredRenderPass deferredRenderPass;
-
+	static std::string BaseShaderFilePath;
 	void BuildRenderer();
 	void Update();
 	void Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList);

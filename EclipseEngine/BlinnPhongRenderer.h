@@ -6,11 +6,13 @@
 #include "RaytraceHybridPass.h"
 #include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
+#include "EnvironmentToCubeRenderPass.h"
 
 class BlinnPhongRenderer
 {
 private:
 	MeshPickerRenderPass3D meshPickerRenderPass;
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	//DepthRenderPass depthRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;

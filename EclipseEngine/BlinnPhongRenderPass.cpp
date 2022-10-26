@@ -9,7 +9,7 @@ BlinnPhongRenderPass::~BlinnPhongRenderPass()
 {
 }
 
-void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture, std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -35,7 +35,7 @@ void BlinnPhongRenderPass::BuildRenderPass(std::shared_ptr<RenderedDepthTexture>
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(depthTexture);
+    BuildRenderPassPipelines(cubeMapTexture, depthTexture);
     SetUpCommandBuffers();
 }
 
@@ -98,7 +98,7 @@ void BlinnPhongRenderPass::RenderPassDesc()
     }
 }
 
-void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture)
+void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture, std::shared_ptr<RenderedDepthTexture> depthTexture)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -119,7 +119,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     pipelineInfo.SampleCount = SampleCount;
 
     blinnphongPipeline.InitializePipeline(pipelineInfo, depthTexture);
-    skyboxPipeline.InitializePipeline(pipelineInfo, TextureManager::GetCubeMapTextureList()[0]);
+    skyboxPipeline.InitializePipeline(pipelineInfo, cubeMapTexture);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
     billBoardPipeline.InitializePipeline(pipelineInfo);

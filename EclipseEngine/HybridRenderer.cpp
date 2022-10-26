@@ -1,5 +1,7 @@
 #include "HybridRenderer.h"
 
+std::string HybridRenderer::BaseShaderFilePath = "../Shaders/";
+
 HybridRenderer::HybridRenderer()
 {
 }
@@ -10,8 +12,9 @@ HybridRenderer::~HybridRenderer()
 
 void HybridRenderer::BuildRenderer()
 {
-	raytraceHybridPass.BuildRenderPass();
 	meshPickerRenderPass.BuildRenderPass();
+	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
+	raytraceHybridPass.BuildRenderPass(SceneManager::CubeMap);
 	GBufferRenderPass.BuildRenderPass(raytraceHybridPass.RenderedShadowTexture);
 	deferredRenderPass.BuildRenderPass(GBufferRenderPass.PositionTexture,
 								GBufferRenderPass.TangentTexture,
@@ -54,6 +57,7 @@ void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkComman
 void HybridRenderer::Destroy()
 {
 	raytraceHybridPass.Destroy();
+	environmentToCubeRenderPass.Destroy();
 	meshPickerRenderPass.Destroy();
 	GBufferRenderPass.Destroy();
 	deferredRenderPass.Destroy();

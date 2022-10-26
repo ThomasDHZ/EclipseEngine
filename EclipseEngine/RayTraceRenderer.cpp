@@ -1,5 +1,7 @@
 #include "RayTraceRenderer.h"
 
+std::string RayTraceRenderer::BaseShaderFilePath = "../Shaders/";
+
 RayTraceRenderer::RayTraceRenderer() : RenderPass()
 {
 }
@@ -11,7 +13,8 @@ RayTraceRenderer::~RayTraceRenderer()
 void RayTraceRenderer::BuildRenderer()
 {
     meshPickerRenderPass.BuildRenderPass();
-    rayTraceRenderPass.BuildRenderPass();
+    environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
+    rayTraceRenderPass.BuildRenderPass(SceneManager::CubeMap);
     FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture);
 }
 
@@ -41,6 +44,7 @@ void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkComm
 void RayTraceRenderer::Destroy()
 {
     meshPickerRenderPass.Destroy();
+    environmentToCubeRenderPass.Destroy();
     rayTraceRenderPass.Destroy();
     FrameBufferRenderer.Destroy();
 }
