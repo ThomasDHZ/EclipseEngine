@@ -63,7 +63,7 @@ void CubeMapTexture::LoadTexture(CubeMapLayout CubeMapFiles, VkFormat textureFor
 	const VkDeviceSize imageSize = Width * Height * 4 * 6;
 	const VkDeviceSize layerSize = imageSize / 6;
 
-	VulkanBuffer StagingBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	VulkanBuffer StagingBuffer(nullptr, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	void* data;
 	vkMapMemory(VulkanRenderer::GetDevice(), *StagingBuffer.GetBufferMemoryPtr(), 0, imageSize, 0, &data);

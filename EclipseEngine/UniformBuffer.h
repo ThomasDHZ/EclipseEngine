@@ -123,7 +123,6 @@ struct MeshProperties
 	alignas(4) uint32_t MaterialBufferIndex;
 	alignas(4) uint32_t SkyBoxIndex = 0;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
-	alignas(16) glm::mat4 MeshReflectionMatrix[6];
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);
 	alignas(8) glm::vec2 UVFlip = glm::vec2(0.0f);
@@ -132,13 +131,6 @@ struct MeshProperties
 	alignas(4) float minLayers = 8;
 	alignas(4) float maxLayers = 32;
 
-	MeshProperties()
-	{
-		for (int x = 0; x <= 5; x++)
-		{
-			MeshReflectionMatrix[x] = glm::mat4(1.0f);
-		}
-	}
 	void from_json(nlohmann::json& json)
 	{
 		JsonConverter::from_json(json["MeshTransform"], MeshTransform);
