@@ -40,8 +40,6 @@ private:
 	}
 
 public:
-	static bool RayTracingActive;
-	static bool HybridRendererActive;
 
 	static std::vector<const char*> GetRequiredExtensions() {
 		uint32_t glfwExtensionCount = 0;
@@ -229,8 +227,6 @@ public:
 	static int GetGraphicsFamily() { return GraphicsFamily; }
 	static int GetPresentFamily() { return PresentFamily; }
 	static bool IsRayTracingFeatureActive() { return RayTracingFeature; }
-	static bool IsRayTracerActive() { return RayTracingActive; }
-	static bool IsHybridRendererActive() { return HybridRendererActive; }
 	static VkQueue GetGraphicsQueue() { return GraphicsQueue; }
 	static VkQueue GetPresentQueue() { return PresentQueue; }
 	static VkSampleCountFlagBits GetMaxSampleCount() { return MaxSampleCount; };

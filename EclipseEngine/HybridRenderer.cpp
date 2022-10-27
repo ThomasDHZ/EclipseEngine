@@ -41,6 +41,24 @@ void HybridRenderer::Update()
 	}
 }
 
+void HybridRenderer::ImGuiUpdate()
+{
+	if (SceneManager::EditorModeFlag)
+	{
+		if (ImGui::Button("Play Mode"))
+		{
+			SceneManager::EditorModeFlag = false;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Editor Mode"))
+		{
+			SceneManager::EditorModeFlag = true;
+		}
+	}
+}
+
 void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (SceneManager::EditorModeFlag)

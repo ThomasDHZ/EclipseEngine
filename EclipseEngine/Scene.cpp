@@ -17,7 +17,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kPBR;
+    SceneManager::sceneType = SceneType::kBlinnPhong;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -129,12 +129,12 @@ Scene::Scene()
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    ModelLoader loader{};
-    loader.FilePath = "../Models/TestAnimModel/model.dae";
-    loader.MeshType = MeshTypeEnum::kPolygon;
-
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-GameObjectManager::AddGameObject(a);
+//    ModelLoader loader{};
+//    loader.FilePath = "../Models/TestAnimModel/model.dae";
+//    loader.MeshType = MeshTypeEnum::kPolygon;
+//
+//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+//GameObjectManager::AddGameObject(a);
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
@@ -326,18 +326,18 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-            //renderer2D.Update();
+            renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
         {
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                if (GraphicsDevice::IsRayTracerActive())
+                if (SceneManager::IsRayTracerActive())
                 {
                     rayTraceRenderer.Update();
                 }
-                else if (GraphicsDevice::IsHybridRendererActive())
+                else if (SceneManager::IsHybridRendererActive())
                 {
                     hybridRenderer.Update();
                 }
@@ -373,40 +373,41 @@ void Scene::ImGuiUpdate()
     //{
     //    ImGui::Image(pbrRenderer.GetColorPickerTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //}
-    if (SceneManager::sceneType == SceneType::kPBR)
+    switch (SceneManager::sceneType)
     {
-        if (SceneManager::EditorModeFlag)
+    case SceneType::kSprite2D:
+    {
+        renderer2D.ImGuiUpdate();
+        break;
+    }
+    case SceneType::kBlinnPhong:
+    {
+        if (GraphicsDevice::IsRayTracingFeatureActive())
         {
-            if (ImGui::Button("Play Mode"))
+            if (SceneManager::IsRayTracerActive())
             {
-                SceneManager::EditorModeFlag = false;
+                rayTraceRenderer.ImGuiUpdate();
             }
-            if (ImGui::Button("Update Renderer"))
+            else if (SceneManager::IsHybridRendererActive())
             {
-                pbrRenderer.UpdateRenderer = true;
+                hybridRenderer.ImGuiUpdate();
             }
-            if (ImGui::Button("Bake"))
+            else
             {
-                pbrRenderer.BakeTextures("TestBake.bmp");
+                blinnPhongRenderer.ImGuiUpdate();
             }
         }
         else
         {
-            if (ImGui::Button("Editor Mode"))
-            {
-                SceneManager::EditorModeFlag = true;
-            }
+            blinnPhongRenderer.ImGuiUpdate();
         }
-       /* if(BakeTexture != nullptr)
-        {
-            ImGui::Image(BakeTexture->ImGuiDescriptorSet, ImVec2(512.0f, 512.0f));
-        }*/
-        //ImGui::Image(TextureManager::GetTexture2DByID(59)->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
-        //ImGui::Image(pbrRenderer.depthDebugRenderPass2.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        break;
     }
-    else if (SceneManager::sceneType == SceneType::kBlinnPhong)
+    case SceneType::kPBR:
     {
-        //ImGui::Image(blinnPhongRenderer.depthDebugRenderPass.RenderedTexture->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
+        pbrRenderer.ImGuiUpdate();
+        break;
+    }
     }
     //ImGui::Begin("VRAM Viewer");
     //{
@@ -437,8 +438,8 @@ void Scene::ImGuiUpdate()
     ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
     if (GraphicsDevice::IsRayTracingFeatureActive())
     {
-        ImGui::Checkbox("RayTrace Mode", &GraphicsDevice::RayTracingActive);
-        ImGui::Checkbox("Hybrid Mode", &GraphicsDevice::HybridRendererActive);
+        ImGui::Checkbox("RayTrace Mode", &SceneManager::RayTracingActive);
+        ImGui::Checkbox("Hybrid Mode", &SceneManager::HybridRendererActive);
     }
 
     //if (SceneManager::sceneType == SceneType::kPBR)
@@ -465,7 +466,7 @@ void Scene::BuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-           // renderer2D.BuildRenderer();
+            renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -503,20 +504,20 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-         //  renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
         {
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                if (GraphicsDevice::IsRayTracerActive())
+                if (SceneManager::IsRayTracerActive())
                 {
                     rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
-                else if (GraphicsDevice::IsHybridRendererActive())
+                else if (SceneManager::IsHybridRendererActive())
                 {
-                   // hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
@@ -555,7 +556,7 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-           // renderer2D.Destroy();
+            renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -563,7 +564,7 @@ void Scene::Destroy()
             blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                //  hybridRenderer.Destroy();
+                hybridRenderer.Destroy();
                 rayTraceRenderer.Destroy();
             }
             break;

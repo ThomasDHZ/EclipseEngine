@@ -82,6 +82,24 @@ void PBRRealTimeRenderer::Update()
 	}
 }
 
+void PBRRealTimeRenderer::ImGuiUpdate()
+{
+	if (SceneManager::EditorModeFlag)
+	{
+		if (ImGui::Button("Play Mode"))
+		{
+			SceneManager::EditorModeFlag = false;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Editor Mode"))
+		{
+			SceneManager::EditorModeFlag = true;
+		}
+	}
+}
+
 void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (SceneManager::EditorModeFlag)

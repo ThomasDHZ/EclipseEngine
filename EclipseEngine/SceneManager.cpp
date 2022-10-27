@@ -13,3 +13,5 @@ std::shared_ptr<Camera>					SceneManager::activeCamera;
 MusicPlayer								SceneManager::musicPlayer;
 GaussianBlurSettings					SceneManager::bloomsettings;
 bool									SceneManager::EditorModeFlag = true;
+bool									SceneManager::RayTracingActive = false;
+bool									SceneManager::HybridRendererActive = false;

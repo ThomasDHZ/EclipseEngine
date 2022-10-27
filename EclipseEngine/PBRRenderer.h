@@ -52,6 +52,7 @@ public:
 
 	void BuildRenderer();
 	void Update();
+	void ImGuiUpdate();
 	void Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 

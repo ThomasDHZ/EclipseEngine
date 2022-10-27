@@ -26,6 +26,24 @@ void Renderer2D::Update()
 	}
 }
 
+void Renderer2D::ImGuiUpdate()
+{
+	if (SceneManager::EditorModeFlag)
+	{
+		if (ImGui::Button("Play Mode"))
+		{
+			SceneManager::EditorModeFlag = false;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Editor Mode"))
+		{
+			SceneManager::EditorModeFlag = true;
+		}
+	}
+}
+
 void Renderer2D::Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	//if (VulkanRenderer::EditorModeFlag)

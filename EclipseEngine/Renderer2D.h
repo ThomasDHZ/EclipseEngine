@@ -15,6 +15,7 @@ public:
 
 	void BuildRenderer();
 	void Update();
+	void ImGuiUpdate();
 	void Draw(SceneProperties& sceneProperites, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 };

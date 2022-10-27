@@ -31,6 +31,24 @@ void BlinnPhongRenderer::Update()
 	}
 }
 
+void BlinnPhongRenderer::ImGuiUpdate()
+{
+	if (SceneManager::EditorModeFlag)
+	{
+		if (ImGui::Button("Play Mode"))
+		{
+			SceneManager::EditorModeFlag = false;
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Editor Mode"))
+		{
+			SceneManager::EditorModeFlag = true;
+		}
+	}
+}
+
 void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView& skyboxView, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (SceneManager::EditorModeFlag)

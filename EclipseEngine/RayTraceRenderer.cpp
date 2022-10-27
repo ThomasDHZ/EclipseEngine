@@ -30,8 +30,22 @@ void RayTraceRenderer::Update()
     }
 }
 
-void RayTraceRenderer::GUIUpdate()
+void RayTraceRenderer::ImGuiUpdate()
 {
+    if (SceneManager::EditorModeFlag)
+    {
+        if (ImGui::Button("Play Mode"))
+        {
+            SceneManager::EditorModeFlag = false;
+        }
+    }
+    else
+    {
+        if (ImGui::Button("Editor Mode"))
+        {
+            SceneManager::EditorModeFlag = true;
+        }
+    }
 }
 
 void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)

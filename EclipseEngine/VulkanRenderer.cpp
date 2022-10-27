@@ -12,8 +12,6 @@ int GraphicsDevice::PresentFamily = -1;
 VkQueue GraphicsDevice::GraphicsQueue = VK_NULL_HANDLE;
 VkQueue GraphicsDevice::PresentQueue = VK_NULL_HANDLE;
 bool GraphicsDevice::RayTracingFeature = false;
-bool GraphicsDevice::RayTracingActive = false;
-bool GraphicsDevice::HybridRendererActive = false;
 std::vector<const char*> GraphicsDevice::DeviceExtensionList;
 std::vector<std::string> GraphicsDevice::FeatureList;
 VkPhysicalDeviceFeatures GraphicsDevice::PhysicalDeviceFeatures;

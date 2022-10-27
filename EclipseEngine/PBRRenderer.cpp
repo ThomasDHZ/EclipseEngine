@@ -86,6 +86,32 @@ void PBRRenderer::Update()
 	}
 }
 
+void PBRRenderer::ImGuiUpdate()
+{
+	if (SceneManager::EditorModeFlag)
+	{
+		if (ImGui::Button("Play Mode"))
+		{
+			SceneManager::EditorModeFlag = false;
+		}
+		if (ImGui::Button("Update Renderer"))
+		{
+			UpdateRenderer = true;
+		}
+		if (ImGui::Button("Bake"))
+		{
+			BakeTextures("TestBake.bmp");
+		}
+	}
+	else
+	{
+		if (ImGui::Button("Editor Mode"))
+		{
+			SceneManager::EditorModeFlag = true;
+		}
+	}
+}
+
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	if (SceneManager::EditorModeFlag)

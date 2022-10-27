@@ -18,7 +18,7 @@ public:
 	static std::string BaseShaderFilePath;
 	void BuildRenderer();
 	void Update();
-	void GUIUpdate();
+	void ImGuiUpdate();
 	void Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList);
 	void Destroy();
 };

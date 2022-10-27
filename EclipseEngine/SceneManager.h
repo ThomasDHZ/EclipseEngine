@@ -44,7 +44,8 @@ public:
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	static bool EditorModeFlag;
-
+	static bool	RayTracingActive;
+	static bool	HybridRendererActive;
 	static MusicPlayer musicPlayer;
 
 	static void StartUp()
@@ -233,5 +234,7 @@ public:
 	static std::shared_ptr<SkyboxMesh> GetSkyboxMesh() { return skyboxMesh; };
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 	static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
+	static bool IsRayTracerActive() { return RayTracingActive; }
+	static bool IsHybridRendererActive() { return HybridRendererActive; }
 };
 
