@@ -6,10 +6,10 @@ class GameObject3D : public GameObject
 private:
 public:
 	GameObject3D();
-	GameObject3D(const std::string Name);
-	GameObject3D(const std::string Name, const glm::vec3& position);
-	GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation);
-	GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+	GameObject3D(const std::string Name, GameObjectRenderType renderType);
+	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position);
+	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
+	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 	GameObject3D(nlohmann::json& json);
 	~GameObject3D();
 

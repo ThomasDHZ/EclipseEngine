@@ -30,14 +30,12 @@
 class Scene
 {
 private:
-	Renderer2D renderer2D;
-	BlinnPhongRenderer blinnPhongRenderer;
-	HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
+//	Renderer2D renderer2D;
+//	BlinnPhongRenderer blinnPhongRenderer;
+//	HybridRenderer hybridRenderer;
+	//PBRRenderer pbrRenderer;
 	//PBRRealTimeRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
-	std::shared_ptr<GameObject2D> obj5;
-	std::shared_ptr<Texture> BakeTexture;
 public:
 	Scene();
 	~Scene();

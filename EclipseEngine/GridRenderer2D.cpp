@@ -4,32 +4,32 @@ GridRenderer2D::GridRenderer2D()
 {
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSize, GridSize, GridSpacing, GridSpacing, GameObjectID));
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing, const glm::vec3& Color) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing, const glm::vec3& Color) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSize, GridSize, GridSpacing, GridSpacing, Color, GameObjectID));
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing, const glm::vec4& Color) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSize, float GridSpacing, const glm::vec4& Color) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSize, GridSize, GridSpacing, GridSpacing, Color, GameObjectID));
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectID));
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec3& Color) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec3& Color) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, Color, GameObjectID));
 }
 
-GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec4& Color) : GameObject(Name)
+GridRenderer2D::GridRenderer2D(const std::string Name, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec4& Color) : GameObject(Name, kGridRenderer2D)
 {
 	GridObject = std::make_shared<LineMesh2D>(LineMesh2D(GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, Color, GameObjectID));
 }

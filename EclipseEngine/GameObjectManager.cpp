@@ -65,6 +65,97 @@
 	return objList;
 }
 
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetMeshRendererGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kMeshRenderer)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetModelRendererGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kModelRenderer)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetSpriteRendererGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kSpriteRenderer)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetkLineRenderer2DGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kLineRenderer2D)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetkLineRenderer3DGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kLineRenderer3D)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetkGridRenderer2DGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kGridRenderer2D)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
+ std::vector<std::shared_ptr<GameObject>> GameObjectManager::GetkGridRenderer3DGameObjects()
+ {
+	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
+	 for (auto& obj : objList)
+	 {
+		 if (obj->GetRenderType() == GameObjectRenderType::kGridRenderer3D)
+		 {
+			 GameObjectList.emplace_back(obj);
+		 }
+	 }
+	 return GameObjectList;
+ }
+
  void GameObjectManager::LoadGameObjects(nlohmann::json& json)
 {
 	for (int x = 0; x < json["ObjectList"].size(); x++)

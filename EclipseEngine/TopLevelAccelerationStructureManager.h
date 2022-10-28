@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "GraphicsPipeline.h"
 #include "GameObjectManager.h"
+#include "ModelRenderer.h"
 class TopLevelAccelerationStructureManager
 {
 private: 
@@ -28,13 +29,11 @@ public:
         {
             uint32_t PrimitiveCount = 1;
             std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
-            for (int x = 0; x < GameObjectManager::GetGameObjectList().size(); x++)
+            
+            for (int x = 0; x < GameObjectManager::GetModelRendererGameObjects().size(); x++)
             {
-              /*  if (auto component = GameObjectManager::GetGameObjectList()[x]->GetComponentByType(ComponentType::kMeshRenderer))
-                {
-                    auto meshRenderer = static_cast<MeshRendererComponent*>(component.get());
-                    meshRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
-                }*/
+                const auto modelRenderer = static_cast<ModelRenderer*>(GameObjectManager::GetModelRendererGameObjects()[x].get());
+                modelRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(AccelerationStructureInstanceList);
             }
 
             VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};

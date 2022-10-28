@@ -7,10 +7,10 @@ private:
 
 public:
 	GameObject2D();
-	GameObject2D(const std::string Name);
-	GameObject2D(const std::string Name, const glm::vec2& position, uint32_t Depth);
-	GameObject2D(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
-	GameObject2D(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
+	GameObject2D(const std::string Name, GameObjectRenderType renderType);
+	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, uint32_t Depth);
+	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
+	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
 	GameObject2D(nlohmann::json& json);
 	~GameObject2D();
 

@@ -2,8 +2,6 @@
 #include "Math.h"
 #include "MeshRendererManager.h"
 
-std::string RayTraceRenderPass::BaseShaderFilePath = "../Shaders/";
-
 RayTraceRenderPass::RayTraceRenderPass() : RenderPass()
 {
 }
@@ -12,21 +10,12 @@ RayTraceRenderPass::~RayTraceRenderPass()
 {
 }
 
-void RayTraceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture)
+void RayTraceRenderPass::StartUp()
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
 
-    if (renderPass == nullptr)
-    {
-        RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
-    }
-    else
-    {
-        RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPass::Destroy();
-    }
-
-    BuildRenderPassPipelines(cubeMapTexture);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -43,13 +32,13 @@ void RayTraceRenderPass::SetUpCommandBuffers()
     }
 }
 
-void RayTraceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMapTexture)
+void RayTraceRenderPass::BuildRenderPassPipelines()
 {
     std::vector<VkPipelineShaderStageCreateInfo> ShaderList;
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaderList;
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     {
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "raygen.rgen.spv", VK_SHADER_STAGE_RAYGEN_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/raygen.rgen.spv", VK_SHADER_STAGE_RAYGEN_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR RayGeneratorShaderInfo = {};
         RayGeneratorShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         RayGeneratorShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -59,7 +48,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMa
         RayGeneratorShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(RayGeneratorShaderInfo);
 
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "miss.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/miss.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR MissShaderInfo = {};
         MissShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         MissShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -69,7 +58,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMa
         MissShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(MissShaderInfo);
 
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "shadow.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/shadow.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ShadowShaderInfo = {};
         ShadowShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ShadowShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -79,19 +68,19 @@ void RayTraceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMa
         ShadowShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ShadowShaderInfo);
 
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "closesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/closesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ClosestHitShaderInfo = {};
         ClosestHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ClosestHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
         ClosestHitShaderInfo.generalShader = VK_SHADER_UNUSED_KHR;
         ClosestHitShaderInfo.closestHitShader = static_cast<uint32_t>(ShaderList.size()) - 1;
 
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "anyhit.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/anyhit.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
         ClosestHitShaderInfo.anyHitShader = static_cast<uint32_t>(ShaderList.size()) - 1;
         ClosestHitShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ClosestHitShaderInfo);
 
-        ShaderList.emplace_back(CreateShader(BaseShaderFilePath + "anyhit1.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/anyhit1.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ShadwoHitShaderInfo = {};
         ShadwoHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ShadwoHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
@@ -108,29 +97,14 @@ void RayTraceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMa
         std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-        std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
         std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
         std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
         std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
-        std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
-        VkDescriptorImageInfo cubeMapBuffer;
-        cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        cubeMapBuffer.imageView = cubeMapTexture->View;
-        cubeMapBuffer.sampler = cubeMapTexture->Sampler;
-        CubeMapBufferInfoList.emplace_back(cubeMapBuffer);
+
 
         AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
         AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, MaterialBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, DirectionalLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, PointLightBufferInfoList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, CubeMapBufferInfoList);
     }
 
     if (RayTracePipeline == nullptr)
@@ -183,6 +157,14 @@ VkCommandBuffer RayTraceRenderPass::Draw()
 
     vkEndCommandBuffer(RayTraceCommandBuffer);
     return RayTraceCommandBuffer;
+}
+
+void RayTraceRenderPass::RebuildSwapChain()
+{
+    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+
+    RayTracedTexture->RecreateRendererTexture(RenderPassResolution);
+    BuildRenderPassPipelines();
 }
 
 void RayTraceRenderPass::Destroy()

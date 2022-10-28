@@ -10,7 +10,7 @@ private:
 public:
 	Level2DRenderer();
 	Level2DRenderer(std::shared_ptr<Level2D> level, uint64_t GameObjectID);
-	Level2DRenderer(glm::ivec2 levelTilesSize, glm::ivec2 levelTileCount, std::shared_ptr<Material> levelTileSet, uint64_t GameObjectID);
+	//Level2DRenderer(glm::ivec2 levelTilesSize, glm::ivec2 levelTileCount, std::shared_ptr<Material> levelTileSet, uint64_t GameObjectID);
 	virtual ~Level2DRenderer();
 
 	void Update(float DeltaTime) override;

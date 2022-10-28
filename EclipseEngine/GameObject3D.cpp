@@ -4,19 +4,19 @@ GameObject3D::GameObject3D()
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name) : GameObject(Name)
+GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderType) : GameObject(Name, renderType)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position) : GameObject(Name, position)
+GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position) : GameObject(Name, renderType, position)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, position, rotation)
+GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, renderType, position, rotation)
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, position, rotation, scale)
+GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, renderType, position, rotation, scale)
 {
 }
 

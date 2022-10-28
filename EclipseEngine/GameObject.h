@@ -3,6 +3,18 @@
 #include "Component.h"
 #include "Mesh.h"
 
+enum GameObjectRenderType
+{
+	kNoRender,
+	kMeshRenderer,
+	kModelRenderer,
+	kSpriteRenderer,
+	kLineRenderer2D,
+	kLineRenderer3D,
+	kGridRenderer2D,
+	kGridRenderer3D
+};
+
 class GameObject
 {
 private:
@@ -12,6 +24,7 @@ protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
 	std::vector<std::shared_ptr<Component>> ComponentList;
+	GameObjectRenderType  RenderType;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 
@@ -33,10 +46,10 @@ protected:
 public:
 
 	GameObject();
-	GameObject(const std::string Name);
-	GameObject(const std::string Name, const glm::vec3& Position);
-	GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation);
-	GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
+	GameObject(const std::string Name, GameObjectRenderType renderType);
+	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position);
+	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation);
+	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
 	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 
@@ -56,6 +69,8 @@ public:
 
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
+	GameObjectRenderType GetRenderType() { return RenderType; }
+
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);

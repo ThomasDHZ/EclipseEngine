@@ -4,19 +4,19 @@ GameObject2D::GameObject2D() : GameObject()
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name) : GameObject(Name)
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType) : GameObject(Name, renderType)
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, const glm::vec2& position, uint32_t Depth) : GameObject(Name, glm::vec3(position.x, position.y, Depth))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth))
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth) : GameObject(Name, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f))
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth) : GameObject(Name, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
 {
 }
 

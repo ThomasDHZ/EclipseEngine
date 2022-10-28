@@ -5,10 +5,6 @@
 enum ComponentType
 {
 	kNullComponent,
-	kLineRenderer2D,
-	kLineRenderer3D,
-	kSpriteRenderer,
-	kMeshRenderer,
 	kTransform2D,
 	kTransform3D
 };

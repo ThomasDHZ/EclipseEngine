@@ -7,16 +7,19 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(const std::string Name)
+GameObject::GameObject(const std::string Name, GameObjectRenderType renderType)
 {
 	ObjectName = Name;
+	RenderType = renderType;
 	GenerateID();
 }
 
-GameObject::GameObject(const std::string Name, const glm::vec3& Position)
+GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position)
 {
 	GenerateID();
 	ObjectName = Name;
+	RenderType = renderType;
+	
 	GameObjectPosition = Position;
 
 	GameObjectTransform = glm::mat4(1.0f);
@@ -27,10 +30,12 @@ GameObject::GameObject(const std::string Name, const glm::vec3& Position)
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation)
+GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation)
 {
 	GenerateID();
 	ObjectName = Name;
+	RenderType = renderType;
+
 	GameObjectPosition = Position;
 	GameObjectRotation = Rotation;
 
@@ -42,10 +47,12 @@ GameObject::GameObject(const std::string Name, const glm::vec3& Position, const 
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(const std::string Name, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
+GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
 {
 	GenerateID();
 	ObjectName = Name;
+	RenderType = renderType;
+
 	GameObjectPosition = Position;
 	GameObjectRotation = Rotation;
 	GameObjectScale = Scale;

@@ -326,7 +326,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Update();
+           // renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -339,22 +339,22 @@ void Scene::Update()
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
-                    hybridRenderer.Update();
+                  //  hybridRenderer.Update();
                 }
                 else
                 {
-                    blinnPhongRenderer.Update();
+              //      blinnPhongRenderer.Update();
                 }
             }
             else
             {
-                blinnPhongRenderer.Update();
+             //   blinnPhongRenderer.Update();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Update();
+           // pbrRenderer.Update();
             break;
         }
     }
@@ -377,7 +377,7 @@ void Scene::ImGuiUpdate()
     {
     case SceneType::kSprite2D:
     {
-        renderer2D.ImGuiUpdate();
+      //  renderer2D.ImGuiUpdate();
         break;
     }
     case SceneType::kBlinnPhong:
@@ -390,22 +390,22 @@ void Scene::ImGuiUpdate()
             }
             else if (SceneManager::IsHybridRendererActive())
             {
-                hybridRenderer.ImGuiUpdate();
+              //  hybridRenderer.ImGuiUpdate();
             }
             else
             {
-                blinnPhongRenderer.ImGuiUpdate();
+              //  blinnPhongRenderer.ImGuiUpdate();
             }
         }
         else
         {
-            blinnPhongRenderer.ImGuiUpdate();
+         //   blinnPhongRenderer.ImGuiUpdate();
         }
         break;
     }
     case SceneType::kPBR:
     {
-        pbrRenderer.ImGuiUpdate();
+    //    pbrRenderer.ImGuiUpdate();
         break;
     }
     }
@@ -466,22 +466,22 @@ void Scene::BuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.BuildRenderer();
+         //   renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.BuildRenderer();
+          //  blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                 rayTraceRenderer.BuildRenderer();
-                hybridRenderer.BuildRenderer();
+                //hybridRenderer.BuildRenderer();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.BuildRenderer();
+          //  pbrRenderer.BuildRenderer();
             break;
         }
     }
@@ -504,7 +504,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+         //   renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -517,22 +517,22 @@ void Scene::Draw()
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
-                    hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                 //   hybridRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
-                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                //    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+              //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Draw(CommandBufferSubmitList);
+            //pbrRenderer.Draw(CommandBufferSubmitList);
             break;
         }
     }
@@ -556,22 +556,22 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Destroy();
+            //renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.Destroy();
+           // blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                hybridRenderer.Destroy();
+            //    hybridRenderer.Destroy();
                 rayTraceRenderer.Destroy();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Destroy();
+           // pbrRenderer.Destroy();
             break;
         }
     }
