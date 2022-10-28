@@ -15,7 +15,7 @@ void RayTraceRenderer::BuildRenderer()
     meshPickerRenderPass.BuildRenderPass();
     environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
     rayTraceRenderPass.StartUp();
-    FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture);
+    FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture, rayTraceRenderPass.RayTracedTexture);
 }
 
 void RayTraceRenderer::Update()

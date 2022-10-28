@@ -69,17 +69,7 @@ Vertex BuildVertexInfo()
 
 void main() 
 {
-   const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
-   MaterialProperties material = materialBuffer[materialID].materialProperties;
-
 	Vertex vertex = BuildVertexInfo();
-
-	   uint diffuse = material.DiffuseMapID;
-   uint alpha = material.AlphaMapID;
-
-	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
-		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
-   {
-	 ignoreIntersectionEXT;
-   }
+	const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
+    MaterialProperties material = materialBuffer[materialID].materialProperties;
 }

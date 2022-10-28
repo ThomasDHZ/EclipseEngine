@@ -97,14 +97,30 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+        std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
         std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
         std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
         std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
 
+        std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
+        VkDescriptorImageInfo cubeMapBuffer;
+        cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        cubeMapBuffer.imageView = SceneManager::CubeMap2->GetView();
+        cubeMapBuffer.sampler = SceneManager::CubeMap2->GetSampler();
+        CubeMapBufferInfoList.emplace_back(cubeMapBuffer);
 
         AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
         AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, MaterialBufferList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, DirectionalLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, PointLightBufferInfoList);
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, SpotLightBufferInfoList);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    //    AddTextureDescriptorSetBinding(DescriptorBindingList, 10, CubeMapBufferInfoList);
     }
 
     if (RayTracePipeline == nullptr)

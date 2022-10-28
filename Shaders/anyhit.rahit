@@ -43,7 +43,6 @@ layout(binding = 7) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 8) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 9) uniform sampler2D TextureMap[];
 
-
 Vertex BuildVertexInfo()
 {
 	Vertex vertex;
@@ -69,17 +68,7 @@ Vertex BuildVertexInfo()
 
 void main() 
 {
-   const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
-   MaterialProperties material = materialBuffer[materialID].materialProperties;
-
 	Vertex vertex = BuildVertexInfo();
-
-	   uint diffuse = material.DiffuseMapID;
-   uint alpha = material.AlphaMapID;
-
-	 if(texture(TextureMap[alpha], vertex.UV).r == 0.0f ||
-		texture(TextureMap[diffuse], vertex.UV).a == 0.0f)
-   {
-	 ignoreIntersectionEXT;
-   }
+	const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
+    MaterialProperties material = materialBuffer[materialID].materialProperties;
 }

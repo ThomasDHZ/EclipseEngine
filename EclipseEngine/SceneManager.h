@@ -43,6 +43,7 @@ public:
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
+	static std::shared_ptr<CubeMapTexture> CubeMap2;
 	static bool EditorModeFlag;
 	static bool	RayTracingActive;
 	static bool	HybridRendererActive;
@@ -63,7 +64,7 @@ public:
 		auto time = glfwGetTime();
 		GameObjectManager::Update(time);
 		MeshRendererManager::Update();
-		//TopLevelAccelerationStructureManager::Update();
+		TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
 		activeCamera->Update(time);

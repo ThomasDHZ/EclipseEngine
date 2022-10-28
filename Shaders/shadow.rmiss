@@ -17,6 +17,7 @@ layout(push_constant) uniform SceneData
     uint PointLightCount;
     uint SpotLightCount;
     float Timer;
+    float PBRMaxMipLevel;
 } sceneData;
 
 layout(location = 2) rayPayloadInEXT bool shadowed;
