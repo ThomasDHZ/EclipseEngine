@@ -16,6 +16,6 @@ void main()
 {
     vec3 Color = texture(FrameBufferTexture, TexCoords).rgb;
     vec3 Bloom = texture(BloomTexture, TexCoords).rgb;
-    vec3 result = Color + Bloom;
+    vec3 result = Color;
     outColor = vec4(result, 1.0f);
 }

@@ -15,7 +15,7 @@ void BlinnPhongRenderer::BuildRenderer()
 	//depthRenderPass.BuildRenderPass();
 	blinnPhongRenderPass.BuildRenderPass(SceneManager::CubeMap, meshPickerRenderPass.depthTexture);
 	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
-	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture);
+	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture, blinnPhongRenderPass.RenderedTexture);
 }
 
 void BlinnPhongRenderer::Update()

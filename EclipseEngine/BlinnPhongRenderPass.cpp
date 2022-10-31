@@ -122,7 +122,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     skyboxPipeline.InitializePipeline(pipelineInfo, cubeMapTexture);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
-    billBoardPipeline.InitializePipeline(pipelineInfo);
+   // billBoardPipeline.InitializePipeline(pipelineInfo);
 }
 
 VkCommandBuffer BlinnPhongRenderPass::Draw()
@@ -183,7 +183,7 @@ VkCommandBuffer BlinnPhongRenderPass::Draw()
                         switch (mesh->GetMeshSubType())
                         {
                             case MeshSubTypeEnum::kNormal:  blinnphongPipeline.Draw(commandBuffer, mesh); break;
-                            case MeshSubTypeEnum::kBillboard:  billBoardPipeline.Draw(commandBuffer, mesh); break;
+                           // case MeshSubTypeEnum::kBillboard:  billBoardPipeline.Draw(commandBuffer, mesh); break;
                             default: blinnphongPipeline.Draw(commandBuffer, mesh); break;
                         }
                     }
@@ -215,7 +215,7 @@ void BlinnPhongRenderPass::Destroy()
     linePipeline.Destroy();
     skyboxPipeline.Destroy();
     wireframePipeline.Destroy();
-    billBoardPipeline.Destroy();
+  //  billBoardPipeline.Destroy();
 
     RenderPass::Destroy();
 }

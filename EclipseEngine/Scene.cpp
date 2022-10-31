@@ -136,19 +136,19 @@ Scene::Scene()
     cubeMapfiles.Front = "../texture/skybox/back.jpg";
     cubeMapfiles.Back = "../texture/skybox/front.jpg";
     SceneManager::CubeMap2 = std::make_shared<CubeMapTexture>(CubeMapTexture(cubeMapfiles));
-//    ModelLoader loader{};
-//    loader.FilePath = "../Models/TestAnimModel/model.dae";
-//    loader.MeshType = MeshTypeEnum::kPolygon;
-//
-//    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-//GameObjectManager::AddGameObject(a);
+    ModelLoader loader{};
+    loader.FilePath = "../Models/TestAnimModel/model.dae";
+    loader.MeshType = MeshTypeEnum::kPolygon;
 
-  /*  ModelLoader loader2{};
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+GameObjectManager::AddGameObject(a);
+
+    ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
     loader2.MeshType = MeshTypeEnum::kPolygon;
 
 auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
-GameObjectManager::AddGameObject(b);*/
+GameObjectManager::AddGameObject(b);
 
 
     //auto ads = TextureManager::LoadTextureAtlus("../texture/TestReflectionBakeLayer0.bmp", glm::ivec2(256));
@@ -189,45 +189,45 @@ GameObjectManager::AddGameObject(b);*/
 //    //source.Play(sound);
 //
     {
-       std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+       //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+       // std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+       // std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+       // std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+       // std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        ModelLoader loader1{};
-        loader1.FilePath = "../Models/sphere.obj";
-        loader1.MeshType = MeshTypeEnum::kPolygon;
+       // ModelLoader loader1{};
+       // loader1.FilePath = "../Models/sphere.obj";
+       // loader1.MeshType = MeshTypeEnum::kPolygon;
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
-        GameObjectManager::AddGameObject(obj);
+       // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
+       // obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+       // obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
+       // GameObjectManager::AddGameObject(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj2->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 26;
-        GameObjectManager::AddGameObject(obj2);
+       // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
+       // obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj2->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 26;
+       // GameObjectManager::AddGameObject(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Plastic", loader1));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj3->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 27;
-        GameObjectManager::AddGameObject(obj3);
+       // auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Plastic", loader1));
+       // obj3->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+       // obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj3->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 27;
+       // GameObjectManager::AddGameObject(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj4->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 28;
-        GameObjectManager::AddGameObject(obj4);
+       // auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
+       // obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj4->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 28;
+       // GameObjectManager::AddGameObject(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
-        GameObjectManager::AddGameObject(obj5);
+       // auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
+       // obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+       // obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
+       // GameObjectManager::AddGameObject(obj5);
 
  //       std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
  //       material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
@@ -333,7 +333,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-           // renderer2D.Update();
+            renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -350,18 +350,18 @@ void Scene::Update()
                 }
                 else
                 {
-              //      blinnPhongRenderer.Update();
+                    blinnPhongRenderer.Update();
                 }
             }
             else
             {
-             //   blinnPhongRenderer.Update();
+                blinnPhongRenderer.Update();
             }
             break;
         }
         case SceneType::kPBR:
         {
-           // pbrRenderer.Update();
+            pbrRenderer.Update();
             break;
         }
     }
@@ -401,12 +401,12 @@ void Scene::ImGuiUpdate()
             }
             else
             {
-              //  blinnPhongRenderer.ImGuiUpdate();
+                blinnPhongRenderer.ImGuiUpdate();
             }
         }
         else
         {
-         //   blinnPhongRenderer.ImGuiUpdate();
+            blinnPhongRenderer.ImGuiUpdate();
         }
         break;
     }
@@ -473,12 +473,12 @@ void Scene::BuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-         //   renderer2D.BuildRenderer();
+            renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-          //  blinnPhongRenderer.BuildRenderer();
+            blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                 rayTraceRenderer.BuildRenderer();
@@ -488,7 +488,7 @@ void Scene::BuildRenderers()
         }
         case SceneType::kPBR:
         {
-          //  pbrRenderer.BuildRenderer();
+            pbrRenderer.BuildRenderer();
             break;
         }
     }
@@ -511,7 +511,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-         //   renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -528,18 +528,18 @@ void Scene::Draw()
                 }
                 else
                 {
-                //    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-              //  blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
+                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
         case SceneType::kPBR:
         {
-            //pbrRenderer.Draw(CommandBufferSubmitList);
+            pbrRenderer.Draw(CommandBufferSubmitList);
             break;
         }
     }
@@ -563,12 +563,12 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-            //renderer2D.Destroy();
+            renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
         {
-           // blinnPhongRenderer.Destroy();
+            blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
             //    hybridRenderer.Destroy();
@@ -578,7 +578,7 @@ void Scene::Destroy()
         }
         case SceneType::kPBR:
         {
-           // pbrRenderer.Destroy();
+            pbrRenderer.Destroy();
             break;
         }
     }

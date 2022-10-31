@@ -127,34 +127,6 @@ void Mesh3D::UpdateMeshBottomLevelAccelerationStructure()
 {
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
-		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
-
-		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
-		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
-		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(TransformInverseBuffer.GetBuffer());
-
-		TriangleCount = IndexCount / 3;
-
-		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
-		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
-		AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
-		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
-		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
-		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
-		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex3D);
-		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
-		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
-
-		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
-
-		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
-		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
-		AccelerationStructureBuildRangeInfo.firstVertex = 0;
-		AccelerationStructureBuildRangeInfo.transformOffset = 0;
-
 		std::vector<uint32_t> PrimitiveCountList{ TriangleCount };
 		std::vector<VkAccelerationStructureGeometryKHR> AccelerationStructureGeometryList{ AccelerationStructureGeometry };
 		std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationBuildStructureRangeInfos{ AccelerationStructureBuildRangeInfo };
@@ -305,13 +277,12 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		BoneTransformBuffer.CopyBufferToMemory(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size());
 	}
 
-	MeshTransformMatrix = meshProperties.MeshTransform;
-	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
 
-	if (VulkanRenderer::UpdateBLAS &&
-		IndexCount != 0)
-	{
+	//if (VulkanRenderer::UpdateBLAS &&
+	//	IndexCount != 0)
+	//{
 
+	    MeshTransformMatrix = meshProperties.MeshTransform;
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 
 		glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
@@ -319,7 +290,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
 		UpdateMeshBottomLevelAccelerationStructure();
-	}
+	//}
 }
 
 void Mesh3D::Destroy()

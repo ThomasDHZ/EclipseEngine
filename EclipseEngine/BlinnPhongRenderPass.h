@@ -24,7 +24,7 @@ private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 
 	Renderer3DPipeline blinnphongPipeline;
-	BillboardPipeline billBoardPipeline;
+//	BillboardPipeline billBoardPipeline;
 	SkyboxPipeline skyboxPipeline;
 	LinePipeline linePipeline;
 	WireFramePipeline wireframePipeline;

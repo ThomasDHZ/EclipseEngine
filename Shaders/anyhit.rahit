@@ -60,7 +60,9 @@ Vertex BuildVertexInfo()
 	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
 
 	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
-
+	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
+    vertex.Tangant = v0.Tangant * barycentricCoords.x + v1.Tangant * barycentricCoords.y + v2.Tangant * barycentricCoords.z;
+	vertex.BiTangant = v0.BiTangant * barycentricCoords.x + v1.BiTangant * barycentricCoords.y + v2.BiTangant * barycentricCoords.z;
 	vertex.Color = v0.Color * barycentricCoords.x + v1.Color * barycentricCoords.y + v2.Color * barycentricCoords.z;
 
 	return vertex;
@@ -71,4 +73,10 @@ void main()
 	Vertex vertex = BuildVertexInfo();
 	const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
     MaterialProperties material = materialBuffer[materialID].materialProperties;
+
+	if(texture(TextureMap[material.DiffuseMapID], vertex.UV).r == 0.0f ||
+	   texture(TextureMap[material.AlphaMapID], vertex.UV).a == 0.0f)
+   {
+	 ignoreIntersectionEXT;
+   }
 }

@@ -24,5 +24,5 @@ layout(location = 2) rayPayloadInEXT bool shadowed;
 
 void main()
 {
-	shadowed = false;
+	shadowed = true;
 }

@@ -34,7 +34,7 @@ void Renderer3DPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+   // AddTextureDescriptorSetBinding(DescriptorBindingList, 6, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
