@@ -1288,6 +1288,12 @@
     <None Include="..\Shaders\BakeReflectionPBRShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="..\Shaders\pbrclosesthit.rchit">
+      <Filter>Shader\RayTraceShaders</Filter>
+    </None>
+    <None Include="..\Shaders\RTXRandom.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">

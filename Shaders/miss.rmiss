@@ -29,20 +29,21 @@ struct RayHitInfo
 };
 
 layout(location = 0) rayPayloadInEXT RayHitInfo rayPayload;
+
 layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;
 layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
 layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
 layout(binding = 3) buffer Indices { uint i[]; } indices[];
 layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 5) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 6) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 7) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 8) uniform sampler2D TextureMap[];
-layout(binding = 9, set = 0) uniform samplerCube CubeMap[];
+layout(binding = 5) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 6) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 7) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 8) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 9) uniform sampler2D TextureMap[];
+layout(binding = 10) uniform samplerCube CubeMap;
+
 void main()
 {
-//	rayPayload.color = texture(CubeMap[0], gl_WorldRayDirectionEXT).rgb;
-
-	rayPayload.color = vec3(1.0f, 0.0f, 0.0f);
+	rayPayload.color = texture(CubeMap, gl_WorldRayDirectionEXT).rgb;
 	rayPayload.normal = vec3(0.0f);
 }

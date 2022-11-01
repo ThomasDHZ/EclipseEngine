@@ -120,7 +120,7 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, PointLightBufferInfoList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, SpotLightBufferInfoList);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 9, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
-    //    AddTextureDescriptorSetBinding(DescriptorBindingList, 10, CubeMapBufferInfoList);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, CubeMapBufferInfoList);
     }
 
     if (RayTracePipeline == nullptr)
