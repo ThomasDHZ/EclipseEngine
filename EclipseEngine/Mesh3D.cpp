@@ -1,8 +1,5 @@
 #include "Mesh3D.h"
 #include "Math.h"
-#include <stdio.h>      /* printf, scanf, puts, NULL */
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 
 Mesh3D::Mesh3D()
 {
@@ -318,7 +315,6 @@ void Mesh3D::SetMeshPosition(float x, float y, float z)
 {
 	MeshPosition = glm::vec3(x,y,z);
 }
-
 
 void Mesh3D::SetMeshRotation(float x, float y, float z)
 {

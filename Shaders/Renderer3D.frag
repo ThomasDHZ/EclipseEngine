@@ -189,7 +189,7 @@ vec3 CalcNormalDirLight(MaterialProperties material, mat3 TBN, vec3 normal, vec2
     const float diff = max(dot(normal, lightDir), 0.0);
 
     const vec3 halfwayDir = normalize(lightDir + ViewDir);
-    const float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0f);
+    const float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
 
     vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
     vec3 diffuse = DLight[index].directionalLight.diffuse * diff * material.Diffuse.rgb;

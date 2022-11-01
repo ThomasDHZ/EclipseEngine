@@ -46,6 +46,9 @@ layout(binding = 7) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 8) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 9) uniform sampler2D TextureMap[];
 
+vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
+vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords, vec3 viewDir);
+
 Vertex BuildVertexInfo()
 {
 	Vertex vertex;
@@ -61,6 +64,7 @@ Vertex BuildVertexInfo()
 
 	vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
 	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
+
 	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
 	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
     vertex.Tangant = v0.Tangant * barycentricCoords.x + v1.Tangant * barycentricCoords.y + v2.Tangant * barycentricCoords.z;
@@ -69,25 +73,16 @@ Vertex BuildVertexInfo()
 
 	return vertex;
 }
-vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index);
-vec3 CalcNormalPointLight(Vertex vertex, MaterialProperties material, mat3 TBN,  vec3 normal, vec2 uv, int index);
-vec3 CalcNormalSpotLight(Vertex vertex, MaterialProperties material, mat3 TBN,  vec3 normal, vec2 uv, int index);
-vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords, vec3 viewDir);
 
-void main()
+void main() 
 {
-   const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
-   MaterialProperties material = materialBuffer[materialID].materialProperties;
-
 	Vertex vertex = BuildVertexInfo();
-       vec2 FinalUV = vertex.UV + meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVOffset;
-        FinalUV *= meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVScale;
+	const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
+    MaterialProperties material = materialBuffer[materialID].materialProperties;
 
-//   if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
-//      texture(TextureMap[material.DiffuseMapID], FinalUV).a == 0.0f)
-//   {
-//	 discard;
-//   }
+   vec2 FinalUV = vertex.UV + meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVOffset;
+   FinalUV *= meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVScale;
+
    if(meshBuffer[gl_PrimitiveID].meshProperties.UVFlip.y == 1.0f)
    {
         FinalUV.y = 1.0f - FinalUV.y;
@@ -104,28 +99,19 @@ void main()
    
    vec3 normal = vertex.Normal;
    vec3 ViewPos  = sceneData.CameraPos;
-   vec3 FragPos2  = vertex.Position;
-   vec3 viewDir = normalize(ViewPos - FragPos2);
+   vec3 FragPos  = vertex.Position;
+   vec3 viewDir = normalize(ViewPos - FragPos);
     if(material.NormalMapID != 0)
     {
         ViewPos  = TBN * sceneData.CameraPos;
-        FragPos2  = TBN * vertex.Position;
-    }
-
-    if(material.NormalMapID != 0)
-    {
+        FragPos  = TBN * vertex.Position;
         if(material.DepthMapID != 0)
         {
             FinalUV = ParallaxMapping(vertex, material, FinalUV,  viewDir);       
-//            if(FinalUV.x > 1.0 || FinalUV.y > 1.0 || FinalUV.x < 0.0 || FinalUV.y < 0.0)
-//            {
-//              discard;
-//            }
         }
         normal = texture(TextureMap[material.NormalMapID], FinalUV).rgb;
         normal = normalize(normal * 2.0 - 1.0);
-     }
-
+    }
 
    vec3 result = vec3(0.0f);
    for(int x = 0; x < sceneData.DirectionalLightCount; x++)
@@ -140,21 +126,40 @@ void main()
 //       {
 //            result += CalcNormalSpotLight(vertex, material, TBN, normal, FinalUV, x);   
 //       }
+
+
+   /* if(material.Reflectivness > 0.0f &&
+       rayHitInfo.reflectCount != ConstMesh.MaxRefeflectCount)
+    {
+        vec3 hitPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_RayTmaxEXT;
+        vec3 origin   = hitPos.xyz + normal * 0.001f;
+        vec3 rayDir   = reflect(gl_WorldRayDirectionEXT, normal);
+
+        rayHitInfo.reflectCount++;
+        traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
+		result = mix(baseColor, rayHitInfo.color, material.Reflectivness); 
+    }
+    else
+	{
+        result = baseColor;
+        rayHitInfo.reflectCount = ConstMesh.MaxRefeflectCount + 1;
+	}*/
+
     rayHitInfo.color = result;
 }
 
 vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, vec3 normal, vec2 uv, int index)
 {
+    vec3 ViewPos  = sceneData.CameraPos;
+    vec3 FragPos  = vertex.Position;
     vec3 LightPos = DLight[index].directionalLight.direction;
-    vec3 ViewPos = sceneData.CameraPos;
-    vec3 FragPos2 = vertex.Position;
-    if (material.NormalMapID != 0)
+    if(material.NormalMapID != 0)
     {
+        ViewPos  = TBN * sceneData.CameraPos;
+        FragPos  = TBN * vertex.Position;
         LightPos = TBN * DLight[index].directionalLight.direction;
-        ViewPos = TBN * sceneData.CameraPos;
-        FragPos2 = TBN *  vertex.Position;;
     }
-    vec3 ViewDir = normalize(ViewPos - FragPos2);
+	vec3 ViewDir = normalize(ViewPos - FragPos);
 
     const vec3 lightDir = normalize(-LightPos);
     const float diff = max(dot(normal, lightDir), 0.0);
@@ -174,104 +179,19 @@ vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, ve
     {
         specular = DLight[index].directionalLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
     }
-
-    float LightDistance = length(LightPos - FragPos2);
     vec3 result = ambient;
 
-  float tmin = 0.001;
-  float tmax = length(LightPos - FragPos2);
+  float tmin = 0.001f;
+  float tmax = length(LightPos - FragPos);
   vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
-  shadowed = true;  
+  shadowed = false;  
   traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, lightDir, tmax, 1);
   if (shadowed) 
   {
      result += (diffuse + specular);
   }
 
-    return result;
-}
-
-vec3 CalcNormalPointLight(Vertex vertex, MaterialProperties material, mat3 TBN,   vec3 normal, vec2 uv, int index)
-{
-    vec3 LightPos = PLight[index].pointLight.position;
-    vec3 ViewPos = sceneData.CameraPos;
-    vec3 FragPos2 = vertex.Position;
-    if (material.NormalMapID != 0)
-    {
-        LightPos = TBN * PLight[index].pointLight.position;
-        ViewPos = TBN * sceneData.CameraPos;
-        FragPos2 = TBN * vertex.Position;
-    }
-    vec3 ViewDir = normalize(ViewPos - FragPos2);
-
-    vec3 lightDir = normalize(LightPos - FragPos2);
-    float diff = max(dot(normal, lightDir), 0.0);
-
-    vec3 halfwayDir = normalize(lightDir + ViewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
-
-    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
-    vec3 diffuse = PLight[index].pointLight.diffuse * diff * material.Diffuse.rgb;
-    vec3 specular = PLight[index].pointLight.specular * spec * material.Specular;
-    if (material.DiffuseMapID != 0)
-    {
-        ambient = sceneData.AmbientLight * vec3(texture(TextureMap[material.DiffuseMapID], uv));
-        diffuse = PLight[index].pointLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
-    }
-    if (material.SpecularMapID != 0)
-    {
-        specular = PLight[index].pointLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
-    }
-
-    float LightDistance = length(LightPos - FragPos2);
-    float attenuation = 1.0 / (1.0f + PLight[index].pointLight.linear * LightDistance + PLight[index].pointLight.quadratic * (LightDistance * LightDistance));
-
-    vec3 result = (ambient + diffuse + specular) * attenuation;
-//    result = RTXShadow(result, specular, lightDir, 10000.0f);
-//    result *= attenuation;
-    return result;
-}
-
-vec3 CalcNormalSpotLight(Vertex vertex, MaterialProperties material, mat3 TBN,  vec3 normal, vec2 uv, int index)
-{
-    vec3 LightPos = SLight[index].spotLight.position;
-    vec3 ViewPos = sceneData.CameraPos;
-    vec3 FragPos2 = vertex.Position;
-    if (material.NormalMapID != 0)
-    {
-        LightPos = TBN * SLight[index].spotLight.direction;
-        ViewPos = TBN * sceneData.CameraPos;
-        FragPos2 = TBN * vertex.Position;
-    }
-    vec3 ViewDir = normalize(ViewPos - FragPos2);
-
-    vec3 lightDir = normalize(LightPos - FragPos2);
-    float diff = max(dot(normal, lightDir), 0.0);
-
-    vec3 halfwayDir = normalize(lightDir + ViewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
-
-    vec3 ambient = sceneData.AmbientLight * material.Diffuse.rgb;
-    vec3 diffuse = SLight[index].spotLight.diffuse * diff * material.Diffuse.rgb;
-    vec3 specular = SLight[index].spotLight.specular * spec * material.Specular;
-    if (material.DiffuseMapID != 0)
-    {
-        ambient = sceneData.AmbientLight* vec3(texture(TextureMap[material.DiffuseMapID], uv));
-        diffuse = SLight[index].spotLight.diffuse * diff * vec3(texture(TextureMap[material.DiffuseMapID], uv));
-    }
-    if (material.SpecularMapID != 0)
-    {
-        specular = SLight[index].spotLight.specular * spec * vec3(texture(TextureMap[material.SpecularMapID], uv));
-    }
-
-    float theta = dot(lightDir, normalize(-SLight[index].spotLight.direction)); 
-    float epsilon = SLight[index].spotLight.cutOff - SLight[index].spotLight.outerCutOff;
-    float intensity = clamp((theta - SLight[index].spotLight.outerCutOff) / epsilon, 0.0, 1.0);
-
-    float LightDistance = length(LightPos - FragPos2);
-    float attenuation = 1.0 / (1.0f + SLight[index].spotLight.linear * LightDistance + SLight[index].spotLight.quadratic * (LightDistance * LightDistance));
-
-    return (ambient + diffuse + specular) * attenuation;
+  return result;
 }
 
 vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords, vec3 viewDir)
@@ -307,3 +227,4 @@ vec2 ParallaxMapping(Vertex vertex, MaterialProperties material, vec2 texCoords,
 
     return finalTexCoords;
 }
+
