@@ -408,7 +408,7 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 		MaterialInfo.EmissionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 	}
 
-	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialBlinnPhong, MaterialInfo);
+	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialPBR, MaterialInfo);
 	return MaterialManager::GetMaterialByID(materialID);
 }
 

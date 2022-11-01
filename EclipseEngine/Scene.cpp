@@ -17,7 +17,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kBlinnPhong;
+    SceneManager::sceneType = SceneType::kPBR;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -128,14 +128,7 @@ Scene::Scene()
 //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
 //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-    CubeMapLayout cubeMapfiles;
-    cubeMapfiles.Left = "../texture/skybox/right.jpg";
-    cubeMapfiles.Right = "../texture/skybox/left.jpg";
-    cubeMapfiles.Top = "../texture/skybox/top.jpg";
-    cubeMapfiles.Bottom = "../texture/skybox/bottom.jpg";
-    cubeMapfiles.Front = "../texture/skybox/back.jpg";
-    cubeMapfiles.Back = "../texture/skybox/front.jpg";
-    SceneManager::CubeMap2 = std::make_shared<CubeMapTexture>(CubeMapTexture(cubeMapfiles));
+
     ModelLoader loader{};
     loader.FilePath = "../Models/TestAnimModel/model.dae";
     loader.MeshType = MeshTypeEnum::kPolygon;
@@ -361,7 +354,21 @@ void Scene::Update()
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Update();
+            if (GraphicsDevice::IsRayTracingFeatureActive())
+            {
+                if (SceneManager::IsRayTracerActive())
+                {
+                    rayTracePBRRenderer.Update();
+                }
+                else
+                {
+                    pbrRenderer.Update();
+                }
+            }
+            else
+            {
+                pbrRenderer.Update();
+            }
             break;
         }
     }
@@ -412,7 +419,21 @@ void Scene::ImGuiUpdate()
     }
     case SceneType::kPBR:
     {
-    //    pbrRenderer.ImGuiUpdate();
+        if (GraphicsDevice::IsRayTracingFeatureActive())
+        {
+            if (SceneManager::IsRayTracerActive())
+            {
+                rayTracePBRRenderer.Update();
+            }
+            else
+            {
+                pbrRenderer.Update();
+            }
+        }
+        else
+        {
+            pbrRenderer.Update();
+        }
         break;
     }
     }
@@ -488,7 +509,21 @@ void Scene::BuildRenderers()
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.BuildRenderer();
+            if (GraphicsDevice::IsRayTracingFeatureActive())
+            {
+                if (SceneManager::IsRayTracerActive())
+                {
+                    rayTracePBRRenderer.BuildRenderer();
+                }
+                else
+                {
+                    pbrRenderer.BuildRenderer();
+                }
+            }
+            else
+            {
+                pbrRenderer.BuildRenderer();
+            }
             break;
         }
     }
@@ -539,7 +574,21 @@ void Scene::Draw()
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Draw(CommandBufferSubmitList);
+            if (GraphicsDevice::IsRayTracingFeatureActive())
+            {
+                if (SceneManager::IsRayTracerActive())
+                {
+                    rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                }
+                else
+                {
+                    pbrRenderer.Draw(CommandBufferSubmitList);
+                }
+            }
+            else
+            {
+                pbrRenderer.Draw(CommandBufferSubmitList);
+            }
             break;
         }
     }
@@ -579,6 +628,10 @@ void Scene::Destroy()
         case SceneType::kPBR:
         {
             pbrRenderer.Destroy();
+            if (GraphicsDevice::IsRayTracingFeatureActive())
+            {
+                rayTracePBRRenderer.Destroy();
+            }
             break;
         }
     }

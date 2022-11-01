@@ -231,6 +231,8 @@
     <ClCompile Include="PBRRealTimeRenderer.cpp" />
     <ClCompile Include="PBRReflectionPipeline.cpp" />
     <ClCompile Include="PrefilterPipeline.cpp" />
+    <ClCompile Include="RayTracePBRRenderer.cpp" />
+    <ClCompile Include="RayTracePBRRenderPass.cpp" />
     <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
@@ -380,6 +382,8 @@
     <ClInclude Include="PBRRealTimeRenderer.h" />
     <ClInclude Include="PBRReflectionPipeline.h" />
     <ClInclude Include="PrefilterPipeline.h" />
+    <ClInclude Include="RayTracePBRRenderer.h" />
+    <ClInclude Include="RayTracePBRRenderPass.h" />
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="Renderer3DPipeline.h" />
     <ClInclude Include="resource.h" />

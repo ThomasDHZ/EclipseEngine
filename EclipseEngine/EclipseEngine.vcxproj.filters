@@ -561,6 +561,12 @@
     <ClCompile Include="TextureBaker.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="RayTracePBRRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTracePBRRenderer.cpp">
+      <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -1036,6 +1042,12 @@
     </ClInclude>
     <ClInclude Include="TextureBaker.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracePBRRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTracePBRRenderer.h">
+      <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

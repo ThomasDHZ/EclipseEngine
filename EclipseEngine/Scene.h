@@ -26,6 +26,7 @@
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
 #include "PBRRealTimeRenderer.h"
+#include "RayTracePBRRenderer.h"
 
 class Scene
 {
@@ -36,6 +37,7 @@ private:
 	PBRRenderer pbrRenderer;
 	//PBRRealTimeRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
+	RayTracePBRRenderer rayTracePBRRenderer;
 public:
 	Scene();
 	~Scene();
