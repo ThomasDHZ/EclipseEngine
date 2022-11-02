@@ -68,7 +68,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         ShadowShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ShadowShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("../Shaders/closesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/pbrclosesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ClosestHitShaderInfo = {};
         ClosestHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ClosestHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
@@ -106,8 +106,8 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
         VkDescriptorImageInfo cubeMapBuffer;
         cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        cubeMapBuffer.imageView = SceneManager::CubeMap2->GetView();
-        cubeMapBuffer.sampler = SceneManager::CubeMap2->GetSampler();
+        cubeMapBuffer.imageView = SceneManager::CubeMap->GetView();
+        cubeMapBuffer.sampler = SceneManager::CubeMap->GetSampler();
         CubeMapBufferInfoList.emplace_back(cubeMapBuffer);
 
         AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);

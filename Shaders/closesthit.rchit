@@ -7,29 +7,8 @@
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
-
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-} sceneData;
-
-struct RayPayload {
-	vec3 color;
-	uint seed;
-	vec3 normal;
-    int reflectCount;
-	bool hitGeo;
-};
-
+#include "SceneData.glsl"
+#include "RTXPayload.glsl"
 
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 layout(location = 1) rayPayloadEXT bool shadowed;
@@ -114,23 +93,23 @@ void main()
         normal = normalize(normal * 2.0 - 1.0);
     }
 
-   vec3 result = vec3(0.0f);
+   vec3 baseColor = vec3(0.0f);
    for(int x = 0; x < sceneData.DirectionalLightCount; x++)
    {
-        result += CalcNormalDirLight(vertex, material, TBN, normal, FinalUV, x);
+        baseColor += CalcNormalDirLight(vertex, material, TBN, normal, FinalUV, x);
    }
 //        for(int x = 0; x < sceneData.PointLightCount; x++)
 //     {
-//        result += CalcNormalPointLight(vertex, material, TBN, normal, FinalUV, x);   
+//        baseColor += CalcNormalPointLight(vertex, material, TBN, normal, FinalUV, x);   
 //     }
 //       for(int x = 0; x < sceneData.SpotLightCount; x++)
 //       {
-//            result += CalcNormalSpotLight(vertex, material, TBN, normal, FinalUV, x);   
+//            baseColor += CalcNormalSpotLight(vertex, material, TBN, normal, FinalUV, x);   
 //       }
 
-
-   /* if(material.Reflectivness > 0.0f &&
-       rayHitInfo.reflectCount != ConstMesh.MaxRefeflectCount)
+    vec3 result = vec3(0.0f);
+    if(material.Reflectivness > 0.0f &&
+       rayHitInfo.reflectCount != sceneData.MaxRefeflectCount)
     {
         vec3 hitPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_RayTmaxEXT;
         vec3 origin   = hitPos.xyz + normal * 0.001f;
@@ -143,8 +122,8 @@ void main()
     else
 	{
         result = baseColor;
-        rayHitInfo.reflectCount = ConstMesh.MaxRefeflectCount + 1;
-	}*/
+        rayHitInfo.reflectCount = sceneData.MaxRefeflectCount + 1;
+	}
 
     rayHitInfo.color = result;
 }

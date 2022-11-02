@@ -5,27 +5,13 @@
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
+#include "SceneData.glsl"
 
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-} sceneData;
 struct RayHitInfo
 {
 	vec3 color;
 	uint seed;
-	vec3 normal;
     int reflectCount;
-    bool hitGeo;
 };
 
 layout(location = 0) rayPayloadInEXT RayHitInfo rayPayload;
@@ -45,5 +31,4 @@ layout(binding = 10) uniform samplerCube CubeMap;
 void main()
 {
 	rayPayload.color = texture(CubeMap, gl_WorldRayDirectionEXT).rgb;
-	rayPayload.normal = vec3(0.0f);
 }

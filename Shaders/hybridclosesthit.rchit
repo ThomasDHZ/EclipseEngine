@@ -7,29 +7,8 @@
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
-
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-} sceneData;
-
-struct RayPayload {
-	vec3 color;
-	uint seed;
-	vec3 normal;
-    int reflectCount;
-	bool hitGeo;
-};
-
+#include "SceneData.glsl"
+#include "RTXPayload.glsl"
 
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 layout(location = 1) rayPayloadEXT bool shadowed;

@@ -83,6 +83,8 @@ public:
 		const auto material = ActiveMesh->GetMaterial();
 		if (material)
 		{
+			ImGui::SliderFloat3("Reflectivness", &material->Reflectivness, 0.0f, 1.0f);
+
 			if (material->GetMaterialType() == MaterialTypeEnum::kMaterialBlinnPhong)
 			{
 				if (material->GetDiffuseMap())

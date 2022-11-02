@@ -132,7 +132,6 @@ private:
 	glm::vec3 Diffuse = glm::vec3(0.6f);
 	glm::vec3 Specular = glm::vec3(1.0f);
 	float Shininess = 32;
-	float Reflectivness = 0.0f;
 
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	float Matallic = 0.0f;
@@ -157,7 +156,7 @@ private:
 	void GenerateID();
 
 public:
-
+	float Reflectivness = 0.0f;
 	Material();
 	Material(const std::string materialName);
 	Material(const std::string materialName, MaterialTypeEnum materialtype);

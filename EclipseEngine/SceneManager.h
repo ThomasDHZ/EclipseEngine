@@ -56,7 +56,6 @@ public:
 
 		skyboxMesh = std::make_shared<SkyboxMesh>();
 		skyboxMesh->StartUp();
-		std::cout << "break skyboxMesh" << std::endl;
 	}
 
 	static void Update()
@@ -77,6 +76,12 @@ public:
 		sceneProperites.PointLightCount = LightManager::GetPointLightCount();
 		sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
 		sceneProperites.Timer = time;
+		sceneProperites.frame++;
+		if (sceneProperites.frame == UINT32_MAX)
+		{
+			sceneProperites.frame = 0;
+		}
+		sceneProperites.MaxRefeflectCount = 2;
 
 		cubeMapInfo.view = glm::mat4(glm::mat3(SceneManager::activeCamera->GetViewMatrix()));
 		cubeMapInfo.proj = glm::perspective(glm::radians(SceneManager::activeCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);

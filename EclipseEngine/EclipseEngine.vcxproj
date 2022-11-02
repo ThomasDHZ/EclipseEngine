@@ -539,7 +539,9 @@
     <None Include="..\Shaders\Renderer2D.vert" />
     <None Include="..\Shaders\Renderer3D.frag" />
     <None Include="..\Shaders\Renderer3D.vert" />
+    <None Include="..\Shaders\RTXPayload.glsl" />
     <None Include="..\Shaders\RTXRandom.glsl" />
+    <None Include="..\Shaders\SceneData.glsl" />
     <None Include="..\Shaders\SelectedObjectShader.frag" />
     <None Include="..\Shaders\SelectedObjectShader.vert" />
     <None Include="..\Shaders\shadow.rmiss" />

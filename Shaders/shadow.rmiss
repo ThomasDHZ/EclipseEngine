@@ -4,21 +4,8 @@
 
 #include "MeshProperties.glsl"
 #include "Lights.glsl"
-
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-} sceneData;
+#include "RTXPayload.glsl"
+#include "SceneData.glsl"
 
 layout(location = 2) rayPayloadInEXT bool shadowed;
 

@@ -1306,6 +1306,12 @@
     <None Include="..\Shaders\RTXRandom.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="..\Shaders\RTXPayload.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\SceneData.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">

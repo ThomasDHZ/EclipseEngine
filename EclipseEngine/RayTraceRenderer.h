@@ -7,7 +7,7 @@
 class RayTraceRenderer : public RenderPass
 {
 private:
-	MeshPickerRenderPass3D meshPickerRenderPass;
+//	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	FrameBufferRenderPass FrameBufferRenderer;
 

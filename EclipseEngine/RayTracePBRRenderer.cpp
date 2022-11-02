@@ -12,10 +12,10 @@ RayTracePBRRenderer::~RayTracePBRRenderer()
 
 void RayTracePBRRenderer::BuildRenderer()
 {
-   // meshPickerRenderPass.BuildRenderPass();
+    // meshPickerRenderPass.BuildRenderPass();
     environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
-    rayTracePBRRenderPass.StartUp();
-    FrameBufferRenderer.BuildRenderPass(rayTracePBRRenderPass.RayTracedTexture, rayTracePBRRenderPass.RayTracedTexture);
+    rayTraceRenderPass.StartUp();
+    FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture, rayTraceRenderPass.RayTracedTexture);
 }
 
 void RayTracePBRRenderer::Update()
@@ -24,9 +24,9 @@ void RayTracePBRRenderer::Update()
         Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
     {
         const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-      //  const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+        //  const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
 
-     //   MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
+         // MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
     }
 }
 
@@ -50,16 +50,16 @@ void RayTracePBRRenderer::ImGuiUpdate()
 
 void RayTracePBRRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-  //  CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
-    CommandBufferSubmitList.emplace_back(rayTracePBRRenderPass.Draw());
+    //CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
+    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.Draw());
     CommandBufferSubmitList.emplace_back(FrameBufferRenderer.Draw());
 }
 
 void RayTracePBRRenderer::Destroy()
 {
-   // meshPickerRenderPass.Destroy();
+    // meshPickerRenderPass.Destroy();
     environmentToCubeRenderPass.Destroy();
-    rayTracePBRRenderPass.Destroy();
+    rayTraceRenderPass.Destroy();
     FrameBufferRenderer.Destroy();
 }
 

@@ -1,23 +1,21 @@
 #pragma once
-#include "RenderPass.h"
+#include "FrameBufferRenderPass.h"
+#include "RayTraceRenderPass.h"
 #include "MeshPickerRenderPass3D.h"
 #include "EnvironmentToCubeRenderPass.h"
-#include "FrameBufferRenderPass.h"
 #include "RayTracePBRRenderPass.h"
 
 class RayTracePBRRenderer : public RenderPass
 {
 private:
-	//MeshPickerRenderPass3D meshPickerRenderPass;
+	//	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	FrameBufferRenderPass FrameBufferRenderer;
 
 public:
 	RayTracePBRRenderer();
 	~RayTracePBRRenderer();
-
-	RayTracePBRRenderPass rayTracePBRRenderPass;
-
+	RayTracePBRRenderPass rayTraceRenderPass;
 	static std::string BaseShaderFilePath;
 	void BuildRenderer();
 	void Update();
