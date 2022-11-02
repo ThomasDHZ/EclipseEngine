@@ -160,16 +160,12 @@ void main()
         rayHitInfo.reflectCount++;
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		irradiance += rayHitInfo.color; 
-        rayHitInfo.reflectCount += 1;
     }
-    
     rayHitInfo.reflectCount = 0;
 
     vec3 specular = vec3(0.0f);    
-    if(metallic > 0.0f &&
-       rayHitInfo.reflectCount != sceneData.MaxRefeflectCount)
+    if(rayHitInfo.reflectCount2 <= sceneData.MaxRefeflectCount) 
     {
-
        uint seed = tea(gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x, sceneData.frame);
        float r1        = rnd(seed);
        float r2        = rnd(seed);
@@ -179,11 +175,11 @@ void main()
         vec3 origin   = hitPos.xyz + N * 0.001f;
         vec3 rayDir   = reflect(origin, N + material.Roughness * vec3(r1, r2, r3));
 
-        rayHitInfo.reflectCount++;
+        rayHitInfo.reflectCount2++;
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		specular += rayHitInfo.color; 
-        rayHitInfo.reflectCount = sceneData.MaxRefeflectCount + 1;
 	}
+    rayHitInfo.reflectCount2 = 0;
 
     vec3 diffuse = irradiance * albedo;
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);
