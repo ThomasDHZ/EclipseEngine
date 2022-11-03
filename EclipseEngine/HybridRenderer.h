@@ -14,7 +14,7 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	RaytraceHybridPass raytraceHybridPass;
 	FrameBufferRenderPass frameBufferRenderPass;
-
+	ComputeAnimationPipeline AnimationRenderer;
 public:
 	HybridRenderer();
 	~HybridRenderer();

@@ -6,9 +6,20 @@ ComputeAnimationPipeline::ComputeAnimationPipeline()
 {
 }
 
-ComputeAnimationPipeline::ComputeAnimationPipeline(Mesh3D* meshptr)
+ComputeAnimationPipeline::~ComputeAnimationPipeline()
 {
-	mesh = meshptr;
+}
+
+void ComputeAnimationPipeline::StartUp()
+{
+	for (auto& mesh : MeshRendererManager::GetMeshList())
+	{
+		auto mesh3D = static_cast<Mesh3D*>(mesh.get());
+		if (mesh3D->GetBoneCount() > 0)
+		{
+			meshPtr = mesh3D;
+		}
+	}
 
 	SetUpDescriptorBindings();
 	CreateShaderPipeLine();
@@ -24,18 +35,14 @@ ComputeAnimationPipeline::ComputeAnimationPipeline(Mesh3D* meshptr)
 	}
 }
 
-ComputeAnimationPipeline::~ComputeAnimationPipeline()
-{
-}
-
 void ComputeAnimationPipeline::SetUpDescriptorBindings()
 {
-	VertexBufferCopy = mesh->GetVertexVulkanBufferPtr();
+	VertexBufferCopy = meshPtr->GetVertexVulkanBufferPtr();
 
-	VkDescriptorBufferInfo VertexBufferInfo = AddBufferDescriptor(mesh->VertexBuffer);
-	VkDescriptorBufferInfo BoneWeightBufferInfo = AddBufferDescriptor(mesh->BoneWeightBuffer);
-	VkDescriptorBufferInfo MeshDataBufferInfo = AddBufferDescriptor(mesh->MeshPropertiesBuffer.VulkanBufferData);
-	VkDescriptorBufferInfo BoneTransformBufferInfo = AddBufferDescriptor(mesh->BoneTransformBuffer);
+	VkDescriptorBufferInfo VertexBufferInfo = AddBufferDescriptor(meshPtr->VertexBuffer);
+	VkDescriptorBufferInfo BoneWeightBufferInfo = AddBufferDescriptor(meshPtr->BoneWeightBuffer);
+	VkDescriptorBufferInfo MeshDataBufferInfo = AddBufferDescriptor(meshPtr->MeshPropertiesBuffer.VulkanBufferData);
+	VkDescriptorBufferInfo BoneTransformBufferInfo = AddBufferDescriptor(meshPtr->BoneTransformBuffer);
 
 	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 	AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, VertexBufferInfo);
@@ -114,7 +121,7 @@ void ComputeAnimationPipeline::Compute()
 	BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 1, &BufferMemoryBarrier, 0, nullptr);
 
-	mesh->GetVertexVulkanBufferPtr()->CopyBufferToMemory(&mesh->GetVertexList()[0], sizeof(Vertex3D) * mesh->GetVertexList().size());
+	meshPtr->GetVertexVulkanBufferPtr()->CopyBufferToMemory(&meshPtr->GetVertexList()[0], sizeof(Vertex3D) * meshPtr->GetVertexList().size());
 	vkEndCommandBuffer(commandBuffer);
 
 	VkSubmitInfo submitInfo{};

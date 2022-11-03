@@ -77,6 +77,7 @@ public:
 	VulkanBuffer* GetBoneTransformBufferPtr() { return &BoneTransformBuffer; }
 
 	std::vector<Vertex3D> GetVertexList() { return VertexList; }
+	uint32_t GetBoneCount() { return BoneCount; }
 
 	virtual void to_json(nlohmann::json& json) override
 	{

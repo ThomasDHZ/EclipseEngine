@@ -16,6 +16,7 @@ void BlinnPhongRenderer::BuildRenderer()
 	blinnPhongRenderPass.BuildRenderPass(SceneManager::CubeMap, meshPickerRenderPass.depthTexture);
 	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTexture);
 	frameBufferRenderPass.BuildRenderPass(blinnPhongRenderPass.RenderedTexture, blinnPhongRenderPass.RenderedTexture);
+	AnimationRenderer.StartUp();
 }
 
 void BlinnPhongRenderer::Update()
@@ -60,6 +61,7 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
+	AnimationRenderer.StartUp();
 }
 
 void BlinnPhongRenderer::Destroy()
@@ -70,4 +72,5 @@ void BlinnPhongRenderer::Destroy()
 	blinnPhongRenderPass.Destroy();
 	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
+	AnimationRenderer.Destroy();
 }

@@ -10,7 +10,7 @@ private:
 //	MeshPickerRenderPass3D meshPickerRenderPass;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	FrameBufferRenderPass FrameBufferRenderer;
-
+	ComputeAnimationPipeline AnimationRenderer;
 public:
 	RayTraceRenderer();
 	~RayTraceRenderer();

@@ -63,6 +63,7 @@ void PBRRenderer::BuildRenderer()
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, pbrRenderPass.RenderedTexture);
+	AnimationRenderer.StartUp();
 }
 
 void PBRRenderer::Update()
@@ -161,6 +162,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
+	AnimationRenderer.Compute();
 }
 
 void PBRRenderer::Destroy()
@@ -198,6 +200,7 @@ void PBRRenderer::Destroy()
 	 
 	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
+	AnimationRenderer.Destroy();
 }
 
 void PBRRenderer::BakeTextures(const char* FileName)

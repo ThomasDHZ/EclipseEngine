@@ -77,7 +77,7 @@ struct SceneProperties
 	alignas(4)  float Timer = 0.0f;
 	alignas(4)  float PBRMaxMipLevel = 0.0f;
 	alignas(4)  uint32_t frame;
-	alignas(4)  int MaxRefeflectCount;
+	alignas(4)  int MaxReflectCount;
 };
 
 struct GaussianBlurSettings

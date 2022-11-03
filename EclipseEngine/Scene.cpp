@@ -135,13 +135,13 @@ Scene::Scene()
 
     auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
 GameObjectManager::AddGameObject(a);
-
-    ModelLoader loader2{};
-    loader2.FilePath = "../Models/Sponza/sponza.obj";
-    loader2.MeshType = MeshTypeEnum::kPolygon;
-
-auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
-GameObjectManager::AddGameObject(b);
+//
+//    ModelLoader loader2{};
+//    loader2.FilePath = "../Models/Sponza/sponza.obj";
+//    loader2.MeshType = MeshTypeEnum::kPolygon;
+//
+//auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
+//GameObjectManager::AddGameObject(b);
 
 
     //auto ads = TextureManager::LoadTextureAtlus("../texture/TestReflectionBakeLayer0.bmp", glm::ivec2(256));

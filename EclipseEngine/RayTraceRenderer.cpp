@@ -16,6 +16,7 @@ void RayTraceRenderer::BuildRenderer()
     environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
     rayTraceRenderPass.StartUp();
     FrameBufferRenderer.BuildRenderPass(rayTraceRenderPass.RayTracedTexture, rayTraceRenderPass.RayTracedTexture);
+    AnimationRenderer.StartUp();
 }
 
 void RayTraceRenderer::Update()
@@ -53,6 +54,7 @@ void RayTraceRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkComm
     //CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
     CommandBufferSubmitList.emplace_back(rayTraceRenderPass.Draw());
     CommandBufferSubmitList.emplace_back(FrameBufferRenderer.Draw());
+    AnimationRenderer.StartUp();
 }
 
 void RayTraceRenderer::Destroy()

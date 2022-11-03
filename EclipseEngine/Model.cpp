@@ -433,7 +433,6 @@ void Model::LoadModel(ModelLoader& modelLoader)
 	if (AnimationList.size() > 0)
 	{
 		AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
-		AnimationRenderer = ComputeAnimationPipeline(static_cast<Mesh3D*>(MeshList[0].get()));
 	}
 
 	ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
@@ -523,7 +522,6 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 			mesh->Update(GameObjectMatrix, ModelTransform, BoneList);
 
 		}
-		AnimationRenderer.Compute();
 	}
 	else
 	{
@@ -554,10 +552,6 @@ void Model::UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationSt
 
 void Model::Destroy()
 {
-	if (BoneList.size() > 0)
-	{
-		AnimationRenderer.Destroy();
-	}
 	for (auto& mesh : MeshList)
 	{
 		mesh->Destroy();

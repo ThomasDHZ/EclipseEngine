@@ -16,6 +16,7 @@ private:
 	//DepthRenderPass depthRenderPass;
 	BlinnPhongRenderPass blinnPhongRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
+	ComputeAnimationPipeline AnimationRenderer;
 
 public:
 	BlinnPhongRenderer();

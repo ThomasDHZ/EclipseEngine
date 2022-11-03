@@ -26,6 +26,7 @@ void HybridRenderer::BuildRenderer()
 								GBufferRenderPass.BloomTexture,
 								raytraceHybridPass.RenderedShadowTexture);
 	frameBufferRenderPass.BuildRenderPass(deferredRenderPass.RenderedTexture);
+	AnimationRenderer.StartUp();
 }
 
 void HybridRenderer::Update()
@@ -70,6 +71,7 @@ void HybridRenderer::Draw(SceneProperties& sceneProperites, std::vector<VkComman
 	CommandBufferSubmitList.emplace_back(deferredRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(raytraceHybridPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
+	AnimationRenderer.StartUp();
 }
 
 void HybridRenderer::Destroy()
@@ -80,4 +82,5 @@ void HybridRenderer::Destroy()
 	GBufferRenderPass.Destroy();
 	deferredRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
+	AnimationRenderer.Destroy();
 }

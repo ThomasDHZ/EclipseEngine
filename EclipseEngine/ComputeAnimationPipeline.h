@@ -6,16 +6,17 @@ class ComputeAnimationPipeline : public GraphicsPipeline
 {
 private:
 	VulkanBuffer* VertexBufferCopy;
-	Mesh3D* mesh;
+	Mesh3D* meshPtr;
 
 	VkCommandBuffer commandBuffer;
 
 	void SetUpDescriptorBindings();
 	void CreateShaderPipeLine();
+
 public:
 	ComputeAnimationPipeline();
-	ComputeAnimationPipeline(Mesh3D* meshptr);
 	~ComputeAnimationPipeline();
 
+	void StartUp();
 	void Compute();
 };

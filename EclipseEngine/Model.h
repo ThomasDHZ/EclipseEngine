@@ -47,7 +47,6 @@ private:
 	std::vector<NodeMap> NodeMapList;
 
 	AnimationPlayer3D AnimationPlayer;
-	ComputeAnimationPipeline AnimationRenderer;
 
 	void GenerateID();
 	void LoadModel(ModelLoader& modelLoader);

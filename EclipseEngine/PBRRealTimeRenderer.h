@@ -41,7 +41,7 @@ private:
 	BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
-
+	ComputeAnimationPipeline AnimationRenderer;
 public:
 	PBRRealTimeRenderer();
 	~PBRRealTimeRenderer();

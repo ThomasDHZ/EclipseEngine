@@ -60,7 +60,7 @@ public:
 
 	static void Update()
 	{
-		auto time = glfwGetTime();
+		auto time = (float)glfwGetTime();
 		GameObjectManager::Update(time);
 		MeshRendererManager::Update();
 		TopLevelAccelerationStructureManager::Update();
@@ -81,7 +81,7 @@ public:
 		{
 			sceneProperites.frame = 0;
 		}
-		sceneProperites.MaxRefeflectCount = 2;
+		sceneProperites.MaxReflectCount = 2;
 
 		cubeMapInfo.view = glm::mat4(glm::mat3(SceneManager::activeCamera->GetViewMatrix()));
 		cubeMapInfo.proj = glm::perspective(glm::radians(SceneManager::activeCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);

@@ -127,7 +127,7 @@ void main()
 
         if(material.DepthMapID != 0)
         {
-            FinalUV = ParallaxMapping(vertex, material, FinalUV,  viewDir);       
+            FinalUV = ParallaxMapping(vertex, material, FinalUV, viewDir);       
         }
         N = texture(TextureMap[material.NormalMapID], FinalUV).rgb;
         N = normalize(N * 2.0 - 1.0);
@@ -151,35 +151,44 @@ void main()
     kD *= 1.0 - metallic;	  
     
     vec3 irradiance = vec3(0.0f);
-    if(rayHitInfo.reflectCount <= sceneData.MaxRefeflectCount)
+    if(rayHitInfo.reflectCount  == 0) 
     {
+       uint seed = tea(gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x, sceneData.frame);
+       float r1        = rnd(seed)*1.10f;
+       float r2        = rnd(seed)*1.10f;
+       float r3        = rnd(seed)*1.10f;
+
         vec3 hitPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_RayTmaxEXT;
         vec3 origin   = hitPos.xyz + N * 0.001f;
-        vec3 rayDir   = reflect(origin, N);
+        vec3 rayDir   = reflect(origin, N + vec3(r1, r2, r3));
 
         rayHitInfo.reflectCount++;
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		irradiance += rayHitInfo.color; 
     }
-    rayHitInfo.reflectCount = 0;
+    irradiance /= rayHitInfo.reflectCount;
+   // rayHitInfo.reflectCount = 0;
 
+    
     vec3 specular = vec3(0.0f);    
-    if(rayHitInfo.reflectCount2 <= sceneData.MaxRefeflectCount) 
+    if(metallic > 0.0f &&
+       rayHitInfo.reflectCount == 1) 
     {
        uint seed = tea(gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x, sceneData.frame);
-       float r1        = rnd(seed);
-       float r2        = rnd(seed);
-       float r3        = rnd(seed);
+       float r1        = rnd(seed)*0.5f;
+       float r2        = rnd(seed)*0.5f;
+       float r3        = rnd(seed)*0.5f;
 
         vec3 hitPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_RayTmaxEXT;
         vec3 origin   = hitPos.xyz + N * 0.001f;
         vec3 rayDir   = reflect(origin, N + material.Roughness * vec3(r1, r2, r3));
 
-        rayHitInfo.reflectCount2++;
+        rayHitInfo.reflectCount++;
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		specular += rayHitInfo.color; 
 	}
-    rayHitInfo.reflectCount2 = 0;
+    specular /= rayHitInfo.reflectCount;
+    rayHitInfo.reflectCount = 0;
 
     vec3 diffuse = irradiance * albedo;
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);

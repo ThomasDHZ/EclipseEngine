@@ -62,6 +62,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, bloomCombinePipeline.BloomTexture);
+	AnimationRenderer.StartUp();
 }
 
 void PBRRealTimeRenderer::Update()
@@ -178,4 +179,5 @@ void PBRRealTimeRenderer::Destroy()
 
 	//depthDebugRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
+	AnimationRenderer.Destroy();
 }

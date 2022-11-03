@@ -141,7 +141,6 @@ void LineMesh3D::SetMeshPosition(float x, float y, float z)
 	MeshPosition = glm::vec3(x, y, z);
 }
 
-
 void LineMesh3D::SetMeshRotation(float x, float y, float z)
 {
 	MeshRotation = glm::vec3(x, y, z);
