@@ -27,9 +27,11 @@ Mesh3D::Mesh3D(MeshLoader3D& meshLoader)
 	IndexCount = IndexList.size();
 	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
 
+	LastTransform = GameObjectTransformMatrix * ModelTransformMatrix * MeshTransformMatrix;
+
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-	TransformBuffer.CreateBuffer(&MeshTransformMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	TransformBuffer.CreateBuffer(&LastTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	RTXMeshStartUp();
 	AnimationStartUp(meshLoader);
@@ -193,11 +195,6 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 					  glm::vec3(ModelTransformMatrix[3][0], ModelTransformMatrix[3][1], ModelTransformMatrix[3][2]) +
 					  MeshPosition + ReflectionPoint;
 
-	if (meshProperties.MeshTransform != TransformMatrix)
-	{
-		VulkanRenderer::UpdateBLAS = true;
-	}
-
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
 	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
@@ -212,12 +209,10 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 
 	MeshPropertiesBuffer.Update(meshProperties);
 
-	MeshTransformMatrix = meshProperties.MeshTransform;
-
-	if (VulkanRenderer::UpdateBLAS &&
+	if (LastTransform != meshProperties.MeshTransform &&
 		IndexCount != 0)
 	{
-
+		MeshTransformMatrix = meshProperties.MeshTransform;
 		TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
 
 		glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
@@ -225,6 +220,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
 
 		UpdateMeshBottomLevelAccelerationStructure();
+		LastTransform = meshProperties.MeshTransform;
 	}
 }
 
@@ -243,11 +239,6 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 	reflectionPoint = glm::vec3(GameObjectTransformMatrix[3][0], GameObjectTransformMatrix[3][1], GameObjectTransformMatrix[3][2]) +
 		glm::vec3(ModelTransformMatrix[3][0], ModelTransformMatrix[3][1], ModelTransformMatrix[3][2]) +
 		MeshPosition + ReflectionPoint;
-
-	if (meshProperties.MeshTransform != TransformMatrix)
-	{
-		VulkanRenderer::UpdateBLAS = true;
-	}
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
 	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();

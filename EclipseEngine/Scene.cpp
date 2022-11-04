@@ -136,6 +136,11 @@ Scene::Scene()
     auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
 GameObjectManager::AddGameObject(a);
 
+
+auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
+c->GameObjectPosition = glm::vec3(10.0f, 0.0f, 0.0f);
+GameObjectManager::AddGameObject(c);
+
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
     loader2.MeshType = MeshTypeEnum::kPolygon;
@@ -377,11 +382,7 @@ void Scene::Update()
 void Scene::ImGuiUpdate()
 {
     SceneManager::bloomsettings.blurScale;
-
-    ImGui::SliderFloat("DLight position ", &SceneManager::bloomsettings.blurScale, 0.0f, 50.0f);
-    ImGui::SliderFloat("DLight direction ", &SceneManager::bloomsettings.blurStrength, 0.01f, 2.0f);
-
-
+    
     //ImGui::Image(pbrRenderer.GetBloomTexture()->ImGuiDescriptorSet, ImVec2(VulkanRenderer::GetSwapChainResolution().width / 5, VulkanRenderer::GetSwapChainResolution().height / 5));
     //if (pbrRenderer.GetColorPickerTexture() != nullptr)
     //{

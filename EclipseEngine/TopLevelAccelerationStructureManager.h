@@ -8,7 +8,7 @@ class TopLevelAccelerationStructureManager
 {
 private: 
     static AccelerationStructureBuffer TopLevelAccelerationStructure;
-    static VulkanBuffer InstancesBuffer;
+    static VulkanBuffer InstanceBuffer;
 
 public:
     static void Update()
@@ -19,7 +19,6 @@ public:
         UpdateTopLevelAccelerationStructure();
        /* }*/
 
-        VulkanRenderer::UpdateBLAS = false;
         VulkanRenderer::UpdateTLAS = false;
 	}
 
@@ -39,9 +38,9 @@ public:
             VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};
             if (AccelerationStructureInstanceList.size() > 0)
             {
-                InstancesBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+                InstanceBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-                DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstancesBuffer.GetBuffer());
+                DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstanceBuffer.GetBuffer());
             }
 
             VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
@@ -100,7 +99,7 @@ public:
             TopLevelAccelerationStructure.AccelerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
 
             scratchBuffer.DestoryBuffer();
-            InstancesBuffer.DestoryBuffer();
+            InstanceBuffer.DestoryBuffer();
         }
     }
 

@@ -54,7 +54,6 @@ Vertex BuildVertexInfo()
 
 const float PI = 3.14159265359;
 
-vec3 Irradiate(vec3 N, float roughness, int count);
 mat3 getTBNFromMap(Vertex vertex);
 float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
@@ -151,7 +150,7 @@ void main()
     kD *= 1.0 - metallic;	  
     
     vec3 irradiance = vec3(0.0f);
-    if(rayHitInfo.reflectCount <= sceneData.MaxRefeflectCount)
+    if(rayHitInfo.reflectCount < sceneData.MaxRefeflectCount)
     {
        uint seed = tea(gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x, sceneData.frame);
        float r1        = rnd(seed)*1.10f;
@@ -166,11 +165,11 @@ void main()
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		irradiance += rayHitInfo.color; 
     }
-    irradiance /= rayHitInfo.reflectCount;
+    irradiance /= rayHitInfo.reflectCount + 1;
 
     vec3 specular = vec3(0.0f);    
     if(metallic > 0.0f &&
-       rayHitInfo.reflectCount2 <= sceneData.MaxRefeflectCount)
+       rayHitInfo.reflectCount2 < sceneData.MaxRefeflectCount)
     {
        uint seed = tea(gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x, sceneData.frame);
        float r1        = rnd(seed)*0.5f;
@@ -185,7 +184,7 @@ void main()
         traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
 		specular += rayHitInfo.color; 
 	}
-    specular /= rayHitInfo.reflectCount2;
+    specular /= rayHitInfo.reflectCount2 + 1;
 
     vec3 diffuse = irradiance * albedo;
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);
@@ -194,20 +193,6 @@ void main()
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
     rayHitInfo.color = color;
-}
-
-vec3 Irradiate(vec3 N, float roughness, int count)
-{
-    vec3 irradiance = vec3(0.0f);
-
-        vec3 hitPos = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_RayTmaxEXT;
-        vec3 origin   = hitPos.xyz + N * 0.0001f;
-        vec3 rayDir   = reflect(gl_WorldRayDirectionEXT, N + roughness * gl_LaunchIDEXT.y * gl_LaunchSizeEXT.x + gl_LaunchIDEXT.x);
-        traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, 0xff, 0, 0, 0, origin, 0.001f, rayDir, 10000.0f, 0);
-
-        rayHitInfo.reflectCount++;
-        irradiance += rayHitInfo.color;
-        return irradiance;
 }
 
 mat3 getTBNFromMap(Vertex vertex)
@@ -267,29 +252,44 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness, float metallic)
 {
-   vec3 Lo = vec3(0.0);
+ Vertex vertex = BuildVertexInfo();
 
+   vec3 Lo = vec3(0.0);
    for(int x = 0; x < sceneData.DirectionalLightCount; x++)
    {
-        vec3 L = normalize(-DLight[x].directionalLight.direction);
-        vec3 H = normalize(V + L);
-        vec3 radiance = DLight[x].directionalLight.diffuse;
+      vec3 L = normalize(-DLight[x].directionalLight.direction);
+      vec3 H = normalize(V + L);
+      vec3 radiance = DLight[x].directionalLight.diffuse;
 
-        float NDF = DistributionGGX(N, H, roughness);   
-        float G   = GeometrySmith(N, V, L, roughness);    
-        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);        
+      float NDF = DistributionGGX(N, H, roughness);   
+      float G   = GeometrySmith(N, V, L, roughness);    
+      vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);        
         
-        vec3 numerator    = NDF * G * F;
-        float denominator = 4.0f * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f;
-        vec3 specular = numerator / denominator;
+      vec3 numerator    = NDF * G * F;
+      float denominator = 4.0f * max(dot(N, V), 0.0f) * max(dot(N, L), 0.0f) + 0.0001f;
+      vec3 specular = numerator / denominator;
 
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - metallic;	                
+      vec3 kS = F;
+      vec3 kD = vec3(1.0) - kS;
+      kD *= 1.0 - metallic;	                
             
-        float NdotL = max(dot(N, L), 0.0);        
+      float NdotL = max(dot(N, L), 0.0);        
 
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+      float tmin = 0.001f;
+      float tmax = length(L - vertex.Position);
+      vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
+
+      shadowed = false;  
+      traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, L, tmax, 1);
+
+      if(shadowed)
+      {
+         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+      }
+      else
+      {
+         Lo += (kD * albedo / PI + specular) * radiance * NdotL * 0.3f ;
+      }
     }
     return Lo;
 }
@@ -319,7 +319,21 @@ vec3 CalcPointLight(Vertex vertex, vec3 F0, vec3 V, vec3 N, vec3 albedo, float r
             
         float NdotL = max(dot(N, L), 0.0);        
 
-        Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+      float tmin = 0.001f;
+      float tmax = length(L - vertex.Position);
+      vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
+
+      shadowed = false;  
+      traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, L, tmax, 1);
+
+      if(shadowed)
+      {
+         Lo += (kD * albedo / PI + specular) * radiance * NdotL;
+      }
+      else
+      {
+         Lo += (kD * albedo / PI + specular) * radiance * NdotL * 0.3f ;
+      }
    }
 
     return Lo;

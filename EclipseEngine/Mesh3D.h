@@ -29,6 +29,8 @@ private:
 	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
 
+	glm::mat4 LastTransform = glm::mat4(1.0f);
+	
 	glm::vec3 GetPosition() { return MeshPosition; }
 	glm::vec3 GetRotation() { return MeshRotation; }
 	glm::vec3 GetScale() { return MeshScale; }

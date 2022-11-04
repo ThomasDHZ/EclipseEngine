@@ -65,10 +65,6 @@ public:
 	{
 		ImGui::Begin("Selected Model");
 
-		ImGui::LabelText("", "Transform");
-		//ImGui::SliderFloat3("Mesh position ", &ActiveMesh->GetMeshPosition()->x, -100.0f, 100.0f);
-		//ImGui::SliderFloat3("Mesh rotation ", &ActiveMesh->GetMeshRotation()->x, 0.0f, 360.0f);
-		//ImGui::SliderFloat3("Mesh scale ", &ActiveMesh->GetMeshScale()->x, 0.0f, 1.0f);
 
 		ImGui::NewLine();
 
