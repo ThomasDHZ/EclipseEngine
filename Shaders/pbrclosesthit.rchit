@@ -166,6 +166,7 @@ void main()
 		irradiance += rayHitInfo.color; 
     }
     irradiance /= rayHitInfo.reflectCount + 1;
+    rayHitInfo.reflectCount = 0;
 
     vec3 specular = vec3(0.0f);    
     if(metallic > 0.0f &&

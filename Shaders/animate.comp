@@ -42,24 +42,24 @@ struct Vertex
 	vec4  BoneWeights;
  };
 
-layout(binding = 0, scalar) buffer Vertices { Vertex v[]; }vertices;
-layout(binding = 1, scalar) buffer Bonesz { Bones b[]; }bone;
+layout(binding = 0, scalar) buffer Vertices { Vertex v[]; }vertices[];
+layout(binding = 1, scalar) buffer Bonesz { Bones b[]; }bone[];
 layout(binding = 2) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 3, scalar) buffer BoneTransform { mat4 Transform[]; } MeshBoneTransform;
+layout(binding = 3, scalar) buffer BoneTransform { mat4 Transform[]; } MeshBoneTransform[];
 
 void main()
 {
-  Vertex v0 = vertices.v[gl_GlobalInvocationID.x];
-  Bones b = bone.b[gl_GlobalInvocationID.x];
+  Vertex v0 = vertices[ConstMesh.MeshIndex].v[gl_GlobalInvocationID.x];
+  Bones b = bone[ConstMesh.MeshIndex].b[gl_GlobalInvocationID.x];
 
   mat4 BoneTransform = mat4(1.0f);
-  BoneTransform =  MeshBoneTransform.Transform[b.BoneID[0]] * b.BoneWeights[0];
-  BoneTransform += MeshBoneTransform.Transform[b.BoneID[1]] * b.BoneWeights[1];
-  BoneTransform += MeshBoneTransform.Transform[b.BoneID[2]] * b.BoneWeights[2];
-  BoneTransform += MeshBoneTransform.Transform[b.BoneID[3]] * b.BoneWeights[3];
+  BoneTransform =  MeshBoneTransform[ConstMesh.MeshIndex].Transform[b.BoneID[0]] * b.BoneWeights[0];
+  BoneTransform += MeshBoneTransform[ConstMesh.MeshIndex].Transform[b.BoneID[1]] * b.BoneWeights[1];
+  BoneTransform += MeshBoneTransform[ConstMesh.MeshIndex].Transform[b.BoneID[2]] * b.BoneWeights[2];
+  BoneTransform += MeshBoneTransform[ConstMesh.MeshIndex].Transform[b.BoneID[3]] * b.BoneWeights[3];
   vec4 BonePosition = BoneTransform * vec4(v0.Position, 1.0);
 
-  v0.Position = vec3(meshBuffer[0].meshProperties.MeshTransform *  BonePosition);
-  v0.Normal = normalize(transpose(inverse(mat3(meshBuffer[0].meshProperties.MeshTransform * BoneTransform))) * v0.Normal);
-  vertices.v[gl_GlobalInvocationID.x] = v0;
+  v0.Position = vec3(meshBuffer[ConstMesh.MeshIndex].meshProperties.MeshTransform *  BonePosition);
+  v0.Normal = normalize(transpose(inverse(mat3(meshBuffer[ConstMesh.MeshIndex].meshProperties.MeshTransform * BoneTransform))) * v0.Normal);
+  vertices[ConstMesh.MeshIndex].v[gl_GlobalInvocationID.x] = v0;
 }

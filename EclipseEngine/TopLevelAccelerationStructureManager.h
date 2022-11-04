@@ -14,10 +14,10 @@ public:
     static void Update()
     {
 
-    /*    if (VulkanRenderer::UpdateTLAS)
-        {*/
+        if (VulkanRenderer::UpdateTLAS)
+        {
         UpdateTopLevelAccelerationStructure();
-       /* }*/
+        }
 
         VulkanRenderer::UpdateTLAS = false;
 	}

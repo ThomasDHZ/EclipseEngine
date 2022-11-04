@@ -5,8 +5,8 @@
 class ComputeAnimationPipeline : public GraphicsPipeline
 {
 private:
-	VulkanBuffer* VertexBufferCopy;
-	Mesh3D* meshPtr;
+	std::vector<VulkanBuffer*> VertexBufferCopy;
+	std::vector<Mesh3D*> meshPtr;
 
 	VkCommandBuffer commandBuffer;
 
