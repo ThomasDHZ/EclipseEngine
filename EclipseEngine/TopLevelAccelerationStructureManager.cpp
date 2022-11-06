@@ -3,5 +3,4 @@
  AccelerationStructureBuffer TopLevelAccelerationStructureManager::TopLevelAccelerationStructure;
  VkDeviceOrHostAddressConstKHR TopLevelAccelerationStructureManager::DeviceOrHostAddressConst;
  VulkanBuffer TopLevelAccelerationStructureManager::scratchBuffer;
- VulkanBuffer TopLevelAccelerationStructureManager::InstanceBuffer;
  int TopLevelAccelerationStructureManager::AccelerationStructureInstanceCount = -1;
