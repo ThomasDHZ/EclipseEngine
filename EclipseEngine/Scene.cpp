@@ -137,9 +137,17 @@ Scene::Scene()
 GameObjectManager::AddGameObject(a);
 
 
-auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
-c->GameObjectPosition = glm::vec3(10.0f, 0.0f, 0.0f);
-GameObjectManager::AddGameObject(c);
+//auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
+//c->GameObjectPosition = glm::vec3(10.0f, 0.0f, 0.0f);
+//GameObjectManager::AddGameObject(c);
+//
+//auto d = std::make_shared<ModelRenderer>(ModelRenderer("ani3", loader));
+//d->GameObjectPosition = glm::vec3(-5.0f, 0.0f, 0.0f);
+//GameObjectManager::AddGameObject(d);
+//
+//auto e = std::make_shared<ModelRenderer>(ModelRenderer("ani4", loader));
+//e->GameObjectPosition = glm::vec3(-10.0f, 0.0f, 0.0f);
+//GameObjectManager::AddGameObject(e);
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
