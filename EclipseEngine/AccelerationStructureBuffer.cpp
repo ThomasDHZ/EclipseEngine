@@ -55,30 +55,30 @@ void AccelerationStructureBuffer::CreateAccelerationStructure(VkAccelerationStru
 	VkMemoryRequirements memoryRequirements{};
 	vkGetBufferMemoryRequirements(VulkanRenderer::GetDevice(), AccelerationBuffer.GetBuffer(), &memoryRequirements);
 
-	VkMemoryAllocateFlagsInfo memoryAllocateFlagsInfo{};
-	memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
-	memoryAllocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
+	VkMemoryAllocateFlagsInfo MemoryAllocateFlags{};
+	MemoryAllocateFlags.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
+	MemoryAllocateFlags.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
 
-	VkMemoryAllocateInfo memoryAllocateInfo{};
-	memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-	memoryAllocateInfo.pNext = &memoryAllocateFlagsInfo;
-	memoryAllocateInfo.allocationSize = memoryRequirements.size;
-	memoryAllocateInfo.memoryTypeIndex = VulkanRenderer::GetMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+	VkMemoryAllocateInfo MemoryAllocate{};
+	MemoryAllocate.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	MemoryAllocate.pNext = &MemoryAllocateFlags;
+	MemoryAllocate.allocationSize = memoryRequirements.size;
+	MemoryAllocate.memoryTypeIndex = VulkanRenderer::GetMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	vkAllocateMemory(VulkanRenderer::GetDevice(), &memoryAllocateInfo, nullptr, AccelerationBuffer.GetBufferMemoryPtr());
+	vkAllocateMemory(VulkanRenderer::GetDevice(), &MemoryAllocate, nullptr, AccelerationBuffer.GetBufferMemoryPtr());
 	vkBindBufferMemory(VulkanRenderer::GetDevice(), AccelerationBuffer.GetBuffer(), AccelerationBuffer.GetBufferMemory(), 0);
 
-	VkAccelerationStructureCreateInfoKHR accelerationStructureCreate_info{};
-	accelerationStructureCreate_info.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
-	accelerationStructureCreate_info.buffer = AccelerationBuffer.GetBuffer();
-	accelerationStructureCreate_info.size = buildSizeInfo.accelerationStructureSize;
-	accelerationStructureCreate_info.type = type;
-	VulkanRenderer::vkCreateAccelerationStructureKHR(VulkanRenderer::GetDevice(), &accelerationStructureCreate_info, nullptr, AccelerationBuffer.GetBufferHandlePtr());
+	VkAccelerationStructureCreateInfoKHR AccelerationStructureCreateInfo{};
+	AccelerationStructureCreateInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR;
+	AccelerationStructureCreateInfo.buffer = AccelerationBuffer.GetBuffer();
+	AccelerationStructureCreateInfo.size = buildSizeInfo.accelerationStructureSize;
+	AccelerationStructureCreateInfo.type = type;
+	VulkanRenderer::vkCreateAccelerationStructureKHR(VulkanRenderer::GetDevice(), &AccelerationStructureCreateInfo, nullptr, AccelerationBuffer.GetBufferHandlePtr());
 
-	VkAccelerationStructureDeviceAddressInfoKHR accelerationDeviceAddressInfo{};
-	accelerationDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
-	accelerationDeviceAddressInfo.accelerationStructure = AccelerationBuffer.GetBufferHandle();
-	AccelerationBuffer.SetBufferAddress(VulkanRenderer::vkGetAccelerationStructureDeviceAddressKHR(VulkanRenderer::GetDevice(), &accelerationDeviceAddressInfo));
+	VkAccelerationStructureDeviceAddressInfoKHR AccelerationStructureDeviceAddressInfo{};
+	AccelerationStructureDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR;
+	AccelerationStructureDeviceAddressInfo.accelerationStructure = AccelerationBuffer.GetBufferHandle();
+	AccelerationBuffer.SetBufferAddress(VulkanRenderer::vkGetAccelerationStructureDeviceAddressKHR(VulkanRenderer::GetDevice(), &AccelerationStructureDeviceAddressInfo));
 }
 
 void AccelerationStructureBuffer::Destroy()

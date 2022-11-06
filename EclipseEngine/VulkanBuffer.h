@@ -6,6 +6,8 @@ class VulkanBuffer
 private:
 	VkDeviceMemory BufferMemory = VK_NULL_HANDLE;
 	VkDeviceSize BufferSize = 0;
+	VkBufferUsageFlags BufferUsage;
+	VkMemoryPropertyFlags BufferProperties;
 	uint64_t BufferDeviceAddress = 0;
 	VkAccelerationStructureKHR BufferHandle = VK_NULL_HANDLE;
 	void* data;
@@ -18,9 +20,10 @@ public:
 	VkResult CreateBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 	void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	void CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize);
+	VkResult UpdateBufferSize(VkDeviceSize bufferSize);
 	void DestoryBuffer();
 
-	void SetBufferAddress(uint64_t BufferAddress);
+	void SetBufferAddress(uint64_t bufferSize);
 
 	VkBuffer Buffer = VK_NULL_HANDLE;
 	VkBuffer GetBuffer() { return Buffer; }

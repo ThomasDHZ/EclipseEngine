@@ -18,15 +18,17 @@ VulkanBuffer::~VulkanBuffer()
 VkResult VulkanBuffer::CreateBuffer(void* BufferData, VkDeviceSize bufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties)
 {
 	BufferSize = bufferSize;
+	BufferUsage = usage;
+	BufferProperties = properties;
 
 	VkBufferCreateInfo buffer = {};
 	buffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 	buffer.size = BufferSize;
-	buffer.usage = usage;
+	buffer.usage = BufferUsage;
 	buffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 	if (vkCreateBuffer(VulkanRenderer::GetDevice(), &buffer, nullptr, &Buffer) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create buffer!");
+		throw std::runtime_error("Failed to create buffer.");
 	}
 
 	VkMemoryRequirements memRequirements;
@@ -39,11 +41,11 @@ VkResult VulkanBuffer::CreateBuffer(void* BufferData, VkDeviceSize bufferSize, V
 	VkMemoryAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	allocInfo.allocationSize = memRequirements.size;
-	allocInfo.memoryTypeIndex = VulkanRenderer::GetMemoryType(memRequirements.memoryTypeBits, properties);
+	allocInfo.memoryTypeIndex = VulkanRenderer::GetMemoryType(memRequirements.memoryTypeBits, BufferProperties);
 	allocInfo.pNext = &ExtendedAllocFlagsInfo;
 
 	if (vkAllocateMemory(VulkanRenderer::GetDevice(), &allocInfo, nullptr, &BufferMemory) != VK_SUCCESS) {
-		throw std::runtime_error("Failed to allocate buffer memory!");
+		throw std::runtime_error("Failed to allocate buffer memory.");
 	}
 
 	if (BufferData != nullptr)
@@ -52,7 +54,7 @@ VkResult VulkanBuffer::CreateBuffer(void* BufferData, VkDeviceSize bufferSize, V
 		memcpy(data, BufferData, (size_t)BufferSize);
 		vkUnmapMemory(VulkanRenderer::GetDevice(), BufferMemory);
 	}
-
+	
 	vkBindBufferMemory(VulkanRenderer::GetDevice(), Buffer, BufferMemory, 0);
 	return vkMapMemory(VulkanRenderer::GetDevice(), BufferMemory, 0, BufferSize, 0, &data);
 }
@@ -71,6 +73,43 @@ void VulkanBuffer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSi
 void VulkanBuffer::CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize)
 {
 	memcpy(data, DataToCopy, (size_t)BufferSize);
+}
+
+VkResult VulkanBuffer::UpdateBufferSize(VkDeviceSize bufferSize)
+{
+	BufferSize = bufferSize;
+
+	DestoryBuffer();
+	
+	VkBufferCreateInfo buffer = {};
+	buffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	buffer.size = BufferSize;
+	buffer.usage = BufferUsage;
+	buffer.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	if (vkCreateBuffer(VulkanRenderer::GetDevice(), &buffer, nullptr, &Buffer) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create buffer.");
+	}
+
+	VkMemoryRequirements memRequirements;
+	vkGetBufferMemoryRequirements(VulkanRenderer::GetDevice(), Buffer, &memRequirements);
+
+	VkMemoryAllocateFlagsInfoKHR ExtendedAllocFlagsInfo{};
+	ExtendedAllocFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
+	ExtendedAllocFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
+
+	VkMemoryAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+	allocInfo.allocationSize = memRequirements.size;
+	allocInfo.memoryTypeIndex = VulkanRenderer::GetMemoryType(memRequirements.memoryTypeBits, BufferProperties);
+	allocInfo.pNext = &ExtendedAllocFlagsInfo;
+
+	if (vkAllocateMemory(VulkanRenderer::GetDevice(), &allocInfo, nullptr, &BufferMemory) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to allocate buffer memory.");
+	}
+
+	vkBindBufferMemory(VulkanRenderer::GetDevice(), Buffer, BufferMemory, 0);
+	return vkMapMemory(VulkanRenderer::GetDevice(), BufferMemory, 0, BufferSize, 0, &data);
 }
 
 void VulkanBuffer::DestoryBuffer()

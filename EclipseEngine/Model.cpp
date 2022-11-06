@@ -11,7 +11,6 @@ Model::Model(ModelLoader& modelLoader)
 {
 	GenerateID();
 	LoadModel(modelLoader);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
@@ -22,7 +21,6 @@ Model::Model(std::shared_ptr<Mesh> mesh, uint64_t GameObjectID)
 	GameObjectTransform = glm::mat4(1.0f);
 
 	AddMesh(mesh);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID)
@@ -33,7 +31,6 @@ Model::Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID
 	GameObjectTransform = glm::mat4(1.0f);
 
 	AddMeshList(meshList);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::Model(MeshLoader3D& meshLoader)
@@ -44,7 +41,6 @@ Model::Model(MeshLoader3D& meshLoader)
 	GameObjectTransform = meshLoader.GameObjectTransform;
 
 	AddMesh(meshLoader);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::Model(std::vector<MeshLoader3D>& meshLoaderList)
@@ -55,7 +51,6 @@ Model::Model(std::vector<MeshLoader3D>& meshLoaderList)
 	GameObjectTransform = meshLoaderList[0].GameObjectTransform;
 
 	AddMeshList(meshLoaderList);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 Model::~Model()
@@ -436,7 +431,6 @@ void Model::LoadModel(ModelLoader& modelLoader)
 	}
 
 	ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::AddMesh(MeshLoader3D& meshLoader)
@@ -447,7 +441,6 @@ void Model::AddMesh(MeshLoader3D& meshLoader)
 
 	MeshList.emplace_back(mesh);
 	MeshRendererManager::AddMesh(mesh);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::AddMeshList(std::vector<MeshLoader3D>& meshLoaderList)
@@ -460,7 +453,6 @@ void Model::AddMeshList(std::vector<MeshLoader3D>& meshLoaderList)
 
 		MeshList.emplace_back(mesh);
 	}
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::AddMesh(std::shared_ptr<Mesh> mesh)
@@ -469,7 +461,6 @@ void Model::AddMesh(std::shared_ptr<Mesh> mesh)
 	mesh->SetParentModel(ModelID);
 
 	MeshList.emplace_back(mesh);
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::AddMeshList(std::vector<std::shared_ptr<Mesh>>& meshList)
@@ -481,7 +472,6 @@ void Model::AddMeshList(std::vector<std::shared_ptr<Mesh>>& meshList)
 
 		MeshList.emplace_back(mesh);
 	}
-	VulkanRenderer::UpdateTLAS = true;
 }
 
 void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
@@ -501,18 +491,12 @@ void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)
 
 void Model::Update(const glm::mat4& GameObjectMatrix)
 {
-	const glm::mat4 LastTransform = ModelTransform;
 	ModelTransform = glm::mat4(1.0f);
 	ModelTransform = glm::translate(ModelTransform, ModelPosition);
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
 	ModelTransform = glm::rotate(ModelTransform, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransform = glm::scale(ModelTransform, ModelScale);
-
-	if (LastTransform != ModelTransform)
-	{
-		VulkanRenderer::UpdateTLAS = true;
-	}
 
 	if (BoneList.size() > 0)
 	{
@@ -532,11 +516,11 @@ void Model::Update(const glm::mat4& GameObjectMatrix)
 	}
 }
 
-void Model::UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList)
+void Model::UpdateMeshTopLevelAccelerationStructure(const glm::mat4& GameObjectMatrix, std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList)
 {
 	for (auto& mesh : GetMeshList())
 	{
-		glm::mat4 GLMTransformMatrix2 = ModelTransform;
+		glm::mat4 GLMTransformMatrix2 = GameObjectMatrix * ModelTransform;
 		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
 
 		VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};

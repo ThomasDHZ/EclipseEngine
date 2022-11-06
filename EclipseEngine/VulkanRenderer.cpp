@@ -57,7 +57,6 @@ VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
 bool VulkanRenderer::UpdateRendererFlag = false;
 bool VulkanRenderer::WireframeModeFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
-bool VulkanRenderer::UpdateTLAS = true;
 
 PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
 PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;

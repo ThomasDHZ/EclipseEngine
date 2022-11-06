@@ -1,4 +1,4 @@
 #include "TopLevelAccelerationStructureManager.h"
 
-AccelerationStructureBuffer TopLevelAccelerationStructureManager::TopLevelAccelerationStructure{};
-VulkanBuffer TopLevelAccelerationStructureManager::InstanceBuffer;
+ AccelerationStructureBuffer TopLevelAccelerationStructureManager::TopLevelAccelerationStructure;
+ VulkanBuffer TopLevelAccelerationStructureManager::scratchBuffer;

@@ -118,7 +118,7 @@ public:
 	void RemoveMesh(std::shared_ptr<Mesh> mesh);
 
 	void Update(const glm::mat4& GameObjectMatrix);
-	void UpdateMeshTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList);
+	void UpdateMeshTopLevelAccelerationStructure(const glm::mat4& GameObjectMatrix, std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList);
 	void Destroy();
 
 	bool DoesMeshExistInModel(std::shared_ptr<Mesh> mesh);
