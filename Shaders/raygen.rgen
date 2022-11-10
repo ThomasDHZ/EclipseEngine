@@ -39,7 +39,7 @@ void main()
 		float tmax = 10000.0;
 
 		rayPayload.color = vec3(1.0f);
-		rayPayload.reflectCount = 0;
+		rayPayload.reflectCount = 1;
 		rayPayload.reflectCount2 = 1;
 
 		vec3 BaseColor = vec3(0.0f);
@@ -48,5 +48,6 @@ void main()
 
 	 vec3 finalResult = vec3(1.0) - exp(-rayPayload.color * 1.0f);
 		  finalResult = pow(finalResult, vec3(1.0 / 2.2f));
+
     imageStore(RayTracedTexture, ivec2(gl_LaunchIDEXT.xy),  vec4(finalResult, 1.0));
 }
