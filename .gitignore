@@ -68,6 +68,22 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+*.ogg
+*.tga
+*.mtl
+*.hdr
+*.mtz
+*.ppm
+*.glb
+*.gltf
+*.zip
+*.dae
+*.fbx
+*.bin
+*.lxo
+*.wav
+*.blend
+
 
 # Chutzpah Test files
 _Chutzpah*
@@ -257,3 +273,6 @@ ModelManifest.xml
 *.dds
 *.ipch
 *.bmp
+*.tif
+*.blend1
+*.psd
