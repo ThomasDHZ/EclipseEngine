@@ -38,9 +38,9 @@ private:
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass pbrRenderPass;
-	//PBRBloomRenderPass pbrBloomRenderPass;
-	//GaussianBlurRenderPass blurRenderPass;
-	//BloomCombineRenderPass bloomCombinePipeline;
+	PBRBloomRenderPass pbrBloomRenderPass;
+	GaussianBlurRenderPass blurRenderPass;
+	BloomCombineRenderPass bloomCombinePipeline;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
@@ -60,5 +60,5 @@ public:
 
 	bool UpdateRenderer = true;
 
-	std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
+	//std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };

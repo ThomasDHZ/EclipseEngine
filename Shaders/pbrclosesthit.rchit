@@ -166,6 +166,7 @@ void main()
 		irradiance += rayHitInfo.color; 
     }
     irradiance /= rayHitInfo.reflectCount;
+    irradiance = clamp(irradiance, 0.0f, 1.0f);
     rayHitInfo.reflectCount = 1;
 
     vec3 specular = vec3(0.0f);    
@@ -186,6 +187,7 @@ void main()
 		specular += rayHitInfo.color; 
 	}
     specular /= rayHitInfo.reflectCount2;
+    specular = clamp(specular, 0.0f, 1.0f);
 
     vec3 diffuse = irradiance * albedo;
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);

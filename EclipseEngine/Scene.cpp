@@ -348,7 +348,7 @@ void Scene::Update()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Update();
+                     rayTraceRenderer.Update();
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
@@ -356,12 +356,12 @@ void Scene::Update()
                 }
                 else
                 {
-                    blinnPhongRenderer.Update();
+                   blinnPhongRenderer.Update();
                 }
             }
             else
             {
-                blinnPhongRenderer.Update();
+               blinnPhongRenderer.Update();
             }
             break;
         }
@@ -371,7 +371,7 @@ void Scene::Update()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                    rayTracePBRRenderer.Update();
+                     rayTracePBRRenderer.Update();
                 }
                 else
                 {
@@ -400,7 +400,7 @@ void Scene::ImGuiUpdate()
     {
     case SceneType::kSprite2D:
     {
-      //  renderer2D.ImGuiUpdate();
+        renderer2D.ImGuiUpdate();
         break;
     }
     case SceneType::kBlinnPhong:
@@ -432,7 +432,7 @@ void Scene::ImGuiUpdate()
         {
             if (SceneManager::IsRayTracerActive())
             {
-               // rayTracePBRRenderer.ImGuiUpdate();
+                rayTracePBRRenderer.ImGuiUpdate();
             }
             else
             {
@@ -555,7 +555,7 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                    rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                  rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
@@ -578,7 +578,7 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                    rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                  rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
@@ -621,7 +621,7 @@ void Scene::Destroy()
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
             //    hybridRenderer.Destroy();
-                rayTraceRenderer.Destroy();
+              rayTraceRenderer.Destroy();
             }
             break;
         }
@@ -630,7 +630,7 @@ void Scene::Destroy()
             pbrRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                rayTracePBRRenderer.Destroy();
+              rayTracePBRRenderer.Destroy();
             }
             break;
         }

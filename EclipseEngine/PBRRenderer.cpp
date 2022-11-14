@@ -12,7 +12,10 @@ void PBRRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
-	environmentToCubeRenderPass.BuildRenderPass(4096.0f/4);
+	if (SceneManager::CubeMap == nullptr)
+	{
+		environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
+	}
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
