@@ -26,4 +26,18 @@
       <UniqueIdentifier>{ca4b0281-2718-41d4-a330-cc45086b5cb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\EclipseEngine\Mouse.h">
+      <Filter>Header Files\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EclipseEngine\Keyboard.h">
+      <Filter>Header Files\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EclipseEngine\GameController.h">
+      <Filter>Header Files\Inputs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EclipseEngine\Window.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

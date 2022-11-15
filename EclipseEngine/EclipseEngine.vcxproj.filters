@@ -569,15 +569,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="InterfaceRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
@@ -1027,9 +1018,6 @@
     </ClInclude>
     <ClInclude Include="RayTracePBRRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="AccelerationStructureBuffer.h">
       <Filter>Source Files</Filter>

@@ -410,7 +410,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
-    <ClInclude Include="GameController.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="GraphicsPipeline.h" />
@@ -423,12 +422,10 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
-    <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixel.h" />
@@ -458,7 +455,6 @@
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
-    <ClInclude Include="Window.h" />
     <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>
   <ItemGroup>
