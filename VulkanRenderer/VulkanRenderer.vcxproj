@@ -19,10 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="VulkanBuffer.h" />
+    <ClInclude Include="VulkanDebugger.h" />
+    <ClInclude Include="VulkanRenderer.h" />
+    <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="VulkanBuffer.cpp" />
+    <ClCompile Include="VulkanDebugger.cpp" />
+    <ClCompile Include="VulkanRenderer.cpp" />
+    <ClCompile Include="VulkanSwapChain.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

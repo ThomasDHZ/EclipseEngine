@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Vulkan">
       <UniqueIdentifier>{2158582a-3068-4152-9d7c-e44024d67653}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Inputs">
-      <UniqueIdentifier>{cca1f44d-71b3-4ad9-bc3d-8b8be42ce71f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Vulkan">
       <UniqueIdentifier>{ca4b0281-2718-41d4-a330-cc45086b5cb2}</UniqueIdentifier>
     </Filter>
@@ -39,5 +36,40 @@
     <ClInclude Include="Window.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="VulkanSwapChain.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="AccelerationStructureBuffer.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanRenderer.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanDebugger.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanBuffer.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDevice.h">
+      <Filter>Header Files\Vulkan</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VulkanSwapChain.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="AccelerationStructureBuffer.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanBuffer.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanDebugger.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanRenderer.cpp">
+      <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

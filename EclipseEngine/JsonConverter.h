@@ -1,5 +1,6 @@
 #pragma once
-#include "VulkanRenderer.h"
+#include <json.hpp>
+#include <glm/glm.hpp>
 
 struct JsonConverter
 {

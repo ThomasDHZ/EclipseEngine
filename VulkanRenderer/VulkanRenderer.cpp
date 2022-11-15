@@ -76,11 +76,7 @@ void VulkanRenderer::StartUp()
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
 
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-	//GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME);
-	//GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_MAINTENANCE3_EXTENSION_NAME);
-	//GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME);
-	//GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
