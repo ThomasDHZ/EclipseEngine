@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)External\glfw\lib-vc2022;C:\VulkanSDK\1.3.231.1\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)External\External\stb;$(SolutionDir)External\External\glfw\include;$(SolutionDir)External\External\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\External\glfw\lib-vc2022;C:\VulkanSDK\1.3.231.1\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -145,6 +145,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\EclipseEngine\AccelerationStructureBuffer.h" />
+    <ClInclude Include="..\EclipseEngine\GraphicsDevice.h" />
+    <ClInclude Include="..\EclipseEngine\VulkanBuffer.h" />
+    <ClInclude Include="..\EclipseEngine\VulkanDebugger.h" />
+    <ClInclude Include="..\EclipseEngine\VulkanRenderer.h" />
+    <ClInclude Include="..\EclipseEngine\VulkanSwapChain.h" />
+    <ClInclude Include="..\EclipseEngine\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\EclipseEngine\AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="..\EclipseEngine\VulkanBuffer.cpp" />
+    <ClCompile Include="..\EclipseEngine\VulkanDebugger.cpp" />
+    <ClCompile Include="..\EclipseEngine\VulkanRenderer.cpp" />
+    <ClCompile Include="..\EclipseEngine\VulkanSwapChain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -312,21 +312,6 @@
     <ClCompile Include="SoundDevice.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="AccelerationStructureBuffer.cpp">
-      <Filter>Source Files\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanBuffer.cpp">
-      <Filter>Source Files\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanDebugger.cpp">
-      <Filter>Source Files\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanRenderer.cpp">
-      <Filter>Source Files\Engine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanSwapChain.cpp">
-      <Filter>Source Files\Engine\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="SoundSource.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClCompile>
@@ -569,9 +554,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -776,25 +758,7 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VulkanSwapChain.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="AccelerationStructureBuffer.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsDevice.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="UniformBuffer.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="VulkanBuffer.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="VulkanDebugger.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="VulkanRenderer.h">
       <Filter>Header Files\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="SoundSource.h">

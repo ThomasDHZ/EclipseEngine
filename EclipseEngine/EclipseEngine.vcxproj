@@ -153,7 +153,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="Animation3D.cpp" />
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BakedTexture.cpp" />
@@ -293,14 +292,9 @@
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="VulkanBuffer.cpp" />
-    <ClCompile Include="VulkanSwapChain.cpp" />
-    <ClCompile Include="VulkanDebugger.cpp" />
-    <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="WireFramePipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="Animation3D.h" />
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BakedTexture.h" />
@@ -423,7 +417,6 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />
@@ -454,11 +447,6 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
-    <ClInclude Include="VulkanBuffer.h" />
-    <ClInclude Include="VulkanSwapChain.h" />
-    <ClInclude Include="VulkanDebugger.h" />
-    <ClInclude Include="VulkanRenderer.h" />
-    <ClInclude Include="Window.h" />
     <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>
   <ItemGroup>
