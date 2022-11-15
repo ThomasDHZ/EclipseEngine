@@ -552,9 +552,6 @@
     <ClCompile Include="RayTracePBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="VulkanSwapChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VulkanBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -565,6 +562,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AccelerationStructureBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanSwapChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

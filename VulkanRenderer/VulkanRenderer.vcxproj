@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\EclipseEngine\GameController.h" />
-    <ClInclude Include="..\EclipseEngine\Keyboard.h" />
-    <ClInclude Include="..\EclipseEngine\Mouse.h" />
-    <ClInclude Include="..\EclipseEngine\Window.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

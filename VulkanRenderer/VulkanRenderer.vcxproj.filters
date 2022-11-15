@@ -27,16 +27,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\EclipseEngine\Mouse.h">
+    <ClInclude Include="GameController.h">
       <Filter>Header Files\Inputs</Filter>
     </ClInclude>
-    <ClInclude Include="..\EclipseEngine\Keyboard.h">
+    <ClInclude Include="Keyboard.h">
       <Filter>Header Files\Inputs</Filter>
     </ClInclude>
-    <ClInclude Include="..\EclipseEngine\GameController.h">
+    <ClInclude Include="Mouse.h">
       <Filter>Header Files\Inputs</Filter>
     </ClInclude>
-    <ClInclude Include="..\EclipseEngine\Window.h">
+    <ClInclude Include="Window.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
