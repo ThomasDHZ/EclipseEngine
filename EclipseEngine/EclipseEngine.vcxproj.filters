@@ -552,6 +552,21 @@
     <ClCompile Include="RayTracePBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="VulkanSwapChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanDebugger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AccelerationStructureBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Keyboard.h">
@@ -1012,6 +1027,27 @@
     </ClInclude>
     <ClInclude Include="RayTracePBRRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccelerationStructureBuffer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDevice.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanBuffer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanDebugger.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanRenderer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanSwapChain.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

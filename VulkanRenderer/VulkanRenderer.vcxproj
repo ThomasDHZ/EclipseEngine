@@ -144,22 +144,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\EclipseEngine\AccelerationStructureBuffer.h" />
-    <ClInclude Include="..\EclipseEngine\GraphicsDevice.h" />
-    <ClInclude Include="..\EclipseEngine\VulkanBuffer.h" />
-    <ClInclude Include="..\EclipseEngine\VulkanDebugger.h" />
-    <ClInclude Include="..\EclipseEngine\VulkanRenderer.h" />
-    <ClInclude Include="..\EclipseEngine\VulkanSwapChain.h" />
-    <ClInclude Include="..\EclipseEngine\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\EclipseEngine\AccelerationStructureBuffer.cpp" />
-    <ClCompile Include="..\EclipseEngine\VulkanBuffer.cpp" />
-    <ClCompile Include="..\EclipseEngine\VulkanDebugger.cpp" />
-    <ClCompile Include="..\EclipseEngine\VulkanRenderer.cpp" />
-    <ClCompile Include="..\EclipseEngine\VulkanSwapChain.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
