@@ -54,6 +54,9 @@
     <ClInclude Include="GraphicsDevice.h">
       <Filter>Header Files\Vulkan</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanSwapChain.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="VulkanRenderer.cpp">
       <Filter>Source Files\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsPipeline.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

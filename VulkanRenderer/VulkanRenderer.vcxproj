@@ -22,6 +22,7 @@
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GraphicsDevice.h" />
+    <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="VulkanBuffer.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
