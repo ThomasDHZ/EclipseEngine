@@ -164,6 +164,7 @@ vec3 CalcNormalDirLight(Vertex vertex, MaterialProperties material, mat3 TBN, ve
   float tmin = 0.001f;
   float tmax = length(LightPos - FragPos);
   vec3 origin = gl_WorldRayOriginEXT + gl_WorldRayDirectionEXT * gl_HitTEXT;
+
   shadowed = false;  
   traceRayEXT(topLevelAS, gl_RayFlagsSkipClosestHitShaderEXT, 0xFF, 1, 0, 1, origin, tmin, lightDir, tmax, 1);
   if (shadowed) 
