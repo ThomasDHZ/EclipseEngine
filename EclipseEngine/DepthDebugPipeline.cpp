@@ -19,25 +19,25 @@ void DepthDebugPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthDebugShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthDebugShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-    buildGraphicsPipelineInfo.ConstBufferSize = 0;
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
+    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
+    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+    //buildGraphicsPipelineInfo.ConstBufferSize = 0;
+    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
 
-    if (ShaderPipeline == nullptr)
-    {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    }
-    else
-    {
-        Destroy();
-        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    //if (ShaderPipeline == nullptr)
+    //{
+    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    //}
+    //else
+    //{
+    //    Destroy();
+    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    //}
 
     for (auto& shader : PipelineShaderStageList)
     {

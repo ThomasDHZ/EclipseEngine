@@ -29,7 +29,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         IrradianceMapBufferList.emplace_back(nullBuffer);
     }
     else
@@ -50,7 +50,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         PrefilterMapBufferList.emplace_back(nullBuffer);
     }
     else
@@ -76,7 +76,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         DirectionalLightShadowMaps.emplace_back(nullBuffer);
     }
     else
@@ -98,7 +98,7 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         PointLightShadowMaps.emplace_back(nullBuffer);
     }
     else
@@ -156,25 +156,25 @@ void PBRReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         AddTextureDescriptorSetBinding(DescriptorBindingList, 11, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     }
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
+    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
+    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+    //buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
-    if (ShaderPipeline == nullptr)
-    {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    }
-    else
-    {
-        GraphicsPipeline::Destroy();
-        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    //if (ShaderPipeline == nullptr)
+    //{
+    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    //}
+    //else
+    //{
+    //    GraphicsPipeline::Destroy();
+    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    //}
 
     for (auto& shader : PipelineShaderStageList)
     {

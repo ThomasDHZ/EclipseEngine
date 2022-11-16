@@ -23,15 +23,15 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
-    VkDescriptorImageInfo PositionTextureBuffer = AddTextureDescriptor(PositionTexture);
-    VkDescriptorImageInfo TangentTextureeBuffer = AddTextureDescriptor(TangentTexture);
-    VkDescriptorImageInfo BiTangentTextureBuffer = AddTextureDescriptor(BiTangentTexture);
-    VkDescriptorImageInfo TBNormalTextureBuffer = AddTextureDescriptor(TBNormalTexture);
-    VkDescriptorImageInfo NormalTextureBuffer = AddTextureDescriptor(NormalTexture);
-    VkDescriptorImageInfo AlbedoTextureBuffer = AddTextureDescriptor(AlbedoTexture);
-    VkDescriptorImageInfo SpecularTextureBuffer = AddTextureDescriptor(SpecularTexture);
-    VkDescriptorImageInfo BloomTextureBuffer = AddTextureDescriptor(BloomTexture);
-    VkDescriptorImageInfo ShadowTextureBuffer = AddTextureDescriptor(ShadowTexture);
+    VkDescriptorImageInfo PositionTextureBuffer = AddTextureDescriptor(PositionTexture->View, PositionTexture->Sampler);
+    VkDescriptorImageInfo TangentTextureeBuffer = AddTextureDescriptor(TangentTexture->View, TangentTexture->Sampler);
+    VkDescriptorImageInfo BiTangentTextureBuffer = AddTextureDescriptor(BiTangentTexture->View, BiTangentTexture->Sampler);
+    VkDescriptorImageInfo TBNormalTextureBuffer = AddTextureDescriptor(TBNormalTexture->View, TBNormalTexture->Sampler);
+    VkDescriptorImageInfo NormalTextureBuffer = AddTextureDescriptor(NormalTexture->View, NormalTexture->Sampler);
+    VkDescriptorImageInfo AlbedoTextureBuffer = AddTextureDescriptor(AlbedoTexture->View, AlbedoTexture->Sampler);
+    VkDescriptorImageInfo SpecularTextureBuffer = AddTextureDescriptor(SpecularTexture->View, SpecularTexture->Sampler);
+    VkDescriptorImageInfo BloomTextureBuffer = AddTextureDescriptor(BloomTexture->View, BloomTexture->Sampler);
+    VkDescriptorImageInfo ShadowTextureBuffer = AddTextureDescriptor(ShadowTexture->View, ShadowTexture->Sampler);
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DeferredRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -53,25 +53,25 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     AddTextureDescriptorSetBinding(DescriptorBindingList, 12, BloomTextureBuffer);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 13, ShadowTextureBuffer);
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
+    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
+    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    //buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
+    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
+    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
 
-    if (ShaderPipeline == nullptr)
-    {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    }
-    else
-    {
-        Destroy();
-        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    //if (ShaderPipeline == nullptr)
+    //{
+    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    //}
+    //else
+    //{
+    //    Destroy();
+    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    //}
 
     for (auto& shader : PipelineShaderStageList)
     {

@@ -17,7 +17,7 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
-    SceneManager::sceneType = SceneType::kPBR;
+    SceneManager::sceneType = SceneType::kBlinnPhong;
 
    // SceneManager::activeCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
     SceneManager::activeCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -339,7 +339,7 @@ void Scene::Update()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Update();
+           // renderer2D.Update();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -348,7 +348,7 @@ void Scene::Update()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                     rayTraceRenderer.Update();
+                  //   rayTraceRenderer.Update();
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
@@ -371,16 +371,16 @@ void Scene::Update()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                     rayTracePBRRenderer.Update();
+                    // rayTracePBRRenderer.Update();
                 }
                 else
                 {
-                    pbrRenderer.Update();
+                   // pbrRenderer.Update();
                 }
             }
             else
             {
-                pbrRenderer.Update();
+               // pbrRenderer.Update();
             }
             break;
         }
@@ -400,7 +400,7 @@ void Scene::ImGuiUpdate()
     {
     case SceneType::kSprite2D:
     {
-        renderer2D.ImGuiUpdate();
+       // renderer2D.ImGuiUpdate();
         break;
     }
     case SceneType::kBlinnPhong:
@@ -409,7 +409,7 @@ void Scene::ImGuiUpdate()
         {
             if (SceneManager::IsRayTracerActive())
             {
-                rayTraceRenderer.ImGuiUpdate();
+             //   rayTraceRenderer.ImGuiUpdate();
             }
             else if (SceneManager::IsHybridRendererActive())
             {
@@ -432,16 +432,16 @@ void Scene::ImGuiUpdate()
         {
             if (SceneManager::IsRayTracerActive())
             {
-                rayTracePBRRenderer.ImGuiUpdate();
+             //   rayTracePBRRenderer.ImGuiUpdate();
             }
             else
             {
-                pbrRenderer.ImGuiUpdate();
+             //   pbrRenderer.ImGuiUpdate();
             }
         }
         else
         {
-            pbrRenderer.ImGuiUpdate();
+          //  pbrRenderer.ImGuiUpdate();
         }
         break;
     }
@@ -503,7 +503,7 @@ void Scene::BuildRenderers()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.BuildRenderer();
+         //   renderer2D.BuildRenderer();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -511,17 +511,17 @@ void Scene::BuildRenderers()
             blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                rayTraceRenderer.BuildRenderer();
+            //    rayTraceRenderer.BuildRenderer();
                 //hybridRenderer.BuildRenderer();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.BuildRenderer();
+            //pbrRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                rayTracePBRRenderer.BuildRenderer();
+               // rayTracePBRRenderer.BuildRenderer();
                 //hybridRenderer.BuildRenderer();
             }
             break;
@@ -546,7 +546,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+            //renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -555,7 +555,7 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                  rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+               //   rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
@@ -578,16 +578,16 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                  rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+               //   rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
-                    pbrRenderer.Draw(CommandBufferSubmitList);
+                //   pbrRenderer.Draw(CommandBufferSubmitList);
                 }
             }
             else
             {
-                pbrRenderer.Draw(CommandBufferSubmitList);
+              //  pbrRenderer.Draw(CommandBufferSubmitList);
             }
             break;
         }
@@ -612,7 +612,7 @@ void Scene::Destroy()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Destroy();
+          //  renderer2D.Destroy();
             break;
         }
         case SceneType::kBlinnPhong:
@@ -621,16 +621,16 @@ void Scene::Destroy()
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
             //    hybridRenderer.Destroy();
-              rayTraceRenderer.Destroy();
+            //  rayTraceRenderer.Destroy();
             }
             break;
         }
         case SceneType::kPBR:
         {
-            pbrRenderer.Destroy();
+           // pbrRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-              rayTracePBRRenderer.Destroy();
+          //    rayTracePBRRenderer.Destroy();
             }
             break;
         }

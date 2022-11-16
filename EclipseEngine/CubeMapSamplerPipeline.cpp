@@ -28,25 +28,25 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesmBufferBufferInfo, VK_SHADER_STAGE_VERTEX_BIT);
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
-    buildGraphicsPipelineInfo.ConstBufferSize = 0;
-    buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
+    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
+    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
+    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
+    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderSkybox;
+    //buildGraphicsPipelineInfo.ConstBufferSize = 0;
+    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
 
-    if (ShaderPipeline == nullptr)
-    {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    }
-    else
-    {
-        GraphicsPipeline::Destroy();
-        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    //if (ShaderPipeline == nullptr)
+    //{
+    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    //}
+    //else
+    //{
+    //    GraphicsPipeline::Destroy();
+    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    //}
 
     for (auto& shader : PipelineShaderStageList)
     {

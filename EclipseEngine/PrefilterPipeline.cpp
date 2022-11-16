@@ -16,7 +16,7 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         SkyboxBufferInfoList.emplace_back(nullBuffer);
     }
     else
@@ -38,7 +38,7 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfoList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+  /*  BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
     buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
     buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
@@ -57,7 +57,7 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     {
         Destroy();
         UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    }*/
 
     for (auto& shader : PipelineShaderStageList)
     {

@@ -111,7 +111,7 @@ void BlinnPhongRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;

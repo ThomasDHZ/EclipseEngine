@@ -1,5 +1,5 @@
 #pragma once
-#include "GraphicsPipeline.h"
+#include <GraphicsPipeline.h>
 #include "GameObjectManager.h"
 #include "MeshRendererManager.h"
 #include "SceneManager.h"

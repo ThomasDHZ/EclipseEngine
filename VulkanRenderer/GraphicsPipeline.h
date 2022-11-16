@@ -2,6 +2,13 @@
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
 
+struct PipelineInfoStruct
+{
+	VkRenderPass renderPass = VK_NULL_HANDLE;
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
+	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
+};
+
 struct BuildVertexDescription
 {
 	std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions;
@@ -16,7 +23,7 @@ struct BuildRenderPassDescription
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
 	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
-	VkPipelineDepthStencilStateCreateInfo DepthStencilInfo{};
+	VkPipelineDepthStencilStateCreateInfo DepthStencilInfo;
 	VkRenderPass renderPass = VK_NULL_HANDLE;
 	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
 	uint32_t ConstBufferSize = 0;
@@ -79,7 +86,6 @@ public:
 	VkWriteDescriptorSet AddTextureDescriptorSet(uint32_t BindingNumber, VkDescriptorSet& DescriptorSet, std::vector<VkDescriptorImageInfo>& TextureImageInfo);
 	VkWriteDescriptorSetAccelerationStructureKHR AddAcclerationStructureBinding(VkAccelerationStructureKHR& handle);
 	VkDescriptorImageInfo AddRayTraceReturnImageDescriptor(VkImageLayout ImageLayout, VkImageView& ImageView);
-	VkDescriptorImageInfo AddTextureDescriptor(VkImageView ImageView, VkSampler Sampler);
 	VkDescriptorImageInfo AddTextureDescriptor(VkImageView view, VkSampler sampler);
 
 	void CreateGraphicsPipeline(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);

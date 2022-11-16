@@ -31,13 +31,13 @@
 class Scene
 {
 private:
-	Renderer2D renderer2D;
+	////Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 //	HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
-	//PBRRealTimeRenderer pbrRenderer;
-	RayTraceRenderer rayTraceRenderer;
-	RayTracePBRRenderer rayTracePBRRenderer;
+	//PBRRenderer pbrRenderer;
+	////PBRRealTimeRenderer pbrRenderer;
+	//RayTraceRenderer rayTraceRenderer;
+	//RayTracePBRRenderer rayTracePBRRenderer;
 public:
 	Scene();
 	~Scene();

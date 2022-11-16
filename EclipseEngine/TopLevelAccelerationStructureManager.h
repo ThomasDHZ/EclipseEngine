@@ -55,7 +55,7 @@ public:
 
     static void UpdateTopLevelAccelerationStructure()
     {
-        if (GraphicsDevice::IsRayTracingFeatureActive())
+     /*   if (GraphicsDevice::IsRayTracingFeatureActive())
         {
             std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
 
@@ -105,7 +105,7 @@ public:
 
             TopLevelAccelerationStructure.AccelerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
             InstanceBuffer.DestoryBuffer();
-        }
+        }*/
     }
 
     static void Destroy()

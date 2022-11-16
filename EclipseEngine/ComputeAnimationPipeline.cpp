@@ -1,6 +1,5 @@
 #include "ComputeAnimationPipeline.h"
 #include "Vertex.h"
-#include "GraphicsPipeline.h"
 
 ComputeAnimationPipeline::ComputeAnimationPipeline()
 {

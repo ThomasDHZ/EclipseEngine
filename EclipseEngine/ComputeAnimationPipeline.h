@@ -1,5 +1,5 @@
 #pragma once
-#include "GraphicsPipeline.h"
+#include <GraphicsPipeline.h>
 #include "Mesh3D.h"
 
 class ComputeAnimationPipeline : public GraphicsPipeline

@@ -51,7 +51,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         IrradianceMapBufferList.emplace_back(nullBuffer);
     }
     else
@@ -72,7 +72,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         PrefilterMapBufferList.emplace_back(nullBuffer);
     }
     else
@@ -98,7 +98,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         DirectionalLightShadowMaps.emplace_back(nullBuffer);
     }
     else
@@ -120,7 +120,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
         VkDescriptorImageInfo nullBuffer;
         nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         nullBuffer.imageView = VK_NULL_HANDLE;
-        nullBuffer.sampler = NullSampler;
+        nullBuffer.sampler = SceneManager::NullSampler;
         PointLightShadowMaps.emplace_back(nullBuffer);
     }
     else
@@ -178,7 +178,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
         AddTextureDescriptorSetBinding(DescriptorBindingList, 11, PointLightShadowMaps, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     }
 
-    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+  /*  BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
     buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
     buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
@@ -196,7 +196,7 @@ void PBRBakeReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipelineI
     {
         GraphicsPipeline::Destroy();
         UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    }
+    }*/
 
     for (auto& shader : PipelineShaderStageList)
     {

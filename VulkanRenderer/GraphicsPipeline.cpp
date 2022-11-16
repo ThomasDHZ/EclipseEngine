@@ -32,7 +32,7 @@ void GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildPipel
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(buildPipelineInfo.VertexDescription.VertexBindingDescriptions.size());
     vertexInputInfo.pVertexBindingDescriptions = buildPipelineInfo.VertexDescription.VertexBindingDescriptions.data();
-    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(buildPipelineInfo.VertexDescription.VertexBindingDescriptions.size());
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(buildPipelineInfo.VertexDescription.VertexAttributeDescriptions.size());
     vertexInputInfo.pVertexAttributeDescriptions = buildPipelineInfo.VertexDescription.VertexAttributeDescriptions.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
@@ -360,7 +360,7 @@ VkDescriptorSetLayout GraphicsPipeline::CreateDescriptorSetLayout(std::vector<De
 
     VkDescriptorSetLayout descriptorSet;
     if (vkCreateDescriptorSetLayout(VulkanRenderer::GetDevice(), &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create descriptor set layout!");
+        throw std::runtime_error("Failed to create descriptor set layout.");
     }
 
     return descriptorSet;
@@ -573,15 +573,6 @@ void GraphicsPipeline::AddStorageTextureSetBinding(std::vector<DescriptorSetBind
     DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
     DescriptorSetBinding.Count = 1;
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-VkDescriptorImageInfo GraphicsPipeline::AddTextureDescriptor(VkImageView ImageView, VkSampler Sampler)
-{
-    VkDescriptorImageInfo DescriptorImage{};
-    DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    DescriptorImage.imageView = ImageView;
-    DescriptorImage.sampler = Sampler;
-    return DescriptorImage;
 }
 
 void GraphicsPipeline::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags)

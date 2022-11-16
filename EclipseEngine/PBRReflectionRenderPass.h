@@ -11,7 +11,6 @@
 #include "WireFramePipeline.h"
 #include "OutLinePipeline.h"
 #include "PBRReflectionPipeline.h"
-#include "CubeMapViewPipeline.h"
 #include "CubeMapSamplerPipeline.h"
 #include "PBRInstancedReflectionPipeline.h"
 
