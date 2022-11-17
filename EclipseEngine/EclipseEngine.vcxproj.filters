@@ -537,9 +537,6 @@
     <ClCompile Include="PBRReflectionPreRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="PBRBakeReflectionPipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TextureBaker.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
@@ -548,6 +545,9 @@
     </ClCompile>
     <ClCompile Include="RayTracePBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRBakeReflectionPipeline.cpp">
+      <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

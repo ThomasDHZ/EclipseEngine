@@ -30,7 +30,7 @@ int main()
     InterfaceRenderPass::StartUp();
     TextureManager::StartUp();
     MaterialManager::StartUp();
-   // TopLevelAccelerationStructureManager::StartUp();
+    TopLevelAccelerationStructureManager::StartUp();
     LightManager::StartUp();
     SceneManager::StartUp();
     

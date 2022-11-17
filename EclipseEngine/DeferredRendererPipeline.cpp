@@ -53,25 +53,41 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     AddTextureDescriptorSetBinding(DescriptorBindingList, 12, BloomTextureBuffer);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 13, ShadowTextureBuffer);
 
-    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    //buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
+    VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
+    DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    DepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
+    DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+    DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
 
-    //if (ShaderPipeline == nullptr)
-    //{
-    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    //}
-    //else
-    //{
-    //    Destroy();
-    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    //}
+    BuildVertexDescription VertexDescriptionInfo{};
+    VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
+    VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
+
+    BuildRenderPassDescription RenderPassInfo{};
+    RenderPassInfo.PipelineShaderStageList = PipelineShaderStageList;
+    RenderPassInfo.DescriptorBindingList = DescriptorBindingList;
+    RenderPassInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    RenderPassInfo.DepthStencilInfo = DepthStencilStateCreateInfo;
+    RenderPassInfo.renderPass = pipelineInfoStruct.renderPass;
+    RenderPassInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    RenderPassInfo.ConstBufferSize = sizeof(SceneProperties);
+
+    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    buildGraphicsPipelineInfo.VertexDescription = VertexDescriptionInfo;
+    buildGraphicsPipelineInfo.RenderPassDescription = RenderPassInfo;
+
+    if (ShaderPipeline == nullptr)
+    {
+        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    }
+    else
+    {
+        Destroy();
+        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    }
 
     for (auto& shader : PipelineShaderStageList)
     {

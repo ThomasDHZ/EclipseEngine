@@ -58,6 +58,5 @@ public:
 	virtual void SetUpCommandBuffers();
 	virtual void Destroy();
 
-	RenderPassTypeEnum GetRenderPassType() { return RenderPassType; }
 	VkCommandBuffer GetCommandBuffer() { return CommandBuffer[VulkanRenderer::GetCMDIndex()]; }
 };

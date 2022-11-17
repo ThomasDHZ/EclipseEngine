@@ -19,25 +19,51 @@ void OutLinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList, VK_SHADER_STAGE_VERTEX_BIT);
 
-    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderStencil;
-    //buildGraphicsPipelineInfo.ConstBufferSize = sizeof(SceneProperties);
-    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertex3D;
+    VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
+    DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
 
-    //if (ShaderPipeline == nullptr)
-    //{
-    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    //}
-    //else
-    //{
-    //    Destroy();
-    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    //}
+    DepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    DepthStencilStateCreateInfo.stencilTestEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
+    DepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_REPLACE;
+    DepthStencilStateCreateInfo.back.depthFailOp = VK_STENCIL_OP_REPLACE;
+    DepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_REPLACE;
+    DepthStencilStateCreateInfo.back.compareMask = 0xff;
+    DepthStencilStateCreateInfo.back.writeMask = 0xff;
+    DepthStencilStateCreateInfo.back.reference = 1;
+    DepthStencilStateCreateInfo.front = DepthStencilStateCreateInfo.back;
+
+    BuildVertexDescription VertexDescriptionInfo{};
+    VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
+    VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
+    VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
+    VertexDescriptionInfo.CullMode = VK_CULL_MODE_FRONT_BIT;
+
+    BuildRenderPassDescription RenderPassInfo{};
+    RenderPassInfo.PipelineShaderStageList = PipelineShaderStageList;
+    RenderPassInfo.DescriptorBindingList = DescriptorBindingList;
+    RenderPassInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    RenderPassInfo.DepthStencilInfo = DepthStencilStateCreateInfo;
+    RenderPassInfo.renderPass = pipelineInfoStruct.renderPass;
+    RenderPassInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    RenderPassInfo.ConstBufferSize = sizeof(SceneProperties);
+
+    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    buildGraphicsPipelineInfo.VertexDescription = VertexDescriptionInfo;
+    buildGraphicsPipelineInfo.RenderPassDescription = RenderPassInfo;
+
+    if (ShaderPipeline == nullptr)
+    {
+        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    }
+    else
+    {
+        Destroy();
+        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    }
 
     for (auto& shader : PipelineShaderStageList)
     {

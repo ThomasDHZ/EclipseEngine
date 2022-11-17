@@ -27,29 +27,44 @@ void BloomCombinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
         bloomTextureCount.TextureCount += 1;
     }
 
+    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 0, blurTextureBufferList);
 
-    //std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    //AddTextureDescriptorSetBinding(DescriptorBindingList, 0, blurTextureBufferList);
+    VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
+    DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+    DepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
+    DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
+    DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+    DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
 
-    //BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
-    //buildGraphicsPipelineInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
-    //buildGraphicsPipelineInfo.DescriptorBindingList = DescriptorBindingList;
-    //buildGraphicsPipelineInfo.renderPass = pipelineInfoStruct.renderPass;
-    //buildGraphicsPipelineInfo.PipelineShaderStageList = PipelineShaderStageList;
-    //buildGraphicsPipelineInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    //buildGraphicsPipelineInfo.PipelineRendererType = PipelineRendererTypeEnum::kRenderMesh;
-    //buildGraphicsPipelineInfo.ConstBufferSize = sizeof(BloomIndexSettings);
-    //buildGraphicsPipelineInfo.VertexDescriptorType = VertexDescriptorTypeEnum::kVertexNone;
+    BuildVertexDescription VertexDescriptionInfo{};
+    VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
+    VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
 
-    //if (ShaderPipeline == nullptr)
-    //{
-    //    CreateGraphicsPipeline(buildGraphicsPipelineInfo);
-    //}
-    //else
-    //{
-    //    Destroy();
-    //    UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
-    //}
+    BuildRenderPassDescription RenderPassInfo{};
+    RenderPassInfo.PipelineShaderStageList = PipelineShaderStageList;
+    RenderPassInfo.DescriptorBindingList = DescriptorBindingList;
+    RenderPassInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
+    RenderPassInfo.DepthStencilInfo = DepthStencilStateCreateInfo;
+    RenderPassInfo.renderPass = pipelineInfoStruct.renderPass;
+    RenderPassInfo.sampleCount = pipelineInfoStruct.SampleCount;
+    RenderPassInfo.ConstBufferSize = sizeof(BloomIndexSettings);
+
+    BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
+    buildGraphicsPipelineInfo.VertexDescription = VertexDescriptionInfo;
+    buildGraphicsPipelineInfo.RenderPassDescription = RenderPassInfo;
+
+    if (ShaderPipeline == nullptr)
+    {
+        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+    }
+    else
+    {
+        Destroy();
+        UpdateGraphicsPipeLine(buildGraphicsPipelineInfo);
+    }
 
     for (auto& shader : PipelineShaderStageList)
     {
