@@ -59,9 +59,9 @@ void PBRRenderer::BuildRenderer()
 		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
 
 		pbrRenderPass.BuildRenderPass(submitList);
-		//pbrBloomRenderPass.BuildRenderPass(submitList);
-		//blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-		//bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
+		pbrBloomRenderPass.BuildRenderPass(submitList);
+		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
 	}
 
 //	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);

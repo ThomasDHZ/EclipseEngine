@@ -256,7 +256,6 @@
     <ClCompile Include="ComponentRenderer.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -402,7 +401,6 @@
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
-    <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_glfw.h" />

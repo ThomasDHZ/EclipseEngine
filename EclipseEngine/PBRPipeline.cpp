@@ -162,7 +162,7 @@ void PBRPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBR
     VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
-    VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
+    VertexDescriptionInfo.CullMode = VK_CULL_MODE_BACK_BIT;
 
     BuildRenderPassDescription RenderPassInfo{};
     RenderPassInfo.PipelineShaderStageList = PipelineShaderStageList;
