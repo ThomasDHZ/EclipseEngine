@@ -12,6 +12,7 @@
 #include "BillBoardMeshRenderer.h"
 #include "MeshRenderer.h"
 #include "ReadableTexture.h"
+#include "ParticalSystemRenderer.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
@@ -74,47 +75,47 @@ Scene::Scene()
  //   //  std::shared_ptr<GridRenderer3D> obj5 = std::make_shared<GridRenderer3D>(GridRenderer3D("Testobject6", 50, 1.0f));
  //    //GameObjectManager::AddGameObject(obj5);
  //
-     int width = 500;
-     int height = 500;
-     float length = 10.0f;
-     float radius = 0.5f;
-     std::vector<LineVertex3D> VertexList;
-     for (uint32_t y = 0; y < height; y++)
-     {
-         for (uint32_t x = 0; x < width; x++)
-         {
-             glm::vec2 coord = { (float)x / width, (float)y / height };
-             coord = coord * 2.0f - 1.0f;
+     //int width = 500;
+     //int height = 500;
+     //float length = 10.0f;
+     //float radius = 0.5f;
+     //std::vector<LineVertex3D> VertexList;
+     //for (uint32_t y = 0; y < height; y++)
+     //{
+     //    for (uint32_t x = 0; x < width; x++)
+     //    {
+     //        glm::vec2 coord = { (float)x / width, (float)y / height };
+     //        coord = coord * 2.0f - 1.0f;
 
-             uint8_t r = (uint8_t)(coord.x * 255.0f);
-             uint8_t g = (uint8_t)(coord.y * 255.0f);
+     //        uint8_t r = (uint8_t)(coord.x * 255.0f);
+     //        uint8_t g = (uint8_t)(coord.y * 255.0f);
 
-             glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-             glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+     //        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+     //        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
 
-             float a = glm::dot(rayDirection, rayDirection);
-             float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-             float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+     //        float a = glm::dot(rayDirection, rayDirection);
+     //        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+     //        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
 
-             //Quadratic forumla discriminat
-             //b^2 - 4ac;
+     //        //Quadratic forumla discriminat
+     //        //b^2 - 4ac;
 
-             float discriminant = (b * b) - 4.0f * a * c;
+     //        float discriminant = (b * b) - 4.0f * a * c;
 
-             if (discriminant >= 0.0f)
-             {
-                 VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
-                 VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
-             }
-             else
-             {
-                 VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
-                 VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
-             }
-         }
-     }
-     auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
-     GameObjectManager::AddGameObject(line);
+     //        if (discriminant >= 0.0f)
+     //        {
+     //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+     //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+     //        }
+     //        else
+     //        {
+     //            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+     //            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+     //        }
+     //    }
+     //}
+     //auto line = std::make_shared<LineRenderer3D>(LineRenderer3D("Testobject5", VertexList));
+     //GameObjectManager::AddGameObject(line);
  //
  //
  ////   SceneManager::LoadScene("../Scenes/example.txt");
@@ -157,6 +158,30 @@ Scene::Scene()
     auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
     GameObjectManager::AddGameObject(b);
 
+    std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+    std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+    std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+    std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+    std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+
+    std::vector<Vertex3D> vertices = {
+        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    };
+
+    std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
+
+    ParticleLoader3D particaleLoader;
+    particaleLoader.MeshType = MeshTypeEnum::kPolygon;
+    particaleLoader.VerticeList = vertices;
+    particaleLoader.IndexList = indiceList;
+    particaleLoader.MaterialPtr = WallMaterial;
+    particaleLoader.ParticaleCount = 100;
+
+    auto particleSystem = std::make_shared<ParticalSystemRenderer>(ParticalSystemRenderer("particaleSystem", particaleLoader));
+    GameObjectManager::AddGameObject(particleSystem);
 
     //auto ads = TextureManager::LoadTextureAtlus("../texture/TestReflectionBakeLayer0.bmp", glm::ivec2(256));
     //BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(31, 1));
@@ -236,11 +261,11 @@ Scene::Scene()
         obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
         GameObjectManager::AddGameObject(obj5);
 
-        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-        MaterialManager::AddMaterial(material3);
+        //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+        //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+        //MaterialManager::AddMaterial(material3);
 
-        InstancingDataStruct instance = {};
+   /*     InstancingDataStruct instance = {};
         std::vector<std::shared_ptr<Material>> instanceMaterialList;
         instanceMaterialList.emplace_back(IronmMaterial);
         instanceMaterialList.emplace_back(PlasticMaterial);
@@ -250,28 +275,29 @@ Scene::Scene()
 
         for (int x = 0; x < 5; x++)
         {
-            /*   for (int y = 0; y < 50; y++)
-               {*/
-            for (int z = 0; z < 5; z++)
+            for (int y = 0; y < 5; y++)
             {
-                InstanceMeshDataStruct instanceMeshDataStruct = {};
-                instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(0.0f), float(z * 3.0f));
-                instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
-                instance.MaterialList = instanceMaterialList;
+                for (int z = 0; z < 5; z++)
+                {
+                    InstanceMeshDataStruct instanceMeshDataStruct = {};
+                    instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
+                    instance.instanceMeshDataList.emplace_back(instanceMeshDataStruct);
+                    instance.MaterialList = instanceMaterialList;
+                }
             }
         }
 
         ModelLoader loader2{};
         loader2.instanceData = instance;
         loader2.FilePath = "../Models/sphere.obj";
-        loader2.MeshType = MeshTypeEnum::kPolygonInstanced;
+        loader2.MeshType = MeshTypeEnum::kPolygonInstanced;*/
 
         //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
         //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
         //MaterialManager::SaveMaterial(WallMaterial);
 
-        auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", loader2));
-        GameObjectManager::AddGameObject(obj6);
+        //auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", loader2));
+        //GameObjectManager::AddGameObject(obj6);
         // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 
@@ -332,6 +358,7 @@ void Scene::StartUp()
 
 void Scene::Update()
 {
+    particaleSystem.Update(glm::mat4(1.0f), glm::mat4(1.0f));
     auto a = MaterialManager::GetMaterialList();
     if (VulkanRenderer::UpdateRendererFlag)
     {
@@ -414,7 +441,7 @@ void Scene::ImGuiUpdate()
         {
             if (SceneManager::IsRayTracerActive())
             {
-               rayTraceRenderer.ImGuiUpdate();
+                rayTraceRenderer.ImGuiUpdate();
             }
             else if (SceneManager::IsHybridRendererActive())
             {

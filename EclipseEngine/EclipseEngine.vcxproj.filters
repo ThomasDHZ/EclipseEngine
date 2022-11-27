@@ -555,6 +555,9 @@
     <ClCompile Include="ParticaleSystem.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="ParticalSystemRenderer.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1005,6 +1008,9 @@
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="ParticaleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticalSystemRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

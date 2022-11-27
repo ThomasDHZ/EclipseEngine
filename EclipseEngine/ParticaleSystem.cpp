@@ -4,15 +4,20 @@ ParticaleSystem::ParticaleSystem()
 {
 }
 
-ParticaleSystem::ParticaleSystem(MeshLoader3D& particleLoader, uint32_t particaleCount)
+ParticaleSystem::ParticaleSystem(ParticleLoader3D& particleLoader)
 {
-	ParticaleCount = particaleCount;
+	ParticaleCount = particleLoader.ParticaleCount;
 	//ParticaleVertexList.resize(ParticaleCount * 4);
 
-	//for (int x = 0; x < ParticaleCount; x++)
-	//{
-	//	//ParticaleList.emplace_back(Particle(particleLoader));
-	//}
+	for (int x = 0; x < ParticaleCount; x++)
+	{
+		auto particle = std::make_shared<Particle>(Particle(particleLoader));
+		particle->MeshPosition = glm::vec3(std::rand() % 10, std::rand() % 10, std::rand() % 10);
+		//particle->MeshRotation = glm::vec3(std::rand() % 360, std::rand() % 360, std::rand() % 360);
+
+		ParticaleList.emplace_back(particle);
+		MeshRendererManager::AddMesh(ParticaleList.back());
+	}
 	//for (int x = 0; x < ParticaleCount; x++)
 	//{
 	//	const uint32_t ParticalIndex = x * 4;
@@ -31,25 +36,17 @@ ParticaleSystem::~ParticaleSystem()
 
 void ParticaleSystem::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	//for (auto& particale : ParticaleList)
-	//{
-	//	particale.Update(GameObjectMatrix, ModelMatrix);
-	//}
+	for (auto& particale : ParticaleList)
+	{
+		particale->Update(GameObjectMatrix, ModelMatrix);
+	}
 	//memcpy(&ParticaleVertexList, &ParticaleList[0], sizeof(Particle) * ParticaleCount);
-}
-
-void ParticaleSystem::Draw(VkCommandBuffer& commandBuffer)
-{
-	//for (auto& particale : ParticaleList)
-	//{
-	//	particale.Draw(commandBuffer);
-	//}
 }
 
 void ParticaleSystem::Destroy()
 {
-	//for (auto& particale : ParticaleList)
-	//{
-	//	particale.Destroy();
-	//}
+	for (auto& particale : ParticaleList)
+	{
+		particale->Destroy();
+	}
 }

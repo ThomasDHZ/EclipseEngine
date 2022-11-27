@@ -25,23 +25,17 @@ struct MeshLoader3D
 
 class Mesh3D : public Mesh
 {
-private:
+protected:
 	std::vector<Vertex3D> VertexList;
 	std::vector<uint32_t> IndexList;
 
-	glm::mat4 LastTransform = glm::mat4(1.0f);
-	
-	glm::vec3 GetPosition() { return MeshPosition; }
-	glm::vec3 GetRotation() { return MeshRotation; }
-	glm::vec3 GetScale() { return MeshScale; }
-
-
-protected:
 	std::vector<MeshBoneWeights> BoneWeightList;
 	std::vector<glm::mat4> BoneTransform;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
+
+	glm::mat4 LastTransform = glm::mat4(1.0f);
 
 	void InstancingStartUp(InstancingDataStruct& instanceData);
 	void AnimationStartUp(MeshLoader3D& meshLoader);
