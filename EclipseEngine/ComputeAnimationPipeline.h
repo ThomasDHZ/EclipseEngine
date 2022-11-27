@@ -1,6 +1,7 @@
 #pragma once
 #include <GraphicsPipeline.h>
 #include "Mesh3D.h"
+#include "ConstMeshInfo.h"
 
 class ComputeAnimationPipeline : public GraphicsPipeline
 {

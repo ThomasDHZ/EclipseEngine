@@ -198,12 +198,12 @@ public:
 	//	}
 	//};
 
-	virtual void to_json(nlohmann::json& json)
+	/*virtual void to_json(nlohmann::json& json)
 	{
 		JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
 
 		meshProperties.to_json(json["MeshProperties"]);
 		json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
-	}
+	}*/
 };
 

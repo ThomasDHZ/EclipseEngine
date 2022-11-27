@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "RenderedDepthTexture.h"
 #include "RenderedCubeMapDepthTexture.h"
+#include "ConstMeshInfo.h"
 
 class PBRInstancedReflectionPipeline : public GraphicsPipeline
 {

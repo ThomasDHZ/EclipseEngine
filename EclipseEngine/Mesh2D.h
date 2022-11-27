@@ -48,13 +48,13 @@ public:
 	glm::vec2 GetRotation() { return MeshRotation; }
 	glm::vec2 GetScale() { return MeshScale; }
 
-	virtual void to_json(nlohmann::json& json) override
-	{
-		JsonConverter::to_json(json["MeshPosition"], MeshPosition);
-		JsonConverter::to_json(json["MeshRotation"], MeshRotation);
-		JsonConverter::to_json(json["MeshScale"], MeshScale);
+	//virtual void to_json(nlohmann::json& json) override
+	//{
+	//	JsonConverter::to_json(json["MeshPosition"], MeshPosition);
+	//	JsonConverter::to_json(json["MeshRotation"], MeshRotation);
+	//	JsonConverter::to_json(json["MeshScale"], MeshScale);
 
-		Mesh::to_json(json);
-	}
+	//	Mesh::to_json(json);
+	//}
 };
 

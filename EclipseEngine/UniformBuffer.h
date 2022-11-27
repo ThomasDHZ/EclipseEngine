@@ -122,7 +122,9 @@ struct CubeMapSampler
 
 struct MeshProperties
 {
-	alignas(4) uint32_t MaterialBufferIndex;
+	alignas(4) uint32_t VertexBufferIndex = 0;
+	alignas(4) uint32_t IndiceBufferIndex = 0;
+	alignas(4) uint32_t MaterialBufferIndex = 0;
 	alignas(4) uint32_t SkyBoxIndex = 0;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
@@ -132,28 +134,11 @@ struct MeshProperties
 	alignas(4) float heightScale = 0.1f;
 	alignas(4) float minLayers = 8;
 	alignas(4) float maxLayers = 32;
+};
 
-	void from_json(nlohmann::json& json)
-	{
-		JsonConverter::from_json(json["MeshTransform"], MeshTransform);
-		JsonConverter::from_json(json["UVOffset"], UVOffset);
-		JsonConverter::from_json(json["UVScale"], UVScale);
-		JsonConverter::from_json(json["UVFlip"], UVFlip);
-		JsonConverter::from_json(json["heightScale"], heightScale);
-		JsonConverter::from_json(json["minLayers"], minLayers);
-		JsonConverter::from_json(json["maxLayers"], maxLayers);
-	}
-
-	void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["MeshTransform"], MeshTransform);
-		JsonConverter::to_json(json["UVOffset"], UVOffset);
-		JsonConverter::to_json(json["UVScale"], UVScale);
-		JsonConverter::to_json(json["UVFlip"], UVFlip);
-		JsonConverter::to_json(json["heightScale"], heightScale);
-		JsonConverter::to_json(json["minLayers"], minLayers);
-		JsonConverter::to_json(json["maxLayers"], maxLayers);
-	}
+struct InstanceMeshProperties
+{
+	alignas(4) uint32_t MaterialBufferIndex;
 };
 
 template <class T>

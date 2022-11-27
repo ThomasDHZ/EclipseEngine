@@ -36,9 +36,9 @@ public:
 
 	std::shared_ptr<Model> GetModel() { return model; }
 
-	virtual void to_json(nlohmann::json& json) override
-	{
-		GameObject3D::to_json(json);
-		model->to_json(json["Model"]);
-	}
+	//virtual void to_json(nlohmann::json& json) override
+	//{
+	//	GameObject3D::to_json(json);
+	//	model->to_json(json["Model"]);
+	//}
 };

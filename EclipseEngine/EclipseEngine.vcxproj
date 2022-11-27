@@ -158,6 +158,7 @@
     <ClCompile Include="BakedTexture.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
+    <ClCompile Include="ConstMeshInfo.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="GaussianBlurPipeline.cpp" />
@@ -216,6 +217,7 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
+    <ClCompile Include="ParticaleSystem.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
     <ClCompile Include="PBRReflectionPreRenderPass.cpp" />
@@ -233,6 +235,7 @@
     <ClCompile Include="RayTracePBRRenderPass.cpp" />
     <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="Renderer3DPipeline.cpp" />
+    <ClCompile Include="InstanceMesh.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />
@@ -299,6 +302,7 @@
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
     <ClInclude Include="ConsoleLogger.h" />
+    <ClInclude Include="ConstMeshInfo.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="GaussianBlurPipeline.h" />
@@ -359,6 +363,7 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
+    <ClInclude Include="ParticaleSystem.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PBRBakeReflectionPipeline.h" />
     <ClInclude Include="PBRReflectionPreRenderPass.h" />
@@ -377,6 +382,7 @@
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="Renderer3DPipeline.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="InstanceMesh.h" />
     <ClInclude Include="SkyboxPipeline.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="TextureAtlus.h" />
@@ -445,6 +451,7 @@
     <None Include="..\Shaders\AdditionShader.frag" />
     <None Include="..\Shaders\AdditionShader.vert" />
     <None Include="..\Shaders\animate.comp" />
+    <None Include="..\Shaders\animateParticles.comp" />
     <None Include="..\Shaders\anyhit.rahit" />
     <None Include="..\Shaders\anyhit1.rahit" />
     <None Include="..\Shaders\BakeReflectionPBRShader.frag" />

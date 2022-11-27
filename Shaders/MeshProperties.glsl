@@ -27,6 +27,8 @@ struct MaterialProperties
 
 struct MeshProperties
 {
+	uint VertexBufferIndex;
+	uint IndexBufferIndex;
 	uint MaterialBufferIndex;
 	uint SkyBoxIndex;
 	mat4 MeshTransform;
