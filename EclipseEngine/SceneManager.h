@@ -37,6 +37,7 @@ public:
 	static SceneType sceneType;
 	static std::shared_ptr<Camera> activeCamera;
 
+	static float FrameTime;
 	static SceneProperties sceneProperites;
 	static ConstSkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
@@ -89,13 +90,12 @@ public:
 
 	static void Update()
 	{
-		auto time = (float)glfwGetTime();
-		GameObjectManager::Update(time);
+		GameObjectManager::Update(FrameTime);
 		MeshRendererManager::Update();
 		TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
-		activeCamera->Update(time);
+		activeCamera->Update(FrameTime);
 		musicPlayer.UpdateBufferStream();
 
 		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
@@ -104,7 +104,7 @@ public:
 		sceneProperites.DirectionalLightCount = LightManager::GetDirectionalLightCount();
 		sceneProperites.PointLightCount = LightManager::GetPointLightCount();
 		sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
-		sceneProperites.Timer = time;
+		sceneProperites.Timer = (float)glfwGetTime();
 		sceneProperites.frame++;
 		if (sceneProperites.frame == UINT32_MAX)
 		{

@@ -31,13 +31,15 @@ private:
 
 	//const std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
 
-	//float Gravity;
-	//float LifeSpan;
-	//float ElapsedTime = 0.0f;
+	float Gravity;
+	float LifeSpan;
+	float ElapsedTime = 0.0f;
 
 public:
 	Particle();
 	Particle(ParticleLoader3D& particaleLoader);
 	~Particle();
+
+	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 };
 

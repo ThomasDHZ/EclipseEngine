@@ -37,3 +37,9 @@ Particle::Particle(ParticleLoader3D& particaleLoader) : Mesh3D()
 Particle::~Particle()
 {
 }
+
+void Particle::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+{
+
+	Mesh3D::Update(GameObjectMatrix, ModelMatrix);
+}
