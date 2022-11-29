@@ -17,28 +17,25 @@ struct ParticleLoader3D
 
 	MeshTypeEnum MeshType;
 	MeshSubTypeEnum MeshSubType;
+
+	float Gravity;
+	float LifeSpan;
 };
 
 class Particle : public Mesh3D
 {
 private:
-	//const std::vector<Vertex3D> vertices = {
-	//	{{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-	//	{{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-	//	{{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-	//	{{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-	//};
-
-	//const std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
-
 	float Gravity;
 	float LifeSpan;
-	float ElapsedTime = 0.0f;
 
 public:
 	Particle();
 	Particle(ParticleLoader3D& particaleLoader);
 	~Particle();
+
+	bool  Alive;
+	float ElapsedTime = 0.0f;
+	glm::vec3 Velocity = glm::vec3(0.0f);
 
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 };

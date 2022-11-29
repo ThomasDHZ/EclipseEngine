@@ -1,12 +1,12 @@
 #pragma once
 #include "GameObject3D.h"
 #include "Mesh3D.h"
-#include "ParticaleSystem.h"
+#include "ParticleSystem.h"
 
 class ParticalSystemRenderer : public GameObject3D
 {
 private:
-	std::shared_ptr<ParticaleSystem> particaleSystem;
+	std::shared_ptr<ParticleSystem> particaleSystem;
 
 public:
 	ParticalSystemRenderer();
@@ -19,5 +19,5 @@ public:
 	void Update(float DeltaTime) override;
 	void Destroy() override;
 
-	std::shared_ptr<ParticaleSystem> GetParticaleSystem() { return particaleSystem; }
+	std::shared_ptr<ParticleSystem> GetParticaleSystem() { return particaleSystem; }
 };

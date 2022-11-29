@@ -27,7 +27,7 @@
 #include "SoundSource.h"
 #include "PBRRealTimeRenderer.h"
 #include "RayTracePBRRenderer.h"
-#include "ParticaleSystem.h"
+#include "ParticleSystem.h"
 
 class Scene
 {
@@ -39,7 +39,7 @@ private:
 	//PBRRealTimeRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
 	RayTracePBRRenderer rayTracePBRRenderer;
-	ParticaleSystem particaleSystem;
+	ParticleSystem particaleSystem;
 public:
 	Scene();
 	~Scene();

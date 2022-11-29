@@ -25,6 +25,7 @@
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="RandomNumber.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
@@ -35,6 +36,7 @@
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
+    <ClCompile Include="RandomNumber.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />

@@ -37,7 +37,6 @@ public:
 	static SceneType sceneType;
 	static std::shared_ptr<Camera> activeCamera;
 
-	static float FrameTime;
 	static SceneProperties sceneProperites;
 	static ConstSkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
@@ -90,12 +89,12 @@ public:
 
 	static void Update()
 	{
-		GameObjectManager::Update(FrameTime);
+		GameObjectManager::Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		MeshRendererManager::Update();
 		TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
-		activeCamera->Update(FrameTime);
+		activeCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		musicPlayer.UpdateBufferStream();
 
 		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();

@@ -179,6 +179,8 @@ Scene::Scene()
     particaleLoader.IndexList = indiceList;
     particaleLoader.MaterialPtr = WallMaterial;
     particaleLoader.ParticaleCount = 100;
+    particaleLoader.Gravity = -1.0f;
+    particaleLoader.LifeSpan = 3;
 
     auto particleSystem = std::make_shared<ParticalSystemRenderer>(ParticalSystemRenderer("particaleSystem", particaleLoader));
     GameObjectManager::AddGameObject(particleSystem);

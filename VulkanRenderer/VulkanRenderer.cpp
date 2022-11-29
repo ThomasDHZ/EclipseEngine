@@ -58,6 +58,8 @@ bool VulkanRenderer::UpdateRendererFlag = false;
 bool VulkanRenderer::WireframeModeFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
 
+Timer VulkanRenderer::FrameTimer = Timer();
+
 PFN_vkGetBufferDeviceAddressKHR VulkanRenderer::vkGetBufferDeviceAddressKHR = VK_NULL_HANDLE;
 PFN_vkCreateAccelerationStructureKHR VulkanRenderer::vkCreateAccelerationStructureKHR = VK_NULL_HANDLE;
 PFN_vkDestroyAccelerationStructureKHR VulkanRenderer::vkDestroyAccelerationStructureKHR = VK_NULL_HANDLE;
@@ -71,6 +73,8 @@ PFN_vkCreateRayTracingPipelinesKHR VulkanRenderer::vkCreateRayTracingPipelinesKH
 
 void VulkanRenderer::StartUp()
 {
+	FrameTimer.StartTimer();
+
 	UpdateRendererFlag = true;
 
 	ValidationLayers.emplace_back("VK_LAYER_KHRONOS_validation");
@@ -367,6 +371,9 @@ VkResult VulkanRenderer::SubmitDraw(std::vector<VkCommandBuffer>& CommandBufferS
 	{
 		throw std::runtime_error("Failed to present swap chain image.");
 	}
+
+	FrameTimer.EndTimer();
+	FrameTimer.StartTimer();
 
 	return result;
 }

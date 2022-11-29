@@ -6,6 +6,11 @@ Particle::Particle() : Mesh3D()
 
 Particle::Particle(ParticleLoader3D& particaleLoader) : Mesh3D()
 {
+	Alive = true;
+	Gravity = particaleLoader.Gravity;
+	LifeSpan = particaleLoader.LifeSpan;
+	ElapsedTime = 0.0f;
+
 	ParentGameObjectID = particaleLoader.ParentGameObjectID;
 	ParentModelID = particaleLoader.ParentModelID;
 	GenerateID();
@@ -40,6 +45,16 @@ Particle::~Particle()
 
 void Particle::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	if (Alive)
+	{
+		MeshPosition += Velocity * VulkanRenderer::GetFrameTimeDurationSeconds();
 
-	Mesh3D::Update(GameObjectMatrix, ModelMatrix);
+		Mesh3D::Update(GameObjectMatrix, ModelMatrix);
+		ElapsedTime += VulkanRenderer::GetFrameTimeDurationSeconds();
+
+		if (LifeSpan < ElapsedTime)
+		{
+			Alive = false;
+		}
+	}
 }

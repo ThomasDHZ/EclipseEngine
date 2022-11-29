@@ -1,8 +1,8 @@
 #pragma once
 #include "Particle.h"
+#include <RandomNumber.h>
 
-
-class ParticaleSystem
+class ParticleSystem
 {
 private:
 	std::vector<Vertex3D> ParticaleVertexList;
@@ -10,12 +10,15 @@ private:
 	std::vector<std::shared_ptr<Particle>> ParticaleList;
 
 	uint32_t ParticaleCount;
-	uint32_t VertexCountPerParticale;
+	uint32_t VertexCountPerParticle;
 
+	glm::vec3 BasePosition;
+
+	void EmitParticle(std::shared_ptr<Particle> particle);
 public:
-	ParticaleSystem();
-	ParticaleSystem(ParticleLoader3D& particleLoader);
-	~ParticaleSystem();
+	ParticleSystem();
+	ParticleSystem(ParticleLoader3D& particleLoader);
+	~ParticleSystem();
 
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Destroy();

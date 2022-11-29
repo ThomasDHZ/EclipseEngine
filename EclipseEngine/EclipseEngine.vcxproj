@@ -217,7 +217,7 @@
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
-    <ClCompile Include="ParticaleSystem.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticalSystemRenderer.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
@@ -364,7 +364,7 @@
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
-    <ClInclude Include="ParticaleSystem.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticalSystemRenderer.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PBRBakeReflectionPipeline.h" />

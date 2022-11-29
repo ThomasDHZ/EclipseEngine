@@ -552,7 +552,7 @@
     <ClCompile Include="InstanceMesh.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="ParticaleSystem.cpp">
+    <ClCompile Include="ParticleSystem.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="ParticalSystemRenderer.cpp">
@@ -1007,7 +1007,7 @@
     <ClInclude Include="InstanceMesh.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="ParticaleSystem.h">
+    <ClInclude Include="ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticalSystemRenderer.h">

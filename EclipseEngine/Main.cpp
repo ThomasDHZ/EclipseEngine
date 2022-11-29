@@ -24,7 +24,6 @@ std::vector<VkCommandBuffer> InterfaceRenderPass::ImGuiCommandBuffers;
 
 int main()
 {
-    Timer timer = Timer();
     Window::CreateWindow(1280, 720, "Eclipse Engine");
     SoundDevice::StartUp();
     SoundEffectManager::StartUp();
@@ -40,7 +39,6 @@ int main()
 
     while (!glfwWindowShouldClose(Window::GetWindowPtr()))
     {
-        timer.StartTimer();
         glfwPollEvents();
         ImGui_ImplVulkan_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -51,8 +49,6 @@ int main()
         ImGui::Render();
         scene.Update();
         scene.Draw();
-        timer.EndTimer();
-        SceneManager::FrameTime = timer.GetTimerDurationMilliseconds();
     //    //GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
     //    //GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
     //    //GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);

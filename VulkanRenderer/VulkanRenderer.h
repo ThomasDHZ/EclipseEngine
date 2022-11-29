@@ -8,6 +8,7 @@
 #include "VulkanDebugger.h"
 #include "GraphicsDevice.h"
 #include "VulkanSwapChain.h"
+#include "Timer.h"
 
 struct DescriptorSetBindingStruct
 {
@@ -49,7 +50,7 @@ private:
 	static std::vector<VkSemaphore> PresentImageSemaphores;
 	static VulkanDebugger VulkanDebug;
 	static VulkanSwapChain SwapChain;
-
+	static Timer FrameTimer;
 public:
 
 	static bool UpdateRendererFlag;
@@ -96,4 +97,6 @@ public:
 	static VkSurfaceFormatKHR GetSwapChainImageFormat() { return SwapChain.GetSwapChainImageFormat(); }
 	static uint32_t GetSwapChainMinImageCount() { return SwapChain.GetSwapChainMinImageCount(); }
 	static uint32_t GetSwapChainImageCount() { return SwapChain.GetSwapChainImageCount(); }
+	static float 	GetFrameTimeDurationSeconds() { return FrameTimer.GetTimerDurationSeconds(); };
+	static float 	GetFrameTimeDurationMilliseconds() { return FrameTimer.GetTimerDurationMilliseconds(); };
 };
