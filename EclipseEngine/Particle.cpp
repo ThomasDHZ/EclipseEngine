@@ -7,8 +7,8 @@ Particle::Particle() : Mesh3D()
 Particle::Particle(ParticleLoader3D& particaleLoader) : Mesh3D()
 {
 	Alive = true;
-	Gravity = particaleLoader.Gravity;
-	LifeSpan = particaleLoader.LifeSpan;
+	Gravity = particaleLoader.particleInfo.Gravity;
+	LifeSpan = particaleLoader.particleInfo.LifeSpan;
 	ElapsedTime = 0.0f;
 
 	ParentGameObjectID = particaleLoader.ParentGameObjectID;

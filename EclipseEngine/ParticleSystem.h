@@ -13,6 +13,9 @@ private:
 	uint32_t VertexCountPerParticle;
 
 	glm::vec3 BasePosition;
+	std::array<glm::vec2, 3> VelocityRange;
+	std::array<glm::vec2, 3> PositionOffsetRange;
+	std::array<glm::vec2, 3> ScaleRange;
 
 	void EmitParticle(std::shared_ptr<Particle> particle);
 public:

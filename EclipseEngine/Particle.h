@@ -1,6 +1,16 @@
 #pragma once
 #include "Mesh3D.h"
 
+struct ParticleInfo
+{
+	float Gravity;
+	float LifeSpan;
+	glm::vec3 BasePosition;
+	std::array<glm::vec2, 3> VelocityRange;
+	std::array<glm::vec2, 3> PositionOffsetRange;
+	std::array<glm::vec2, 3> ScaleRange;
+};
+
 struct ParticleLoader3D
 {
 	uint64_t ParentGameObjectID = 0;
@@ -18,8 +28,7 @@ struct ParticleLoader3D
 	MeshTypeEnum MeshType;
 	MeshSubTypeEnum MeshSubType;
 
-	float Gravity;
-	float LifeSpan;
+	ParticleInfo particleInfo;
 };
 
 class Particle : public Mesh3D

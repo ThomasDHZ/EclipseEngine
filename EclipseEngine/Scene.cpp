@@ -173,14 +173,21 @@ Scene::Scene()
 
     std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
 
+    ParticleInfo particale;
+    particale.Gravity = -1.0f;
+    particale.LifeSpan = 3;
+    particale.BasePosition = glm::vec3(0.0f);
+    particale.PositionOffsetRange = { glm::vec2(0.0f, 1.0f), glm::vec2(0.0f, 1.0f), glm::vec2(0.0f, 1.0f) };
+    particale.VelocityRange = { glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f) };
+    particale.ScaleRange = { glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f) };
+
     ParticleLoader3D particaleLoader;
     particaleLoader.MeshType = MeshTypeEnum::kPolygon;
     particaleLoader.VerticeList = vertices;
     particaleLoader.IndexList = indiceList;
     particaleLoader.MaterialPtr = WallMaterial;
     particaleLoader.ParticaleCount = 100;
-    particaleLoader.Gravity = -1.0f;
-    particaleLoader.LifeSpan = 3;
+    particaleLoader.particleInfo = particale;
 
     auto particleSystem = std::make_shared<ParticalSystemRenderer>(ParticalSystemRenderer("particaleSystem", particaleLoader));
     GameObjectManager::AddGameObject(particleSystem);
