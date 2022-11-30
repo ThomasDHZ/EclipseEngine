@@ -10,6 +10,7 @@
 
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 #include "Lights.glsl"
 
 layout(location = 0) in vec2 TexCoords;

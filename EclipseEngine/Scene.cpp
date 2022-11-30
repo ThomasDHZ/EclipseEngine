@@ -164,33 +164,33 @@ Scene::Scene()
     std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
     std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-    std::vector<Vertex3D> vertices = {
-        {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
-        {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
-        {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
-        {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
-    };
+    //std::vector<Vertex3D> vertices = {
+    //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, -0.5f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 1.0f, 0.0f},{ 0.0f}},
+    //    {{0.5f, 0.5f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}, {0.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {0.0f, 0.0f, 1.0f},{ 0.0f}},
+    //    {{-0.5f, 0.5f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 1.0f},{ 0.0f}, {1.0f, 1.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 1.0f, 0.0f},{ 0.0f}}
+    //};
 
-    std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
+    //std::vector<uint32_t> indiceList = { 0, 1, 2, 2, 3, 0 };
 
-    ParticleInfo particale;
-    particale.Gravity = -1.0f;
-    particale.LifeSpan = 3;
-    particale.BasePosition = glm::vec3(0.0f);
-    particale.PositionOffsetRange = { glm::vec2(0.0f, 1.0f), glm::vec2(0.0f, 1.0f), glm::vec2(0.0f, 1.0f) };
-    particale.VelocityRange = { glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f) };
-    particale.ScaleRange = { glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f) };
+    //ParticleInfo particale;
+    //particale.Gravity = -1.0f;
+    //particale.LifeSpan = 3;
+    //particale.BasePosition = glm::vec3(0.0f);
+    //particale.PositionOffsetRange = { glm::vec2(-1.0f, 1.0f), glm::vec2(0.0f, 1.0f), glm::vec2(-1.0f, 1.0f) };
+    //particale.VelocityRange = { glm::vec2(-1.0f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(-1.0f, 1.0f) };
+    //particale.ScaleRange = { glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f), glm::vec2(0.1f, 1.0f) };
 
-    ParticleLoader3D particaleLoader;
-    particaleLoader.MeshType = MeshTypeEnum::kPolygon;
-    particaleLoader.VerticeList = vertices;
-    particaleLoader.IndexList = indiceList;
-    particaleLoader.MaterialPtr = WallMaterial;
-    particaleLoader.ParticaleCount = 100;
-    particaleLoader.particleInfo = particale;
+    //ParticleLoader3D particaleLoader;
+    //particaleLoader.MeshType = MeshTypeEnum::kPolygon;
+    //particaleLoader.VerticeList = vertices;
+    //particaleLoader.IndexList = indiceList;
+    //particaleLoader.MaterialPtr = WallMaterial;
+    //particaleLoader.ParticaleCount = 300;
+    //particaleLoader.particleInfo = particale;
 
-    auto particleSystem = std::make_shared<ParticalSystemRenderer>(ParticalSystemRenderer("particaleSystem", particaleLoader));
-    GameObjectManager::AddGameObject(particleSystem);
+    //auto particleSystem = std::make_shared<ParticalSystemRenderer>(ParticalSystemRenderer("particaleSystem", particaleLoader));
+    //GameObjectManager::AddGameObject(particleSystem);
 
     //auto ads = TextureManager::LoadTextureAtlus("../texture/TestReflectionBakeLayer0.bmp", glm::ivec2(256));
     //BakeTexture = ads->CreateTextureFromTextureAtlus(glm::ivec2(31, 1));
@@ -274,7 +274,7 @@ Scene::Scene()
         //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
         //MaterialManager::AddMaterial(material3);
 
-   /*     InstancingDataStruct instance = {};
+        InstancingDataStruct instance = {};
         std::vector<std::shared_ptr<Material>> instanceMaterialList;
         instanceMaterialList.emplace_back(IronmMaterial);
         instanceMaterialList.emplace_back(PlasticMaterial);
@@ -299,14 +299,14 @@ Scene::Scene()
         ModelLoader loader2{};
         loader2.instanceData = instance;
         loader2.FilePath = "../Models/sphere.obj";
-        loader2.MeshType = MeshTypeEnum::kPolygonInstanced;*/
+        loader2.MeshType = MeshTypeEnum::kPolygonInstanced;
 
-        //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
-        //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
-        //MaterialManager::SaveMaterial(WallMaterial);
+        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
+        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
+        MaterialManager::SaveMaterial(WallMaterial);
 
-        //auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", loader2));
-        //GameObjectManager::AddGameObject(obj6);
+        auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", loader2));
+        GameObjectManager::AddGameObject(obj6);
         // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 
@@ -563,7 +563,7 @@ void Scene::BuildRenderers()
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                rayTracePBRRenderer.BuildRenderer();
-               hybridRenderer.BuildRenderer();
+               //hybridRenderer.BuildRenderer();
             }
             break;
         }

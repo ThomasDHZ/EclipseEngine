@@ -1279,6 +1279,21 @@
     <None Include="..\Shaders\animateParticles.comp">
       <Filter>Shader\ComputeShaders</Filter>
     </None>
+    <None Include="..\Shaders\ParticleShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\ParticleShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRBindingLayout.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\PBRMaterial.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\MaterialProperties.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">

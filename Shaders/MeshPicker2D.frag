@@ -5,6 +5,7 @@
 #extension GL_EXT_debug_printf : enable
 
 #include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;

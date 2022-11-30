@@ -2,9 +2,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_EXT_nonuniform_qualifier : enable
 
-#include "VertexLayout.glsl"
-#include "MeshProperties.glsl"
-#include "Lights.glsl"
+#include "PBRBindingLayout.glsl"
 
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
@@ -14,18 +12,6 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
-
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 4) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 5) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 6) uniform sampler2D TextureMap[];
-layout(binding = 7) uniform samplerCube IrradianceMap[];
-layout(binding = 8) uniform samplerCube PrefilterMap[];
-layout(binding = 9) uniform sampler2D BRDFMap;
-layout(binding = 10) uniform sampler2D ShadowMap[];
-layout(binding = 11) uniform samplerCube PointShadowMap[];
 
 layout(push_constant) uniform SceneData
 {

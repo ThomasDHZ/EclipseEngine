@@ -4,7 +4,6 @@
 
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
-#include "MaterialProperties.glsl"
 #include "Lights.glsl"
 
 layout(location = 0) in vec3 FragPos;
@@ -17,21 +16,20 @@ layout(location = 5) in vec3 Color;
 layout(location = 0) out vec4 outColor;
 //layout(location = 1) out vec4 outBloom;
 
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 4) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 5) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-layout(binding = 6) uniform sampler2D TextureMap[];
-layout(binding = 7) uniform samplerCube IrradianceMap;
-layout(binding = 8) uniform samplerCube PrefilterMap;
-layout(binding = 9) uniform sampler2D BRDFMap;
-layout(binding = 10) uniform sampler2D ShadowMap[];
-layout(binding = 11) uniform samplerCube PointShadowMap[];
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 2) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 3) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 4) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 5) uniform sampler2D TextureMap[];
+layout(binding = 6) uniform samplerCube IrradianceMap[];
+layout(binding = 7) uniform samplerCube PrefilterMap[];
+layout(binding = 8) uniform sampler2D BRDFMap;
+layout(binding = 9) uniform sampler2D ShadowMap[];
+layout(binding = 10) uniform samplerCube PointShadowMap[];
 
 layout(push_constant) uniform SceneData
 {
-    uint Counter;
     uint MeshIndex;
     mat4 proj;
     mat4 view;
@@ -179,7 +177,7 @@ void main()
      ao = texture(TextureMap[material.AmbientOcclusionMapID], FinalUV).r;
    }
 
-      vec3 emission = material.Emission;
+   vec3 emission = material.Emission;
    if (material.EmissionMapID != 0)
    {
        emission = texture(TextureMap[material.EmissionMapID], FinalUV).rgb;
@@ -225,16 +223,23 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap, N).rgb;
+    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], N).rgb;
     vec3 diffuse      = irradiance * albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap, R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
     vec3 ambient = emission + ((kD * diffuse + specular) * ao);
     
     vec3 color = ambient + Lo;
+    color = color / (color + vec3(1.0f));
+    color = pow(color, vec3(1.0f/2.2f)); 
+
+    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
+    {
+        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
+    }
     outColor = vec4(color, 1.0f);
 }
 
@@ -317,6 +322,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, vec3 albedo, float roughness,
 
         vec4 LightSpace = (LightBiasMatrix *  DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
         float shadow = filterPCF(LightSpace/ LightSpace.w, x);  
+
         Lo += (kD * albedo / PI + specular) * radiance * NdotL * shadow;
     }
     return Lo;

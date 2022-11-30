@@ -5,7 +5,6 @@
 #extension GL_EXT_debug_printf : enable
 
 #include "MeshProperties.glsl"
-#include "MaterialProperties.glsl"
 
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 aNormal;
@@ -39,10 +38,20 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    gl_Position = sceneData.proj * 
-                  sceneData.view *                   
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
-                  vec4(inPosition, 1.0);
+    FragPos = vec3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
+    Normal = aNormal;
+	Tangent = aTangent;
+	BiTangent = aBitangent;
+
+    mat4 model =  
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform;
+
+
+    
+    gl_Position = sceneData.proj * 
+                  sceneData.view *                
+                  model *
+                  vec4(inPosition, 1.0);
 }

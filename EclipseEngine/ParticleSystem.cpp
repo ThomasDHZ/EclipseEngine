@@ -46,8 +46,8 @@ void ParticleSystem::EmitParticle(std::shared_ptr<Particle> particle)
 									   BasePosition.y + RandomNumber::GenerateRandomFloat(PositionOffsetRange[1].x, PositionOffsetRange[1].y), 
 									   BasePosition.z + RandomNumber::GenerateRandomFloat(PositionOffsetRange[2].x, PositionOffsetRange[2].y));
 	particle->MeshScale = glm::vec3(RandomNumber::GenerateRandomFloat(ScaleRange[0].x, ScaleRange[0].y),
-									   RandomNumber::GenerateRandomFloat(ScaleRange[1].x, ScaleRange[1].y),
-								 	   RandomNumber::GenerateRandomFloat(ScaleRange[2].x, ScaleRange[2].y));
+									RandomNumber::GenerateRandomFloat(ScaleRange[1].x, ScaleRange[1].y),
+								 	RandomNumber::GenerateRandomFloat(ScaleRange[2].x, ScaleRange[2].y));
 	particle->Velocity = glm::vec3(RandomNumber::GenerateRandomFloat(VelocityRange[0].x, VelocityRange[0].y),
 								   RandomNumber::GenerateRandomFloat(VelocityRange[1].x, VelocityRange[1].y),
 								   RandomNumber::GenerateRandomFloat(VelocityRange[2].x, VelocityRange[2].y));

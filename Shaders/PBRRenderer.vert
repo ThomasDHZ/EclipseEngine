@@ -4,7 +4,7 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
-#include "MeshProperties.glsl"
+#include "PBRBindingLayout.glsl"
 
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 aNormal;
@@ -19,8 +19,6 @@ layout(location = 2) out vec3 Normal;
 layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
-
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData
 {

@@ -28,6 +28,10 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.vert -o ../x64/Shaders/BlinnPhoneReflectVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BlinnPhoneReflect.frag -o ../x64/Shaders/BlinnPhoneReflectFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.vert -o ParticleShaderert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.frag -o ParticleShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.vert -o ../x64/Shaders/ParticleShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.frag -o ../x64/Shaders/ParticleShaderFrag.spv
 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BillBoardShader.vert -o BillBoardShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BillBoardShader.frag -o BillBoardShaderFrag.spv

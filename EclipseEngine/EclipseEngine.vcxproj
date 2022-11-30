@@ -502,6 +502,7 @@
     <None Include="..\Shaders\LineRenderer2D.vert" />
     <None Include="..\Shaders\LineRenderer3D.frag" />
     <None Include="..\Shaders\LineRenderer3D.vert" />
+    <None Include="..\Shaders\MaterialProperties.glsl" />
     <None Include="..\Shaders\MeshPicker2D.frag" />
     <None Include="..\Shaders\MeshPicker2D.vert" />
     <None Include="..\Shaders\MeshPicker3D.frag" />
@@ -510,11 +511,15 @@
     <None Include="..\Shaders\miss.rmiss" />
     <None Include="..\Shaders\OutlineRenderer.frag" />
     <None Include="..\Shaders\OutlineRenderer.vert" />
+    <None Include="..\Shaders\ParticleShader.frag" />
+    <None Include="..\Shaders\ParticleShader.vert" />
+    <None Include="..\Shaders\PBRBindingLayout.glsl" />
     <None Include="..\Shaders\PBRBloomRenderer.frag" />
     <None Include="..\Shaders\PBRBloomRenderer.vert" />
     <None Include="..\Shaders\pbrclosesthit.rchit" />
     <None Include="..\Shaders\PBRInstanceRenderer.frag" />
     <None Include="..\Shaders\PBRInstanceRenderer.vert" />
+    <None Include="..\Shaders\PBRMaterial.glsl" />
     <None Include="..\Shaders\PBRRenderer.frag" />
     <None Include="..\Shaders\PBRRenderer.vert" />
     <None Include="..\Shaders\PrefilterShader.frag" />
