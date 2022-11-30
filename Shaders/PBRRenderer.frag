@@ -2,7 +2,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_EXT_nonuniform_qualifier : enable
 
-#include "PBRBindingLayout.glsl"
+#include "PBRMaterial.glsl"
 
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
@@ -125,11 +125,6 @@ void main()
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
-   if(texture(TextureMap[material.AlphaMapID], FinalUV).r == 0.0f ||
-      texture(TextureMap[material.AlbedoMapID], FinalUV).a == 0.0f)
-   {
-	 discard;
-   }
    if(meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
    {
         FinalUV.y = 1.0f - FinalUV.y;
@@ -139,35 +134,7 @@ void main()
         FinalUV.x = 1.0f - FinalUV.x;
    }
 
-   vec3 albedo = pow(material.Albedo, vec3(2.2));
-   if (material.AlbedoMapID != 0)
-   {
-       albedo = pow(texture(TextureMap[material.AlbedoMapID], FinalUV).rgb, vec3(2.2));
-   }
-
-   float metallic =  material.Matallic;
-   if (material.MetallicMapID != 0)
-   {
-     metallic = texture(TextureMap[material.MetallicMapID], FinalUV).r;
-   }
-
-   float roughness =  material.Roughness;
-   if (material.RoughnessMapID != 0)
-   {
-     roughness = texture(TextureMap[material.RoughnessMapID], FinalUV).r;
-   }
-
-   float ao = material.AmbientOcclusion;
-   if (material.AmbientOcclusionMapID != 0)
-   {
-     ao = texture(TextureMap[material.AmbientOcclusionMapID], FinalUV).r;
-   }
-
-   vec3 emission = material.Emission;
-   if (material.EmissionMapID != 0)
-   {
-       emission = texture(TextureMap[material.EmissionMapID], FinalUV).rgb;
-   }
+  PBRMaterial pbrMaterial = BuildPBRMaterial(materialBuffer[materialID].materialProperties, FinalUV);
 
    mat3 TBN = getTBNFromMap();
    vec3 N = Normal;
@@ -175,12 +142,12 @@ void main()
    vec3 ViewPos  = sceneData.CameraPos;
    vec3 FragPos2  = FragPos;
    vec3 viewDir = normalize(ViewPos - FragPos2);
-   if (material.NormalMapID != 0)
+   if (pbrMaterial.NormalMapID != 0)
    {
         ViewPos  = TBN * sceneData.CameraPos;
         FragPos2  = TBN * FragPos;
 
-        if(material.DepthMapID != 0)
+        if(pbrMaterial.DepthMapID != 0)
         {
             FinalUV = ParallaxMapping(material.DepthMapID, FinalUV,  viewDir);       
             if(FinalUV.x > 1.0 || FinalUV.y > 1.0 || FinalUV.x < 0.0 || FinalUV.y < 0.0)
@@ -197,26 +164,26 @@ void main()
     vec3 R = reflect(-V, N); 
 
     vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic);
+    F0 = mix(F0, pbrMaterial.Albedo, pbrMaterial.Metallic);
 
     vec3 Lo = vec3(0.0);
-    Lo += CalcDirectionalLight(F0, V, N, albedo, roughness, metallic);
-    Lo += CalcPointLight(F0, V, N, albedo, roughness, metallic);
-    Lo += CalcSpotLight(F0, V, N, albedo, roughness, metallic);
+    Lo += CalcDirectionalLight(F0, V, N, pbrMaterial.Albedo, pbrMaterial.Roughness, pbrMaterial.Metallic);
+    Lo += CalcPointLight(F0, V, N, pbrMaterial.Albedo, pbrMaterial.Roughness, pbrMaterial.Metallic);
+    Lo += CalcSpotLight(F0, V, N, pbrMaterial.Albedo, pbrMaterial.Roughness, pbrMaterial.Metallic);
 
-    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);
     vec3 kS = F;
     vec3 kD = 1.0 - kS;
-    kD *= 1.0 - metallic;	  
+    kD *= 1.0 - pbrMaterial.Metallic;	  
     
     vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], N).rgb;
-    vec3 diffuse      = irradiance * albedo;
+    vec3 diffuse      = irradiance * pbrMaterial.Albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  roughness * sceneData.PBRMaxMipLevel).rgb;    
-    vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  pbrMaterial.Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), pbrMaterial.Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-    vec3 ambient = emission + ((kD * diffuse + specular) * ao);
+    vec3 ambient = pbrMaterial.Emission + ((kD * diffuse + specular) * pbrMaterial.AmbientOcclusion);
     
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0f));
