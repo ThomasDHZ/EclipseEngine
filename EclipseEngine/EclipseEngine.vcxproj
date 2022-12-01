@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Shaders\RTXPBRBindingLayout.glsl" />
     <ClCompile Include="Animation3D.cpp" />
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BakedTexture.cpp" />
@@ -524,6 +525,7 @@
     <None Include="..\Shaders\PBRMaterial.glsl" />
     <None Include="..\Shaders\PBRRenderer.frag" />
     <None Include="..\Shaders\PBRRenderer.vert" />
+    <None Include="..\Shaders\PBRRTXLight.glsl" />
     <None Include="..\Shaders\PrefilterShader.frag" />
     <None Include="..\Shaders\PrefilterShader.vert" />
     <None Include="..\Shaders\RasterVertexBuilder.glsl" />

@@ -558,6 +558,9 @@
     <ClCompile Include="ParticalSystemRenderer.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="..\Shaders\RTXPBRBindingLayout.glsl">
+      <Filter>Shader\Include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1301,6 +1304,9 @@
       <Filter>Shader\Include</Filter>
     </None>
     <None Include="..\Shaders\VertexLayout.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\PBRRTXLight.glsl">
       <Filter>Shader\Include</Filter>
     </None>
   </ItemGroup>

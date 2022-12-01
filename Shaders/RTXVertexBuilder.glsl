@@ -15,6 +15,18 @@ Vertex BuildVertexInfo()
 	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
 
 	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
+	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
+
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+	{
+		vertex.UV.y = 1.0f - vertex.UV.y;
+	}
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+	{
+		vertex.UV.x = 1.0f - vertex.UV.x;
+	}
+
 	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
     vertex.Tangant = v0.Tangant * barycentricCoords.x + v1.Tangant * barycentricCoords.y + v2.Tangant * barycentricCoords.z;
 	vertex.BiTangant = v0.BiTangant * barycentricCoords.x + v1.BiTangant * barycentricCoords.y + v2.BiTangant * barycentricCoords.z;

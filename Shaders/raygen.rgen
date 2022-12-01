@@ -47,8 +47,8 @@ void main()
 		vec3 finalColor = vec3(0.0f);
 		traceRayEXT(topLevelAS, gl_RayFlagsNoneEXT, cullMask, 0, 0, 0, origin.xyz, tmin, direction.xyz, tmax, 0);
 
-	 vec3 finalResult = vec3(1.0) - exp(-rayPayload.color * 1.0f);
-		  finalResult = pow(finalResult, vec3(1.0 / 2.2f));
+    vec3 finalResult = rayPayload.color / (rayPayload.color + vec3(1.0f));
+    finalResult = pow(finalResult, vec3(1.0f/2.2f)); 
 
     imageStore(RayTracedTexture, ivec2(gl_LaunchIDEXT.xy),  vec4(finalResult, 1.0));
 }
