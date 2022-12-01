@@ -517,13 +517,16 @@
     <None Include="..\Shaders\PBRBloomRenderer.frag" />
     <None Include="..\Shaders\PBRBloomRenderer.vert" />
     <None Include="..\Shaders\pbrclosesthit.rchit" />
+    <None Include="..\Shaders\PBRFunctions.glsl" />
     <None Include="..\Shaders\PBRInstanceRenderer.frag" />
     <None Include="..\Shaders\PBRInstanceRenderer.vert" />
+    <None Include="..\Shaders\PBRLight.glsl" />
     <None Include="..\Shaders\PBRMaterial.glsl" />
     <None Include="..\Shaders\PBRRenderer.frag" />
     <None Include="..\Shaders\PBRRenderer.vert" />
     <None Include="..\Shaders\PrefilterShader.frag" />
     <None Include="..\Shaders\PrefilterShader.vert" />
+    <None Include="..\Shaders\RasterVertexBuilder.glsl" />
     <None Include="..\Shaders\raygen.rgen" />
     <None Include="..\Shaders\ReflectionPBRInstanceShader.frag" />
     <None Include="..\Shaders\ReflectionPBRInstanceShader.vert" />
@@ -539,7 +542,7 @@
     <None Include="..\Shaders\SelectedObjectShader.frag" />
     <None Include="..\Shaders\SelectedObjectShader.vert" />
     <None Include="..\Shaders\shadow.rmiss" />
-    <None Include="..\Shaders\VertexBuilder.glsl" />
+    <None Include="..\Shaders\RTXVertexBuilder.glsl" />
     <None Include="..\Shaders\VertexLayout.glsl" />
     <None Include="..\Shaders\WireFrameShader.frag" />
     <None Include="..\Shaders\WireFrameShader.vert" />

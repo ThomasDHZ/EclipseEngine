@@ -1,5 +1,3 @@
-#include "PBRBindingLayout.glsl"
-
 struct PBRMaterial
 {
 	vec3 Albedo;

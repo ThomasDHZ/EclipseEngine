@@ -1015,10 +1015,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shaders\VertexLayout.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\VertexBuilder.glsl">
+    <None Include="..\Shaders\RTXVertexBuilder.glsl">
       <Filter>Shader\Include</Filter>
     </None>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1292,6 +1289,18 @@
       <Filter>Shader\Include</Filter>
     </None>
     <None Include="..\Shaders\MaterialProperties.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\PBRFunctions.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\PBRLight.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\RasterVertexBuilder.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\VertexLayout.glsl">
       <Filter>Shader\Include</Filter>
     </None>
   </ItemGroup>
