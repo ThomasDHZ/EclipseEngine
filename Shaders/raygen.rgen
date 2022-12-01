@@ -3,10 +3,11 @@
 #extension GL_EXT_debug_printf : enable
 #extension GL_EXT_scalar_block_layout : enable
 
+#include "RTXPayload.glsl"
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 #include "Lights.glsl"
-#include "RTXPayload.glsl"
 #include "SceneData.glsl"
 
 layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;

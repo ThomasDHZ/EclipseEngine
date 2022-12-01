@@ -48,7 +48,7 @@ PBRMaterial BuildPBRMaterial(MaterialProperties properties, vec2 UV)
 	if (texture(TextureMap[properties.AlphaMapID], UV).r == 0.0f ||
 		texture(TextureMap[properties.AlbedoMapID], UV).a == 0.0f)
 	{
-		discard;
+		//discard;
 	}
 
 	material.NormalMapID = properties.NormalMapID;

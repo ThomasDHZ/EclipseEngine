@@ -4,11 +4,12 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
+#include "RTXPayload.glsl"
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 #include "Lights.glsl"
 #include "SceneData.glsl"
-#include "RTXPayload.glsl"
 
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 layout(location = 1) rayPayloadEXT bool shadowed;
@@ -25,6 +26,7 @@ layout(binding = 7) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 8) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 9) uniform sampler2D TextureMap[];
 
+#include "PBRMaterial.glsl"
 Vertex BuildVertexInfo()
 {
 	Vertex vertex;

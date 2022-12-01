@@ -23,16 +23,6 @@ layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
 layout(location = 6) out int MaterialID;
 
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    float Timer;
-} sceneData;
-
 void main() {
 
     FragPos = vec3(IntanceMatrix * vec4(inPosition.xyz, 1.0));    

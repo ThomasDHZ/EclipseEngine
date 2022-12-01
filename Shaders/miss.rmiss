@@ -4,8 +4,10 @@
 
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 #include "Lights.glsl"
 #include "SceneData.glsl"
+#include "RTXPayload.glsl"
 
 struct RayHitInfo
 {
