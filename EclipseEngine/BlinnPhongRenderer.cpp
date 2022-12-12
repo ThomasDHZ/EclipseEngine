@@ -61,7 +61,7 @@ void BlinnPhongRenderer::Draw(SceneProperties& sceneProperties, ConstSkyBoxView&
 	CommandBufferSubmitList.emplace_back(blinnPhongRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
-	AnimationRenderer.StartUp();
+	AnimationRenderer.Compute();
 }
 
 void BlinnPhongRenderer::Destroy()

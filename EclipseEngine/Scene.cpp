@@ -274,7 +274,7 @@ Scene::Scene()
         //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
         //MaterialManager::AddMaterial(material3);
 
-        InstancingDataStruct instance = {};
+      /*  InstancingDataStruct instance = {};
         std::vector<std::shared_ptr<Material>> instanceMaterialList;
         instanceMaterialList.emplace_back(IronmMaterial);
         instanceMaterialList.emplace_back(PlasticMaterial);
@@ -306,7 +306,7 @@ Scene::Scene()
         MaterialManager::SaveMaterial(WallMaterial);
 
         auto obj6 = std::make_shared<ModelRenderer>(ModelRenderer("Grass", loader2));
-        GameObjectManager::AddGameObject(obj6);
+        GameObjectManager::AddGameObject(obj6);*/
         // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 
