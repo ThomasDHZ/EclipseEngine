@@ -16,8 +16,6 @@ hitAttributeEXT vec2 attribs;
 #include "RTXVertexBuilder.glsl"
 #include "RTXRandom.glsl"
 
-
-
 void main()
 {		
    Vertex vertex = BuildVertexInfo();

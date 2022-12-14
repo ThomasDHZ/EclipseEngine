@@ -130,6 +130,21 @@
     <Filter Include="Shader\ComputeShaders">
       <UniqueIdentifier>{b4a60ae6-8a5a-4415-a22e-92dc21a94e6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\RayTraceShaders\Raster">
+      <UniqueIdentifier>{16bb6acc-e59d-40e9-8dfd-559e786dbfe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\RayTraceShaders\PBR">
+      <UniqueIdentifier>{f107c5f8-7072-40a4-a23f-7afa41c8f934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\RayTraceShaders\Hybrid">
+      <UniqueIdentifier>{199c10ad-53fc-4014-988c-d900f4494a4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Include\Raster">
+      <UniqueIdentifier>{9030a743-e90d-4cbe-9ce7-487a7eaa2f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Include\RayTrace">
+      <UniqueIdentifier>{74a924a7-e51a-47db-8b07-ed04dcc8a0ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -557,9 +572,6 @@
     </ClCompile>
     <ClCompile Include="ParticalSystemRenderer.cpp">
       <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Shaders\RTXPBRBindingLayout.glsl">
-      <Filter>Shader\Include</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1018,9 +1030,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shaders\RTXVertexBuilder.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
     <None Include="..\Shaders\MeshProperties.glsl">
       <Filter>Shader\Include</Filter>
     </None>
@@ -1165,27 +1174,6 @@
     <None Include="..\Shaders\WireFrameShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\anyhit.rahit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\anyhit1.rahit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\closesthit.rchit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\hybridclosesthit.rchit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\miss.rmiss">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\raygen.rgen">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\shadow.rmiss">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
     <None Include="..\Shaders\compile.bat">
       <Filter>Resource Files</Filter>
     </None>
@@ -1264,15 +1252,6 @@
     <None Include="..\Shaders\BakeReflectionPBRShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\pbrclosesthit.rchit">
-      <Filter>Shader\RayTraceShaders</Filter>
-    </None>
-    <None Include="..\Shaders\RTXRandom.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\RTXPayload.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
     <None Include="..\Shaders\SceneData.glsl">
       <Filter>Shader\Include</Filter>
     </None>
@@ -1285,29 +1264,86 @@
     <None Include="..\Shaders\ParticleShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\PBRBindingLayout.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\PBRMaterial.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
     <None Include="..\Shaders\MaterialProperties.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\PBRFunctions.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\PBRLight.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\RasterVertexBuilder.glsl">
       <Filter>Shader\Include</Filter>
     </None>
     <None Include="..\Shaders\VertexLayout.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="..\Shaders\PBRAnyhit.rahit">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\PBRAnyhit1.rahit">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\PBRClosesthit.rchit">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\PBRRaygen.rgen">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\hybridclosesthit.rchit">
+      <Filter>Shader\RayTraceShaders\Hybrid</Filter>
+    </None>
+    <None Include="..\Shaders\PBRMiss.rmiss">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\anyhit.rahit">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\anyhit1.rahit">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\closesthit.rchit">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\miss.rmiss">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\raygen.rgen">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\shadow.rmiss">
+      <Filter>Shader\RayTraceShaders\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\PBRShadow.rmiss">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </None>
+    <None Include="..\Shaders\RasterVertexBuilder.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\RasterBindingLayout.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\RasterLight.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\RTXVertexBuilder.glsl">
+      <Filter>Shader\Include\RayTrace</Filter>
+    </None>
+    <None Include="..\Shaders\RTXRandom.glsl">
+      <Filter>Shader\Include\RayTrace</Filter>
+    </None>
+    <None Include="..\Shaders\RTXPBRBindingLayout.glsl">
+      <Filter>Shader\Include\RayTrace</Filter>
+    </None>
+    <None Include="..\Shaders\RTXPayload.glsl">
+      <Filter>Shader\Include\RayTrace</Filter>
+    </None>
     <None Include="..\Shaders\PBRRTXLight.glsl">
-      <Filter>Shader\Include</Filter>
+      <Filter>Shader\Include\RayTrace</Filter>
+    </None>
+    <None Include="..\Shaders\PBRMaterial.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\PBRBindingLayout.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\PBRFunctions.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\PBRLight.glsl">
+      <Filter>Shader\Include\Raster</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
