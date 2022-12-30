@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EclipseEngine", "EclipseEng
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VulkanRenderer", "VulkanRenderer\VulkanRenderer.vcxproj", "{3CACE6F3-402C-46CB-B6A5-F53B3A190B25}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLTFLoader", "GLTFLoader\GLTFLoader.vcxproj", "{797AC059-EFD1-42CB-9422-885B5552C924}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{3CACE6F3-402C-46CB-B6A5-F53B3A190B25}.Release|x64.Build.0 = Release|x64
 		{3CACE6F3-402C-46CB-B6A5-F53B3A190B25}.Release|x86.ActiveCfg = Release|Win32
 		{3CACE6F3-402C-46CB-B6A5-F53B3A190B25}.Release|x86.Build.0 = Release|Win32
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Debug|x64.ActiveCfg = Debug|x64
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Debug|x64.Build.0 = Debug|x64
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Debug|x86.ActiveCfg = Debug|Win32
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Debug|x86.Build.0 = Debug|Win32
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Release|x64.ActiveCfg = Release|x64
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Release|x64.Build.0 = Release|x64
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Release|x86.ActiveCfg = Release|Win32
+		{797AC059-EFD1-42CB-9422-885B5552C924}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,7 @@
 #include "Animation3D.h"
 #include "AnimationPlayer3D.h"
 #include "ComputeAnimationPipeline.h"
+#include <GLTFScene.h>
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
 

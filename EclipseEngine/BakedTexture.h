@@ -1,6 +1,5 @@
 #pragma once
 #include "Texture.h"
-#include "stb_image_write.h"
 #include <fstream>
 #include "ReadableTexture.h"
 

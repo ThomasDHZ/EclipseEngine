@@ -1,6 +1,9 @@
 #include "Texture.h"
 #include "VulkanBuffer.h"
 #include "ImGui/imgui_impl_vulkan.h"
+#include <tinygltf/stb_image.h>
+
+
 
 uint64_t Texture::TextureIDCounter = 0;
 

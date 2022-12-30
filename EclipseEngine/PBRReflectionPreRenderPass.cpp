@@ -84,44 +84,44 @@ void PBRReflectionPreRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& t
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void PBRReflectionPreRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize)
-{
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = glm::vec2(cubeMapSize);
-
-    if (renderPass == nullptr)
-    {
-        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-    }
-    else
-    {
-        ClearTextureList();
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(textures);
-    SetUpCommandBuffers();
-    Draw();
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-    TextureBaker::BakeCubeTextureAtlus("../texture/TestReflectionBakeLayer", ReflectionCubeMapList, cubeMapSize, bakedTextureAtlusSize);
-}
+//void PBRReflectionPreRenderPass::BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize)
+//{
+//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+//    RenderPassResolution = glm::vec2(cubeMapSize);
+//
+//    if (renderPass == nullptr)
+//    {
+//        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+//        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+//        for (const auto& mesh : MeshRendererManager::GetMeshList())
+//        {
+//            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+//        }
+//    }
+//    else
+//    {
+//        ClearTextureList();
+//        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+//        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+//        for (const auto& mesh : MeshRendererManager::GetMeshList())
+//        {
+//            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+//        }
+//        RenderPass::Destroy();
+//    }
+//
+//    std::vector<VkImageView> AttachmentList;
+//    AttachmentList.emplace_back(RenderedTexture->View);
+//    AttachmentList.emplace_back(DepthTexture->View);
+//
+//    RenderPassDesc();
+//    CreateRendererFramebuffers(AttachmentList);
+//    BuildRenderPassPipelines(textures);
+//    SetUpCommandBuffers();
+//    Draw();
+//    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+//    TextureBaker::BakeCubeTextureAtlus("../texture/TestReflectionBakeLayer", ReflectionCubeMapList, cubeMapSize, bakedTextureAtlusSize);
+//}
 
 
 void PBRReflectionPreRenderPass::RenderPassDesc()

@@ -131,12 +131,12 @@ Scene::Scene()
  //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    ModelLoader loader{};
-    loader.FilePath = "../Models/TestAnimModel/model.dae";
-    loader.MeshType = MeshTypeEnum::kPolygon;
+    //ModelLoader loader{};
+    //loader.FilePath = "../Models/TestAnimModel/model.dae";
+    //loader.MeshType = MeshTypeEnum::kPolygon;
 
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-    GameObjectManager::AddGameObject(a);
+    //auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+    //GameObjectManager::AddGameObject(a);
 
 
     //auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
@@ -152,7 +152,7 @@ Scene::Scene()
     //GameObjectManager::AddGameObject(e);
 
     ModelLoader loader2{};
-    loader2.FilePath = "../Models/Sponza/sponza.obj";
+    loader2.FilePath = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/Suzanne/glTF";
     loader2.MeshType = MeshTypeEnum::kPolygon;
 
     auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));

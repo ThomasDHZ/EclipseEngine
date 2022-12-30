@@ -409,6 +409,7 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 
 void Model::LoadModel(ModelLoader& modelLoader)
 {
+	GLTFModel scene = GLTFModel(modelLoader.FilePath.c_str(), sizeof(Vertex3D));
 	ModelFilePath = modelLoader.FilePath;
 
 	Assimp::Importer ModelImporter;

@@ -42,7 +42,7 @@ public:
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
 	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize);
+	//void BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

@@ -1,5 +1,7 @@
 #include "VulkanRenderer.h"
 #include <GLFW/glfw3.h>
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 
 Window* Window::window;
 GLFWwindow* Window::GLFWindow;

@@ -1,10 +1,6 @@
 #include <iostream>
 #include "VulkanRenderer.h"
 #include "Scene.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
 #include <json.hpp>
 #include "GameObject.h"
 #include "TextureManager.h"
@@ -24,7 +20,7 @@ std::vector<VkCommandBuffer> InterfaceRenderPass::ImGuiCommandBuffers;
 
 int main()
 {
-    Window::CreateWindow(1280, 720, "Eclipse Engine");
+    Window::CreateGraphicsWindow(1280, 720, "Eclipse Engine");
     SoundDevice::StartUp();
     SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();

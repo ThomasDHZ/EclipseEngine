@@ -1,6 +1,6 @@
 #include "EnvironmentTexture.h"
-#include <stb_image.h>
 #include "VulkanBuffer.h"
+#include <tinygltf/stb_image.h>
 
 EnvironmentTexture::EnvironmentTexture() : Texture()
 {
