@@ -142,10 +142,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GLTFFileLoader.h" />
+    <ClInclude Include="GLTFMaterial.h" />
+    <ClInclude Include="GLTFMesh.h" />
+    <ClInclude Include="GLTFModel.h" />
     <ClInclude Include="GLTFScene.h" />
+    <ClInclude Include="GLTFVertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GLTFFileLoader.cpp" />
+    <ClCompile Include="GLTFMaterial.cpp" />
+    <ClCompile Include="GLTFMesh.cpp" />
+    <ClCompile Include="GLTFModel.cpp" />
     <ClCompile Include="GLTFScene.cpp" />
+    <ClCompile Include="GLTFVertex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

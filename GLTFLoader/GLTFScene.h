@@ -1,10 +1,8 @@
 #pragma once
-#include <iostream>
-#include <VulkanBuffer.h>
+#include "GLTFFileLoader.h"
+#include "GLTFModel.h"
 
-#include <tinygltf/tiny_gltf.h>
-
-class GLTFModel
+class GLTFScene
 {
 private:
 	uint32_t VertexSize;
@@ -12,12 +10,12 @@ private:
 	VulkanBuffer IndexBuffer;
 
 	void ModelNodes(tinygltf::Node& node);
-	void ModelMesh(tinygltf::Mesh& mesh);
+	void LoadMesh(tinygltf::Mesh& mesh);
 
 public:
 	tinygltf::Model model;
 
-	GLTFModel(const char* filename, uint32_t vertexSize);
-	~GLTFModel();
+	GLTFScene(const char* filename, uint32_t vertexSize);
+	~GLTFScene();
 };
 
