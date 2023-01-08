@@ -1,6 +1,10 @@
 #pragma once
 #include "GLTFFileLoader.h"
 #include "GLTFMesh.h"
+#include "GLTFTexture.h"
+#include <Texture2D.h>
+#include <Material.h>
+#include <VRAMManager.h>
 
 class GLTFModel
 {
@@ -8,46 +12,22 @@ private:
 	GLTFVertexEnum VertexType;
 	tinygltf::Model model;
 
+	std::vector<std::shared_ptr<Texture2D>> TextureList;
+	std::vector<std::shared_ptr<Material>> MaterialList;
 	std::vector<GLTFMesh> MeshList;
 	glm::mat4 ModelMatrix;
+
+	void LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader);
+	void LoadSamplerDetails(const tinygltf::Sampler tinygltfSampler, TinyGltfTextureSamplerLoader SamplerLoader);
+	void LoadMaterials(tinygltf::Model& model);
+
 public: 
-	GLTFModel()
-	{
-	}
+	GLTFModel();
+	GLTFModel(const char* filename, GLTFVertexEnum vertexType);
+	~GLTFModel();
 
-	GLTFModel(const char* filename, GLTFVertexEnum vertexType)
-	{
-		VertexType = vertexType;
+	void LoadModelNodes(tinygltf::Node& node);
 
-		auto file = "C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf";
-		model = GLTFFileLoader::Loader(file);
-
-		const tinygltf::Scene& scene = model.scenes[model.defaultScene];
-		const tinygltf::Node node = model.nodes[scene.nodes[0]];
-		for (int x = 0; x < scene.nodes.size(); x++)
-		{
-			LoadModelNodes(model.nodes[scene.nodes[x]]);
-		}
-	}
-
-	~GLTFModel()
-	{
-	}
-
-	void LoadModelNodes(tinygltf::Node& node)
-	{
-		if (node.mesh >= 0 &&
-			node.mesh < model.meshes.size())
-		{
-			GLTFMesh mesh = GLTFMesh(VertexType);
-			mesh.LoadMesh(model, model.meshes[node.mesh]);
-			MeshList.emplace_back(mesh);
-		}
-
-		for (uint32_t x = 0; x < node.children.size(); x++)
-		{
-			LoadModelNodes(model.nodes[node.children[x]]);
-		}
-	}
+	std::vector<GLTFMesh> GetGLTFMeshList() { return MeshList; };
 };
 

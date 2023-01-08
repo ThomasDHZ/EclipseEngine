@@ -34,4 +34,5 @@ public:
 	uint64_t GetBufferDeviceAddress() { return BufferDeviceAddress; }
 	VkAccelerationStructureKHR GetBufferHandle() { return BufferHandle; }
 	VkAccelerationStructureKHR* GetBufferHandlePtr() { return &BufferHandle; }
+	void* GetData() { return data; }
 };
