@@ -54,12 +54,6 @@ SpriteRenderer::SpriteRenderer(const std::string Name, std::shared_ptr<Material>
 	MeshRendererManager::AddMesh(Sprite);
 }
 
-
-
-SpriteRenderer::SpriteRenderer(nlohmann::json& json)
-{
-}
-
 SpriteRenderer::~SpriteRenderer()
 {
 }

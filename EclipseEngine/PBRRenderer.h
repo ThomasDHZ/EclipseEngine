@@ -44,7 +44,7 @@ private:
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
-	ComputeAnimationPipeline AnimationRenderer;
+	//ComputeAnimationPipeline AnimationRenderer;
 
 public:
 	PBRRenderer();

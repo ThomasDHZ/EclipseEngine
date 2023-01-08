@@ -8,11 +8,6 @@ class ModelRenderer : public GameObject3D
 private:
 	std::shared_ptr<Model> model;
 
-	void from_json(nlohmann::json& json)
-	{
-		model = std::make_shared<Model>(Model(json.at("Model"), GameObjectID));
-	}
-
 public:
 	ModelRenderer();
 
@@ -25,12 +20,8 @@ public:
 	ModelRenderer(const std::string Name, ModelLoader& modelLoader, const glm::vec3& position);
 	ModelRenderer(const std::string Name, ModelLoader& modelLoader, const glm::vec3& position, const glm::vec3& rotation);
 	ModelRenderer(const std::string Name, ModelLoader& modelLoader, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	ModelRenderer(nlohmann::json json);
 	virtual ~ModelRenderer();
 
-	virtual void LoadPrefab(nlohmann::json& json) override;
-	virtual void SaveAsPrefab(nlohmann::json& json) override;
 	virtual void Update(float DeltaTime) override;
 	virtual void Destroy() override;
 

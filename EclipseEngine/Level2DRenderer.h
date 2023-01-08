@@ -15,11 +15,5 @@ public:
 
 	void Update(float DeltaTime) override;
 	void Destroy() override;
-
-	virtual void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["componentType"], componentType);
-		JsonConverter::to_json(json["componentSubType"], componentSubType);
-	}
 };
 

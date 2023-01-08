@@ -10,11 +10,8 @@ public:
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position);
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-	GameObject3D(nlohmann::json& json);
 	~GameObject3D();
 
-	virtual void LoadPrefab(nlohmann::json& json) override;
-	virtual void SaveAsPrefab(nlohmann::json& json) override;
 	virtual void Update(float DeltaTime) override;
 
 	void SetGameObjectPosition(float x, float y, float z);

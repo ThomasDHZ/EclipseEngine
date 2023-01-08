@@ -118,11 +118,6 @@ void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
 	material = materialPtr;
 }
 
-void Mesh::SetMaterial(const std::string& MaterialPath)
-{
-	material = MaterialManager::LoadMaterial(MaterialPath);
-}
-
 void Mesh::SetReflectionPoint(const glm::vec3& reflectionPoint)
 {
 	ReflectionPoint = reflectionPoint;

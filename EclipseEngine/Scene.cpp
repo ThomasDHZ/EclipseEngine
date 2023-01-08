@@ -152,17 +152,17 @@ Scene::Scene()
     //GameObjectManager::AddGameObject(e);
 
     ModelLoader loader2{};
-    loader2.FilePath = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/Suzanne/glTF";
+    loader2.FilePath = "../Models/Sponza/sponza.obj";
     loader2.MeshType = MeshTypeEnum::kPolygon;
 
     auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
     GameObjectManager::AddGameObject(b);
 
-    std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-    std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-    std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-    std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-    std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+    //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+    //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+    //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+    //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+    //std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
     //std::vector<Vertex3D> vertices = {
     //    {{-0.5f, -0.5f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f},{  0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}, {1.0f, 0.0f, 0.0f},{ 0.0f}},
@@ -230,45 +230,45 @@ Scene::Scene()
 //    //source.Play(sound);
 //
     {
-        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
+        //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
+        //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
+        //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
+        //std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-        ModelLoader loader1{};
-        loader1.FilePath = "../Models/sphere.obj";
-        loader1.MeshType = MeshTypeEnum::kPolygon;
+       // ModelLoader loader1{};
+       // loader1.FilePath = "../Models/sphere.obj";
+       // loader1.MeshType = MeshTypeEnum::kPolygon;
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
-        obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-        obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
-        GameObjectManager::AddGameObject(obj);
+       // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
+       //// obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
+       // obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
+       // GameObjectManager::AddGameObject(obj);
 
-        auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
-        obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj2->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 26;
-        GameObjectManager::AddGameObject(obj2);
+       // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
+       //// obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // obj2->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj2->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 26;
+       // GameObjectManager::AddGameObject(obj2);
 
-        auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Plastic", loader1));
-        obj3->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
-        obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj3->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 27;
-        GameObjectManager::AddGameObject(obj3);
+       // auto obj3 = std::make_shared<ModelRenderer>(ModelRenderer("Plastic", loader1));
+       //// obj3->GetModel()->GetMeshList()[0]->SetMaterial(PlasticMaterial);
+       // obj3->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj3->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 27;
+       // GameObjectManager::AddGameObject(obj3);
 
-        auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
-        obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
-        obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj4->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 28;
-        GameObjectManager::AddGameObject(obj4);
+       // auto obj4 = std::make_shared<ModelRenderer>(ModelRenderer("GoldSphere", loader1, glm::vec3(3.0f, 0.0f, 0.0f)));
+       //// obj4->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
+       // obj4->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj4->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 28;
+       // GameObjectManager::AddGameObject(obj4);
 
-        auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
-        obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
-        obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-        obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
-        GameObjectManager::AddGameObject(obj5);
+       // auto obj5 = std::make_shared<ModelRenderer>(ModelRenderer("GrassSphere", loader1, glm::vec3(6.0f, 0.0f, 0.0f)));
+       //// obj5->GetModel()->GetMeshList()[0]->SetMaterial(GrassMaterial);
+       // obj5->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+       // obj5->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 29;
+       // GameObjectManager::AddGameObject(obj5);
 
         //std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Grass", MaterialTypeEnum::kMaterialPBR));
         //material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/grass.png");
@@ -496,20 +496,6 @@ void Scene::ImGuiUpdate()
     //    }
     //}
     //ImGui::End();
-
-
-    ImGui::Begin("File Window");
-    if (ImGui::Button("Save"))
-    {
-        SceneManager::SaveScene("../Scenes/example.txt");
-    }
-
-    if (ImGui::Button("Load"))
-    {
-        vkDeviceWaitIdle(VulkanRenderer::GetDevice());
-        SceneManager::LoadScene("../Scenes/example.txt");
-    }
-    ImGui::End();
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 

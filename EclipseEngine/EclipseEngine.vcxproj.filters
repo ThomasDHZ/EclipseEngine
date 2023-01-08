@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Renderer">
       <UniqueIdentifier>{fcac44da-ff7a-4cf0-bcd7-35062aa72647}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ImGui">
-      <UniqueIdentifier>{b878dece-2d7b-4f47-a21c-c6e514e6c6c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Renderer\RenderPasses">
       <UniqueIdentifier>{d7f7ad42-2438-44de-8b79-1c3c14ab5860}</UniqueIdentifier>
     </Filter>
@@ -165,35 +162,11 @@
     <ClCompile Include="Component.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_glfw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_vulkan.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_tables.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="BlinnPhongRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="ComponentRenderer.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -222,12 +195,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="Texture2D.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="ReadableTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="RenderedColorTexture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
@@ -235,9 +202,6 @@
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="RenderedTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
@@ -275,12 +239,6 @@
     </ClCompile>
     <ClCompile Include="DeferredRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeMapTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="EnvironmentTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="PBRRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
@@ -540,17 +498,8 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="TextureAtlus.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="BakedTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="PBRReflectionPreRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureBaker.cpp">
-      <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="RayTracePBRRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
@@ -593,30 +542,6 @@
     <ClInclude Include="Component.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ImGui\imconfig.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_glfw.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_vulkan.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_internal.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_rectpack.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_textedit.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -625,9 +550,6 @@
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MaterialManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -665,9 +587,6 @@
     <ClInclude Include="MeshPickerRenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="Texture2D.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="RenderedColorTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
@@ -675,12 +594,6 @@
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
     <ClInclude Include="RenderedTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="ReadableTexture.h">
       <Filter>Header Files\Texture</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
@@ -722,12 +635,6 @@
     <ClInclude Include="DeferredRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="EnvironmentTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMapTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="PBRRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
@@ -751,9 +658,6 @@
     </ClInclude>
     <ClInclude Include="BRDFRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="JsonConverter.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PBRReflectionRenderPass.h">
       <Filter>Header Files\Managers</Filter>
@@ -991,12 +895,6 @@
     </ClInclude>
     <ClInclude Include="CubeToEnvironmentPipeline.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureAtlus.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="BakedTexture.h">
-      <Filter>Header Files\Texture</Filter>
     </ClInclude>
     <ClInclude Include="PBRReflectionPreRenderPass.h">
       <Filter>Header Files</Filter>

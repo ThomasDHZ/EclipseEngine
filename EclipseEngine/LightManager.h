@@ -226,45 +226,6 @@ public:
 		return SpotLightBufferList;
 	}
 
-	static void LoadLights(nlohmann::json& json)
-	{
-		for (int x = 0; x < json["LightList"]["DirectionalLightList"].size(); x++)
-		{
-			std::shared_ptr<DirectionalLight> directionalLight = std::make_shared<DirectionalLight>(DirectionalLight(json["LightList"].at("DirectionalLightList")[x]));
-			DirectionalLightList.emplace_back(directionalLight);
-		}
-		for (int x = 0; x < json["LightList"]["PointLightList"].size(); x++)
-		{
-			std::shared_ptr<PointLight> pointLight = std::make_shared<PointLight>(PointLight(json["LightList"].at("PointLightList")[x]));
-			PointLightList.emplace_back(pointLight);
-		}
-		for (int x = 0; x < json["LightList"]["SpotLightList"].size(); x++)
-		{
-			std::shared_ptr<SpotLight> spotLight = std::make_shared<SpotLight>(SpotLight(json["LightList"].at("SpotLightList")[x]));
-			SpotLightList.emplace_back(spotLight);
-		}
-
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	static nlohmann::json SaveLights()
-	{
-		nlohmann::json json;
-		for (int x = 0; x < DirectionalLightList.size(); x++)
-		{
-			DirectionalLightList[x]->to_json(json["DirectionalLightList"][x]);
-		}
-		for (int x = 0; x < PointLightList.size(); x++)
-		{
-			PointLightList[x]->to_json(json["PointLightList"][x]);
-		}
-		for (int x = 0; x < SpotLightList.size(); x++)
-		{
-			SpotLightList[x]->to_json(json["SpotLightList"][x]);
-		}
-		return json;
-	}
-
 	static void DestroyScene()
 	{
 		for (int x = DirectionalLightList.size() - 1; x >= 0; x--)

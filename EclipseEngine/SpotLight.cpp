@@ -9,11 +9,6 @@ SpotLight::SpotLight(SpotLightBuffer light) : Light<SpotLightBuffer>(light)
 	LightBuffer.Update(light);
 }
 
-SpotLight::SpotLight(nlohmann::json& json)
-{
-	from_json(json);
-}
-
 SpotLight::~SpotLight()
 {
 }

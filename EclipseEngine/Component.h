@@ -1,6 +1,5 @@
 #pragma once
 #include "VulkanRenderer.h"
-#include "JsonConverter.h"
 
 enum ComponentType
 {
@@ -27,11 +26,11 @@ protected:
 	ComponentType componentType;
 	ComponentSubType componentSubType;
 
-	void from_json(const nlohmann::json& json)
-	{
-		json.at("componentType").get_to(componentType);
-		json.at("componentSubType").get_to(componentSubType);
-	}
+	//void from_json(const nlohmann::json& json)
+	//{
+	//	json.at("componentType").get_to(componentType);
+	//	json.at("componentSubType").get_to(componentSubType);
+	//}
 
 public:
 
@@ -52,10 +51,10 @@ public:
 	ComponentSubType GetComponentSubType() { return componentSubType; }
 	uint64_t GetComponentID() { return ComponentID; }
 
-	virtual void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["componentType"], componentType);
-		JsonConverter::to_json(json["componentSubType"], componentSubType);
-	}
+	//virtual void to_json(nlohmann::json& json)
+	//{
+	//	JsonConverter::to_json(json["componentType"], componentType);
+	//	JsonConverter::to_json(json["componentSubType"], componentSubType);
+	//}
 };
 

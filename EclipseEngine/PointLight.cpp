@@ -15,12 +15,6 @@ PointLight::PointLight(PointLightBuffer light) : Light<PointLightBuffer>(light)
 	debugMesh = std::make_shared<ModelRenderer>(ModelRenderer("PLight1", loader, LightBuffer.UniformDataInfo.position));
 	GameObjectManager::AddGameObject(debugMesh);
 }
-
-PointLight::PointLight(nlohmann::json& json)
-{
-	from_json(json);
-}
-
 PointLight::~PointLight()
 {
 }

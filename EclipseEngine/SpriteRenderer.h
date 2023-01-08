@@ -19,7 +19,6 @@ public:
 	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, uint32_t Depth);
 	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
 	SpriteRenderer(const std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
-	SpriteRenderer(nlohmann::json& json);
 	virtual ~SpriteRenderer();
 
 	virtual void Update(float DeltaTime) override;

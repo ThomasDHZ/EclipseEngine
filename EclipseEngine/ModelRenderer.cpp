@@ -59,23 +59,8 @@ ModelRenderer::ModelRenderer(const std::string Name, ModelLoader& modelloader, c
 	model = std::make_shared<Model>(Model(modelloader));
 }
 
-ModelRenderer::ModelRenderer(nlohmann::json json) : GameObject3D(json)
-{
-	from_json(json);
-}
-
 ModelRenderer::~ModelRenderer()
 {
-}
-
-void ModelRenderer::LoadPrefab(nlohmann::json& json)
-{
-	model->LoadPrefab(json);
-}
-
-void ModelRenderer::SaveAsPrefab(nlohmann::json& json)
-{
-	//model->m(json);
 }
 
 void ModelRenderer::Update(float DeltaTime)

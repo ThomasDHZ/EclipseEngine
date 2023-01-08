@@ -43,6 +43,7 @@ protected:
 	glm::vec3* GetGameObjectPositionPtr() { return &GameObjectPosition; }
 	glm::vec3* GetGameObjectRotationPtr() { return &GameObjectRotation; }
 	glm::vec3* GetGameObjectScalePtr() { return &GameObjectScale; }
+
 public:
 
 	GameObject();
@@ -50,15 +51,12 @@ public:
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
-	GameObject(nlohmann::json& json);
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
-	virtual void LoadPrefab(nlohmann::json& json);
-	virtual void SaveAsPrefab(nlohmann::json& json);
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 
@@ -79,19 +77,6 @@ public:
 	bool operator==(const GameObject& rhs) const
 	{ 
 		return this->GameObjectID == rhs.GameObjectID; 
-	}
-
-	virtual void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["ObjectName"], ObjectName);
-		JsonConverter::to_json(json["GameObjectPosition"], GameObjectPosition);
-		JsonConverter::to_json(json["GameObjectRotation"], GameObjectRotation);
-		JsonConverter::to_json(json["GameObjectScale"], GameObjectScale);
-
-		for (int x = 0; x < ComponentList.size(); x++)
-		{
-			ComponentList[x]->to_json(json["ComponentList"][x]);
-		}
 	}
 };
 

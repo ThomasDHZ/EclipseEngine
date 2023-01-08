@@ -410,6 +410,13 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 void Model::LoadModel(ModelLoader& modelLoader)
 {
 	GLTFModel scene = GLTFModel(modelLoader.FilePath.c_str(), GLTFVertexEnum::kGLTFVertex3D);
+
+	//auto data = scene.GetGLTFMeshList()[0].VertexBuffer.GetData();
+
+	//std::vector<Vertex3D> vertex;
+	//vertex.resize(scene.GetGLTFMeshList()[0].VertexCount);
+	//memcpy(&vertex[0], data, scene.GetGLTFMeshList()[0].VertexCount * sizeof(GLTFVertex3D));
+
 	ModelFilePath = modelLoader.FilePath;
 
 	Assimp::Importer ModelImporter;
@@ -477,13 +484,6 @@ void Model::AddMeshList(std::vector<std::shared_ptr<Mesh>>& meshList)
 
 void Model::DeleteMesh(std::shared_ptr<Mesh> mesh)
 {
-}
-
-Model::Model(nlohmann::json& json, uint64_t GameObjectID)
-{
-	GenerateID();
-	ParentGameObjectID = GameObjectID;
-	from_json(json, GameObjectID);
 }
 
 void Model::RemoveMesh(std::shared_ptr<Mesh> mesh)

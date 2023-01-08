@@ -11,11 +11,8 @@ public:
 	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, uint32_t Depth);
 	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth);
 	GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth);
-	GameObject2D(nlohmann::json& json);
 	~GameObject2D();
 
-	virtual void LoadPrefab(nlohmann::json& json) override;
-	virtual void SaveAsPrefab(nlohmann::json& json) override;
 	virtual void Update(float DeltaTime) override;
 	virtual void Destroy() override;
 
@@ -31,10 +28,5 @@ public:
 	glm::vec2 GetGameObjectPosition() { return glm::vec2(GameObject::GetGameObjectPosition().x, GameObject::GetGameObjectPosition().y); }
 	glm::vec2 GetGameObjectRotation() { return glm::vec2(GameObject::GetGameObjectRotation().x, GameObject::GetGameObjectRotation().y); }
 	glm::vec2 GetGameObjectScale() { return glm::vec2(GameObject::GetGameObjectScale().x, GameObject::GetGameObjectScale().y); }
-
-	//virtual void to_json(nlohmann::json& json) override
-	//{
-	//	GameObject::to_json(json);
-	//}
 };
 

@@ -23,7 +23,6 @@
 	}
 }
 
-
  std::shared_ptr<GameObject> GameObjectManager::GetGameObjectByID(uint64_t ObjID)
 {
 	for (auto obj : objList)
@@ -155,26 +154,6 @@
 	 }
 	 return GameObjectList;
  }
-
- void GameObjectManager::LoadGameObjects(nlohmann::json& json)
-{
-	for (int x = 0; x < json["ObjectList"].size(); x++)
-	{
-		std::shared_ptr<ModelRenderer> obj = std::make_shared<ModelRenderer>(ModelRenderer(json.at("ObjectList")[x]));
-		objList.emplace_back(obj);
-	}
-	VulkanRenderer::UpdateRendererFlag = true;
-}
-
- nlohmann::json GameObjectManager::SaveGameObjects()
-{
-	nlohmann::json json;
-	for (int x = 0; x < objList.size(); x++)
-	{
-		objList[x]->to_json(json[x]);
-	}
-	return json;
-}
 
  void GameObjectManager::Destroy()
 {

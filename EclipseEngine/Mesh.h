@@ -8,7 +8,6 @@
 #include "AccelerationStructureBuffer.h"
 #include "Bone.h"
 #include "Converters.h"
-#include "JsonConverter.h"
 
 enum MeshTypeEnum
 {
@@ -31,18 +30,6 @@ struct MeshBoneWeights
 {
 	glm::ivec4 BoneID = glm::ivec4(0);
 	glm::vec4 BoneWeights = glm::vec4(0.0f);
-
-	void from_json(nlohmann::json& json)
-	{
-		JsonConverter::from_json(json["BoneID"], BoneID);
-		JsonConverter::from_json(json["BoneWeights"], BoneWeights);
-	}
-
-	void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["BoneID"], BoneID);
-		JsonConverter::to_json(json["BoneWeights"], BoneWeights);
-	}
 };
 
 struct InstanceMeshDataStruct
@@ -143,7 +130,6 @@ public:
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
 	void SetMaterial(std::shared_ptr<Material> materialPtr);
-	void SetMaterial(const std::string& MaterialPath);
 	void SetReflectionPoint(const glm::vec3& reflectionPoint);
 
 	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
@@ -197,13 +183,5 @@ public:
 	//		return mesh1->MeshPosition.z < mesh2->MeshPosition.z;
 	//	}
 	//};
-
-	/*virtual void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["MeshTransformMatrix"], MeshTransformMatrix);
-
-		meshProperties.to_json(json["MeshProperties"]);
-		json["MaterialPath"] = "../Materials/" + material->GetMaterialName() + ".txt";
-	}*/
 };
 

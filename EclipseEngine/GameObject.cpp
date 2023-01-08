@@ -65,38 +65,8 @@ GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, 
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(nlohmann::json& json)
-{
-	GenerateID();
-	json.at("ObjectName").get_to(ObjectName);
-	JsonConverter::from_json(json["GameObjectPosition"], GameObjectPosition);
-	JsonConverter::from_json(json["GameObjectRotation"], GameObjectRotation);
-	JsonConverter::from_json(json["GameObjectScale"], GameObjectScale);
-	//for (int x = 0; x < json["ComponentList"].size(); x++)
-	//{
-	//	ComponentType type = ComponentType::kNullComponent;
-	//	json["ComponentList"][x].at("componentType").get_to(type);
-
-	//	switch (type)
-	//	{
-	//		case ComponentType::kSpriteRenderer: {break; }
-	//		case ComponentType::kMeshRenderer: AddComponent(std::make_shared<MeshRenderer>(MeshRenderer(json["ComponentList"][x], GameObjectID))); break;
-	//	}
-	//}
-}
-
 GameObject::~GameObject()
 {
-}
-
-void GameObject::LoadPrefab(nlohmann::json& json)
-{
-	ObjectName = json.at("ObjectName");
-}
-
-void GameObject::SaveAsPrefab(nlohmann::json& json)
-{
-	JsonConverter::to_json(json["ObjectName"], ObjectName);
 }
 
 void GameObject::Update(float DeltaTime)

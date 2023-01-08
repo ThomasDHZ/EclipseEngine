@@ -7,20 +7,10 @@ class DirectionalLight : public Light<DirectionalLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
-	void from_json(nlohmann::json& json)
-	{
-		JsonConverter::from_json(json["LightName"], LightName);
-		JsonConverter::from_json(json["position"], LightBuffer.UniformDataInfo.position);
-		JsonConverter::from_json(json["direction"], LightBuffer.UniformDataInfo.direction);
-		JsonConverter::from_json(json["diffuse"], LightBuffer.UniformDataInfo.diffuse);
-		JsonConverter::from_json(json["specular"], LightBuffer.UniformDataInfo.specular);
-		JsonConverter::from_json(json["LightSpaceMatrix"], LightBuffer.UniformDataInfo.LightSpaceMatrix);
-	}
 
 public:
 	DirectionalLight();
 	DirectionalLight(DirectionalLightBuffer light);
-	DirectionalLight(nlohmann::json& json);
 	~DirectionalLight();
 
 	//glm::vec2 LeftRight = glm::vec2(-25.0f, 25.0f);
@@ -45,15 +35,5 @@ public:
 	glm::vec2* GetLeftRightPtr() { return &LeftRight; }
 	glm::vec2* GetTopBottomPtr() { return &TopBottom; }
 	glm::vec2* GetNearFarPtr() { return &NearFar; }
-
-	void to_json(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["LightName"], LightName);
-		JsonConverter::to_json(json["position"], LightBuffer.UniformDataInfo.position);
-		JsonConverter::to_json(json["direction"], LightBuffer.UniformDataInfo.direction);
-		JsonConverter::to_json(json["diffuse"], LightBuffer.UniformDataInfo.diffuse);
-		JsonConverter::to_json(json["specular"], LightBuffer.UniformDataInfo.specular);
-		JsonConverter::to_json(json["LightSpaceMatrix"], LightBuffer.UniformDataInfo.LightSpaceMatrix);
-	}
 };
 

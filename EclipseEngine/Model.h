@@ -12,6 +12,7 @@
 #include "AnimationPlayer3D.h"
 #include "ComputeAnimationPipeline.h"
 #include <GLTFScene.h>
+#include "TextureManager.h"
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
 
@@ -63,36 +64,6 @@ private:
 
 	void BoneWeightPlacement(std::vector<MeshBoneWeights>& VertexList, unsigned int vertexID, unsigned int bone_id, float weight);
 
-
-	void from_json(nlohmann::json& json, uint64_t GameObjectID)
-	{
-		/*JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
-		LoadModel(ModelFilePath, GameObjectID);
-
-		for (int x = 0; x < json["MeshList"].size(); x++)
-		{
-			Mesh3D* mesh = static_cast<Mesh3D*>(MeshList[x].get());
-
-			mesh->SetMaterial(json["MeshList"][x]["MaterialPath"]);
-
-			glm::vec3 Position = glm::vec3(0.0f);
-			JsonConverter::from_json(json["MeshList"][x]["MeshPosition"], Position);
-			mesh->SetMeshPosition(Position);
-
-			glm::vec3 Rotation = glm::vec3(0.0f);
-			JsonConverter::from_json(json["MeshList"][x]["MeshRotation"], Rotation);
-			mesh->SetMeshRotation(Rotation);
-
-			glm::vec3 Scale = glm::vec3(0.0f);
-			JsonConverter::from_json(json["MeshList"][x]["MeshScale"], Scale);
-			mesh->SetMeshScale(Scale);
-		}
-
-		JsonConverter::from_json(json["ModelPosition"], ModelPosition);
-		JsonConverter::from_json(json["ModelRotation"], ModelRotation);
-		JsonConverter::from_json(json["ModelScale"], ModelScale);*/
-	}
-
 public:
 
 
@@ -106,7 +77,6 @@ public:
 	Model(std::vector<std::shared_ptr<Mesh>>& meshList, uint64_t GameObjectID);
 	Model(MeshLoader3D& meshLoader);
 	Model(std::vector<MeshLoader3D>& meshLoaderList);
-	Model(nlohmann::json& json, uint64_t GameObjectID);
 	~Model();
 
 	void AddMesh(MeshLoader3D& meshLoader);
@@ -144,43 +114,5 @@ public:
 	glm::vec3* GetModelPositionPtr() { return &ModelPosition; }
 	glm::vec3* GetModelRotationPtr() { return &ModelRotation; }
 	glm::vec3* GetModelScalePtr() { return &ModelScale; }
-
-	void LoadPrefab(nlohmann::json& json)
-	{
-		JsonConverter::from_json(json["ModelFilePath"], ModelFilePath);
-
-		std::string materialPath;
-		json["Material"].get_to(materialPath);
-		MaterialManager::LoadMaterial(materialPath);
-	}
-
-	void SaveAsPrefab(nlohmann::json& json)
-	{
-		JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
-		MeshList[0]->GetMaterial()->to_json(json["Material"]);
-	}
-	//void to_json(nlohmann::json& json)
-	//{
-	//	JsonConverter::to_json(json["ModelFilePath"], ModelFilePath);
-
-	//	glm::mat4 ModelTransform = glm::mat4(1.0f);
-
-	//	for (int x = 0; x < MeshList.size(); x++)
-	//	{
-	//		MeshList[x]->to_json(json["MeshList"][x]);
-	//	}
-	//	for (int x = 0; x < BoneList.size(); x++)
-	//	{
-	//		BoneList[x]->to_json(json["BoneList"][x]);
-	//	}
-	//	for (int x = 0; x < NodeMapList.size(); x++)
-	//	{
-	//		//NodeMapList[x].to_json(json["NodeMapList"][x]);
-	//	}
-
-	//	JsonConverter::to_json(json["ModelPosition"], ModelPosition);
-	//	JsonConverter::to_json(json["ModelRotation"], ModelRotation);
-	//	JsonConverter::to_json(json["ModelScale"], ModelScale);
-	//}
 };
 

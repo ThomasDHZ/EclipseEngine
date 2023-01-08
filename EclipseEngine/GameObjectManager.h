@@ -13,9 +13,6 @@ public:
 	static void AddGameObject(std::shared_ptr<GameObject> obj);
 	static void RemoveGameObject(std::shared_ptr<GameObject> obj);
 
-	static void LoadGameObjects(nlohmann::json& json);
-	static nlohmann::json SaveGameObjects();
-
 	static void Update(float DeltaTime);
 	static void Destroy();
 	static void DestroyScene();
