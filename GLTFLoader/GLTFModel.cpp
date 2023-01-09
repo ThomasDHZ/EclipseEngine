@@ -1,6 +1,7 @@
 #include "GLTFModel.h"
 #include "GLTFMaterial.h"
 #include <glm/glm/gtc/type_ptr.inl>
+#include <glm/gtc/quaternion.hpp>
 
 GLTFModel::GLTFModel()
 {
@@ -12,6 +13,8 @@ GLTFModel::GLTFModel(const char* filename, GLTFVertexEnum vertexType)
 
 	auto file = "C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf";
 	model = GLTFFileLoader::Loader(file);
+
+	ModelMatrix = glm::mat4(1.0f);
 
 	const tinygltf::Scene& scene = model.scenes[model.defaultScene];
 	const tinygltf::Node node = model.nodes[scene.nodes[0]];
