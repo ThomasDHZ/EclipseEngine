@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\Shaders\GLTFPBRRenderer.frag" />
+    <None Include="..\Shaders\GLTFPBRRenderer.vert" />
     <None Include="..\Shaders\PBRAnyhit.rahit" />
     <None Include="..\Shaders\PBRAnyhit1.rahit" />
     <None Include="..\Shaders\PBRMiss.rmiss" />
@@ -198,6 +200,9 @@
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GBufferPipeline.cpp" />
+    <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
+    <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="GLTF_Temp_Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="HybridRenderer.cpp" />
@@ -327,6 +332,9 @@
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GBufferPipeline.h" />
+    <ClInclude Include="GLTFPBRRenderPIpeline.h" />
+    <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="GLTF_Temp_Model.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
     <ClInclude Include="IrradiancePipeline.h" />

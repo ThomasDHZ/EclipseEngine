@@ -17,7 +17,7 @@ public:
 	//static void SortByZIndex();
 	//static void SortByRenderPipeline();
 	static void GUIUpdate();
-	static void GetMeshMaterialDetails();
+	//static void GetMeshMaterialDetails();
 	static std::shared_ptr<Mesh> GetMeshByColorID(Pixel pixel);
 	static Pixel GetGameObjectsColorID(uint64_t MeshID);
 	static void SetSelectedMesh(std::shared_ptr<Mesh> mesh);

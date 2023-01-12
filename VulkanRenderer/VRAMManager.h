@@ -31,5 +31,7 @@ public:
 	static std::shared_ptr<Texture2D> GetTexture2DByID(uint64_t TextureID);
 	static std::shared_ptr<Texture2D> GetTexture2DByName(const std::string TextureName);
 	static std::shared_ptr<Material> GetMaterialByID(uint64_t MaterialID);
+
+	static std::vector<std::shared_ptr<Material>> GetMaterialList() { return  MaterialList; }
 };
 

@@ -13,6 +13,7 @@
 #include "MeshRenderer.h"
 #include "ReadableTexture.h"
 #include "ParticalSystemRenderer.h"
+#include "GLTF_Temp_Model.h"
 
 std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
@@ -150,6 +151,8 @@ Scene::Scene()
     //auto e = std::make_shared<ModelRenderer>(ModelRenderer("ani4", loader));
     //e->GameObjectPosition = glm::vec3(-10.0f, 0.0f, 0.0f);
     //GameObjectManager::AddGameObject(e);
+
+    GLTF_Temp_Model model("../Models/Sponza/sponza.obj");
 
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
@@ -353,7 +356,7 @@ Scene::Scene()
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
     MeshRendererManager::Update();
-    TopLevelAccelerationStructureManager::Update();
+    //TopLevelAccelerationStructureManager::Update();
     BuildRenderers();
 }
 

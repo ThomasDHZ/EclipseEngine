@@ -3,6 +3,7 @@
 #include <vector>
 #include <array>
 #include <glm/glm.hpp>
+#include <GLTFVertex.h>
 
 struct LineVertex2D {
     glm::vec2 pos;
@@ -224,6 +225,35 @@ struct Vertex3D
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;
+    }
+    
+    Vertex3D& operator= (const GLTFVertex& gltfVertex)
+    {
+        Vertex3D vertex;
+        vertex.Position = gltfVertex.Position;
+        vertex.Normal = gltfVertex.Normal;
+        vertex.UV = gltfVertex.UV;
+        vertex.Tangant = gltfVertex.Tangant;
+        vertex.BiTangant = gltfVertex.BiTangant;
+        vertex.Color = gltfVertex.Color;
+        return vertex;
+    }
+
+    std::vector<Vertex3D>& operator= (const std::vector<GLTFVertex>& gltfVertexList)
+    {
+        std::vector<Vertex3D> VertexList;
+        for (GLTFVertex gltfVertex : gltfVertexList)
+        {
+            Vertex3D vertex;
+            vertex.Position = gltfVertex.Position;
+            vertex.Normal = gltfVertex.Normal;
+            vertex.UV = gltfVertex.UV;
+            vertex.Tangant = gltfVertex.Tangant;
+            vertex.BiTangant = gltfVertex.BiTangant;
+            vertex.Color = gltfVertex.Color;
+            VertexList.emplace_back(vertex);
+        }
+        return VertexList;
     }
 };
 

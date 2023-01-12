@@ -5,6 +5,45 @@ Mesh3D::Mesh3D()
 {
 }
 
+Mesh3D::Mesh3D(GLTFMeshLoader3D& meshLoader)
+{
+	ParentGameObjectID = meshLoader.ParentGameObjectID;
+	ParentModelID = meshLoader.ParentModelID;
+	GenerateID();
+	GenerateColorID();
+
+	GameObjectTransformMatrix = meshLoader.GameObjectTransform;
+	ModelTransformMatrix = meshLoader.ModelTransform;
+	MeshTransformMatrix = meshLoader.MeshTransform;
+
+	//auto data = scene.GetGLTFMeshList()[0].VertexBuffer.GetData();
+
+	//std::vector<Vertex3D> vertex;
+	//vertex.resize(scene.GetGLTFMeshList()[0].VertexCount);
+	//memcpy(&vertex[0], data, scene.GetGLTFMeshList()[0].VertexCount * sizeof(GLTFVertex3D));
+
+	//VertexList = meshLoader.VerticeList;
+	//IndexList = meshLoader.IndexList;
+	material = meshLoader.MaterialPtr;
+
+	MeshType = meshLoader.MeshType;
+	MeshSubType = meshLoader.MeshSubType;
+
+	VertexCount = meshLoader.VertexCount;
+	IndexCount = meshLoader.IndexCount;
+	TriangleCount = static_cast<uint32_t>(IndexList.size()) / 3;
+
+	LastTransform = GameObjectTransformMatrix * ModelTransformMatrix * MeshTransformMatrix;
+
+	VertexBuffer = meshLoader.VertexBuffer;
+	IndexBuffer = meshLoader.IndexBuffer;
+	TransformBuffer = meshLoader.TransformBuffer;
+
+	RTXMeshStartUp();
+	//AnimationStartUp(meshLoader);
+	//InstancingStartUp(meshLoader.instanceData);
+}
+
 Mesh3D::Mesh3D(MeshLoader3D& meshLoader)
 {
 	ParentGameObjectID = meshLoader.ParentGameObjectID;

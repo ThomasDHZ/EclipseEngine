@@ -16,32 +16,35 @@
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
+#include "GLTFPBRRenderPIpeline.h"
+#include "GLTFRenderPass.h"
 
 class PBRRenderer
 {
 private:
-	MeshPickerRenderPass3D meshPickerRenderPass;
-	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	BRDFRenderPass brdfRenderPass;
+	//MeshPickerRenderPass3D meshPickerRenderPass;
+	//EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	//BRDFRenderPass brdfRenderPass;
 
-	DepthRenderPass DepthPassRenderPass;
-	DepthCubeMapRenderer DepthCubeMapRenderPass;
+	//DepthRenderPass DepthPassRenderPass;
+	//DepthCubeMapRenderer DepthCubeMapRenderPass;
 
-	IrradianceRenderPass skyIrradianceRenderPass;
-	PrefilterRenderPass skyPrefilterRenderPass;
-	PBRReflectionRenderPass skyPBRRenderPass;
+	//IrradianceRenderPass skyIrradianceRenderPass;
+	//PrefilterRenderPass skyPrefilterRenderPass;
+	//PBRReflectionRenderPass skyPBRRenderPass;
 
-	IrradianceRenderPass geoIrradianceRenderPass;
-	PrefilterRenderPass geoPrefilterRenderPass;
-	PBRReflectionPreRenderPass ReflectionPreRenderPass;
+	//IrradianceRenderPass geoIrradianceRenderPass;
+	//PrefilterRenderPass geoPrefilterRenderPass;
+	//PBRReflectionPreRenderPass ReflectionPreRenderPass;
 
-	IrradianceRenderPass irradianceRenderPass;
-	PrefilterRenderPass prefilterRenderPass;
-	PBRRenderPass pbrRenderPass;
-	PBRBloomRenderPass pbrBloomRenderPass;
-	GaussianBlurRenderPass blurRenderPass;
-	BloomCombineRenderPass bloomCombinePipeline;
-
+	//IrradianceRenderPass irradianceRenderPass;
+	//PrefilterRenderPass prefilterRenderPass;
+	//PBRRenderPass pbrRenderPass;
+	//PBRBloomRenderPass pbrBloomRenderPass;
+	//GaussianBlurRenderPass blurRenderPass;
+	//BloomCombineRenderPass bloomCombinePipeline;
+	GLTF_Temp_Model model;
+	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 	//ComputeAnimationPipeline AnimationRenderer;
@@ -49,9 +52,7 @@ private:
 public:
 	PBRRenderer();
 	~PBRRenderer();
-
-	void BakeTextures(const char* FileName);
-
+	
 	void BuildRenderer();
 	void Update();
 	void ImGuiUpdate();
@@ -59,6 +60,4 @@ public:
 	void Destroy();
 
 	bool UpdateRenderer = true;
-
-	//std::shared_ptr<RenderedColorTexture> GetColorPickerTexture() { return meshPickerRenderPass.RenderedTexture; }
 };
