@@ -152,8 +152,6 @@ Scene::Scene()
     //e->GameObjectPosition = glm::vec3(-10.0f, 0.0f, 0.0f);
     //GameObjectManager::AddGameObject(e);
 
-    GLTF_Temp_Model model("../Models/Sponza/sponza.obj");
-
     ModelLoader loader2{};
     loader2.FilePath = "../Models/Sponza/sponza.obj";
     loader2.MeshType = MeshTypeEnum::kPolygon;

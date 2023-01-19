@@ -34,8 +34,6 @@ class Model
 private:
 	static uint64_t ModelIDCounter;
 
-	std::string ModelFilePath;
-
 	uint64_t ModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 
@@ -106,7 +104,6 @@ public:
 	uint64_t GetParentGameObjectID() { return ParentGameObjectID; }
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 
-	std::string GetModelFilePath() { return ModelFilePath; }
 	glm::mat4 GetModelMatrix() { return ModelTransform; }
 	glm::vec3 GetModelPosition() { return ModelPosition; }
 	glm::vec3 GetModelRotation() { return ModelRotation; }

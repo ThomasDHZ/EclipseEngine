@@ -251,6 +251,7 @@
     <ClCompile Include="InstanceMesh.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="Temp_GLTFMesh.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
@@ -385,6 +386,7 @@
     <ClInclude Include="InstanceMesh.h" />
     <ClInclude Include="SkyboxPipeline.h" />
     <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="Temp_GLTFMesh.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />

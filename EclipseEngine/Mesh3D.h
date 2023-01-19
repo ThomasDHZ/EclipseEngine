@@ -23,32 +23,6 @@ struct MeshLoader3D
 	std::vector<MeshBoneWeights> BoneWeightList;
 };
 
-struct GLTFMeshLoader3D
-{
-	uint64_t ParentGameObjectID = 0;
-	uint64_t ParentModelID = 0;
-
-	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
-	glm::mat4 ModelTransform = glm::mat4(1.0f);
-	glm::mat4 MeshTransform = glm::mat4(1.0f);
-
-	uint32_t VertexCount = 0;
-	uint32_t IndexCount = 0;
-
-	VulkanBuffer VertexBuffer;
-	VulkanBuffer IndexBuffer;
-	VulkanBuffer TransformBuffer;
-
-	std::shared_ptr<Material> MaterialPtr = MaterialManager::GetDefaultMaterial();
-	InstancingDataStruct instanceData;
-
-	MeshTypeEnum MeshType;
-	MeshSubTypeEnum MeshSubType;
-
-	uint32_t BoneCount = 0;
-	std::vector<MeshBoneWeights> BoneWeightList;
-};
-
 class Mesh3D : public Mesh
 {
 protected:
@@ -70,7 +44,6 @@ protected:
 
 public:
 	Mesh3D();
-	Mesh3D(GLTFMeshLoader3D& meshLoader);
 	Mesh3D(MeshLoader3D& meshLoader);
 	~Mesh3D();
 

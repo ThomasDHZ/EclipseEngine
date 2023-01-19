@@ -409,56 +409,26 @@ std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMes
 
 void Model::LoadModel(ModelLoader& modelLoader)
 {
-	GLTFModel scene = GLTFModel(modelLoader.FilePath.c_str());
+	Assimp::Importer ModelImporter;
 
-	//for (GLTFMesh meshLoader : scene.GetGLTFMeshList())
-	//{
-	//	GLTFMeshLoader3D GltfMeshLoader;
-	//	GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
-	//	GltfMeshLoader.ParentModelID = ModelID;
-	//	GltfMeshLoader.GameObjectTransform = GameObjectTransform;
-	//	GltfMeshLoader.ModelTransform = ModelTransform;
-	//	//GltfMeshLoader.TransformBuffer = meshLoader.TransformBuffer;
-	//	////GltfMeshLoader.VertexBuffer = meshLoader.VertexBuffer;
-	//	////GltfMeshLoader.IndexBuffer = meshLoader.IndexBuffer;
-	//	//GltfMeshLoader.VertexCount = meshLoader.VertexCount;
-	//	//GltfMeshLoader.IndexCount = meshLoader.IndexCount;
-	//	GltfMeshLoader.instanceData = modelLoader.instanceData;
-	//	GltfMeshLoader.MeshType = modelLoader.MeshType;
-	//	GltfMeshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
-	//	GltfMeshLoader.BoneCount = BoneList.size();
+	const aiScene* Scene = ModelImporter.ReadFile(modelLoader.FilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
+	{
+		std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
+		return;
+	}
 
-	//	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh3D(GltfMeshLoader));
-	//	MeshList.emplace_back(mesh);
-	//}
-	//auto data = scene.GetGLTFMeshList()[0].VertexBuffer.GetData();
+	ParentGameObjectID = modelLoader.ParentGameObjectID;
+	glm::mat4 GlobalInverseTransformMatrix = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	LoadNodeTree(Scene->mRootNode);
+	LoadAnimations(Scene);
+	LoadMesh(modelLoader, Scene->mRootNode, Scene);
+	if (AnimationList.size() > 0)
+	{
+		AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
+	}
 
-	//std::vector<Vertex3D> vertex;
-	//vertex.resize(scene.GetGLTFMeshList()[0].VertexCount);
-	//memcpy(&vertex[0], data, scene.GetGLTFMeshList()[0].VertexCount * sizeof(GLTFVertex3D));
-
-	//ModelFilePath = modelLoader.FilePath;
-
-	//Assimp::Importer ModelImporter;
-
-	//const aiScene* Scene = ModelImporter.ReadFile(ModelFilePath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-	//if (!Scene || Scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !Scene->mRootNode)
-	//{
-	//	std::cout << "Error loading model: " << ModelImporter.GetErrorString() << std::endl;
-	//	return;
-	//}
-
-	//ParentGameObjectID = modelLoader.ParentGameObjectID;
-	//glm::mat4 GlobalInverseTransformMatrix = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
-	//LoadNodeTree(Scene->mRootNode);
-	//LoadAnimations(Scene);
-	//LoadMesh(modelLoader, Scene->mRootNode, Scene);
-	//if (AnimationList.size() > 0)
-	//{
-	//	AnimationPlayer = AnimationPlayer3D(BoneList, NodeMapList, GlobalInverseTransformMatrix, AnimationList[0]);
-	//}
-
-	//ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
+	ModelTransform = Converter::AssimpToGLMMatrixConverter(Scene->mRootNode->mTransformation.Inverse());
 }
 
 void Model::AddMesh(MeshLoader3D& meshLoader)

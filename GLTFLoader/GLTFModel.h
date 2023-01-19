@@ -12,18 +12,36 @@ struct GLTFPrimitive
 	uint32_t material = 0;
 };
 
-struct GLTFModelData
+struct GLTFNode
 {
-	std::vector<GLTFVertex> VertexList = std::vector<GLTFVertex>();
-	std::vector<uint32_t> IndexList = std::vector<uint32_t>();
-	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	std::vector<GLTFPrimitive> GLTFPrimitiveList = std::vector<GLTFPrimitive>();
-	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
-	std::vector<std::shared_ptr<Material>> MaterialList = std::vector<std::shared_ptr<Material>>();
+public:
+	std::string NodeName;
+	int NodeID = -1;
+
+	std::shared_ptr<GLTFNode> Parent = nullptr;
+	std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
+	std::vector<GLTFPrimitive> PrimitiveList = std::vector<GLTFPrimitive>();
+	std::shared_ptr<Material> Material;
+
+	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
+	glm::mat4 NodeTransformMatrix = glm::mat4(1.0f);
+	bool Visible = true;
 
 	glm::vec3 Position = glm::vec3(0.0f);
 	glm::vec3 Rotation = glm::vec3(0.0f);
 	glm::vec3 Scale = glm::vec3(1.0f);
+
+	GLTFNode(){}
+	~GLTFNode(){}
+};
+
+struct GLTFModelData
+{
+	std::vector<GLTFVertex> VertexList = std::vector<GLTFVertex>();
+	std::vector<uint32_t> IndexList = std::vector<uint32_t>();
+	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
+	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
+	std::vector<std::shared_ptr<Material>> MaterialList = std::vector<std::shared_ptr<Material>>();
 };
 
 class GLTFModel
@@ -36,9 +54,7 @@ private:
 
 	std::vector<GLTFVertex> VertexList;
 	std::vector<uint32_t> IndexList;
-	std::vector<GLTFPrimitive> GLTFPrimitiveList;
-	glm::mat4 TransformMatrix;
-
+	std::vector<std::shared_ptr<GLTFNode>> NodeList;
 	tinygltf::Model model;
 
 	GLTFModelData data;
@@ -50,8 +66,8 @@ private:
 	void LoadVertices(tinygltf::Model& model, tinygltf::Mesh& mesh, uint32_t x);
 	void LoadIndices(tinygltf::Model& model, tinygltf::Mesh& mesh, uint32_t x);
 	void LoadPrimitive(tinygltf::Mesh& mesh, uint32_t x);
-	void LoadMesh(tinygltf::Model& model, tinygltf::Mesh& mesh, tinygltf::Node& node);
-	void LoadModelNodes(tinygltf::Node& node);
+	void LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shared_ptr<GLTFNode> parentNode, int index);
+	void LoadModelNodes(tinygltf::Node& node, int index);
 	void Loader();
 
 public: 
