@@ -6,34 +6,34 @@ Temp_GLTFMesh::Temp_GLTFMesh()
 
 Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 {
-	this->MeshName = meshLoader.MeshName;
+	MeshName = meshLoader.node->NodeName;
 	MeshType = meshLoader.MeshType;
 	MeshSubType = meshLoader.MeshSubType;
 
 	ParentGameObjectID = meshLoader.ParentGameObjectID;
 	ParentModelID = meshLoader.ParentModelID;
-	MeshID = meshLoader.NodeID;
+	MeshID = meshLoader.node->NodeID;
 
-	ParentMeshID = meshLoader.ParentMeshID;
-	ChildMeshIDList = meshLoader.ChildMeshIDList;
+	ParentMesh = meshLoader.node->ParentMesh;
+	ChildMeshList = meshLoader.node->ChildMeshList;
 
-	Primitive = meshLoader.Primitive;
+	PrimitiveList = meshLoader.node->PrimitiveList;
 
 	VertexCount = meshLoader.VertexCount;
 	IndexCount = meshLoader.IndexCount;
-	BoneCount = meshLoader.BoneCount;
+	//BoneCount = meshLoader.node->BoneCount;
 
 	GameObjectTransform = meshLoader.GameObjectTransform;
 	ModelTransform = meshLoader.ModelTransform;
-	MeshTransform = meshLoader.MeshTransform;
+	MeshTransform = meshLoader.node->NodeTransformMatrix;
 
-	MeshPosition = meshLoader.MeshPosition;
-	MeshRotation = meshLoader.MeshRotation;
-	MeshScale = meshLoader.MeshScale;
+	MeshPosition = meshLoader.node->Position;
+	MeshRotation = meshLoader.node->Rotation;
+	MeshScale = meshLoader.node->Scale;
 
-	TransformBuffer = meshLoader.TransformBuffer;
+	TransformBuffer = meshLoader.node->TransformBuffer;
 	
-	material = meshLoader.MaterialPtr;
+	material = meshLoader.node->Material;
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
@@ -45,18 +45,7 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	GameObjectTransformMatrix = GameObjectMatrix;
 	ModelTransformMatrix = ModelMatrix;
 
-	glm::mat4 TransformMatrix = glm::mat4(1.0f);
-	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
-
-	reflectionPoint = glm::vec3(GameObjectTransformMatrix[3][0], GameObjectTransformMatrix[3][1], GameObjectTransformMatrix[3][2]) +
-		glm::vec3(ModelTransformMatrix[3][0], ModelTransformMatrix[3][1], ModelTransformMatrix[3][2]) +
-		MeshPosition + ReflectionPoint;
-
-	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
+	meshProperties.MeshTransform = MeshTransformMatrix;
 	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)
@@ -140,18 +129,6 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 
 	//UpdateMeshBottomLevelAccelerationStructure();
 	//}
-}
-
-void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer)
-{
-	if (IndexCount > 0)
-	{
-		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, Primitive.FirstIndex, 0, 0);
-	}
-	else
-	{
-		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
-	}
 }
 
 void Temp_GLTFMesh::Destroy()

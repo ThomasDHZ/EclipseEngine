@@ -16,12 +16,17 @@ struct GLTFNode
 {
 public:
 	std::string NodeName;
+
+	uint64_t ParentGameObjectID = 0;
+	uint64_t ParentModelID = 0;
 	int NodeID = -1;
 
-	std::shared_ptr<GLTFNode> Parent = nullptr;
-	std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
-	std::vector<GLTFPrimitive> PrimitiveList = std::vector<GLTFPrimitive>();
-	std::shared_ptr<Material> Material;
+	std::shared_ptr<GLTFNode> ParentMesh;
+	std::vector<std::shared_ptr<GLTFNode>> ChildMeshList;
+	std::shared_ptr<Material> Material = nullptr;
+
+	std::vector<GLTFPrimitive> PrimitiveList;
+	VulkanBuffer TransformBuffer;
 
 	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 NodeTransformMatrix = glm::mat4(1.0f);
@@ -67,7 +72,6 @@ private:
 	void LoadIndices(tinygltf::Model& model, tinygltf::Mesh& mesh, uint32_t x);
 	void LoadPrimitive(tinygltf::Mesh& mesh, uint32_t x);
 	void LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shared_ptr<GLTFNode> parentNode, int index);
-	void LoadModelNodes(tinygltf::Node& node, int index);
 	void Loader();
 
 public: 

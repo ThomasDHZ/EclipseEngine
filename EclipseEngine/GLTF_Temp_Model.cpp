@@ -1,4 +1,5 @@
 #include "GLTF_Temp_Model.h"
+#include "SceneManager.h"
 
 uint64_t GLTF_Temp_Model::ModelIDCounter = 0;
 
@@ -42,47 +43,21 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 		TransformBuffer.CreateBuffer(&TransformBuffer, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 		GLTFMeshLoader3D GltfMeshLoader;
+		GltfMeshLoader.node = node;
 
-		GltfMeshLoader.MeshName = node->NodeName;
 		GltfMeshLoader.MeshType = MeshTypeEnum::kPolygon;
 		GltfMeshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
-		if (node->PrimitiveList.size() > 0)
-		{
-			GltfMeshLoader.Primitive = node->PrimitiveList[0];
-		}
+
 		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 		GltfMeshLoader.ParentModelID = ModelID;
 		GltfMeshLoader.NodeID = node->NodeID;
-		PrimitiveList = node->PrimitiveList;
-
-		if (!node->Parent)
-		{
-			GltfMeshLoader.ParentMeshID = -1;
-		}
-		else
-		{
-			GltfMeshLoader.ParentMeshID = node->Parent->NodeID;
-		}
-		for (auto& childNode : node->ChildNodeList)
-		{
-			GltfMeshLoader.ChildMeshIDList.emplace_back(childNode->NodeID);
-		}
 
 		GltfMeshLoader.VertexCount = VertexList.size();
 		GltfMeshLoader.IndexCount = IndexList.size();
-		//GltfMeshLoader.BoneCount = meshLoader.BoneCount;
+		GltfMeshLoader.BoneCount = 0;
 
 		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
 		GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
-		GltfMeshLoader.MeshTransform = node->NodeTransformMatrix;
-
-		GltfMeshLoader.MeshPosition = node->Position;
-		GltfMeshLoader.MeshRotation = node->Rotation;
-		GltfMeshLoader.MeshScale = node->Scale;
-
-		GltfMeshLoader.TransformBuffer = TransformBuffer;
-
-		GltfMeshLoader.MaterialPtr = node->Material;
 
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
@@ -106,6 +81,26 @@ void GLTF_Temp_Model::GenerateID()
 	ModelID = ModelIDCounter;
 }
 
+void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix)
+{
+	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
+	MeshTransformMatrix = glm::translate(MeshTransformMatrix, mesh->MeshPosition);
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshTransformMatrix = glm::scale(MeshTransformMatrix, mesh->MeshScale);
+	mesh->MeshTransform = MeshTransformMatrix;
+
+	glm::mat4 GlobalTransform = ParentMatrix * mesh->MeshTransform;
+	if (node == nullptr)
+	{
+		for (int x = 0; x < mesh->ChildMeshList.size() - 1; x++)
+		{
+			UpdateNodeTransform(mesh, mesh->ChildMeshList[x + 1], GlobalTransform);
+		}
+	}
+}
+
 void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 {
 	for (int x = 0; x < TextureList.size(); x++)
@@ -124,11 +119,9 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 	ModelTransformMatrix = glm::rotate(ModelTransformMatrix, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransformMatrix = glm::scale(ModelTransformMatrix, ModelScale);
 
-	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix;
-	MeshPropertiesUniformBuffer.Update(meshProperties);
-
 	for (auto& mesh : MeshList)
 	{
+		UpdateNodeTransform(mesh, nullptr, ModelTransformMatrix);
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
 }
@@ -191,11 +184,19 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer)
 	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		
-			if (mesh->Primitive.IndexCount > 0)
+		for (auto& node : mesh->ChildMeshList)
+		{
+			if (node->Visible)
 			{
-				vkCmdDrawIndexed(commandBuffer, mesh->Primitive.IndexCount, 1, mesh->Primitive.FirstIndex, 0, 0);
+				for (auto& primitve : node->PrimitiveList)
+				{
+					if (primitve.IndexCount > 0)
+					{
+						vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
+					}
+				}
 			}
+		}
 	}
 }
 

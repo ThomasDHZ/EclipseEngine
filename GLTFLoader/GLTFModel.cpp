@@ -294,6 +294,10 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 	gltfNode->NodeName = node.name;
 	gltfNode->Material = data.MaterialList[index];
 	gltfNode->NodeID = index;
+	if (parentNode)
+	{
+		gltfNode->ParentMesh = parentNode;
+	}
 	{
 		if (node.translation.size() == 3)
 		{
@@ -396,38 +400,38 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 				IndexCount = static_cast<uint32_t>(accessor.count);
 				switch (accessor.componentType)
 				{
-				case TINYGLTF_PARAMETER_TYPE_UNSIGNED_INT:
-				{
-					const uint32_t* indexBuffer = reinterpret_cast<const uint32_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
-					for (uint32_t x = 0; x < accessor.count; x++)
+					case TINYGLTF_PARAMETER_TYPE_UNSIGNED_INT:
 					{
-						IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						const uint32_t* indexBuffer = reinterpret_cast<const uint32_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
+						for (uint32_t x = 0; x < accessor.count; x++)
+						{
+							IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						}
+						break;
 					}
-					break;
-				}
-				case TINYGLTF_PARAMETER_TYPE_UNSIGNED_SHORT:
-				{
-					const uint16_t* indexBuffer = reinterpret_cast<const uint16_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
-					for (uint32_t x = 0; x < accessor.count; x++)
+					case TINYGLTF_PARAMETER_TYPE_UNSIGNED_SHORT:
 					{
-						IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						const uint16_t* indexBuffer = reinterpret_cast<const uint16_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
+						for (uint32_t x = 0; x < accessor.count; x++)
+						{
+							IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						}
+						break;
 					}
-					break;
-				}
-				case TINYGLTF_PARAMETER_TYPE_UNSIGNED_BYTE:
-				{
-					const uint8_t* indexBuffer = reinterpret_cast<const uint8_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
-					for (uint32_t x = 0; x < accessor.count; x++)
+					case TINYGLTF_PARAMETER_TYPE_UNSIGNED_BYTE:
 					{
-						IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						const uint8_t* indexBuffer = reinterpret_cast<const uint8_t*>(&buffer.data[accessor.byteOffset + bufferView.byteOffset]);
+						for (uint32_t x = 0; x < accessor.count; x++)
+						{
+							IndexList.emplace_back(indexBuffer[x] + VertexStartIndex);
+						}
+						break;
 					}
-					break;
-				}
-				default:
-				{
-					std::cout << "Index component type " << accessor.componentType << " not supported!" << std::endl;
-					return;
-				}
+					default:
+					{
+						std::cout << "Index component type " << accessor.componentType << " not supported!" << std::endl;
+						return;
+					}
 				}
 			}
 			{
@@ -444,20 +448,11 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 
 	if (parentNode)
 	{
-		parentNode->ChildNodeList.push_back(gltfNode);
+		parentNode->ChildMeshList.push_back(gltfNode);
 	}
 	else
 	{
 		NodeList.push_back(gltfNode);
-	}
-}
-
-void GLTFModel::LoadModelNodes(tinygltf::Node& node, int index)
-{
-	LoadMesh(model, node, nullptr, index);
-	for (uint32_t x = 0; x < node.children.size(); x++)
-	{
-		LoadModelNodes(model.nodes[node.children[x]], x);
 	}
 }
 
@@ -469,7 +464,7 @@ void GLTFModel::Loader()
 	for (int x = 0; x < scene.nodes.size(); x++)
 	{
 		tinygltf::Node node = model.nodes[scene.nodes[x]];
-		LoadModelNodes(node, x);
+		LoadMesh(model, node, nullptr, x);
 	}
 
 	data.VertexList = VertexList;
