@@ -31,7 +31,6 @@ private:
 	uint64_t ParentGameObjectID = 0;
 	uint64_t ParentModelID = 0;
 
-
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BoneCount = 0;
@@ -48,6 +47,7 @@ public:
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);
 	~Temp_GLTFMesh();
 
+	Temp_GLTFMesh* asdf;
 	std::shared_ptr<GLTFNode> ParentMesh = nullptr;
 	std::vector<std::shared_ptr<GLTFNode>> ChildMeshList;
 	std::vector<GLTFPrimitive> PrimitiveList;
@@ -60,8 +60,4 @@ public:
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList) override;
 	virtual void Destroy() override;
-
-	void SetMeshPosition(float x, float y, float z);
-	void SetMeshRotation(float x, float y, float z);
-	void SetMeshScale(float x, float y, float z);
 };

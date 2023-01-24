@@ -42,10 +42,10 @@ Temp_GLTFMesh::~Temp_GLTFMesh()
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	GameObjectTransformMatrix = GameObjectMatrix;
-	ModelTransformMatrix = ModelMatrix;
+	//GameObjectTransformMatrix = GameObjectMatrix;
+	//ModelTransformMatrix = ModelMatrix;
 
-	meshProperties.MeshTransform = MeshTransformMatrix;
+	//meshProperties.MeshTransform = MeshTransformMatrix;
 	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)

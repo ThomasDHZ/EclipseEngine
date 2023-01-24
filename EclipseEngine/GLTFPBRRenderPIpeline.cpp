@@ -11,12 +11,10 @@ GLTFPBRRenderPIpeline::~GLTFPBRRenderPIpeline()
 
 void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, GLTF_Temp_Model model)
 {
-    VkDescriptorBufferInfo MeshPropertiesBufferList = model.GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = model.GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshTransformBufferList = model.GetTransformMatrixBuffer();
     std::vector<VkDescriptorBufferInfo> MaterialBufferList = model.GetMaterialPropertiesBuffer();
     std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = model.GetTexturePropertiesBuffer();
-    //std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    //std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
-    //std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFPBRRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -24,8 +22,9 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 2, RenderedTextureBufferInfo);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshTransformBufferList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo);
 
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};

@@ -35,4 +35,7 @@ public:
 	VkAccelerationStructureKHR GetBufferHandle() { return BufferHandle; }
 	VkAccelerationStructureKHR* GetBufferHandlePtr() { return &BufferHandle; }
 	void* GetData() { return data; }
+	
+	template<class T>
+	T* DataView() { return ((T*)data); }
 };

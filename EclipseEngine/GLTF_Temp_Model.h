@@ -18,17 +18,19 @@ private:
 	std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
 
 	std::vector<GLTFPrimitive> PrimitiveList;
+	std::vector<MeshProperties> MeshPropertiesList;
+	std::vector<glm::mat4> TransformMatrixList;
 	std::vector<std::shared_ptr<Texture2D>> TextureList;
 	std::vector<std::shared_ptr<Material>> MaterialList;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
+	std::vector<VulkanBuffer> MeshBufferList;
+	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 	std::vector<VulkanBuffer> MeshTransformBufferList;
 
-	MeshProperties meshProperties;
-	VkDescriptorBufferInfo MeshPropertiesBuffer;
-
-	MeshPropertiesUniformBuffer MeshPropertiesUniformBuffer;
+	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 
@@ -51,13 +53,15 @@ public:
 	void UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateMeshPropertiesBuffer();
+	void UpdateMeshTransformBuffer();
 	void UpdateTexturePropertiesBuffer();
 	void UpdateMaterialPropertiesBuffer();
 
 	void Draw(VkCommandBuffer& commandBuffer);
 	void Destroy();
 
-	VkDescriptorBufferInfo GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; };
+	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; };
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; };
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; };
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; };
 };

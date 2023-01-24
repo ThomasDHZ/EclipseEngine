@@ -39,9 +39,6 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 
 	for (auto& node : gltfModelData.NodeList)
 	{
-		VulkanBuffer TransformBuffer;
-		TransformBuffer.CreateBuffer(&TransformBuffer, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
 
@@ -61,12 +58,25 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
-}
 
-	MeshPropertiesUniformBuffer.Update(meshProperties);
+		for (auto& childMesh : MeshList[0]->ChildMeshList)
+		{
+			glm::mat4 matrix = glm::mat4(1.0f);
+			VulkanBuffer TransformBuffer;
+			TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+			MeshTransformBufferList.emplace_back(TransformBuffer);
+			TransformMatrixList.emplace_back(glm::mat4(1.0f));
+
+			MeshProperties meshProperties;
+			VulkanBuffer MeshPropertiesBuffer;
+			MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+			MeshPropertiesBufferList.emplace_back(MeshPropertiesBuffer);
+		}
+	}
 
 	Update(glm::mat4(1.0f));
 	UpdateMeshPropertiesBuffer();
+	UpdateMeshTransformBuffer();
 	UpdateTexturePropertiesBuffer();
 	UpdateMaterialPropertiesBuffer();
 }
@@ -83,15 +93,17 @@ void GLTF_Temp_Model::GenerateID()
 
 void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix)
 {
-	glm::mat4 MeshTransformMatrix = glm::mat4(1.0f);
-	MeshTransformMatrix = glm::translate(MeshTransformMatrix, mesh->MeshPosition);
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	MeshTransformMatrix = glm::rotate(MeshTransformMatrix, glm::radians(mesh->MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	MeshTransformMatrix = glm::scale(MeshTransformMatrix, mesh->MeshScale);
-	mesh->MeshTransform = MeshTransformMatrix;
+	glm::mat4 GlobalTransform = ParentMatrix * glm::mat4(1.0f);
+	if (node == nullptr)
+	{
+		MeshTransformBufferList[0].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+	}
+	else
+	{
+		GlobalTransform = ParentMatrix * node->NodeTransformMatrix;
+		MeshTransformBufferList[node->NodeID].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+	}
 
-	glm::mat4 GlobalTransform = ParentMatrix * mesh->MeshTransform;
 	if (node == nullptr)
 	{
 		for (int x = 0; x < mesh->ChildMeshList.size() - 1; x++)
@@ -121,18 +133,40 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 
 	for (auto& mesh : MeshList)
 	{
-		UpdateNodeTransform(mesh, nullptr, ModelTransformMatrix);
+		UpdateNodeTransform(mesh, nullptr, GameObjectTransformMatrix * ModelTransformMatrix);
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
+	UpdateMeshTransformBuffer();
 }
 
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 {
-	VkDescriptorBufferInfo MeshPropertiesmBufferBufferInfo = {};
-	MeshPropertiesmBufferBufferInfo.buffer = MeshPropertiesUniformBuffer.VulkanBufferData.Buffer;
-	MeshPropertiesmBufferBufferInfo.offset = 0;
-	MeshPropertiesmBufferBufferInfo.range = VK_WHOLE_SIZE;
-	MeshPropertiesBuffer = MeshPropertiesmBufferBufferInfo;
+	std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList;
+	for (auto meshProperties : MeshPropertiesBufferList)
+	{
+		VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
+		MeshPropertiesmBufferInfo.buffer = meshProperties.GetBuffer();
+		MeshPropertiesmBufferInfo.offset = 0;
+		MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
+		MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferInfo);
+	}
+	MeshPropertiesBuffer = MeshPropertiesmBufferList;
+}
+
+void GLTF_Temp_Model::UpdateMeshTransformBuffer()
+{
+	std::vector<VkDescriptorBufferInfo> TransformBufferDescriptorList;
+	for (auto transformMatrix : MeshTransformBufferList)
+	{
+		auto ab = transformMatrix.DataView<glm::mat4>();
+
+		VkDescriptorBufferInfo transformMatrixPropertiesBufferInfo = {};
+		transformMatrixPropertiesBufferInfo.buffer = transformMatrix.GetBuffer();
+		transformMatrixPropertiesBufferInfo.offset = 0;
+		transformMatrixPropertiesBufferInfo.range = VK_WHOLE_SIZE;
+		TransformBufferDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
+	}
+	TransformMatrixBuffer = TransformBufferDescriptorList;
 }
 
 void GLTF_Temp_Model::UpdateTexturePropertiesBuffer()

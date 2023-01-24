@@ -17,8 +17,9 @@ layout(location = 0) out vec4 outColor;
 #include "SceneData.glsl"
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 2) uniform sampler2D TextureMap[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
 
 #include "PBRMaterial.glsl"
 
