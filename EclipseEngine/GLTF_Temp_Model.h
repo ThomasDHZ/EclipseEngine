@@ -57,7 +57,7 @@ public:
 	void UpdateTexturePropertiesBuffer();
 	void UpdateMaterialPropertiesBuffer();
 
-	void Draw(VkCommandBuffer& commandBuffer);
+	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; };

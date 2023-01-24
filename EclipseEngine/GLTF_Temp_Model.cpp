@@ -62,12 +62,15 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 		for (auto& childMesh : MeshList[0]->ChildMeshList)
 		{
 			glm::mat4 matrix = glm::mat4(1.0f);
+			TransformMatrixList.emplace_back(matrix);
+
+			MeshProperties meshProperties;
+			MeshPropertiesList.emplace_back(meshProperties);
+
 			VulkanBuffer TransformBuffer;
 			TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 			MeshTransformBufferList.emplace_back(TransformBuffer);
-			TransformMatrixList.emplace_back(glm::mat4(1.0f));
 
-			MeshProperties meshProperties;
 			VulkanBuffer MeshPropertiesBuffer;
 			MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 			MeshPropertiesBufferList.emplace_back(MeshPropertiesBuffer);
@@ -115,6 +118,11 @@ void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, s
 
 void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 {
+	for (int x = 0; x < MeshList[0]->ChildMeshList.size(); x++)
+	{
+		MeshPropertiesList[x].MaterialBufferIndex = MeshList[0]->ChildMeshList[x]->Material->GetMaterialBufferIndex();
+		MeshPropertiesBufferList[x].CopyBufferToMemory(&MeshPropertiesList[x], sizeof(MeshProperties));
+	}
 	for (int x = 0; x < TextureList.size(); x++)
 	{
 		TextureList[x]->SetTextureBufferIndex(x);
@@ -136,26 +144,29 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 		UpdateNodeTransform(mesh, nullptr, GameObjectTransformMatrix * ModelTransformMatrix);
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
+	UpdateMeshPropertiesBuffer();
 	UpdateMeshTransformBuffer();
 }
 
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 {
-	std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList;
+	std::vector<VkDescriptorBufferInfo> MeshPropertiesDescriptorList;
 	for (auto meshProperties : MeshPropertiesBufferList)
 	{
+		auto ab = meshProperties.DataView<MeshProperties>();
+
 		VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
 		MeshPropertiesmBufferInfo.buffer = meshProperties.GetBuffer();
 		MeshPropertiesmBufferInfo.offset = 0;
 		MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
-		MeshPropertiesmBufferList.emplace_back(MeshPropertiesmBufferInfo);
+		MeshPropertiesDescriptorList.emplace_back(MeshPropertiesmBufferInfo);
 	}
-	MeshPropertiesBuffer = MeshPropertiesmBufferList;
+	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
 
 void GLTF_Temp_Model::UpdateMeshTransformBuffer()
 {
-	std::vector<VkDescriptorBufferInfo> TransformBufferDescriptorList;
+	std::vector<VkDescriptorBufferInfo> TransformDescriptorList;
 	for (auto transformMatrix : MeshTransformBufferList)
 	{
 		auto ab = transformMatrix.DataView<glm::mat4>();
@@ -164,9 +175,9 @@ void GLTF_Temp_Model::UpdateMeshTransformBuffer()
 		transformMatrixPropertiesBufferInfo.buffer = transformMatrix.GetBuffer();
 		transformMatrixPropertiesBufferInfo.offset = 0;
 		transformMatrixPropertiesBufferInfo.range = VK_WHOLE_SIZE;
-		TransformBufferDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
+		TransformDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
 	}
-	TransformMatrixBuffer = TransformBufferDescriptorList;
+	TransformMatrixBuffer = TransformDescriptorList;
 }
 
 void GLTF_Temp_Model::UpdateTexturePropertiesBuffer()
@@ -211,7 +222,7 @@ void GLTF_Temp_Model::UpdateMaterialPropertiesBuffer()
 	MaterialPropertiesBuffer = MaterialPropertiesBufferList;
 }
 
-void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer)
+void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
@@ -226,6 +237,10 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer)
 				{
 					if (primitve.IndexCount > 0)
 					{
+						SceneManager::sceneProperites.MeshIndex = node->NodeID;
+						SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+
+						vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
 						vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 					}
 				}
