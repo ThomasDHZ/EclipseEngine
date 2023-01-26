@@ -7,8 +7,8 @@ TextureAtlus::TextureAtlus()
 TextureAtlus::TextureAtlus(const std::string& textureLocation, const glm::ivec2& textureCellSize) : Texture2D(textureLocation, TextureTypeEnum::kTextureAtlus, VK_FORMAT_R8G8B8A8_UNORM)
 {
 	TextureCellSize = textureCellSize;
-	TextureWidthCellCount = Width / textureCellSize.x;
-	TextureHeightCellCount = Height / textureCellSize.y;
+	TextureWidthCellCount = Width \ textureCellSize.x;
+	TextureHeightCellCount = Height \ textureCellSize.y;
 }
 
 TextureAtlus::~TextureAtlus()

@@ -15,14 +15,17 @@ layout(location = 0) out vec4 outColor;
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
 #include "SceneData.glsl"
+#include "Lights.glsl"
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 4) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 5) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 6) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 #include "PBRMaterial.glsl"
-
 #include "RasterVertexBuilder.glsl"
 
 void main()
@@ -33,5 +36,17 @@ void main()
 
    PBRMaterial pbrMaterial = BuildPBRMaterial(materialBuffer[materialID].materialProperties, vertex.UV);
 
-   outColor = vec4(texture(TextureMap[material.AlbedoMapID], vertex.UV).rgb, 1.0f);
+    vec3 N = normalize(Normal);
+	vec3 T = normalize(Tangent.xyz);
+	vec3 B = cross(Normal, Tangent.xyz);
+	mat3 TBN = mat3(T, B, N);
+	N = TBN * normalize(texture(TextureMap[material.NormalMapID], vertex.UV).xyz * 2.0 - vec3(1.0));
+
+	const float ambient = 0.1;
+	vec3 L = normalize(DLight[0].directionalLight.direction);
+	vec3 V = normalize(sceneData.CameraPos - vertex.Position);
+	vec3 R = reflect(-L, N);
+	vec3 diffuse = max(dot(N, L), ambient).rrr;
+	float specular = pow(max(dot(R, V), 0.0), 32.0f);
+	outColor = vec4(diffuse * texture(TextureMap[material.AlbedoMapID], vertex.UV).rgb + specular, 1.0f);
 }

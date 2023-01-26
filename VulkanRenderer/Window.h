@@ -2,10 +2,10 @@
 #define Window_H
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include <GLFW\glfw3.h>
 #include <memory>
 #include <iostream>
-#include <glm/glm.hpp>
+#include <glm\glm.hpp>
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "GameController.h"

@@ -1,6 +1,6 @@
 #include "CubeMapTexture.h"
 #include "VulkanBuffer.h"
-#include <tinygltf/stb_image.h>
+#include <tinygltf\stb_image.h>
 
 CubeMapTexture::CubeMapTexture() : Texture()
 {
@@ -61,7 +61,7 @@ void CubeMapTexture::LoadTexture(CubeMapLayout CubeMapFiles, VkFormat textureFor
 	textureData.emplace_back(stbi_load(CubeMapFiles.Front.c_str(), &Width, &Height, &texChannels, STBI_rgb_alpha));
 
 	const VkDeviceSize imageSize = Width * Height * 4 * 6;
-	const VkDeviceSize layerSize = imageSize / 6;
+	const VkDeviceSize layerSize = imageSize \ 6;
 
 	VulkanBuffer StagingBuffer(nullptr, imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
