@@ -33,5 +33,5 @@ void main()
 
    PBRMaterial pbrMaterial = BuildPBRMaterial(materialBuffer[materialID].materialProperties, vertex.UV);
 
-   outColor = vec4(texture(TextureMap[material.NormalMapID], vertex.UV).rgb, 1.0f);
+   outColor = vec4(texture(TextureMap[material.AlbedoMapID], vertex.UV).rgb, 1.0f);
 }
