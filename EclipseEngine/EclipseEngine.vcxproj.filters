@@ -955,6 +955,9 @@
     <None Include="..\Shaders\MeshProperties.glsl">
       <Filter>Shader\Include</Filter>
     </None>
+    <None Include="..\Shaders\Lights.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
     <None Include="..\Shaders\BillBoardShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1269,9 +1272,6 @@
     </None>
     <None Include="..\Shaders\GLTFPBRRenderer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\Lights.glsl">
-      <Filter>Shader\Include\Raster</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

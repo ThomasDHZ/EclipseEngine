@@ -1,7 +1,7 @@
 #pragma once
 #include <vulkan\vulkan_core.h>
 #include <vector>
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 class VulkanSwapChain
 {

@@ -34,8 +34,8 @@ std::shared_ptr<Texture2D> VRAMManager::IsTexture2DLoaded(std::string name)
 
 void VRAMManager::StartUp()
 {
-	LoadTexture2D("..\texture\DefaultTexture.png", TextureTypeEnum::kDiffuseTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	LoadTexture2D("..\texture\AlphaDefault.png", TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+	LoadTexture2D("../texture/DefaultTexture.png", TextureTypeEnum::kDiffuseTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+	LoadTexture2D("../texture/AlphaDefault.png", TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
 
 	VkSamplerCreateInfo NullSamplerInfo = {};
 	NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;

@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 class GameController

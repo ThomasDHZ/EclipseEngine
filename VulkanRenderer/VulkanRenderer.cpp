@@ -1,5 +1,5 @@
 #include "VulkanRenderer.h"
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
@@ -127,7 +127,7 @@ void VulkanRenderer::StartUp()
 	VulkanCreateInfo.enabledLayerCount = static_cast<unsigned int>(ValidationLayers.size());
 	VulkanCreateInfo.ppEnabledLayerNames = ValidationLayers.data();
 	VulkanCreateInfo.pNext = &ValidationFeatures;
-	\\VulkanCreateInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
+	//VulkanCreateInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
 
 #endif
 

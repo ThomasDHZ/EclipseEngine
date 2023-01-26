@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include "VulkanBuffer.h"
-#include "ImGui\imgui_impl_vulkan.h"
-#include <tinygltf\stb_image.h>
+#include "ImGui/imgui_impl_vulkan.h"
+#include <tinygltf/stb_image.h>
 
 
 
@@ -160,39 +160,39 @@ void Texture::LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution,
 	StagingBuffer.DestoryBuffer();
 }
 
-\\void Texture::LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format)
-\\{
-\\	VkDeviceSize imageSize = Width * Height * sizeof(Pixel);
-\\
-\\	VulkanBuffer StagingBuffer;
-\\	StagingBuffer.CreateBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &Pixels[0]);
-\\
-\\	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(Width, Height)))) + 1;
-\\
-\\	VkImageCreateInfo TextureInfo = {};
-\\	TextureInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-\\	TextureInfo.imageType = VK_IMAGE_TYPE_2D;
-\\	TextureInfo.extent.width = Width;
-\\	TextureInfo.extent.height = Height;
-\\	TextureInfo.extent.depth = Depth;
-\\	TextureInfo.mipLevels = MipMapLevels;
-\\	TextureInfo.arrayLayers = 1;
-\\	TextureInfo.format = format;
-\\	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-\\	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-\\	TextureInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-\\	TextureInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-\\	TextureInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-\\
-\\	Texture::CreateTextureImage(TextureInfo);
-\\
-\\	TransitionImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-\\	CopyBufferToImage(StagingBuffer.Buffer);
-\\
-\\	StagingBuffer.DestoryBuffer();
-\\
-\\	GenerateMipmaps(format);
-\\}
+//void Texture::LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format)
+//{
+//	VkDeviceSize imageSize = Width * Height * sizeof(Pixel);
+//
+//	VulkanBuffer StagingBuffer;
+//	StagingBuffer.CreateBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &Pixels[0]);
+//
+//	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(Width, Height)))) + 1;
+//
+//	VkImageCreateInfo TextureInfo = {};
+//	TextureInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+//	TextureInfo.imageType = VK_IMAGE_TYPE_2D;
+//	TextureInfo.extent.width = Width;
+//	TextureInfo.extent.height = Height;
+//	TextureInfo.extent.depth = Depth;
+//	TextureInfo.mipLevels = MipMapLevels;
+//	TextureInfo.arrayLayers = 1;
+//	TextureInfo.format = format;
+//	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+//	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+//	TextureInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+//	TextureInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+//	TextureInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+//
+//	Texture::CreateTextureImage(TextureInfo);
+//
+//	TransitionImageLayout(VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+//	CopyBufferToImage(StagingBuffer.Buffer);
+//
+//	StagingBuffer.DestoryBuffer();
+//
+//	GenerateMipmaps(format);
+//}
 
 void Texture::LoadTexture(std::string TextureLocation, VkFormat format)
 {
@@ -371,7 +371,7 @@ void Texture::GenerateMipmaps()
 		ImageBlit.srcSubresource.baseArrayLayer = 0;
 		ImageBlit.srcSubresource.layerCount = 1;
 		ImageBlit.dstOffsets[0] = { 0, 0, 0 };
-		ImageBlit.dstOffsets[1] = { mipWidth > 1 ? mipWidth \ 2 : 1, mipHeight > 1 ? mipHeight \ 2 : 1, 1 };
+		ImageBlit.dstOffsets[1] = { mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1 };
 		ImageBlit.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 		ImageBlit.dstSubresource.mipLevel = x;
 		ImageBlit.dstSubresource.baseArrayLayer = 0;
@@ -388,8 +388,8 @@ void Texture::GenerateMipmaps()
 		vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT, 0, 0, nullptr, 0, nullptr, 1, &ImageMemoryBarrier);
 		TextureImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-		if (mipWidth > 1) mipWidth \= 2;
-		if (mipHeight > 1) mipHeight \= 2;
+		if (mipWidth > 1) mipWidth /= 2;
+		if (mipHeight > 1) mipHeight /= 2;
 	}
 
 	ImageMemoryBarrier.subresourceRange.baseMipLevel = MipMapLevels - 1;

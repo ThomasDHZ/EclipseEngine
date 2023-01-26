@@ -1,5 +1,5 @@
 #pragma once
-#include <vulkan\vulkan.h>
+#include <vulkan/vulkan.h>
 #include <vector>
 #include <set>
 #include <array>
@@ -207,7 +207,7 @@ public:
 			}
 			else
 			{
-				std::cout << "GPU\MotherBoard isn't ray tracing compatible." << std::endl;
+				std::cout << "GPU/MotherBoard isn't ray tracing compatible." << std::endl;
 			}
 		}
 	}
