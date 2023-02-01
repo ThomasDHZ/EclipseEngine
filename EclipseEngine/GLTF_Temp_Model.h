@@ -3,7 +3,7 @@
 #include "Vertex.h"
 #include "Mesh3D.h"
 #include "Temp_GLTFMesh.h"
-
+#include "GLTF_GraphicsDescriptors.h"
 
 class GLTF_Temp_Model
 {
@@ -14,14 +14,14 @@ private:
 	uint64_t ModelID = 0;
 
 	std::string NodeName;
-	std::shared_ptr<GLTFNode> ParentMesh = nullptr;
-	std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
+	//std::shared_ptr<GLTFNode> ParentMesh = nullptr;
+	//std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
 
 	std::vector<GLTFPrimitive> PrimitiveList;
 	std::vector<MeshProperties> MeshPropertiesList;
 	std::vector<glm::mat4> TransformMatrixList;
 	std::vector<std::shared_ptr<Texture2D>> TextureList;
-	std::vector<std::shared_ptr<Material>> MaterialList;
+	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
@@ -38,7 +38,7 @@ private:
 	glm::mat4 ModelTransformMatrix;
 
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
-
+	std::vector<VkDescriptorSet> descripterSetList;
 	void GenerateID();
 public:
 

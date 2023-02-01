@@ -11,21 +11,59 @@ GLTFPBRRenderPIpeline::~GLTFPBRRenderPIpeline()
 
 void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, GLTF_Temp_Model model)
 {
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = model.GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MeshTransformBufferList = model.GetTransformMatrixBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = model.GetMaterialPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = model.GetTexturePropertiesBuffer();
+    VkSampler Sampler = nullptr;
+    VkSamplerCreateInfo TextureImageSamplerInfo = {};
+    TextureImageSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    TextureImageSamplerInfo.magFilter = VK_FILTER_NEAREST;
+    TextureImageSamplerInfo.minFilter = VK_FILTER_NEAREST;
+    TextureImageSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    TextureImageSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    TextureImageSamplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    TextureImageSamplerInfo.anisotropyEnable = VK_TRUE;
+    TextureImageSamplerInfo.maxAnisotropy = 16.0f;
+    TextureImageSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    TextureImageSamplerInfo.unnormalizedCoordinates = VK_FALSE;
+    TextureImageSamplerInfo.compareEnable = VK_FALSE;
+    TextureImageSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    TextureImageSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+    TextureImageSamplerInfo.minLod = 0;
+    TextureImageSamplerInfo.maxLod = 0;
+    TextureImageSamplerInfo.mipLodBias = 0;
 
+    if (vkCreateSampler(VulkanRenderer::GetDevice(), &TextureImageSamplerInfo, nullptr, &Sampler))
+    {
+        throw std::runtime_error("Failed to create Sampler.");
+    }
+
+    std::vector<VkDescriptorImageInfo> TextureDescriptorList;
+    VkDescriptorImageInfo nullBuffer;
+    nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    nullBuffer.imageView = VK_NULL_HANDLE;
+    nullBuffer.sampler = Sampler;
+    
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFPBRRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFPBRRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
+    std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = model.GetMeshPropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> MeshTransformBufferList = model.GetTransformMatrixBuffer();
+    std::vector<VkDescriptorBufferInfo> MaterialBufferList = model.GetMaterialPropertiesBuffer();
+    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = model.GetTexturePropertiesBuffer();
+    std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+    std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
+    std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
+
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshTransformBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo);
-
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 2, nullBuffer);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, nullBuffer);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, nullBuffer);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, nullBuffer);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 6, nullBuffer);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, DirectionalLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, PointLightBufferInfoList);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 9, SpotLightBufferInfoList);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;

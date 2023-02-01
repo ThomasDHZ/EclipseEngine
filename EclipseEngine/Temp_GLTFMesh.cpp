@@ -33,7 +33,7 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 
 	TransformBuffer = meshLoader.node->TransformBuffer;
 	
-	material = meshLoader.node->Material;
+	gltfMaterial = meshLoader.node->Material;
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
@@ -46,7 +46,7 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	//ModelTransformMatrix = ModelMatrix;
 
 	//meshProperties.MeshTransform = MeshTransformMatrix;
-	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
+	//meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)
 	{
@@ -91,7 +91,7 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 		MeshPosition + ReflectionPoint;
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
+	//meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)
 	{

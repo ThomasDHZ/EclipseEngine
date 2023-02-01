@@ -135,6 +135,15 @@
     <ClInclude Include="VRAMManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLTFMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTF_GraphicsDescriptors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTF_GraphicsPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanSwapChain.cpp">
@@ -210,6 +219,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VRAMManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTF_GraphicsDescriptors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTF_GraphicsPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

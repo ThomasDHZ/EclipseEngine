@@ -82,6 +82,129 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	UpdateMeshTransformBuffer();
 	UpdateTexturePropertiesBuffer();
 	UpdateMaterialPropertiesBuffer();
+
+	VkSampler Sampler = nullptr;
+	VkSamplerCreateInfo TextureImageSamplerInfo = {};
+	TextureImageSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	TextureImageSamplerInfo.magFilter = VK_FILTER_NEAREST;
+	TextureImageSamplerInfo.minFilter = VK_FILTER_NEAREST;
+	TextureImageSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	TextureImageSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	TextureImageSamplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	TextureImageSamplerInfo.anisotropyEnable = VK_TRUE;
+	TextureImageSamplerInfo.maxAnisotropy = 16.0f;
+	TextureImageSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	TextureImageSamplerInfo.unnormalizedCoordinates = VK_FALSE;
+	TextureImageSamplerInfo.compareEnable = VK_FALSE;
+	TextureImageSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+	TextureImageSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	TextureImageSamplerInfo.minLod = 0;
+	TextureImageSamplerInfo.maxLod = 0;
+	TextureImageSamplerInfo.mipLodBias = 0;
+
+	if (vkCreateSampler(VulkanRenderer::GetDevice(), &TextureImageSamplerInfo, nullptr, &Sampler))
+	{
+		throw std::runtime_error("Failed to create Sampler.");
+	}
+
+	for (int x = 0; x < MaterialList.size(); x++)
+	{
+		VkDescriptorImageInfo albedoTextureDescriptor{};
+		if (MaterialList[x]->AlbedoMap != nullptr)
+		{
+			auto albedoTexture = MaterialList[x]->AlbedoMap;
+			albedoTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			albedoTextureDescriptor.imageView = albedoTexture->GetView();
+			albedoTextureDescriptor.sampler = albedoTexture->GetSampler();
+		}
+		else
+		{
+			albedoTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			albedoTextureDescriptor.imageView = VK_NULL_HANDLE;
+			albedoTextureDescriptor.sampler = Sampler;
+		}
+
+		VkDescriptorImageInfo normalTextureDescriptor{};
+		if (MaterialList[x]->NormalMap != nullptr)
+		{
+			auto normalTexture = MaterialList[x]->NormalMap;
+			normalTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			normalTextureDescriptor.imageView = normalTexture->GetView();
+			normalTextureDescriptor.sampler = normalTexture->GetSampler();
+		}
+		else
+		{
+			normalTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			normalTextureDescriptor.imageView = VK_NULL_HANDLE;
+			normalTextureDescriptor.sampler = Sampler;
+		}
+
+		VkDescriptorImageInfo MetallicRoughnessTextureDescriptor{};
+		if (MaterialList[x]->MetallicRoughnessMap != nullptr)
+		{
+			auto MetallicRoughnessTexture = MaterialList[x]->MetallicRoughnessMap;
+			MetallicRoughnessTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			MetallicRoughnessTextureDescriptor.imageView = MetallicRoughnessTexture->GetView();
+			MetallicRoughnessTextureDescriptor.sampler = MetallicRoughnessTexture->GetSampler();
+		}
+		else
+		{
+			MetallicRoughnessTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			MetallicRoughnessTextureDescriptor.imageView = VK_NULL_HANDLE;
+			MetallicRoughnessTextureDescriptor.sampler = Sampler;
+		}
+
+		VkDescriptorImageInfo ambientOcclusionTextureDescriptor{};
+		if (MaterialList[x]->AmbientOcclusionMap != nullptr)
+		{
+			auto AmbientOcclusionTexture = MaterialList[x]->AmbientOcclusionMap;
+			ambientOcclusionTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			ambientOcclusionTextureDescriptor.imageView = AmbientOcclusionTexture->GetView();
+			ambientOcclusionTextureDescriptor.sampler = AmbientOcclusionTexture->GetSampler();
+		}
+		else
+		{
+			ambientOcclusionTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			ambientOcclusionTextureDescriptor.imageView = VK_NULL_HANDLE;
+			ambientOcclusionTextureDescriptor.sampler = Sampler;
+		}
+
+		VkDescriptorImageInfo alphaTextureDescriptor{};
+		if (MaterialList[x]->AlphaMap != nullptr)
+		{
+			auto AlphaTexture = MaterialList[x]->AlphaMap;
+
+			alphaTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			alphaTextureDescriptor.imageView = AlphaTexture->GetView();
+			alphaTextureDescriptor.sampler = AlphaTexture->GetSampler();
+		}
+		else
+		{
+			alphaTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+			alphaTextureDescriptor.imageView = VK_NULL_HANDLE;
+			alphaTextureDescriptor.sampler = Sampler;
+		}
+
+		std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = GetMeshPropertiesBuffer();
+		std::vector<VkDescriptorBufferInfo> MeshTransformBufferList = GetTransformMatrixBuffer();
+		std::vector<VkDescriptorBufferInfo> MaterialBufferList = GetMaterialPropertiesBuffer();
+		std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+		std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = LightManager::GetPointLightBuffer();
+		std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = LightManager::GetSpotLightBuffer();
+
+		std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshTransformBufferList);
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, albedoTextureDescriptor);
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, normalTextureDescriptor);
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, albedoTextureDescriptor);
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, normalTextureDescriptor);
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, albedoTextureDescriptor);
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, DirectionalLightBufferInfoList);
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, PointLightBufferInfoList);
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 9, SpotLightBufferInfoList);
+		descripterSetList.emplace_back(GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList));
+	}
 }
 
 GLTF_Temp_Model::~GLTF_Temp_Model()
@@ -120,17 +243,18 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 {
 	for (int x = 0; x < MeshList[0]->ChildMeshList.size(); x++)
 	{
-		MeshPropertiesList[x].MaterialBufferIndex = MeshList[0]->ChildMeshList[x]->Material->GetMaterialBufferIndex();
+	//	MeshPropertiesList[x].MaterialBufferIndex = MeshList[0]->ChildMeshList[x]->Material->GetMaterialBufferIndex();
 		MeshPropertiesBufferList[x].CopyBufferToMemory(&MeshPropertiesList[x], sizeof(MeshProperties));
 	}
-	for (int x = 0; x < TextureList.size(); x++)
-	{
-		TextureList[x]->SetTextureBufferIndex(x);
-	}
-	for (auto& material : MaterialList)
-	{
-		material->MaterialBufferUpdate();
-	}
+
+	//for (int x = 0; x < TextureList.size(); x++)
+	//{
+	//	TextureList[x]->SetTextureBufferIndex(x);
+	//}
+	//for (auto& material : MaterialList)
+	//{
+	//	material->MaterialBufferUpdate();
+	//}
 
 	ModelTransformMatrix = glm::mat4(1.0f);
 	ModelTransformMatrix = glm::translate(ModelTransformMatrix, ModelPosition);
@@ -207,19 +331,21 @@ void GLTF_Temp_Model::UpdateTexturePropertiesBuffer()
 
 void GLTF_Temp_Model::UpdateMaterialPropertiesBuffer()
 {
-	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBufferList{};
-	for (int x = 0; x < MaterialList.size(); x++)
-	{
-		VkDescriptorBufferInfo materialPropertiesBufferBufferInfo = {};
-		materialPropertiesBufferBufferInfo.buffer = MaterialList[x]->GetMaterialBuffer();
-		materialPropertiesBufferBufferInfo.offset = 0;
-		materialPropertiesBufferBufferInfo.range = VK_WHOLE_SIZE;
-		MaterialPropertiesBufferList.emplace_back(materialPropertiesBufferBufferInfo);
+	//std::vector<VkDescriptorBufferInfo> MaterialPropertiesBufferList{};
+	//for (int x = 0; x < MaterialList.size(); x++)
+	//{
+	//	auto ab = MaterialList[x]->MaterialBuffer.DataView<MaterialBufferData>();
 
-		MaterialList[x]->SetBufferIndex(x);
-	}
+	//	VkDescriptorBufferInfo materialPropertiesBufferBufferInfo = {};
+	//	materialPropertiesBufferBufferInfo.buffer = MaterialList[x]->GetMaterialBuffer();
+	//	materialPropertiesBufferBufferInfo.offset = 0;
+	//	materialPropertiesBufferBufferInfo.range = VK_WHOLE_SIZE;
+	//	MaterialPropertiesBufferList.emplace_back(materialPropertiesBufferBufferInfo);
 
-	MaterialPropertiesBuffer = MaterialPropertiesBufferList;
+	//	MaterialList[x]->SetBufferIndex(x);
+	//}
+
+	//MaterialPropertiesBuffer = MaterialPropertiesBufferList;
 }
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
@@ -240,6 +366,7 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shad
 						SceneManager::sceneProperites.MeshIndex = node->NodeID;
 						SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
+						vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[node->NodeID], 0, nullptr);
 						vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
 						vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 					}

@@ -42,6 +42,8 @@ private:
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer TransformBuffer;
 
+	std::shared_ptr<GLTFMaterial> gltfMaterial;
+
 public:
 	Temp_GLTFMesh();
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);

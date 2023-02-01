@@ -24,6 +24,9 @@
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GLTFMaterial.h" />
+    <ClInclude Include="GLTF_GraphicsDescriptors.h" />
+    <ClInclude Include="GLTF_GraphicsPipeline.h" />
     <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -58,6 +61,9 @@
     <ClCompile Include="BakedTexture.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
+    <ClCompile Include="GLTFMaterial.cpp" />
+    <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />
+    <ClCompile Include="GLTF_GraphicsPipeline.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

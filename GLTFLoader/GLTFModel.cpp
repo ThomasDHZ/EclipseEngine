@@ -65,7 +65,7 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 
 	for (uint32_t x = 0; x < model.materials.size(); x++)
 	{
-		std::shared_ptr<Material> material = std::make_shared<Material>(model.materials[x].name, MaterialTypeEnum::kMaterialPBR);
+		std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(model.materials[x].name);
 
 		TinyGltfTextureLoader TextureLoader{};
 		TinyGltfTextureSamplerLoader SamplerLoader{};
@@ -74,20 +74,20 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 		const int imageIndex = tinygltfTexture[x].source;
 		const int samplerIndex = tinygltfTexture[x].sampler;
 
-		if (glTFMaterial.values.find("baseColorFactor") != glTFMaterial.values.end())
-		{
-			material->SetAlbedoMap(glm::make_vec4(glTFMaterial.values["baseColorFactor"].ColorFactor().data()));
-		}
+		//if (glTFMaterial.values.find("baseColorFactor") != glTFMaterial.values.end())
+		//{
+		//	material->SetAlbedoMap(glm::make_vec4(glTFMaterial.values["baseColorFactor"].ColorFactor().data()));
+		//}
 
-		if (glTFMaterial.values.find("metallicFactor") != glTFMaterial.values.end())
-		{
-			material->SetMetallicMap(*reinterpret_cast<float*>(glTFMaterial.values["metallicFactor"].ColorFactor().data()));
-		}
+		//if (glTFMaterial.values.find("metallicFactor") != glTFMaterial.values.end())
+		//{
+		//	material->SetMetallicMap(*reinterpret_cast<float*>(glTFMaterial.values["metallicFactor"].ColorFactor().data()));
+		//}
 
-		if (glTFMaterial.values.find("roughnessFactor") != glTFMaterial.values.end())
-		{
-			material->SetRoughnessMap(*reinterpret_cast<float*>(glTFMaterial.values["roughnessFactor"].ColorFactor().data()));
-		}
+		//if (glTFMaterial.values.find("roughnessFactor") != glTFMaterial.values.end())
+		//{
+		//	material->SetRoughnessMap(*reinterpret_cast<float*>(glTFMaterial.values["roughnessFactor"].ColorFactor().data()));
+		//}
 
 		if (glTFMaterial.values.find("baseColorTexture") != glTFMaterial.values.end())
 		{
@@ -95,7 +95,8 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 
 			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
 			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
-			material->SetAlbedoMap(data.TextureList.back());
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->AlbedoMap = data.TextureList.back();
 			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
@@ -109,7 +110,8 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
 			}
 			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
-			material->SetAmbientOcclusionMap(data.TextureList.back());
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->AmbientOcclusionMap = data.TextureList.back();
 			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
@@ -123,7 +125,8 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
 			}
 			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
-			material->SetNormalMap(data.TextureList.back());
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->NormalMap = data.TextureList.back();
 			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
@@ -137,12 +140,13 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
 			}
 			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
-			material->SetMetallicMap(data.TextureList.back());
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->MetallicRoughnessMap = data.TextureList.back();
 			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
 		data.MaterialList.emplace_back(material);
-		VRAMManager::AddMaterial(data.MaterialList.back());
+		//VRAMManager::AddMaterial(data.MaterialList.back());
 	}
 }
 

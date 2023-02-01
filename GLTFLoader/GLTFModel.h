@@ -1,7 +1,7 @@
 #pragma once
 #include "GLTFFileLoader.h"
 #include <Texture2D.h>
-#include <Material.h>
+#include <GLTFMaterial.h>
 #include <VRAMManager.h>
 #include "GLTFVertex.h"
 
@@ -23,7 +23,7 @@ public:
 
 	std::shared_ptr<GLTFNode> ParentMesh;
 	std::vector<std::shared_ptr<GLTFNode>> ChildMeshList;
-	std::shared_ptr<Material> Material = nullptr;
+	std::shared_ptr<GLTFMaterial> Material = nullptr;
 
 	std::vector<GLTFPrimitive> PrimitiveList;
 	VulkanBuffer TransformBuffer;
@@ -46,7 +46,7 @@ struct GLTFModelData
 	std::vector<uint32_t> IndexList = std::vector<uint32_t>();
 	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
 	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
-	std::vector<std::shared_ptr<Material>> MaterialList = std::vector<std::shared_ptr<Material>>();
+	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList = std::vector<std::shared_ptr<GLTFMaterial>>();
 };
 
 class GLTFModel
