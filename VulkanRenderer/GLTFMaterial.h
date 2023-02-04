@@ -11,11 +11,6 @@ private:
 	uint64_t MaterialID = 0;
 	uint64_t MaterialBufferIndex = 0;
 
-	glm::vec3 Ambient = glm::vec3(0.2f);
-	glm::vec3 Diffuse = glm::vec3(0.6f);
-	glm::vec3 Specular = glm::vec3(1.0f);
-	float Shininess = 32;
-
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	float Metallic = 0.0f;
 	float Roughness = 0.0f;
@@ -27,8 +22,6 @@ private:
 
 public:
 	std::string MaterialName;
-	std::shared_ptr<Texture> DiffuseMap = nullptr;
-	std::shared_ptr<Texture> SpecularMap = nullptr;
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
 	std::shared_ptr<Texture> AmbientOcclusionMap = nullptr;
@@ -40,4 +33,12 @@ public:
 	GLTFMaterial();
 	GLTFMaterial(const std::string& materialName);
 	~GLTFMaterial();
+
+	VkDescriptorImageInfo GetAlbedoMapDescriptor();
+	VkDescriptorImageInfo GetMetallicRoughnessMapDescriptor();
+	VkDescriptorImageInfo GetAmbientOcclusionMapDescriptor();
+	VkDescriptorImageInfo GetNormalMapDescriptor();
+	VkDescriptorImageInfo GetDepthMapDescriptor();
+	VkDescriptorImageInfo GetAlphaMapDescriptor();
+	VkDescriptorImageInfo GetEmissionMapDescriptor();
 };

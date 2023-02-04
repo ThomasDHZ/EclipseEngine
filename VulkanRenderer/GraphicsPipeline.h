@@ -1,39 +1,7 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
-
-struct PipelineInfoStruct
-{
-	VkRenderPass renderPass = VK_NULL_HANDLE;
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
-	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
-};
-
-struct BuildVertexDescription
-{
-	std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions;
-	std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions;
-	VkPrimitiveTopology VertexTopology;
-	VkPolygonMode PolygonMode;
-	VkCullModeFlags CullMode;
-};
-
-struct BuildRenderPassDescription
-{
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachments;
-	VkPipelineDepthStencilStateCreateInfo DepthStencilInfo;
-	VkRenderPass renderPass = VK_NULL_HANDLE;
-	VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT;
-	uint32_t ConstBufferSize = 0;
-};
-
-struct BuildGraphicsPipelineInfo
-{
-	BuildVertexDescription VertexDescription;
-	BuildRenderPassDescription RenderPassDescription;
-};
+#include "GLTF_GraphicsPipeline.h"
 
 class GraphicsPipeline
 {

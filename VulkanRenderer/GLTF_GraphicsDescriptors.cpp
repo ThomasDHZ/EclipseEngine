@@ -213,7 +213,46 @@ VkDescriptorSet GLTF_GraphicsDescriptors::SubmitDescriptorSet(std::vector<Descri
 	return DescriptorSet;
 }
 
-void GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)
+VkDescriptorSetLayout GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+{
+	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
+	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+
+	std::vector<VkDescriptorPoolSize>  DescriptorPoolList{};
+	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo{};
+
+	if (DescriptorBindingList.size() > 0)
+	{
+		{
+			std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
+			for (auto& DescriptorBinding : DescriptorBindingList)
+			{
+				DescriptorPoolList.emplace_back(AddDescriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
+			}
+			DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+		}
+		{
+			std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
+			for (auto& DescriptorBinding : DescriptorBindingList)
+			{
+				LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
+			}
+			DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+		}
+	}
+	else
+	{
+		DescriptorPoolList.emplace_back(AddDescriptorPoolBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1));
+		DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+
+		LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL, 1 });
+		DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+	}
+
+	return DescriptorSetLayout;
+}
+
+void GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR accelerationStructure, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -224,7 +263,7 @@ void GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(std::vector<D
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo TextureImageInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -235,7 +274,7 @@ void GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(std::vector<Descripto
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo> TextureImageInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -246,7 +285,7 @@ void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<Descri
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo TextureImageInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -257,7 +296,7 @@ void GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(std::vector<Descri
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -268,7 +307,7 @@ void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -279,7 +318,7 @@ void GLTF_GraphicsDescriptors::AddUniformBufferDescriptorSetBinding(std::vector<
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
@@ -290,7 +329,7 @@ void GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(std::vector<
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
+void GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
 {
 	DescriptorSetBindingStruct DescriptorSetBinding{};
 	DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;

@@ -23,9 +23,12 @@ layout(binding = 3) uniform sampler2D NormalMap;
 layout(binding = 4) uniform sampler2D MetallicRoughnessMap;
 layout(binding = 5) uniform sampler2D AmbientOcclusionMap;
 layout(binding = 6) uniform sampler2D AlphaMap;
-layout(binding = 7) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 8) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 9) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 7) uniform sampler2D DepthMap;
+layout(binding = 8) uniform sampler2D BRDFMap;
+layout(binding = 9) uniform samplerCube CubeMap;
+layout(binding = 10) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 11) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 12) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 #include "RasterVertexBuilder.glsl"
 
@@ -47,5 +50,5 @@ void main()
 	vec3 diffuse = max(dot(N, L), 0.15) * Albedo;
 	vec3 specular = pow(max(dot(R, V), 0.0), 16.0) * vec3(0.75);
 
-   outColor = vec4(diffuse * Albedo.rgb + specular, 1.0);	
+   outColor = vec4(Albedo, 1.0);	
 }
