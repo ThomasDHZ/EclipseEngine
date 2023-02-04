@@ -10,8 +10,11 @@ PBRRenderer::~PBRRenderer()
 
 void PBRRenderer::BuildRenderer()
 {
+	GLTF_BRDFRenderPass.BuildRenderPass(512);
+	gLTFRenderPass.BuildRenderPass(model);
+
 	model = GLTF_Temp_Model("C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf", glm::mat4(1.0f), 0);
-	//GLTF_BRDFRenderPass.BuildRenderPass(512);
+
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }

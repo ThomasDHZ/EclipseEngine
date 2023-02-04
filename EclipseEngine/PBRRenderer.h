@@ -45,7 +45,7 @@ private:
 	//GaussianBlurRenderPass blurRenderPass;
 	//BloomCombineRenderPass bloomCombinePipeline;
 	GLTF_Temp_Model model;
-//	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
+	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
 	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 

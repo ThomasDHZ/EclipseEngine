@@ -42,6 +42,7 @@ void main()
 	float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
 	float AmbientOcclusion = texture(AmbientOcclusionMap, vertex.UV).r;
 	float Alpha = texture(AlphaMap, vertex.UV).r;
+	vec2 BRDF = texture(BRDFMap, vertex.UV).rg;
 
    	vec3 N = texture(NormalMap, vertex.UV).rgb;
 	vec3 L = normalize(DLight[0].directionalLight.direction);
