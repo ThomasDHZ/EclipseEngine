@@ -1,15 +1,15 @@
-#include "GLTFPBRRenderPIpeline.h"
+#include "GLTF_BRDFPipeline.h"
 #include "SceneManager.h"
 
-GLTFPBRRenderPIpeline::GLTFPBRRenderPIpeline()
+GLTF_BRDFPipeline::GLTF_BRDFPipeline()
 {
 }
 
-GLTFPBRRenderPIpeline::~GLTFPBRRenderPIpeline()
+GLTF_BRDFPipeline::~GLTF_BRDFPipeline()
 {
 }
 
-void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, GLTF_Temp_Model model)
+void GLTF_BRDFPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     VkSampler Sampler = nullptr;
     VkSamplerCreateInfo TextureImageSamplerInfo = {};
@@ -40,25 +40,13 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     nullBuffer.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
     nullBuffer.imageView = VK_NULL_HANDLE;
     nullBuffer.sampler = Sampler;
-    
+
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFPBRRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFPBRRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFBRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFBRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, model.GetMeshPropertiesBuffer());
-    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, model.GetTransformMatrixBuffer());
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, nullBuffer);
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, nullBuffer);
-    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 10, LightManager::GetDirectionalLightBuffer());
-    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, LightManager::GetPointLightBuffer());
-    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, LightManager::GetSpotLightBuffer());
+    DescriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
     DescriptorSetLayout = GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(DescriptorBindingList);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
@@ -70,15 +58,12 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
 
     BuildVertexDescription VertexDescriptionInfo{};
-    VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
-    VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
-    VertexDescriptionInfo.CullMode = VK_CULL_MODE_BACK_BIT;
+    VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
 
     BuildRenderPassDescription RenderPassInfo{};
     RenderPassInfo.PipelineShaderStageList = PipelineShaderStageList;
-    RenderPassInfo.DescriptorBindingList = DescriptorBindingList;
     RenderPassInfo.ColorAttachments = pipelineInfoStruct.ColorAttachments;
     RenderPassInfo.DepthStencilInfo = DepthStencilStateCreateInfo;
     RenderPassInfo.renderPass = pipelineInfoStruct.renderPass;
@@ -105,8 +90,9 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     }
 }
 
-void GLTFPBRRenderPIpeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model)
+void GLTF_BRDFPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    model.Draw(commandBuffer, ShaderPipelineLayout);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+    vkCmdDraw(commandBuffer, 6, 1, 0, 0);
 }

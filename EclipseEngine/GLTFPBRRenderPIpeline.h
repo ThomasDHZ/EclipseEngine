@@ -1,7 +1,7 @@
 #pragma once
-#include <GraphicsPipeline.h>
+#include <GLTF_GraphicsPipeline.h>
 #include "GLTF_Temp_Model.h"
-class GLTFPBRRenderPIpeline : public GraphicsPipeline
+class GLTFPBRRenderPIpeline : public GLTF_GraphicsPipeline
 {
 public:
 	GLTFPBRRenderPIpeline();

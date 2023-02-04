@@ -534,6 +534,12 @@
     <ClCompile Include="Temp_GLTFMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLTF_BRDFPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTF_BRDFRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -950,6 +956,12 @@
     <ClInclude Include="Temp_GLTFMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLTF_BRDFPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTF_BRDFRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1271,6 +1283,12 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\GLTFPBRRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GLTFBRDFShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\GLTFBRDFShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>

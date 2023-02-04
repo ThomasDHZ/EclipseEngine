@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\Shaders\GLTFBRDFShader.frag" />
+    <None Include="..\Shaders\GLTFBRDFShader.vert" />
     <None Include="..\Shaders\GLTFPBRRenderer.frag" />
     <None Include="..\Shaders\GLTFPBRRenderer.vert" />
     <None Include="..\Shaders\PBRAnyhit.rahit" />
@@ -202,6 +204,8 @@
     <ClCompile Include="GBufferPipeline.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="GLTF_BRDFPipeline.cpp" />
+    <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
     <ClCompile Include="GLTF_Temp_Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
@@ -335,6 +339,8 @@
     <ClInclude Include="GBufferPipeline.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="GLTF_BRDFPipeline.h" />
+    <ClInclude Include="GLTF_BRDFRenderPass.h" />
     <ClInclude Include="GLTF_Temp_Model.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />

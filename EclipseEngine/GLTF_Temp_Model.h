@@ -52,10 +52,9 @@ public:
 
 	void UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectTransformMatrix);
+	void UpdateDescriptorSets();
 	void UpdateMeshPropertiesBuffer();
 	void UpdateMeshTransformBuffer();
-	void UpdateTexturePropertiesBuffer();
-	void UpdateMaterialPropertiesBuffer();
 
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();

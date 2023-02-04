@@ -181,6 +181,34 @@ public:
 		//ImGui::End();
 	}
 
+	static VkDescriptorImageInfo GetBRDFMapDescriptor()
+	{
+		if (BRDFTexture != nullptr)
+		{
+			VkDescriptorImageInfo depthTextureDescriptor{};
+			depthTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			depthTextureDescriptor.imageView = BRDFTexture->GetView();
+			depthTextureDescriptor.sampler = BRDFTexture->GetSampler();
+			return depthTextureDescriptor;
+		}
+
+		return VulkanRenderer::GetNullDescriptor();
+	}
+
+	static VkDescriptorImageInfo GetCubeMapMapDescriptor()
+	{
+		if (CubeMap != nullptr)
+		{
+			VkDescriptorImageInfo depthTextureDescriptor{};
+			depthTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			depthTextureDescriptor.imageView = CubeMap->GetView();
+			depthTextureDescriptor.sampler = CubeMap->GetSampler();
+			return depthTextureDescriptor;
+		}
+
+		return VulkanRenderer::GetNullDescriptor();
+	}
+
 	static void DestroyScene()
 	{
 		MaterialManager::DestroyScene();
