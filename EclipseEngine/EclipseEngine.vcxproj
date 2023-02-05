@@ -202,7 +202,11 @@
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GBufferPipeline.cpp" />
+    <ClCompile Include="GLTFIrradiancePipeline.cpp" />
+    <ClCompile Include="GLTFIrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
+    <ClCompile Include="GLTFPrefilterPipeline.cpp" />
+    <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="GLTF_BRDFPipeline.cpp" />
     <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
@@ -340,7 +344,11 @@
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GBufferPipeline.h" />
+    <ClInclude Include="GLTFIrradiancePipeline.h" />
+    <ClInclude Include="GLTFIrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
+    <ClInclude Include="GLTFPrefilterPipeline.h" />
+    <ClInclude Include="GLTFPrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="GLTF_BRDFPipeline.h" />
     <ClInclude Include="GLTF_BRDFRenderPass.h" />

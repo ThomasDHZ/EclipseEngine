@@ -20,6 +20,8 @@
 #include "GLTF_EnvironmentToCubeRenderPass.h"
 #include "GLTF_BRDFRenderPass.h"
 #include "GLTFRenderPass.h"
+#include "GLTFIrradianceRenderPass.h"
+#include "GLTFPrefilterRenderPass.h"
 
 class PBRRenderer
 {
@@ -48,6 +50,8 @@ private:
 	GLTF_Temp_Model model;
 	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
+	GLTFIrradianceRenderPass irradianceRenderPass;
+	GLTFPrefilterRenderPass prefilterRenderPass;
 	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 

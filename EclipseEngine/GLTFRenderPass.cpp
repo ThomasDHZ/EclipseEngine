@@ -120,7 +120,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, model);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap2);
+    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
 VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
