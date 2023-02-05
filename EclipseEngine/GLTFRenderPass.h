@@ -2,7 +2,7 @@
 #include "GLTFPBRRenderPIpeline.h"
 #include "RenderedColorTexture.h"
 #include "RenderPass.h"
-
+#include "GLTF_SkyboxPipeline.h"
 class GLTFRenderPass : public RenderPass
 {
 	private:
@@ -15,6 +15,7 @@ class GLTFRenderPass : public RenderPass
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 		GLTFPBRRenderPIpeline pbrPipeline;
+		GLTF_SkyboxPipeline skyboxPipeline;
 
 		void RenderPassDesc();
 		void BuildRenderPassPipelines(GLTF_Temp_Model& model);

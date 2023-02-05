@@ -10,6 +10,9 @@ PBRRenderer::~PBRRenderer()
 
 void PBRRenderer::BuildRenderer()
 {
+	SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+
+	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	GLTF_BRDFRenderPass.BuildRenderPass(512);
 	gLTFRenderPass.BuildRenderPass(model);
 

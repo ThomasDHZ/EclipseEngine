@@ -1,65 +1,50 @@
-#include "GLTFRenderPass.h"
-#include "LightManager.h"
+#include "GLTF_EnvironmentToCubeRenderPass.h"
 
-GLTFRenderPass::GLTFRenderPass() : RenderPass()
+
+GLTF_EnvironmentToCubeRenderPass::GLTF_EnvironmentToCubeRenderPass() : RenderPass()
 {
 }
 
-GLTFRenderPass::~GLTFRenderPass()
+GLTF_EnvironmentToCubeRenderPass::~GLTF_EnvironmentToCubeRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(GLTF_Temp_Model& model)
+void GLTF_EnvironmentToCubeRenderPass::BuildRenderPass(uint32_t cubeMapSize)
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
     if (renderPass == nullptr)
     {
-        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        ColorTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+        SceneManager::CubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
+    AttachmentList.emplace_back(SceneManager::CubeMap->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(model);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    Draw();
 }
 
-void GLTFRenderPass::RenderPassDesc()
+void GLTF_EnvironmentToCubeRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(SceneManager::CubeMap->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    std::vector<VkAttachmentReference> MultiSampleReferenceList;
-    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
     subpassDescription.pColorAttachments = ColorRefsList.data();
-    subpassDescription.pDepthStencilAttachment = &depthReference;
-    subpassDescription.pResolveAttachments = MultiSampleReferenceList.data();
 
     std::vector<VkSubpassDependency> DependencyList;
 
@@ -83,6 +68,17 @@ void GLTFRenderPass::RenderPassDesc()
     SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
     DependencyList.emplace_back(SecondDependency);
 
+
+    const uint32_t viewMask = 0b00111111;
+    const uint32_t correlationMask = 0b00111111;
+
+    VkRenderPassMultiviewCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
+    createInfo.subpassCount = 1;
+    createInfo.pViewMasks = &viewMask;
+    createInfo.correlationMaskCount = 1;
+    createInfo.pCorrelationMasks = &correlationMask;
+
     VkRenderPassCreateInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
@@ -91,19 +87,19 @@ void GLTFRenderPass::RenderPassDesc()
     renderPassInfo.pSubpasses = &subpassDescription;
     renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
     renderPassInfo.pDependencies = DependencyList.data();
+    renderPassInfo.pNext = &createInfo;
 
     if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
     {
-        throw std::runtime_error("Failed to create Buffer RenderPass.");
+        throw std::runtime_error("failed to create GBuffer RenderPass!");
     }
-
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
+void GLTF_EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
+    ColorAttachment.blendEnable = VK_FALSE;
     ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
     ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
     ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
@@ -112,27 +108,33 @@ void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
     ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
 
     ColorAttachmentList.clear();
-    ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.resize(1, ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, model);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap2);
+    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
+void GLTF_EnvironmentToCubeRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 3> clearValues{};
-    clearValues[0].color = { {0.4f, 0.4f, 0.4f, 1.0f} };
-    clearValues[1].color = { {0.4f, 0.4f, 0.4f, 1.0f} };
-    clearValues[2].depthStencil = { 1.0f, 0 };
+    std::array<VkClearValue, 1> clearValues{};
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -146,40 +148,24 @@ VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
     rect2D.offset = { 0, 0 };
     rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
 
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
-    renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
-    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-    renderPassInfo.pClearValues = clearValues.data();
-
-    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to begin recording command buffer.");
+    if (vkBeginCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()], &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
+    vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
+    vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
+    vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    EnvironmentToCubeRenderPassPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to record command buffer!");
     }
 
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    skyboxPipeline.Draw(commandBuffer);
-    pbrPipeline.Draw(commandBuffer, model);
-    vkCmdEndRenderPass(commandBuffer);
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to record command buffer.");
-    }
-
-    return commandBuffer;
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void GLTFRenderPass::Destroy()
+void GLTF_EnvironmentToCubeRenderPass::Destroy()
 {
-    ColorTexture->Destroy();
-    RenderedTexture->Destroy();
-    DepthTexture->Destroy();
-
-    pbrPipeline.Destroy();
-
+    SceneManager::CubeMap->Destroy();
+    EnvironmentToCubeRenderPassPipeline.Destroy();
     RenderPass::Destroy();
 }

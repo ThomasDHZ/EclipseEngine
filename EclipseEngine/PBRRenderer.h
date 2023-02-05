@@ -17,6 +17,7 @@
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
 #include "GLTFPBRRenderPIpeline.h"
+#include "GLTF_EnvironmentToCubeRenderPass.h"
 #include "GLTF_BRDFRenderPass.h"
 #include "GLTFRenderPass.h"
 
@@ -45,6 +46,7 @@ private:
 	//GaussianBlurRenderPass blurRenderPass;
 	//BloomCombineRenderPass bloomCombinePipeline;
 	GLTF_Temp_Model model;
+	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
 	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;

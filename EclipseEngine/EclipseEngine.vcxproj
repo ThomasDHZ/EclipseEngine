@@ -206,6 +206,9 @@
     <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="GLTF_BRDFPipeline.cpp" />
     <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
+    <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
+    <ClCompile Include="GLTF_EnvironmentToCubeRenderPass.cpp" />
+    <ClCompile Include="GLTF_SkyboxPipeline.cpp" />
     <ClCompile Include="GLTF_Temp_Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
@@ -341,6 +344,9 @@
     <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="GLTF_BRDFPipeline.h" />
     <ClInclude Include="GLTF_BRDFRenderPass.h" />
+    <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />
+    <ClInclude Include="GLTF_EnvironmentToCubeRenderPass.h" />
+    <ClInclude Include="GLTF_SkyboxPipeline.h" />
     <ClInclude Include="GLTF_Temp_Model.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
