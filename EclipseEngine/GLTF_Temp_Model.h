@@ -14,8 +14,6 @@ private:
 	uint64_t ModelID = 0;
 
 	std::string NodeName;
-	//std::shared_ptr<GLTFNode> ParentMesh = nullptr;
-	//std::vector<std::shared_ptr<GLTFNode>> ChildNodeList = std::vector<std::shared_ptr<GLTFNode>>();
 
 	std::vector<GLTFPrimitive> PrimitiveList;
 	std::vector<MeshProperties> MeshPropertiesList;

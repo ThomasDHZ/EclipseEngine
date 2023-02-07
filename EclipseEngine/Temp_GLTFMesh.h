@@ -49,7 +49,6 @@ public:
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);
 	~Temp_GLTFMesh();
 
-	Temp_GLTFMesh* asdf;
 	std::shared_ptr<GLTFNode> ParentMesh = nullptr;
 	std::vector<std::shared_ptr<GLTFNode>> ChildMeshList;
 	std::vector<GLTFPrimitive> PrimitiveList;

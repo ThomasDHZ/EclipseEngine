@@ -42,8 +42,9 @@ public:
 	static GaussianBlurSettings bloomsettings;
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
+	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;
+	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
-	static std::shared_ptr<CubeMapTexture> CubeMap2;
 	static bool EditorModeFlag;
 	static bool	RayTracingActive;
 	static bool	HybridRendererActive;
@@ -185,25 +186,53 @@ public:
 	{
 		if (BRDFTexture != nullptr)
 		{
-			VkDescriptorImageInfo depthTextureDescriptor{};
-			depthTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			depthTextureDescriptor.imageView = BRDFTexture->GetView();
-			depthTextureDescriptor.sampler = BRDFTexture->GetSampler();
-			return depthTextureDescriptor;
+			VkDescriptorImageInfo BRDFMapDescriptor{};
+			BRDFMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			BRDFMapDescriptor.imageView = BRDFTexture->GetView();
+			BRDFMapDescriptor.sampler = BRDFTexture->GetSampler();
+			return BRDFMapDescriptor;
 		}
 
 		return VulkanRenderer::GetNullDescriptor();
 	}
 
-	static VkDescriptorImageInfo GetCubeMapMapDescriptor()
+	static VkDescriptorImageInfo GetIrradianceMapDescriptor()
+	{
+		if (IrradianceMap != nullptr)
+		{
+			VkDescriptorImageInfo IrradianceMapDescriptor{};
+			IrradianceMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			IrradianceMapDescriptor.imageView = IrradianceMap->GetView();
+			IrradianceMapDescriptor.sampler = IrradianceMap->GetSampler();
+			return IrradianceMapDescriptor;
+		}
+
+		return VulkanRenderer::GetNullDescriptor();
+	}
+
+	static VkDescriptorImageInfo GetPrefilterMapDescriptor()
+	{
+		if (PrefilterMap != nullptr)
+		{
+			VkDescriptorImageInfo PrefilterMapDescriptor{};
+			PrefilterMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			PrefilterMapDescriptor.imageView = PrefilterMap->GetView();
+			PrefilterMapDescriptor.sampler = PrefilterMap->GetSampler();
+			return PrefilterMapDescriptor;
+		}
+
+		return VulkanRenderer::GetNullDescriptor();
+	}
+
+	static VkDescriptorImageInfo GetCubeMapDescriptor()
 	{
 		if (CubeMap != nullptr)
 		{
-			VkDescriptorImageInfo depthTextureDescriptor{};
-			depthTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			depthTextureDescriptor.imageView = CubeMap->GetView();
-			depthTextureDescriptor.sampler = CubeMap->GetSampler();
-			return depthTextureDescriptor;
+			VkDescriptorImageInfo CubeMapDescriptor{};
+			CubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			CubeMapDescriptor.imageView = CubeMap->GetView();
+			CubeMapDescriptor.sampler = CubeMap->GetSampler();
+			return CubeMapDescriptor;
 		}
 
 		return VulkanRenderer::GetNullDescriptor();

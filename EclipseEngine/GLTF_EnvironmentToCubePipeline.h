@@ -13,6 +13,6 @@ public:
 	GLTF_EnvironmentToCubePipeline();
 	~GLTF_EnvironmentToCubePipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
 	void Draw(VkCommandBuffer& commandBuffer);
 };

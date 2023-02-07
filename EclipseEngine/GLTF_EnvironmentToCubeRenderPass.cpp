@@ -1,6 +1,5 @@
 #include "GLTF_EnvironmentToCubeRenderPass.h"
 
-
 GLTF_EnvironmentToCubeRenderPass::GLTF_EnvironmentToCubeRenderPass() : RenderPass()
 {
 }
@@ -115,7 +114,7 @@ void GLTF_EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
+    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo);
 }
 
 void GLTF_EnvironmentToCubeRenderPass::Draw()

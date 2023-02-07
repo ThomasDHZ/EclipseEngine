@@ -16,14 +16,18 @@ void PBRRenderer::BuildRenderer()
 	GLTF_BRDFRenderPass.BuildRenderPass(512);
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
-	irradianceRenderPass.BuildRenderPass(cubemap, SceneManager::GetPreRenderedMapSize());
-	prefilterRenderPass.BuildRenderPass(cubemap, SceneManager::GetPreRenderedMapSize());
+	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 	gLTFRenderPass.BuildRenderPass(model);
 
 	model = GLTF_Temp_Model("C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf", glm::mat4(1.0f), 0);
 
-	irradianceRenderPass.BuildRenderPass(cubemap, SceneManager::GetPreRenderedMapSize());
-	prefilterRenderPass.BuildRenderPass(cubemap, SceneManager::GetPreRenderedMapSize());
+	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
@@ -61,8 +65,6 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(model));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }

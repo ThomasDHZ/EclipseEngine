@@ -164,10 +164,11 @@ void GLTF_Temp_Model::UpdateDescriptorSets()
 		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, MaterialList[x]->GetAlphaMapDescriptor());
 		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, MaterialList[x]->GetDepthMapDescriptor());
 		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
-		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetCubeMapMapDescriptor());
-		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 10, LightManager::GetDirectionalLightBuffer());
-		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, LightManager::GetPointLightBuffer());
-		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, LightManager::GetSpotLightBuffer());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, LightManager::GetDirectionalLightBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, LightManager::GetPointLightBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, LightManager::GetSpotLightBuffer());
 		descripterSetList.emplace_back(GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList));
 	}
 }
