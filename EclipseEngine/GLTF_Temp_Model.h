@@ -23,7 +23,6 @@ private:
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
-	std::vector<VulkanBuffer> MeshBufferList;
 	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 	std::vector<VulkanBuffer> MeshTransformBufferList;
 

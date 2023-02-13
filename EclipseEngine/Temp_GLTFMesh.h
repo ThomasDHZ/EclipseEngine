@@ -25,11 +25,16 @@ struct GLTFMeshLoader3D
 	std::vector<MeshBoneWeights> BoneWeightList;
 };
 
-class Temp_GLTFMesh : public Mesh
+class Temp_GLTFMesh
 {
 private:
-	uint64_t ParentGameObjectID = 0;
+	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
+	uint64_t ParentGameObjectID = 0;
+
+	std::string MeshName;
+	MeshTypeEnum MeshType;
+	MeshSubTypeEnum MeshSubType;
 
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
@@ -58,7 +63,7 @@ public:
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList) override;
-	virtual void Destroy() override;
+	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
+	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	void Destroy();
 };
