@@ -1,4 +1,5 @@
 #include "Temp_GLTFMesh.h"
+#include "SceneManager.h"
 
 Temp_GLTFMesh::Temp_GLTFMesh()
 {
@@ -34,6 +35,8 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	TransformBuffer = meshLoader.node->TransformBuffer;
 	
 	gltfMaterial = meshLoader.node->Material;
+
+	MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
@@ -42,6 +45,8 @@ Temp_GLTFMesh::~Temp_GLTFMesh()
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
+
 	//GameObjectTransformMatrix = GameObjectMatrix;
 	//ModelTransformMatrix = ModelMatrix;
 
@@ -129,6 +134,37 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 
 	//UpdateMeshBottomLevelAccelerationStructure();
 	//}
+}
+
+VkDescriptorBufferInfo Temp_GLTFMesh::UpdateMeshPropertiesBuffer()
+{
+	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
+	MeshPropertiesmBufferInfo.buffer = MeshPropertiesBuffer.GetBuffer();
+	MeshPropertiesmBufferInfo.offset = 0;
+	MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
+	return MeshPropertiesmBufferInfo;
+}
+
+void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, std::vector<VkDescriptorSet> descripterSetList)
+{
+	for (auto& node : ChildMeshList)
+	{
+		if (node->Visible)
+		{
+			for (auto& primitve : node->PrimitiveList)
+			{
+				if (primitve.IndexCount > 0)
+				{
+					SceneManager::sceneProperites.MeshIndex = node->NodeID;
+					//SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+
+					vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[node->NodeID], 0, nullptr);
+					vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+					vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
+				}
+			}
+		}
+	}
 }
 
 void Temp_GLTFMesh::Destroy()
