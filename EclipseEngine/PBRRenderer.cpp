@@ -22,7 +22,7 @@ void PBRRenderer::BuildRenderer()
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 	gLTFRenderPass.BuildRenderPass(model);
 
-	model = GLTF_Temp_Model("C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf", glm::mat4(1.0f), 0);
+	model = GLTF_Temp_Model("C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf", glm::mat4(1.0f), 0);
 
 	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];

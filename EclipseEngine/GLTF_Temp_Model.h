@@ -48,7 +48,7 @@ public:
 	GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjectMatrix, uint32_t gameObjectID);
 	~GLTF_Temp_Model();
 
-	void UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix, int MeshId);
+	void UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateDescriptorSets();
 	void UpdateMeshPropertiesBuffer();

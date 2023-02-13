@@ -40,6 +40,17 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	glm::mat4 matrix = glm::mat4(1.0f);
 	TransformMatrixList.emplace_back(matrix);
 
+	MeshProperties meshProperties;
+	MeshPropertiesList.emplace_back(meshProperties);
+
+	VulkanBuffer TransformBuffer;
+	TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	MeshTransformBufferList.emplace_back(TransformBuffer);
+
+	VulkanBuffer MeshPropertiesBuffer;
+	MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	MeshPropertiesBufferList.emplace_back(MeshPropertiesBuffer);
+
 	for (auto& node : gltfModelData.NodeList)
 	{
 		GLTFMeshLoader3D GltfMeshLoader;
@@ -61,22 +72,8 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
-	}
 
-	for (auto& mesh : MeshList)
-	{
-		MeshProperties meshProperties;
-		MeshPropertiesList.emplace_back(meshProperties);
-
-		VulkanBuffer TransformBuffer;
-		TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		MeshTransformBufferList.emplace_back(TransformBuffer);
-
-		VulkanBuffer MeshPropertiesBuffer;
-		MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		MeshPropertiesBufferList.emplace_back(MeshPropertiesBuffer);
-
-		for (auto& childMesh : mesh->ChildMeshList)
+		for (auto& childMesh : MeshList[0]->ChildMeshList)
 		{
 			glm::mat4 matrix = glm::mat4(1.0f);
 			TransformMatrixList.emplace_back(matrix);
@@ -110,12 +107,12 @@ void GLTF_Temp_Model::GenerateID()
 	ModelID = ModelIDCounter;
 }
 
-void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix, int MeshId)
+void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix)
 {
 	glm::mat4 GlobalTransform = ParentMatrix * glm::mat4(1.0f);
 	if (node == nullptr)
 	{
-		MeshTransformBufferList[MeshId].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+		MeshTransformBufferList[0].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
 	}
 	else
 	{
@@ -125,22 +122,18 @@ void GLTF_Temp_Model::UpdateNodeTransform(std::shared_ptr<Temp_GLTFMesh> mesh, s
 
 	if (node == nullptr)
 	{
-		for (int x = 0; x < mesh->ChildMeshList.size(); x++)
+		for (int x = 0; x < mesh->ChildMeshList.size() - 1; x++)
 		{
-			UpdateNodeTransform(mesh, mesh->ChildMeshList[x + 1], GlobalTransform, x+1);
+			UpdateNodeTransform(mesh, mesh->ChildMeshList[x + 1], GlobalTransform);
 		}
 	}
 }
 
 void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 {
-	for (int x = 0; x < MeshList.size(); x++)
+	for (int x = 0; x < MeshList[0]->ChildMeshList.size(); x++)
 	{
 		MeshPropertiesBufferList[x].CopyBufferToMemory(&MeshPropertiesList[x], sizeof(MeshProperties));
-		for (int y = 0; y < MeshList[x]->ChildMeshList.size(); y++)
-		{
-			
-		}
 	}
 
 	ModelTransformMatrix = glm::mat4(1.0f);
@@ -150,10 +143,10 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 	ModelTransformMatrix = glm::rotate(ModelTransformMatrix, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransformMatrix = glm::scale(ModelTransformMatrix, ModelScale);
 
-	for (int x = 0; x < MeshList.size(); x++)
+	for (auto& mesh : MeshList)
 	{
-		UpdateNodeTransform(MeshList[x], nullptr, GameObjectTransformMatrix * ModelTransformMatrix, x);
-		MeshList[x]->Update(GameObjectTransformMatrix, ModelTransformMatrix);
+		UpdateNodeTransform(mesh, nullptr, GameObjectTransformMatrix * ModelTransformMatrix);
+		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
 }
 
@@ -215,16 +208,22 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shad
 	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		for (auto& primitve : mesh->PrimitiveList)
+		for (auto& node : mesh->ChildMeshList)
 		{
-			if (primitve.IndexCount > 0)
+			if (node->Visible)
 			{
-				SceneManager::sceneProperites.MeshIndex = 0;
-				SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+				for (auto& primitve : node->PrimitiveList)
+				{
+					if (primitve.IndexCount > 0)
+					{
+						SceneManager::sceneProperites.MeshIndex = node->NodeID;
+						SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
-				vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[0], 0, nullptr);
-				vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-				vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
+						vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[node->NodeID], 0, nullptr);
+						vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+						vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
+					}
+				}
 			}
 		}
 	}

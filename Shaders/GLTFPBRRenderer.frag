@@ -109,9 +109,9 @@ void main()
     Vertex vertex = RasterVertexBuilder();
     const vec3 Albedo = texture(AlbedoMap, vertex.UV).rgb;
 	const vec3 Normal = texture(NormalMap, vertex.UV).rgb;
-	const float Metalic = texture(MetallicRoughnessMap, vertex.UV).g;
-	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).b;
-	const float AmbientOcclusion = texture(AmbientOcclusionMap, vertex.UV).r;
+	const float Metalic = texture(MetallicRoughnessMap, vertex.UV).b;
+	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
+	const float AmbientOcclusion = texture(MetallicRoughnessMap, vertex.UV).r;
     const float Depth = texture(DepthMap, vertex.UV).r;
 	const float Alpha = texture(AlphaMap, vertex.UV).r;
 	const vec2 BRDF = texture(BRDFMap, vertex.UV).rg;

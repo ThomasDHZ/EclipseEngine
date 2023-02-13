@@ -83,7 +83,12 @@ artifacts/
 *.lxo
 *.wav
 *.blend
-
+*.md
+*.xcf
+*.max
+*.gltf
+*.gif
+*.glsl
 
 # Chutzpah Test files
 _Chutzpah*

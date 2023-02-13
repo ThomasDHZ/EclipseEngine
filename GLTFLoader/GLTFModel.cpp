@@ -296,6 +296,7 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 
 	std::shared_ptr<GLTFNode> gltfNode = std::make_shared<GLTFNode>();
 	gltfNode->NodeName = node.name;
+	gltfNode->Material = data.MaterialList[index];
 	gltfNode->NodeID = index;
 	if (parentNode)
 	{
@@ -376,6 +377,12 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 					TangantBuffer = reinterpret_cast<const float*>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
 				}
 
+				if (glTFPrimitive.attributes.find("TANGENT") != glTFPrimitive.attributes.end()) {
+					const tinygltf::Accessor& accessor = model.accessors[glTFPrimitive.attributes.find("TANGENT")->second];
+					const tinygltf::BufferView& view = model.bufferViews[accessor.bufferView];
+					TangantBuffer = reinterpret_cast<const float*>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
+				}
+
 				for (uint32_t x = 0; x < VertexCount; x++)
 				{
 					GLTFVertex vertex;
@@ -439,8 +446,6 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 				primitive.IndexCount = IndexCount;
 				primitive.material = glTFPrimitive.material;
 				gltfNode->PrimitiveList.emplace_back(primitive);
-
-				gltfNode->Material = data.MaterialList[glTFPrimitive.material];
 			}
 		}
 	}
