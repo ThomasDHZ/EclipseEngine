@@ -20,7 +20,6 @@ void PBRRenderer::BuildRenderer()
 	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
-	gLTFRenderPass.BuildRenderPass(model);
 
 	model = GLTF_Temp_Model("C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf", glm::mat4(1.0f), 0);
 
@@ -71,5 +70,12 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 void PBRRenderer::Destroy()
 {
-	frameBufferRenderPass.Destroy();
+	 environmentToCubeRenderPass.Destroy();
+	 GLTF_BRDFRenderPass.Destroy();
+	 irradianceRenderPass.Destroy();
+	 prefilterRenderPass.Destroy();
+	 gLTFRenderPass.Destroy();
+	 frameBufferRenderPass.Destroy();
+
+	 model.Destroy();
 }

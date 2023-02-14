@@ -43,15 +43,7 @@ private:
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
-	VulkanBuffer VertexBuffer;
-	VulkanBuffer IndexBuffer;
-	VulkanBuffer TransformBuffer;
-
 	std::shared_ptr<GLTFMaterial> gltfMaterial;
-
-	MeshProperties meshProperties;
-	
-
 public:
 	Temp_GLTFMesh();
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);
@@ -66,11 +58,22 @@ public:
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 
-	VulkanBuffer MeshPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+	MeshProperties meshProperties;
 
+	std::vector<VulkanBuffer> MeshTransformBufferList;
+	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
+	VulkanBuffer MeshPropertiesBuffer;
+	std::vector<glm::mat4> TransformMatrixList;
+	std::vector<VkDescriptorSet> descripterSetList;
+
+	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, std::vector<VkDescriptorSet> descripterSetList);
+	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
+	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
+
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; }
 };

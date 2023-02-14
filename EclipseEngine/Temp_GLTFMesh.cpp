@@ -32,19 +32,58 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	MeshRotation = meshLoader.node->Rotation;
 	MeshScale = meshLoader.node->Scale;
 
-	TransformBuffer = meshLoader.node->TransformBuffer;
-	
 	gltfMaterial = meshLoader.node->Material;
 
 	MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	glm::mat4 matrix = glm::mat4(1.0f);
+	TransformMatrixList.emplace_back(matrix);
+
+	VulkanBuffer TransformBuffer = meshLoader.node->TransformBuffer;
+	TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	MeshTransformBufferList.emplace_back(TransformBuffer);
+
+	for (auto& childMesh : ChildMeshList)
+	{
+		glm::mat4 matrix = glm::mat4(1.0f);
+		TransformMatrixList.emplace_back(matrix);
+
+		VulkanBuffer TransformBuffer;
+		TransformBuffer.CreateBuffer(&matrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		MeshTransformBufferList.emplace_back(TransformBuffer);
+	}
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
 {
 }
 
+void Temp_GLTFMesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix)
+{
+	glm::mat4 GlobalTransform = ParentMatrix * glm::mat4(1.0f);
+	if (node == nullptr)
+	{
+		MeshTransformBufferList[0].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+	}
+	else
+	{
+		GlobalTransform = ParentMatrix * node->NodeTransformMatrix;
+		MeshTransformBufferList[node->NodeID].CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+	}
+
+	if (node == nullptr)
+	{
+
+		for (int x = 0; x < ChildMeshList.size() - 1; x++)
+		{
+			UpdateNodeTransform(ChildMeshList[x + 1], GlobalTransform);
+		}
+	}
+}
+
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix);
 	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
 
 	//GameObjectTransformMatrix = GameObjectMatrix;
@@ -145,7 +184,23 @@ VkDescriptorBufferInfo Temp_GLTFMesh::UpdateMeshPropertiesBuffer()
 	return MeshPropertiesmBufferInfo;
 }
 
-void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, std::vector<VkDescriptorSet> descripterSetList)
+std::vector<VkDescriptorBufferInfo> Temp_GLTFMesh::UpdateMeshTransformBuffer()
+{
+	std::vector<VkDescriptorBufferInfo> TransformDescriptorList;
+	for (auto transformMatrix : MeshTransformBufferList)
+	{
+		VkDescriptorBufferInfo transformMatrixPropertiesBufferInfo = {};
+		transformMatrixPropertiesBufferInfo.buffer = transformMatrix.GetBuffer();
+		transformMatrixPropertiesBufferInfo.offset = 0;
+		transformMatrixPropertiesBufferInfo.range = VK_WHOLE_SIZE;
+		TransformDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
+	}
+	TransformMatrixBuffer = TransformDescriptorList;
+	return TransformMatrixBuffer;
+}
+
+
+void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
 	for (auto& node : ChildMeshList)
 	{
@@ -169,21 +224,9 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 
 void Temp_GLTFMesh::Destroy()
 {
-	//Mesh::Destroy();
-	//if (TransformBuffer.Buffer != nullptr)
-	//{
-	//	TransformBuffer.DestoryBuffer();
-	//}
-	//if (TransformInverseBuffer.Buffer != nullptr)
-	//{
-	//	TransformInverseBuffer.DestoryBuffer();
-	//}
-	//if (BoneTransformBuffer.Buffer != nullptr)
-	//{
-	//	BoneTransformBuffer.DestoryBuffer();
-	//}
-	//if (BoneWeightBuffer.Buffer != nullptr)
-	//{
-	//	BoneWeightBuffer.DestoryBuffer();
-	//}
+	MeshPropertiesBuffer.DestoryBuffer();
+	for (auto& transformBuffer : MeshTransformBufferList)
+	{
+		transformBuffer.DestoryBuffer();
+	}
 }

@@ -296,7 +296,10 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 
 	std::shared_ptr<GLTFNode> gltfNode = std::make_shared<GLTFNode>();
 	gltfNode->NodeName = node.name;
-	gltfNode->Material = data.MaterialList[index];
+	if (data.MaterialList.size() > 1)
+	{
+		gltfNode->Material = data.MaterialList[index];
+	}
 	gltfNode->NodeID = index;
 	if (parentNode)
 	{
