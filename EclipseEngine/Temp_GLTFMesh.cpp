@@ -73,10 +73,12 @@ void Temp_GLTFMesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const gl
 
 	if (node == nullptr)
 	{
-
-		for (int x = 0; x < ChildMeshList.size() - 1; x++)
+		if (ChildMeshList.size() > 0)
 		{
-			UpdateNodeTransform(ChildMeshList[x + 1], GlobalTransform);
+			for (int x = 0; x < ChildMeshList.size() - 1; x++)
+			{
+				UpdateNodeTransform(ChildMeshList[x + 1], GlobalTransform);
+			}
 		}
 	}
 }
@@ -202,9 +204,9 @@ std::vector<VkDescriptorBufferInfo> Temp_GLTFMesh::UpdateMeshTransformBuffer()
 
 void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
-	for (auto& node : ChildMeshList)
+	if (ChildMeshList.size() > 0)
 	{
-		if (node->Visible)
+		for (auto& node : ChildMeshList)
 		{
 			for (auto& primitve : node->PrimitiveList)
 			{
@@ -217,6 +219,21 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 					vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
 					vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 				}
+			}
+		}
+	}
+	else
+	{
+		for (auto& primitve : PrimitiveList)
+		{
+			if (primitve.IndexCount > 0)
+			{
+				SceneManager::sceneProperites.MeshIndex = 0;
+				//SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+
+				vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[0], 0, nullptr);
+				vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+				vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 			}
 		}
 	}

@@ -23,10 +23,6 @@ void PBRRenderer::BuildRenderer()
 
 	model = GLTF_Temp_Model("C:/Users/dotha/Desktop/Vulkan-master/Vulkan/data/models/FlightHelmet/glTF/FlightHelmet.gltf", glm::mat4(1.0f), 0);
 
-	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
-	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
