@@ -85,7 +85,14 @@ void Temp_GLTFMesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const gl
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix);
+	glm::mat4 TransformMatrix = glm::mat4(1.0f);
+	TransformMatrix = glm::translate(TransformMatrix, MeshPosition);
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	TransformMatrix = glm::rotate(TransformMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	TransformMatrix = glm::scale(TransformMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * TransformMatrix);
 	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
 
 	//GameObjectTransformMatrix = GameObjectMatrix;
