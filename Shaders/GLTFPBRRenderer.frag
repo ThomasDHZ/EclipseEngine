@@ -107,11 +107,11 @@ vec2 ParallaxMapping(vec2 UV, vec3 viewDir);
 void main()
 { 
     Vertex vertex = RasterVertexBuilder();
-    const vec3 Albedo = texture(AlbedoMap, vertex.UV).rgb;
+    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
 	const vec3 Normal = texture(NormalMap, vertex.UV).rgb;
 	const float Metalic = texture(MetallicRoughnessMap, vertex.UV).b;
 	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-	const float AmbientOcclusion = texture(MetallicRoughnessMap, vertex.UV).r;
+	const float AmbientOcclusion = texture(AmbientOcclusionMap, vertex.UV).r;
     const float Depth = texture(DepthMap, vertex.UV).r;
 	const float Alpha = texture(AlphaMap, vertex.UV).r;
 	const vec2 BRDF = texture(BRDFMap, vertex.UV).rg;
@@ -122,10 +122,7 @@ void main()
    vec3 ViewPos  = sceneData.CameraPos;
    vec3 FragPos2  = vertex.Position;
    vec3 viewDir = normalize(ViewPos - FragPos2);
-   if (Normal.r == 0.0f &&
-       Normal.g == 0.0f &&
-       Normal.b == 0.0f)
-   {
+  
         ViewPos  = TBN * sceneData.CameraPos;
         FragPos2  = TBN * vertex.Position;
 
@@ -140,7 +137,7 @@ void main()
         N = Normal;
         N = normalize(N * 2.0 - 1.0);
         N = normalize(TBN * N);
-   }
+   
 
     vec3 V = normalize(sceneData.CameraPos - vertex.Position);
     vec3 R = reflect(-V, N); 
@@ -149,9 +146,31 @@ void main()
     F0 = mix(F0, Albedo, Metalic);
 
     vec3 Lo = vec3(0.0);
-    Lo += CalcDirectionalLight(F0, V, N, vertex);
-    Lo += CalcPointLight(F0, V, N, vertex);
-    Lo += CalcSpotLight(F0, V, N, vertex);
+    for (int x = 0; x < sceneData.DirectionalLightCount; x++)
+    {
+        vec3 L = normalize(-DLight[x].directionalLight.direction);
+        vec3 H = normalize(V + L);
+        vec3 radiance = DLight[x].directionalLight.diffuse;
+
+        float NDF = DistributionGGX(N, H, Roughness);
+        float G = GeometrySmith(N, V, L, Roughness);
+        vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+
+        vec3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular = numerator / denominator;
+
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - Metalic;
+
+        float NdotL = max(dot(N, L), 0.0);
+
+        //vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+       // float shadow = filterPCF(LightSpace / LightSpace.w, x);
+
+        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
+    }
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, Roughness);
     vec3 kS = F;
@@ -171,10 +190,6 @@ void main()
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
 
-    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
-    {
-        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
-    }
     outColor = vec4(color, 1.0f);	
 }
 
@@ -225,7 +240,7 @@ mat3 getTBNFromMap(Vertex vertex)
 
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 {
-    const vec3 Albedo = texture(AlbedoMap, vertex.UV).rgb;
+    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
     const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
 	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
 
@@ -260,7 +275,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 {
-    const vec3 Albedo = texture(AlbedoMap, vertex.UV).rgb;
+    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
     const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
 	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
 
@@ -296,7 +311,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 
 vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 {
-    const vec3 Albedo = texture(AlbedoMap, vertex.UV).rgb;
+   const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
     const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
 	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
 

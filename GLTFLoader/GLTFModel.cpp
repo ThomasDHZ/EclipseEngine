@@ -380,12 +380,6 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 					TangantBuffer = reinterpret_cast<const float*>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
 				}
 
-				if (glTFPrimitive.attributes.find("TANGENT") != glTFPrimitive.attributes.end()) {
-					const tinygltf::Accessor& accessor = model.accessors[glTFPrimitive.attributes.find("TANGENT")->second];
-					const tinygltf::BufferView& view = model.bufferViews[accessor.bufferView];
-					TangantBuffer = reinterpret_cast<const float*>(&(model.buffers[view.buffer].data[accessor.byteOffset + view.byteOffset]));
-				}
-
 				for (uint32_t x = 0; x < VertexCount; x++)
 				{
 					GLTFVertex vertex;
@@ -394,6 +388,8 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 					vertex.UV = UVBuffer ? glm::make_vec2(&UVBuffer[x * 2]) : glm::vec3(0.0f);
 					vertex.Color = ColorBuffer ? glm::make_vec4(&ColorBuffer[x * 4]) : glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
 					vertex.Tangant = TangantBuffer ? glm::make_vec4(&TangantBuffer[x * 4]) : glm::vec4(0.0f);
+					vertex.BiTangant = cross(vertex.Normal, glm::vec3(vertex.Tangant.x, vertex.Tangant.y, vertex.Tangant.z)) * vertex.Tangant.w;
+
 					VertexList.emplace_back(vertex);
 				}
 			}
