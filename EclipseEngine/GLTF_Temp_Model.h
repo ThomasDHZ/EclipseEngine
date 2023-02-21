@@ -31,11 +31,11 @@ private:
 	glm::mat4 GameObjectTransformMatrix;
 	glm::mat4 ModelTransformMatrix;
 
-	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
+
 	std::vector<VkDescriptorSet> descripterSetList;
 	void GenerateID();
 public:
-
+	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
 	glm::vec3 ModelPosition = glm::vec3(0.0f);
 	glm::vec3 ModelRotation = glm::vec3(0.0f);
 	glm::vec3 ModelScale = glm::vec3(1.0f);

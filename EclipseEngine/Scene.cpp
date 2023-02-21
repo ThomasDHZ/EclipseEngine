@@ -152,12 +152,12 @@ Scene::Scene()
     //e->GameObjectPosition = glm::vec3(-10.0f, 0.0f, 0.0f);
     //GameObjectManager::AddGameObject(e);
 
-    ModelLoader loader2{};
-    loader2.FilePath = "../Models/Sponza/sponza.obj";
-    loader2.MeshType = MeshTypeEnum::kPolygon;
+    //ModelLoader loader2{};
+    //loader2.FilePath = "../Models/Sponza/sponza.obj";
+    //loader2.MeshType = MeshTypeEnum::kPolygon;
 
-    auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
-    GameObjectManager::AddGameObject(b);
+    //auto b = std::make_shared<ModelRenderer>(ModelRenderer("sponza", loader2));
+    //GameObjectManager::AddGameObject(b);
 
     //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
     //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");

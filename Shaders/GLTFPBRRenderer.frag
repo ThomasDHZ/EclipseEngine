@@ -108,87 +108,67 @@ void main()
 { 
     Vertex vertex = RasterVertexBuilder();
     const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
-	const vec3 Normal = texture(NormalMap, vertex.UV).rgb;
-	const float Metalic = texture(MetallicRoughnessMap, vertex.UV).b;
+	const float Metallic = texture(MetallicRoughnessMap, vertex.UV).b;
 	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-	const float AmbientOcclusion = texture(AmbientOcclusionMap, vertex.UV).r;
+	const float AmbientOcclusion = 1.0f;
     const float Depth = texture(DepthMap, vertex.UV).r;
 	const float Alpha = texture(AlphaMap, vertex.UV).r;
-	const vec2 BRDF = texture(BRDFMap, vertex.UV).rg;
 
-   mat3 TBN = getTBNFromMap(vertex);
-   vec3 N = vertex.Normal;
-
-   vec3 ViewPos  = sceneData.CameraPos;
-   vec3 FragPos2  = vertex.Position;
-   vec3 viewDir = normalize(ViewPos - FragPos2);
-  
-        ViewPos  = TBN * sceneData.CameraPos;
-        FragPos2  = TBN * vertex.Position;
-
-          if (Depth == 0.0f)
-           {
-            vertex.UV = ParallaxMapping(vertex.UV,  viewDir);       
-            if(vertex.UV.x > 1.0 || vertex.UV.y > 1.0 || vertex.UV.x < 0.0 || vertex.UV.y < 0.0)
-            {
-              discard;
-            }
-        }
-        N = Normal;
-        N = normalize(N * 2.0 - 1.0);
-        N = normalize(TBN * N);
-   
-
+    mat3 TBN = getTBNFromMap(vertex);
+    vec3 N = vertex.Normal;
     vec3 V = normalize(sceneData.CameraPos - vertex.Position);
     vec3 R = reflect(-V, N); 
 
-    vec3 F0 = vec3(0.04f); 
-    F0 = mix(F0, Albedo, Metalic);
+    vec3 ViewPos  = TBN * sceneData.CameraPos;
+    vec3 vertexPos  = TBN * vertex.Position;
+    V = normalize(ViewPos - vertexPos);
 
+//        if(pbrMaterial.DepthMapID != 0)
+//        {
+//            vertex.UV = ParallaxMapping(material.DepthMapID, vertex.UV,  viewDir);       
+//            if(vertex.UV.x > 1.0 || vertex.UV.y > 1.0 || vertex.UV.x < 0.0 || vertex.UV.y < 0.0)
+//            {
+//              discard;
+//            }
+//        }
+    N = texture(NormalMap, vertex.UV).rgb;
+    N = normalize(N * 2.0 - 1.0);
+    N = normalize(TBN * N);
+   
+
+    // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
+    // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
+    vec3 F0 = vec3(0.04); 
+    F0 = mix(F0, Albedo, Metallic);
+
+    // reflectance equation
     vec3 Lo = vec3(0.0);
-    for (int x = 0; x < sceneData.DirectionalLightCount; x++)
-    {
-        vec3 L = normalize(-DLight[x].directionalLight.direction);
-        vec3 H = normalize(V + L);
-        vec3 radiance = DLight[x].directionalLight.diffuse;
-
-        float NDF = DistributionGGX(N, H, Roughness);
-        float G = GeometrySmith(N, V, L, Roughness);
-        vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
-
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - Metalic;
-
-        float NdotL = max(dot(N, L), 0.0);
-
-        //vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-       // float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
-    }
-
+    Lo += CalcDirectionalLight(F0, V, N, vertex);
+    
+    // ambient lighting (we now use IBL as the ambient term)
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, Roughness);
+    
     vec3 kS = F;
     vec3 kD = 1.0 - kS;
-    kD *= 1.0 - Metalic;	  
+    kD *= 1.0 - Metallic;	  
     
     vec3 irradiance = texture(IrradianceMap, N).rgb;
-    vec3 diffuse    = irradiance * Albedo;
-
-    vec3 prefilteredColor = textureLod(PrefilterMap, R, Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 diffuse      = irradiance * Albedo;
+    
+    // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilteredColor = textureLod(PrefilterMap, R,  Roughness * MAX_REFLECTION_LOD).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-    vec3 ambient = ((kD * diffuse + specular) * AmbientOcclusion);
+    vec3 ambient = (kD * diffuse + specular) * AmbientOcclusion;
     
     vec3 color = ambient + Lo;
-    color = color / (color + vec3(1.0f));
-    color = pow(color, vec3(1.0f/2.2f)); 
+
+    // HDR tonemapping
+    color = color / (color + vec3(1.0));
+    // gamma correct
+    color = pow(color, vec3(1.0/2.2)); 
 
     outColor = vec4(color, 1.0f);	
 }

@@ -21,7 +21,7 @@ void PBRRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	model = GLTF_Temp_Model("C:/Users/dotha/source/repos/EclipseEngine/Models/gltfShield/hyruleshield_low.gltf", glm::mat4(1.0f), 0);
+	model = GLTF_Temp_Model("C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf", glm::mat4(1.0f), 0);
 
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
@@ -34,6 +34,9 @@ void PBRRenderer::Update()
 
 void PBRRenderer::ImGuiUpdate()
 {
+	ImGui::SliderFloat3("Position ", &model.MeshList[0]->MeshPosition.x, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Rotation ", &model.MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
+	ImGui::SliderFloat3("Scale ", &model.MeshList[0]->MeshScale.x, 0.0f, 1.0f);
 	if (SceneManager::EditorModeFlag)
 	{
 		if (ImGui::Button("Play Mode"))
