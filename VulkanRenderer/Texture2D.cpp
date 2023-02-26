@@ -4,18 +4,19 @@ Texture2D::Texture2D()
 {
 }
 
-Texture2D::Texture2D(const TinyGltfTextureLoader& textureLoader, const TinyGltfTextureSamplerLoader& samplerLoader, VkFormat format, TextureTypeEnum textureType) : Texture(textureLoader, format, textureType)
-{
-	Depth = 1;
-	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	SampleCount = VK_SAMPLE_COUNT_1_BIT;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
-
-	CreateTextureView(format);
-	CreateTextureSampler();
-
-	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-}
+//Texture2D::Texture2D(nlohmann::json& json) : Texture(json)
+//{
+//	Depth = 1;
+//	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+//	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+//	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+//
+//	CreateTextureView(StartTextureByteFormat);
+//	CreateTextureSampler();
+//
+//	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+//
+//}
 
 Texture2D::Texture2D(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType) : Texture(ClearColor, Resolution, format, textureType)
 {
@@ -32,6 +33,19 @@ Texture2D::Texture2D(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFo
 
 
 Texture2D::Texture2D(const std::string TextureLocation, TextureTypeEnum textureType, VkFormat format) : Texture(TextureLocation, textureType, format)
+{
+	Depth = 1;
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
+
+	CreateTextureView(format);
+	CreateTextureSampler();
+
+	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+}
+
+Texture2D::Texture2D(const TinyGltfTextureLoader& textureLoader, const TinyGltfTextureSamplerLoader& samplerLoader, VkFormat format, TextureTypeEnum textureType) : Texture(textureLoader, format, textureType)
 {
 	Depth = 1;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;

@@ -304,7 +304,6 @@
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="WireFramePipeline.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -451,7 +450,6 @@
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WireFramePipeline.h" />

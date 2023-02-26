@@ -1,10 +1,10 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <Texture2D.h>
-#include <CubeMapTexture.h>
-#include <EnvironmentTexture.h>
-#include <TextureAtlus.h>
+#include "Texture2D.h"
+#include "CubeMapTexture.h"
+#include "EnvironmentTexture.h"
+#include "TextureAtlus.h"
 
 class TextureManager
 {
@@ -34,7 +34,7 @@ private:
 		}
 	}
 
-public: 
+public:
 	static std::shared_ptr<EnvironmentTexture> EnvironmentTexture;
 
 	static void StartUp()

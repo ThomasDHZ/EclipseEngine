@@ -132,12 +132,12 @@ Scene::Scene()
  //
     SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-    //ModelLoader loader{};
-    //loader.FilePath = "../Models/TestAnimModel/model.dae";
-    //loader.MeshType = MeshTypeEnum::kPolygon;
+    ModelLoader loader{};
+    loader.FilePath = "../Models/TestAnimModel/model.dae";
+    loader.MeshType = MeshTypeEnum::kPolygon;
 
-    //auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-    //GameObjectManager::AddGameObject(a);
+    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+    GameObjectManager::AddGameObject(a);
 
 
     //auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
@@ -231,7 +231,7 @@ Scene::Scene()
 //    //source.Play(sound);
 //
     {
-        //std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
+        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
         //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
         //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
         //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");

@@ -1,6 +1,8 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "ImGui/imgui_impl_vulkan.h"
+#include "stb_image.h"
+#include "JsonConverter.h"
 #include "Pixel.h"
 
 enum TextureTypeEnum
@@ -99,10 +101,10 @@ public:
     Texture(const std::vector<Pixel> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);
     Texture(const std::vector<glm::vec4> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);
     Texture(TextureTypeEnum textureType);
+    Texture(nlohmann::json& json);
     Texture(std::string TextureLocation, TextureTypeEnum textureType, VkFormat format);
 
     ~Texture();
-
     void UpdateImageLayout(VkImageLayout newImageLayout);
     void UpdateImageLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
@@ -168,5 +170,21 @@ public:
     int GetWidth() { return Width; }
     int GetHeight() { return Height; }
     int GetDepth() { return Depth; }
-};
 
+
+    void to_json(nlohmann::json& json)
+    {
+        JsonConverter::to_json(json["FilePath"], FilePath);
+        JsonConverter::to_json(json["TextureName"], TextureName);
+        JsonConverter::to_json(json["Width"], Width);
+        JsonConverter::to_json(json["Height"], Height);
+        JsonConverter::to_json(json["Depth"], Depth);
+        JsonConverter::to_json(json["MipMapLevels"], MipMapLevels);
+        JsonConverter::to_json(json["SampleCount"], SampleCount);
+        JsonConverter::to_json(json["TextureType"], TextureType);
+        JsonConverter::to_json(json["StartTextureByteFormat"], StartTextureByteFormat);
+        JsonConverter::to_json(json["TextureByteFormat"], TextureByteFormat);
+        JsonConverter::to_json(json["TextureImageLayout"], TextureImageLayout);
+    }
+
+};

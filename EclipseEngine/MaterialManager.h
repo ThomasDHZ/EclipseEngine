@@ -8,7 +8,7 @@
 
 class MaterialManager
 {
-private: 
+private:
 	static std::shared_ptr<Material> DefaultMaterial;
 	static std::vector<std::shared_ptr<Material>> MaterialList;
 
@@ -59,7 +59,7 @@ public:
 
 	static uint64_t AddMaterial(std::shared_ptr<Material> material)
 	{
-	    uint64_t materialID = DoesMaterialExist(material);
+		uint64_t materialID = DoesMaterialExist(material);
 		{
 			MaterialList.emplace_back(material);
 		}
@@ -67,6 +67,20 @@ public:
 		UpdateBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return materialID;
+	}
+
+	static void AddMaterial(const nlohmann::json& json)
+	{
+		//uint64_t materialID = DoesMaterialExist(material);
+		//{
+		//	MaterialList.emplace_back(material);
+		//}
+
+		std::shared_ptr<Material> material = Material::from_json(json["Material"]);
+		MaterialList.emplace_back(material);
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	static std::vector<VkDescriptorBufferInfo>  GetMaterialBufferList()
@@ -121,6 +135,65 @@ public:
 			}
 		}
 		return 0;
+	}
+
+	static void LoadMaterials(nlohmann::json& json)
+	{
+		auto a = json["MaterialList"].size();
+		for (int x = 0; x < json["MaterialList"].size(); x++)
+		{
+			std::shared_ptr<Material> material = std::make_shared<Material>(Material(json.at("MaterialList")[x]));
+			MaterialList.emplace_back(material);
+		}
+
+		UpdateBufferIndex();
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
+	static nlohmann::json SaveMaterials()
+	{
+		nlohmann::json json;
+		for (int x = 0; x < MaterialList.size(); x++)
+		{
+			MaterialList[x]->to_json(json[x]);
+		}
+		return json;
+	}
+
+	static std::shared_ptr<Material> LoadMaterial(const std::string FilePath)
+	{
+		std::string SceneInfo;
+		std::ifstream SceneFile;
+		SceneFile.open(FilePath);
+		if (SceneFile.is_open())
+		{
+			while (!SceneFile.eof())
+			{
+				getline(SceneFile, SceneInfo);
+			}
+		}
+		else std::cout << "Unable to open file";
+		SceneFile.close();
+
+		nlohmann::json jsonstring = nlohmann::json::parse(SceneInfo);
+		AddMaterial(jsonstring);
+
+		return MaterialList.back();;
+	}
+
+	static void SaveMaterial(std::shared_ptr<Material> material)
+	{
+		nlohmann::json json;
+
+		material->to_json(json["Material"]);
+
+		std::ofstream SaveFile("../Materials/" + material->GetMaterialName() + ".txt");
+		if (SaveFile.is_open())
+		{
+			SaveFile << json;
+			SaveFile.close();
+		}
+		else std::cout << "Unable to open file";
 	}
 
 	static void Destroy()
