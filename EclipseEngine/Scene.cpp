@@ -130,14 +130,14 @@ Scene::Scene()
  //    cubeMapfiles.Back = "../texture/skybox/front.jpg";
  //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
  //
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
     ModelLoader loader{};
     loader.FilePath = "../Models/TestAnimModel/model.dae";
     loader.MeshType = MeshTypeEnum::kPolygon;
 
-    auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
-    GameObjectManager::AddGameObject(a);
+    //auto a = std::make_shared<ModelRenderer>(ModelRenderer("ani", loader));
+    //GameObjectManager::AddGameObject(a);
 
 
     //auto c= std::make_shared<ModelRenderer>(ModelRenderer("ani2", loader));
@@ -231,21 +231,24 @@ Scene::Scene()
 //    //source.Play(sound);
 //
     {
-        std::shared_ptr<Material> IronmMaterial = MaterialManager::LoadMaterial("../Materials/IronMaterial.txt");
-        //std::shared_ptr<Material> PlasticMaterial = MaterialManager::LoadMaterial("../Materials/PlasticMaterial.txt");
-        //std::shared_ptr<Material> WallMaterial = MaterialManager::LoadMaterial("../Materials/WallMaterial.txt");
-        //std::shared_ptr<Material> GoldMaterial = MaterialManager::LoadMaterial("../Materials/GoldMaterial.txt");
-        //std::shared_ptr<Material> GrassMaterial = MaterialManager::LoadMaterial("../Materials/GrassMaterial.txt");
 
-       // ModelLoader loader1{};
-       // loader1.FilePath = "../Models/sphere.obj";
-       // loader1.MeshType = MeshTypeEnum::kPolygon;
+        std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Iron", MaterialTypeEnum::kMaterialPBR));
+        material3->LoadAlbedoMap("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png");
+        material3->LoadMetallicMap("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png");
+        material3->LoadNormalMap("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png");
+        material3->LoadRoughnessMap("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png");
+        material3->LoadAmbientOcclusionMap("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png");
+        MaterialManager::AddMaterial(material3);
 
-       // auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
-       //// obj->GetModel()->GetMeshList()[0]->SetMaterial(IronmMaterial);
-       // obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
-       // obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
-       // GameObjectManager::AddGameObject(obj);
+        ModelLoader loader1{};
+        loader1.FilePath = "../Models/sphere.obj";
+        loader1.MeshType = MeshTypeEnum::kPolygon;
+
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
+        obj->GetModel()->GetMeshList()[0]->SetMaterial(material3);
+        obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
+        obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
+        GameObjectManager::AddGameObject(obj);
 
        // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
        //// obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);
