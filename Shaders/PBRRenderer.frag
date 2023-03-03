@@ -11,7 +11,24 @@ layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 
-#include "PBRBindingLayout.glsl"
+#include "VertexLayout.glsl"
+#include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
+#include "Lights.glsl"
+#include "SceneData.glsl"
+
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 2) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 3) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 4) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 5) uniform sampler2D TextureMap[];
+layout(binding = 6) uniform samplerCube IrradianceMap[];
+layout(binding = 7) uniform samplerCube PrefilterMap[];
+layout(binding = 8) uniform sampler2D BRDFMap;
+layout(binding = 9) uniform sampler2D ShadowMap[];
+layout(binding = 10) uniform samplerCube PointShadowMap[];
+
 #include "PBRMaterial.glsl"
 #include "PBRFunctions.glsl"
 #include "PBRLight.glsl"
@@ -65,10 +82,10 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - pbrMaterial.Metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], N).rgb;
+    vec3 irradiance = texture(IrradianceMap[0], N).rgb;
     vec3 diffuse      = irradiance * pbrMaterial.Albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  pbrMaterial.Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap[0], R,  pbrMaterial.Roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), pbrMaterial.Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
