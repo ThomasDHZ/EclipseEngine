@@ -28,6 +28,7 @@
 #include "PBRRealTimeRenderer.h"
 #include "RayTracePBRRenderer.h"
 #include "ParticleSystem.h"
+#include "GLTFRenderer.h"
 
 class Scene
 {
@@ -35,7 +36,8 @@ private:
 	Renderer2D renderer2D;
 	BlinnPhongRenderer blinnPhongRenderer;
 	HybridRenderer hybridRenderer;
-	PBRRenderer pbrRenderer;
+	GLTFRenderer pbrRenderer;
+	//GLTFRenderer gltfRenderer;
 	//PBRRealTimeRenderer pbrRenderer;
 	RayTraceRenderer rayTraceRenderer;
 	RayTracePBRRenderer rayTracePBRRenderer;

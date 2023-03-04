@@ -244,7 +244,7 @@ Scene::Scene()
         loader1.FilePath = "../Models/sphere.obj";
         loader1.MeshType = MeshTypeEnum::kPolygon;
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(-6.0f, 0.0f, 0.0f)));
+        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(0.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(material3);
         obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
@@ -416,7 +416,8 @@ void Scene::Update()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                     rayTracePBRRenderer.Update();
+                   // gltfRenderer.Update();
+                    // rayTracePBRRenderer.Update();
                 }
                 else
                 {
@@ -477,7 +478,8 @@ void Scene::ImGuiUpdate()
         {
             if (SceneManager::IsRayTracerActive())
             {
-                rayTracePBRRenderer.ImGuiUpdate();
+                //gltfRenderer.ImGuiUpdate();
+                //ayTracePBRRenderer.ImGuiUpdate();
             }
             else
             {
@@ -552,7 +554,8 @@ void Scene::BuildRenderers()
             pbrRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-               rayTracePBRRenderer.BuildRenderer();
+                //gltfRenderer.BuildRenderer();
+               //rayTracePBRRenderer.BuildRenderer();
                //hybridRenderer.BuildRenderer();
             }
             break;
@@ -609,7 +612,8 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                  rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                    //gltfRenderer.Draw(CommandBufferSubmitList);
+                //  rayTracePBRRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else
                 {
@@ -661,7 +665,8 @@ void Scene::Destroy()
             pbrRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-              rayTracePBRRenderer.Destroy();
+                //gltfRenderer.Destroy();
+            //  rayTracePBRRenderer.Destroy();
             }
             break;
         }

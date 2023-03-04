@@ -92,7 +92,7 @@ public:
 	{
 		GameObjectManager::Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		MeshRendererManager::Update();
-		TopLevelAccelerationStructureManager::Update();
+		//TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
 		activeCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());

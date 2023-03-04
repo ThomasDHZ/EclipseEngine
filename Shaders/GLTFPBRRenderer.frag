@@ -11,10 +11,129 @@ layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 
-#include "VertexLayout.glsl"
-#include "MeshProperties.glsl"
-#include "SceneData.glsl"
-#include "Lights.glsl"
+struct Vertex
+{
+	vec3 Position;
+	float PositionPadding;
+	vec3 Normal;
+	float NormalPadding;
+	vec2 UV;
+	vec2 UVPadding;
+	vec3 Tangant;
+	float TangantPadding;
+	vec3 BiTangant;
+	float BiTangentPadding;
+	vec3 Color;
+	float ColorPadding;
+};
+
+struct MeshProperties
+{
+	uint VertexBufferIndex;
+	uint IndexBufferIndex;
+	uint MaterialBufferIndex;
+	uint SkyBoxIndex;
+	mat4 MeshTransform;
+	vec2 UVOffset;
+	vec2 UVScale;
+	vec2 UVFlip;
+	int SelectedMesh;
+	float heightScale;
+	float minLayers;
+	float maxLayers;
+};
+
+struct MaterialProperties
+{
+	vec3 Ambient;
+	vec3 Diffuse;
+	vec3 Specular;
+	float Shininess;
+	float Reflectivness;
+
+	vec3 Albedo;
+	float Matallic;
+	float Roughness;
+	float AmbientOcclusion;
+	vec3 Emission;
+	float Alpha;
+
+	uint DiffuseMapID;
+	uint SpecularMapID;
+	uint AlbedoMapID;
+	uint MetallicMapID;
+	uint RoughnessMapID;
+	uint AmbientOcclusionMapID;
+	uint NormalMapID;
+	uint DepthMapID;
+	uint AlphaMapID;
+	uint EmissionMapID;
+};
+
+struct DirectionalLight
+{
+    vec3 position;
+    vec3 direction;
+    vec3 diffuse;
+    vec3 specular;
+    mat4 lightSpaceMatrix;
+};
+
+struct PointLight
+{
+    vec3 position;
+    vec3 diffuse;
+    vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
+    mat4 lightSpaceMatrix;
+};
+
+struct SpotLight
+{
+    vec3 position;
+    vec3 direction;
+    vec3 diffuse;
+    vec3 specular;
+
+    float cutOff;
+    float outerCutOff;
+    float constant;
+    float linear;
+    float quadratic;
+    mat4 lightSpaceMatrix;
+};
+
+layout(push_constant) uniform SceneData
+{
+    uint MeshIndex;
+    mat4 proj;
+    mat4 view;
+    vec3 CameraPos;
+    vec3 MeshColorID;
+    vec3 AmbientLight;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
+    float Timer;
+    float PBRMaxMipLevel;
+    uint frame;
+    int MaxRefeflectCount;
+} sceneData;
+
+struct PBRMaterial
+{
+	vec3 Albedo;
+	float Metallic;
+	float Roughness;
+	float AmbientOcclusion;
+	vec3 Emission;
+	float Alpha;
+
+	uint NormalMapID;
+	uint DepthMapID;
+};
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
@@ -31,9 +150,96 @@ layout(binding = 11) buffer DirectionalLightBuffer { DirectionalLight directiona
 layout(binding = 12) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 13) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
-#include "RasterVertexBuilder.glsl"
-
 const float PI = 3.14159265359;
+
+PBRMaterial BuildPBRMaterial(vec2 UV);
+float DistributionGGX(vec3 N, vec3 H, float roughness);
+float GeometrySchlickGGX(float NdotV, float roughness);
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
+mat3 getTBNFromMap(Vertex vertex);
+vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial);
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial);
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial);
+//vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir);
+Vertex RasterVertexBuilder();
+
+void main()
+{ 
+   Vertex vertex = RasterVertexBuilder();
+   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
+   PBRMaterial pbrMaterial = BuildPBRMaterial(vertex.UV);
+
+   mat3 TBN = getTBNFromMap(vertex);
+   vec3 N = vertex.Normal;
+
+   vec3 ViewPos  = sceneData.CameraPos;
+   vec3 FragPos2  = vertex.Position;
+   vec3 viewDir = normalize(ViewPos - FragPos2);
+//   if (pbrMaterial.NormalMapID != 0)
+//   {
+        ViewPos  = TBN * sceneData.CameraPos;
+        FragPos2  = TBN * vertex.Position;
+
+//        if(pbrMaterial.DepthMapID != 0)
+//        {
+//            vertex.UV = ParallaxMapping(vertex.UV,  viewDir);       
+//            if(vertex.UV.x > 1.0 || vertex.UV.y > 1.0 || vertex.UV.x < 0.0 || vertex.UV.y < 0.0)
+//            {
+//              discard;
+//            }
+//        }
+        N = texture(NormalMap, vertex.UV).rgb;
+        N = normalize(N * 2.0 - 1.0);
+        N = normalize(TBN * N);
+//   }
+
+    vec3 V = normalize(sceneData.CameraPos - vertex.Position);
+    vec3 R = reflect(-V, N); 
+
+    vec3 F0 = vec3(0.04f); 
+    F0 = mix(F0, pbrMaterial.Albedo, pbrMaterial.Metallic);
+
+    vec3 Lo = vec3(0.0);
+    Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
+    //Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
+    //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
+
+    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);
+    vec3 kS = F;
+    vec3 kD = 1.0 - kS;
+    kD *= 1.0 - pbrMaterial.Metallic;	  
+    
+    vec3 irradiance = texture(IrradianceMap, N).rgb;
+    vec3 diffuse      = irradiance * pbrMaterial.Albedo;
+
+    vec3 prefilteredColor = textureLod(PrefilterMap, R,  pbrMaterial.Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), pbrMaterial.Roughness)).rg;
+    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
+
+    vec3 ambient = ((kD * diffuse + specular) * pbrMaterial.AmbientOcclusion);
+    
+    vec3 color = ambient + Lo;
+    color = color / (color + vec3(1.0f));
+    color = pow(color, vec3(1.0f/2.2f)); 
+
+    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
+    {
+        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
+    }
+    outColor = vec4(color, 1.0f);
+}
+
+PBRMaterial BuildPBRMaterial(vec2 UV)
+{
+	PBRMaterial material;
+    material.Albedo = texture(AlbedoMap, UV).rgb;
+	material.Metallic = texture(MetallicRoughnessMap, UV).b;
+	material.Roughness = texture(MetallicRoughnessMap, UV).g;
+    material.AmbientOcclusion = 0.992f;
+	//material.Emission = texture(TextureMap[properties.EmissionMapID], UV).rgb;
+    return material;
+}
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -80,160 +286,27 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-const mat4 LightBiasMatrix = mat4(
-    0.5, 0.0, 0.0, 0.0,
-    0.0, 0.5, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    0.5, 0.5, 0.0, 1.0);
-
-vec3 gridSamplingDisk[20] = vec3[]
-(
-    vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
-    vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
-    vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
-    vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
-    vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
-    );
-
-//float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index);
-//float filterPCF(vec4 sc, int index);
-float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index);
-mat3 getTBNFromMap(Vertex vertex);
-vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, Vertex vertex);
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex);
-vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex);
-vec2 ParallaxMapping(vec2 UV, vec3 viewDir);
-
-void main()
-{ 
-    Vertex vertex = RasterVertexBuilder();
-    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
-	const float Metallic = texture(MetallicRoughnessMap, vertex.UV).b;
-	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-	const float AmbientOcclusion = 1.0f;
-    const float Depth = texture(DepthMap, vertex.UV).r;
-	const float Alpha = texture(AlphaMap, vertex.UV).r;
-
-    mat3 TBN = getTBNFromMap(vertex);
-    vec3 N = vertex.Normal;
-    vec3 V = normalize(sceneData.CameraPos - vertex.Position);
-    vec3 R = reflect(-V, N); 
-
-    vec3 ViewPos  = TBN * sceneData.CameraPos;
-    vec3 vertexPos  = TBN * vertex.Position;
-    V = normalize(ViewPos - vertexPos);
-
-//        if(pbrMaterial.DepthMapID != 0)
-//        {
-//            vertex.UV = ParallaxMapping(material.DepthMapID, vertex.UV,  viewDir);       
-//            if(vertex.UV.x > 1.0 || vertex.UV.y > 1.0 || vertex.UV.x < 0.0 || vertex.UV.y < 0.0)
-//            {
-//              discard;
-//            }
-//        }
-    N = texture(NormalMap, vertex.UV).rgb;
-    N = normalize(N * 2.0 - 1.0);
-    N = normalize(TBN * N);
-   
-
-    // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
-    // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
-    vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, Albedo, Metallic);
-
-    // reflectance equation
-    vec3 Lo = vec3(0.0);
-    Lo += CalcDirectionalLight(F0, V, N, vertex);
-    
-    // ambient lighting (we now use IBL as the ambient term)
-    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, Roughness);
-    
-    vec3 kS = F;
-    vec3 kD = 1.0 - kS;
-    kD *= 1.0 - Metallic;	  
-    
-    vec3 irradiance = texture(IrradianceMap, N).rgb;
-    vec3 diffuse      = irradiance * Albedo;
-    
-    // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
-    const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(PrefilterMap, R,  Roughness * MAX_REFLECTION_LOD).rgb;    
-    vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), Roughness)).rg;
-    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
-
-    vec3 ambient = (kD * diffuse + specular) * AmbientOcclusion;
-    
-    vec3 color = ambient + Lo;
-
-    // HDR tonemapping
-    color = color / (color + vec3(1.0));
-    // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
-
-    outColor = vec4(color, 1.0f);	
-}
-
-//float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
-//{
-//    float shadow = 1.0f;
-//    if (fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0)
-//    {
-//        float dist = texture(ShadowMap[index], fragPosLightSpace.st + offset).r;
-//        if (fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z)
-//        {
-//            shadow = 0.1f;
-//        }
-//    }
-//    return shadow;
-//}
-//
-//float filterPCF(vec4 sc, int index)
-//{
-//    ivec2 texDim = textureSize(ShadowMap[index], 0);
-//    float scale = 1.5;
-//    float dx = scale * 1.0 / float(texDim.x);
-//    float dy = scale * 1.0 / float(texDim.y);
-//
-//    float shadowFactor = 0.0;
-//    int count = 0;
-//    int range = 1;
-//
-//    for (int x = -range; x <= range; x++)
-//    {
-//        for (int y = -range; y <= range; y++)
-//        {
-//            shadowFactor += ShadowCalculation(sc, vec2(dx * x, dy * y), index);
-//            count++;
-//        }
-//
-//    }
-//    return shadowFactor / count;
-//}
-//
 mat3 getTBNFromMap(Vertex vertex)
 {
     vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.Tangant));
+    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
     vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vertex.Normal);
-    vec3 B = normalize(cross(N, T));
     return mat3(T, B, N);
 }
 
-vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
+vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial)
 {
-    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
-    const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
-	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-
     vec3 Lo = vec3(0.0);
+
     for (int x = 0; x < sceneData.DirectionalLightCount; x++)
     {
         vec3 L = normalize(-DLight[x].directionalLight.direction);
         vec3 H = normalize(V + L);
         vec3 radiance = DLight[x].directionalLight.diffuse;
 
-        float NDF = DistributionGGX(N, H, Roughness);
-        float G = GeometrySmith(N, V, L, Roughness);
-        vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+        float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
+        float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, pbrMaterial.Roughness);
 
         vec3 numerator = NDF * G * F;
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
@@ -241,24 +314,20 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - Metalic;
+        kD *= 1.0 - pbrMaterial.Metallic;
 
         float NdotL = max(dot(N, L), 0.0);
 
-        //vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-       // float shadow = filterPCF(LightSpace / LightSpace.w, x);
+      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
-        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
+        Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;// * shadow;
     }
     return Lo;
 }
 
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
 {
-    const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
-    const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
-	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.PointLightCount; x++)
     {
@@ -268,9 +337,9 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = PLight[x].pointLight.diffuse * attenuation;
 
-        float NDF = DistributionGGX(N, H, Roughness);
-        float G = GeometrySmith(N, V, L, Roughness);
-        vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+        float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
+        float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, pbrMaterial.Roughness);
 
         vec3 numerator = NDF * G * F;
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
@@ -278,23 +347,19 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - Metalic;
+        kD *= 1.0 - pbrMaterial.Metallic;
 
         float NdotL = max(dot(N, L), 0.0);
 
         // float shadow = CubeShadowCalculation(FragPos, V, x);
-        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
+        Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;// * shadow;
     }
 
     return Lo;
 }
 
-vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
+vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
 {
-   const vec3 Albedo = pow(texture(AlbedoMap, vertex.UV).rgb, vec3(2.2));
-    const float Metalic = texture(MetallicRoughnessMap, vertex.UV).r;
-	const float Roughness = texture(MetallicRoughnessMap, vertex.UV).g;
-
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.SpotLightCount; x++)
     {
@@ -310,9 +375,9 @@ vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
         attenuation *= intensity;
         vec3 radiance = SLight[x].spotLight.diffuse * attenuation;
 
-        float NDF = DistributionGGX(N, H, Roughness);
-        float G = GeometrySmith(N, V, L, Roughness);
-        vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
+        float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
+        float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, pbrMaterial.Roughness);
 
         vec3 numerator = NDF * G * F;
         float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
@@ -320,48 +385,73 @@ vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex)
 
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - Metalic;
+        kD *= 1.0 - pbrMaterial.Metallic;
 
         float NdotL = max(dot(N, L), 0.0);
 
-        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
+        Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;
     }
 
     return Lo;
 }
 
 
-vec2 ParallaxMapping(vec2 UV, vec3 viewDir)
+//vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir)
+//{
+//    const float heightScale = meshBuffer[sceneData.MeshIndex].meshProperties.heightScale;
+//    const float minLayers = meshBuffer[sceneData.MeshIndex].meshProperties.minLayers;
+//    const float maxLayers = meshBuffer[sceneData.MeshIndex].meshProperties.maxLayers;
+//
+//    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+//    float layerDepth = 1.0 / numLayers;
+//    float currentLayerDepth = 0.0;
+//
+//    viewDir.y = -viewDir.y;
+//    vec2 P = viewDir.xy / viewDir.z * heightScale;
+//    vec2 deltaTexCoords = P / numLayers;
+//
+//    vec2  currentTexCoords = texCoords;
+//    float currentDepthMapValue = texture(TextureMap[depthMapID], currentTexCoords).r;
+//
+//    while (currentLayerDepth < currentDepthMapValue)
+//    {
+//        currentTexCoords -= deltaTexCoords;
+//        currentDepthMapValue = texture(TextureMap[depthMapID], currentTexCoords).r;
+//        currentLayerDepth += layerDepth;
+//    }
+//
+//    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+//
+//    float afterDepth = currentDepthMapValue - currentLayerDepth;
+//    float beforeDepth = texture(TextureMap[depthMapID], prevTexCoords).r - currentLayerDepth + layerDepth;
+//
+//    float weight = afterDepth / (afterDepth - beforeDepth);
+//    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+//
+//    return finalTexCoords;
+//}
+
+Vertex RasterVertexBuilder()
 {
-    const float heightScale = meshBuffer[sceneData.MeshIndex].meshProperties.heightScale;
-    const float minLayers = meshBuffer[sceneData.MeshIndex].meshProperties.minLayers;
-    const float maxLayers = meshBuffer[sceneData.MeshIndex].meshProperties.maxLayers;
+	Vertex vertex;
+	vertex.Position = FragPos;
+	vertex.UV = UV;
+	vertex.Normal = Normal;
+	vertex.Tangant = Tangent;
+	vertex.BiTangant = BiTangent;
+	vertex.Color = Color;
 
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-    float layerDepth = 1.0 / numLayers;
-    float currentLayerDepth = 0.0;
+	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
-    viewDir.y = -viewDir.y;
-    vec2 P = viewDir.xy / viewDir.z * heightScale;
-    vec2 deltaTexCoords = P / numLayers;
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+	{
+		vertex.UV.y = 1.0f - vertex.UV.y;
+	}
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+	{
+		vertex.UV.x = 1.0f - vertex.UV.x;
+	}
 
-    vec2  currentTexCoords = UV;
-    float currentDepthMapValue = texture(DepthMap, currentTexCoords).r;
-
-    while (currentLayerDepth < currentDepthMapValue)
-    {
-        currentTexCoords -= deltaTexCoords;
-        currentDepthMapValue = texture(DepthMap, currentTexCoords).r;
-        currentLayerDepth += layerDepth;
-    }
-
-    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-
-    float afterDepth = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = texture(DepthMap, prevTexCoords).r - currentLayerDepth + layerDepth;
-
-    float weight = afterDepth / (afterDepth - beforeDepth);
-    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
-
-    return finalTexCoords;
+	return vertex;
 }
