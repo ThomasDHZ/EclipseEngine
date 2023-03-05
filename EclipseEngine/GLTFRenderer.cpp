@@ -22,7 +22,7 @@ void GLTFRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	model = GLTF_Temp_Model("C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf", glm::mat4(1.0f), 0);
+	model = GLTF_Temp_Model("C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/Sponza/glTF/Sponza.gltf", glm::mat4(1.0f), 0);
 
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);

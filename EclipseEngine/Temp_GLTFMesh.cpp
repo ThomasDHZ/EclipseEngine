@@ -94,37 +94,6 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
-
-	//GameObjectTransformMatrix = GameObjectMatrix;
-	//ModelTransformMatrix = ModelMatrix;
-
-	//meshProperties.MeshTransform = MeshTransformMatrix;
-	//meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
-
-	//if (SelectedMesh)
-	//{
-	//	meshProperties.SelectedObjectBufferIndex = 1;
-	//}
-	//else
-	//{
-	//	meshProperties.SelectedObjectBufferIndex = 0;
-	//}
-
-	//MeshPropertiesBuffer.Update(meshProperties);
-
-	//if (LastTransform != meshProperties.MeshTransform &&
-	//	IndexCount != 0)
-	//{
-	//	MeshTransformMatrix = meshProperties.MeshTransform;
-	//	TransformBuffer.CopyBufferToMemory(&MeshTransformMatrix, sizeof(MeshTransformMatrix));
-
-	//	glm::mat4 transformMatrix2 = glm::transpose(meshProperties.MeshTransform);
-	//	VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(transformMatrix2);
-	//	TransformInverseBuffer.CopyBufferToMemory(&transformMatrix, sizeof(transformMatrix));
-
-	//	UpdateMeshBottomLevelAccelerationStructure();
-	//	LastTransform = meshProperties.MeshTransform;
-	//}
 }
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
@@ -211,37 +180,16 @@ std::vector<VkDescriptorBufferInfo> Temp_GLTFMesh::UpdateMeshTransformBuffer()
 
 void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
-	if (ChildMeshList.size() > 0)
+	for (auto& primitve : PrimitiveList)
 	{
-		for (auto& node : ChildMeshList)
+		if (primitve.IndexCount > 0)
 		{
-			for (auto& primitve : node->PrimitiveList)
-			{
-				if (primitve.IndexCount > 0)
-				{
-					SceneManager::sceneProperites.MeshIndex = node->NodeID;
-					//SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
+			SceneManager::sceneProperites.MeshIndex = 0;
+			//SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
 
-					vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[node->NodeID], 0, nullptr);
-					vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-					vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
-				}
-			}
-		}
-	}
-	else
-	{
-		for (auto& primitve : PrimitiveList)
-		{
-			if (primitve.IndexCount > 0)
-			{
-				SceneManager::sceneProperites.MeshIndex = 0;
-				//SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(mesh->GetMeshColorID());
-
-				vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[0], 0, nullptr);
-				vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
-				vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
-			}
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descripterSetList[primitve.material], 0, nullptr);
+			vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
 	}
 }

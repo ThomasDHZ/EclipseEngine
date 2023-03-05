@@ -290,9 +290,6 @@ void GLTFModel::LoadPrimitive(tinygltf::Mesh& mesh, uint32_t x)
 
 void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shared_ptr<GLTFNode> parentNode, int index)
 {
-	FirstIndex = static_cast<uint32_t>(IndexList.size());
-	VertexStartIndex = static_cast<uint32_t>(VertexList.size());
-
 
 	std::shared_ptr<GLTFNode> gltfNode = std::make_shared<GLTFNode>();
 	gltfNode->NodeName = node.name;
@@ -336,6 +333,10 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 		}
 	}
 
+	FirstIndex = static_cast<uint32_t>(IndexList.size());
+	VertexStartIndex = static_cast<uint32_t>(VertexList.size());
+	IndexCount = 0;
+	
 	if (node.mesh > -1)
 	{
 		const tinygltf::Mesh mesh = model.meshes[node.mesh];
@@ -400,7 +401,8 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 				const tinygltf::BufferView& bufferView = model.bufferViews[accessor.bufferView];
 				const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
 
-				IndexCount = static_cast<uint32_t>(accessor.count);
+				IndexCount += static_cast<uint32_t>(accessor.count);
+
 				switch (accessor.componentType)
 				{
 					case TINYGLTF_PARAMETER_TYPE_UNSIGNED_INT:
