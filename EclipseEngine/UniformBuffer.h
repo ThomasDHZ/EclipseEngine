@@ -34,6 +34,34 @@ struct SpotLightBuffer {
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 };
 
+struct GLTFDirectionalLightBuffer {
+	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
+	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
+	alignas(4) float intensity = 1.0f;
+};
+
+struct GLTFPointLightBuffer {
+	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
+	alignas(4) float intensity = 1.0f;
+	alignas(4) float constant = 1.0f;
+	alignas(4) float linear = 0.022f;
+	alignas(4) float quadratic = 0.0019f;
+};
+
+struct GLTFSpotLightBuffer {
+	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
+	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
+	alignas(4) float intensity = 1.0f;
+	alignas(4) float cutOff = glm::cos(glm::radians(12.5f));
+	alignas(4) float outerCutOff = glm::cos(glm::radians(15.0f));
+	alignas(4) float constant = 1.0f;
+	alignas(4) float linear = 0.022f;
+	alignas(4) float quadratic = 0.0019f;
+};
+
 struct IrradianceSkyboxSettings
 {
 	alignas(4) uint32_t CubeMapId = 0;

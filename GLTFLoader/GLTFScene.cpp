@@ -19,31 +19,31 @@ GLTFScene::~GLTFScene()
 {
 }
 
-void GLTFScene::ModelNodes(tinygltf::Node& node)
-{
-	//if (node.mesh >= 0 &&
-	//	node.mesh < model.meshes.size())
-	//{
-	//	LoadMesh(model.meshes[node.mesh]);
-	//}
-
-	//for (uint32_t x = 0; x < node.children.size(); x++)
-	//{
-	//	ModelNodes(model.nodes[node.children[x]]);
-	//}
-}
-
-void GLTFScene::LoadMesh(tinygltf::Mesh& mesh)
-{
-	//for (size_t x = 0; x < mesh.primitives.size(); x++) 
-	//{
-	//	const tinygltf::BufferView& bufferView = model.bufferViews[x];
-	//	const tinygltf::Primitive& glTFPrimitive = mesh.primitives[x];
-	//	if (bufferView.target == 0)
-	//	{
-	//		continue;
-	//	}
-	//	
-	//	const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
-	//}
-}
+//void GLTFScene::ModelNodes(tinygltf::Node& node)
+//{
+//	//if (node.mesh >= 0 &&
+//	//	node.mesh < model.meshes.size())
+//	//{
+//	//	LoadMesh(model.meshes[node.mesh]);
+//	//}
+//
+//	//for (uint32_t x = 0; x < node.children.size(); x++)
+//	//{
+//	//	ModelNodes(model.nodes[node.children[x]]);
+//	//}
+//}
+//
+//void GLTFScene::LoadMesh(tinygltf::Mesh& mesh)
+//{
+//	//for (size_t x = 0; x < mesh.primitives.size(); x++) 
+//	//{
+//	//	const tinygltf::BufferView& bufferView = model.bufferViews[x];
+//	//	const tinygltf::Primitive& glTFPrimitive = mesh.primitives[x];
+//	//	if (bufferView.target == 0)
+//	//	{
+//	//		continue;
+//	//	}
+//	//	
+//	//	const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
+//	//}
+//}

@@ -21,6 +21,17 @@ GLTFModel::~GLTFModel()
 {
 }
 
+void GLTFModel::LoadLights(tinygltf::Model& model)
+{
+	auto color = glm::vec3(1.0f);
+	auto intensity = 0.0f;
+
+	for (auto& light : model.lights)
+	{
+		light.
+	}
+}
+
 void GLTFModel::LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader)
 {
 	TextureLoader.image = tinygltfImage.image;
@@ -76,77 +87,80 @@ void GLTFModel::LoadMaterial(tinygltf::Model& model)
 
 		//if (glTFMaterial.values.find("baseColorFactor") != glTFMaterial.values.end())
 		//{
-		//	material->SetAlbedoMap(glm::make_vec4(glTFMaterial.values["baseColorFactor"].ColorFactor().data()));
+		//	material->Albedo = glm::make_vec4(glTFMaterial.values["baseColorFactor"].ColorFactor().data());
 		//}
 
 		//if (glTFMaterial.values.find("metallicFactor") != glTFMaterial.values.end())
 		//{
-		//	material->SetMetallicMap(*reinterpret_cast<float*>(glTFMaterial.values["metallicFactor"].ColorFactor().data()));
+		//	material->Metallic = *reinterpret_cast<float*>(glTFMaterial.values["metallicFactor"].ColorFactor().data());
 		//}
 
 		//if (glTFMaterial.values.find("roughnessFactor") != glTFMaterial.values.end())
 		//{
-		//	material->SetRoughnessMap(*reinterpret_cast<float*>(glTFMaterial.values["roughnessFactor"].ColorFactor().data()));
+		//	material->Roughness = *reinterpret_cast<float*>(glTFMaterial.values["roughnessFactor"].ColorFactor().data());
 		//}
 
 		if (glTFMaterial.values.find("baseColorTexture") != glTFMaterial.values.end())
 		{
 			const uint32_t TextureIndex = glTFMaterial.pbrMetallicRoughness.baseColorTexture.index;
-
-			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->AlbedoMap = data.TextureList.back();
-			VRAMManager::LoadTexture2D(data.TextureList.back());
+			if (TextureIndex <= 68)
+			{
+				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
+				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+				material->AlbedoMap = data.TextureList.back();
+			}
 		}
 
 		if (glTFMaterial.additionalValues.find("occlusionTexture") != glTFMaterial.additionalValues.end())
 		{
 			const uint32_t TextureIndex = glTFMaterial.occlusionTexture.index;
-
-			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-			if (tinygltfSampler.size() > 0)
+			if (TextureIndex <= 68)
 			{
-				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+				if (tinygltfSampler.size() > 0)
+				{
+					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				}
+				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
+				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+				material->AmbientOcclusionMap = data.TextureList.back();
 			}
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->AmbientOcclusionMap = data.TextureList.back();
-			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
 		if (glTFMaterial.additionalValues.find("normalTexture") != glTFMaterial.additionalValues.end())
 		{
 			const uint32_t TextureIndex = glTFMaterial.normalTexture.index;
-
-			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-			if (tinygltfSampler.size() > 0)
+			if (TextureIndex <= 68)
 			{
-				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+				if (tinygltfSampler.size() > 0)
+				{
+					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				}
+				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
+				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+				material->NormalMap = data.TextureList.back();
 			}
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->NormalMap = data.TextureList.back();
-			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
 		if (glTFMaterial.values.find("metallicRoughnessTexture") != glTFMaterial.values.end())
 		{
 			const uint32_t TextureIndex = glTFMaterial.pbrMetallicRoughness.metallicRoughnessTexture.index;
-
-			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-			if (tinygltfSampler.size() > 0)
+			if (TextureIndex <= 68)
 			{
-				LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+				if (tinygltfSampler.size() > 0)
+				{
+					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
+				}
+				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
+				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+				material->MetallicRoughnessMap = data.TextureList.back();
 			}
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->MetallicRoughnessMap = data.TextureList.back();
-			VRAMManager::LoadTexture2D(data.TextureList.back());
 		}
 
 		data.MaterialList.emplace_back(material);
-		//VRAMManager::AddMaterial(data.MaterialList.back());
 	}
 }
 
@@ -332,16 +346,16 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 			LoadMesh(model, model.nodes[node.children[x]], gltfNode, x);
 		}
 	}
-
-	FirstIndex = static_cast<uint32_t>(IndexList.size());
-	VertexStartIndex = static_cast<uint32_t>(VertexList.size());
-	IndexCount = 0;
 	
 	if (node.mesh > -1)
 	{
 		const tinygltf::Mesh mesh = model.meshes[node.mesh];
 		for (size_t x = 0; x < mesh.primitives.size(); x++)
 		{
+			FirstIndex = static_cast<uint32_t>(IndexList.size());
+			VertexStartIndex = static_cast<uint32_t>(VertexList.size());
+			IndexCount = 0;
+
 			{
 				const tinygltf::Primitive& glTFPrimitive = mesh.primitives[x];
 				const float* PositionBuffer = nullptr;
@@ -465,6 +479,7 @@ void GLTFModel::Loader()
 {
 	const tinygltf::Scene& scene = model.scenes[model.defaultScene];
 
+	LoadLights(model);
 	LoadMaterial(model);
 	for (int x = 0; x < scene.nodes.size(); x++)
 	{

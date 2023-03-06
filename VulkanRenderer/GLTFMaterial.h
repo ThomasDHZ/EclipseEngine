@@ -11,6 +11,10 @@ private:
 	uint64_t MaterialID = 0;
 	uint64_t MaterialBufferIndex = 0;
 
+	void GenerateID();
+
+public:
+
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	float Metallic = 0.0f;
 	float Roughness = 0.0f;
@@ -18,9 +22,6 @@ private:
 	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
 
-	void GenerateID();
-
-public:
 	std::string MaterialName;
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;

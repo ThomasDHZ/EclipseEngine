@@ -76,6 +76,7 @@ struct DirectionalLight
     vec3 direction;
     vec3 diffuse;
     vec3 specular;
+    float intens
     mat4 lightSpaceMatrix;
 };
 

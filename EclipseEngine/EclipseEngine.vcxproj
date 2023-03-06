@@ -202,6 +202,7 @@
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GBufferPipeline.cpp" />
+    <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="GLTFIrradiancePipeline.cpp" />
     <ClCompile Include="GLTFIrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
@@ -344,6 +345,7 @@
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GBufferPipeline.h" />
+    <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFIrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />

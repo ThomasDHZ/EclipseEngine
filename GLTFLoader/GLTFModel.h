@@ -64,6 +64,7 @@ private:
 
 	GLTFModelData data;
 
+	void LoadLights(tinygltf::Model& model);
 	void LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader);
 	void LoadSamplerDetails(const tinygltf::Sampler tinygltfSampler, TinyGltfTextureSamplerLoader SamplerLoader);
 	void LoadMaterial(tinygltf::Model& model);

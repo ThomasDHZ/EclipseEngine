@@ -561,6 +561,9 @@
     <ClCompile Include="GLTFRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLTFDirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1002,6 +1005,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLTFRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFDirectionalLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
