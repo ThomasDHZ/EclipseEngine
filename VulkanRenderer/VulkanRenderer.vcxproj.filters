@@ -34,6 +34,12 @@
     <Filter Include="Source Files\ImGui">
       <UniqueIdentifier>{639b5adf-b7ff-483f-9773-fd3c8b21ded4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{b4d75e23-3dd6-4af3-a533-f93e06a2239c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{cca2f0ee-1fcb-48f8-b29f-975bb4d924ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameController.h">
@@ -150,6 +156,36 @@
     <ClInclude Include="JsonConverter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UniformBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFSpotLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFPointLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFDirectionalLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedColorTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedCubeMapDepthTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedCubeMapTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedDepthTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderedTexture.h">
+      <Filter>Header Files\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VulkanSwapChain.cpp">
@@ -241,6 +277,30 @@
     </ClCompile>
     <ClCompile Include="JsonConverter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFSpotLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFPointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFDirectionalLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedDepthTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedCubeMapTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedCubeMapDepthTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderedColorTexture.cpp">
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

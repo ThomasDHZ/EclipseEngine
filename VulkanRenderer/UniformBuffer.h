@@ -21,9 +21,9 @@ struct PointLightBuffer {
 };
 
 struct SpotLightBuffer {
+	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.0f);
-	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
 	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
 
 	alignas(4) float cutOff = glm::cos(glm::radians(12.5f));
@@ -35,14 +35,15 @@ struct SpotLightBuffer {
 };
 
 struct GLTFDirectionalLightBuffer {
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 	alignas(4) float intensity = 1.0f;
 };
 
 struct GLTFPointLightBuffer {
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
+	alignas(16) glm::vec3 position = glm::vec3(0.00001f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 	alignas(4) float intensity = 1.0f;
 	alignas(4) float constant = 1.0f;
@@ -51,7 +52,8 @@ struct GLTFPointLightBuffer {
 };
 
 struct GLTFSpotLightBuffer {
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
+	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
+	alignas(16) glm::vec3 position = glm::vec3(0.00001f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 	alignas(4) float intensity = 1.0f;
@@ -172,7 +174,7 @@ struct InstanceMeshProperties
 template <class T>
 class UniformBuffer
 {
-private: 
+private:
 
 
 public:

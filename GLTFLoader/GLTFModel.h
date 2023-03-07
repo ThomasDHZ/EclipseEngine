@@ -4,6 +4,9 @@
 #include <GLTFMaterial.h>
 #include <VRAMManager.h>
 #include "GLTFVertex.h"
+#include <GLTFDirectionalLight.h>
+#include <GLTFPointLight.h>
+#include <GLTFSpotLight.h>
 
 struct GLTFPrimitive
 {
@@ -36,6 +39,8 @@ public:
 	glm::vec3 Rotation = glm::vec3(0.0f);
 	glm::vec3 Scale = glm::vec3(1.0f);
 
+
+
 	GLTFNode(){}
 	~GLTFNode(){}
 };
@@ -47,6 +52,9 @@ struct GLTFModelData
 	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
 	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList = std::vector<std::shared_ptr<GLTFMaterial>>();
+	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
+	std::vector<std::shared_ptr<GLTFPointLight>> PointlLightList;
+	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 };
 
 class GLTFModel

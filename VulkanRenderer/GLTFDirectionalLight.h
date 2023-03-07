@@ -7,15 +7,12 @@ class GLTFDirectionalLight : public Light<GLTFDirectionalLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
-
 public:
 	GLTFDirectionalLight();
+	GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity);
 	GLTFDirectionalLight(GLTFDirectionalLightBuffer light);
 	~GLTFDirectionalLight();
 
-	//glm::vec2 LeftRight = glm::vec2(-25.0f, 25.0f);
-	//glm::vec2 TopBottom = glm::vec2(-25.0f, 25.0f);
-	//glm::vec2 NearFar = glm::vec2(0.1f, 25.0f);
 	glm::vec2 LeftRight = glm::vec2(-180.0f, 192.0f);
 	glm::vec2 TopBottom = glm::vec2(-110.0f, 117.0f);
 	glm::vec2 NearFar = glm::vec2(-5000.0f, 460.0f);
@@ -28,7 +25,7 @@ public:
 
 	std::shared_ptr<RenderedDepthTexture> GetLightViewTexture() { return LightViewTexture; }
 
-	glm::vec3* GetPositionPtr() { return &LightBuffer.UniformDataInfo.position; }
+	glm::vec3* GetDiffusePtr() { return &LightBuffer.UniformDataInfo.diffuse; }
 	glm::vec3* GetDirectionPtr() { return &LightBuffer.UniformDataInfo.direction; }
 	float* GetIntensityPtr() { return &LightBuffer.UniformDataInfo.intensity; }
 

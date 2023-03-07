@@ -171,6 +171,9 @@
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
+    <ClCompile Include="BlinnPhongReflectionPipeline.cpp" />
+    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp" />
+    <ClCompile Include="BloomCombine.cpp" />
     <ClCompile Include="ConstMeshInfo.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
@@ -202,7 +205,6 @@
     <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GBufferPipeline.cpp" />
-    <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="GLTFIrradiancePipeline.cpp" />
     <ClCompile Include="GLTFIrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
@@ -246,6 +248,7 @@
     <ClCompile Include="ParticalSystemRenderer.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
+    <ClCompile Include="PBRPlayRenderer.cpp" />
     <ClCompile Include="PBRReflectionPreRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
@@ -259,6 +262,7 @@
     <ClCompile Include="PrefilterPipeline.cpp" />
     <ClCompile Include="RayTracePBRRenderer.cpp" />
     <ClCompile Include="RayTracePBRRenderPass.cpp" />
+    <ClCompile Include="ReadableTexture.cpp" />
     <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="InstanceMesh.cpp" />
@@ -273,8 +277,6 @@
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
-    <ClCompile Include="RenderedCubeMapDepthTexture.cpp" />
-    <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="BlinnPhongRenderPass.cpp" />
@@ -292,9 +294,6 @@
     <ClCompile Include="RayTraceRenderer.cpp" />
     <ClCompile Include="RayTraceRenderPass.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
-    <ClCompile Include="RenderedColorTexture.cpp" />
-    <ClCompile Include="RenderedDepthTexture.cpp" />
-    <ClCompile Include="RenderedTexture.cpp" />
     <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="RaytraceHybridPass.cpp" />
@@ -307,12 +306,16 @@
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="WireFramePipeline.cpp" />
+    <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation3D.h" />
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
+    <ClInclude Include="BlinnPhongReflectionPipeline.h" />
+    <ClInclude Include="BlinnPhongReflectionRenderPass.h" />
+    <ClInclude Include="BloomCombine.h" />
     <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="ConstMeshInfo.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
@@ -345,7 +348,6 @@
     <ClInclude Include="GameObject2D.h" />
     <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GBufferPipeline.h" />
-    <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFIrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
@@ -403,6 +405,7 @@
     <ClInclude Include="PrefilterPipeline.h" />
     <ClInclude Include="RayTracePBRRenderer.h" />
     <ClInclude Include="RayTracePBRRenderPass.h" />
+    <ClInclude Include="ReadableTexture.h" />
     <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="Renderer3DPipeline.h" />
     <ClInclude Include="resource.h" />
@@ -419,8 +422,6 @@
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
-    <ClInclude Include="RenderedCubeMapDepthTexture.h" />
-    <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="BlinnPhongRenderPass.h" />
@@ -440,9 +441,6 @@
     <ClInclude Include="RayTraceRenderer.h" />
     <ClInclude Include="RayTraceRenderPass.h" />
     <ClInclude Include="RayTracingPipeline.h" />
-    <ClInclude Include="RenderedColorTexture.h" />
-    <ClInclude Include="RenderedDepthTexture.h" />
-    <ClInclude Include="RenderedTexture.h" />
     <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="RaytraceHybridPass.h" />
@@ -454,7 +452,6 @@
     <ClInclude Include="SoundDevice.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpotLight.h" />
-    <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>

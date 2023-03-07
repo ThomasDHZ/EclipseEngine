@@ -37,6 +37,9 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	DirectionalLightList = gltfModelData.DirectionalLightList;
+	PointLightList = gltfModelData.PointlLightList;
+	SpotLightList = gltfModelData.SpotLightList;
 
 	for (auto& node : gltfModelData.NodeList)
 	{
@@ -67,6 +70,9 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	{
 		mesh->UpdateMeshTransformBuffer();
 	}
+	UpdateDirectionalLightPropertiesBuffer();
+	UpdatePointLightPropertiesBuffer();
+	UpdateSpotLightPropertiesBuffer();
 	UpdateDescriptorSets();
 }
 
@@ -93,6 +99,19 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 	{
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
+
+	for (auto& light : DirectionalLightList)
+	{
+		light->Update();
+	}
+	for (auto& light : PointLightList)
+	{
+		light->Update();
+	}
+	for (auto& light : SpotLightList)
+	{
+		light->Update();
+	}
 }
 
 void GLTF_Temp_Model::UpdateDescriptorSets()
@@ -113,9 +132,9 @@ void GLTF_Temp_Model::UpdateDescriptorSets()
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, LightManager::GetDirectionalLightBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, LightManager::GetPointLightBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, LightManager::GetSpotLightBuffer());
+			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GetDirectionalLightPropertiesBuffer());
+			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GetPointLightPropertiesBuffer());
+			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GetSpotLightPropertiesBuffer());
 			descripterSetList.emplace_back(GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList));
 			MeshList[x]->descripterSetList = descripterSetList;
 		}
@@ -130,6 +149,30 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 		MeshPropertiesDescriptorList.emplace_back(mesh->UpdateMeshPropertiesBuffer());
 	}
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
+}
+
+void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
+{
+	for (auto& light : DirectionalLightList)
+	{
+		light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
+	}
+}
+
+void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
+{
+	for (auto& light : PointLightList)
+	{
+		light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
+	}
+}
+
+void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
+{
+	for (auto& light : SpotLightList)
+	{
+		light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
+	}
 }
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)

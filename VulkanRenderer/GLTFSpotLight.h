@@ -1,17 +1,18 @@
 #pragma once
-#include <Light.h>
-#include <UniformBuffer.h>
-#include <RenderedDepthTexture.h>
+#include "Light.h"
+#include "UniformBuffer.h"
+#include "RenderedDepthTexture.h"
 
-class SpotLight : public Light<SpotLightBuffer>
+class GLTFSpotLight : public Light<GLTFSpotLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
 
 public:
-	SpotLight();
-	SpotLight(SpotLightBuffer light);
-	~SpotLight();
+	GLTFSpotLight();
+	GLTFSpotLight(const std::string name, glm::vec3 Position, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity);
+	GLTFSpotLight(GLTFSpotLightBuffer light);
+	~GLTFSpotLight();
 
 	void Update() override;
 	void Destroy() override;
@@ -23,5 +24,5 @@ public:
 	glm::vec3* GetPositionPtr() { return &LightBuffer.UniformDataInfo.position; }
 	glm::vec3* GetDirectionPtr() { return &LightBuffer.UniformDataInfo.direction; }
 	glm::vec3* GetDiffusePtr() { return &LightBuffer.UniformDataInfo.diffuse; }
-	glm::vec3* GetSpecularPtr() { return &LightBuffer.UniformDataInfo.specular; }
+	float* GetIntensityPtr() { return &LightBuffer.UniformDataInfo.intensity; }
 };

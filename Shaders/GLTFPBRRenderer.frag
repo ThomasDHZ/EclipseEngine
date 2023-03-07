@@ -72,31 +72,30 @@ struct MaterialProperties
 
 struct DirectionalLight
 {
-    vec3 position;
-    vec3 direction;
-    vec3 diffuse;
-    vec3 specular;
-    float intens
-    mat4 lightSpaceMatrix;
+	vec3 diffuse;
+	vec3 direction;
+	mat4 LightSpaceMatrix;
+	float intensity;
 };
 
 struct PointLight
 {
-    vec3 position;
-    vec3 diffuse;
-    vec3 specular;
-    float constant;
-    float linear;
-    float quadratic;
-    mat4 lightSpaceMatrix;
+	vec3 diffuse;
+	vec3 position;
+	mat4 LightSpaceMatrix;
+	float intensity;
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 struct SpotLight
 {
-    vec3 position;
-    vec3 direction;
-    vec3 diffuse;
-    vec3 specular;
+	vec3 diffuse;
+	vec3 position;
+	vec3 direction;
+	mat4 LightSpaceMatrix;
+	float intensity;
 
     float cutOff;
     float outerCutOff;
@@ -203,7 +202,7 @@ void main()
 
     vec3 Lo = vec3(0.0);
     Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
-    //Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
+    Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
     //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);
@@ -303,7 +302,8 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial)
     {
         vec3 L = normalize(-DLight[x].directionalLight.direction);
         vec3 H = normalize(V + L);
-        vec3 radiance = DLight[x].directionalLight.diffuse;
+        float watts = DLight[x].directionalLight.intensity;
+        vec3 radiance = DLight[x].directionalLight.diffuse * watts;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -336,7 +336,8 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
         vec3 H = normalize(V + L);
         float distance = length(PLight[x].pointLight.position - vertex.Position);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance = PLight[x].pointLight.diffuse * attenuation;
+        float watts = PLight[x].pointLight.intensity;
+        vec3 radiance = PLight[x].pointLight.diffuse * 700.0f * attenuation;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -359,7 +360,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
     return Lo;
 }
 
-vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
+/*vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
 {
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.SpotLightCount; x++)
@@ -374,7 +375,8 @@ vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMateri
         float distance = length(SLight[x].spotLight.position - vertex.Position);
         float attenuation = 1.0 / (distance * distance);
         attenuation *= intensity;
-        vec3 radiance = SLight[x].spotLight.diffuse * attenuation;
+        float watts = SLight[x].spotLight.intensity;
+        vec3 radiance = SLight[x].spotLight.diffuse * watts * attenuation;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -394,7 +396,7 @@ vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMateri
     }
 
     return Lo;
-}
+}*/
 
 
 //vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir)

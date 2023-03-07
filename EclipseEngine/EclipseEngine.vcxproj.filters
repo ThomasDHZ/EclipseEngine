@@ -192,15 +192,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="RenderedColorTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedDepthTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -246,9 +237,6 @@
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="RenderedCubeMapTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="PrefilterRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -266,9 +254,6 @@
     </ClCompile>
     <ClCompile Include="PBRReflectionRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderedCubeMapDepthTexture.cpp">
-      <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="DepthRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
@@ -561,8 +546,20 @@
     <ClCompile Include="GLTFRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFDirectionalLight.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BlinnPhongReflectionPipeline.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomCombine.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRPlayRenderer.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadableTexture.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -626,20 +623,8 @@
     <ClInclude Include="MeshPickerRenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="RenderedColorTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderedDepthTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderedTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="LightManager.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header Files\Lights</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLight.h">
       <Filter>Header Files\Lights</Filter>
@@ -683,9 +668,6 @@
     <ClInclude Include="EnvironmentToCubeRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="RenderedCubeMapTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="IrradianceRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
@@ -701,17 +683,11 @@
     <ClInclude Include="PBRReflectionRenderPass.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="RenderedCubeMapDepthTexture.h">
-      <Filter>Header Files\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="SoundDevice.h">
       <Filter>Header Files\Engine\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UniformBuffer.h">
-      <Filter>Header Files\Engine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="SoundSource.h">
       <Filter>Header Files\Engine\Audio</Filter>
@@ -1007,7 +983,19 @@
     <ClInclude Include="GLTFRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFDirectionalLight.h">
+    <ClInclude Include="BlinnPhongReflectionPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlinnPhongReflectionRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomCombine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadableTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1338,6 +1326,9 @@
     </None>
     <None Include="..\Shaders\GLTFBRDFShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="imgui.ini">
+      <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

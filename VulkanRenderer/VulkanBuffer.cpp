@@ -1,5 +1,4 @@
 #include "VulkanBuffer.h"
-#include "VulkanBuffer.h"
 #include <stdexcept>
 
 VulkanBuffer::VulkanBuffer()

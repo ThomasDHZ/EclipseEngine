@@ -28,7 +28,21 @@ void GLTFModel::LoadLights(tinygltf::Model& model)
 
 	for (auto& light : model.lights)
 	{
-		light.
+		if (light.type == "point")
+		{
+			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+			data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::vec3(0.0f, 10.0f, 0.0f), color, light.intensity)));
+		}
+		if (light.type == "directional")
+		{
+			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+			data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::vec3(0.0f, -1.0f, 0.0f), color, light.intensity)));
+		}
+		if (light.type == "spot")
+		{
+			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+			data.SpotLightList.emplace_back(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::vec3(0.0f), glm::vec3(0.0f), color, light.intensity)));
+		}
 	}
 }
 

@@ -27,9 +27,13 @@ private:
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> DirectionalLightPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
 
 	glm::mat4 GameObjectTransformMatrix;
 	glm::mat4 ModelTransformMatrix;
+
 
 
 	std::vector<VkDescriptorSet> descripterSetList;
@@ -47,12 +51,22 @@ public:
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateDescriptorSets();
 	void UpdateMeshPropertiesBuffer();
+	void UpdateDirectionalLightPropertiesBuffer();
+	void UpdatePointLightPropertiesBuffer();
+	void UpdateSpotLightPropertiesBuffer();
 
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
-	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; };
-	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; };
-	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; };
-	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; };
+	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
+	std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
+	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
+
+	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
+	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer() { return DirectionalLightPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer() { return PointLightPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer() { return SpotLightPropertiesBuffer; }
 };
