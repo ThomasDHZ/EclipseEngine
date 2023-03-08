@@ -27,6 +27,7 @@ private:
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> SunLightPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> DirectionalLightPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
@@ -51,6 +52,7 @@ public:
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateDescriptorSets();
 	void UpdateMeshPropertiesBuffer();
+	void UpdateSunLightPropertiesBuffer();
 	void UpdateDirectionalLightPropertiesBuffer();
 	void UpdatePointLightPropertiesBuffer();
 	void UpdateSpotLightPropertiesBuffer();
@@ -58,6 +60,7 @@ public:
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
+	std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
 	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
 	std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
 	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
@@ -66,6 +69,7 @@ public:
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetSunLightPropertiesBuffer() { return SunLightPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer() { return DirectionalLightPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer() { return PointLightPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer() { return SpotLightPropertiesBuffer; }

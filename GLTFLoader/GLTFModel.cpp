@@ -21,27 +21,41 @@ GLTFModel::~GLTFModel()
 {
 }
 
-void GLTFModel::LoadLights(tinygltf::Model& model)
+void GLTFModel::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
-	auto color = glm::vec3(1.0f);
-	auto intensity = 0.0f;
-
-	for (auto& light : model.lights)
+	if (node.mesh == -1)
 	{
-		if (light.type == "point")
+		auto color = glm::vec3(1.0f);
+		auto intensity = 0.0f;
+		for (auto& light : model.lights)
 		{
-			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-			data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::vec3(0.0f, 10.0f, 0.0f), color, light.intensity)));
-		}
-		if (light.type == "directional")
-		{
-			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-			data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::vec3(0.0f, -1.0f, 0.0f), color, light.intensity)));
-		}
-		if (light.type == "spot")
-		{
-			glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-			data.SpotLightList.emplace_back(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::vec3(0.0f), glm::vec3(0.0f), color, light.intensity)));
+			std::string baseName = node.name;
+			if (node.name.find("_Orientation") != std::string::npos)
+			{
+				int stringPos = node.name.find("_Orientation");
+				baseName = baseName.substr(0, stringPos);
+			}
+			if (light.name == baseName)
+			{
+				if (light.type == "point")
+				{
+
+					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+				
+					data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+				}
+				if (light.type == "directional")
+				{
+					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+					data.SunlLightList.emplace_back(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+					data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+				}
+				if (light.type == "spot")
+				{
+					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+					data.SpotLightList.emplace_back(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
+				}
+			}
 		}
 	}
 }
@@ -360,7 +374,7 @@ void GLTFModel::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::shar
 			LoadMesh(model, model.nodes[node.children[x]], gltfNode, x);
 		}
 	}
-	
+
 	if (node.mesh > -1)
 	{
 		const tinygltf::Mesh mesh = model.meshes[node.mesh];
@@ -493,11 +507,11 @@ void GLTFModel::Loader()
 {
 	const tinygltf::Scene& scene = model.scenes[model.defaultScene];
 
-	LoadLights(model);
 	LoadMaterial(model);
 	for (int x = 0; x < scene.nodes.size(); x++)
 	{
 		tinygltf::Node node = model.nodes[scene.nodes[x]];
+		LoadLights(model, node);
 		LoadMesh(model, node, nullptr, x);
 	}
 

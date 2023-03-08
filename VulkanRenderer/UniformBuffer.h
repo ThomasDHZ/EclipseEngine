@@ -34,6 +34,13 @@ struct SpotLightBuffer {
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 };
 
+struct GLTFSunLightBuffer {
+	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
+	alignas(16) glm::vec3 position = glm::vec3(0.00001f);
+	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
+	alignas(4) float intensity = 1.0f;
+};
+
 struct GLTFDirectionalLightBuffer {
 	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
@@ -101,6 +108,7 @@ struct SceneProperties
 	alignas(16) glm::vec3 CameraPos = glm::vec3(0.0f);
 	alignas(16) glm::vec3 MeshColorID = glm::vec3(0.0f);
 	alignas(16) glm::vec3 AmbientLight = glm::vec3(0.1f);
+	alignas(4)  uint32_t SunLightCount;
 	alignas(4)  uint32_t DirectionalLightCount;
 	alignas(4)  uint32_t PointLightCount;
 	alignas(4)  uint32_t SpotLightCount;

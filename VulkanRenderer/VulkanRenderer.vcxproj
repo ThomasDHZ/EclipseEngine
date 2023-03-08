@@ -28,6 +28,7 @@
     <ClInclude Include="GLTFMaterial.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFSpotLight.h" />
+    <ClInclude Include="GLTFSunLight.h" />
     <ClInclude Include="GLTF_GraphicsDescriptors.h" />
     <ClInclude Include="GLTF_GraphicsPipeline.h" />
     <ClInclude Include="GraphicsDevice.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="GLTFMaterial.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFSpotLight.cpp" />
+    <ClCompile Include="GLTFSunLight.cpp" />
     <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />
     <ClCompile Include="GLTF_GraphicsPipeline.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />

@@ -11,7 +11,7 @@ GLTFRenderer::~GLTFRenderer()
 void GLTFRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-	SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	GLTF_BRDFRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
@@ -36,6 +36,12 @@ void GLTFRenderer::Update()
 
 void GLTFRenderer::ImGuiUpdate()
 {
+	for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
+	{
+		ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
+		ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+		ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+	}
 	for (int x = 0; x < model.GetDirectionalLightPropertiesBuffer().size(); x++)
 	{
 		ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &model.DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);

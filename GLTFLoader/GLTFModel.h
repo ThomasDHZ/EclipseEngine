@@ -4,6 +4,7 @@
 #include <GLTFMaterial.h>
 #include <VRAMManager.h>
 #include "GLTFVertex.h"
+#include <GLTFSunLight.h>
 #include <GLTFDirectionalLight.h>
 #include <GLTFPointLight.h>
 #include <GLTFSpotLight.h>
@@ -52,6 +53,7 @@ struct GLTFModelData
 	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
 	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList = std::vector<std::shared_ptr<GLTFMaterial>>();
+	std::vector<std::shared_ptr<GLTFSunLight>> SunlLightList;
 	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
 	std::vector<std::shared_ptr<GLTFPointLight>> PointlLightList;
 	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
@@ -72,7 +74,7 @@ private:
 
 	GLTFModelData data;
 
-	void LoadLights(tinygltf::Model& model);
+	void LoadLights(tinygltf::Model& model, tinygltf::Node& node);
 	void LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader);
 	void LoadSamplerDetails(const tinygltf::Sampler tinygltfSampler, TinyGltfTextureSamplerLoader SamplerLoader);
 	void LoadMaterial(tinygltf::Model& model);
