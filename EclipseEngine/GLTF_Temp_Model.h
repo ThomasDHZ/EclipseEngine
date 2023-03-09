@@ -18,7 +18,7 @@ private:
 	std::vector<GLTFPrimitive> PrimitiveList;
 	std::vector<MeshProperties> MeshPropertiesList;
 	std::vector<std::shared_ptr<Texture2D>> TextureList;
-	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
@@ -41,6 +41,7 @@ private:
 	void GenerateID();
 public:
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
+	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 	glm::vec3 ModelPosition = glm::vec3(0.0f);
 	glm::vec3 ModelRotation = glm::vec3(0.0f);
 	glm::vec3 ModelScale = glm::vec3(1.0f);
