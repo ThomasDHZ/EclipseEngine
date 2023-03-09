@@ -101,10 +101,6 @@ public:
 		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
 		sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
 		sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
-		sceneProperites.SunLightCount = 1;
-		sceneProperites.DirectionalLightCount = 1;
-		sceneProperites.PointLightCount = 7;
-		sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
 		sceneProperites.Timer = (float)glfwGetTime();
 		sceneProperites.frame++;
 		if (sceneProperites.frame == UINT32_MAX)

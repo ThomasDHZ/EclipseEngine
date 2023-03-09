@@ -5,12 +5,13 @@ GLTFPointLight::GLTFPointLight() : Light<GLTFPointLightBuffer>()
 
 }
 
-GLTFPointLight::GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity)
+GLTFPointLight::GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float Radius)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;
 	LightBuffer.UniformDataInfo.position = Position;
 	LightBuffer.UniformDataInfo.intensity = Intesity;
+	LightBuffer.UniformDataInfo.radius = Radius;
 	LightBuffer.Update();
 }
 

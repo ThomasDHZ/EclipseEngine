@@ -41,8 +41,7 @@ void GLTFModel::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 				{
 
 					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-				
-					data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+					data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
 				}
 				if (light.type == "directional")
 				{

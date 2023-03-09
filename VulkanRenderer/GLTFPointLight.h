@@ -11,7 +11,7 @@ private:
 
 public:
 	GLTFPointLight();
-	GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity);
+	GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float radius);
 	GLTFPointLight(GLTFPointLightBuffer light);
 	~GLTFPointLight();
 
@@ -26,4 +26,5 @@ public:
 	glm::vec3* GetPositionPtr() { return &LightBuffer.UniformDataInfo.position; }
 	glm::vec3* GetDiffusePtr() { return &LightBuffer.UniformDataInfo.diffuse; }
 	float* GetIntensityPtr() { return &LightBuffer.UniformDataInfo.intensity; }
+	float* GetRadiusPtr() { return &LightBuffer.UniformDataInfo.radius; }
 };

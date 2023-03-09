@@ -164,6 +164,7 @@ void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
 	{
 		light->GetLightPropertiesBuffer(SunLightPropertiesBuffer);
 	}
+	SceneManager::sceneProperites.SunLightCount = SunLightList.size();
 }
 
 void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
@@ -172,6 +173,7 @@ void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
 	{
 		light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
 	}
+	SceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
 }
 
 void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
@@ -180,6 +182,7 @@ void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
 	{
 		light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
 	}
+	SceneManager::sceneProperites.PointLightCount = PointLightList.size();
 }
 
 void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
@@ -188,6 +191,7 @@ void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
 	{
 		light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
 	}
+	SceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
 }
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)

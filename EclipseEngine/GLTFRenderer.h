@@ -27,6 +27,8 @@
 class GLTFRenderer
 {
 private:
+	SceneProperties sceneProperites;
+
 	GLTF_Temp_Model model;
 	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;

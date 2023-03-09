@@ -53,9 +53,7 @@ struct GLTFPointLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.00001f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 	alignas(4) float intensity = 1.0f;
-	alignas(4) float constant = 1.0f;
-	alignas(4) float linear = 0.022f;
-	alignas(4) float quadratic = 0.0019f;
+	alignas(4) float radius = 1.0f;;
 };
 
 struct GLTFSpotLightBuffer {

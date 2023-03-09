@@ -92,9 +92,7 @@ struct PointLight
 	vec3 position;
 	mat4 LightSpaceMatrix;
 	float intensity;
-	float constant;
-	float linear;
-	float quadratic;
+	float radius;
 };
 
 struct SpotLight
@@ -213,7 +211,7 @@ void main()
 
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
-  Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
+ // Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
     Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
@@ -378,8 +376,13 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
     {
         vec3 L = normalize(PLight[x].pointLight.position - vertex.Position);
         vec3 H = normalize(V + L);
+
         float distance = length(PLight[x].pointLight.position - vertex.Position);
-        float attenuation = 1.0 / (distance * distance);
+        float Kc = 1.0f;
+        float Kl = 2 / PLight[x].pointLight.radius;
+        float Kq = 1 / (PLight[x].pointLight.radius * PLight[x].pointLight.radius); 
+        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));  
+        
         float watts = PLight[x].pointLight.intensity;
         vec3 radiance = PLight[x].pointLight.diffuse * watts * attenuation;
 
