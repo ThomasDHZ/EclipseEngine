@@ -42,29 +42,18 @@ VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(std::v
 
 VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout)
 {
-	{
+	VkDescriptorSetAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = descriptorPool;
+	allocInfo.descriptorSetCount = 1;
+	allocInfo.pSetLayouts = &layout;
 
-		uint32_t variableDescCounts[] = { 1 };
-
-		VkDescriptorSetVariableDescriptorCountAllocateInfoEXT VariableDescriptorCountAllocateInfo{};
-		VariableDescriptorCountAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT;
-		VariableDescriptorCountAllocateInfo.descriptorSetCount = 1;
-		VariableDescriptorCountAllocateInfo.pDescriptorCounts = variableDescCounts;
-
-		VkDescriptorSetAllocateInfo allocInfo = {};
-		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		allocInfo.descriptorPool = descriptorPool;
-		allocInfo.descriptorSetCount = 1;
-		allocInfo.pSetLayouts = &layout;
-		allocInfo.pNext = &VariableDescriptorCountAllocateInfo;
-
-		VkDescriptorSet DescriptorSets;
-		if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
-			throw std::runtime_error("Failed to allocate descriptor sets.");
-		}
-
-		return DescriptorSets;
+	VkDescriptorSet DescriptorSets;
+	if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to allocate descriptor sets.");
 	}
+
+	return DescriptorSets;
 }
 
 VkDescriptorPool GLTF_GraphicsDescriptors::CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo)
@@ -74,6 +63,7 @@ VkDescriptorPool GLTF_GraphicsDescriptors::CreateDescriptorPool(std::vector<VkDe
 	poolInfo.poolSizeCount = static_cast<uint32_t>(DescriptorPoolInfo.size());
 	poolInfo.pPoolSizes = DescriptorPoolInfo.data();
 	poolInfo.maxSets = static_cast<uint32_t>(VulkanRenderer::GetSwapChainImageCount());
+	poolInfo.maxSets = 50;
 
 	VkDescriptorPool descriptorPool;
 	if (vkCreateDescriptorPool(VulkanRenderer::GetDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
@@ -213,6 +203,49 @@ VkDescriptorSet GLTF_GraphicsDescriptors::SubmitDescriptorSet(std::vector<Descri
 	return DescriptorSet;
 }
 
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteBufferDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, VkDescriptorBufferInfo Buffer)
+{
+	std::vector<VkDescriptorBufferInfo> BufferInfo = std::vector<VkDescriptorBufferInfo>{ Buffer };
+
+	VkWriteDescriptorSet writeTextureDescriptorSet = {};
+	writeTextureDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeTextureDescriptorSet.dstSet = descriptorSet;
+	writeTextureDescriptorSet.dstBinding = BindingNumber;
+	writeTextureDescriptorSet.dstArrayElement = 0;
+	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	writeTextureDescriptorSet.descriptorCount = static_cast<uint32_t>(BufferInfo.size());
+	writeTextureDescriptorSet.pBufferInfo = BufferInfo.data();
+	return writeTextureDescriptorSet;
+}
+
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteBufferDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> Buffer)
+{
+	VkWriteDescriptorSet writeTextureDescriptorSet = {};
+	writeTextureDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeTextureDescriptorSet.dstSet = descriptorSet;
+	writeTextureDescriptorSet.dstBinding = BindingNumber;
+	writeTextureDescriptorSet.dstArrayElement = 0;
+	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	writeTextureDescriptorSet.descriptorCount = static_cast<uint32_t>(Buffer.size());
+	writeTextureDescriptorSet.pBufferInfo = Buffer.data();
+	return writeTextureDescriptorSet;
+}
+
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteTextureDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, VkDescriptorImageInfo TextureBuffer)
+{
+	std::vector<VkDescriptorImageInfo> TextureBufferInfo = std::vector<VkDescriptorImageInfo>{ TextureBuffer };
+
+	VkWriteDescriptorSet writeTextureDescriptorSet = {};
+	writeTextureDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeTextureDescriptorSet.dstSet = descriptorSet;
+	writeTextureDescriptorSet.dstBinding = BindingNumber;
+	writeTextureDescriptorSet.dstArrayElement = 0;
+	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	writeTextureDescriptorSet.descriptorCount = static_cast<uint32_t>(TextureBufferInfo.size());
+	writeTextureDescriptorSet.pImageInfo = TextureBufferInfo.data();
+	return writeTextureDescriptorSet;
+}
+
 VkDescriptorSetLayout GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
@@ -261,6 +294,59 @@ void GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(std::vector<D
 	DescriptorSetBinding.AccelerationStructureDescriptor = accelerationStructure;
 	DescriptorSetBinding.Count = 1;
 	DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+VkDescriptorPool GLTF_GraphicsDescriptors::CreateDesciptorPool(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+{
+	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
+
+	if (DescriptorBindingList.size() > 0)
+	{
+		{
+			std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
+			for (auto& DescriptorBinding : DescriptorBindingList)
+			{
+				DescriptorPoolList.emplace_back(AddDescriptorPoolBinding(DescriptorBinding.DescriptorType, DescriptorBinding.Count));
+			}
+			DescriptorPool = CreateDescriptorPool(DescriptorPoolList);
+		}
+	}
+	return DescriptorPool;
+}
+
+VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+{
+	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+	std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
+	for (auto& DescriptorBinding : DescriptorBindingList)
+	{
+		LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
+	}
+	DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+	return DescriptorSetLayout;
+}
+
+VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSet(VkDescriptorPool descriptorPool, VkDescriptorSetLayout descriptorSetLayout, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
+{
+	std::vector<VkWriteDescriptorSet> DescriptorList;
+	VkDescriptorSet DescriptorSet2 = CreateDescriptorSets(descriptorPool, descriptorSetLayout);
+	for (auto& DescriptorBinding : DescriptorBindingList)
+	{
+		if (DescriptorBinding.BufferDescriptor.size() > 0)
+		{
+			DescriptorList.emplace_back(AddBufferDescriptorSet(DescriptorSet2, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+		}
+		else if (DescriptorBinding.TextureDescriptor.size() > 0)
+		{
+			DescriptorList.emplace_back(AddTextureDescriptorSet(DescriptorSet2, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+		}
+		else
+		{
+			DescriptorList.emplace_back(AddAccelerationBuffer(DescriptorSet2, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+		}
+	}
+	vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
+	return DescriptorSet2;
 }
 
 void GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo TextureImageInfo, VkShaderStageFlags StageFlags)
