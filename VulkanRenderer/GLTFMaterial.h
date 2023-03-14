@@ -31,6 +31,8 @@ public:
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 
+	VkDescriptorSet descriptorSet;
+
 	GLTFMaterial();
 	GLTFMaterial(const std::string& materialName);
 	~GLTFMaterial();

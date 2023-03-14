@@ -58,14 +58,15 @@ public:
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 
-	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 	MeshProperties meshProperties;
 
-	std::vector<VulkanBuffer> MeshTransformBufferList;
-	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
+	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
-	std::vector<glm::mat4> TransformMatrixList;
+
+	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 	std::vector<VkDescriptorSet> descripterSetList;
+	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);

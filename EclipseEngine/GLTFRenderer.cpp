@@ -22,7 +22,7 @@ void GLTFRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/FlightHelmet/glTF/FlightHelmet.gltf";
+	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	model = GLTF_Temp_Model(a, glm::mat4(1.0f), 0);
 
 	gLTFRenderPass.BuildRenderPass(model);
