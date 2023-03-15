@@ -30,7 +30,6 @@ private:
 
 	static float PBRCubeMapSize;
 	static float PreRenderedMapSize;
-
 	static std::shared_ptr<SkyboxMesh> skyboxMesh;
 
 public:

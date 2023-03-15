@@ -1,7 +1,7 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "Component.h"
-#include "Mesh.h"
+#include <glm/glm.hpp>
 
 enum GameObjectRenderType
 {

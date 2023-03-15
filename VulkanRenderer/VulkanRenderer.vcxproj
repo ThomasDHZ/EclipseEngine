@@ -21,12 +21,20 @@
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
     <ClInclude Include="BakedTexture.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentRenderer.h" />
     <ClInclude Include="CubeMapTexture.h" />
+    <ClInclude Include="CubeSamplerCamera.h" />
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObject2D.h" />
+    <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFMaterial.h" />
     <ClInclude Include="GLTFPointLight.h" />
+    <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="GLTFSpotLight.h" />
     <ClInclude Include="GLTFSunLight.h" />
     <ClInclude Include="GLTF_GraphicsDescriptors.h" />
@@ -46,6 +54,8 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="OrthographicCamera.h" />
+    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RandomNumber.h" />
     <ClInclude Include="ReadableTexture.h" />
@@ -54,6 +64,7 @@
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="STBIImport.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
@@ -72,11 +83,19 @@
   <ItemGroup>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
     <ClCompile Include="BakedTexture.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentRenderer.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
+    <ClCompile Include="CubeSamplerCamera.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObject2D.cpp" />
+    <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="GLTFMaterial.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
+    <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="GLTFSpotLight.cpp" />
     <ClCompile Include="GLTFSunLight.cpp" />
     <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />
@@ -91,6 +110,8 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="JsonConverter.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="OrthographicCamera.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="RandomNumber.cpp" />
     <ClCompile Include="ReadableTexture.cpp" />
     <ClCompile Include="RenderedColorTexture.cpp" />
@@ -98,6 +119,7 @@
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />

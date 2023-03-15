@@ -15,10 +15,10 @@ void PBRRealTimeRenderer::BuildRenderer()
 	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
-	{
-		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
-	}
+	//{
+	//	DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
+	//	DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
+	//}
 
 	PBRRenderPassTextureSubmitList submitList;
 	submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;

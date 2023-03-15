@@ -186,7 +186,6 @@
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
     <ClCompile Include="CubeMapSamplerPipeline.cpp" />
-    <ClCompile Include="CubeSamplerCamera.cpp" />
     <ClCompile Include="DeferredRendererPipeline.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
@@ -201,8 +200,6 @@
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
-    <ClCompile Include="GameObject2D.cpp" />
-    <ClCompile Include="GameObject3D.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GBufferPipeline.cpp" />
     <ClCompile Include="GLTFIrradiancePipeline.cpp" />
@@ -267,7 +264,6 @@
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="InstanceMesh.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Temp_GLTFMesh.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
@@ -280,17 +276,11 @@
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="BlinnPhongRenderer.cpp" />
     <ClCompile Include="BlinnPhongRenderPass.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="ComponentRenderer.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="OrthographicCamera.cpp" />
-    <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
     <ClCompile Include="RayTraceRenderPass.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
@@ -330,7 +320,6 @@
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="CubeMapSamplerPipeline.h" />
-    <ClInclude Include="CubeSamplerCamera.h" />
     <ClInclude Include="DeferredRendererPipeline.h" />
     <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
@@ -345,8 +334,6 @@
     <ClInclude Include="EnvironmentToCubePipeline.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
-    <ClInclude Include="GameObject2D.h" />
-    <ClInclude Include="GameObject3D.h" />
     <ClInclude Include="GBufferPipeline.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFIrradianceRenderPass.h" />
@@ -411,7 +398,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InstanceMesh.h" />
     <ClInclude Include="SkyboxPipeline.h" />
-    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Temp_GLTFMesh.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Tile.h" />
@@ -425,18 +411,12 @@
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="BlinnPhongRenderer.h" />
     <ClInclude Include="BlinnPhongRenderPass.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="ComponentRenderer.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="OrthographicCamera.h" />
-    <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RayTraceRenderer.h" />
     <ClInclude Include="RayTraceRenderPass.h" />
