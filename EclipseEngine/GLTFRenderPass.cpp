@@ -9,7 +9,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(std::shared_ptr<ModelRenderer> model)
+void GLTFRenderPass::BuildRenderPass(GLTF_Temp_Model& model)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -99,7 +99,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(std::shared_ptr<ModelRenderer> model)
+void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -123,7 +123,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::shared_ptr<ModelRenderer> mod
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::shared_ptr<ModelRenderer> model)
+VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

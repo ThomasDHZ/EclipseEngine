@@ -2,6 +2,7 @@
 #include "GLTFFileLoader.h"
 #include <Texture2D.h>
 #include <GLTFMaterial.h>
+#include <VRAMManager.h>
 #include "GLTFVertex.h"
 #include <GLTFSunLight.h>
 #include <GLTFDirectionalLight.h>

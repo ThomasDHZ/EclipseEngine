@@ -1,5 +1,4 @@
 #include "GLTF_Temp_Model.h"
-#include "GLTFSceneManager.h"
 #include "SceneManager.h"
 
 uint64_t GLTF_Temp_Model::ModelIDCounter = 0;
@@ -134,9 +133,9 @@ void GLTF_Temp_Model::UpdateDescriptorSets()
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, MaterialList[y]->GetAmbientOcclusionMapDescriptor());
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, MaterialList[y]->GetAlphaMapDescriptor());
 			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, MaterialList[y]->GetDepthMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
+			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
+			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
+			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
 			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GetSunLightPropertiesBuffer());
 			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GetDirectionalLightPropertiesBuffer());
 			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GetPointLightPropertiesBuffer());
@@ -161,7 +160,7 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 
 void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
 {
-	GLTFSceneManager::sceneProperites.SunLightCount = SunLightList.size();
+	SceneManager::sceneProperites.SunLightCount = SunLightList.size();
 	if (SunLightList.size() == 0)
 	{
 		VkDescriptorBufferInfo nullBuffer;
@@ -181,7 +180,7 @@ void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
 
 void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
 {
-	GLTFSceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
+	SceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
 	if (DirectionalLightList.size() == 0)
 	{
 		VkDescriptorBufferInfo nullBuffer;
@@ -201,7 +200,7 @@ void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
 
 void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
 {
-	GLTFSceneManager::sceneProperites.PointLightCount = PointLightList.size();
+	SceneManager::sceneProperites.PointLightCount = PointLightList.size();
 	if (PointLightList.size() == 0)
 	{
 		VkDescriptorBufferInfo nullBuffer;
@@ -221,7 +220,7 @@ void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
 
 void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
 {
-	GLTFSceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
+	SceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
 	if (SpotLightList.size() == 0)
 	{
 		VkDescriptorBufferInfo nullBuffer;

@@ -10,6 +10,7 @@
 #include "SoundDevice.h"
 #include "SoundEffectManager.h"
 #include <Timer.h>
+#include <VRAMManager.h>
 
 VkRenderPass InterfaceRenderPass::RenderPass = VK_NULL_HANDLE;
 VkDescriptorPool InterfaceRenderPass::ImGuiDescriptorPool = VK_NULL_HANDLE;
@@ -25,6 +26,7 @@ int main()
     SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
+    VRAMManager::StartUp();
     TextureManager::StartUp();
     MaterialManager::StartUp();
     //TopLevelAccelerationStructureManager::StartUp();

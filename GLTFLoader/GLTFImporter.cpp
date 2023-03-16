@@ -8,6 +8,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 	{
 		auto color = glm::vec3(1.0f);
 		auto intensity = 0.0f;
+
 		for (auto& light : model.lights)
 		{
 			std::string baseName = node.name;

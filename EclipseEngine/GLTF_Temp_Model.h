@@ -35,6 +35,8 @@ private:
 	glm::mat4 GameObjectTransformMatrix;
 	glm::mat4 ModelTransformMatrix;
 
+
+
 	std::vector<VkDescriptorSet> descripterSetList;
 	void GenerateID();
 public:

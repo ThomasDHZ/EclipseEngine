@@ -27,6 +27,7 @@ void GLTFModel::LoadModel(tinygltf::Model model)
 		LoadLights(model, node);
 		LoadMesh(model, node, nullptr, x);
 	}
+	data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
 	data.VertexList = VertexList;
 	data.IndexList = IndexList;
