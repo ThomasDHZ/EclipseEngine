@@ -23,13 +23,14 @@
 #include "GLTFRenderPass.h"
 #include "GLTFIrradianceRenderPass.h"
 #include "GLTFPrefilterRenderPass.h"
+#include "PerspectiveCamera.h"
 
 class GLTFRenderer
 {
 private:
-	SceneProperties sceneProperites;
+	std::shared_ptr<ModelRenderer> model;
+	std::shared_ptr<Camera> camera;
 
-	GLTF_Temp_Model model;
 	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
 	GLTFIrradianceRenderPass irradianceRenderPass;

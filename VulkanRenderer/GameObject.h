@@ -57,6 +57,7 @@ public:
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
+	virtual void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout) = 0;
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 

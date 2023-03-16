@@ -144,9 +144,6 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VRAMManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLTFMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -300,9 +297,6 @@
       <Filter>Source Files\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VRAMManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLTFMaterial.cpp">

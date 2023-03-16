@@ -244,11 +244,11 @@ Scene::Scene()
         loader1.FilePath = "../Models/sphere.obj";
         loader1.MeshType = MeshTypeEnum::kPolygon;
 
-        auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(0.0f, 0.0f, 0.0f)));
+   /*     auto obj = std::make_shared<ModelRenderer>(ModelRenderer("IronSphere", loader1, glm::vec3(0.0f, 0.0f, 0.0f)));
         obj->GetModel()->GetMeshList()[0]->SetMaterial(material3);
         obj->GetModel()->GetMeshList()[0]->SetReflectionPoint(glm::vec3(0.3f, 1.0f, 1.0f));
         obj->GetModel()->GetMeshList()[0]->meshProperties.SkyBoxIndex = 25;
-        GameObjectManager::AddGameObject(obj);
+        GameObjectManager::AddGameObject(obj);*/
 
        // auto obj2 = std::make_shared<ModelRenderer>(ModelRenderer("PlasticSphere", loader1, glm::vec3(-3.0f, 0.0f, 0.0f)));
        //// obj2->GetModel()->GetMeshList()[0]->SetMaterial(GoldMaterial);

@@ -1258,9 +1258,6 @@
     <None Include="..\Shaders\GLTFPBRRenderer.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\GLTFPBRRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\GLTFBRDFShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1269,6 +1266,9 @@
     </None>
     <None Include="imgui.ini">
       <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Shaders\GLTFPBRRenderer.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

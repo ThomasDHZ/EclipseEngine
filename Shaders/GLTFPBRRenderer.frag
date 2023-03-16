@@ -70,38 +70,32 @@ struct MaterialProperties
 	uint EmissionMapID;
 };
 
-struct SunLight
-{
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-};
-
 struct DirectionalLight
 {
-	vec3 diffuse;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
+    vec3 position;
+    vec3 direction;
+    vec3 diffuse;
+    vec3 specular;
+    mat4 lightSpaceMatrix;
 };
 
 struct PointLight
 {
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-	float radius;
+    vec3 position;
+    vec3 diffuse;
+    vec3 specular;
+    float constant;
+    float linear;
+    float quadratic;
+    mat4 lightSpaceMatrix;
 };
 
 struct SpotLight
 {
-	vec3 diffuse;
-	vec3 position;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
+    vec3 position;
+    vec3 direction;
+    vec3 diffuse;
+    vec3 specular;
 
     float cutOff;
     float outerCutOff;
@@ -119,7 +113,6 @@ layout(push_constant) uniform SceneData
     vec3 CameraPos;
     vec3 MeshColorID;
     vec3 AmbientLight;
-    uint SunLightCount;
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
@@ -153,10 +146,9 @@ layout(binding = 7) uniform sampler2D DepthMap;
 layout(binding = 8) uniform sampler2D BRDFMap;
 layout(binding = 9) uniform samplerCube IrradianceMap;
 layout(binding = 10) uniform samplerCube PrefilterMap;
-layout(binding = 11) buffer SunLightBuffer { SunLight sunLight; } SULight[];
-layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 11) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 12) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 13) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 const float PI = 3.14159265359;
 
@@ -166,7 +158,6 @@ float GeometrySchlickGGX(float NdotV, float roughness);
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 mat3 getTBNFromMap(Vertex vertex);
-vec3 CalcSunLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial);
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial);
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial);
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial);
@@ -210,10 +201,9 @@ void main()
     F0 = mix(F0, pbrMaterial.Albedo, pbrMaterial.Metallic);
 
     vec3 Lo = vec3(0.0);
- // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
- // Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
-    Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
-  //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
+    Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
+    //Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
+    //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);
     vec3 kS = F;
@@ -246,8 +236,8 @@ PBRMaterial BuildPBRMaterial(vec2 UV)
     material.Albedo = texture(AlbedoMap, UV).rgb;
 	material.Metallic = texture(MetallicRoughnessMap, UV).b;
 	material.Roughness = texture(MetallicRoughnessMap, UV).g;
-    material.AmbientOcclusion = texture(MetallicRoughnessMap, UV).r;
-	//material.Emission = .4f;
+    material.AmbientOcclusion = 0.992f;
+	//material.Emission = texture(TextureMap[properties.EmissionMapID], UV).rgb;
     return material;
 }
 
@@ -304,38 +294,6 @@ mat3 getTBNFromMap(Vertex vertex)
     return mat3(T, B, N);
 }
 
-vec3 CalcSunLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
-{
-    vec3 Lo = vec3(0.0);
-    for (int x = 0; x < sceneData.SunLightCount; x++)
-    {
-        vec3 L = normalize(SULight[x].sunLight.position - vertex.Position);
-        vec3 H = normalize(V + L);
-        float watts = SULight[x].sunLight.intensity;
-        vec3 radiance = SULight[x].sunLight.diffuse * watts;
-
-        float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
-        float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
-        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, pbrMaterial.Roughness);
-
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - pbrMaterial.Metallic;
-
-        float NdotL = max(dot(N, L), 0.0);
-
-      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;// * shadow;
-    }
-    return Lo;
-}
-
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial)
 {
     vec3 Lo = vec3(0.0);
@@ -344,8 +302,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, PBRMaterial pbrMaterial)
     {
         vec3 L = normalize(-DLight[x].directionalLight.direction);
         vec3 H = normalize(V + L);
-        float watts = DLight[x].directionalLight.intensity;
-        vec3 radiance = DLight[x].directionalLight.diffuse * watts;
+        vec3 radiance = DLight[x].directionalLight.diffuse;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -376,15 +333,9 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
     {
         vec3 L = normalize(PLight[x].pointLight.position - vertex.Position);
         vec3 H = normalize(V + L);
-
         float distance = length(PLight[x].pointLight.position - vertex.Position);
-        float Kc = 1.0f;
-        float Kl = 2 / PLight[x].pointLight.radius;
-        float Kq = 1 / (PLight[x].pointLight.radius * PLight[x].pointLight.radius); 
-        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));  
-        
-        float watts = PLight[x].pointLight.intensity;
-        vec3 radiance = PLight[x].pointLight.diffuse * watts * attenuation;
+        float attenuation = 1.0 / (distance * distance);
+        vec3 radiance = PLight[x].pointLight.diffuse * attenuation;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -400,15 +351,14 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
 
         float NdotL = max(dot(N, L), 0.0);
 
-      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
+        // float shadow = CubeShadowCalculation(FragPos, V, x);
         Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;// * shadow;
     }
+
     return Lo;
 }
 
-/*vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
+vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
 {
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.SpotLightCount; x++)
@@ -423,8 +373,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
         float distance = length(SLight[x].spotLight.position - vertex.Position);
         float attenuation = 1.0 / (distance * distance);
         attenuation *= intensity;
-        float watts = SLight[x].spotLight.intensity;
-        vec3 radiance = SLight[x].spotLight.diffuse * watts * attenuation;
+        vec3 radiance = SLight[x].spotLight.diffuse * attenuation;
 
         float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
         float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
@@ -444,7 +393,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMater
     }
 
     return Lo;
-}*/
+}
 
 
 //vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir)

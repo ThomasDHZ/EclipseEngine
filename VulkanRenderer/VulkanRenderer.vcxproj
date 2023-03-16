@@ -73,7 +73,6 @@
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UniformBuffer.h" />
-    <ClInclude Include="VRAMManager.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanRenderer.h" />
@@ -126,7 +125,6 @@
     <ClCompile Include="TextureBaker.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="VRAMManager.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />

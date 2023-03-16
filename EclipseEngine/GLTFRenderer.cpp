@@ -10,20 +10,22 @@ GLTFRenderer::~GLTFRenderer()
 
 void GLTFRenderer::BuildRenderer()
 {
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-	SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
-	GLTF_BRDFRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
+	//GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
+
+	environmentToCubeRenderPass.BuildRenderPass(1024.0f);
+	GLTF_BRDFRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
-	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
-	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
+	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
-	model = GLTF_Temp_Model(a, glm::mat4(1.0f), 0);
+	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
+	model = std::make_shared<ModelRenderer>(ModelRenderer("Testobject", a, glm::vec3(0.0f)));
 
 	gLTFRenderPass.BuildRenderPass(model);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
@@ -31,22 +33,23 @@ void GLTFRenderer::BuildRenderer()
 
 void GLTFRenderer::Update()
 {
-	sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
-	sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
-	sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
-	sceneProperites.SunLightCount = 1;
-	sceneProperites.DirectionalLightCount = 1;
-	sceneProperites.PointLightCount = 7;
-	sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
-	sceneProperites.Timer = (float)glfwGetTime();
-	sceneProperites.frame++;
-	if (sceneProperites.frame == UINT32_MAX)
-	{
-		sceneProperites.frame = 0;
-	}
-	sceneProperites.MaxReflectCount = 2;
+	//sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
+	//sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
+	//sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
+	//sceneProperites.SunLightCount = 1;
+	//sceneProperites.DirectionalLightCount = 1;
+	//sceneProperites.PointLightCount = 7;
+	//sceneProperites.SpotLightCount = LightManager::GetSpotLightCount();
+	//sceneProperites.Timer = (float)glfwGetTime();
+	//sceneProperites.frame++;
+	//if (sceneProperites.frame == UINT32_MAX)
+	//{
+	//	sceneProperites.frame = 0;
+	//}
+	//
 
-	model.Update(glm::mat4(1.0f));
+	//GLTFSceneManager::Update();
+	model->Update(0.0f);
 }
 
 void GLTFRenderer::ImGuiUpdate()
@@ -78,31 +81,31 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
 	//}
 
-	//ImGui::SliderFloat3("Position ", &model.MeshList[0]->MeshPosition.x, 0.0f, 1.0f);
-	//ImGui::SliderFloat3("Rotation ", &model.MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
-	//ImGui::SliderFloat3("Scale ", &model.MeshList[0]->MeshScale.x, 0.0f, 1.0f);
-	if (SceneManager::EditorModeFlag)
-	{
-		if (ImGui::Button("Play Mode"))
-		{
-			SceneManager::EditorModeFlag = false;
-		}
-		if (ImGui::Button("Update Renderer"))
-		{
-			UpdateRenderer = true;
-		}
-		if (ImGui::Button("Bake"))
-		{
-			//BakeTextures("TestBake.bmp");
-		}
-	}
-	else
-	{
-		if (ImGui::Button("Editor Mode"))
-		{
-			SceneManager::EditorModeFlag = true;
-		}
-	}
+	ImGui::SliderFloat3("Position ", &model->GetGameObjectPositionPtr()->x, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Rotation ", &model->GetGameObjectRotationPtr()->x, 0.0f, 360.0f);
+	ImGui::SliderFloat3("Scale ", &model->GetGameObjectScalePtr()->x, 0.0f, 1.0f);
+	//if (GLTFSceneManager::EditorModeFlag)
+	//{
+	//	if (ImGui::Button("Play Mode"))
+	//	{
+	//		SceneManager::EditorModeFlag = false;
+	//	}
+	//	if (ImGui::Button("Update Renderer"))
+	//	{
+	//		UpdateRenderer = true;
+	//	}
+	//	if (ImGui::Button("Bake"))
+	//	{
+	//		//BakeTextures("TestBake.bmp");
+	//	}
+	//}
+	//else
+	//{
+	//	if (ImGui::Button("Editor Mode"))
+	//	{
+	//		SceneManager::EditorModeFlag = true;
+	//	}
+	//}
 }
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
@@ -120,5 +123,5 @@ void GLTFRenderer::Destroy()
 	gLTFRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 
-	model.Destroy();
+	model->Destroy();
 }

@@ -18,7 +18,7 @@ class GLTFRenderPass : public RenderPass
 		GLTF_SkyboxPipeline skyboxPipeline;
 
 		void RenderPassDesc();
-		void BuildRenderPassPipelines(GLTF_Temp_Model& model);
+		void BuildRenderPassPipelines(std::shared_ptr<ModelRenderer> model);
 
 public:
 	GLTFRenderPass();
@@ -26,8 +26,8 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(GLTF_Temp_Model& model);
-	VkCommandBuffer Draw(GLTF_Temp_Model& model);
+	void BuildRenderPass(std::shared_ptr<ModelRenderer> model);
+	VkCommandBuffer Draw(std::shared_ptr<ModelRenderer> model);
 	void Destroy();
 };
 
