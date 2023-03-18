@@ -159,9 +159,6 @@
     <ClCompile Include="RenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="BlinnPhongRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -198,23 +195,11 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="BlinnPhongRenderer.cpp">
-      <Filter>Source Files\Renderer\Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="RayTraceRenderer.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="Renderer2D.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="RaytraceHybridPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="HybridRenderer.cpp">
-      <Filter>Source Files\Renderer\Renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="GBufferRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="RenderPassImageManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -337,9 +322,6 @@
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="DepthPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="GBufferPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="BRDFPipeline.cpp">
@@ -516,12 +498,6 @@
     <ClCompile Include="GLTFRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BlinnPhongReflectionPipeline.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="BloomCombine.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -530,6 +506,9 @@
     </ClCompile>
     <ClCompile Include="ReadableTexture.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFSceneManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -556,9 +535,6 @@
     </ClInclude>
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlinnPhongRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="RayTracingPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
@@ -599,23 +575,11 @@
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="BlinnPhongRenderer.h">
-      <Filter>Header Files\Renderer\Renderers</Filter>
-    </ClInclude>
     <ClInclude Include="RayTraceRenderer.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="Renderer2D.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="RaytraceHybridPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="HybridRenderer.h">
-      <Filter>Header Files\Renderer\Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="GBufferRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="RenderPassImageManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -720,9 +684,6 @@
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="LinePipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GBufferPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WireFramePipeline.h">
@@ -923,12 +884,6 @@
     <ClInclude Include="GLTFRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BlinnPhongReflectionPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlinnPhongReflectionRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BloomCombine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -936,6 +891,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReadableTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFSceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -998,12 +956,6 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\FrameBuffer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\GBuffer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\GBuffer.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\IrradianceShader.frag">
@@ -1111,12 +1063,6 @@
     <None Include="..\Shaders\DepthIntencedShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\BlinnPhoneReflect.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\BlinnPhoneReflect.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\ReflectionPBRInstanceShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1191,9 +1137,6 @@
     </None>
     <None Include="..\Shaders\PBRRaygen.rgen">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
-    </None>
-    <None Include="..\Shaders\hybridclosesthit.rchit">
-      <Filter>Shader\RayTraceShaders\Hybrid</Filter>
     </None>
     <None Include="..\Shaders\PBRMiss.rmiss">
       <Filter>Shader\RayTraceShaders\PBR</Filter>

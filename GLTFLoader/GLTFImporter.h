@@ -8,7 +8,6 @@
 #include <GLTFDirectionalLight.h>
 #include <GLTFPointLight.h>
 #include <GLTFSpotLight.h>
-#include <GLTFSceneManager.h>
 
 struct GLTFPrimitive
 {

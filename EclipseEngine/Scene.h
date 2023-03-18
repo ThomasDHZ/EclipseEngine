@@ -14,14 +14,11 @@
 #include "RenderedTexture.h"
 #include "Texture2D.h"
 #include "GameObjectManager.h"
-#include "BlinnPhongRenderer.h"
 #include "Renderer2D.h"
-#include "BlinnPhongRenderer.h"
 #include "TextureManager.h"
 #include "MaterialManager.h"
 #include "RayTraceRenderer.h"
 #include "LightManager.h"
-#include "HybridRenderer.h"
 #include "PBRRenderer.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
@@ -34,8 +31,6 @@ class Scene
 {
 private:
 	Renderer2D renderer2D;
-	BlinnPhongRenderer blinnPhongRenderer;
-	HybridRenderer hybridRenderer;
 	GLTFRenderer pbrRenderer;
 	//GLTFRenderer gltfRenderer;
 	//PBRRealTimeRenderer pbrRenderer;

@@ -397,16 +397,13 @@ void Scene::Update()
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {
-                    hybridRenderer.Update();
                 }
                 else
                 {
-                   blinnPhongRenderer.Update();
                 }
             }
             else
             {
-               blinnPhongRenderer.Update();
             }
             break;
         }
@@ -459,16 +456,13 @@ void Scene::ImGuiUpdate()
             }
             else if (SceneManager::IsHybridRendererActive())
             {
-                hybridRenderer.ImGuiUpdate();
             }
             else
             {
-                blinnPhongRenderer.ImGuiUpdate();
             }
         }
         else
         {
-            blinnPhongRenderer.ImGuiUpdate();
         }
         break;
     }
@@ -541,7 +535,6 @@ void Scene::BuildRenderers()
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.BuildRenderer();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
                rayTraceRenderer.BuildRenderer();
@@ -597,12 +590,10 @@ void Scene::Draw()
                 }
                 else
                 {
-                    blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
                 }
             }
             else
             {
-                blinnPhongRenderer.Draw(SceneManager::sceneProperites, SceneManager::cubeMapInfo, CommandBufferSubmitList);
             }
             break;
         }
@@ -652,10 +643,8 @@ void Scene::Destroy()
         }
         case SceneType::kBlinnPhong:
         {
-            blinnPhongRenderer.Destroy();
             if (GraphicsDevice::IsRayTracingFeatureActive())
             {
-                hybridRenderer.Destroy();
               rayTraceRenderer.Destroy();
             }
             break;

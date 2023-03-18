@@ -171,8 +171,6 @@
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
-    <ClCompile Include="BlinnPhongReflectionPipeline.cpp" />
-    <ClCompile Include="BlinnPhongReflectionRenderPass.cpp" />
     <ClCompile Include="BloomCombine.cpp" />
     <ClCompile Include="ConstMeshInfo.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
@@ -201,7 +199,6 @@
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
-    <ClCompile Include="GBufferPipeline.cpp" />
     <ClCompile Include="GLTFIrradiancePipeline.cpp" />
     <ClCompile Include="GLTFIrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
@@ -209,6 +206,7 @@
     <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderer.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="GLTF_BRDFPipeline.cpp" />
     <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
     <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
@@ -217,8 +215,6 @@
     <ClCompile Include="GLTF_Temp_Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
-    <ClCompile Include="HybridRenderer.cpp" />
-    <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="IrradiancePipeline.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="Level2D.cpp" />
@@ -274,8 +270,6 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="RenderPass.cpp" />
-    <ClCompile Include="BlinnPhongRenderer.cpp" />
-    <ClCompile Include="BlinnPhongRenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -286,7 +280,6 @@
     <ClCompile Include="RayTracingPipeline.cpp" />
     <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
-    <ClCompile Include="RaytraceHybridPass.cpp" />
     <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -303,8 +296,6 @@
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
-    <ClInclude Include="BlinnPhongReflectionPipeline.h" />
-    <ClInclude Include="BlinnPhongReflectionRenderPass.h" />
     <ClInclude Include="BloomCombine.h" />
     <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="ConstMeshInfo.h" />
@@ -334,7 +325,6 @@
     <ClInclude Include="EnvironmentToCubePipeline.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
-    <ClInclude Include="GBufferPipeline.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFIrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
@@ -342,6 +332,7 @@
     <ClInclude Include="GLTFPrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
     <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="GLTF_BRDFPipeline.h" />
     <ClInclude Include="GLTF_BRDFRenderPass.h" />
     <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />
@@ -351,8 +342,6 @@
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
     <ClInclude Include="IrradiancePipeline.h" />
-    <ClInclude Include="HybridRenderer.h" />
-    <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />
@@ -409,8 +398,6 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="RenderPass.h" />
-    <ClInclude Include="BlinnPhongRenderer.h" />
-    <ClInclude Include="BlinnPhongRenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
@@ -423,7 +410,6 @@
     <ClInclude Include="RayTracingPipeline.h" />
     <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderPass2D.h" />
-    <ClInclude Include="RaytraceHybridPass.h" />
     <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -446,8 +432,6 @@
     <None Include="..\Shaders\BakeReflectionPBRShader.vert" />
     <None Include="..\Shaders\BillBoardShader.frag" />
     <None Include="..\Shaders\BillBoardShader.vert" />
-    <None Include="..\Shaders\BlinnPhoneReflect.frag" />
-    <None Include="..\Shaders\BlinnPhoneReflect.vert" />
     <None Include="..\Shaders\BRDFShader.frag" />
     <None Include="..\Shaders\BRDFShader.vert" />
     <None Include="..\Shaders\closesthit.rchit" />
@@ -476,9 +460,6 @@
     <None Include="..\Shaders\FrameBuffer.vert" />
     <None Include="..\Shaders\GaussianBlur.frag" />
     <None Include="..\Shaders\GaussianBlur.vert" />
-    <None Include="..\Shaders\GBuffer.frag" />
-    <None Include="..\Shaders\GBuffer.vert" />
-    <None Include="..\Shaders\hybridclosesthit.rchit" />
     <None Include="..\Shaders\IrradianceShader.frag" />
     <None Include="..\Shaders\IrradianceShader.vert" />
     <None Include="..\Shaders\LightDebugShader.frag" />

@@ -195,9 +195,6 @@
     <ClInclude Include="GLTFSunLight.h">
       <Filter>Header Files\Lights</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFSceneManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PerspectiveCamera.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
@@ -346,9 +343,6 @@
     </ClCompile>
     <ClCompile Include="GLTFSunLight.cpp">
       <Filter>Source Files\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFSceneManager.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Camera</Filter>
