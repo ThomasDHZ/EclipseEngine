@@ -128,7 +128,7 @@ void Texture::LoadTexture(const TinyGltfTextureLoader& textureLoader, VkFormat f
 	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	CopyBufferToImage(StagingBuffer.GetBuffer());
 
-	StagingBuffer.DestoryBuffer();
+	StagingBuffer.DestroyBuffer();
 }
 
 void Texture::LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format)
@@ -157,7 +157,7 @@ void Texture::LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution,
 	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	CopyBufferToImage(StagingBuffer.GetBuffer());
 
-	StagingBuffer.DestoryBuffer();
+	StagingBuffer.DestroyBuffer();
 }
 
 //void Texture::LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format)
@@ -223,7 +223,7 @@ void Texture::LoadTexture(std::string TextureLocation, VkFormat format)
 	CopyBufferToImage(StagingBuffer.GetBuffer());
 	GenerateMipmaps();
 
-	StagingBuffer.DestoryBuffer();
+	StagingBuffer.DestroyBuffer();
 	stbi_image_free(pixels);
 }
 

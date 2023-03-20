@@ -83,5 +83,5 @@ void AccelerationStructureBuffer::CreateAccelerationStructure(VkAccelerationStru
 
 void AccelerationStructureBuffer::Destroy()
 {
-	AccelerationBuffer.DestoryBuffer();
+	AccelerationBuffer.DestroyBuffer();
 }

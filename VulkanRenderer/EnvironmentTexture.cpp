@@ -63,7 +63,7 @@ void EnvironmentTexture::LoadTexture(std::string TextureLocation, VkFormat textu
 	CopyBufferToImage(StagingBuffer.Buffer);
 	TransitionImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-	StagingBuffer.DestoryBuffer();
+	StagingBuffer.DestroyBuffer();
 	for (auto texturedata : textureData)
 	{
 		stbi_image_free(texturedata);

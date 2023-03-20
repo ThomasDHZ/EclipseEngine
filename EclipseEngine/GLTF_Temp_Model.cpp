@@ -251,15 +251,15 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shad
 
 void GLTF_Temp_Model::Destroy()
 {
-	VertexBuffer.DestoryBuffer();
-	IndexBuffer.DestoryBuffer();
+	VertexBuffer.DestroyBuffer();
+	IndexBuffer.DestroyBuffer();
 	for (auto& texture : TextureList)
 	{
 		texture->Destroy();
 	}
 	for (auto& material : MeshPropertiesBufferList)
 	{
-		material.DestoryBuffer();
+		material.DestroyBuffer();
 	}
 	for (auto& mesh : MeshList)
 	{

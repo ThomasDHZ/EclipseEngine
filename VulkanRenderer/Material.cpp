@@ -171,7 +171,7 @@ void Material::MaterialBufferUpdate()
 
 void Material::Destroy()
 {
-	MaterialBuffer.DestoryBuffer();
+	MaterialBuffer.DestroyBuffer();
 }
 
 void Material::LoadDiffuseMap(const std::string FilePath)

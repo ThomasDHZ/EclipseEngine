@@ -74,12 +74,12 @@ void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatri
 
 void Mesh::Destroy()
 {
-	VertexBuffer.DestoryBuffer();
+	VertexBuffer.DestroyBuffer();
 	MeshPropertiesBuffer.Destroy();
 
 	if (IndexBuffer.Buffer != nullptr)
 	{
-		IndexBuffer.DestoryBuffer();
+		IndexBuffer.DestroyBuffer();
 	}
 	if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() != VK_NULL_HANDLE)
 	{

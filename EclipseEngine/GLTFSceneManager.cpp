@@ -1,7 +1,7 @@
 #include "GLTFSceneManager.h"
-ConstSkyBoxView							           GLTFSceneManager::CubeMapInfo;
+SkyBoxView							           GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
-std::shared_ptr<SkyboxMesh>                        GLTFSceneManager::skyboxMesh;
+std::shared_ptr<Skybox>                        GLTFSceneManager::skyboxMesh;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;

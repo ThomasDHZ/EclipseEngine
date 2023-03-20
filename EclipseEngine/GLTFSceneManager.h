@@ -6,9 +6,8 @@
 #include "GLTFDirectionalLight.h"
 #include "GLTFSpotLight.h"
 #include "GLTFPointLight.h"
-#include "SkyboxMesh.h"
-#include "GLTFSceneManager.h"
-
+#include "Skybox.h"
+#
 class GLTFSceneManager
 {
 private:
@@ -32,8 +31,8 @@ public:
 	static std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
 	static std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
 
-	static std::shared_ptr<SkyboxMesh> skyboxMesh;
-	static ConstSkyBoxView CubeMapInfo;
+	static std::shared_ptr<Skybox> skyboxMesh;
+	static SkyBoxView CubeMapInfo;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;

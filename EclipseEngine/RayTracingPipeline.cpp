@@ -54,9 +54,9 @@ void RayTracingPipeline::SetUpPipeline(std::vector<VkPipelineShaderStageCreateIn
 void RayTracingPipeline::UpdateGraphicsPipeLine(std::vector<VkPipelineShaderStageCreateInfo>& ShaderList, std::vector<VkRayTracingShaderGroupCreateInfoKHR>& RayTraceShaderList, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
     GraphicsPipeline::UpdateGraphicsPipeLine();
-    RaygenShaderBindingTable.DestoryBuffer();
-    MissShaderBindingTable.DestoryBuffer();
-    HitShaderBindingTable.DestoryBuffer();
+    RaygenShaderBindingTable.DestroyBuffer();
+    MissShaderBindingTable.DestroyBuffer();
+    HitShaderBindingTable.DestroyBuffer();
 
     SetUpDescriptorBindings(DescriptorBindingList);
     SetUpPipeline(ShaderList, RayTraceShaderList);
@@ -65,9 +65,9 @@ void RayTracingPipeline::UpdateGraphicsPipeLine(std::vector<VkPipelineShaderStag
 
 void RayTracingPipeline::Destroy()
 {
-    RaygenShaderBindingTable.DestoryBuffer();
-    MissShaderBindingTable.DestoryBuffer();
-    HitShaderBindingTable.DestoryBuffer();
+    RaygenShaderBindingTable.DestroyBuffer();
+    MissShaderBindingTable.DestroyBuffer();
+    HitShaderBindingTable.DestroyBuffer();
 
     GraphicsPipeline::Destroy();
 }

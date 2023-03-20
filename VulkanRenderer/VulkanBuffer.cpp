@@ -78,7 +78,7 @@ VkResult VulkanBuffer::UpdateBufferSize(VkDeviceSize bufferSize)
 {
 	BufferSize = bufferSize;
 
-	DestoryBuffer();
+	DestroyBuffer();
 	
 	VkBufferCreateInfo buffer = {};
 	buffer.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -111,7 +111,7 @@ VkResult VulkanBuffer::UpdateBufferSize(VkDeviceSize bufferSize)
 	return vkMapMemory(VulkanRenderer::GetDevice(), BufferMemory, 0, BufferSize, 0, &data);
 }
 
-void VulkanBuffer::DestoryBuffer()
+void VulkanBuffer::DestroyBuffer()
 {
 	BufferDeviceAddress = 0;
 	if (Buffer != nullptr &&

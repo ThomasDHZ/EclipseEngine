@@ -175,7 +175,7 @@ void Mesh3D::UpdateMeshBottomLevelAccelerationStructure()
 
 		BottomLevelAccelerationBuffer.AccelerationCommandBuffer(AccelerationBuildGeometryInfo, AccelerationBuildStructureRangeInfos);
 
-		scratchBuffer.DestoryBuffer();
+		scratchBuffer.DestroyBuffer();
 	}
 }
 
@@ -286,19 +286,19 @@ void Mesh3D::Destroy()
 	Mesh::Destroy();
 	if (TransformBuffer.Buffer != nullptr)
 	{
-		TransformBuffer.DestoryBuffer();
+		TransformBuffer.DestroyBuffer();
 	}
 	if (TransformInverseBuffer.Buffer != nullptr)
 	{
-		TransformInverseBuffer.DestoryBuffer();
+		TransformInverseBuffer.DestroyBuffer();
 	}
 	if(BoneTransformBuffer.Buffer != nullptr)
 	{
-		BoneTransformBuffer.DestoryBuffer();
+		BoneTransformBuffer.DestroyBuffer();
 	}
 	if (BoneWeightBuffer.Buffer != nullptr)
 	{
-		BoneWeightBuffer.DestoryBuffer();
+		BoneWeightBuffer.DestroyBuffer();
 	}
 }
 

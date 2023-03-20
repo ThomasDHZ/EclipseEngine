@@ -180,6 +180,6 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 
 void Temp_GLTFMesh::Destroy()
 {
-	MeshPropertiesBuffer.DestoryBuffer();
-	MeshTransformBuffer.DestoryBuffer();
+	MeshPropertiesBuffer.DestroyBuffer();
+	MeshTransformBuffer.DestroyBuffer();
 }

@@ -63,6 +63,7 @@
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="STBIImport.h" />
     <ClInclude Include="Texture.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />

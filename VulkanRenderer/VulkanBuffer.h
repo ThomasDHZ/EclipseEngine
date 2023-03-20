@@ -21,7 +21,7 @@ public:
 	void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	void CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize);
 	VkResult UpdateBufferSize(VkDeviceSize bufferSize);
-	void DestoryBuffer();
+	void DestroyBuffer();
 
 	void SetBufferAddress(uint64_t bufferSize);
 

@@ -137,12 +137,6 @@ struct DirectionalLightProjection
 	alignas(4) uint32_t LightIndex;
 };
 
-struct ConstSkyBoxView
-{
-	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
-	alignas(16) glm::mat4 view = glm::mat4(1.0f);
-};
-
 struct RayTraceSceneProperties
 {
 	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
@@ -211,7 +205,7 @@ public:
 
 	void Destroy()
 	{
-		VulkanBufferData.DestoryBuffer();
+		VulkanBufferData.DestroyBuffer();
 	}
 
 	VulkanBuffer GetVulkanBufferData() { return VulkanBufferData; }
