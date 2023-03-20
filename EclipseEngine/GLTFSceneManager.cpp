@@ -1,36 +1,44 @@
 #include "GLTFSceneManager.h"
-ConstSkyBoxView							GLTFSceneManager::CubeMapInfo;
-SceneProperties							GLTFSceneManager::sceneProperites;
-std::shared_ptr<SkyboxMesh>             GLTFSceneManager::skyboxMesh;
-std::shared_ptr<EnvironmentTexture>     GLTFSceneManager::EnvironmentTexture = nullptr;
-std::shared_ptr<RenderedColorTexture>   GLTFSceneManager::BRDFTexture = nullptr;
-std::shared_ptr<RenderedCubeMapTexture> GLTFSceneManager::IrradianceMap = nullptr;
-std::shared_ptr<RenderedCubeMapTexture> GLTFSceneManager::PrefilterMap = nullptr;
-std::shared_ptr<RenderedCubeMapTexture> GLTFSceneManager::CubeMap = nullptr;
-//std::shared_ptr<Camera>					GLTFSceneManager::activeCamera;
-float                                   GLTFSceneManager::PBRCubeMapSize = 256.0f;
-float									GLTFSceneManager::PreRenderedMapSize = 256.0f;
+ConstSkyBoxView							           GLTFSceneManager::CubeMapInfo;
+SceneProperties							           GLTFSceneManager::sceneProperites;
+std::shared_ptr<SkyboxMesh>                        GLTFSceneManager::skyboxMesh;
+std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
+std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
+std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
+std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::PrefilterMap = nullptr;
+std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::CubeMap = nullptr;
+std::vector<std::shared_ptr<GLTFSunLight>>         GLTFSceneManager::SunlLightList;
+std::vector<std::shared_ptr<GLTFDirectionalLight>> GLTFSceneManager::DirectionalLightList;
+std::vector<std::shared_ptr<GLTFPointLight>>       GLTFSceneManager::PointlLightList;
+std::vector<std::shared_ptr<GLTFSpotLight>>        GLTFSceneManager::SpotLightList;
+//std::shared_ptr<Camera>					       GLTFSceneManager::activeCamera;
+float                                              GLTFSceneManager::PBRCubeMapSize = 256.0f;
+float									           GLTFSceneManager::PreRenderedMapSize = 256.0f;
 
 
-//void GLTFSceneManager::AddSunLight(GLTFSunLight sunLight)
-//{
-//	SunLightList.emplace_back(sunLight);
-//}
-//
-//void GLTFSceneManager::AddDirectionalLight(GLTFDirectionalLight directionalLight)
-//{
-//	DirectionalLightList.emplace_back(directionalLight);
-//}
-//
-//void GLTFSceneManager::AddPointlLight(GLTFPointLight pointLight)
-//{
-//	PointLightList.emplace_back(pointLight);
-//}
-//
-//void GLTFSceneManager::AddSpotLight(GLTFSpotLight spotLight)
-//{
-//	SpotLightList.emplace_back(spotLight);
-//}
+void GLTFSceneManager::AddSunLight(std::shared_ptr<GLTFSunLight> sunLight)
+{
+	SunlLightList.emplace_back(sunLight);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight)
+{
+	DirectionalLightList.emplace_back(directionalLight);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight)
+{
+	PointlLightList.emplace_back(pointLight);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
+{
+	SpotLightList.emplace_back(spotLight);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
 
 void GLTFSceneManager::Update()
 {

@@ -15,20 +15,22 @@ private:
 	static float PBRCubeMapSize;
 	static float PreRenderedMapSize;
 
-	//static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
-	//static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
-	//static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
-	//static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 
-	//static std::vector<VkDescriptorBufferInfo> SunLightPropertiesBuffer;
-	//static std::vector<VkDescriptorBufferInfo> DirectionalLightPropertiesBuffer;
-	//static std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
-	//static std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
 
 	//static std::shared_ptr<SkyboxMesh> SkyboxMesh;
 
 public:
 	static SceneProperties sceneProperites;
+
+	static std::vector<std::shared_ptr<GLTFSunLight>> SunlLightList;
+	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
+	static std::vector<std::shared_ptr<GLTFPointLight>> PointlLightList;
+	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
+
+	static std::vector<VkDescriptorBufferInfo> SunLightPropertiesBuffer;
+	static std::vector<VkDescriptorBufferInfo> DirectionalLightPropertiesBuffer;
+	static std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
+	static std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
 
 	static std::shared_ptr<SkyboxMesh> skyboxMesh;
 	static ConstSkyBoxView CubeMapInfo;
@@ -38,10 +40,10 @@ public:
 	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	//static void AddGameObject();
-	static void AddSunLight(GLTFSunLight sunLight);
-	static void AddDirectionalLight(GLTFDirectionalLight directionalLight);
-	static void AddPointlLight(GLTFPointLight pointLight);
-	static void AddSpotLight(GLTFSpotLight spotLight);
+	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
+	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
+	static void AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight);
+	static void AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight);
 	static void Update();
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
 	static VkDescriptorImageInfo GetIrradianceMapDescriptor();
