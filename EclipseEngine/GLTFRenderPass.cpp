@@ -9,7 +9,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(GLTF_Temp_Model& model)
+void GLTFRenderPass::BuildRenderPass(std::vector<GLTF_Temp_Model> modelList)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -35,7 +35,7 @@ void GLTFRenderPass::BuildRenderPass(GLTF_Temp_Model& model)
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(model);
+    BuildRenderPassPipelines(modelList);
     SetUpCommandBuffers();
 }
 
@@ -99,7 +99,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
+void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> modelList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -119,11 +119,11 @@ void GLTFRenderPass::BuildRenderPassPipelines(GLTF_Temp_Model& model)
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, model);
+    pbrPipeline.InitializePipeline(pipelineInfo, modelList);
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
+VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -164,7 +164,10 @@ VkCommandBuffer GLTFRenderPass::Draw(GLTF_Temp_Model& model)
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     skyboxPipeline.Draw(commandBuffer);
-    pbrPipeline.Draw(commandBuffer, model);
+    for (int x = 0; x < modelList.size(); x++)
+    {
+        pbrPipeline.Draw(commandBuffer, modelList[x], x);
+    }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

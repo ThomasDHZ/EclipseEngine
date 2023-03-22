@@ -29,7 +29,7 @@ class GLTFRenderer
 private:
 	SceneProperties sceneProperites;
 
-	GLTF_Temp_Model model;
+	std::vector<GLTF_Temp_Model> modelList;
 	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
 	GLTFIrradianceRenderPass irradianceRenderPass;

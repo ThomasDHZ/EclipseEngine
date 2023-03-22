@@ -9,7 +9,7 @@ std::shared_ptr<RenderedColorTexture>   SceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture> SceneManager::IrradianceMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture> SceneManager::PrefilterMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture> SceneManager::CubeMap = nullptr;
-ConstSkyBoxView							SceneManager::cubeMapInfo;
+SkyBoxView							SceneManager::cubeMapInfo;
 SceneProperties							SceneManager::sceneProperites;
 std::shared_ptr<Camera>					SceneManager::activeCamera;
 MusicPlayer								SceneManager::musicPlayer;

@@ -87,5 +87,5 @@ void PrefilterPipeline::Draw(VkCommandBuffer& commandBuffer, PrefilterSkyboxSett
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
     vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(prefiliter), &prefiliter);
-    SceneManager::GetSkyboxMesh()->Draw(commandBuffer, ShaderPipelineLayout);
+    SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
 }

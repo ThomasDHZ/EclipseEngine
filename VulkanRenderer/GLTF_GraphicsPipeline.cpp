@@ -83,9 +83,18 @@ void GLTF_GraphicsPipeline::BuildShaderPipeLine(BuildGraphicsPipelineInfo& build
     colorBlending.pAttachments = buildPipelineInfo.RenderPassDescription.ColorAttachments.data();
 
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-    pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipelineLayoutInfo.setLayoutCount = 1;
-    pipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
+    if (DescriptorSetLayoutList.size() == 0)
+    {
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
+    }
+    else
+    {
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(DescriptorSetLayoutList.size());
+        pipelineLayoutInfo.pSetLayouts = DescriptorSetLayoutList.data();
+    }
     pipelineLayoutInfo.pushConstantRangeCount = 1;
 
     if (buildPipelineInfo.RenderPassDescription.ConstBufferSize != 0)

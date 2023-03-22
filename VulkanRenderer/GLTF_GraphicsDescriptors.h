@@ -6,6 +6,7 @@ class GLTF_GraphicsDescriptors
 private:
 	static VkDescriptorPoolSize AddDescriptorPoolBinding(VkDescriptorType descriptorType, uint32_t descriptorCount);
 	static VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo);
+	static VkDescriptorSetLayout CreateDescriptorSetLayou(std::vector<VkDescriptorSetLayoutBinding> LayoutBindingInfo);
 
 	static VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo);
 
@@ -28,6 +29,7 @@ public:
 
 	static VkDescriptorPool CreateDesciptorPool(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
 	static VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
+	static VkDescriptorSetLayout CreateDescriptorSetLayout(std::vector<VkDescriptorSetLayoutBinding>& DescriptorBindingList);
 	static VkDescriptorSet CreateDescriptorSet(VkDescriptorPool descriptorPool, VkDescriptorSetLayout descriptorSetLayout, std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
 
 	static void AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR accelerationStructure, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);

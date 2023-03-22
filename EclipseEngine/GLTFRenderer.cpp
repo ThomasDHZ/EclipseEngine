@@ -22,10 +22,12 @@ void GLTFRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
-	model = GLTF_Temp_Model(a, glm::mat4(1.0f), 0);
+	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
+	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
+	modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
+	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
 
-	gLTFRenderPass.BuildRenderPass(model);
+	gLTFRenderPass.BuildRenderPass(modelList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
 
@@ -46,7 +48,10 @@ void GLTFRenderer::Update()
 	}
 	sceneProperites.MaxReflectCount = 2;
 
-	model.Update(glm::mat4(1.0f));
+	for (auto& model : modelList)
+	{
+		model.Update(glm::mat4(1.0f));
+	}
 }
 
 void GLTFRenderer::ImGuiUpdate()
@@ -57,12 +62,12 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 	//	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	//}
-	for (int x = 0; x < model.GetDirectionalLightPropertiesBuffer().size(); x++)
-	{
-		ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &model.DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &model.DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat(("DLight Intensity " + std::to_string(x)).c_str(), &model.DirectionalLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
-	}
+	//for (int x = 0; x < modelList[0].GetDirectionalLightPropertiesBuffer().size(); x++)
+	//{
+	//	ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &modelList.DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+	//	ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &modelList.DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	//	ImGui::SliderFloat(("DLight Intensity " + std::to_string(x)).c_str(), &modelList.DirectionalLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+	//}
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
 	//{
 	//	ImGui::SliderFloat3(("PLight direction " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetPositionPtr()->x, -1.0f, 100.0f);
@@ -78,9 +83,9 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
 	//}
 
-	//ImGui::SliderFloat3("Position ", &model.MeshList[0]->MeshPosition.x, 0.0f, 1.0f);
-	//ImGui::SliderFloat3("Rotation ", &model.MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
-	//ImGui::SliderFloat3("Scale ", &model.MeshList[0]->MeshScale.x, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Position ", &modelList[0].MeshList[0]->MeshPosition.x, 0.0f, 100.0f);
+	ImGui::SliderFloat3("Rotation ", &modelList[0].MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
+	ImGui::SliderFloat3("Scale ", &modelList[0].MeshList[0]->MeshScale.x, 0.0f, 1.0f);
 	//if (SceneManager::EditorModeFlag)
 	//{
 	//	if (ImGui::Button("Play Mode"))
@@ -107,7 +112,7 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(model));
+	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(modelList));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
@@ -119,6 +124,8 @@ void GLTFRenderer::Destroy()
 	prefilterRenderPass.Destroy();
 	gLTFRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
-
-	model.Destroy();
+	for (auto& model : modelList)
+	{
+		model.Destroy();
+	}
 }

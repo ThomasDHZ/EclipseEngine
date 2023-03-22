@@ -44,7 +44,7 @@ private:
 protected:
 	VkDescriptorSet DescriptorSet;
 	VkDescriptorSetLayout DescriptorSetLayout;
-
+	std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	void BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildPipelineInfo);
 

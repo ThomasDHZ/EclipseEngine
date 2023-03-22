@@ -122,30 +122,30 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 
 void GLTF_Temp_Model::UpdateDescriptorSets()
 {
-		for (int y = 0; y < MaterialList.size(); y++)
+	for (int y = 0; y < MaterialList.size(); y++)
+	{
+		std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, GetMeshPropertiesBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshList[0]->GetTransformMatrixBuffer());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, MaterialList[y]->GetAlbedoMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, MaterialList[y]->GetNormalMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, MaterialList[y]->GetMetallicRoughnessMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, MaterialList[y]->GetAmbientOcclusionMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, MaterialList[y]->GetAlphaMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, MaterialList[y]->GetDepthMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
+		GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GetSunLightPropertiesBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GetDirectionalLightPropertiesBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GetPointLightPropertiesBuffer());
+		GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GetSpotLightPropertiesBuffer());
+		MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
+		for (int x = 0; x < MeshList.size(); x++)
 		{
-			std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, GetMeshPropertiesBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshList[0]->GetTransformMatrixBuffer());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, MaterialList[y]->GetAlbedoMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, MaterialList[y]->GetNormalMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, MaterialList[y]->GetMetallicRoughnessMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, MaterialList[y]->GetAmbientOcclusionMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, MaterialList[y]->GetAlphaMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, MaterialList[y]->GetDepthMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
-			GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GetSunLightPropertiesBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GetDirectionalLightPropertiesBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GetPointLightPropertiesBuffer());
-			GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GetSpotLightPropertiesBuffer());
-			MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
-			for (int x = 0; x < MeshList.size(); x++)
-			{
-				MeshList[x]->MaterialList = MaterialList;
-			}
+			MeshList[x]->MaterialList = MaterialList;
 		}
+	}
 }
 
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
@@ -238,14 +238,14 @@ void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
 	}
 }
 
-void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
+void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
 	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		mesh->Draw(commandBuffer, ShaderPipelineLayout);
+		mesh->Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex);
 	}
 }
 

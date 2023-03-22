@@ -2,6 +2,12 @@
 #include "VulkanBuffer.h"
 #include "Material.h"
 
+struct SkyBoxView
+{
+	alignas(16) glm::mat4 proj = glm::mat4(1.0f);
+	alignas(16) glm::mat4 view = glm::mat4(1.0f);
+};
+
 struct DirectionalLightBuffer {
 	alignas(16) glm::vec3 position = glm::vec3(0.0f);
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);

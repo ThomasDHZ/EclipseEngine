@@ -37,7 +37,7 @@ public:
 	static std::shared_ptr<Camera> activeCamera;
 
 	static SceneProperties sceneProperites;
-	static ConstSkyBoxView cubeMapInfo;
+	static SkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
 	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;

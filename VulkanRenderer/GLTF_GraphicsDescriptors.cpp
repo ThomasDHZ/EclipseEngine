@@ -40,6 +40,22 @@ VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(std::v
 	return descriptorSet;
 }
 
+VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayou(std::vector<VkDescriptorSetLayoutBinding> LayoutBindingInfo)
+{
+	VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutInfo.bindingCount = static_cast<uint32_t>(LayoutBindingInfo.size());
+	layoutInfo.pBindings = LayoutBindingInfo.data();
+
+	VkDescriptorSetLayout descriptorSet;
+	if (vkCreateDescriptorSetLayout(VulkanRenderer::GetDevice(), &layoutInfo, nullptr, &descriptorSet) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to create descriptor set layout.");
+	}
+
+	return descriptorSet;
+}
+
+
 VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout)
 {
 	VkDescriptorSetAllocateInfo allocInfo = {};
@@ -62,7 +78,6 @@ VkDescriptorPool GLTF_GraphicsDescriptors::CreateDescriptorPool(std::vector<VkDe
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = static_cast<uint32_t>(DescriptorPoolInfo.size());
 	poolInfo.pPoolSizes = DescriptorPoolInfo.data();
-	poolInfo.maxSets = static_cast<uint32_t>(VulkanRenderer::GetSwapChainImageCount());
 	poolInfo.maxSets = 50;
 
 	VkDescriptorPool descriptorPool;
@@ -323,6 +338,13 @@ VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(std::v
 		LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.DescriptorType, DescriptorBinding.StageFlags, DescriptorBinding.Count });
 	}
 	DescriptorSetLayout = CreateDescriptorSetLayout(LayoutBindingInfo);
+	return DescriptorSetLayout;
+}
+
+VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(std::vector<VkDescriptorSetLayoutBinding>& DescriptorBindingList)
+{
+	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+	DescriptorSetLayout = CreateDescriptorSetLayou(DescriptorBindingList);
 	return DescriptorSetLayout;
 }
 
