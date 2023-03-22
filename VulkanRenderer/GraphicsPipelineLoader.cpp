@@ -44,13 +44,13 @@ VkPipelineShaderStageCreateInfo JsonGraphicsPipeline::LoadVKPipelineShaderStageC
     return PipelineShaderStageCreateInfo;
 }
 
-VkDescriptorPool JsonGraphicsPipeline::CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo)
+VkDescriptorPool JsonGraphicsPipeline::CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo, uint32_t modelCount)
 {
     VkDescriptorPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = static_cast<uint32_t>(DescriptorPoolInfo.size());
     poolInfo.pPoolSizes = DescriptorPoolInfo.data();
-    poolInfo.maxSets = static_cast<uint32_t>(DescriptorPoolInfo.size());
+    poolInfo.maxSets = static_cast<uint32_t>(DescriptorPoolInfo.size()) * modelCount;
 
     VkDescriptorPool descriptorPool;
     if (vkCreateDescriptorPool(VulkanRenderer::GetDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
@@ -96,6 +96,20 @@ VkDescriptorSetLayoutBinding JsonGraphicsPipeline::LoadDescriptorLayoutSet(nlohm
     //descriptorSetLayoutBinding.pImmutableSamplers = json["pImmutableSamplers"];
 
     return descriptorSetLayoutBinding;
+}
+
+void JsonGraphicsPipeline::SaveBufferDescriptorSet(nlohmann::json& json, VkWriteDescriptorSet writeDescriptorSet)
+{
+    JsonConverter::to_json(json["sType"], writeDescriptorSet.sType);
+    //JsonConverter::to_json(json["pNext"], writeDescriptorSet.pNext);
+    //JsonConverter::to_json(json["dstSet"], writeDescriptorSet.dstSet);
+    JsonConverter::to_json(json["dstBinding"], writeDescriptorSet.dstBinding);
+    JsonConverter::to_json(json["dstArrayElement"], writeDescriptorSet.dstArrayElement);
+    JsonConverter::to_json(json["descriptorCount"], writeDescriptorSet.descriptorCount);
+    JsonConverter::to_json(json["descriptorType"], writeDescriptorSet.descriptorType);
+    //JsonConverter::to_json(json["pImageInfo"], writeDescriptorSet.pImageInfo);
+    //JsonConverter::to_json(json["pBufferInfo"], writeDescriptorSet.pBufferInfo);
+    //JsonConverter::to_json(json["pTexelBufferView"], writeDescriptorSet.pTexelBufferView);
 }
 
 void JsonGraphicsPipeline::SaveVKPipelineShaderStageCreateInfo(nlohmann::json& json, VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo, std::string filename)

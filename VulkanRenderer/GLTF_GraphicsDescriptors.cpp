@@ -55,7 +55,6 @@ VkDescriptorSetLayout GLTF_GraphicsDescriptors::CreateDescriptorSetLayou(std::ve
 	return descriptorSet;
 }
 
-
 VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout)
 {
 	VkDescriptorSetAllocateInfo allocInfo = {};
@@ -63,6 +62,22 @@ VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool 
 	allocInfo.descriptorPool = descriptorPool;
 	allocInfo.descriptorSetCount = 1;
 	allocInfo.pSetLayouts = &layout;
+
+	VkDescriptorSet DescriptorSets;
+	if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to allocate descriptor sets.");
+	}
+
+	return DescriptorSets;
+}
+
+VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool descriptorPool, std::vector<VkDescriptorSetLayout> layout)
+{
+	VkDescriptorSetAllocateInfo allocInfo = {};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = descriptorPool;
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(layout.size());
+	allocInfo.pSetLayouts = layout.data();
 
 	VkDescriptorSet DescriptorSets;
 	if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {

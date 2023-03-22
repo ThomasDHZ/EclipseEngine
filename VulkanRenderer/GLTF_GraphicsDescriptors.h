@@ -10,19 +10,21 @@ private:
 
 	static VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo);
 
+
+public:
 	static VkWriteDescriptorSet AddAccelerationBuffer(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure);
 	static VkWriteDescriptorSet AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkDescriptorType descriptorType);
 	static VkWriteDescriptorSet AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkDescriptorType descriptorType);
 	static VkWriteDescriptorSet AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkDescriptorType descriptorType);
 	static VkWriteDescriptorSet AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType);
 
-public:
 
 	static VkWriteDescriptorSet WriteBufferDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, VkDescriptorBufferInfo Buffer);
 	static VkWriteDescriptorSet WriteBufferDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> Buffer);
 	static VkWriteDescriptorSet WriteTextureDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, VkDescriptorImageInfo TextureBuffer);
 
 	static VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);
+	static VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, std::vector<VkDescriptorSetLayout> layout);
 
 	static VkDescriptorSet SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
 	static VkDescriptorSetLayout SubmitDescriptorSetLayout(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList);
