@@ -167,6 +167,58 @@ VkWriteDescriptorSet GLTF_GraphicsDescriptors::AddBufferDescriptorSet(VkDescript
 	return BufferDescriptor;
 }
 
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, VkDescriptorImageInfo& TextureImageInfo, VkDescriptorType descriptorType)
+{
+	VkWriteDescriptorSet TextureDescriptor = {};
+	TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	TextureDescriptor.dstSet = DescriptorSet;
+	TextureDescriptor.dstBinding = BindingNumber;
+	TextureDescriptor.dstArrayElement = dstArrayElement;
+	TextureDescriptor.descriptorType = descriptorType;
+	TextureDescriptor.descriptorCount = 1;
+	TextureDescriptor.pImageInfo = &TextureImageInfo;
+	return TextureDescriptor;
+}
+
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkDescriptorType descriptorType)
+{
+	VkWriteDescriptorSet TextureDescriptor = {};
+	TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	TextureDescriptor.dstSet = DescriptorSet;
+	TextureDescriptor.dstBinding = BindingNumber;
+	TextureDescriptor.dstArrayElement = dstArrayElement;
+	TextureDescriptor.descriptorType = descriptorType;
+	TextureDescriptor.descriptorCount = static_cast<uint32_t>(TextureImageInfo.size());
+	TextureDescriptor.pImageInfo = TextureImageInfo.data();
+	return TextureDescriptor;
+}
+
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, VkDescriptorBufferInfo& BufferInfo, VkDescriptorType descriptorType)
+{
+	VkWriteDescriptorSet BufferDescriptor = {};
+	BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	BufferDescriptor.dstSet = DescriptorSet;
+	BufferDescriptor.dstBinding = BindingNumber;
+	BufferDescriptor.dstArrayElement = dstArrayElement;
+	BufferDescriptor.descriptorType = descriptorType;
+	BufferDescriptor.descriptorCount = 1;
+	BufferDescriptor.pBufferInfo = &BufferInfo;
+	return BufferDescriptor;
+}
+
+VkWriteDescriptorSet GLTF_GraphicsDescriptors::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType)
+{
+	VkWriteDescriptorSet BufferDescriptor = {};
+	BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	BufferDescriptor.dstSet = DescriptorSet;
+	BufferDescriptor.dstBinding = BindingNumber;
+	BufferDescriptor.dstArrayElement = dstArrayElement;
+	BufferDescriptor.descriptorType = descriptorType;
+	BufferDescriptor.descriptorCount = static_cast<uint32_t>(BufferInfoList.size());
+	BufferDescriptor.pBufferInfo = BufferInfoList.data();
+	return BufferDescriptor;
+}
+
 VkDescriptorSet GLTF_GraphicsDescriptors::SubmitDescriptorSet(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList)
 {
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;

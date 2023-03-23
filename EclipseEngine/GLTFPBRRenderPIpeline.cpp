@@ -56,7 +56,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         PipelineShaderStageList.emplace_back(jsonPipeline.LoadVKPipelineShaderStageCreateInfo(json["Shader"][x]));
     }
 
-    VkDescriptorPool DescriptorPool1 = VK_NULL_HANDLE;
+    std::vector<VkDescriptorPool> DescriptorPool1;
     for (auto& model : modelList)
     {
         std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
@@ -86,12 +86,13 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         {
             loaddescriptorPoolSizeList.emplace_back(jsonPipeline.LoadDescriptorPoolSize(json["DescriptorPoolSize"][x]));
         }
-        DescriptorPool1 = jsonPipeline.CreateDescriptorPool(loaddescriptorPoolSizeList, modelList.size());
+        DescriptorPool1.emplace_back(jsonPipeline.CreateDescriptorPool(loaddescriptorPoolSizeList, modelList.size()));
     }
 
-    
+    for (int z = 0; z < modelList.size(); z++)
+    {
         std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL});
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
@@ -102,10 +103,10 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 8, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 9, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 10, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
         for (int x = 0; x < descriptorSetLayoutBinding.size(); x++)
         {
             jsonPipeline.SaveDescriptorLayoutSet(json["DescriptorSetLayoutBinding"][x], descriptorSetLayoutBinding[x]);
@@ -117,10 +118,9 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
             loaddescriptorSetLayoutBinding.emplace_back(jsonPipeline.LoadDescriptorLayoutSet(json["DescriptorSetLayoutBinding"][x]));
         }
         DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
-    
+    }
 
         for (int z = 0; z < modelList.size(); z++)
-
         {
             for (int y = 0; y < modelList[z].MaterialList.size(); y++)
             {
@@ -140,7 +140,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
                 GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, modelList[z].GetDirectionalLightPropertiesBuffer());
                 GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, modelList[z].GetPointLightPropertiesBuffer());
                 GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, modelList[z].GetSpotLightPropertiesBuffer());
-                modelList[z].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1, DescriptorSetLayoutList);
+                modelList[z].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1[z], DescriptorSetLayoutList[z]);
 
                 std::vector<VkWriteDescriptorSet> writeDescriptorSet;
                 for (auto& DescriptorBinding : DescriptorBindingList)
