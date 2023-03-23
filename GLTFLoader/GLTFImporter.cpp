@@ -9,7 +9,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 		auto color = glm::vec3(1.0f);
 		auto intensity = 0.0f;
 
-		for (auto& light : model.lights)
+		/*for (auto& light : model.lights)
 		{
 			std::string baseName = node.name;
 			if (node.name.find("_Orientation") != std::string::npos)
@@ -37,7 +37,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 					data.SpotLightList.emplace_back(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
 				}
 			}
-		}
+		}*/
 	}
 }
 

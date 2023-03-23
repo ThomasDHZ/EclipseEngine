@@ -61,7 +61,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     {
         std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
         descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetMeshPropertiesBuffer().size() });
-        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetTransformMatrixBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1 });
         descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
         descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
         descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
@@ -89,11 +89,10 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         DescriptorPool1 = jsonPipeline.CreateDescriptorPool(loaddescriptorPoolSizeList, modelList.size());
     }
 
-    std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
-    for (auto& model : modelList)
-    {
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetTransformMatrixBuffer().size(), VK_SHADER_STAGE_ALL });
+    
+        std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL});
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
@@ -103,10 +102,10 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 8, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 9, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
         descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 10, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[0].GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
         for (int x = 0; x < descriptorSetLayoutBinding.size(); x++)
         {
             jsonPipeline.SaveDescriptorLayoutSet(json["DescriptorSetLayoutBinding"][x], descriptorSetLayoutBinding[x]);
@@ -117,54 +116,56 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         {
             loaddescriptorSetLayoutBinding.emplace_back(jsonPipeline.LoadDescriptorLayoutSet(json["DescriptorSetLayoutBinding"][x]));
         }
-    }
-    DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
+        DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
+    
 
-    for (auto& model : modelList)
-    {
-        for (int y = 0; y < model.MaterialList.size(); y++)
+        for (int z = 0; z < modelList.size(); z++)
+
         {
-            std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, model.GetMeshPropertiesBuffer());
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, model.MeshList[0]->GetTransformMatrixBuffer());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, model.MaterialList[y]->GetAlbedoMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, model.MaterialList[y]->GetNormalMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, model.MaterialList[y]->GetMetallicRoughnessMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, model.MaterialList[y]->GetAmbientOcclusionMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, model.MaterialList[y]->GetAlphaMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, model.MaterialList[y]->GetDepthMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
-            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, model.GetSunLightPropertiesBuffer());
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, model.GetDirectionalLightPropertiesBuffer());
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, model.GetPointLightPropertiesBuffer());
-            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, model.GetSpotLightPropertiesBuffer());
-            model.MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1, DescriptorSetLayoutList);
+            for (int y = 0; y < modelList[z].MaterialList.size(); y++)
+            {
+                std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, modelList[z].GetMeshPropertiesBuffer());
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, modelList[z].MeshList[0]->GetTransformMatrixBuffer()[0]);
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, modelList[z].MaterialList[y]->GetAlbedoMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, modelList[z].MaterialList[y]->GetNormalMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, modelList[z].MaterialList[y]->GetMetallicRoughnessMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, modelList[z].MaterialList[y]->GetAmbientOcclusionMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, modelList[z].MaterialList[y]->GetAlphaMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, modelList[z].MaterialList[y]->GetDepthMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
+                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, modelList[z].GetSunLightPropertiesBuffer());
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, modelList[z].GetDirectionalLightPropertiesBuffer());
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, modelList[z].GetPointLightPropertiesBuffer());
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, modelList[z].GetSpotLightPropertiesBuffer());
+                modelList[z].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1, DescriptorSetLayoutList);
 
-            std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-            for (auto& DescriptorBinding : DescriptorBindingList)
-            {
-                if (DescriptorBinding.BufferDescriptor.size() > 0)
+                std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+                for (auto& DescriptorBinding : DescriptorBindingList)
                 {
-                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                    if (DescriptorBinding.BufferDescriptor.size() > 0)
+                    {
+                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                    }
+                    else if (DescriptorBinding.TextureDescriptor.size() > 0)
+                    {
+                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                    }
+                    else
+                    {
+                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+                    }
                 }
-                else if (DescriptorBinding.TextureDescriptor.size() > 0)
+                vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
+                for (int x = 0; x < modelList[z].MeshList.size(); x++)
                 {
-                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                    modelList[z].MeshList[x]->MaterialList = modelList[z].MaterialList;
                 }
-                else
-                {
-                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
-                }
-            }
-            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-            for (int x = 0; x < model.MeshList.size(); x++)
-            {
-                model.MeshList[x]->MaterialList = model.MaterialList;
             }
         }
-    }
+    
     std::cout << json << std::endl;
 
 
