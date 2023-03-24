@@ -507,9 +507,6 @@
     <ClCompile Include="ReadableTexture.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFSceneManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JsonGraphicsPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -894,9 +891,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReadableTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFSceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="JsonGraphicsPipeline.h">

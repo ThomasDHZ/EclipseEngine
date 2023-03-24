@@ -95,8 +95,8 @@
 //
 //	//Depth Pass
 //	{
-//		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-//		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
+//		DepthPassRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
+//		DepthCubeMapRenderPass.BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
 //	}
 //
 //	PBRRenderPassTextureSubmitList submitList;
@@ -155,7 +155,7 @@
 //		//Depth Pass
 //		{
 //			CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-//			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+//			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(GLTFSceneManager::GetPointLights()));
 //		}
 //		//Main Render Pass
 //		{
@@ -170,7 +170,7 @@
 //		//Depth Pass
 //		{
 //			CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-//			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+//			CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(GLTFSceneManager::GetPointLights()));
 //		}
 //
 //		//Geometry Pass

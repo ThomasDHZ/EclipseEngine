@@ -20,8 +20,8 @@ void PBRRenderer::BuildRenderer()
 
 	//Depth Pass
 	{
-		DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-		DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
+		//DepthPassRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
+		//DepthCubeMapRenderPass.BuildRenderPass(GLTFSceneManager::GetPoint(), glm::vec2(512.0f));
 	}
 
 	PBRRenderPassTextureSubmitList submitList;
@@ -130,7 +130,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		//Depth Pass
 		{
 			//CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-			//CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+			//CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(GLTFSceneManager::GetPointLights()));
 		}
 		//Main Render Pass
 		{
@@ -145,7 +145,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 		//Depth Pass
 		{
 			//CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-			//CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+			//CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(GLTFSceneManager::GetPointLights()));
 		}
 
 		//Geometry Pass
@@ -221,8 +221,8 @@ void PBRRenderer::BakeTextures(const char* FileName)
 
 	//Depth Pass
 	{
-		bakeDepthPassRenderPass.OneTimeDraw(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-		bakeDepthCubeMapRenderPass.OneTimeDraw(LightManager::GetPointLights(), glm::vec2(512.0f));
+		//bakeDepthPassRenderPass.OneTimeDraw(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
+		//bakeDepthCubeMapRenderPass.OneTimeDraw(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
 	}
 
 	PBRRenderPassTextureSubmitList bakesubmitList;

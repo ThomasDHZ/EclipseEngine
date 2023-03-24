@@ -71,11 +71,6 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	{
 		mesh->UpdateMeshTransformBuffer();
 	}
-	UpdateSunLightPropertiesBuffer();
-	UpdateDirectionalLightPropertiesBuffer();
-	UpdatePointLightPropertiesBuffer();
-	UpdateSpotLightPropertiesBuffer();
-	UpdateDescriptorSets();
 }
 
 GLTF_Temp_Model::~GLTF_Temp_Model()
@@ -120,34 +115,6 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 	}
 }
 
-void GLTF_Temp_Model::UpdateDescriptorSets()
-{
-	//for (int y = 0; y < MaterialList.size(); y++)
-	//{
-	//	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, GetMeshPropertiesBuffer());
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshList[0]->GetTransformMatrixBuffer());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, MaterialList[y]->GetAlbedoMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, MaterialList[y]->GetNormalMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, MaterialList[y]->GetMetallicRoughnessMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, MaterialList[y]->GetAmbientOcclusionMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, MaterialList[y]->GetAlphaMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, MaterialList[y]->GetDepthMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GetSunLightPropertiesBuffer());
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GetDirectionalLightPropertiesBuffer());
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GetPointLightPropertiesBuffer());
-	//	GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GetSpotLightPropertiesBuffer());
-	//	MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
-	//	for (int x = 0; x < MeshList.size(); x++)
-	//	{
-	//		MeshList[x]->MaterialList = MaterialList;
-	//	}
-	//}
-}
-
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 {
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesDescriptorList;
@@ -156,86 +123,6 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 		MeshPropertiesDescriptorList.emplace_back(mesh->UpdateMeshPropertiesBuffer());
 	}
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
-}
-
-void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.SunLightCount = SunLightList.size();
-	if (SunLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		SunLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : SunLightList)
-		{
-			light->GetLightPropertiesBuffer(SunLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
-	if (DirectionalLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		DirectionalLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : DirectionalLightList)
-		{
-			light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.PointLightCount = PointLightList.size();
-	if (PointLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		PointLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : PointLightList)
-		{
-			light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
-	if (SpotLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		SpotLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : SpotLightList)
-		{
-			light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
-		}
-	}
 }
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount)

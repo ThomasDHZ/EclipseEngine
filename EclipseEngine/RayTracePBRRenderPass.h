@@ -4,6 +4,7 @@
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
 #include "LightManager.h"
+#include <GLTFSceneManager.h>
 
 class RayTracePBRRenderPass : public RenderPass
 {

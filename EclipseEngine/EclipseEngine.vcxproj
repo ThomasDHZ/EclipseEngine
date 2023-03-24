@@ -206,7 +206,6 @@
     <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderer.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
-    <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="GLTF_BRDFPipeline.cpp" />
     <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
     <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
@@ -333,7 +332,6 @@
     <ClInclude Include="GLTFPrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
     <ClInclude Include="GLTFRenderPass.h" />
-    <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="GLTF_BRDFPipeline.h" />
     <ClInclude Include="GLTF_BRDFRenderPass.h" />
     <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />

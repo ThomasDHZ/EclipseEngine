@@ -23,6 +23,7 @@
 #include "GLTFRenderPass.h"
 #include "GLTFIrradianceRenderPass.h"
 #include "GLTFPrefilterRenderPass.h"
+#include <GLTFSceneManager.h>
 
 class GLTFRenderer
 {

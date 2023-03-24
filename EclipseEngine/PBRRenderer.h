@@ -16,6 +16,7 @@
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
+#include "GLTFSceneManager.h"
 
 class PBRRenderer
 {

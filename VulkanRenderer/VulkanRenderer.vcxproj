@@ -34,6 +34,7 @@
     <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFMaterial.h" />
     <ClInclude Include="GLTFPointLight.h" />
+    <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="GLTFSpotLight.h" />
     <ClInclude Include="GLTFSunLight.h" />
     <ClInclude Include="GLTF_GraphicsDescriptors.h" />
@@ -95,6 +96,7 @@
     <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="GLTFMaterial.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
+    <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="GLTFSpotLight.cpp" />
     <ClCompile Include="GLTFSunLight.cpp" />
     <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />

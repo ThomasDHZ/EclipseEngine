@@ -18,7 +18,7 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<PointLigh
     if (renderPass == nullptr)
     {
         RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : LightManager::GetPointLights())
+        for (auto& light : GLTFSceneManager::GetPointLights())
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
         }

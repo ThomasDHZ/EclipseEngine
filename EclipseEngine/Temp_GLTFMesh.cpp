@@ -168,7 +168,7 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 	{
 		if (primitve.IndexCount > 0)
 		{
-			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, descriptorsetIndex, descriptorSetCount - 1, &MaterialList[primitve.material]->descriptorSet, 0, nullptr);
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, descriptorSetCount - 1, &MaterialList[primitve.material]->descriptorSet, 0, nullptr);
 			vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}

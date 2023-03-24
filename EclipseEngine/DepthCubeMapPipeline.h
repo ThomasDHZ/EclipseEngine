@@ -5,6 +5,7 @@
 #include "LightManager.h"
 #include "SceneManager.h"
 #include "RenderedDepthTexture.h"
+#include <GLTFSceneManager.h>
 
 class DepthCubeMapPipeline : public GraphicsPipeline
 {

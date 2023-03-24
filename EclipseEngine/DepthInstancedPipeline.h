@@ -2,6 +2,7 @@
 #include <GraphicsPipeline.h>
 #include "SceneManager.h"
 #include "Mesh.h"
+#include <GLTFSceneManager.h>
 
 class DepthInstancedPipeline : public GraphicsPipeline
 {

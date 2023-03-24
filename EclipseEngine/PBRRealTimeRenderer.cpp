@@ -16,8 +16,8 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 	//Depth Pass
 	//{
-	//	DepthPassRenderPass.BuildRenderPass(LightManager::GetDirectionalLights(), glm::vec2(512.0f));
-	//	DepthCubeMapRenderPass.BuildRenderPass(LightManager::GetPointLights(), glm::vec2(512.0f));
+	//	DepthPassRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
+	//	DepthCubeMapRenderPass.BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
 	//}
 
 	PBRRenderPassTextureSubmitList submitList;
@@ -111,7 +111,7 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 	//Depth Pass
 	{
 		CommandBufferSubmitList.emplace_back(DepthPassRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(LightManager::GetPointLights()));
+		//CommandBufferSubmitList.emplace_back(DepthCubeMapRenderPass.Draw(GLTFSceneManager::GetPointLights()));
 		//CommandBufferSubmitList.emplace_back(spotLightDepthPassRenderPassList[x].Draw());
 	}
 

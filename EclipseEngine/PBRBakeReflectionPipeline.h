@@ -6,6 +6,7 @@
 #include "SceneManager.h"
 #include "RenderedDepthTexture.h"
 #include "RenderedCubeMapDepthTexture.h"
+#include <GLTFSceneManager.h>
 
 class PBRBakeReflectionPipeline : public GraphicsPipeline
 {

@@ -314,20 +314,20 @@ Scene::Scene()
         // auto obj7 = std::make_shared<ModelRenderer>(ModelRenderer("Grass2", "../Models/plateform.obj"));
     }
 
-    auto dLight = DirectionalLightBuffer{};
-    dLight.direction = glm::vec3(0.0f, -1.0f, 0.0f);
-    dLight.diffuse = glm::vec3(30.8f);
-    dLight.specular = glm::vec3(1.0f);
+    //auto dLight = DirectionalLightBuffer{};
+    //dLight.direction = glm::vec3(0.0f, -1.0f, 0.0f);
+    //dLight.diffuse = glm::vec3(30.8f);
+    //dLight.specular = glm::vec3(1.0f);
 
     //auto dLight2 = DirectionalLightBuffer{};
     //dLight2.direction = glm::vec3(-1.0f, -1.0f, 0.0f);
     //dLight2.diffuse = glm::vec3(30.8f);
     //dLight2.specular = glm::vec3(1.0f);
 
-    LightManager::AddDirectionalLight(dLight);
-   // LightManager::AddDirectionalLight(dLight2);
-    //LightManager::AddDirectionalLight(dLight);
-    //LightManager::AddDirectionalLight(dLight);
+   // GLTFSceneManager::AddDirectionalLight(dLight);
+   // GLTFSceneManager::AddDirectionalLight(dLight2);
+    //GLTFSceneManager::AddDirectionalLight(dLight);
+    //GLTFSceneManager::AddDirectionalLight(dLight);
 
     //PointLightBuffer plight = PointLightBuffer();
     //plight.position = glm::vec3(-121.08f, 16.47f, -44.34);
@@ -349,10 +349,10 @@ Scene::Scene()
     //plight4.diffuse = glm::vec3(300.0f);
     //plight4.specular = glm::vec3(1.0f);
 
-    //LightManager::AddPointLight(plight);
-    //LightManager::AddPointLight(plight2);
-    //LightManager::AddPointLight(plight3);
-    //LightManager::AddPointLight(plight4);
+    //GLTFSceneManager::AddPointLight(plight);
+    //GLTFSceneManager::AddPointLight(plight2);
+    //GLTFSceneManager::AddPointLight(plight3);
+    //GLTFSceneManager::AddPointLight(plight4);
 //
 //    SceneManager::SaveScene("../Scenes/example.txt");
 
@@ -517,7 +517,7 @@ void Scene::ImGuiUpdate()
 
     SceneManager::ImGuiSceneHierarchy();
     MeshRendererManager::GUIUpdate();
-    LightManager::GUIUpdate();
+    //SceneManager::GUIUpdate();
 
     VulkanRenderer::ImGUILayerActive = ImGui::IsAnyItemHovered() || ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
 }
