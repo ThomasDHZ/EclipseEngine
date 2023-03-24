@@ -3,18 +3,25 @@
 #include <string>
 #include <json.hpp>
 
-#include "VulkanRenderer.h"
-#include "JsonConverter.h"
-
+#include <VulkanRenderer.h>
+#include <JsonConverter.h>
+#include "GLTF_Temp_Model.h"
 
 class JsonGraphicsPipeline
 {
 private:
+	static std::string BaseShaderFilePath;
+	static std::string BasePipelineFilePath;
+
+	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
+	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
+
 	VkShaderModule ReadShaderFile(const std::string& filename);
+	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 protected:
 
 
-public: 
+public:
 	JsonGraphicsPipeline();
 	~JsonGraphicsPipeline();
 
@@ -31,7 +38,7 @@ public:
 	void SavePipelineViewportStateCreateInfo(nlohmann::json& json, VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo);
 	void SavePipelineRasterizationStateCreateInfo(nlohmann::json& json, VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo);
 	void SavePipelineMultisampleStateCreateInfo(nlohmann::json& json, VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo);
-	void SavePipelineColorBlendStateCreateInfo(nlohmann::json& json, VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo);
+	void SavePipelineColorBlendStateCreateInfo(nlohmann::json& json, VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo, );
 
 	VkDescriptorPoolSize LoadDescriptorPoolSize(nlohmann::json& json);
 	VkDescriptorSetLayoutBinding LoadDescriptorLayoutSet(nlohmann::json& json);
@@ -43,10 +50,10 @@ public:
 	VkPipelineViewportStateCreateInfo LoadPipelineViewportStateCreateInfo(nlohmann::json& json);
 	VkPipelineRasterizationStateCreateInfo LoadPipelineRasterizationStateCreateInfo(nlohmann::json& json);
 	VkPipelineMultisampleStateCreateInfo LoadPipelineMultisampleStateCreateInfo(nlohmann::json& json);
-	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json);
+	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments);
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
-	void LoadGraphicsPipeline(const std::string& filename);
-	void SaveGraphicsPipeline(VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo, std::string filename);
+	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& modelList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, uint32_t sizeofConstBuffer);
+	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
 };
 

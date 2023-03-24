@@ -280,6 +280,10 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         if (result != VK_SUCCESS) {
             throw std::runtime_error("Failed to create pipeline.");
         }
+
+        jsonPipeline.SaveGraphicsPipeline("GLTFPBRPipeline.txt", json);
+        jsonPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList, pipelineInfoStruct.ColorAttachments, sizeof(SceneProperties));
+
     }
     else
     {

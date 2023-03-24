@@ -217,6 +217,7 @@
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="IrradiancePipeline.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
+    <ClCompile Include="JsonGraphicsPipeline.cpp" />
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightDebugPipeline.cpp" />
@@ -343,6 +344,7 @@
     <ClInclude Include="GridRenderer3D.h" />
     <ClInclude Include="IrradiancePipeline.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
+    <ClInclude Include="JsonGraphicsPipeline.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />
     <ClInclude Include="Light.h" />

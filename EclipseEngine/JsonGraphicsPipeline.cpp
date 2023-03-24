@@ -1,4 +1,8 @@
-#include "GraphicsPipelineLoader.h"
+#include "JsonGraphicsPipeline.h"
+#include "SceneManager.h"
+
+std::string JsonGraphicsPipeline::BaseShaderFilePath = "../Shaders/";
+std::string JsonGraphicsPipeline::BasePipelineFilePath = "../Pipelines/";
 
 JsonGraphicsPipeline::JsonGraphicsPipeline()
 {
@@ -35,6 +39,17 @@ VkShaderModule JsonGraphicsPipeline::ReadShaderFile(const std::string& filename)
     }
 
     return shaderModule;
+}
+
+VkPipelineShaderStageCreateInfo JsonGraphicsPipeline::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
+{
+    VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertShaderStageInfo.stage = shaderStages;
+    vertShaderStageInfo.module = ReadShaderFile(filename);
+    vertShaderStageInfo.pName = "main";
+
+    return vertShaderStageInfo;
 }
 
 VkDescriptorPool JsonGraphicsPipeline::CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo, uint32_t modelCount)
@@ -130,7 +145,7 @@ void JsonGraphicsPipeline::SavePipelineViewportStateCreateInfo(nlohmann::json& j
     JsonConverter::to_json(json["viewportCount"], pipelineViewportStateCreateInfo.viewportCount);
     //JsonConverter::to_json(json["pViewports"], pipelineViewportStateCreateInfo.pViewports);
     JsonConverter::to_json(json["scissorCount"], pipelineViewportStateCreateInfo.scissorCount);
-   // JsonConverter::to_json(json["pScissors"], pipelineViewportStateCreateInfo.pScissors);
+    // JsonConverter::to_json(json["pScissors"], pipelineViewportStateCreateInfo.pScissors);
 }
 
 void JsonGraphicsPipeline::SavePipelineRasterizationStateCreateInfo(nlohmann::json& json, VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo)
@@ -156,7 +171,7 @@ void JsonGraphicsPipeline::SavePipelineMultisampleStateCreateInfo(nlohmann::json
     JsonConverter::to_json(json["rasterizationSamples"], pipelineMultisampleStateCreateInfo.rasterizationSamples);
     JsonConverter::to_json(json["sampleShadingEnable"], pipelineMultisampleStateCreateInfo.sampleShadingEnable);
     JsonConverter::to_json(json["minSampleShading"], pipelineMultisampleStateCreateInfo.minSampleShading);
-   //JsonConverter::to_json(json["pSampleMask"], pipelineMultisampleStateCreateInfo.pSampleMask);
+    //JsonConverter::to_json(json["pSampleMask"], pipelineMultisampleStateCreateInfo.pSampleMask);
     JsonConverter::to_json(json["alphaToCoverageEnable"], pipelineMultisampleStateCreateInfo.alphaToCoverageEnable);
     JsonConverter::to_json(json["alphaToOneEnable"], pipelineMultisampleStateCreateInfo.alphaToOneEnable);
 }
@@ -166,8 +181,6 @@ void JsonGraphicsPipeline::SavePipelineColorBlendStateCreateInfo(nlohmann::json&
     JsonConverter::to_json(json["flags"], pipelineColorBlendStateCreateInfo.flags);
     JsonConverter::to_json(json["logicOpEnable"], pipelineColorBlendStateCreateInfo.logicOpEnable);
     JsonConverter::to_json(json["logicOp"], pipelineColorBlendStateCreateInfo.logicOp);
-    JsonConverter::to_json(json["attachmentCount"], pipelineColorBlendStateCreateInfo.attachmentCount);
-   // JsonConverter::to_json(json["pAttachments"], pipelineColorBlendStateCreateInfo.pAttachments);
     JsonConverter::to_json(json["blendConstants"][0], pipelineColorBlendStateCreateInfo.blendConstants[0]);
     JsonConverter::to_json(json["blendConstants"][1], pipelineColorBlendStateCreateInfo.blendConstants[1]);
     JsonConverter::to_json(json["blendConstants"][2], pipelineColorBlendStateCreateInfo.blendConstants[2]);
@@ -239,7 +252,7 @@ VkPipelineDepthStencilStateCreateInfo JsonGraphicsPipeline::LoadPipelineDepthSte
     VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo = {};
 
     pipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-     pipelineDepthStencilStateCreateInfo.pNext = nullptr;
+    pipelineDepthStencilStateCreateInfo.pNext = nullptr;
     pipelineDepthStencilStateCreateInfo.depthTestEnable = json["depthTestEnable"];
     pipelineDepthStencilStateCreateInfo.depthWriteEnable = json["depthWriteEnable"];
     pipelineDepthStencilStateCreateInfo.depthCompareOp = json["depthCompareOp"];
@@ -315,15 +328,15 @@ VkPipelineMultisampleStateCreateInfo JsonGraphicsPipeline::LoadPipelineMultisamp
     return pipelineMultisampleStateCreateInfo;
 }
 
-VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json)
+VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments)
 {
     VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo{};
     pipelineColorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     pipelineColorBlendStateCreateInfo.flags = json["flags"];
     pipelineColorBlendStateCreateInfo.logicOpEnable = json["logicOpEnable"];
     pipelineColorBlendStateCreateInfo.logicOp = json["logicOp"];
-    pipelineColorBlendStateCreateInfo.attachmentCount = json["attachmentCount"];
-    pipelineColorBlendStateCreateInfo.pAttachments = nullptr;
+    pipelineColorBlendStateCreateInfo.attachmentCount = static_cast<uint32_t>(ColorAttachments.size());
+    pipelineColorBlendStateCreateInfo.pAttachments = ColorAttachments.data();
     pipelineColorBlendStateCreateInfo.blendConstants[0] = json["blendConstants"][0];
     pipelineColorBlendStateCreateInfo.blendConstants[1] = json["blendConstants"][1];
     pipelineColorBlendStateCreateInfo.blendConstants[2] = json["blendConstants"][2];
@@ -332,13 +345,182 @@ VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlend
     return pipelineColorBlendStateCreateInfo;
 }
 
-void JsonGraphicsPipeline::LoadGraphicsPipeline(const std::string& filename)
+void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& modelList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, uint32_t sizeofConstBuffer)
 {
-    nlohmann::json json;
+    std::string SceneInfo;
+    std::ifstream SceneFile;
+    SceneFile.open(BasePipelineFilePath + filePath);
+    if (SceneFile.is_open())
+    {
+        while (!SceneFile.eof())
+        {
+            getline(SceneFile, SceneInfo);
+        }
+    }
+    else std::cout << "Unable to open file";
+    SceneFile.close();
+
+    nlohmann::json json = nlohmann::json::parse(SceneInfo);
+
+    std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
+
+    std::vector<VkDescriptorPool> DescriptorPoolList;
+    for (auto& model : modelList)
+    {
+        std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetMeshPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetSunLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetDirectionalLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetPointLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model.GetSpotLightPropertiesBuffer().size() });
+        DescriptorPoolList.emplace_back(CreateDescriptorPool(descriptorPoolSizeList, modelList.size()));
+    }
+
+    std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
+    for (int z = 0; z < modelList.size(); z++)
+    {
+        std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 , VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 7, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 8, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 9, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 10, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)modelList[z].GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
+    }
+
+    for (int z = 0; z < modelList.size(); z++)
+    {
+        for (int y = 0; y < modelList[z].MaterialList.size(); y++)
+        {
+            std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, modelList[z].GetMeshPropertiesBuffer());
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, modelList[z].MeshList[0]->GetTransformMatrixBuffer()[0]);
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, modelList[z].MaterialList[y]->GetAlbedoMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, modelList[z].MaterialList[y]->GetNormalMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, modelList[z].MaterialList[y]->GetMetallicRoughnessMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, modelList[z].MaterialList[y]->GetAmbientOcclusionMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, modelList[z].MaterialList[y]->GetAlphaMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, modelList[z].MaterialList[y]->GetDepthMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, SceneManager::GetBRDFMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, SceneManager::GetIrradianceMapDescriptor());
+            GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, SceneManager::GetPrefilterMapDescriptor());
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, modelList[z].GetSunLightPropertiesBuffer());
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, modelList[z].GetDirectionalLightPropertiesBuffer());
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, modelList[z].GetPointLightPropertiesBuffer());
+            GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, modelList[z].GetSpotLightPropertiesBuffer());
+            modelList[z].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPoolList[z], DescriptorSetLayoutList[z]);
+
+            std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+            for (auto& DescriptorBinding : DescriptorBindingList)
+            {
+                if (DescriptorBinding.BufferDescriptor.size() > 0)
+                {
+                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else if (DescriptorBinding.TextureDescriptor.size() > 0)
+                {
+                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                }
+                else
+                {
+                    writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(modelList[z].MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+                }
+            }
+            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
+            for (int x = 0; x < modelList[z].MeshList.size(); x++)
+            {
+                modelList[z].MeshList[x]->MaterialList = modelList[z].MaterialList;
+            }
+        }
+    }
+
+    if (ShaderPipeline == nullptr)
+    {
+        const std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
+        const std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
+
+        VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+        vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+        vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(VertexBindingDescriptions.size());
+        vertexInputInfo.pVertexBindingDescriptions = VertexBindingDescriptions.data();
+        vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(VertexAttributeDescriptions.size());
+        vertexInputInfo.pVertexAttributeDescriptions = VertexAttributeDescriptions.data();
+
+        VkPipelineDepthStencilStateCreateInfo depthStencilStateCreateInfo = LoadPipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"]);
+        VkPipelineInputAssemblyStateCreateInfo inputAssembly = LoadPipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"]);
+        VkPipelineViewportStateCreateInfo viewportState = LoadPipelineViewportStateCreateInfo(json["PipelineViewportStateCreateInfo"]);
+        VkPipelineRasterizationStateCreateInfo rasterizer = LoadPipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"]);
+        VkPipelineMultisampleStateCreateInfo multisampling = LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"]);
+        VkPipelineColorBlendStateCreateInfo colorBlending = LoadPipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], ColorAttachments);
+
+        VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+        pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+        pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(DescriptorSetLayoutList.size());
+        pipelineLayoutInfo.pSetLayouts = DescriptorSetLayoutList.data();
+        pipelineLayoutInfo.pushConstantRangeCount = 1;
+        if (sizeofConstBuffer != 0)
+        {
+            VkPushConstantRange pushConstantRange{};
+            pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+            pushConstantRange.offset = 0;
+            pushConstantRange.size = sizeofConstBuffer;
+            pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+        }
+
+        if (vkCreatePipelineLayout(VulkanRenderer::GetDevice(), &pipelineLayoutInfo, nullptr, &ShaderPipelineLayout) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create pipeline layout.");
+        }
+
+        VkGraphicsPipelineCreateInfo pipelineInfo{};
+        pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+        pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
+        pipelineInfo.pStages = PipelineShaderStageList.data();
+        pipelineInfo.pVertexInputState = &vertexInputInfo;
+        pipelineInfo.pInputAssemblyState = &inputAssembly;
+        pipelineInfo.pViewportState = &viewportState;
+        pipelineInfo.pRasterizationState = &rasterizer;
+        pipelineInfo.pMultisampleState = &multisampling;
+        pipelineInfo.pDepthStencilState = &depthStencilStateCreateInfo;
+        pipelineInfo.pColorBlendState = &loadcolorBlending;
+        pipelineInfo.layout = ShaderPipelineLayout;
+        pipelineInfo.renderPass = renderPass;
+        pipelineInfo.subpass = 0;
+        pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+        VkResult result = vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline);
+        if (result != VK_SUCCESS) {
+            throw std::runtime_error("Failed to create pipeline.");
+        }
+    }
 }
 
-void JsonGraphicsPipeline::SaveGraphicsPipeline(VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo, std::string filename)
+void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::json& json)
 {
-    nlohmann::json json;
-    SavePipelineShaderStageCreateInfo(json, PipelineShaderStageCreateInfo, filename);
+    std::ofstream pipelineFile(BasePipelineFilePath + fileName);
+    pipelineFile << json;
+    pipelineFile.close();
 }
