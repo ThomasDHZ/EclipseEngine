@@ -10,6 +10,6 @@ public:
 	~GLTFPBRRenderPIpeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<GLTF_Temp_Model> modelList);
-	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model, uint32_t descriptorsetIndex);
+	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
 };
 

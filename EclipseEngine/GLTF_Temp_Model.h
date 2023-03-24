@@ -58,7 +58,7 @@ public:
 	void UpdatePointLightPropertiesBuffer();
 	void UpdateSpotLightPropertiesBuffer();
 
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex);
+	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount);
 	void Destroy();
 
 	std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;

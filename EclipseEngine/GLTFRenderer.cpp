@@ -24,10 +24,13 @@ void GLTFRenderer::BuildRenderer()
 
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
-	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
+	//auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
+	//auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
+
 	modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
 	//modelList.emplace_back(GLTF_Temp_Model(c, glm::mat4(1.0f), 0));
 	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
+	//modelList.emplace_back(GLTF_Temp_Model(d, glm::mat4(1.0f), 0));
 
 	gLTFRenderPass.BuildRenderPass(modelList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);

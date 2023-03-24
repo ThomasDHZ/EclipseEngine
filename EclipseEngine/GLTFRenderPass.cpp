@@ -166,7 +166,7 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
     skyboxPipeline.Draw(commandBuffer);
     for (int x = 0; x < modelList.size(); x++)
     {
-        pbrPipeline.Draw(commandBuffer, modelList[x], x);
+        pbrPipeline.Draw(commandBuffer, modelList[x], x, modelList.size());
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
