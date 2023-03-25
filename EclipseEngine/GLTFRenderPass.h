@@ -16,6 +16,7 @@ class GLTFRenderPass : public RenderPass
 
 		//GLTFPBRRenderPIpeline pbrPipeline;
 		JsonGraphicsPipeline pbrPipeline;
+		JsonGraphicsPipeline pbrPipeline2;
 		GLTF_SkyboxPipeline skyboxPipeline;
 
 		void RenderPassDesc();

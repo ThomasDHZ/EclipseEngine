@@ -119,7 +119,8 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> model
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    pbrPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    pbrPipeline2.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[1], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
@@ -164,10 +165,9 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     skyboxPipeline.Draw(commandBuffer);
-    for (int x = 0; x < modelList.size(); x++)
-    {
-        pbrPipeline.Draw(commandBuffer, modelList[x], x, modelList.size());
-    }
+   
+        pbrPipeline.Draw(commandBuffer, modelList[0], 0, modelList.size());
+        pbrPipeline2.Draw(commandBuffer, modelList[1], 1, modelList.size());
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

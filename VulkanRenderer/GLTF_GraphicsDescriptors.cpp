@@ -64,9 +64,8 @@ VkDescriptorSet GLTF_GraphicsDescriptors::CreateDescriptorSets(VkDescriptorPool 
 	allocInfo.pSetLayouts = &layout;
 
 	VkDescriptorSet DescriptorSets;
-	if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
-		throw std::runtime_error("Failed to allocate descriptor sets.");
-	}
+	auto af = vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets);
+
 
 	return DescriptorSets;
 }
