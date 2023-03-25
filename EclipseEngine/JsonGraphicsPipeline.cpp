@@ -519,7 +519,7 @@ void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::
     pipelineFile.close();
 }
 
-void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
+void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     model.Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorsetcount);
