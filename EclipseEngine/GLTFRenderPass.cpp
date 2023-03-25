@@ -119,7 +119,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> model
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, modelList);
+    pbrPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
@@ -182,7 +182,7 @@ void GLTFRenderPass::Destroy()
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
 
-    pbrPipeline.Destroy();
+   // pbrPipeline.Destroy();
 
     RenderPass::Destroy();
 }

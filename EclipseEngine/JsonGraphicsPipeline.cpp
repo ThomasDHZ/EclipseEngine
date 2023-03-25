@@ -168,7 +168,6 @@ void JsonGraphicsPipeline::SavePipelineMultisampleStateCreateInfo(nlohmann::json
 {
     //JsonConverter::to_json(json["pNext"], pipelineMultisampleStateCreateInfo.pNext);
     JsonConverter::to_json(json["flags"], pipelineMultisampleStateCreateInfo.flags);
-    JsonConverter::to_json(json["rasterizationSamples"], pipelineMultisampleStateCreateInfo.rasterizationSamples);
     JsonConverter::to_json(json["sampleShadingEnable"], pipelineMultisampleStateCreateInfo.sampleShadingEnable);
     JsonConverter::to_json(json["minSampleShading"], pipelineMultisampleStateCreateInfo.minSampleShading);
     //JsonConverter::to_json(json["pSampleMask"], pipelineMultisampleStateCreateInfo.pSampleMask);
@@ -312,13 +311,13 @@ VkPipelineRasterizationStateCreateInfo  JsonGraphicsPipeline::LoadPipelineRaster
     return pipelineRasterizationStateCreateInfo;
 }
 
-VkPipelineMultisampleStateCreateInfo JsonGraphicsPipeline::LoadPipelineMultisampleStateCreateInfo(nlohmann::json& json)
+VkPipelineMultisampleStateCreateInfo JsonGraphicsPipeline::LoadPipelineMultisampleStateCreateInfo(nlohmann::json& json, VkSampleCountFlagBits sampleCount)
 {
     VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo{};
     pipelineMultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     pipelineMultisampleStateCreateInfo.pNext = nullptr;
     pipelineMultisampleStateCreateInfo.flags = json["flags"];
-    pipelineMultisampleStateCreateInfo.rasterizationSamples = json["rasterizationSamples"];
+    pipelineMultisampleStateCreateInfo.rasterizationSamples = sampleCount;
     pipelineMultisampleStateCreateInfo.sampleShadingEnable = json["sampleShadingEnable"];
     pipelineMultisampleStateCreateInfo.minSampleShading = json["minSampleShading"];
     pipelineMultisampleStateCreateInfo.pSampleMask = nullptr;
@@ -345,7 +344,7 @@ VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlend
     return pipelineColorBlendStateCreateInfo;
 }
 
-void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& modelList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, uint32_t sizeofConstBuffer)
+void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& modelList, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
     std::string SceneInfo;
     std::ifstream SceneFile;
@@ -474,7 +473,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
         VkPipelineInputAssemblyStateCreateInfo inputAssembly = LoadPipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"]);
         VkPipelineViewportStateCreateInfo viewportState = LoadPipelineViewportStateCreateInfo(json["PipelineViewportStateCreateInfo"]);
         VkPipelineRasterizationStateCreateInfo rasterizer = LoadPipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"]);
-        VkPipelineMultisampleStateCreateInfo multisampling = LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"]);
+        VkPipelineMultisampleStateCreateInfo multisampling = LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], samplecount);
         VkPipelineColorBlendStateCreateInfo colorBlending = LoadPipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], ColorAttachments);
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
@@ -523,4 +522,10 @@ void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::
     std::ofstream pipelineFile(BasePipelineFilePath + fileName);
     pipelineFile << json;
     pipelineFile.close();
+}
+
+void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
+{
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+    model.Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorsetcount);
 }

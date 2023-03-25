@@ -220,7 +220,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         savemultisampling.sampleShadingEnable = VK_TRUE;
         savemultisampling.rasterizationSamples = pipelineInfoStruct.SampleCount;
         jsonPipeline.SavePipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], savemultisampling);
-        VkPipelineMultisampleStateCreateInfo loadmultisampling = jsonPipeline.LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"]);
+        VkPipelineMultisampleStateCreateInfo loadmultisampling = jsonPipeline.LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], pipelineInfoStruct.SampleCount);
 
         VkPipelineColorBlendStateCreateInfo savecolorBlending{};
         savecolorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -283,7 +283,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         }
 
         jsonPipeline.SaveGraphicsPipeline("GLTFPBRPipeline.txt", json);
-        jsonPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList, pipelineInfoStruct.ColorAttachments, sizeof(SceneProperties));
+       // jsonPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList, pipelineInfoStruct.ColorAttachments, sizeof(SceneProperties));
 
     }
     else
