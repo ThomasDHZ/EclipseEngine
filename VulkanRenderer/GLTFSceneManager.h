@@ -56,5 +56,7 @@ public:
 	static uint32_t GetDirectionalCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }
+	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
+	static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
 };
 

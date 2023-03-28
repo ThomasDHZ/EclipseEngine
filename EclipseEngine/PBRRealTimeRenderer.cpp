@@ -9,10 +9,10 @@ PBRRealTimeRenderer::~PBRRealTimeRenderer()
 }
 void PBRRealTimeRenderer::BuildRenderer()
 {
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
+	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
-	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
+	brdfRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
 	//{
@@ -27,29 +27,29 @@ void PBRRealTimeRenderer::BuildRenderer()
 	//SkyBox Pass
 	{
 		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-		skyIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-		skyPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		skyIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+		skyPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = skyPrefilterRenderPass.PrefilterCubeMapList;
 
-		skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+		skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	{
 		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
-		geoIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-		geoPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		geoIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+		geoPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = geoIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = geoPrefilterRenderPass.PrefilterCubeMapList;
 
-		ReflectionPreRenderPass.PreRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
+		ReflectionPreRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Main Render Pass
 	{
-		irradianceRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(ReflectionPreRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;

@@ -10,13 +10,13 @@ PBRRenderer::~PBRRenderer()
 
 void PBRRenderer::BuildRenderer()
 {
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
+	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	//meshPickerRenderPass.BuildRenderPass();
 	if (GLTFSceneManager::CubeMap == nullptr)
 	{
 		environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	}
-	brdfRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
+	brdfRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());
 
 	//Depth Pass
 	{
@@ -31,13 +31,13 @@ void PBRRenderer::BuildRenderer()
 	//SkyBox Pass
 	{
 		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-		skyIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-		skyPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		skyIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+		skyPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = skyPrefilterRenderPass.PrefilterCubeMapList;
 
-		skyPBRRenderPass.OneTimeDraw(submitList, SceneManager::GetPreRenderedMapSize());
+		skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	//{
@@ -53,8 +53,8 @@ void PBRRenderer::BuildRenderer()
 	//Main Render Pass
 	{
 		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
-		irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
+		irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+		prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
 		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
@@ -238,7 +238,7 @@ void PBRRenderer::BakeTextures(const char* FileName)
 		bakesubmitList.IrradianceTextureList = bakeskyIrradianceRenderPass.IrradianceCubeMapList;
 		bakesubmitList.PrefilterTextureList = bakeskyPrefilterRenderPass.PrefilterCubeMapList;
 
-		bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, SceneManager::GetPreRenderedMapSize());
+		bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	{

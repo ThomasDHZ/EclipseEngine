@@ -28,8 +28,8 @@ class SceneManager
 {
 private:
 
-	static float PBRCubeMapSize;
-	static float PreRenderedMapSize;
+	//static float PBRCubeMapSize;
+	//static float PreRenderedMapSize;
 	static std::shared_ptr<SkyboxMesh> skyboxMesh;
 
 public:
@@ -247,8 +247,8 @@ public:
 
 	static SceneType GetSceneType() { return sceneType; }
 	static std::shared_ptr<SkyboxMesh> GetSkyboxMesh() { return skyboxMesh; };
-	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
-	static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
+	//static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
+	//static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
 	static bool IsRayTracerActive() { return RayTracingActive; }
 	static bool IsHybridRendererActive() { return HybridRendererActive; }
 };
