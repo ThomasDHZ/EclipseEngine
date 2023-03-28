@@ -4,8 +4,9 @@
 
 void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
-	if (node.mesh == -1)
+	/*if (node.mesh == -1)
 	{
+		GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 		auto color = glm::vec3(1.0f);
 		auto intensity = 0.0f;
 
@@ -38,7 +39,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader)
