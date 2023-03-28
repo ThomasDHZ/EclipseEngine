@@ -23,16 +23,16 @@ void GLTFRenderer::BuildRenderer()
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
-	SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	GLTF_BRDFRenderPass.BuildRenderPass(SceneManager::GetPreRenderedMapSize());
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
+	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
 	irradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
 	prefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
-	SceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
+	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
 	gLTFRenderPass.BuildRenderPass(modelList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);

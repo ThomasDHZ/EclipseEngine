@@ -12,8 +12,8 @@ void GLTF_EnvironmentToCubePipeline::InitializePipeline(PipelineInfoStruct& pipe
 {
     VkDescriptorImageInfo SkyboxBufferInfo;
     SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = SceneManager::environmentTexture->View;
-    SkyboxBufferInfo.sampler = SceneManager::environmentTexture->Sampler;
+    SkyboxBufferInfo.imageView = GLTFSceneManager::EnvironmentTexture->View;
+    SkyboxBufferInfo.sampler = GLTFSceneManager::EnvironmentTexture->Sampler;
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));

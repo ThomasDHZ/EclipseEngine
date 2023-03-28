@@ -39,11 +39,11 @@ public:
 	static SceneProperties sceneProperites;
 	static SkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
-	static std::shared_ptr<EnvironmentTexture>     environmentTexture;
-	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
-	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;
-	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
-	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
+	//static std::shared_ptr<EnvironmentTexture>     environmentTexture;
+	//static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
+	//static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;
+	//static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
+	//static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	static bool EditorModeFlag;
 	static bool	RayTracingActive;
 	static bool	HybridRendererActive;
@@ -118,18 +118,18 @@ public:
 		skyboxMesh->Destroy();
 		musicPlayer.Destroy();
 
-		if (environmentTexture != nullptr)
-		{
-			environmentTexture->Destroy();
-		}
-		if (BRDFTexture != nullptr)
-		{
-			BRDFTexture->Destroy();
-		}
-		if (CubeMap != nullptr)
-		{
-			CubeMap->Destroy();
-		}
+		//if (environmentTexture != nullptr)
+		//{
+		//	environmentTexture->Destroy();
+		//}
+		//if (BRDFTexture != nullptr)
+		//{
+		//	BRDFTexture->Destroy();
+		//}
+		//if (CubeMap != nullptr)
+		//{
+		//	CubeMap->Destroy();
+		//}
 	}
 
 	static void ImGuiSceneHierarchy()
@@ -178,7 +178,7 @@ public:
 		//ImGui::End();
 	}
 
-	static VkDescriptorImageInfo GetBRDFMapDescriptor()
+	/*static VkDescriptorImageInfo GetBRDFMapDescriptor()
 	{
 		if (BRDFTexture != nullptr)
 		{
@@ -232,7 +232,7 @@ public:
 		}
 
 		return VulkanRenderer::GetNullDescriptor();
-	}
+	}*/
 
 	static void DestroyScene()
 	{

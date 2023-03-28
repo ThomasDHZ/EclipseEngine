@@ -165,7 +165,7 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
     pbrInstancedPipeline.InitializePipeline(pipelineInfo, textures);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
+    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
 }
 
 VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMesh)

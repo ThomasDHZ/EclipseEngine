@@ -14,16 +14,16 @@ void EnvironmentToCubeRenderPass::BuildRenderPass(uint32_t cubeMapSize)
 
     if (renderPass == nullptr)
     {
-        SceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        GLTFSceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        SceneManager::CubeMap->RecreateRendererTexture(RenderPassResolution);
+        GLTFSceneManager::CubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(SceneManager::CubeMap->View);
+    AttachmentList.emplace_back(GLTFSceneManager::CubeMap->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -35,7 +35,7 @@ void EnvironmentToCubeRenderPass::BuildRenderPass(uint32_t cubeMapSize)
 void EnvironmentToCubeRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(SceneManager::CubeMap->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(GLTFSceneManager::CubeMap->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -164,7 +164,7 @@ void EnvironmentToCubeRenderPass::Draw()
 
 void EnvironmentToCubeRenderPass::Destroy()
 {
-    SceneManager::CubeMap->Destroy();
+    GLTFSceneManager::CubeMap->Destroy();
     EnvironmentToCubeRenderPassPipeline.Destroy();
     RenderPass::Destroy();
 }

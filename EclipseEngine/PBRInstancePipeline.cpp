@@ -61,8 +61,8 @@ void PBRInstancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
 
     VkDescriptorImageInfo BRDFBuffer;
     BRDFBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    BRDFBuffer.imageView = SceneManager::BRDFTexture->View;
-    BRDFBuffer.sampler = SceneManager::BRDFTexture->Sampler;
+    BRDFBuffer.imageView = GLTFSceneManager::BRDFTexture->View;
+    BRDFBuffer.sampler = GLTFSceneManager::BRDFTexture->Sampler;
 
     std::vector<VkDescriptorImageInfo> DirectionalLightShadowMaps;
     if (textures.DirectionalLightTextureShadowMaps.size() == 0)

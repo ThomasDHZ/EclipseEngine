@@ -123,7 +123,7 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
     pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
     lightDebugPipeline.InitializePipeline(pipelineInfo);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
+    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
     linePipeline.InitializePipeline(pipelineInfo);
     wireframePipeline.InitializePipeline(pipelineInfo);
     outLinePipeline.InitializePipeline(pipelineInfo);

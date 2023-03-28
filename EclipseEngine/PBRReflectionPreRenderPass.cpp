@@ -221,7 +221,7 @@ void PBRReflectionPreRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSu
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
-    skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
+    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
 }
 
 void PBRReflectionPreRenderPass::ClearTextureList()

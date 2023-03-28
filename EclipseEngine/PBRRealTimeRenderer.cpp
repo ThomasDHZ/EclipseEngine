@@ -26,7 +26,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 	//SkyBox Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
 		skyIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 		skyPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 

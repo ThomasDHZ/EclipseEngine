@@ -13,16 +13,16 @@ void BRDFRenderPass::BuildRenderPass(uint32_t textureSize)
     RenderPassResolution = glm::ivec2(textureSize, textureSize);
     if (renderPass == nullptr)
     {
-        SceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        GLTFSceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
-        SceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
+        GLTFSceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(SceneManager::BRDFTexture->View);
+    AttachmentList.emplace_back(GLTFSceneManager::BRDFTexture->View);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -36,7 +36,7 @@ void BRDFRenderPass::RenderPassDesc()
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 
     VkAttachmentDescription CubeMapAttachment = {};
-    AttachmentDescriptionList.emplace_back(SceneManager::BRDFTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(GLTFSceneManager::BRDFTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
@@ -154,7 +154,7 @@ void BRDFRenderPass::Draw()
 
 void BRDFRenderPass::Destroy()
 {
-    SceneManager::BRDFTexture->Destroy();
+    GLTFSceneManager::BRDFTexture->Destroy();
     brdfPipeline.Destroy();
     RenderPass::Destroy();
 }

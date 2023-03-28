@@ -12,7 +12,7 @@ void PBRRenderer::BuildRenderer()
 {
 	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(SceneManager::GetPreRenderedMapSize(), SceneManager::GetPreRenderedMapSize())))) + 1;
 	//meshPickerRenderPass.BuildRenderPass();
-	if (SceneManager::CubeMap == nullptr)
+	if (GLTFSceneManager::CubeMap == nullptr)
 	{
 		environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	}
@@ -30,7 +30,7 @@ void PBRRenderer::BuildRenderer()
 
 	//SkyBox Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
 		skyIrradianceRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 		skyPrefilterRenderPass.OneTimeDraw(cubemap, SceneManager::GetPreRenderedMapSize());
 
@@ -231,7 +231,7 @@ void PBRRenderer::BakeTextures(const char* FileName)
 
 	//SkyBox Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { SceneManager::CubeMap };
+		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
 		bakeskyIrradianceRenderPass.OneTimeDraw(cubemap, 256.0f);
 		bakeskyPrefilterRenderPass.OneTimeDraw(cubemap, 256.0f);
 

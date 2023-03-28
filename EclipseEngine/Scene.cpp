@@ -130,7 +130,7 @@ Scene::Scene()
  //    cubeMapfiles.Back = "../texture/skybox/front.jpg";
  //    TextureManager::LoadCubeMapTexture(cubeMapfiles);
  //
-    SceneManager::environmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
     ModelLoader loader{};
     loader.FilePath = "../Models/TestAnimModel/model.dae";

@@ -106,8 +106,8 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         std::vector<VkDescriptorImageInfo> CubeMapBufferInfoList;
         VkDescriptorImageInfo cubeMapBuffer;
         cubeMapBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-        cubeMapBuffer.imageView = SceneManager::CubeMap->GetView();
-        cubeMapBuffer.sampler = SceneManager::CubeMap->GetSampler();
+        cubeMapBuffer.imageView = GLTFSceneManager::CubeMap->GetView();
+        cubeMapBuffer.sampler = GLTFSceneManager::CubeMap->GetSampler();
         CubeMapBufferInfoList.emplace_back(cubeMapBuffer);
 
         AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);

@@ -13,7 +13,7 @@ RayTracePBRRenderer::~RayTracePBRRenderer()
 void RayTracePBRRenderer::BuildRenderer()
 {
     meshPickerRenderPass.BuildRenderPass();
-    if (SceneManager::CubeMap == nullptr)
+    if (GLTFSceneManager::CubeMap == nullptr)
     {
         environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
     }
