@@ -10,7 +10,7 @@ PBRRenderer::~PBRRenderer()
 
 void PBRRenderer::BuildRenderer()
 {
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	//meshPickerRenderPass.BuildRenderPass();
 	if (GLTFSceneManager::CubeMap == nullptr)
 	{

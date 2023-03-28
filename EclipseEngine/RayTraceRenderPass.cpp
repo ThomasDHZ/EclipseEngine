@@ -159,10 +159,10 @@ VkCommandBuffer RayTraceRenderPass::Draw()
     hitShaderSbtEntry.stride = handleSizeAligned;
     hitShaderSbtEntry.size = handleSizeAligned;
 
-    SceneManager::sceneProperites.proj = glm::inverse(SceneManager::sceneProperites.proj);
-    SceneManager::sceneProperites.view = glm::inverse(SceneManager::sceneProperites.view);
+    GLTFSceneManager::sceneProperites.proj = glm::inverse(GLTFSceneManager::sceneProperites.proj);
+    GLTFSceneManager::sceneProperites.view = glm::inverse(GLTFSceneManager::sceneProperites.view);
 
-    vkCmdPushConstants(RayTraceCommandBuffer, RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &SceneManager::sceneProperites);
+    vkCmdPushConstants(RayTraceCommandBuffer, RayTracePipeline->GetShaderPipelineLayout(), VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_MISS_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
     vkCmdBindPipeline(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipeline());
     vkCmdBindDescriptorSets(RayTraceCommandBuffer, VK_PIPELINE_BIND_POINT_RAY_TRACING_KHR, RayTracePipeline->GetShaderPipelineLayout(), 0, 1, RayTracePipeline->GetDescriptorSetPtr(), 0, 0);
 

@@ -573,7 +573,7 @@ void Scene::Draw()
     {
         case SceneType::kSprite2D:
         {
-            renderer2D.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+            renderer2D.Draw(GLTFSceneManager::sceneProperites, CommandBufferSubmitList);
             break;
         }
         case SceneType::kBlinnPhong:
@@ -582,7 +582,7 @@ void Scene::Draw()
             {
                 if (SceneManager::IsRayTracerActive())
                 {
-                 rayTraceRenderer.Draw(SceneManager::sceneProperites, CommandBufferSubmitList);
+                 rayTraceRenderer.Draw(GLTFSceneManager::sceneProperites, CommandBufferSubmitList);
                 }
                 else if (SceneManager::IsHybridRendererActive())
                 {

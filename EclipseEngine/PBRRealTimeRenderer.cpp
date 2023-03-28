@@ -9,7 +9,7 @@ PBRRealTimeRenderer::~PBRRealTimeRenderer()
 }
 void PBRRealTimeRenderer::BuildRenderer()
 {
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	meshPickerRenderPass.BuildRenderPass();
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	brdfRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());

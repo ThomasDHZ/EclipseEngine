@@ -227,22 +227,22 @@ void PBRBakeReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared
     if (reflectingMesh != nullptr &&
         drawMesh->GetMeshID() != reflectingMesh->GetMeshID())
     {
-        SceneManager::sceneProperites.MeshIndex = drawMesh->GetMeshBufferIndex();
-        SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(drawMesh->GetMeshColorID());
+        //GLTFSceneManager::sceneProperites.MeshIndex = drawMesh->GetMeshBufferIndex();
+        //GLTFSceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(drawMesh->GetMeshColorID());
 
         auto BakeProperties = BakeSceneProperties();
         BakeProperties.Counter = counter;
-        BakeProperties.AmbientLight = SceneManager::sceneProperites.AmbientLight;
-        BakeProperties.CameraPos = SceneManager::sceneProperites.CameraPos;
-        BakeProperties.DirectionalLightCount = SceneManager::sceneProperites.DirectionalLightCount;
-        BakeProperties.MeshColorID = SceneManager::sceneProperites.MeshColorID;
-        BakeProperties.MeshIndex = SceneManager::sceneProperites.MeshIndex;
-        BakeProperties.PBRMaxMipLevel = SceneManager::sceneProperites.PBRMaxMipLevel;
-        BakeProperties.PointLightCount = SceneManager::sceneProperites.PointLightCount;
-        BakeProperties.proj = SceneManager::sceneProperites.proj;
-        BakeProperties.SpotLightCount = SceneManager::sceneProperites.SpotLightCount;
-        BakeProperties.Timer = SceneManager::sceneProperites.Timer;
-        BakeProperties.view = SceneManager::sceneProperites.view;
+        BakeProperties.AmbientLight = GLTFSceneManager::sceneProperites.AmbientLight;
+        BakeProperties.CameraPos = GLTFSceneManager::sceneProperites.CameraPos;
+        BakeProperties.DirectionalLightCount = GLTFSceneManager::sceneProperites.DirectionalLightCount;
+        BakeProperties.MeshColorID = GLTFSceneManager::sceneProperites.MeshColorID;
+        BakeProperties.MeshIndex = GLTFSceneManager::sceneProperites.MeshIndex;
+        BakeProperties.PBRMaxMipLevel = GLTFSceneManager::sceneProperites.PBRMaxMipLevel;
+        BakeProperties.PointLightCount = GLTFSceneManager::sceneProperites.PointLightCount;
+        BakeProperties.proj = GLTFSceneManager::sceneProperites.proj;
+        BakeProperties.SpotLightCount = GLTFSceneManager::sceneProperites.SpotLightCount;
+        BakeProperties.Timer = GLTFSceneManager::sceneProperites.Timer;
+        BakeProperties.view = GLTFSceneManager::sceneProperites.view;
 
 
         const glm::vec3 reflectPos = reflectingMesh->reflectionPoint;

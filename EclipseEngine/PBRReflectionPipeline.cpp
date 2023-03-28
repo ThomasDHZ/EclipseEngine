@@ -206,9 +206,6 @@ void PBRReflectionPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr
     if (reflectingMesh != nullptr &&
         drawMesh->GetMeshID() != reflectingMesh->GetMeshID())
     {
-        SceneManager::sceneProperites.MeshIndex = drawMesh->GetMeshBufferIndex();
-        SceneManager::sceneProperites.MeshColorID = Converter::PixelToVec3(drawMesh->GetMeshColorID());
-
         const glm::vec3 reflectPos = reflectingMesh->reflectionPoint;
         glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
