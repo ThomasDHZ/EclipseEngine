@@ -8,6 +8,11 @@ JsonGraphicsPipeline::JsonGraphicsPipeline()
 {
 }
 
+JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& model, uint32_t modelIndex, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
+{
+    LoadGraphicsPipeline(filePath, renderPass, model, modelIndex, ColorAttachments, samplecount, sizeofConstBuffer);
+}
+
 JsonGraphicsPipeline::~JsonGraphicsPipeline()
 {
 }
@@ -367,10 +372,8 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
         PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
     }
 
-    std::vector<VkDescriptorPool> DescriptorPoolList;
-
     std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
-    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[modelIndex].GetMeshPropertiesBuffer().size()});
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[modelIndex].GetMeshPropertiesBuffer().size() });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1 });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
@@ -381,14 +384,11 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetSunLightPropertiesBuffer().size() });
-        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetDirectionalLightPropertiesBuffer().size() });
-        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetPointLightPropertiesBuffer().size() });
-        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetSpotLightPropertiesBuffer().size() });
-    DescriptorPoolList.emplace_back(CreateDescriptorPool(descriptorPoolSizeList, 1));
-
-
-    std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetSunLightPropertiesBuffer().size() });
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetDirectionalLightPropertiesBuffer().size() });
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetPointLightPropertiesBuffer().size() });
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetSpotLightPropertiesBuffer().size() });
+    DescriptorPool = CreateDescriptorPool(descriptorPoolSizeList, 1);
 
     std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[modelIndex].GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
@@ -406,7 +406,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)model[1].GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-    DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
+    DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
 
     for (int y = 0; y < model[modelIndex].MaterialList.size(); y++)
     {
@@ -426,7 +426,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
         GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, model[1].GetDirectionalLightPropertiesBuffer());
         GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, model[1].GetPointLightPropertiesBuffer());
         GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, model[1].GetSpotLightPropertiesBuffer());
-        model[modelIndex].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPoolList[0], DescriptorSetLayoutList[0]);
+        model[modelIndex].MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
         std::vector<VkWriteDescriptorSet> writeDescriptorSet;
         for (auto& DescriptorBinding : DescriptorBindingList)
@@ -473,8 +473,8 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
 
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(DescriptorSetLayoutList.size());
-        pipelineLayoutInfo.pSetLayouts = DescriptorSetLayoutList.data();
+        pipelineLayoutInfo.setLayoutCount = 1;
+        pipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
         pipelineLayoutInfo.pushConstantRangeCount = 1;
         if (sizeofConstBuffer != 0)
         {
@@ -523,4 +523,17 @@ void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model&
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     model.Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorsetcount);
+}
+
+void JsonGraphicsPipeline::Destroy()
+{
+    vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
+    vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
+    vkDestroyDescriptorPool(VulkanRenderer::GetDevice(), DescriptorPool, nullptr);
+    vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
+
+    ShaderPipeline = VK_NULL_HANDLE;
+    ShaderPipelineLayout = VK_NULL_HANDLE;
+    DescriptorPool = VK_NULL_HANDLE;
+    DescriptorSetLayout = VK_NULL_HANDLE;
 }

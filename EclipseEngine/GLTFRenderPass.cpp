@@ -119,9 +119,11 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> model
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    pbrPipeline.InitializePipeline(pipelineInfo, modelList);
-    //pbrPipeline.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    //pbrPipeline2.LoadGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[1], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    //pbrPipeline.InitializePipeline(pipelineInfo, modelList);
+    for (int x = 0; x < modelList.size(); x++)
+    {
+        pbrPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList, x, ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+    }
     skyboxPipeline.InitializePipeline(pipelineInfo, SceneManager::CubeMap);
 }
 
@@ -168,10 +170,8 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
     skyboxPipeline.Draw(commandBuffer);
     for (int x= 0; x < modelList.size(); x++)
     {
-        pbrPipeline.Draw(commandBuffer, modelList[x], x, 0, 0);
+        pbrPipelineList[x].Draw(commandBuffer, modelList[x], x, modelList.size());
     }
-        //pbrPipeline.Draw(commandBuffer, modelList[0], 0, modelList.size());
-        //pbrPipeline2.Draw(commandBuffer, modelList[1], 1, modelList.size());
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -185,8 +185,10 @@ void GLTFRenderPass::Destroy()
     ColorTexture->Destroy();
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
-
-   // pbrPipeline.Destroy();
+    for (int x = 0; x < pbrPipelineList.size(); x++)
+    {
+        pbrPipelineList[x].Destroy();
+    }
 
     RenderPass::Destroy();
 }
