@@ -14,9 +14,9 @@ class GLTFRenderPass : public RenderPass
 		std::shared_ptr<RenderedColorTexture> ColorTexture;
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-		//GLTFPBRRenderPIpeline pbrPipeline;
-		JsonGraphicsPipeline pbrPipeline;
-		JsonGraphicsPipeline pbrPipeline2;
+		GLTFPBRRenderPIpeline pbrPipeline;
+		//JsonGraphicsPipeline pbrPipeline;
+		//JsonGraphicsPipeline pbrPipeline2;
 		GLTF_SkyboxPipeline skyboxPipeline;
 
 		void RenderPassDesc();

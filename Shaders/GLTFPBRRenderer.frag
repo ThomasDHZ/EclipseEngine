@@ -212,7 +212,7 @@ void main()
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
   Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
- //   Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
+   Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);

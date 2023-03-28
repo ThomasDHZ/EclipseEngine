@@ -71,6 +71,10 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	{
 		mesh->UpdateMeshTransformBuffer();
 	}
+	UpdateSunLightPropertiesBuffer();
+	UpdateDirectionalLightPropertiesBuffer();
+	UpdatePointLightPropertiesBuffer();
+	UpdateSpotLightPropertiesBuffer();
 }
 
 GLTF_Temp_Model::~GLTF_Temp_Model()
@@ -133,6 +137,86 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shad
 	for (auto& mesh : MeshList)
 	{
 		mesh->Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorSetCount);
+	}
+}
+
+void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
+{
+	SceneManager::sceneProperites.SunLightCount = SunLightList.size();
+	if (SunLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		SunLightPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : SunLightList)
+		{
+			light->GetLightPropertiesBuffer(SunLightPropertiesBuffer);
+		}
+	}
+}
+
+void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
+{
+	SceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
+	if (DirectionalLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		DirectionalLightPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : DirectionalLightList)
+		{
+			light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
+		}
+	}
+}
+
+void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
+{
+	SceneManager::sceneProperites.PointLightCount = PointLightList.size();
+	if (PointLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		PointLightPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : PointLightList)
+		{
+			light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
+		}
+	}
+}
+
+void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
+{
+	SceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
+	if (SpotLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		SpotLightPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : SpotLightList)
+		{
+			light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
+		}
 	}
 }
 

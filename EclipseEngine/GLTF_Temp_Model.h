@@ -19,7 +19,6 @@ private:
 	std::vector<MeshProperties> MeshPropertiesList;
 	std::vector<std::shared_ptr<Texture2D>> TextureList;
 
-
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
 	std::vector<VulkanBuffer> MeshPropertiesBufferList;
@@ -27,6 +26,10 @@ private:
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> SunLightPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> DirectionalLightPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> PointLightPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> SpotLightPropertiesBuffer;
 
 	glm::mat4 GameObjectTransformMatrix;
 	glm::mat4 ModelTransformMatrix;
@@ -48,6 +51,10 @@ public:
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateMeshPropertiesBuffer();
+	void UpdateSunLightPropertiesBuffer();
+	void UpdateDirectionalLightPropertiesBuffer();
+	void UpdatePointLightPropertiesBuffer();
+	void UpdateSpotLightPropertiesBuffer();
 
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount);
 	void Destroy();
@@ -61,4 +68,8 @@ public:
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetSunLightPropertiesBuffer() { return SunLightPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer() { return DirectionalLightPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer() { return PointLightPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer() { return SpotLightPropertiesBuffer; }
 };

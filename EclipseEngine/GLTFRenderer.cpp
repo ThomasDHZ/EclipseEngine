@@ -11,11 +11,11 @@ GLTFRenderer::~GLTFRenderer()
 void GLTFRenderer::BuildRenderer()
 {
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
-	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
+	//auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
 	//auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	//auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
-	modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
+	//modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
 	//modelList.emplace_back(GLTF_Temp_Model(c, glm::mat4(1.0f), 0));
 	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
 	//modelList.emplace_back(GLTF_Temp_Model(d, glm::mat4(1.0f), 0));
@@ -69,11 +69,11 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 	//	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	//}
-	for (int x = 0; x < GLTFSceneManager::GetDirectionalCount(); x++)
+	for (int x = 0; x < modelList[0].DirectionalLightList.size(); x++)
 	{
-		ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat(("DLight Intensity " + std::to_string(x)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+		ImGui::SliderFloat3(("DLight direction " + std::to_string(x)).c_str(), &modelList[x].DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(x)).c_str(), &modelList[x].DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+		ImGui::SliderFloat(("DLight Intensity " + std::to_string(x)).c_str(), &modelList[x].DirectionalLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	}
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
 	//{
