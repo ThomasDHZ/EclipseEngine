@@ -11,7 +11,6 @@ std::shared_ptr<SkyboxMesh>             SceneManager::skyboxMesh;
 //std::shared_ptr<RenderedCubeMapTexture> SceneManager::CubeMap = nullptr;
 SkyBoxView							SceneManager::cubeMapInfo;
 SceneProperties							SceneManager::sceneProperites;
-std::shared_ptr<Camera>					SceneManager::activeCamera;
 MusicPlayer								SceneManager::musicPlayer;
 GaussianBlurSettings					SceneManager::bloomsettings;
 bool									SceneManager::EditorModeFlag = true;

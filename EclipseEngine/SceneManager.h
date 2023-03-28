@@ -34,7 +34,7 @@ private:
 
 public:
 	static SceneType sceneType;
-	static std::shared_ptr<Camera> activeCamera;
+
 
 	static SceneProperties sceneProperites;
 	static SkyBoxView cubeMapInfo;
@@ -94,12 +94,12 @@ public:
 		//TopLevelAccelerationStructureManager::Update();
 		LightManager::Update();
 
-		activeCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
+		GLTFSceneManager::ActiveCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		musicPlayer.UpdateBufferStream();
 
-		sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
-		sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
-		sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
+		sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
+		sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
+		sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
 		sceneProperites.Timer = (float)glfwGetTime();
 		sceneProperites.frame++;
 		if (sceneProperites.frame == UINT32_MAX)
@@ -108,8 +108,8 @@ public:
 		}
 		sceneProperites.MaxReflectCount = 2;
 
-		cubeMapInfo.view = glm::mat4(glm::mat3(SceneManager::activeCamera->GetViewMatrix()));
-		cubeMapInfo.proj = glm::perspective(glm::radians(SceneManager::activeCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
+		cubeMapInfo.view = glm::mat4(glm::mat3(GLTFSceneManager::ActiveCamera->GetViewMatrix()));
+		cubeMapInfo.proj = glm::perspective(glm::radians(GLTFSceneManager::ActiveCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
 		cubeMapInfo.proj[1][1] *= -1;
 	}
 

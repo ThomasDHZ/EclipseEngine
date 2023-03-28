@@ -24,6 +24,7 @@ private:
 public:
 	static SceneProperties sceneProperites;
 
+	static std::shared_ptr<Camera> ActiveCamera;
 	static std::shared_ptr<Skybox> skyboxMesh;
 	static SkyBoxView CubeMapInfo;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;

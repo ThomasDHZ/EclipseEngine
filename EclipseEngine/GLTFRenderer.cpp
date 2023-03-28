@@ -40,9 +40,9 @@ void GLTFRenderer::BuildRenderer()
 
 void GLTFRenderer::Update()
 {
-	sceneProperites.CameraPos = SceneManager::activeCamera->GetPosition();
-	sceneProperites.view = SceneManager::activeCamera->GetViewMatrix();
-	sceneProperites.proj = SceneManager::activeCamera->GetProjectionMatrix();
+	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
+	sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
+	sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
 	sceneProperites.SunLightCount = 1;
 	sceneProperites.DirectionalLightCount = GLTFSceneManager::GetDirectionalCount();
 	sceneProperites.PointLightCount = GLTFSceneManager::GetPointLightCount();
