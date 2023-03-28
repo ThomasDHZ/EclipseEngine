@@ -13,8 +13,7 @@ private:
 	static std::string BaseShaderFilePath;
 	static std::string BasePipelineFilePath;
 
-	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
-	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
+
 
 	VkShaderModule ReadShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
@@ -22,6 +21,9 @@ protected:
 
 
 public:
+	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
+	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
+
 	JsonGraphicsPipeline();
 	~JsonGraphicsPipeline();
 

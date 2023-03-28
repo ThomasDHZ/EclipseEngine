@@ -29,7 +29,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 				{
 					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
 					data.SunlLightList.emplace_back(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-					data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, 500.0f)));
+					data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
 				}
 				if (light.type == "spot")
 				{

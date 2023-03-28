@@ -166,9 +166,9 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     skyboxPipeline.Draw(commandBuffer);
-    for (auto& model : modelList)
+    for (int x= 0; x < modelList.size(); x++)
     {
-        pbrPipeline.Draw(commandBuffer, model, 0, 0);
+        pbrPipeline.Draw(commandBuffer, modelList[x], x, 0, 0);
     }
         //pbrPipeline.Draw(commandBuffer, modelList[0], 0, modelList.size());
         //pbrPipeline2.Draw(commandBuffer, modelList[1], 1, modelList.size());
