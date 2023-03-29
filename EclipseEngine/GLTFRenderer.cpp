@@ -15,10 +15,10 @@ void GLTFRenderer::BuildRenderer()
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
-	modelList.emplace_back(GLTF_Temp_Model(c, glm::mat4(1.0f), 0));
-	//modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
+	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
+	modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
 
-	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);

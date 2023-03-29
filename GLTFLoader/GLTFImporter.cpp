@@ -4,9 +4,8 @@
 
 void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
-	/*if (node.mesh == -1)
+	if (node.mesh == -1)
 	{
-		GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 		auto color = glm::vec3(1.0f);
 		auto intensity = 0.0f;
 
@@ -24,22 +23,22 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 				{
 
 					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					data.PointlLightList.emplace_back(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
+					GLTFSceneManager::AddPointlLight(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
 				}
 				if (light.type == "directional")
 				{
 					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					data.SunlLightList.emplace_back(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-					data.DirectionalLightList.emplace_back(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+					GLTFSceneManager::AddSunLight(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+					GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
 				}
 				if (light.type == "spot")
 				{
 					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					data.SpotLightList.emplace_back(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
+					GLTFSceneManager::AddSpotLight(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
 				}
 			}
 		}
-	}*/
+	}
 }
 
 void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader)
