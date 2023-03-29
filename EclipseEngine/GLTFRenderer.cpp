@@ -18,9 +18,9 @@ void GLTFRenderer::BuildRenderer()
 	modelList.emplace_back(GLTF_Temp_Model(c, glm::mat4(1.0f), 0));
 	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
 
-	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
-	SceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
@@ -38,20 +38,7 @@ void GLTFRenderer::BuildRenderer()
 
 void GLTFRenderer::Update()
 {
-	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
-	sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
-	sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
-	sceneProperites.SunLightCount = 1;
-	sceneProperites.DirectionalLightCount = GLTFSceneManager::GetDirectionalCount();
-	sceneProperites.PointLightCount = GLTFSceneManager::GetPointLightCount();
-	sceneProperites.SpotLightCount = GLTFSceneManager::GetSpotLightCount();
-	sceneProperites.Timer = (float)glfwGetTime();
-	sceneProperites.frame++;
-	if (sceneProperites.frame == UINT32_MAX)
-	{
-		sceneProperites.frame = 0;
-	}
-	sceneProperites.MaxReflectCount = 2;
+	GLTFSceneManager::Update();
 
 	for (auto& model : modelList)
 	{
@@ -67,11 +54,11 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 	//	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	//}
-	for (int x = 0; x < modelList[1].DirectionalLightList.size(); x++)
+	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	{
-		ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &modelList[1].DirectionalLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &modelList[1].DirectionalLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &modelList[1].DirectionalLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+		ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	}
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
 	//{

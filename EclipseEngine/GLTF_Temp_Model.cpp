@@ -71,10 +71,10 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	{
 		mesh->UpdateMeshTransformBuffer();
 	}
-	UpdateSunLightPropertiesBuffer();
-	UpdateDirectionalLightPropertiesBuffer();
-	UpdatePointLightPropertiesBuffer();
-	UpdateSpotLightPropertiesBuffer();
+	//UpdateSunLightPropertiesBuffer();
+	//UpdateDirectionalLightPropertiesBuffer();
+	//UpdatePointLightPropertiesBuffer();
+	//UpdateSpotLightPropertiesBuffer();
 }
 
 GLTF_Temp_Model::~GLTF_Temp_Model()
@@ -101,22 +101,22 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
 
-	for (auto& light : SunLightList)
-	{
-		light->Update();
-	}
-	for (auto& light : DirectionalLightList)
-	{
-		light->Update();
-	}
-	for (auto& light : PointLightList)
-	{
-		light->Update();
-	}
-	for (auto& light : SpotLightList)
-	{
-		light->Update();
-	}
+	//for (auto& light : SunLightList)
+	//{
+	//	light->Update();
+	//}
+	//for (auto& light : DirectionalLightList)
+	//{
+	//	light->Update();
+	//}
+	//for (auto& light : PointLightList)
+	//{
+	//	light->Update();
+	//}
+	//for (auto& light : SpotLightList)
+	//{
+	//	light->Update();
+	//}
 }
 
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
@@ -140,85 +140,85 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shad
 	}
 }
 
-void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.SunLightCount = SunLightList.size();
-	if (SunLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		SunLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : SunLightList)
-		{
-			light->GetLightPropertiesBuffer(SunLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
-	if (DirectionalLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		DirectionalLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : DirectionalLightList)
-		{
-			light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.PointLightCount = PointLightList.size();
-	if (PointLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		PointLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : PointLightList)
-		{
-			light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
-		}
-	}
-}
-
-void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
-{
-	SceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
-	if (SpotLightList.size() == 0)
-	{
-		VkDescriptorBufferInfo nullBuffer;
-		nullBuffer.buffer = VK_NULL_HANDLE;
-		nullBuffer.offset = 0;
-		nullBuffer.range = VK_WHOLE_SIZE;
-		SpotLightPropertiesBuffer.emplace_back(nullBuffer);
-	}
-	else
-	{
-		for (auto& light : SpotLightList)
-		{
-			light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
-		}
-	}
-}
+//void GLTF_Temp_Model::UpdateSunLightPropertiesBuffer()
+//{
+//	GLTFSceneManager::sceneProperites.SunLightCount = SunLightList.size();
+//	if (SunLightList.size() == 0)
+//	{
+//		VkDescriptorBufferInfo nullBuffer;
+//		nullBuffer.buffer = VK_NULL_HANDLE;
+//		nullBuffer.offset = 0;
+//		nullBuffer.range = VK_WHOLE_SIZE;
+//		SunLightPropertiesBuffer.emplace_back(nullBuffer);
+//	}
+//	else
+//	{
+//		for (auto& light : SunLightList)
+//		{
+//			light->GetLightPropertiesBuffer(SunLightPropertiesBuffer);
+//		}
+//	}
+//}
+//
+//void GLTF_Temp_Model::UpdateDirectionalLightPropertiesBuffer()
+//{
+//	GLTFSceneManager::sceneProperites.DirectionalLightCount = DirectionalLightList.size();
+//	if (DirectionalLightList.size() == 0)
+//	{
+//		VkDescriptorBufferInfo nullBuffer;
+//		nullBuffer.buffer = VK_NULL_HANDLE;
+//		nullBuffer.offset = 0;
+//		nullBuffer.range = VK_WHOLE_SIZE;
+//		DirectionalLightPropertiesBuffer.emplace_back(nullBuffer);
+//	}
+//	else
+//	{
+//		for (auto& light : DirectionalLightList)
+//		{
+//			light->GetLightPropertiesBuffer(DirectionalLightPropertiesBuffer);
+//		}
+//	}
+//}
+//
+//void GLTF_Temp_Model::UpdatePointLightPropertiesBuffer()
+//{
+//	GLTFSceneManager::sceneProperites.PointLightCount = PointLightList.size();
+//	if (PointLightList.size() == 0)
+//	{
+//		VkDescriptorBufferInfo nullBuffer;
+//		nullBuffer.buffer = VK_NULL_HANDLE;
+//		nullBuffer.offset = 0;
+//		nullBuffer.range = VK_WHOLE_SIZE;
+//		PointLightPropertiesBuffer.emplace_back(nullBuffer);
+//	}
+//	else
+//	{
+//		for (auto& light : PointLightList)
+//		{
+//			light->GetLightPropertiesBuffer(PointLightPropertiesBuffer);
+//		}
+//	}
+//}
+//
+//void GLTF_Temp_Model::UpdateSpotLightPropertiesBuffer()
+//{
+//	GLTFSceneManager::sceneProperites.SpotLightCount = SpotLightList.size();
+//	if (SpotLightList.size() == 0)
+//	{
+//		VkDescriptorBufferInfo nullBuffer;
+//		nullBuffer.buffer = VK_NULL_HANDLE;
+//		nullBuffer.offset = 0;
+//		nullBuffer.range = VK_WHOLE_SIZE;
+//		SpotLightPropertiesBuffer.emplace_back(nullBuffer);
+//	}
+//	else
+//	{
+//		for (auto& light : SpotLightList)
+//		{
+//			light->GetLightPropertiesBuffer(SpotLightPropertiesBuffer);
+//		}
+//	}
+//}
 
 void GLTF_Temp_Model::Destroy()
 {

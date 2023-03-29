@@ -43,6 +43,33 @@ void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
 
 void GLTFSceneManager::Update()
 {
+	for (auto& light : SunLightList)
+	{
+		light->Update();
+	}
+	for (auto& light : DirectionalLightList)
+	{
+		light->Update();
+	}
+	for (auto& light : PointLightList)
+	{
+		light->Update();
+	}
+	for (auto& light : SpotLightList)
+	{
+		light->Update();
+	}
+
+	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
+	sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
+	sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
+	sceneProperites.Timer = (float)glfwGetTime();
+	sceneProperites.frame++;
+	if (sceneProperites.frame == UINT32_MAX)
+	{
+		sceneProperites.frame = 0;
+	}
+	sceneProperites.MaxReflectCount = 2;
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()

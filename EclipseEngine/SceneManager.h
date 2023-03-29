@@ -36,7 +36,7 @@ public:
 	static SceneType sceneType;
 
 
-	static SceneProperties sceneProperites;
+	//static SceneProperties sceneProperites;
 	static SkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
 	//static std::shared_ptr<EnvironmentTexture>     environmentTexture;
@@ -97,16 +97,16 @@ public:
 		GLTFSceneManager::ActiveCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		musicPlayer.UpdateBufferStream();
 
-		sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
-		sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
-		sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
-		sceneProperites.Timer = (float)glfwGetTime();
-		sceneProperites.frame++;
-		if (sceneProperites.frame == UINT32_MAX)
-		{
-			sceneProperites.frame = 0;
-		}
-		sceneProperites.MaxReflectCount = 2;
+		//sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
+		//sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
+		//sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
+		//sceneProperites.Timer = (float)glfwGetTime();
+		//sceneProperites.frame++;
+		//if (sceneProperites.frame == UINT32_MAX)
+		//{
+		//	sceneProperites.frame = 0;
+		//}
+		//sceneProperites.MaxReflectCount = 2;
 
 		cubeMapInfo.view = glm::mat4(glm::mat3(GLTFSceneManager::ActiveCamera->GetViewMatrix()));
 		cubeMapInfo.proj = glm::perspective(glm::radians(GLTFSceneManager::ActiveCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
