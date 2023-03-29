@@ -122,7 +122,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> model
     //pbrPipeline.InitializePipeline(pipelineInfo, modelList);
     for (int x = 0; x < modelList.size(); x++)
     {
-        pbrPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList, x, ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+        pbrPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
     skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
 }

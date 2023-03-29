@@ -16,7 +16,7 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 	modelList.emplace_back(GLTF_Temp_Model(c, glm::mat4(1.0f), 0));
-	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
+	//modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
 
 	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 

@@ -52,10 +52,10 @@ public:
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
-	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& model, uint32_t modelIndex, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	~JsonGraphicsPipeline();
 
-	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<GLTF_Temp_Model>& model, uint32_t modelIndex, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
 	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
 	void Destroy();

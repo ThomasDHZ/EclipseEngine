@@ -16,7 +16,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     for (int x = 0; x < modelList.size(); x++)
     {
         importer.emplace_back(JsonGraphicsPipeline());
-        importer.back().LoadGraphicsPipeline("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList, x, pipelineInfoStruct.ColorAttachments, pipelineInfoStruct.SampleCount, sizeof(SceneProperties));
+        importer.back().LoadGraphicsPipeline("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList[x], pipelineInfoStruct.ColorAttachments, pipelineInfoStruct.SampleCount, sizeof(SceneProperties));
     }
    // importer.emplace_back(std::make_shared<JsonGraphicsPipeline>("GLTFPBRPipeline.txt", pipelineInfoStruct.renderPass, modelList[1], pipelineInfoStruct.ColorAttachments, pipelineInfoStruct.SampleCount, sizeof(SceneProperties)));
     if (ShaderPipeline == nullptr)
