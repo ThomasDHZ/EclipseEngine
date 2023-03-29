@@ -73,6 +73,228 @@ VkDescriptorPool JsonGraphicsPipeline::CreateDescriptorPool(std::vector<VkDescri
     return descriptorPool;
 }
 
+VkDescriptorSet JsonGraphicsPipeline::CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout)
+{
+    VkDescriptorSetAllocateInfo allocInfo = {};
+    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+    allocInfo.descriptorPool = descriptorPool;
+    allocInfo.descriptorSetCount = 1;
+    allocInfo.pSetLayouts = &layout;
+
+    VkDescriptorSet DescriptorSets;
+    if (vkAllocateDescriptorSets(VulkanRenderer::GetDevice(), &allocInfo, &DescriptorSets) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to allocate descriptor sets.");
+    }
+
+    return DescriptorSets;
+}
+
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddAccelerationBuffer(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure)
+{
+    VkWriteDescriptorSet AccelerationDesciptorSet = {};
+    AccelerationDesciptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    AccelerationDesciptorSet.descriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+    AccelerationDesciptorSet.dstSet = DescriptorSet;
+    AccelerationDesciptorSet.dstBinding = BindingNumber;
+    AccelerationDesciptorSet.descriptorCount = 1;
+    AccelerationDesciptorSet.pNext = &accelerationStructure;
+    return AccelerationDesciptorSet;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet TextureDescriptor = {};
+    TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    TextureDescriptor.dstSet = DescriptorSet;
+    TextureDescriptor.dstBinding = BindingNumber;
+    TextureDescriptor.dstArrayElement = 0;
+    TextureDescriptor.descriptorType = descriptorType;
+    TextureDescriptor.descriptorCount = 1;
+    TextureDescriptor.pImageInfo = &TextureImageInfo;
+    return TextureDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet TextureDescriptor = {};
+    TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    TextureDescriptor.dstSet = DescriptorSet;
+    TextureDescriptor.dstBinding = BindingNumber;
+    TextureDescriptor.dstArrayElement = 0;
+    TextureDescriptor.descriptorType = descriptorType;
+    TextureDescriptor.descriptorCount = static_cast<uint32_t>(TextureImageInfo.size());
+    TextureDescriptor.pImageInfo = TextureImageInfo.data();
+    return TextureDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet BufferDescriptor = {};
+    BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    BufferDescriptor.dstSet = DescriptorSet;
+    BufferDescriptor.dstBinding = BindingNumber;
+    BufferDescriptor.dstArrayElement = 0;
+    BufferDescriptor.descriptorType = descriptorType;
+    BufferDescriptor.descriptorCount = 1;
+    BufferDescriptor.pBufferInfo = &BufferInfo;
+    return BufferDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet BufferDescriptor = {};
+    BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    BufferDescriptor.dstSet = DescriptorSet;
+    BufferDescriptor.dstBinding = BindingNumber;
+    BufferDescriptor.dstArrayElement = 0;
+    BufferDescriptor.descriptorType = descriptorType;
+    BufferDescriptor.descriptorCount = static_cast<uint32_t>(BufferInfoList.size());
+    BufferDescriptor.pBufferInfo = BufferInfoList.data();
+    return BufferDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, VkDescriptorImageInfo& TextureImageInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet TextureDescriptor = {};
+    TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    TextureDescriptor.dstSet = DescriptorSet;
+    TextureDescriptor.dstBinding = BindingNumber;
+    TextureDescriptor.dstArrayElement = dstArrayElement;
+    TextureDescriptor.descriptorType = descriptorType;
+    TextureDescriptor.descriptorCount = 1;
+    TextureDescriptor.pImageInfo = &TextureImageInfo;
+    return TextureDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddTextureDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet TextureDescriptor = {};
+    TextureDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    TextureDescriptor.dstSet = DescriptorSet;
+    TextureDescriptor.dstBinding = BindingNumber;
+    TextureDescriptor.dstArrayElement = dstArrayElement;
+    TextureDescriptor.descriptorType = descriptorType;
+    TextureDescriptor.descriptorCount = static_cast<uint32_t>(TextureImageInfo.size());
+    TextureDescriptor.pImageInfo = TextureImageInfo.data();
+    return TextureDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, VkDescriptorBufferInfo& BufferInfo, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet BufferDescriptor = {};
+    BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    BufferDescriptor.dstSet = DescriptorSet;
+    BufferDescriptor.dstBinding = BindingNumber;
+    BufferDescriptor.dstArrayElement = dstArrayElement;
+    BufferDescriptor.descriptorType = descriptorType;
+    BufferDescriptor.descriptorCount = 1;
+    BufferDescriptor.pBufferInfo = &BufferInfo;
+    return BufferDescriptor;
+}
+
+VkWriteDescriptorSet JsonGraphicsPipeline::AddBufferDescriptorSet(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, uint32_t dstArrayElement, std::vector<VkDescriptorBufferInfo>& BufferInfoList, VkDescriptorType descriptorType)
+{
+    VkWriteDescriptorSet BufferDescriptor = {};
+    BufferDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    BufferDescriptor.dstSet = DescriptorSet;
+    BufferDescriptor.dstBinding = BindingNumber;
+    BufferDescriptor.dstArrayElement = dstArrayElement;
+    BufferDescriptor.descriptorType = descriptorType;
+    BufferDescriptor.descriptorCount = static_cast<uint32_t>(BufferInfoList.size());
+    BufferDescriptor.pBufferInfo = BufferInfoList.data();
+    return BufferDescriptor;
+}
+
+void JsonGraphicsPipeline::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR accelerationStructure, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+    DescriptorSetBinding.AccelerationStructureDescriptor = accelerationStructure;
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo> TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    DescriptorSetBinding.TextureDescriptor = TextureImageInfo;
+    DescriptorSetBinding.Count = TextureImageInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo TextureImageInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = BufferInfo;
+    DescriptorSetBinding.Count = BufferInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
+    DescriptorSetBinding.Count = 1;
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+void JsonGraphicsPipeline::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
+{
+    DescriptorSetBindingStruct DescriptorSetBinding{};
+    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+    DescriptorSetBinding.StageFlags = StageFlags;
+    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    DescriptorSetBinding.BufferDescriptor = BufferInfo;
+    DescriptorSetBinding.Count = BufferInfo.size();
+    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+}
+
+
 void JsonGraphicsPipeline::SaveDescriptorPoolSize(nlohmann::json& json, VkDescriptorPoolSize descriptorPoolSize)
 {
     JsonConverter::to_json(json["type"], descriptorPoolSize.type);
@@ -411,21 +633,21 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
     for (int y = 0; y < model.MaterialList.size(); y++)
     {
         std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, model.GetMeshPropertiesBuffer());
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, model.MeshList[0]->GetTransformMatrixBuffer()[0]);
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, model.MaterialList[y]->GetAlbedoMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, model.MaterialList[y]->GetNormalMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, model.MaterialList[y]->GetMetallicRoughnessMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, model.MaterialList[y]->GetAmbientOcclusionMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, model.MaterialList[y]->GetAlphaMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, model.MaterialList[y]->GetDepthMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
-        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GLTFSceneManager::GetSunLightPropertiesBuffer());
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
-        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, model.GetMeshPropertiesBuffer());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, model.MeshList[0]->GetTransformMatrixBuffer()[0]);
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 2, model.MaterialList[y]->GetAlbedoMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 3, model.MaterialList[y]->GetNormalMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 4, model.MaterialList[y]->GetMetallicRoughnessMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 5, model.MaterialList[y]->GetAmbientOcclusionMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 6, model.MaterialList[y]->GetAlphaMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 7, model.MaterialList[y]->GetDepthMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
+        AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GLTFSceneManager::GetSunLightPropertiesBuffer());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
+        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
         model.MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
         std::vector<VkWriteDescriptorSet> writeDescriptorSet;
@@ -433,15 +655,15 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
         {
             if (DescriptorBinding.BufferDescriptor.size() > 0)
             {
-                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+                writeDescriptorSet.emplace_back(AddBufferDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
             }
             else if (DescriptorBinding.TextureDescriptor.size() > 0)
             {
-                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+                writeDescriptorSet.emplace_back(AddTextureDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
             }
             else
             {
-                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+                writeDescriptorSet.emplace_back(AddAccelerationBuffer(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
             }
         }
         vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
