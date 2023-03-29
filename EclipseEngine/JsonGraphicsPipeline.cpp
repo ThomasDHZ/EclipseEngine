@@ -294,20 +294,9 @@ void JsonGraphicsPipeline::AddStorageBufferDescriptorSetBinding(std::vector<Desc
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-
-void JsonGraphicsPipeline::SaveDescriptorPoolSize(nlohmann::json& json, VkDescriptorPoolSize descriptorPoolSize)
+void JsonGraphicsPipeline::SaveDescriptorBindingLayout(nlohmann::json& json, DescriptorBindingPropertiesEnum descriptorBindingPropertiesEnum)
 {
-    JsonConverter::to_json(json["type"], descriptorPoolSize.type);
-    JsonConverter::to_json(json["descriptorCount"], descriptorPoolSize.descriptorCount);
-}
-
-void JsonGraphicsPipeline::SaveDescriptorLayoutSet(nlohmann::json& json, VkDescriptorSetLayoutBinding descriptorSetLayoutBinding)
-{
-    JsonConverter::to_json(json["binding"], descriptorSetLayoutBinding.binding);
-    JsonConverter::to_json(json["descriptorType"], descriptorSetLayoutBinding.descriptorType);
-    JsonConverter::to_json(json["descriptorCount"], descriptorSetLayoutBinding.descriptorCount);
-    JsonConverter::to_json(json["stageFlags"], descriptorSetLayoutBinding.stageFlags);
-    //JsonConverter::to_json(json["pImmutableSamplers"], pImmutableSamplers);
+    JsonConverter::to_json(json["bindingType"], descriptorBindingPropertiesEnum);
 }
 
 void JsonGraphicsPipeline::SaveCreateDescriptorPool(nlohmann::json& json, VkDescriptorPoolCreateInfo descriptorPoolCreateInfo)
@@ -411,27 +400,6 @@ void JsonGraphicsPipeline::SavePipelineColorBlendStateCreateInfo(nlohmann::json&
     JsonConverter::to_json(json["blendConstants"][1], pipelineColorBlendStateCreateInfo.blendConstants[1]);
     JsonConverter::to_json(json["blendConstants"][2], pipelineColorBlendStateCreateInfo.blendConstants[2]);
     JsonConverter::to_json(json["blendConstants"][3], pipelineColorBlendStateCreateInfo.blendConstants[3]);
-}
-
-VkDescriptorPoolSize JsonGraphicsPipeline::LoadDescriptorPoolSize(nlohmann::json& json)
-{
-    VkDescriptorPoolSize descriptorPoolSize{};
-    descriptorPoolSize.type = json["type"];
-    descriptorPoolSize.descriptorCount = json["descriptorCount"];
-
-    return descriptorPoolSize;
-}
-
-VkDescriptorSetLayoutBinding JsonGraphicsPipeline::LoadDescriptorLayoutSet(nlohmann::json& json)
-{
-    VkDescriptorSetLayoutBinding descriptorSetLayoutBinding{};
-    descriptorSetLayoutBinding.binding = json["binding"];
-    descriptorSetLayoutBinding.descriptorType = json["descriptorType"];
-    descriptorSetLayoutBinding.descriptorCount = json["descriptorCount"];
-    descriptorSetLayoutBinding.stageFlags = json["stageFlags"];
-    descriptorSetLayoutBinding.pImmutableSamplers = nullptr;
-
-    return descriptorSetLayoutBinding;
 }
 
 VkDescriptorPool JsonGraphicsPipeline::LoadCreateDescriptorPool(nlohmann::json& json)
