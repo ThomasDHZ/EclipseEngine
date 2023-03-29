@@ -76,21 +76,21 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() });
 
       
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], DescriptorBindingPropertiesEnum::kModelTransformDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][1], DescriptorBindingPropertiesEnum::kMeshPropertiesDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][2], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][3], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][4], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][5], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][6], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][7], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][8], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][9], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][10], DescriptorBindingPropertiesEnum::kTextureDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][11], DescriptorBindingPropertiesEnum::kSunLightDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][12], DescriptorBindingPropertiesEnum::kDirectionalLightDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][13], DescriptorBindingPropertiesEnum::kPointLightDescriptor);
-        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][14], DescriptorBindingPropertiesEnum::kSpotLightDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kModelTransformDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][1], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kMeshPropertiesDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][2], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kAlbedoMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][3], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kNormalMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][4], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kMetallicRoughnessMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][5], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kAmbientOcclusionMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][6], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kAlphaMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][7], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kDepthMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][8], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kBRDFMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][9], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kIrradianceMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][10], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kPrefilterMapDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][11], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kSunLightDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][12], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kDirectionalLightDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][13], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kPointLightDescriptor);
+        jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][14], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingPropertiesEnum::kSpotLightDescriptor);
         DescriptorPool1.emplace_back(jsonPipeline.CreateDescriptorPool(descriptorPoolSizeList, modelList.size()));
     
  
@@ -176,21 +176,18 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         saveDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
         saveDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
         jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], saveDepthStencilStateCreateInfo);
-        VkPipelineDepthStencilStateCreateInfo loadDepthStencilStateCreateInfo = jsonPipeline.LoadPipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"]);
 
         VkPipelineInputAssemblyStateCreateInfo saveinputAssembly = {};
         saveinputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         saveinputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         saveinputAssembly.primitiveRestartEnable = VK_FALSE;
         jsonPipeline.SavePipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"], saveinputAssembly);
-        VkPipelineInputAssemblyStateCreateInfo loadinputAssembly = jsonPipeline.LoadPipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"]);
 
         VkPipelineViewportStateCreateInfo saveviewportState{};
         saveviewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         saveviewportState.scissorCount = 0;
         saveviewportState.viewportCount = 0;
         jsonPipeline.SavePipelineViewportStateCreateInfo(json["PipelineViewportStateCreateInfo"], saveviewportState);
-        VkPipelineViewportStateCreateInfo loadviewportState = jsonPipeline.LoadPipelineViewportStateCreateInfo(json["PipelineViewportStateCreateInfo"]);
 
         VkPipelineRasterizationStateCreateInfo saverasterizer{};
         saverasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
@@ -202,23 +199,18 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         saverasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         saverasterizer.depthBiasEnable = VK_FALSE;
         jsonPipeline.SavePipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"], saverasterizer);
-        VkPipelineRasterizationStateCreateInfo loadrasterizer = jsonPipeline.LoadPipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"]);
 
         VkPipelineMultisampleStateCreateInfo savemultisampling{};
         savemultisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         savemultisampling.sampleShadingEnable = VK_TRUE;
         savemultisampling.rasterizationSamples = pipelineInfoStruct.SampleCount;
         jsonPipeline.SavePipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], savemultisampling);
-        VkPipelineMultisampleStateCreateInfo loadmultisampling = jsonPipeline.LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], pipelineInfoStruct.SampleCount);
 
         VkPipelineColorBlendStateCreateInfo savecolorBlending{};
         savecolorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         savecolorBlending.attachmentCount = static_cast<uint32_t>(pipelineInfoStruct.ColorAttachments.size());
         savecolorBlending.pAttachments = pipelineInfoStruct.ColorAttachments.data();
         jsonPipeline.SavePipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], savecolorBlending);
-        VkPipelineColorBlendStateCreateInfo loadcolorBlending = jsonPipeline.LoadPipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], pipelineInfoStruct.ColorAttachments);
-        loadcolorBlending.attachmentCount = static_cast<uint32_t>(pipelineInfoStruct.ColorAttachments.size());
-        loadcolorBlending.pAttachments = pipelineInfoStruct.ColorAttachments.data();
 
         std::cout << json << std::endl;
 
@@ -255,12 +247,12 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
         pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
         pipelineInfo.pStages = PipelineShaderStageList.data();
         pipelineInfo.pVertexInputState = &vertexInputInfo;
-        pipelineInfo.pInputAssemblyState = &loadinputAssembly;
-        pipelineInfo.pViewportState = &loadviewportState;
-        pipelineInfo.pRasterizationState = &loadrasterizer;
-        pipelineInfo.pMultisampleState = &loadmultisampling;
-        pipelineInfo.pDepthStencilState = &loadDepthStencilStateCreateInfo;
-        pipelineInfo.pColorBlendState = &loadcolorBlending;
+        pipelineInfo.pInputAssemblyState = &saveinputAssembly;
+        pipelineInfo.pViewportState = &saveviewportState;
+        pipelineInfo.pRasterizationState = &saverasterizer;
+        pipelineInfo.pMultisampleState = &savemultisampling;
+        pipelineInfo.pDepthStencilState = &saveDepthStencilStateCreateInfo;
+        pipelineInfo.pColorBlendState = &savecolorBlending;
         pipelineInfo.layout = ShaderPipelineLayout;
         pipelineInfo.renderPass = pipelineInfoStruct.renderPass;
         pipelineInfo.subpass = 0;

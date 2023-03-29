@@ -2,6 +2,7 @@
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
 #include "GLTF_GraphicsDescriptors.h"
+#include <json.hpp>
 
 struct PipelineInfoStruct
 {
@@ -47,6 +48,7 @@ protected:
 	std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	void BuildShaderPipeLine(BuildGraphicsPipelineInfo& buildPipelineInfo);
+	void BuildShaderPipeLine(nlohmann::json& json, BuildGraphicsPipelineInfo& buildPipelineInfo);
 
 public:
 	GLTF_GraphicsPipeline();
@@ -61,5 +63,6 @@ public:
 	virtual void UpdateGraphicsPipeLine();
 	virtual void UpdateGraphicsPipeLine(BuildGraphicsPipelineInfo& buildGraphicsPipelineInfo);
 	virtual void Destroy();
+
 };
 

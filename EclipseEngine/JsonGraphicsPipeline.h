@@ -11,10 +11,16 @@ enum DescriptorBindingPropertiesEnum
 {
 	kModelTransformDescriptor,
 	kMeshPropertiesDescriptor,
-	kTextureDescriptor,
+	kAlbedoMapDescriptor,
+	kNormalMapDescriptor,
+	kMetallicRoughnessMapDescriptor,
+	kAmbientOcclusionMapDescriptor,
+	kAlphaMapDescriptor,
+	kDepthMapDescriptor,
 	kBRDFMapDescriptor,
 	kIrradianceMapDescriptor,
 	kPrefilterMapDescriptor,
+	kCubeMapDescriptor,
 	kSunLightDescriptor,
 	kDirectionalLightDescriptor,
 	kPointLightDescriptor,
@@ -50,8 +56,7 @@ private:
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 
 	
-	void DescriptorPropertyLookUp();
-
+	void LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Model& model);
 
 protected:
 
@@ -70,7 +75,7 @@ public:
 	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments);
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
-	void SaveDescriptorBindingLayout(nlohmann::json& json, DescriptorBindingPropertiesEnum descriptorBindingPropertiesEnum);
+	void SaveDescriptorBindingLayout(nlohmann::json& json, VkDescriptorType descriptorType, DescriptorBindingPropertiesEnum descriptorBindingPropertiesEnum);
 	void SaveCreateDescriptorPool(nlohmann::json& json, VkDescriptorPoolCreateInfo descriptorPoolCreateInfo);
 	void SaveBufferDescriptorSet(nlohmann::json& json, VkWriteDescriptorSet writeDescriptorSet);
 
@@ -88,11 +93,16 @@ public:
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
+	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	~JsonGraphicsPipeline();
 
+	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
+	void BuildAndSaveShaderPipeLine(nlohmann::json& json, BuildGraphicsPipelineInfo& buildPipelineInfo, VkDescriptorSetLayout descriptorSetLayout);
+	
+	void DrawCubeMap(VkCommandBuffer& commandBuffer, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
 	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
 	void Destroy();
 };
