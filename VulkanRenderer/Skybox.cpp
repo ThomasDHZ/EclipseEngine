@@ -11,30 +11,30 @@ void Skybox::StartUp()
 {
 	std::vector<SkyboxVertexLayout> SkyBoxVertices =
 	{
-		{{1.0f, 1.0f, -10.0f, 0.0f }},
-		{{1.0f, 1.0f, -10.0f, 0.0f }},
-		{{1.0f, 1.0f, -10.0f, 0.0f }},
-		{{1.0f, -1.0f, -10.0f, 0.0f }},
-		{{1.0f, -1.0f, -10.0f, 0.0f }},
-		{{1.0f, -1.0f, -10.0f, 0.0f }},
-		{{1.0f, 1.0f, 10.0f, 0.0f }},
-		{{1.0f, 1.0f, 10.0f, 0.0f }},
-		{{1.0f, 1.0f, 10.0f, 0.0f }},
-		{{1.0f, -1.0f, 10.0f, 0.0f }},
-		{{1.0f, -1.0f, 10.0f, 0.0f }},
-		{{1.0f, -1.0f, 10.0f, 0.0f }},
-		{{-1.0f, 1.0f, -10.0f, 0.0f }},
-		{{-1.0f, 1.0f, -10.0f, 0.0f }},
-		{{-1.0f, 1.0f, -10.0f, 0.0f }},
-		{{-1.0f, -1.0f, -10.0f, 0.0f }},
-		{{-1.0f, -1.0f, -10.0f, 0.0f }},
-		{{-1.0f, -1.0f, -10.0f, 0.0f }},
-		{{-1.0f, 1.0f, 10.0f, 0.0f }},
-		{{-1.0f, 1.0f, 10.0f, 0.0f }},
-		{{-1.0f, 1.0f, 10.0f, 0.0f }},
-		{{-1.0f, -1.0f, 10.0f, 0.0f }},
-		{{-1.0f, -1.0f, 10.0f, 0.0f }},
-		{{-1.0f, -1.0f, 10.0f, 0.0f }}
+		{{1.0f, 1.0f, -1.0f}},
+		{{1.0f, 1.0f, -1.0f}},
+		{{1.0f, 1.0f, -1.0f}},
+		{{1.0f, -1.0f, -1.0f}},
+		{{1.0f, -1.0f, -1.0f}},
+		{{1.0f, -1.0f, -1.0f}},
+		{{1.0f, 1.0f, 1.0f}},
+		{{1.0f, 1.0f, 1.0f}},
+		{{1.0f, 1.0f, 1.0f}},
+		{{1.0f, -1.0f, 1.0f}},
+		{{1.0f, -1.0f, 1.0f}},
+		{{1.0f, -1.0f, 1.0f}},
+		{{-1.0f, 1.0f, -1.0f}},
+		{{-1.0f, 1.0f, -1.0f}},
+		{{-1.0f, 1.0f, -1.0f}},
+		{{-1.0f, -1.0f, -1.0f}},
+		{{-1.0f, -1.0f, -1.0f}},
+		{{-1.0f, -1.0f, -1.0f}},
+		{{-1.0f, 1.0f, 1.0f}},
+		{{-1.0f, 1.0f, 1.0f}},
+		{{-1.0f, 1.0f, 1.0f}},
+		{{-1.0f, -1.0f, 1.0f}},
+		{{-1.0f, -1.0f, 1.0f}},
+		{{-1.0f, -1.0f, 1.0f}}
 	};
 
 	std::vector<uint32_t> IndexList
@@ -51,6 +51,7 @@ void Skybox::StartUp()
 
 	VertexBuffer.CreateBuffer(SkyBoxVertices.data(), SkyBoxVertices.size() * sizeof(SkyboxVertexLayout), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	skyBoxView = SkyBoxView{};
 }
 
 void Skybox::Update(std::shared_ptr<Camera> camera)
@@ -60,11 +61,10 @@ void Skybox::Update(std::shared_ptr<Camera> camera)
 	skyBoxView.proj[1][1] *= -1;
 }
 
-void Skybox::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout layout)
+void Skybox::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout layout, VkDescriptorSet descriptorSet)
 {
 	VkDeviceSize offsets[] = { 0 };
-
-	vkCmdPushConstants(commandBuffer, layout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyBoxView), &skyBoxView);
+	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorSet, 0, nullptr);
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
 	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	vkCmdDrawIndexed(commandBuffer, 36, 1, 0, 0, 0);

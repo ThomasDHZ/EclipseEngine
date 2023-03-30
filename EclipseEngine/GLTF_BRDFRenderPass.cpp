@@ -31,6 +31,30 @@ void GLTF_BRDFRenderPass::BuildRenderPass(uint32_t textureSize)
     Draw();
 }
 
+void GLTF_BRDFRenderPass::OneTimeDraw(uint32_t textureSize)
+{
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    if (renderPass == nullptr)
+    {
+        GLTFSceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        GLTFSceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(GLTFSceneManager::BRDFTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
 void GLTF_BRDFRenderPass::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
@@ -107,7 +131,7 @@ void GLTF_BRDFRenderPass::BuildRenderPassPipelines()
     brdfPipeline.InitializePipeline(pipelineInfo);
 }
 
-void GLTF_BRDFRenderPass::Draw()
+VkCommandBuffer GLTF_BRDFRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -149,7 +173,7 @@ void GLTF_BRDFRenderPass::Draw()
         throw std::runtime_error("Failed to record command buffer.");
     }
 
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    return CommandBuffer[VulkanRenderer::GetCMDIndex()];
 }
 
 void GLTF_BRDFRenderPass::Destroy()

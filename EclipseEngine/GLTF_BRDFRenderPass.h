@@ -16,7 +16,8 @@ public:
 	GLTF_BRDFPipeline brdfPipeline;
 
 	void BuildRenderPass(uint32_t textureSize);
-	void Draw();
+	void OneTimeDraw(uint32_t textureSize);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

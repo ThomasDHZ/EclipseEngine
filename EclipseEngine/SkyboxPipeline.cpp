@@ -69,7 +69,6 @@ void SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, 
 void SkyboxPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyBoxView), &SceneManager::cubeMapInfo);
-    SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
+    //vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyBoxView), &GLTFSceneManager::SkyboxMesh->skyBoxView);
+    GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 }

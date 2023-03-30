@@ -25,7 +25,7 @@ public:
 	static SceneProperties sceneProperites;
 
 	static std::shared_ptr<Camera> ActiveCamera;
-	static std::shared_ptr<Skybox> skyboxMesh;
+	static std::shared_ptr<Skybox> SkyboxMesh;
 	static SkyBoxView CubeMapInfo;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
@@ -37,7 +37,10 @@ public:
 	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
 	static void AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight);
 	static void AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight);
+	
+	static void StartUp();
 	static void Update();
+	static void Destroy();
 
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
 	static VkDescriptorImageInfo GetIrradianceMapDescriptor();

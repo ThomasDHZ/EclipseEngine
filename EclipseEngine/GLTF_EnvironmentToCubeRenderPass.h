@@ -17,6 +17,7 @@ public:
 	GLTF_EnvironmentToCubePipeline EnvironmentToCubeRenderPassPipeline;
 
 	void BuildRenderPass(uint32_t cubeMapSize);
-	void Draw();
+	VkCommandBuffer Draw();
+	void OneTimeDraw(uint32_t cubeMapSize);
 	void Destroy();
 };

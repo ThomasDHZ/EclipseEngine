@@ -2,7 +2,7 @@
 SkyBoxView							               GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
-std::shared_ptr<Skybox>                            GLTFSceneManager::skyboxMesh;
+std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
@@ -41,6 +41,12 @@ void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
+void GLTFSceneManager::StartUp()
+{
+	SkyboxMesh = std::make_shared<Skybox>();
+	SkyboxMesh->StartUp();
+}
+
 void GLTFSceneManager::Update()
 {
 	for (auto& light : SunLightList)
@@ -60,6 +66,8 @@ void GLTFSceneManager::Update()
 		light->Update();
 	}
 
+	SkyboxMesh->Update(ActiveCamera);
+
 	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
 	sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
 	sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
@@ -70,6 +78,10 @@ void GLTFSceneManager::Update()
 		sceneProperites.frame = 0;
 	}
 	sceneProperites.MaxReflectCount = 2;
+}
+
+void GLTFSceneManager::Destroy()
+{
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()

@@ -10,12 +10,13 @@ GLTFRenderer::~GLTFRenderer()
 
 void GLTFRenderer::BuildRenderer()
 {
+	GLTFSceneManager::StartUp();
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
-	modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
+	//modelList.emplace_back(GLTF_Temp_Model(a, glm::mat4(1.0f), 0));
 	modelList.emplace_back(GLTF_Temp_Model(b, glm::mat4(1.0f), 0));
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
@@ -23,8 +24,8 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
-	GLTF_BRDFRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());
+	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
+	GLTF_BRDFRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
 	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());

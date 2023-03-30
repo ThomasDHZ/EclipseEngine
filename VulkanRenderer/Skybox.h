@@ -8,7 +8,7 @@
 
 struct SkyboxVertexLayout
 {
-    glm::vec4 Position = glm::vec4(0.0f);
+    glm::vec3 Position = glm::vec3(0.0f);
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
@@ -31,7 +31,7 @@ struct SkyboxVertexLayout
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 0;
-        AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
+        AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
         AttributeDescription.offset = offsetof(SkyboxVertexLayout, Position);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
@@ -46,14 +46,14 @@ private:
 
     VulkanBuffer VertexBuffer;
     VulkanBuffer IndexBuffer;
-    SkyBoxView skyBoxView;
 
 public:
 	Skybox();
 	~Skybox();
 
+    SkyBoxView skyBoxView;
 	void StartUp();
     void Update(std::shared_ptr<Camera> camera);
-    void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout layout);
+    void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout layout, VkDescriptorSet descriptorSet);
     void Destroy();
 };

@@ -48,8 +48,8 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
 
     BuildVertexDescription VertexDescriptionInfo{};
-    VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
-    VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
+    VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
+    VertexDescriptionInfo.VertexAttributeDescriptions = SkyboxVertexLayout::getAttributeDescriptions();
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
     VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
@@ -86,7 +86,6 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
 void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(IrradianceSkyboxSettings), &irradiance);
-    SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
+    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &irradiance);
+    GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 }

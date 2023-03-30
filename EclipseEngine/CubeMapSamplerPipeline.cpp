@@ -37,8 +37,8 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
 
     BuildVertexDescription VertexDescriptionInfo{};
-    VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
-    VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
+    VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
+    VertexDescriptionInfo.VertexAttributeDescriptions = SkyboxVertexLayout::getAttributeDescriptions();
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
     VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;
@@ -74,8 +74,8 @@ void CubeMapSamplerPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
 void CubeMapSamplerPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
+    GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet
+    );
 }
 
 void CubeMapSamplerPipeline::Destroy()
