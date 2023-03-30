@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "SkyboxMesh.h"
 #include "GLTF_EnvironmentToCubePipeline.h"
 
 class GLTF_EnvironmentToCubeRenderPass : public RenderPass

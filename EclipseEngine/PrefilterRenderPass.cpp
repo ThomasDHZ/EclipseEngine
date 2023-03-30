@@ -1,6 +1,4 @@
 #include "PrefilterRenderPass.h"
-#include "SkyboxMesh.h"
-
 
 PrefilterRenderPass::PrefilterRenderPass() : RenderPass()
 {

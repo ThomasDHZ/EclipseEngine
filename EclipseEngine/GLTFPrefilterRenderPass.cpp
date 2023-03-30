@@ -1,5 +1,4 @@
 #include "GLTFPrefilterRenderPass.h"
-#include "SkyboxMesh.h"
 
 GLTFPrefilterRenderPass::GLTFPrefilterRenderPass() : RenderPass()
 {

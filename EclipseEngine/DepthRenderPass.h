@@ -2,7 +2,6 @@
 #include "RenderPass.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "SkyboxMesh.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
 #include "DepthPipeline.h"

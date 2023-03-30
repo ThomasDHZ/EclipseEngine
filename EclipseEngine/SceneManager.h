@@ -8,7 +8,6 @@
 
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
-#include "SkyboxMesh.h"
 
 #include "GameObjectManager.h"
 #include "LightManager.h"
@@ -30,14 +29,14 @@ private:
 
 	//static float PBRCubeMapSize;
 	//static float PreRenderedMapSize;
-	static std::shared_ptr<SkyboxMesh> skyboxMesh;
+
 
 public:
 	static SceneType sceneType;
 
 
 	//static SceneProperties sceneProperites;
-	static SkyBoxView cubeMapInfo;
+	//static SkyBoxView cubeMapInfo;
 	static GaussianBlurSettings bloomsettings;
 	//static std::shared_ptr<EnvironmentTexture>     environmentTexture;
 	//static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
@@ -82,9 +81,6 @@ public:
 
 		musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
 		musicPlayer.Play();
-
-		skyboxMesh = std::make_shared<SkyboxMesh>();
-		skyboxMesh->StartUp();
 	}
 
 	static void Update()
@@ -96,26 +92,10 @@ public:
 
 		GLTFSceneManager::ActiveCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		musicPlayer.UpdateBufferStream();
-
-		//sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
-		//sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
-		//sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
-		//sceneProperites.Timer = (float)glfwGetTime();
-		//sceneProperites.frame++;
-		//if (sceneProperites.frame == UINT32_MAX)
-		//{
-		//	sceneProperites.frame = 0;
-		//}
-		//sceneProperites.MaxReflectCount = 2;
-
-		cubeMapInfo.view = glm::mat4(glm::mat3(GLTFSceneManager::ActiveCamera->GetViewMatrix()));
-		cubeMapInfo.proj = glm::perspective(glm::radians(GLTFSceneManager::ActiveCamera->GetZoom()), VulkanRenderer::GetSwapChainResolution().width / (float)VulkanRenderer::GetSwapChainResolution().height, 0.1f, 100.0f);
-		cubeMapInfo.proj[1][1] *= -1;
 	}
 
 	static void Destory()
 	{
-		skyboxMesh->Destroy();
 		musicPlayer.Destroy();
 
 		//if (environmentTexture != nullptr)
@@ -246,7 +226,6 @@ public:
 	}
 
 	static SceneType GetSceneType() { return sceneType; }
-	static std::shared_ptr<SkyboxMesh> GetSkyboxMesh() { return skyboxMesh; };
 	//static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 	//static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
 	static bool IsRayTracerActive() { return RayTracingActive; }

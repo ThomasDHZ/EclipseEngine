@@ -784,7 +784,7 @@ void JsonGraphicsPipeline::DrawCubeMap(VkCommandBuffer& commandBuffer, uint32_t 
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
   //  vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    SceneManager::GetSkyboxMesh()->Draw(commandBuffer);
+   // GLTFSceneManager::GetSkyboxMesh()->Draw(commandBuffer);
 }
 
 void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)

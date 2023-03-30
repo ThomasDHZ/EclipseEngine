@@ -30,13 +30,7 @@
 class Scene
 {
 private:
-	Renderer2D renderer2D;
 	GLTFRenderer pbrRenderer;
-	//GLTFRenderer gltfRenderer;
-	//PBRRealTimeRenderer pbrRenderer;
-	RayTraceRenderer rayTraceRenderer;
-	RayTracePBRRenderer rayTracePBRRenderer;
-	ParticleSystem particaleSystem;
 public:
 	Scene();
 	~Scene();

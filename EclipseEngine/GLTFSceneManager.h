@@ -19,7 +19,7 @@
 //	static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
 //	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 //
-//	//static std::shared_ptr<SkyboxMesh> SkyboxMesh;
+
 //
 //public:
 //	static SceneProperties sceneProperites;

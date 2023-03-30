@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "SkyboxMesh.h"
 #include "IrradiancePipeline.h"
 
 class GLTFIrradianceRenderPass : public RenderPass

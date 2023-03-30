@@ -1,5 +1,4 @@
 #include "PBRBloomRenderPass.h"
-#include "SkyboxMesh.h"
 
 
 PBRBloomRenderPass::PBRBloomRenderPass() : RenderPass()

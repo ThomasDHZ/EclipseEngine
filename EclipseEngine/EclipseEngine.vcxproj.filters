@@ -270,9 +270,6 @@
     <ClCompile Include="LineMesh3D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="SkyboxMesh.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="LineMesh2D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
@@ -639,9 +636,6 @@
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh3D.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyboxMesh.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh2D.h">
