@@ -34,10 +34,10 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 
 	gltfMaterial = meshLoader.node->Material;
 
-	/*MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	MeshPropertiesBuffer.CreateBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	
 	MeshTransformBuffer = meshLoader.node->TransformBuffer;
-	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);*/
+	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 }
 
@@ -50,12 +50,12 @@ void Temp_GLTFMesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const gl
 	glm::mat4 GlobalTransform = ParentMatrix * glm::mat4(1.0f);
 	if (node == nullptr)
 	{
-	/*	MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));*/
+		MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
 	}
 	else
 	{
 		GlobalTransform = ParentMatrix * node->NodeTransformMatrix;
-	/*	MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));*/
+		MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
 	}
 
 	if (node == nullptr)
@@ -80,7 +80,7 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
-	//MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
+	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
 }
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
@@ -143,33 +143,32 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 VkDescriptorBufferInfo Temp_GLTFMesh::UpdateMeshPropertiesBuffer()
 {
 	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
-	//MeshPropertiesmBufferInfo.buffer = MeshPropertiesBuffer.GetBuffer();
-	//MeshPropertiesmBufferInfo.offset = 0;
-	//MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
+	MeshPropertiesmBufferInfo.buffer = MeshPropertiesBuffer.GetBuffer();
+	MeshPropertiesmBufferInfo.offset = 0;
+	MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
 	return MeshPropertiesmBufferInfo;
 }
 
 std::vector<VkDescriptorBufferInfo> Temp_GLTFMesh::UpdateMeshTransformBuffer()
 {
 	std::vector<VkDescriptorBufferInfo> TransformDescriptorList;
-	//VkDescriptorBufferInfo transformMatrixPropertiesBufferInfo = {};
-	//transformMatrixPropertiesBufferInfo.buffer = MeshTransformBuffer.GetBuffer();
-	//transformMatrixPropertiesBufferInfo.offset = 0;
-	//transformMatrixPropertiesBufferInfo.range = VK_WHOLE_SIZE;
-	//TransformDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
-	//TransformMatrixBuffer = TransformDescriptorList;
+	VkDescriptorBufferInfo transformMatrixPropertiesBufferInfo = {};
+	transformMatrixPropertiesBufferInfo.buffer = MeshTransformBuffer.GetBuffer();
+	transformMatrixPropertiesBufferInfo.offset = 0;
+	transformMatrixPropertiesBufferInfo.range = VK_WHOLE_SIZE;
+	TransformDescriptorList.emplace_back(transformMatrixPropertiesBufferInfo);
+	TransformMatrixBuffer = TransformDescriptorList;
 	return TransformMatrixBuffer;
 }
 
 
-void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount)
+void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
 	for (auto& primitve : PrimitiveList)
 	{
 		if (primitve.IndexCount > 0)
 		{
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &MaterialList[primitve.material]->descriptorSet, 0, nullptr);
-			vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
 	}
@@ -177,6 +176,6 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 
 void Temp_GLTFMesh::Destroy()
 {
-	//MeshPropertiesBuffer.DestroyBuffer();
-	//MeshTransformBuffer.DestroyBuffer();
+	MeshPropertiesBuffer.DestroyBuffer();
+	MeshTransformBuffer.DestroyBuffer();
 }

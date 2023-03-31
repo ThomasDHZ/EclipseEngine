@@ -45,7 +45,7 @@ public:
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateMeshPropertiesBuffer();
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount);
+	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }

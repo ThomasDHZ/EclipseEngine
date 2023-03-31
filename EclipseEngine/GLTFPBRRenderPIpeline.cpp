@@ -48,6 +48,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
     nlohmann::json json;
     JsonGraphicsPipeline jsonPipeline{};
+    JsonConverter::to_json(json["CubeMapShader"], false);
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "GLTFPBRRendererVert.spv");
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "GLTFPBRRendererFrag.spv");
 
@@ -279,8 +280,8 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     }
 }
 
-void GLTFPBRRenderPIpeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
+void GLTFPBRRenderPIpeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    model.Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorsetcount);
+    model.Draw(commandBuffer, ShaderPipelineLayout);
 }

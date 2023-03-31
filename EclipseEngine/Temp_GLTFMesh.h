@@ -60,8 +60,8 @@ public:
 
 	MeshProperties meshProperties;
 
-	//VulkanBuffer MeshTransformBuffer;
-	//VulkanBuffer MeshPropertiesBuffer;
+	VulkanBuffer MeshTransformBuffer;
+	VulkanBuffer MeshPropertiesBuffer;
 
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
@@ -73,7 +73,7 @@ public:
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount);
+	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; }

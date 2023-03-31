@@ -31,6 +31,7 @@ public:
 	std::shared_ptr<GLTFMaterial> Material = nullptr;
 
 	std::vector<GLTFPrimitive> PrimitiveList;
+	VulkanBuffer TransformBuffer;
 
 	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 NodeTransformMatrix = glm::mat4(1.0f);

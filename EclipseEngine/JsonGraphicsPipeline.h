@@ -56,7 +56,7 @@ private:
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 
 	
-	void LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Model& model);
+	void LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GLTF_Temp_Model> model);
 
 protected:
 
@@ -91,19 +91,33 @@ public:
 	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+	VkDescriptorSet CubeMapDescriptorSet = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
-	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
-	JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	~JsonGraphicsPipeline();
 
-	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
-	void LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
 	void BuildAndSaveShaderPipeLine(nlohmann::json& json, BuildGraphicsPipelineInfo& buildPipelineInfo, VkDescriptorSetLayout descriptorSetLayout);
 	
-	void DrawCubeMap(VkCommandBuffer& commandBuffer, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
-	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount);
+	template<class T>
+	void DrawCubeMap(VkCommandBuffer& commandBuffer, T& constBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
+		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
+	}
+
+	template<class T>
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model, T& constBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
+		model->Draw(commandBuffer, ShaderPipelineLayout);
+	}
+
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model);
 	void Destroy();
 };
 

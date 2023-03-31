@@ -9,7 +9,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(std::vector<GLTF_Temp_Model> modelList)
+void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -99,7 +99,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> modelList)
+void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -122,12 +122,12 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> model
     //pbrPipeline.InitializePipeline(pipelineInfo, modelList);
     for (int x = 0; x < modelList.size(); x++)
     {
-        pbrPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+        PBRPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
-    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
+    SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
+VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -167,10 +167,13 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<GLTF_Temp_Model> modelList)
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    skyboxPipeline.Draw(commandBuffer);
+    //skyboxPipeline.Draw(commandBuffer);
+    //pbrPipeline.Draw(commandBuffer, modelList[0], 0, 0);
+
+    SkyBoxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
     for (int x= 0; x < modelList.size(); x++)
     {
-        pbrPipelineList[x].Draw(commandBuffer, modelList[x], x, modelList.size());
+        PBRPipelineList[x].Draw(commandBuffer, modelList[x], GLTFSceneManager::sceneProperites);
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -185,9 +188,11 @@ void GLTFRenderPass::Destroy()
     ColorTexture->Destroy();
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
-    for (int x = 0; x < pbrPipelineList.size(); x++)
+
+    SkyBoxPipeline.Destroy();
+    for (int x = 0; x < PBRPipelineList.size(); x++)
     {
-        pbrPipelineList[x].Destroy();
+        PBRPipelineList[x].Destroy();
     }
 
     RenderPass::Destroy();

@@ -14,12 +14,13 @@ class GLTFRenderPass : public RenderPass
 		std::shared_ptr<RenderedColorTexture> ColorTexture;
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	/*	GLTFPBRRenderPIpeline pbrPipeline;*/
-		std::vector<JsonGraphicsPipeline> pbrPipelineList;
-		GLTF_SkyboxPipeline skyboxPipeline;
+		//GLTFPBRRenderPIpeline pbrPipeline;
+		//GLTF_SkyboxPipeline skyboxPipeline;
+		std::vector<JsonGraphicsPipeline> PBRPipelineList;
+		JsonGraphicsPipeline SkyBoxPipeline;
 
 		void RenderPassDesc();
-		void BuildRenderPassPipelines(std::vector<GLTF_Temp_Model> modelList);
+		void BuildRenderPassPipelines(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList);
 
 public:
 	GLTFRenderPass();
@@ -27,8 +28,8 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(std::vector<GLTF_Temp_Model> modelList);
-	VkCommandBuffer Draw(std::vector<GLTF_Temp_Model> modelList);
+	void BuildRenderPass(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList);
 	void Destroy();
 };
 

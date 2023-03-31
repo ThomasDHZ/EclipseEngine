@@ -10,9 +10,9 @@ JsonGraphicsPipeline::JsonGraphicsPipeline()
 {
 }
 
-JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
+JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
-    LoadGraphicsPipeline(filePath, renderPass, model, ColorAttachments, samplecount, sizeofConstBuffer);
+    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, model, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
 JsonGraphicsPipeline::~JsonGraphicsPipeline()
@@ -344,7 +344,7 @@ void JsonGraphicsPipeline::SavePipelineShaderStageCreateInfo(nlohmann::json& jso
     JsonConverter::to_json(json["flags"], PipelineShaderStageCreateInfo.flags);
     JsonConverter::to_json(json["stage"], PipelineShaderStageCreateInfo.stage);
     JsonConverter::to_json(json["shaderFile"], filename);
-    //JsonConverter::to_json(json["pName"], "main");
+    json["pName"] = "main";
     //JsonConverter::to_json(json["pSpecializationInfo"], PipelineShaderStageCreateInfo.pSpecializationInfo);
     //JsonConverter::to_json(json["pNext"], PipelineShaderStageCreateInfo.pNext);
 }
@@ -542,7 +542,7 @@ VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlend
     return pipelineColorBlendStateCreateInfo;
 }
 
-void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Model& model)
+void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GLTF_Temp_Model> model)
 {
     std::vector<DescriptorBindingPropertiesEnum> BindingList;
     std::vector<VkDescriptorType> DescriptorList;
@@ -557,7 +557,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Mo
     {
         switch (BindingList[x])
         {
-            case kModelTransformDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)model.GetMeshPropertiesBuffer().size() }); break;
+            case kModelTransformDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)model->GetMeshPropertiesBuffer().size() }); break;
             case kMeshPropertiesDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kAlbedoMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kNormalMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
@@ -582,7 +582,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Mo
     {
         switch (BindingList[x])
         {
-            case kModelTransformDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x, DescriptorList[x], (uint32_t)model.GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kModelTransformDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x, DescriptorList[x], (uint32_t)model->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kMeshPropertiesDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kAlbedoMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kNormalMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
@@ -602,21 +602,23 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Mo
     }
 
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
-    for (int y = 0; y < model.MaterialList.size(); y++)
+    if (model != nullptr)
     {
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        for (int x = 0; x < BindingList.size(); x++)
+        for (int y = 0; y < model->MaterialList.size(); y++)
         {
-            switch (BindingList[x])
+            std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+            for (int x = 0; x < BindingList.size(); x++)
             {
-                case kModelTransformDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, model.GetMeshPropertiesBuffer()); break;
-                case kMeshPropertiesDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, model.MeshList[0]->GetTransformMatrixBuffer()[0]); break;
-                case kAlbedoMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetAlbedoMapDescriptor()); break;
-                case kNormalMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetNormalMapDescriptor()); break;
-                case kMetallicRoughnessMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetMetallicRoughnessMapDescriptor()); break;
-                case kAmbientOcclusionMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetAmbientOcclusionMapDescriptor()); break;
-                case kAlphaMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetAlphaMapDescriptor()); break;
-                case kDepthMapDescriptor:  AddTextureDescriptorSetBinding(DescriptorBindingList, x, model.MaterialList[y]->GetDepthMapDescriptor()); break;
+                switch (BindingList[x])
+                {
+                case kModelTransformDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, model->GetMeshPropertiesBuffer()); break;
+                case kMeshPropertiesDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, model->MeshList[0]->GetTransformMatrixBuffer()[0]); break;
+                case kAlbedoMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetAlbedoMapDescriptor()); break;
+                case kNormalMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetNormalMapDescriptor()); break;
+                case kMetallicRoughnessMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetMetallicRoughnessMapDescriptor()); break;
+                case kAmbientOcclusionMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetAmbientOcclusionMapDescriptor()); break;
+                case kAlphaMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetAlphaMapDescriptor()); break;
+                case kDepthMapDescriptor:  AddTextureDescriptorSetBinding(DescriptorBindingList, x, model->MaterialList[y]->GetDepthMapDescriptor()); break;
                 case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
                 case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
                 case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
@@ -625,30 +627,58 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, GLTF_Temp_Mo
                 case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
                 case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
                 case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
+                }
+            }
+            model->MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+
+            std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+            for (auto& DescriptorBinding : DescriptorBindingList)
+            {
+                switch (DescriptorBinding.DescriptorType)
+                {
+                case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(model->MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
+                case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(model->MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
+                case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(model->MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
+                }
+            }
+            vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
+
+            for (int x = 0; x < model->MeshList.size(); x++)
+            {
+                model->MeshList[x]->MaterialList = model->MaterialList;
             }
         }
-        model.MaterialList[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+    }
+    else
+    {
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        for (int x = 0; x < BindingList.size(); x++)
+        {
+            switch (BindingList[x])
+            {
+                case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
+                case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
+                case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
+                case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
+            }
+        }
+        CubeMapDescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
         std::vector<VkWriteDescriptorSet> writeDescriptorSet;
         for (auto& DescriptorBinding : DescriptorBindingList)
         {
             switch (DescriptorBinding.DescriptorType)
             {
-            case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
-            case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
-            case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(model.MaterialList[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
+            case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
+            case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
+            case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
             }
         }
         vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-
-        for (int x = 0; x < model.MeshList.size(); x++)
-        {
-            model.MeshList[x]->MaterialList = model.MaterialList;
-        }
     }
 }
 
-void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, GLTF_Temp_Model& model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
+void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
     std::string SceneInfo;
     std::ifstream SceneFile;
@@ -675,9 +705,6 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
 
     if (ShaderPipeline == nullptr)
     {
-        const std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
-        const std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
-
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(VertexBindingDescriptions.size());
@@ -733,10 +760,6 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPa
     }
 }
 
-void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
-{
-}
-
 void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::json& json)
 {
     std::ofstream pipelineFile(BasePipelineFilePath + fileName);
@@ -778,19 +801,6 @@ void JsonGraphicsPipeline::BuildAndSaveShaderPipeLine(nlohmann::json& json, Buil
     colorBlending.attachmentCount = static_cast<uint32_t>(buildPipelineInfo.RenderPassDescription.ColorAttachments.size());
     colorBlending.pAttachments = buildPipelineInfo.RenderPassDescription.ColorAttachments.data();
     SavePipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], colorBlending);
-}
-
-void JsonGraphicsPipeline::DrawCubeMap(VkCommandBuffer& commandBuffer, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
-{
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-  //  vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-   // GLTFSceneManager::GetSkyboxMesh()->Draw(commandBuffer);
-}
-
-void JsonGraphicsPipeline::Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model& model, uint32_t descriptorsetIndex, uint32_t descriptorsetcount)
-{
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    model.Draw(commandBuffer, ShaderPipelineLayout, descriptorsetIndex, descriptorsetcount);
 }
 
 void JsonGraphicsPipeline::Destroy()

@@ -1,4 +1,5 @@
 #include "GLTF_SkyboxPipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 GLTF_SkyboxPipeline::GLTF_SkyboxPipeline()
 {
@@ -15,14 +16,29 @@ void GLTF_SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
     SkyboxBufferInfo.imageView = cubemap->View;
     SkyboxBufferInfo.sampler = cubemap->Sampler;
 
+
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "CubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    auto a = CreateShader(BaseShaderFilePath + "CubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+    auto b = CreateShader(BaseShaderFilePath + "CubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+    nlohmann::json json;
+    JsonGraphicsPipeline jsonPipeline{};
+    JsonConverter::to_json(json["CubeMapShader"], true);
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "CubeMapVert.spv");
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "CubeMapFrag.spv");
+
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     DescriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
     DescriptorSetLayout = GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(DescriptorBindingList);
+
+    jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kCubeMapDescriptor);
+
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -31,6 +47,7 @@ void GLTF_SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
     DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
@@ -54,7 +71,8 @@ void GLTF_SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
 
     if (ShaderPipeline == nullptr)
     {
-        BuildShaderPipeLine(buildGraphicsPipelineInfo);
+        jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
+        jsonPipeline.SaveGraphicsPipeline("SkyBoxPipeline.txt", json);
     }
     else
     {
@@ -71,6 +89,5 @@ void GLTF_SkyboxPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStr
 void GLTF_SkyboxPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SkyBoxView), &GLTFSceneManager::SkyboxMesh->skyBoxView);
     GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 }
