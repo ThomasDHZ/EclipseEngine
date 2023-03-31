@@ -30,8 +30,8 @@ private:
 	glm::mat4 GameObjectTransformMatrix;
 	glm::mat4 ModelTransformMatrix;
 
-	std::vector<VkDescriptorSet> descripterSetList;
 	void GenerateID();
+
 public:
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
@@ -47,11 +47,6 @@ public:
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, uint32_t descriptorsetIndex, uint32_t descriptorSetCount);
 	void Destroy();
-
-	std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
-	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
-	std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
-	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }

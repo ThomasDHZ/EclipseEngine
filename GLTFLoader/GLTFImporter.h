@@ -31,7 +31,6 @@ public:
 	std::shared_ptr<GLTFMaterial> Material = nullptr;
 
 	std::vector<GLTFPrimitive> PrimitiveList;
-	VulkanBuffer TransformBuffer;
 
 	glm::mat4 ModelTransformMatrix = glm::mat4(1.0f);
 	glm::mat4 NodeTransformMatrix = glm::mat4(1.0f);
@@ -52,10 +51,6 @@ struct GLTFModelData
 	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
 	std::vector<std::shared_ptr<Texture2D>> TextureList = std::vector<std::shared_ptr<Texture2D>>();
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList = std::vector<std::shared_ptr<GLTFMaterial>>();
-	std::vector<std::shared_ptr<GLTFSunLight>> SunlLightList;
-	std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
-	std::vector<std::shared_ptr<GLTFPointLight>> PointlLightList;
-	std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 };
 
 class GLTFImporter
