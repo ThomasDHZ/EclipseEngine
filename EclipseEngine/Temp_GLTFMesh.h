@@ -60,8 +60,8 @@ public:
 
 	MeshProperties meshProperties;
 
-	VulkanBuffer MeshTransformBuffer;
-	VulkanBuffer MeshPropertiesBuffer;
+	//VulkanBuffer MeshTransformBuffer;
+	//VulkanBuffer MeshPropertiesBuffer;
 
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;

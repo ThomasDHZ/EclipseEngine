@@ -26,7 +26,6 @@ int main()
     SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
-    VRAMManager::StartUp();
     TextureManager::StartUp();
     MaterialManager::StartUp();
     //TopLevelAccelerationStructureManager::StartUp();

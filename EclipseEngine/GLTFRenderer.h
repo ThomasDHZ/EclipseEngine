@@ -28,15 +28,13 @@
 class GLTFRenderer
 {
 private:
-	SceneProperties sceneProperites;
-
 	std::vector<GLTF_Temp_Model> modelList;
-	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
-	GLTFIrradianceRenderPass irradianceRenderPass;
-	GLTFPrefilterRenderPass prefilterRenderPass;
-	GLTFRenderPass gLTFRenderPass;
-	FrameBufferRenderPass frameBufferRenderPass;
+	//GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	//GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
+	//GLTFIrradianceRenderPass irradianceRenderPass;
+	//GLTFPrefilterRenderPass prefilterRenderPass;
+	//GLTFRenderPass gLTFRenderPass;
+	//FrameBufferRenderPass frameBufferRenderPass;
 
 public:
 	GLTFRenderer();

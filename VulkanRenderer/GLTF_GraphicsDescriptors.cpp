@@ -281,7 +281,6 @@ VkDescriptorSet GLTF_GraphicsDescriptors::SubmitDescriptorSet(std::vector<Descri
 		DescriptorSet = CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 		vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
 	}
-
 	return DescriptorSet;
 }
 

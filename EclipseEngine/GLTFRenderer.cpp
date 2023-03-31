@@ -21,20 +21,20 @@ void GLTFRenderer::BuildRenderer()
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
-	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	//GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	//GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
-	GLTF_BRDFRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
+	//environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
+	//GLTF_BRDFRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
-	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
+	//std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
+	//irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	//GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	//prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	//GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	gLTFRenderPass.BuildRenderPass(modelList);
-	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
+	//gLTFRenderPass.BuildRenderPass(modelList);
+	//frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
 
 void GLTFRenderer::Update()
@@ -49,76 +49,78 @@ void GLTFRenderer::Update()
 
 void GLTFRenderer::ImGuiUpdate()
 {
-	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
+	////for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
+	////{
+	////	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
+	////	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	////	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+	////}
+	//for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	//{
-	//	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
-	//	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-	//	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+	//	ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+	//	ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	//	ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	//}
-	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
-	{
-		ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
-	}
-	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
-	//{
-	//	ImGui::SliderFloat3(("PLight direction " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetPositionPtr()->x, -1.0f, 100.0f);
-	//	ImGui::SliderFloat3(("PLight Diffuse " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-	//	ImGui::SliderFloat(("PLight Intensity " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
-	//	ImGui::SliderFloat(("PLight Radius " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetRadiusPtr()[0], 0.0f, 100.0f);
-	//}
-	//for (int x = 0; x < model.GetSpotLightPropertiesBuffer().size(); x++)
-	//{
-	//	ImGui::SliderFloat3(("SLight Position " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetPositionPtr()->x, -1.0f, 1.0f);
-	//	ImGui::SliderFloat3(("SLight direction " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
-	//	ImGui::SliderFloat3(("SLight Diffuse " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-	//	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
-	//}
+	////for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
+	////{
+	////	ImGui::SliderFloat3(("PLight direction " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetPositionPtr()->x, -1.0f, 100.0f);
+	////	ImGui::SliderFloat3(("PLight Diffuse " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	////	ImGui::SliderFloat(("PLight Intensity " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
+	////	ImGui::SliderFloat(("PLight Radius " + std::to_string(x)).c_str(), &model.PointLightList[x]->GetRadiusPtr()[0], 0.0f, 100.0f);
+	////}
+	////for (int x = 0; x < model.GetSpotLightPropertiesBuffer().size(); x++)
+	////{
+	////	ImGui::SliderFloat3(("SLight Position " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetPositionPtr()->x, -1.0f, 1.0f);
+	////	ImGui::SliderFloat3(("SLight direction " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetDirectionPtr()->x, -1.0f, 1.0f);
+	////	ImGui::SliderFloat3(("SLight Diffuse " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	////	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
+	////}
 
-	ImGui::SliderFloat3("Position ", &modelList[0].MeshList[0]->MeshPosition.x, 0.0f, 100.0f);
-	ImGui::SliderFloat3("Rotation ", &modelList[0].MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
-	ImGui::SliderFloat3("Scale ", &modelList[0].MeshList[0]->MeshScale.x, 0.0f, 1.0f);
-	//if (SceneManager::EditorModeFlag)
-	//{
-	//	if (ImGui::Button("Play Mode"))
-	//	{
-	//		SceneManager::EditorModeFlag = false;
-	//	}
-	//	if (ImGui::Button("Update Renderer"))
-	//	{
-	//		UpdateRenderer = true;
-	//	}
-	//	if (ImGui::Button("Bake"))
-	//	{
-	//		//BakeTextures("TestBake.bmp");
-	//	}
-	//}
-	//else
-	//{
-	//	if (ImGui::Button("Editor Mode"))
-	//	{
-	//		SceneManager::EditorModeFlag = true;
-	//	}
-	//}
+	//ImGui::SliderFloat3("Position ", &modelList[0].MeshList[0]->MeshPosition.x, 0.0f, 100.0f);
+	//ImGui::SliderFloat3("Rotation ", &modelList[0].MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
+	//ImGui::SliderFloat3("Scale ", &modelList[0].MeshList[0]->MeshScale.x, 0.0f, 1.0f);
+	////if (SceneManager::EditorModeFlag)
+	////{
+	////	if (ImGui::Button("Play Mode"))
+	////	{
+	////		SceneManager::EditorModeFlag = false;
+	////	}
+	////	if (ImGui::Button("Update Renderer"))
+	////	{
+	////		UpdateRenderer = true;
+	////	}
+	////	if (ImGui::Button("Bake"))
+	////	{
+	////		//BakeTextures("TestBake.bmp");
+	////	}
+	////}
+	////else
+	////{
+	////	if (ImGui::Button("Editor Mode"))
+	////	{
+	////		SceneManager::EditorModeFlag = true;
+	////	}
+	////}
 }
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(modelList));
-	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(modelList));
+	//CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void GLTFRenderer::Destroy()
 {
-	environmentToCubeRenderPass.Destroy();
-	GLTF_BRDFRenderPass.Destroy();
-	irradianceRenderPass.Destroy();
-	prefilterRenderPass.Destroy();
-	gLTFRenderPass.Destroy();
-	frameBufferRenderPass.Destroy();
+	GLTFSceneManager::Destroy();
 	for (auto& model : modelList)
 	{
 		model.Destroy();
 	}
+
+	//environmentToCubeRenderPass.Destroy();
+	//GLTF_BRDFRenderPass.Destroy();
+	//irradianceRenderPass.Destroy();
+	//prefilterRenderPass.Destroy();
+	//gLTFRenderPass.Destroy();
+	//frameBufferRenderPass.Destroy();
 }

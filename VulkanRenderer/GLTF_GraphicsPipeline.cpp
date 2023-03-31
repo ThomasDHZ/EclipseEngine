@@ -245,7 +245,7 @@ void GLTF_GraphicsPipeline::Destroy()
 {
     vkDestroyPipeline(VulkanRenderer::GetDevice(), ShaderPipeline, nullptr);
     vkDestroyPipelineLayout(VulkanRenderer::GetDevice(), ShaderPipelineLayout, nullptr);
-
+    vkDestroyDescriptorSetLayout(VulkanRenderer::GetDevice(), DescriptorSetLayout, nullptr);
     ShaderPipeline = VK_NULL_HANDLE;
     ShaderPipelineLayout = VK_NULL_HANDLE;
 }

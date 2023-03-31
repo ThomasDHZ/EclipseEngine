@@ -82,6 +82,11 @@ void GLTFSceneManager::Update()
 
 void GLTFSceneManager::Destroy()
 {
+	SkyboxMesh->Destroy();
+	if (EnvironmentTexture != nullptr)
+	{
+		EnvironmentTexture->Destroy();
+	}
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
