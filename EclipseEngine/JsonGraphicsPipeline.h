@@ -21,6 +21,7 @@ enum DescriptorBindingPropertiesEnum
 	kIrradianceMapDescriptor,
 	kPrefilterMapDescriptor,
 	kCubeMapDescriptor,
+	kEnvironmentDescriptor,
 	kSunLightDescriptor,
 	kDirectionalLightDescriptor,
 	kPointLightDescriptor,

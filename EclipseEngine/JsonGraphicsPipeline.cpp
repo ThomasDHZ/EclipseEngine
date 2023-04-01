@@ -569,6 +569,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
             case kIrradianceMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kPrefilterMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kCubeMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kEnvironmentDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kSunLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() }); break;
             case kDirectionalLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() }); break;
             case kPointLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() }); break;
@@ -594,6 +595,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
             case kIrradianceMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kPrefilterMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kCubeMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kEnvironmentDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kSunLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kDirectionalLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kPointLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
@@ -623,6 +625,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
                 case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
                 case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
                 case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
+                case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
                 case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
                 case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
                 case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;

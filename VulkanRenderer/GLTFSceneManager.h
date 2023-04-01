@@ -45,6 +45,7 @@ public:
 	static VkDescriptorImageInfo GetIrradianceMapDescriptor();
 	static VkDescriptorImageInfo GetPrefilterMapDescriptor();
 	static VkDescriptorImageInfo GetCubeMapDescriptor();
+	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 
 	static std::vector<VkDescriptorBufferInfo> GetSunLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer();

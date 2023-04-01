@@ -156,7 +156,7 @@ void GLTFPrefilterRenderPass::BuildRenderPassPipelines(std::vector<std::shared_p
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    prefilterPipeline.InitializePipeline(pipelineInfo, cubeMapList);
+    PrefilterPipeline.LoadGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings));
 }
 
 VkCommandBuffer GLTFPrefilterRenderPass::Draw(glm::vec3 DrawPosition)
@@ -218,7 +218,7 @@ VkCommandBuffer GLTFPrefilterRenderPass::Draw(glm::vec3 DrawPosition)
             vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
             vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
             vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-            prefilterPipeline.Draw(commandBuffer, prefiliter);
+            PrefilterPipeline.DrawCubeMap<PrefilterSkyboxSettings>(commandBuffer, prefiliter);
             vkCmdEndRenderPass(commandBuffer);
 
             DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -241,6 +241,6 @@ void GLTFPrefilterRenderPass::Destroy()
         prefilterMap->Destroy();
     }
     DrawToCubeMap->Destroy();
-    prefilterPipeline.Destroy();
+    PrefilterPipeline.Destroy();
     RenderPass::Destroy();
 }

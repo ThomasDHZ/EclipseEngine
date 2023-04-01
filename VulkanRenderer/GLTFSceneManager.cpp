@@ -145,6 +145,20 @@ VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()
 	return VulkanRenderer::GetNullDescriptor();
 }
 
+VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
+{
+	if (EnvironmentTexture != nullptr)
+	{
+		VkDescriptorImageInfo CubeMapDescriptor{};
+		CubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		CubeMapDescriptor.imageView = CubeMap->GetView();
+		CubeMapDescriptor.sampler = CubeMap->GetSampler();
+		return CubeMapDescriptor;
+	}
+
+	return VulkanRenderer::GetNullDescriptor();
+}
+
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetSunLightPropertiesBuffer()
 {
 	sceneProperites.SunLightCount = SunLightList.size();

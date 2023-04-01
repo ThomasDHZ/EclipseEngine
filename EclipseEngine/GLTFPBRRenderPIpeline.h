@@ -9,6 +9,6 @@ public:
 	GLTFPBRRenderPIpeline();
 	~GLTFPBRRenderPIpeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<GLTF_Temp_Model> modelList);
-	void Draw(VkCommandBuffer& commandBuffer, GLTF_Temp_Model model);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model);
 };
