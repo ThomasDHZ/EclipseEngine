@@ -24,13 +24,13 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
-	GLTF_BRDFRenderPass.BuildRenderPass(GLTFSceneManager::GetPreRenderedMapSize());
+	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
+	GLTF_BRDFRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-	irradianceRenderPass.BuildRenderPass(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
-	prefilterRenderPass.BuildRenderPass(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
 	gLTFRenderPass.BuildRenderPass(modelList);
@@ -105,10 +105,6 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(GLTF_BRDFRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(modelList));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }

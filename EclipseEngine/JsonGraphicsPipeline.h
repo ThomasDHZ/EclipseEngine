@@ -110,6 +110,12 @@ public:
 		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
 	}
 
+	void DrawCubeMap(VkCommandBuffer& commandBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
+	}
+
 	template<class T>
 	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model, T& constBuffer)
 	{
@@ -118,7 +124,12 @@ public:
 		model->Draw(commandBuffer, ShaderPipelineLayout);
 	}
 
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		model->Draw(commandBuffer, ShaderPipelineLayout);
+	}
+
 	void Destroy();
 };
 

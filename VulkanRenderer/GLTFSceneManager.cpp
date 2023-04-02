@@ -149,11 +149,11 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 {
 	if (EnvironmentTexture != nullptr)
 	{
-		VkDescriptorImageInfo CubeMapDescriptor{};
-		CubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		CubeMapDescriptor.imageView = CubeMap->GetView();
-		CubeMapDescriptor.sampler = CubeMap->GetSampler();
-		return CubeMapDescriptor;
+		VkDescriptorImageInfo SkyboxBufferInfo;
+		SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		SkyboxBufferInfo.imageView = GLTFSceneManager::EnvironmentTexture->View;
+		SkyboxBufferInfo.sampler = GLTFSceneManager::EnvironmentTexture->Sampler;
+		return SkyboxBufferInfo;
 	}
 
 	return VulkanRenderer::GetNullDescriptor();

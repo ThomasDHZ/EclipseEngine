@@ -1,4 +1,5 @@
 #include "GLTF_EnvironmentToCubePipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 GLTF_EnvironmentToCubePipeline::GLTF_EnvironmentToCubePipeline()
 {
@@ -10,19 +11,28 @@ GLTF_EnvironmentToCubePipeline::~GLTF_EnvironmentToCubePipeline()
 
 void GLTF_EnvironmentToCubePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
-    VkDescriptorImageInfo SkyboxBufferInfo;
-    SkyboxBufferInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    SkyboxBufferInfo.imageView = GLTFSceneManager::EnvironmentTexture->View;
-    SkyboxBufferInfo.sampler = GLTFSceneManager::EnvironmentTexture->Sampler;
+
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    auto a = CreateShader(BaseShaderFilePath + "EnvironmentToCubeMapVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+    auto b = CreateShader(BaseShaderFilePath + "EnvironmentToCubeMapFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+    nlohmann::json json;
+    JsonGraphicsPipeline jsonPipeline{};
+    JsonConverter::to_json(json["CubeMapShader"], false);
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "EnvironmentToCubeMapVert.spv");
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "EnvironmentToCubeMapFrag.spv");
+
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 0, GLTFSceneManager::GetEnvironmentMapDescriptor(), VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     DescriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
     DescriptorSetLayout = GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(DescriptorBindingList);
+    jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kEnvironmentDescriptor);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -31,6 +41,7 @@ void GLTF_EnvironmentToCubePipeline::InitializePipeline(PipelineInfoStruct& pipe
     DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
+    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
@@ -55,6 +66,8 @@ void GLTF_EnvironmentToCubePipeline::InitializePipeline(PipelineInfoStruct& pipe
     if (ShaderPipeline == nullptr)
     {
         BuildShaderPipeLine(buildGraphicsPipelineInfo);
+        jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
+        jsonPipeline.SaveGraphicsPipeline("EnvironmentToCubePipeline.txt", json);
     }
     else
     {

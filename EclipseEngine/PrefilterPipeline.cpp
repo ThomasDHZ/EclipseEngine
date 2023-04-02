@@ -1,4 +1,5 @@
 #include "PrefilterPipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 PrefilterPipeline::PrefilterPipeline()
 {
@@ -32,11 +33,24 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     }
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "PrefilterShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "PrefilterShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    auto a = CreateShader(BaseShaderFilePath + "PrefilterShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+    auto b = CreateShader(BaseShaderFilePath + "PrefilterShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+    nlohmann::json json;
+    JsonGraphicsPipeline jsonPipeline{};
+    JsonConverter::to_json(json["CubeMapShader"], true);
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "PrefilterShaderVert.spv");
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "PrefilterShaderFrag.spv");
+
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfoList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kPrefilterMapDescriptor);
+
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -45,6 +59,7 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
@@ -68,7 +83,8 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
     if (ShaderPipeline == nullptr)
     {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+        jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
+        jsonPipeline.SaveGraphicsPipeline("PrefilterPipeline.txt", json);
     }
     else
     {
@@ -84,7 +100,5 @@ void PrefilterPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
 void PrefilterPipeline::Draw(VkCommandBuffer& commandBuffer, PrefilterSkyboxSettings& prefiliter)
 {
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(prefiliter), &prefiliter);
-    GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
+
 }

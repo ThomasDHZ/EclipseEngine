@@ -5,6 +5,20 @@
 #include <glm/glm.hpp>
 #include <GLTFVertex.h>
 
+struct VoidVertex {
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
+        return bindingDescriptionList;
+    }
+
+    static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions()
+    {
+        std::vector<VkVertexInputAttributeDescription> AttributeDescriptionList{};
+        return AttributeDescriptionList;
+    }
+};
+
 struct LineVertex2D {
     glm::vec2 pos;
     glm::vec4 color;

@@ -2,13 +2,14 @@
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
 #include "IrradiancePipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 class GLTFIrradianceRenderPass : public RenderPass
 {
 private:
 	uint32_t CubeMapMipLevels = 0;
 
-	IrradiancePipeline irradiancePipeline;
+	JsonGraphicsPipeline IrradiancePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList);

@@ -114,7 +114,7 @@ void GLTF_EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo);
+    EnvironmentToCubeRenderPassPipeline = JsonGraphicsPipeline("EnvironmentToCubePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, 0);
 }
 
 VkCommandBuffer GLTF_EnvironmentToCubeRenderPass::Draw()
@@ -153,7 +153,7 @@ VkCommandBuffer GLTF_EnvironmentToCubeRenderPass::Draw()
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    EnvironmentToCubeRenderPassPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    EnvironmentToCubeRenderPassPipeline.DrawCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
