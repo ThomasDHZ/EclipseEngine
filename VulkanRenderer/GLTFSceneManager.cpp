@@ -87,6 +87,22 @@ void GLTFSceneManager::Destroy()
 	{
 		EnvironmentTexture->Destroy();
 	}
+	if (BRDFTexture != nullptr)
+	{
+		BRDFTexture->Destroy();
+	}
+	if (IrradianceMap != nullptr)
+	{
+		IrradianceMap->Destroy();
+	}
+	if (PrefilterMap != nullptr)
+	{
+		PrefilterMap->Destroy();
+	}
+	if (CubeMap != nullptr)
+	{
+		CubeMap->Destroy();
+	}
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()

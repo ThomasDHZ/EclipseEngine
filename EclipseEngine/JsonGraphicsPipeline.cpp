@@ -761,6 +761,11 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vecto
             throw std::runtime_error("Failed to create pipeline.");
         }
     }
+
+    for (auto& shader : PipelineShaderStageList)
+    {
+        vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+    }
 }
 
 void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::json& json)

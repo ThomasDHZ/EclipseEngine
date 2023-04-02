@@ -218,7 +218,6 @@ VkCommandBuffer GLTFPrefilterRenderPass::Draw(glm::vec3 DrawPosition)
             vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
             vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
             vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
             PrefilterPipeline.DrawCubeMap<PrefilterSkyboxSettings>(commandBuffer, prefiliter);
             vkCmdEndRenderPass(commandBuffer);
 
