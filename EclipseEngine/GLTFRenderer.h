@@ -18,8 +18,7 @@
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
 #include "GLTFPBRRenderPIpeline.h"
-#include "GLTF_EnvironmentToCubeRenderPass.h"
-#include "GLTF_BRDFRenderPass.h"
+#include "EnvironmentToCubeRenderPass.h"
 #include "GLTFRenderPass.h"
 #include "GLTFIrradianceRenderPass.h"
 #include "GLTFPrefilterRenderPass.h"
@@ -29,8 +28,8 @@ class GLTFRenderer
 {
 private:
 	std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList;
-	GLTF_EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	GLTF_BRDFRenderPass GLTF_BRDFRenderPass;
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	BRDFRenderPass GLTF_BRDFRenderPass;
 	GLTFIrradianceRenderPass irradianceRenderPass;
 	GLTFPrefilterRenderPass prefilterRenderPass;
 	GLTFRenderPass gLTFRenderPass;

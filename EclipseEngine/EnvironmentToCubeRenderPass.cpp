@@ -114,10 +114,10 @@ void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    EnvironmentToCubeRenderPassPipeline.InitializePipeline(pipelineInfo);
+    EnvironmentToCubeRenderPassPipeline = JsonGraphicsPipeline("EnvironmentToCubePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, 0);
 }
 
-void EnvironmentToCubeRenderPass::Draw()
+VkCommandBuffer EnvironmentToCubeRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -153,12 +153,37 @@ void EnvironmentToCubeRenderPass::Draw()
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    EnvironmentToCubeRenderPassPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    EnvironmentToCubeRenderPassPipeline.DrawCubeMap(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
 
+    return CommandBuffer[VulkanRenderer::GetCMDIndex()];
+}
+
+void EnvironmentToCubeRenderPass::OneTimeDraw(uint32_t cubeMapSize)
+{
+    RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
+
+    if (renderPass == nullptr)
+    {
+        GLTFSceneManager::CubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        GLTFSceneManager::CubeMap->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(GLTFSceneManager::CubeMap->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 

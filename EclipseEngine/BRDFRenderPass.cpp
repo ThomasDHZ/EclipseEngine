@@ -28,7 +28,30 @@ void BRDFRenderPass::BuildRenderPass(uint32_t textureSize)
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+}
+
+void BRDFRenderPass::OneTimeDraw(uint32_t textureSize)
+{
+    RenderPassResolution = glm::ivec2(textureSize, textureSize);
+    if (renderPass == nullptr)
+    {
+        GLTFSceneManager::BRDFTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        GLTFSceneManager::BRDFTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(GLTFSceneManager::BRDFTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
     Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
 void BRDFRenderPass::RenderPassDesc()
@@ -104,10 +127,10 @@ void BRDFRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    brdfPipeline.InitializePipeline(pipelineInfo);
+    BRDFPipeline = JsonGraphicsPipeline("BRDFPipeline.txt", VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, 0);
 }
 
-void BRDFRenderPass::Draw()
+VkCommandBuffer BRDFRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -143,18 +166,18 @@ void BRDFRenderPass::Draw()
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    brdfPipeline.Draw(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    BRDFPipeline.DrawTexture(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
 
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+    return CommandBuffer[VulkanRenderer::GetCMDIndex()];
 }
 
 void BRDFRenderPass::Destroy()
 {
     GLTFSceneManager::BRDFTexture->Destroy();
-    brdfPipeline.Destroy();
+    BRDFPipeline.Destroy();
     RenderPass::Destroy();
 }

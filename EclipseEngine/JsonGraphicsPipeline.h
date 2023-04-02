@@ -130,6 +130,13 @@ public:
 		model->Draw(commandBuffer, ShaderPipelineLayout);
 	}
 
+	void DrawTexture(VkCommandBuffer& commandBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &CubeMapDescriptorSet, 0, nullptr);
+		vkCmdDraw(commandBuffer, 6, 1, 0, 0);
+	}
+
 	void Destroy();
 };
 

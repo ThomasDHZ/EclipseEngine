@@ -158,7 +158,7 @@ void GLTFIrradianceRenderPass::BuildRenderPassPipelines(std::vector<std::shared_
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    IrradiancePipeline.LoadGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    irradiancePipeline.InitializePipeline(pipelineInfo, cubeMapList);
 }
 
 VkCommandBuffer GLTFIrradianceRenderPass::Draw()
@@ -206,7 +206,7 @@ VkCommandBuffer GLTFIrradianceRenderPass::Draw()
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        IrradiancePipeline.DrawCubeMap<IrradianceSkyboxSettings>(commandBuffer, irradiance);
+        irradiancePipeline.Draw(commandBuffer, irradiance);
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -230,6 +230,6 @@ void GLTFIrradianceRenderPass::Destroy()
         IrradianceCubeMap->Destroy();
     }
     DrawToCubeMap->Destroy();
-    IrradiancePipeline.Destroy();
+    irradiancePipeline.Destroy();
     RenderPass::Destroy();
 }

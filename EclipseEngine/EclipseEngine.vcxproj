@@ -196,7 +196,6 @@
     <ClCompile Include="DepthRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
-    <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GLTFIrradiancePipeline.cpp" />
@@ -206,10 +205,8 @@
     <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderer.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
-    <ClCompile Include="GLTF_BRDFPipeline.cpp" />
-    <ClCompile Include="GLTF_BRDFRenderPass.cpp" />
     <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
-    <ClCompile Include="GLTF_EnvironmentToCubeRenderPass.cpp" />
+    <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="GLTF_SkyboxPipeline.cpp" />
     <ClCompile Include="GLTF_Temp_Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
@@ -322,7 +319,6 @@
     <ClInclude Include="DepthRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubePipeline.h" />
-    <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFIrradianceRenderPass.h" />
@@ -331,10 +327,8 @@
     <ClInclude Include="GLTFPrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
     <ClInclude Include="GLTFRenderPass.h" />
-    <ClInclude Include="GLTF_BRDFPipeline.h" />
-    <ClInclude Include="GLTF_BRDFRenderPass.h" />
     <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />
-    <ClInclude Include="GLTF_EnvironmentToCubeRenderPass.h" />
+    <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="GLTF_SkyboxPipeline.h" />
     <ClInclude Include="GLTF_Temp_Model.h" />
     <ClInclude Include="GridRenderer2D.h" />

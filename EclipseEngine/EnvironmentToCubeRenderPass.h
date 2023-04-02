@@ -1,7 +1,8 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "EnvironmentToCubePipeline.h"
+#include "GLTF_EnvironmentToCubePipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 class EnvironmentToCubeRenderPass : public RenderPass
 {
@@ -9,14 +10,14 @@ private:
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
 
+	JsonGraphicsPipeline EnvironmentToCubeRenderPassPipeline;
+
 public:
 	EnvironmentToCubeRenderPass();
 	~EnvironmentToCubeRenderPass();
 
-	EnvironmentToCubePipeline EnvironmentToCubeRenderPassPipeline;
-
 	void BuildRenderPass(uint32_t cubeMapSize);
-	void Draw();
+	VkCommandBuffer Draw();
+	void OneTimeDraw(uint32_t cubeMapSize);
 	void Destroy();
 };
-
