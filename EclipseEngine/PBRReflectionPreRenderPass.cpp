@@ -283,7 +283,7 @@ VkCommandBuffer PBRReflectionPreRenderPass::Draw()
             switch (mesh->GetMeshType())
             {
 
-            case MeshTypeEnum::kPolygon:
+            case MeshTypeEnum::kMeshPolygon:
             {
                 pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh, x);
                 break;

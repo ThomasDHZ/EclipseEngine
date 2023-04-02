@@ -7,7 +7,7 @@ GLTF_Temp_Model::GLTF_Temp_Model()
 {
 }
 
-GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjectMatrix, uint32_t gameObjectID)
+GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, ModelTypeEnum modelType, glm::mat4 GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
 
@@ -16,6 +16,7 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 
 	GLTFModel model = GLTFModel(FilePath.c_str());
 	GLTFModelData gltfModelData = model.GetModelData();
+	ModelType = modelType;
 
 	std::vector<Vertex3D> VertexList;
 	for (GLTFVertex gltfVertex : gltfModelData.VertexList)
@@ -41,9 +42,6 @@ GLTF_Temp_Model::GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjec
 	{
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
-
-		GltfMeshLoader.MeshType = MeshTypeEnum::kPolygon;
-		GltfMeshLoader.MeshSubType = MeshSubTypeEnum::kNormal;
 
 		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 		GltfMeshLoader.ParentModelID = ModelID;

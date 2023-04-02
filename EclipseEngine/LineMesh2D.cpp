@@ -141,7 +141,7 @@ void LineMesh2D::SetUpMesh()
 	GenerateID();
 	GenerateColorID();
 
-	MeshType = MeshTypeEnum::kLine;
+	MeshType = MeshTypeEnum::kMeshLine;
 	material = MaterialManager::GetDefaultMaterial();
 	ParentModelID = -1;
 	ParentGameObjectID = 0;

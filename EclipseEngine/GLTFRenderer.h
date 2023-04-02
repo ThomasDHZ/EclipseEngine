@@ -21,7 +21,7 @@
 #include "EnvironmentToCubeRenderPass.h"
 #include "GLTFRenderPass.h"
 #include "IrradianceRenderPass.h"
-#include "GLTFPrefilterRenderPass.h"
+#include "PrefilterRenderPass.h"
 #include <GLTFSceneManager.h>
 
 class GLTFRenderer
@@ -31,7 +31,7 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;
 	IrradianceRenderPass irradianceRenderPass;
-	GLTFPrefilterRenderPass prefilterRenderPass;
+	PrefilterRenderPass prefilterRenderPass;
 	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 

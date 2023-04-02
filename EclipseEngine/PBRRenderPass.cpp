@@ -176,9 +176,9 @@ VkCommandBuffer PBRRenderPass::Draw()
         {
             switch (mesh->GetMeshType())
             {
-                case MeshTypeEnum::kPolygon:
+                case MeshTypeEnum::kMeshPolygon:
                 {
-                    if (VulkanRenderer::WireframeModeFlag)
+                    if (GLTFSceneManager::WireframeModeFlag)
                     {
                         wireframePipeline.Draw(commandBuffer, mesh);
                     }
@@ -193,17 +193,17 @@ VkCommandBuffer PBRRenderPass::Draw()
                     }
                     break;
                 }
-                case MeshTypeEnum::kPolygonInstanced:
+                case MeshTypeEnum::kMeshPolygonInstanced:
                 {
                     pbrInstancePipeline.Draw(commandBuffer, mesh);
                     break;
                 }
-                case MeshTypeEnum::kLightDebug:
+                case MeshTypeEnum::kMeshLightDebug:
                 {
                     lightDebugPipeline.Draw(commandBuffer, mesh);
                     break;
                 }
-                case MeshTypeEnum::kLine:
+                case MeshTypeEnum::kMeshLine:
                 {
                     linePipeline.Draw(commandBuffer, mesh);
                     break;

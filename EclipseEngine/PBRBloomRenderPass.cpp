@@ -216,7 +216,7 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
-                case MeshTypeEnum::kPolygon:
+                case MeshTypeEnum::kMeshPolygon:
                 {
                     pbrBloomPipeline.Draw(commandBuffer, mesh);
                     break;

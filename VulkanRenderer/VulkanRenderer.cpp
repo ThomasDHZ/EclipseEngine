@@ -57,7 +57,6 @@ VkPhysicalDevice VulkanRenderer::PhysicalDevice = VK_NULL_HANDLE;
 VkSurfaceKHR VulkanRenderer::Surface = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
 bool VulkanRenderer::UpdateRendererFlag = false;
-bool VulkanRenderer::WireframeModeFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
 
 Timer VulkanRenderer::FrameTimer = Timer();

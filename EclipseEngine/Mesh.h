@@ -11,13 +11,13 @@
 
 enum MeshTypeEnum
 {
-	Unknown,
-	kSprite,
-	kPolygon,
-	kPolygonInstanced,
-	kLightDebug,
-	kSkybox,
-	kLine
+	kMeshUnknown,
+	kMeshSprite,
+	kMeshPolygon,
+	kMeshPolygonInstanced,
+	kMeshLightDebug,
+	kMeshSkybox,
+	kMeshLine
 };
 
 enum MeshSubTypeEnum

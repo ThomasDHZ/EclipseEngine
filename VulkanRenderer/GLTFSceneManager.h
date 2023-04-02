@@ -21,6 +21,7 @@ private:
 
 
 public:
+	static bool WireframeModeFlag;
 	static SceneProperties sceneProperites;
 
 	static std::shared_ptr<Camera> ActiveCamera;

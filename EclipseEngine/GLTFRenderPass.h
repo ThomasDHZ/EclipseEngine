@@ -3,6 +3,8 @@
 #include "RenderedColorTexture.h"
 #include "RenderPass.h"
 #include "GLTF_SkyboxPipeline.h"
+#include "WireFramePipeline.h"
+#include "LinePipeline.h"
 class GLTFRenderPass : public RenderPass
 {
 	private:
@@ -17,6 +19,8 @@ class GLTFRenderPass : public RenderPass
 		//GLTFPBRRenderPIpeline pbrPipeline;
 		//GLTF_SkyboxPipeline skyboxPipeline;
 		std::vector<JsonGraphicsPipeline> PBRPipelineList;
+		std::vector<JsonGraphicsPipeline> WireframePipelineList;
+		std::vector<JsonGraphicsPipeline> LinePipelineList;
 		JsonGraphicsPipeline SkyBoxPipeline;
 
 		void RenderPassDesc();

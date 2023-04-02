@@ -159,9 +159,9 @@ VkCommandBuffer RenderPass2D::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
-                case MeshTypeEnum::kSprite:
+                case MeshTypeEnum::kMeshSprite:
                 {
-                    if (VulkanRenderer::WireframeModeFlag)
+                    if (GLTFSceneManager::WireframeModeFlag)
                     {
                         wireframePipeline.Draw(commandBuffer, mesh);
                     }
@@ -171,7 +171,7 @@ VkCommandBuffer RenderPass2D::Draw()
                     }
                     break;
                 }
-                case MeshTypeEnum::kLine:
+                case MeshTypeEnum::kMeshLine:
                 {
                     drawLinePipeline.Draw(commandBuffer, mesh);
                     break;

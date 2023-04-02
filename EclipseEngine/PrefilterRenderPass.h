@@ -2,6 +2,7 @@
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
 #include "PrefilterPipeline.h"
+#include "JsonGraphicsPipeline.h"
 
 class PrefilterRenderPass : public RenderPass
 {
@@ -12,7 +13,7 @@ private:
 	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList);
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
-	PrefilterPipeline prefilterPipeline;
+	JsonGraphicsPipeline PrefilterPipeline;
 
 public:
 	PrefilterRenderPass();

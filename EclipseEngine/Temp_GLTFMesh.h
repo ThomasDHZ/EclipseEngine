@@ -6,8 +6,6 @@
 struct GLTFMeshLoader3D
 {
 	std::shared_ptr<GLTFNode> node;
-	MeshTypeEnum MeshType;
-	MeshSubTypeEnum MeshSubType;
 
 	uint64_t ParentGameObjectID = 0;
 	uint64_t ParentModelID = 0;
@@ -33,8 +31,6 @@ private:
 	uint64_t ParentGameObjectID = 0;
 
 	std::string MeshName;
-	MeshTypeEnum MeshType;
-	MeshSubTypeEnum MeshSubType;
 
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;

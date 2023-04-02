@@ -49,16 +49,16 @@ void Scene::Update()
 void Scene::ImGuiUpdate()
 {
     SceneManager::bloomsettings.blurScale;
-    pbrRenderer.ImGuiUpdate();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-    ImGui::Checkbox("Wireframe Mode", &VulkanRenderer::WireframeModeFlag);
+    ImGui::Checkbox("Wireframe Mode", &GLTFSceneManager::WireframeModeFlag);
     if (GraphicsDevice::IsRayTracingFeatureActive())
     {
         ImGui::Checkbox("RayTrace Mode", &SceneManager::RayTracingActive);
         ImGui::Checkbox("Hybrid Mode", &SceneManager::HybridRendererActive);
     }
 
+    pbrRenderer.ImGuiUpdate();
 
     SceneManager::ImGuiSceneHierarchy();
     MeshRendererManager::GUIUpdate();

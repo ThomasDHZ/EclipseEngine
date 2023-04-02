@@ -158,7 +158,7 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
         {
             switch (mesh->GetMeshType())
             {
-            case MeshTypeEnum::kPolygon:
+            case MeshTypeEnum::kMeshPolygon:
             {
                 MeshPickerPipeline.Draw(commandBuffer, mesh);
                 break;

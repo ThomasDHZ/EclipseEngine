@@ -200,8 +200,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
-    <ClCompile Include="GLTFPrefilterPipeline.cpp" />
-    <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
+    <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderer.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
@@ -263,7 +262,6 @@
     <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
@@ -320,8 +318,7 @@
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
-    <ClInclude Include="GLTFPrefilterPipeline.h" />
-    <ClInclude Include="GLTFPrefilterRenderPass.h" />
+    <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
     <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />
@@ -385,7 +382,6 @@
     <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
-    <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameObjectManager.h" />

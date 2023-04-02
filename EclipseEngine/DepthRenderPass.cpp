@@ -208,12 +208,12 @@ VkCommandBuffer DepthRenderPass::Draw()
             {
                 switch (mesh->GetMeshType())
                 {
-                case MeshTypeEnum::kPolygon:
+                case MeshTypeEnum::kMeshPolygon:
                 {
                     depthPipeline.Draw(commandBuffer, mesh, x);
                     break;
                 }
-                case MeshTypeEnum::kPolygonInstanced:
+                case MeshTypeEnum::kMeshPolygonInstanced:
                 {
                     depthInstancedPipeline.Draw(commandBuffer, mesh, x);
                     break;

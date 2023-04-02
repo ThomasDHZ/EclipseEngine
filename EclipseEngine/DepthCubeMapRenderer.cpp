@@ -226,7 +226,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLigh
             {
                 switch (mesh->GetMeshType())
                 {
-                case MeshTypeEnum::kPolygon:
+                case MeshTypeEnum::kMeshPolygon:
                 {
                     depthCubeMapPipeline.Draw(commandBuffer, mesh, PointLightList[x]->GetPosition(), x);
                     break;

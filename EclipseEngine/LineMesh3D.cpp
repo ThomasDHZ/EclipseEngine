@@ -111,7 +111,7 @@ void LineMesh3D::SetUpMesh()
 	GenerateID();
 	GenerateColorID();
 
-	MeshType = MeshTypeEnum::kLine;
+	MeshType = MeshTypeEnum::kMeshLine;
 	material = MaterialManager::GetDefaultMaterial();
 	ParentModelID = -1;
 	VertexCount = LineVertexList.size();

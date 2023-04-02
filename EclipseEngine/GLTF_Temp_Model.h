@@ -5,6 +5,17 @@
 #include "Temp_GLTFMesh.h"
 #include "GLTF_GraphicsDescriptors.h"
 
+enum ModelTypeEnum
+{
+	KUnknown,
+	kSprite,
+	kPolygon,
+	kPolygonInstanced,
+	kLightDebug,
+	kSkybox,
+	kLine
+};
+
 class GLTF_Temp_Model
 {
 private:
@@ -14,6 +25,8 @@ private:
 	uint64_t ModelID = 0;
 
 	std::string NodeName;
+
+	ModelTypeEnum ModelType;
 
 	std::vector<GLTFPrimitive> PrimitiveList;
 	std::vector<MeshProperties> MeshPropertiesList;
@@ -40,7 +53,7 @@ public:
 	glm::vec3 ModelScale = glm::vec3(1.0f);
 
 	GLTF_Temp_Model();
-	GLTF_Temp_Model(const std::string FilePath, glm::mat4 GameObjectMatrix, uint32_t gameObjectID);
+	GLTF_Temp_Model(const std::string FilePath, ModelTypeEnum ModelType, glm::mat4 GameObjectMatrix, uint32_t gameObjectID);
 	~GLTF_Temp_Model();
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);
@@ -52,4 +65,5 @@ public:
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; }
+	ModelTypeEnum GetModelType() { return ModelType; }
 };

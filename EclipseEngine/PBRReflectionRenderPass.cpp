@@ -215,12 +215,12 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMe
             switch (mesh->GetMeshType())
             {
 
-            case MeshTypeEnum::kPolygon:
+            case MeshTypeEnum::kMeshPolygon:
             {
                 pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh);
                 break;
             }
-            case MeshTypeEnum::kPolygonInstanced:
+            case MeshTypeEnum::kMeshPolygonInstanced:
             {
                 pbrInstancedPipeline.Draw(commandBuffer, mesh, reflectingMesh);
                 break;

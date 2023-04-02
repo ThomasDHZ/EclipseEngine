@@ -12,8 +12,6 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	ParentGameObjectID = meshLoader.ParentGameObjectID;
 
 	MeshName = meshLoader.node->NodeName;
-	MeshType = meshLoader.MeshType;
-	MeshSubType = meshLoader.MeshSubType;
 
 	ParentMesh = meshLoader.node->ParentMesh;
 	ChildMeshList = meshLoader.node->ChildMeshList;
