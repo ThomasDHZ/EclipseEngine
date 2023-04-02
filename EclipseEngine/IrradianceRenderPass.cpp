@@ -158,7 +158,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    irradiancePipeline.InitializePipeline(pipelineInfo, cubeMapList);
+    IrradiancePipeline.LoadGraphicsPipeline("IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings));
 }
 
 VkCommandBuffer IrradianceRenderPass::Draw()
@@ -198,7 +198,7 @@ VkCommandBuffer IrradianceRenderPass::Draw()
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
     }
-    for (int x= 0; x < IrradianceCubeMapList.size(); x++)
+    for (int x = 0; x < IrradianceCubeMapList.size(); x++)
     {
         irradiance.CubeMapId = x;
         IrradianceCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
@@ -206,7 +206,7 @@ VkCommandBuffer IrradianceRenderPass::Draw()
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        irradiancePipeline.Draw(commandBuffer, irradiance);
+        IrradiancePipeline.DrawCubeMap<IrradianceSkyboxSettings>(commandBuffer, irradiance);
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -230,6 +230,6 @@ void IrradianceRenderPass::Destroy()
         IrradianceCubeMap->Destroy();
     }
     DrawToCubeMap->Destroy();
-    irradiancePipeline.Destroy();
+    IrradiancePipeline.Destroy();
     RenderPass::Destroy();
 }

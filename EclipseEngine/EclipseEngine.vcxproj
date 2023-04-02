@@ -198,8 +198,7 @@
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
-    <ClCompile Include="GLTFIrradiancePipeline.cpp" />
-    <ClCompile Include="GLTFIrradianceRenderPass.cpp" />
+    <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="GLTFPrefilterPipeline.cpp" />
     <ClCompile Include="GLTFPrefilterRenderPass.cpp" />
@@ -212,7 +211,6 @@
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="IrradiancePipeline.cpp" />
-    <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="JsonGraphicsPipeline.cpp" />
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="Level2DRenderer.cpp" />
@@ -320,8 +318,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EnvironmentToCubePipeline.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
-    <ClInclude Include="GLTFIrradiancePipeline.h" />
-    <ClInclude Include="GLTFIrradianceRenderPass.h" />
+    <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="GLTFPrefilterPipeline.h" />
     <ClInclude Include="GLTFPrefilterRenderPass.h" />
@@ -334,7 +331,6 @@
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
     <ClInclude Include="IrradiancePipeline.h" />
-    <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="JsonGraphicsPipeline.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />

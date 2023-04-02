@@ -1,4 +1,5 @@
 #include "IrradiancePipeline.h"
+#include "JsonGraphicsPipeline.h"
 IrradiancePipeline::IrradiancePipeline()
 {
 }
@@ -33,11 +34,23 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     }
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
-    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
+    auto a = CreateShader(BaseShaderFilePath + "IrradianceShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
+    auto b = CreateShader(BaseShaderFilePath + "IrradianceShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+
+    nlohmann::json json;
+    JsonGraphicsPipeline jsonPipeline{};
+    JsonConverter::to_json(json["CubeMapShader"], true);
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "IrradianceShaderVert.spv");
+    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "IrradianceShaderFrag.spv");
+
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddTextureDescriptorSetBinding(DescriptorBindingList, 0, SkyboxBufferInfoList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+    jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kCubeMapDescriptor);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -46,6 +59,7 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
+    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = SkyboxVertexLayout::getBindingDescriptions();
@@ -61,7 +75,7 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     RenderPassInfo.DepthStencilInfo = DepthStencilStateCreateInfo;
     RenderPassInfo.renderPass = pipelineInfoStruct.renderPass;
     RenderPassInfo.sampleCount = pipelineInfoStruct.SampleCount;
-    RenderPassInfo.ConstBufferSize = sizeof(SceneProperties);
+    RenderPassInfo.ConstBufferSize = sizeof(IrradianceSkyboxSettings);
 
     BuildGraphicsPipelineInfo buildGraphicsPipelineInfo{};
     buildGraphicsPipelineInfo.VertexDescription = VertexDescriptionInfo;
@@ -69,7 +83,8 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
 
     if (ShaderPipeline == nullptr)
     {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+        jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
+        jsonPipeline.SaveGraphicsPipeline("IrradiancePipeline.txt", json);
     }
     else
     {
@@ -85,7 +100,4 @@ void IrradiancePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
 
 void IrradiancePipeline::Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance)
 {
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &irradiance);
-    GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 }

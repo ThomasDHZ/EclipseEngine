@@ -20,7 +20,7 @@
 #include "GLTFPBRRenderPIpeline.h"
 #include "EnvironmentToCubeRenderPass.h"
 #include "GLTFRenderPass.h"
-#include "GLTFIrradianceRenderPass.h"
+#include "IrradianceRenderPass.h"
 #include "GLTFPrefilterRenderPass.h"
 #include <GLTFSceneManager.h>
 
@@ -30,7 +30,7 @@ private:
 	std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;
-	GLTFIrradianceRenderPass irradianceRenderPass;
+	IrradianceRenderPass irradianceRenderPass;
 	GLTFPrefilterRenderPass prefilterRenderPass;
 	GLTFRenderPass gLTFRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
