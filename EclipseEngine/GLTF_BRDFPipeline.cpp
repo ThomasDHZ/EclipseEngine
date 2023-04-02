@@ -1,6 +1,5 @@
 #include "GLTF_BRDFPipeline.h"
 #include "SceneManager.h"
-#include "JsonGraphicsPipeline.h"
 
 GLTF_BRDFPipeline::GLTF_BRDFPipeline()
 {
@@ -43,24 +42,12 @@ void GLTF_BRDFPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     nullBuffer.sampler = Sampler;
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-    auto a = CreateShader(BaseShaderFilePath + "GLTFBRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-    auto b = CreateShader(BaseShaderFilePath + "GLTFBRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
-
-    nlohmann::json json;
-    JsonGraphicsPipeline jsonPipeline{};
-    JsonConverter::to_json(json["CubeMapShader"], false);
-    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "GLTFBRDFShaderVert.spv");
-    jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "GLTFBRDFShaderFrag.spv");
-
-    for (int x = 0; x < json["Shader"].size(); x++)
-    {
-        PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
-    }
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFBRDFShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
+    PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "GLTFBRDFShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     DescriptorSet = GLTF_GraphicsDescriptors::SubmitDescriptorSet(DescriptorBindingList);
     DescriptorSetLayout = GLTF_GraphicsDescriptors::SubmitDescriptorSetLayout(DescriptorBindingList);
-    jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][0], VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, DescriptorBindingPropertiesEnum::kCubeMapDescriptor);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -69,7 +56,6 @@ void GLTF_BRDFPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     DepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
-    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -90,8 +76,7 @@ void GLTF_BRDFPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
     if (ShaderPipeline == nullptr)
     {
-        jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
-        jsonPipeline.SaveGraphicsPipeline("BRDFPipeline.txt", json);
+        BuildShaderPipeLine(buildGraphicsPipelineInfo);
     }
     else
     {
@@ -107,5 +92,7 @@ void GLTF_BRDFPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
 void GLTF_BRDFPipeline::Draw(VkCommandBuffer& commandBuffer)
 {
-
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+    vkCmdDraw(commandBuffer, 6, 1, 0, 0);
 }

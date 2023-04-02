@@ -15,4 +15,3 @@ public:
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubeMapList);
 	void Draw(VkCommandBuffer& commandBuffer, IrradianceSkyboxSettings& irradiance);
 };
-
