@@ -683,6 +683,11 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
 
 void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
+    if (ShaderPipeline != VK_NULL_HANDLE)
+    {
+        Destroy();
+    }
+
     std::string SceneInfo;
     std::ifstream SceneFile;
     SceneFile.open(BasePipelineFilePath + filePath);

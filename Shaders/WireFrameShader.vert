@@ -21,6 +21,7 @@ layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
 
 layout(push_constant) uniform SceneData
 {
@@ -40,7 +41,7 @@ void main() {
 //	}
   gl_Position = sceneData.proj * 
                   sceneData.view *                
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  transformBuffer[sceneData.MeshIndex].transform * 
                   vec4(inPosition, 1.0);
     Color = aColor;
     UV = aUV;
