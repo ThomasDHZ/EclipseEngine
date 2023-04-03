@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObjectManager.h"
-#include <GameObject3D.h>
+#include "GameObject3D.h"
 #include "Mesh3D.h"
 
 class MeshRenderer : public GameObject3D
