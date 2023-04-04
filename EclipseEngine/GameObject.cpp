@@ -70,8 +70,9 @@ GameObject::GameObject(const std::string Name, const std::string fileName)
 	ObjectName = Name;
 	//RenderType = renderType;
 	GenerateID();
-
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID));
+	
+	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
 }
 
 GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position)
@@ -89,7 +90,8 @@ GameObject::GameObject(const std::string Name, const std::string fileName, const
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID));
+	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
 }
 
 GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation)
@@ -108,7 +110,8 @@ GameObject::GameObject(const std::string Name, const std::string fileName, const
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID));
+	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
 }
 
 GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
@@ -128,7 +131,8 @@ GameObject::GameObject(const std::string Name, const std::string fileName, const
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID));
+	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
 }
 
 GameObject::~GameObject()

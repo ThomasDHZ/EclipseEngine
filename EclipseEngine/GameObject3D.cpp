@@ -20,6 +20,34 @@ GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderTy
 {
 }
 
+GameObject3D::GameObject3D(const std::string Name, const std::string fileName) : GameObject(Name, fileName)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& position) : GameObject(Name, fileName, position)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, fileName, position, rotation)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, fileName, position, rotation, scale)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
+{
+}
+
+GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList)
+{
+}
+
 GameObject3D::~GameObject3D()
 {
 }
