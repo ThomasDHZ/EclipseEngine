@@ -1,5 +1,4 @@
 #include "GameObjectManager.h"
-#include "SpriteRenderer.h"
 #include "ModelRenderer.h"
 
 

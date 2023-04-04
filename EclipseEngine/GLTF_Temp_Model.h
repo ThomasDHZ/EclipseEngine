@@ -61,6 +61,8 @@ public:
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void Destroy();
 
+	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return MeshList; }
+	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return MaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }

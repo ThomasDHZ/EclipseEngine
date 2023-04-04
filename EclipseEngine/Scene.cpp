@@ -7,7 +7,6 @@
 #include "GridRenderer2D.h"
 #include "LineRenderer3D.h"
 #include "GridRenderer3D.h"
-#include "SpriteRenderer.h"
 #include "ModelRenderer.h"
 #include "BillBoardMeshRenderer.h"
 #include "MeshRenderer.h"

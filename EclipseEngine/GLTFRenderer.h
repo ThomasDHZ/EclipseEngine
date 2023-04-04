@@ -27,7 +27,7 @@
 class GLTFRenderer
 {
 private:
-	std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList;
+	std::vector<std::shared_ptr<GameObject>> gameObjectList;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;
 	IrradianceRenderPass irradianceRenderPass;

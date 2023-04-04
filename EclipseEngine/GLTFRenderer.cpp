@@ -17,8 +17,8 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
-	if(modelList.size() == 0)
-	modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(b, ModelTypeEnum::kPolygon, glm::mat4(1.0f), 0)));
+	//if(modelList.size() == 0)
+	gameObjectList.emplace_back(std::make_shared<GameObject>(GameObject("Sphere", b)));
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
@@ -34,7 +34,7 @@ void GLTFRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	gLTFRenderPass.BuildRenderPass(modelList);
+	gLTFRenderPass.BuildRenderPass(gameObjectList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
 
@@ -42,9 +42,9 @@ void GLTFRenderer::Update()
 {
 	GLTFSceneManager::Update();
 
-	for (auto& model : modelList)
+	for (auto& obj : gameObjectList)
 	{
-		model->Update(glm::mat4(1.0f));
+		obj->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 	}
 }
 
@@ -77,9 +77,9 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
 	//}
 
-	ImGui::SliderFloat3("Position ", &modelList[0]->MeshList[0]->MeshPosition.x, 0.0f, 100.0f);
-	ImGui::SliderFloat3("Rotation ", &modelList[0]->MeshList[0]->MeshRotation.x, 0.0f, 360.0f);
-	ImGui::SliderFloat3("Scale ", &modelList[0]->MeshList[0]->MeshScale.x, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Position ", &gameObjectList[0]->GameObjectPosition.x, 0.0f, 100.0f);
+	ImGui::SliderFloat3("Rotation ", &gameObjectList[0]->GameObjectRotation.x, 0.0f, 360.0f);
+	ImGui::SliderFloat3("Scale ", &gameObjectList[0]->GameObjectScale.x, 0.0f, 1.0f);
 	//if (SceneManager::EditorModeFlag)
 	//{
 	//	if (ImGui::Button("Play Mode"))
@@ -106,16 +106,16 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(modelList));
+	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(gameObjectList));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void GLTFRenderer::Destroy()
 {
 	GLTFSceneManager::Destroy();
-	for (auto& model : modelList)
+	for (auto& obj : gameObjectList)
 	{
-		model->Destroy();
+		obj->Destroy();
 	}
 
 	environmentToCubeRenderPass.Destroy();

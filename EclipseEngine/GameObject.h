@@ -2,6 +2,7 @@
 #include "VulkanRenderer.h"
 #include "Component.h"
 #include <glm/glm.hpp>
+#include "GLTF_Temp_Model.h"
 
 enum GameObjectRenderType
 {
@@ -23,6 +24,7 @@ private:
 protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
+	std::shared_ptr<GLTF_Temp_Model> model;
 	std::vector<std::shared_ptr<Component>> ComponentList;
 	GameObjectRenderType  RenderType;
 
@@ -51,12 +53,17 @@ public:
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
+	GameObject(const std::string Name, const std::string fileName);
+	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position);
+	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation);
+	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
+	virtual void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 
@@ -72,7 +79,16 @@ public:
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
-	std::vector<std::shared_ptr<Component>> GetComponentList() { return ComponentList; };
+	std::vector<std::shared_ptr<Component>> GetComponentList() { return GetComponentList(); };
+
+	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return model->GetMeshList(); }
+	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return model->GetMaterialList(); }
+
+	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return model->GetMeshPropertiesBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return model->MeshList[0]->GetTransformMatrixBuffer(); }
+	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return model->GetTexturePropertiesBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return model->GetMaterialPropertiesBuffer(); }
+	ModelTypeEnum GetModelType() { return model->GetModelType(); }
 
 	bool operator==(const GameObject& rhs) const
 	{ 

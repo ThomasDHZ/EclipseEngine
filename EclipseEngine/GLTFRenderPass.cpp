@@ -9,7 +9,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
+void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GameObject>> gameObjectList)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -35,7 +35,7 @@ void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTF_Temp_Model
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(modelList);
+    BuildRenderPassPipelines(gameObjectList);
     SetUpCommandBuffers();
 }
 
@@ -99,7 +99,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
+void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>> gameObjectList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -119,16 +119,16 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GLTF_T
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    for (int x = 0; x < modelList.size(); x++)
+    for (int x = 0; x < gameObjectList.size(); x++)
     {
-        LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-        WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-        PBRPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, modelList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+        LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+        WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+        PBRPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
     SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
+VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> gameObjectList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -171,25 +171,25 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GLTF_Temp_Model
 
     SkyBoxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
     
-    for (int x = 0; x < modelList.size(); x++)
+    for (int x = 0; x < gameObjectList.size(); x++)
     {
-        switch (modelList[x]->GetModelType())
+        switch (gameObjectList[x]->GetModelType())
         {
             case MeshTypeEnum::kMeshPolygon:
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipelineList[x].Draw<SceneProperties>(commandBuffer, modelList[x], GLTFSceneManager::sceneProperites);
+                    WireframePipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
-                    PBRPipelineList[x].Draw(commandBuffer, modelList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipelineList[x].Draw(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
             case MeshTypeEnum::kMeshLine:
             {
-                LinePipelineList[x].Draw(commandBuffer, modelList[x]);
+                LinePipelineList[x].Draw(commandBuffer, gameObjectList[x]);
                 break;
             }
         }

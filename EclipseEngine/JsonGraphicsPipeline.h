@@ -5,7 +5,7 @@
 
 #include <VulkanRenderer.h>
 #include <JsonConverter.h>
-#include "GLTF_Temp_Model.h"
+#include "GameObject.h"
 
 enum DescriptorBindingPropertiesEnum
 {
@@ -57,7 +57,7 @@ private:
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 
 	
-	void LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GLTF_Temp_Model> model);
+	void LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GameObject> gameObject );
 
 protected:
 
@@ -95,10 +95,10 @@ public:
 	VkDescriptorSet CubeMapDescriptorSet = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
-	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	~JsonGraphicsPipeline();
 
-	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GLTF_Temp_Model> model, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
 	void BuildAndSaveShaderPipeLine(nlohmann::json& json, BuildGraphicsPipelineInfo& buildPipelineInfo, VkDescriptorSetLayout descriptorSetLayout);
 	
@@ -117,17 +117,17 @@ public:
 	}
 
 	template<class T>
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model, T& constBuffer)
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, T& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
-		model->Draw(commandBuffer, ShaderPipelineLayout);
+		gameObject->Draw(commandBuffer, ShaderPipelineLayout);
 	}
 
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model)
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		model->Draw(commandBuffer, ShaderPipelineLayout);
+		gameObject->Draw(commandBuffer, ShaderPipelineLayout);
 	}
 
 	void DrawTexture(VkCommandBuffer& commandBuffer)
