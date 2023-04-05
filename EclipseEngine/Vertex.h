@@ -6,6 +6,11 @@
 #include <GLTFVertex.h>
 
 struct VoidVertex {
+
+    VoidVertex()
+    {
+    }
+
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
         std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
@@ -20,8 +25,12 @@ struct VoidVertex {
 };
 
 struct LineVertex2D {
-    glm::vec2 pos;
-    glm::vec4 color;
+    glm::vec2 pos = glm::vec2(0.0f);
+    glm::vec4 color = glm::vec4(1.0f);
+
+    LineVertex2D()
+    {
+    }
 
     LineVertex2D(glm::vec2 Pos)
     {
@@ -71,8 +80,13 @@ struct LineVertex2D {
 };
 
 struct LineVertex3D {
-    glm::vec3 pos;
-    glm::vec4 color;
+    glm::vec3 pos = glm::vec3(0.0f);
+    glm::vec4 color = glm::vec4(1.0f);
+
+    LineVertex3D()
+    {
+
+    }
 
     LineVertex3D(glm::vec3 Pos)
     {
@@ -126,6 +140,8 @@ struct Vertex2D
     glm::vec2 Position = glm::vec2(0.0f);
     glm::vec2 UV = glm::vec2(0.0f);
     glm::vec3 Color = glm::vec3(1.0f);
+
+    Vertex2D(){}
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
@@ -182,6 +198,8 @@ struct Vertex3D
     float BiTangentPadding = 0.0f;
     glm::vec3 Color = glm::vec3(1.0f);
     float ColorPadding = 0.0f;
+
+    Vertex3D(){}
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
