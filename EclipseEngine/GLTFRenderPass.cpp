@@ -170,12 +170,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> ga
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
 
     SkyBoxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
-    
     for (int x = 0; x < gameObjectList.size(); x++)
     {
-        switch (gameObjectList[x]->GetModelType())
+        switch (gameObjectList[x]->RenderType)
         {
-            case MeshTypeEnum::kMeshPolygon:
+            case GameObjectRenderType::kModelRenderer:
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
@@ -183,13 +182,13 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> ga
                 }
                 else
                 {
-                    PBRPipelineList[x].Draw(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
-            case MeshTypeEnum::kMeshLine:
+            case GameObjectRenderType::kLineRenderer3D:
             {
-                LinePipelineList[x].Draw(commandBuffer, gameObjectList[x]);
+                LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 break;
             }
         }

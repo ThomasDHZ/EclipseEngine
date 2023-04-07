@@ -24,7 +24,7 @@ public:
 	~LineMesh3D();
 
 	std::vector<LineVertex3D> LineVertexList;
-
+	virtual void Draw(VkCommandBuffer& commandBuffer);
 	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 
 	void SetMeshPosition(float x, float y, float z);

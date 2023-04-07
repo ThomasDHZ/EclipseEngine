@@ -11,11 +11,6 @@ public:
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
-	GameObject3D(const std::string Name, const std::string fileName);
-	GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& Position);
-	GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation);
-	GameObject3D(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
-
 	GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint);
 	GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color);
 	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList);

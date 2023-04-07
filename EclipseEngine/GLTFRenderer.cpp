@@ -18,7 +18,51 @@ void GLTFRenderer::BuildRenderer()
 
 	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
 	//if(modelList.size() == 0)
-	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", b)));
+	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
+	gameObjectList.back()->LoadRenderObject<Vertex3D>(b);
+
+	int width = 500;
+	int height = 500;
+	float length = 10.0f;
+	float radius = 0.5f;
+	std::vector<LineVertex3D> VertexList;
+	for (uint32_t y = 0; y < height; y++)
+	{
+	    for (uint32_t x = 0; x < width; x++)
+	    {
+	        glm::vec2 coord = { (float)x / width, (float)y / height };
+	        coord = coord * 2.0f - 1.0f;
+
+	        uint8_t r = (uint8_t)(coord.x * 255.0f);
+	        uint8_t g = (uint8_t)(coord.y * 255.0f);
+
+	        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+	        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+
+	        float a = glm::dot(rayDirection, rayDirection);
+	        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+	        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+
+	        //Quadratic forumla discriminat
+	        //b^2 - 4ac;
+
+	        float discriminant = (b * b) - 4.0f * a * c;
+
+	        if (discriminant >= 0.0f)
+	        {
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+	        }
+	        else
+	        {
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+	        }
+	    }
+	}
+
+	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kLineRenderer3D)));
+	gameObjectList.back()->LoadRenderObject<LineVertex3D>(VertexList);
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
@@ -41,7 +85,6 @@ void GLTFRenderer::BuildRenderer()
 void GLTFRenderer::Update()
 {
 	GLTFSceneManager::Update();
-
 	for (auto& obj : gameObjectList)
 	{
 		obj->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());

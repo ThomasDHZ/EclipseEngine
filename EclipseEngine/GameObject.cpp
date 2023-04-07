@@ -65,83 +65,18 @@ GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, 
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 }
 
-GameObject::GameObject(const std::string Name, const std::string fileName)
-{
-	ObjectName = Name;
-	//RenderType = renderType;
-	GenerateID();
-	
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
-}
-
-GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position)
-{
-	GenerateID();
-	ObjectName = Name;
-	//RenderType = renderType;
-
-	GameObjectPosition = Position;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
-}
-
-GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation)
-{
-	GenerateID();
-	ObjectName = Name;
-	//RenderType = renderType;
-
-	GameObjectPosition = Position;
-	GameObjectRotation = Rotation;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
-}
-
-GameObject::GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
-{
-	GenerateID();
-	ObjectName = Name;
-	//RenderType = renderType;
-
-	GameObjectPosition = Position;
-	GameObjectRotation = Rotation;
-	GameObjectScale = Scale;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-
-	model = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-	model->LoadModel<Vertex3D>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
-}
-
 GameObject::~GameObject()
 {
 }
 
 void GameObject::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)
 {
-	model->Draw(commandBuffer, shaderPipelineLayout);
+	GameObjectRenderer->Draw(commandBuffer, shaderPipelineLayout);
+}
+
+void GameObject::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet)
+{
+	GameObjectRenderer->DrawLine(commandBuffer, shaderPipelineLayout, descriptorSet);
 }
 
 void GameObject::Update(float DeltaTime)
@@ -153,7 +88,10 @@ void GameObject::Update(float DeltaTime)
 	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
 
-	model->Update(GameObjectTransform);
+	if (GameObjectRenderer != nullptr)
+	{
+		GameObjectRenderer->Update(GameObjectTransform);
+	}
 }
 
 void GameObject::Destroy()
@@ -163,7 +101,7 @@ void GameObject::Destroy()
 		ComponentList[x]->Destroy();
 		ComponentList.erase(ComponentList.begin() + x);
 	}
-	model->Destroy();
+	GameObjectRenderer->Destroy();
 }
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)

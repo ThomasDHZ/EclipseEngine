@@ -124,10 +124,12 @@ public:
 		gameObject->Draw(commandBuffer, ShaderPipelineLayout);
 	}
 
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
+	template<class T>
+	void DrawLine(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, T& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->Draw(commandBuffer, ShaderPipelineLayout);
+		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
+		gameObject->DrawLine(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
 	}
 
 	void DrawTexture(VkCommandBuffer& commandBuffer)

@@ -24,9 +24,8 @@ private:
 protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
-	std::shared_ptr<GLTF_Temp_Model> model;
+	std::shared_ptr<GLTF_Temp_Model> GameObjectRenderer;
 	std::vector<std::shared_ptr<Component>> ComponentList;
-	GameObjectRenderType  RenderType;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 
@@ -47,23 +46,35 @@ protected:
 	glm::vec3* GetGameObjectScalePtr() { return &GameObjectScale; }
 
 public:
+	GameObjectRenderType  RenderType;
 
 	GameObject();
 	GameObject(const std::string Name, GameObjectRenderType renderType);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation);
 	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
-	GameObject(const std::string Name, const std::string fileName);
-	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position);
-	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation);
-	GameObject(const std::string Name, const std::string fileName, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
+	template <class T>
+	void LoadRenderObject(const std::string fileName)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
+	}
+
+	template <class T>
+	void LoadRenderObject(std::vector<T>& vertexList)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(vertexList, ModelTypeEnum::kLine, GameObjectTransform, GameObjectID);
+	}
+
 	virtual void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
+	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet);
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();
 
@@ -76,19 +87,21 @@ public:
 	uint64_t GetGameObjectID() { return GameObjectID; }
 	GameObjectRenderType GetRenderType() { return RenderType; }
 
+	std::shared_ptr<GLTF_Temp_Model> GetGameObjectRenderer() { return GameObjectRenderer; }
+
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return GetComponentList(); };
 
-	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return model->GetMeshList(); }
-	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return model->GetMaterialList(); }
+	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return GameObjectRenderer->GetMeshList(); }
+	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
 
-	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return model->GetMeshPropertiesBuffer(); }
-	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return model->MeshList[0]->GetTransformMatrixBuffer(); }
-	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return model->GetTexturePropertiesBuffer(); }
-	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return model->GetMaterialPropertiesBuffer(); }
-	ModelTypeEnum GetModelType() { return model->GetModelType(); }
+	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return GameObjectRenderer->MeshList[0]->GetTransformMatrixBuffer(); }
+	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return GameObjectRenderer->GetTexturePropertiesBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return GameObjectRenderer->GetMaterialPropertiesBuffer(); }
+	ModelTypeEnum GetModelType() { return GameObjectRenderer->GetModelType(); }
 
 	bool operator==(const GameObject& rhs) const
 	{ 

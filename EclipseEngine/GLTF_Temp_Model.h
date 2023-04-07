@@ -46,94 +46,55 @@ private:
 
 	void GenerateID();
 
-	std::vector<Vertex3D> GetVertex3DData(std::vector<GLTFVertex> vertexList)
-	{
-		std::vector<Vertex3D> VertexList;
-		for (GLTFVertex gltfVertex : vertexList)
-		{
-			Vertex3D vertex{};
-			vertex.Position = gltfVertex.Position;
-			vertex.Normal = gltfVertex.Normal;
-			vertex.UV = gltfVertex.UV;
-			vertex.Tangant = gltfVertex.Tangant;
-			vertex.BiTangant = gltfVertex.BiTangant;
-			vertex.Color = gltfVertex.Color;
-			VertexList.emplace_back(vertex);
-		}
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-		return VertexList;
-	}
-
-	std::vector<Vertex2D> GetVertex2DData(std::vector<GLTFVertex> vertexList)
-	{
-		std::vector<Vertex2D> VertexList;
-		for (GLTFVertex gltfVertex : vertexList)
-		{
-			Vertex2D vertex{};
-			vertex.Position = gltfVertex.Position;
-			vertex.UV = gltfVertex.UV;
-			vertex.Color = gltfVertex.Color;
-			VertexList.emplace_back(vertex);
-		}
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-		return VertexList;
-	}
-
-	std::vector<LineVertex3D> GetLineVertex3DData(std::vector<GLTFVertex> vertexList)
-	{
-		std::vector<LineVertex3D> VertexList;
-		for (GLTFVertex gltfVertex : vertexList)
-		{
-			LineVertex3D vertex{};
-			vertex.pos = gltfVertex.Position;
-			vertex.color = gltfVertex.Color;
-			VertexList.emplace_back(vertex);
-		}
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-		return VertexList;
-	}
-
-	std::vector<LineVertex2D> GetLineVertex2DData(std::vector<GLTFVertex> vertexList)
-	{
-		std::vector<LineVertex2D> VertexList;
-		for (GLTFVertex gltfVertex : vertexList)
-		{
-			LineVertex2D vertex{};
-			vertex.pos = gltfVertex.Position;
-			vertex.color = gltfVertex.Color;
-			VertexList.emplace_back(vertex);
-		}
-
-		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(LineVertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-		return VertexList;
-	}
-
 	template <class T>
 	std::vector<T> GetVertexData(std::vector<GLTFVertex> vertexList)
 	{
 		std::vector<T> VertexList;
-		if (typeid(T) == typeid(Vertex3D))
+
+		if constexpr (std::is_same_v<T, Vertex3D>)
 		{
-			GetVertex3DData(vertexList);
+			for (GLTFVertex gltfVertex : vertexList)
+			{
+				Vertex3D vertex{};
+				vertex.Position = gltfVertex.Position;
+				vertex.Normal = gltfVertex.Normal;
+				vertex.UV = gltfVertex.UV;
+				vertex.Tangant = gltfVertex.Tangant;
+				vertex.BiTangant = gltfVertex.BiTangant;
+				vertex.Color = gltfVertex.Color;
+				VertexList.emplace_back(vertex);
+			}
 		}
-		
-		if (typeid(T) == typeid(Vertex2D))
+		if constexpr (std::is_same_v<T, Vertex2D>)
 		{
-			GetVertex2DData(vertexList);
+			for (GLTFVertex gltfVertex : vertexList)
+			{
+				Vertex2D vertex{};
+				vertex.Position = gltfVertex.Position;
+				vertex.UV = gltfVertex.UV;
+				vertex.Color = gltfVertex.Color;
+				VertexList.emplace_back(vertex);
+			}
 		}
-		
-		if (typeid(T) == typeid(LineVertex3D))
+		if constexpr (std::is_same_v<T, LineVertex3D>)
 		{
-			GetLineVertex3DData(vertexList);
+			for (GLTFVertex gltfVertex : vertexList)
+			{
+				LineVertex3D vertex{};
+				vertex.pos = gltfVertex.Position;
+				vertex.color = gltfVertex.Color;
+				VertexList.emplace_back(vertex);
+			}
 		}
-		
-		if (typeid(T) == typeid(LineVertex2D))
+		if constexpr (std::is_same_v<T, LineVertex2D>)
 		{
-			GetLineVertex2DData(vertexList);
+			for (GLTFVertex gltfVertex : vertexList)
+			{
+				LineVertex2D vertex{};
+				vertex.pos = gltfVertex.Position;
+				vertex.color = gltfVertex.Color;
+				VertexList.emplace_back(vertex);
+			}
 		}
 		return VertexList;
 	}
@@ -149,7 +110,7 @@ public:
 	~GLTF_Temp_Model();
 
 	template <class T>
-	void LoadModel(const std::string FilePath, ModelTypeEnum modelType, glm::mat4 GameObjectMatrix, uint32_t gameObjectID)
+	void LoadModel(const std::string FilePath, ModelTypeEnum modelType, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 	{
 		GenerateID();
 
@@ -166,6 +127,7 @@ public:
 		TextureList = gltfModelData.TextureList;
 		MaterialList = gltfModelData.MaterialList;
 
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 		for (auto& node : gltfModelData.NodeList)
@@ -188,7 +150,53 @@ public:
 			MeshList.emplace_back(mesh);
 		}
 
-		Update(glm::mat4(1.0f));
+		Update(GameObjectMatrix);
+		UpdateMeshPropertiesBuffer();
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshTransformBuffer();
+		}
+	}
+
+	template <class T>
+	void LoadModel(std::vector<T>& vertexList, ModelTypeEnum modelType, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+	{
+		GenerateID();
+
+		ParentGameObjectID = gameObjectID;
+		GameObjectTransformMatrix = glm::mat4(1.0f);
+
+		MaterialList.emplace_back(std::make_shared<GLTFMaterial>(GLTFMaterial("Line Material")));
+
+		std::vector<T> VertexList = vertexList;
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+		std::shared_ptr<GLTFNode> node = std::make_shared<GLTFNode>();
+		node->NodeID = 0;
+		node->ParentModelID = ModelID;
+		node->ParentGameObjectID = gameObjectID;
+		node->NodeName = "Line";
+		node->ModelTransformMatrix = ModelTransformMatrix;
+		node->NodeTransformMatrix = glm::mat4(1.0f);
+		node->Position = glm::vec3(0.0f);
+		node->Rotation = glm::vec3(0.0f);
+		node->Scale = glm::vec3(1.0f);
+		node->Material = MaterialList[0];
+
+		GLTFMeshLoader3D GltfMeshLoader;
+		GltfMeshLoader.node = node;
+		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
+		GltfMeshLoader.ParentModelID = ModelID;
+		GltfMeshLoader.NodeID = node->NodeID;
+		GltfMeshLoader.VertexCount = VertexList.size();
+		GltfMeshLoader.IndexCount = 0;
+		GltfMeshLoader.BoneCount = 0;
+		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+		
+		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
+		MeshList.emplace_back(mesh);
+
+		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -199,6 +207,7 @@ public:
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
+	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();
 
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return MeshList; }
