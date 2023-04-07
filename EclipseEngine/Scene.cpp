@@ -19,7 +19,6 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 Scene::Scene()
 {
     SceneManager::sceneType = SceneType::kPBR;
-    GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
    
     MeshRendererManager::Update();
     //TopLevelAccelerationStructureManager::Update();

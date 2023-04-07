@@ -30,6 +30,9 @@ protected:
 
 	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	VkVertexInputBindingDescription VertexInputBindingDescription;
+	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	VkWriteDescriptorSetAccelerationStructureKHR AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR* handle);
 	VkDescriptorImageInfo AddRayTraceStorageImageDescriptor(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkImageLayout ImageLayout, VkImageView& ImageView);

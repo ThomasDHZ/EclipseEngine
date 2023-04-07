@@ -24,6 +24,7 @@
 #include "PrefilterRenderPass.h"
 #include <GLTFSceneManager.h>
 #include "LineRenderer3D.h"
+#include "PerspectiveCamera.h"
 
 class GLTFRenderer
 {

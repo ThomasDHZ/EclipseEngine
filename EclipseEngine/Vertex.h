@@ -139,9 +139,7 @@ struct Vertex2D
 {
     glm::vec2 Position = glm::vec2(0.0f);
     glm::vec2 UV = glm::vec2(0.0f);
-    glm::vec3 Color = glm::vec3(1.0f);
-
-    Vertex2D(){}
+    glm::vec4 Color = glm::vec4(1.0f);
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
@@ -176,7 +174,7 @@ struct Vertex2D
 
         AttributeDescription.binding = 0;
         AttributeDescription.location = 2;
-        AttributeDescription.format = VK_FORMAT_R32G32B32_SFLOAT;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
         AttributeDescription.offset = offsetof(Vertex2D, Color);
         AttributeDescriptions.emplace_back(AttributeDescription);
 

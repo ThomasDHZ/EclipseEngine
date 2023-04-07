@@ -10,11 +10,6 @@
 class MeshPickerRenderPass3D : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkVertexInputBindingDescription VertexInputBindingDescription;
-	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
 	MeshPicker3DPipeline MeshPickerPipeline;
 
 	void RenderPassDesc();

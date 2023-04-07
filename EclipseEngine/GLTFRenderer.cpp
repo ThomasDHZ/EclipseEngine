@@ -16,13 +16,15 @@ void GLTFRenderer::BuildRenderer()
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
+	GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
+
 	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
-	//if(modelList.size() == 0)
+	if(gameObjectList.size() == 0)
 	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
 	gameObjectList.back()->LoadRenderObject<Vertex3D>(b);
 
-	int width = 500;
-	int height = 500;
+	int width = 1;
+	int height = 1;
 	float length = 10.0f;
 	float radius = 0.5f;
 	std::vector<LineVertex3D> VertexList;
@@ -61,8 +63,10 @@ void GLTFRenderer::BuildRenderer()
 	    }
 	}
 
-	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kLineRenderer3D)));
-	gameObjectList.back()->LoadRenderObject<LineVertex3D>(VertexList);
+	gameObjectList.emplace_back(std::make_shared<LineRenderer3D>(LineRenderer3D("Sphere", VertexList)));
+
+	//gameObjectList.emplace_back(std::make_shared<LineRenderer3D>(LineRenderer3D("Line", VertexList)));
+
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 

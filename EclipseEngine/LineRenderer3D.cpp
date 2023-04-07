@@ -6,71 +6,142 @@ LineRenderer3D::LineRenderer3D()
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint) : GameObject(Name, kLineRenderer3D)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, glm::vec4(1.0f)},
+		{EndPoint, glm::vec4(1.0f)}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& position) : GameObject(Name, kLineRenderer3D, position)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, glm::vec4(1.0f)},
+		{EndPoint, glm::vec4(1.0f)}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, kLineRenderer3D, position, rotation)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, glm::vec4(1.0f)},
+		{EndPoint, glm::vec4(1.0f)}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, kLineRenderer3D, position, rotation, scale)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, glm::vec4(1.0f)},
+		{EndPoint, glm::vec4(1.0f)}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color) : GameObject(Name, kLineRenderer3D)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, Color},
+		{EndPoint, Color}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, const glm::vec3& position) : GameObject(Name, kLineRenderer3D, position)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, Color},
+		{EndPoint, Color}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation) : GameObject(Name, kLineRenderer3D, position, rotation)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, Color},
+		{EndPoint, Color}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject(Name, kLineRenderer3D, position, rotation, scale)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(StartPoint, EndPoint, Color));
+	std::vector<LineVertex3D> LineVertexList =
+	{
+		{StartPoint, Color},
+		{EndPoint, Color}
+	};
+	std::vector<uint32_t> LineIndexList = {
+		0, 1
+	};
+
+	LoadRenderObject<LineVertex3D>(LineVertexList, LineIndexList);
 }
 
-LineRenderer3D::LineRenderer3D(const std::string Name, std::vector<LineVertex3D> VertexList)
+LineRenderer3D::LineRenderer3D(const std::string Name, std::vector<LineVertex3D> VertexList) : GameObject(Name, kLineRenderer3D)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(VertexList));
+	LoadRenderObject<LineVertex3D>(VertexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, std::vector<LineVertex3D> VertexList, const glm::vec3 position) : GameObject(Name, kLineRenderer3D, position)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(VertexList));
+	LoadRenderObject<LineVertex3D>(VertexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, std::vector<LineVertex3D> VertexList, const glm::vec3 position, const glm::vec3 rotation) : GameObject(Name, kLineRenderer3D, position, rotation)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(VertexList));
+	LoadRenderObject<LineVertex3D>(VertexList);
 }
 
 LineRenderer3D::LineRenderer3D(const std::string Name, std::vector<LineVertex3D> VertexList, const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale) : GameObject(Name, kLineRenderer3D, position, rotation, scale)
 {
-	LineObject = std::make_shared<LineMesh3D>(LineMesh3D(VertexList));
+	LoadRenderObject<LineVertex3D>(VertexList);
 }
 
 LineRenderer3D::~LineRenderer3D()
 {
 }
 
-void LineRenderer3D::Update(float DeltaTime)
+void LineRenderer3D::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet)
 {
-	GameObject::Update(DeltaTime);
-	LineObject->Update(glm::mat4(1.0f), glm::mat4(1.0f));
+	GameObject::DrawLine(commandBuffer, shaderPipelineLayout, descriptorSet);
 }

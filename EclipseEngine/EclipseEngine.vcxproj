@@ -203,6 +203,8 @@
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="GLTFRenderer2D.cpp" />
+    <ClCompile Include="GLTFRenderPass2D.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
@@ -259,6 +261,7 @@
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="InstanceMesh.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Temp_GLTFMesh.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
@@ -327,6 +330,8 @@
     <ClInclude Include="EnvironmentToCubePipeline.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
+    <ClInclude Include="GLTFRenderer2D.h" />
+    <ClInclude Include="GLTFRenderPass2D.h" />
     <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
@@ -385,6 +390,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InstanceMesh.h" />
     <ClInclude Include="SkyboxPipeline.h" />
+    <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Temp_GLTFMesh.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Tile.h" />

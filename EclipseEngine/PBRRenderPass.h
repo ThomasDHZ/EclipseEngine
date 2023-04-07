@@ -16,11 +16,6 @@
 class PBRRenderPass : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkVertexInputBindingDescription VertexInputBindingDescription;
-	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 

@@ -11,11 +11,6 @@
 class DepthRenderPass : public RenderPass
 {
 private:
-	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
-	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	VkVertexInputBindingDescription VertexInputBindingDescription;
-	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
-
 	std::shared_ptr<RenderedDepthTexture> RenderPassDepthTexture;
 	DepthPipeline depthPipeline;
 	DepthInstancedPipeline depthInstancedPipeline;

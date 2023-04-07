@@ -48,30 +48,94 @@ protected:
 public:
 	GameObjectRenderType  RenderType;
 
+	void GenerateID();
 	GameObject();
-	GameObject(const std::string Name, GameObjectRenderType renderType);
-	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position);
-	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation);
-	GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale);
+
+	GameObject(const std::string& objectName, GameObjectRenderType renderType)
+	{
+		GenerateID();
+		ObjectName = objectName;
+		RenderType = renderType;
+	}
+
+	GameObject(const std::string& objectName, GameObjectRenderType renderType, const glm::vec3& Position)
+	{
+		GenerateID();
+		ObjectName = objectName;
+		RenderType = renderType;
+
+		GameObjectPosition = Position;
+
+		GameObjectTransform = glm::mat4(1.0f);
+		GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
+	}
+
+	GameObject(const std::string& objectName, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation)
+	{
+		GenerateID();
+		ObjectName = objectName;
+		RenderType = renderType;
+
+		GameObjectPosition = Position;
+		GameObjectRotation = Rotation;
+
+		GameObjectTransform = glm::mat4(1.0f);
+		GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
+	}
+
+	GameObject(const std::string& objectName, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
+	{
+		GenerateID();
+		ObjectName = objectName;
+		RenderType = renderType;
+
+		GameObjectPosition = Position;
+		GameObjectRotation = Rotation;
+		GameObjectScale = Scale;
+
+		GameObjectTransform = glm::mat4(1.0f);
+		GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
+	}
+
+	template <class T>
+	void LoadRenderObject(const std::string& fileName)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(fileName, GameObjectTransform, GameObjectID);
+	}
+
+	template <class T>
+	void LoadRenderObject(const std::vector<T>& vertexList)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, GameObjectTransform, GameObjectID);
+	}
+
+	template <class T>
+	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, GameObjectTransform, GameObjectID);
+	}
+
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
 	glm::vec3 GameObjectRotation = glm::vec3(0.0f);
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
-	template <class T>
-	void LoadRenderObject(const std::string fileName)
-	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-		GameObjectRenderer->LoadModel<T>(fileName, ModelTypeEnum::kPolygon, GameObjectTransform, GameObjectID);
-	}
-
-	template <class T>
-	void LoadRenderObject(std::vector<T>& vertexList)
-	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
-		GameObjectRenderer->LoadModel<T>(vertexList, ModelTypeEnum::kLine, GameObjectTransform, GameObjectID);
-	}
 
 	virtual void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet);
@@ -80,8 +144,6 @@ public:
 
 	void AddComponent(std::shared_ptr<Component> component);
 	void RemoveComponent(std::shared_ptr<Component> component);
-
-	void GenerateID();
 
 	std::string GetObjectName() { return ObjectName; }
 	uint64_t GetGameObjectID() { return GameObjectID; }
@@ -101,7 +163,6 @@ public:
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return GameObjectRenderer->MeshList[0]->GetTransformMatrixBuffer(); }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return GameObjectRenderer->GetTexturePropertiesBuffer(); }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return GameObjectRenderer->GetMaterialPropertiesBuffer(); }
-	ModelTypeEnum GetModelType() { return GameObjectRenderer->GetModelType(); }
 
 	bool operator==(const GameObject& rhs) const
 	{ 

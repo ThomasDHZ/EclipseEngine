@@ -7,64 +7,6 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(const std::string Name, GameObjectRenderType renderType)
-{
-	ObjectName = Name;
-	RenderType = renderType;
-	GenerateID();
-}
-
-GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position)
-{
-	GenerateID();
-	ObjectName = Name;
-	RenderType = renderType;
-	
-	GameObjectPosition = Position;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-}
-
-GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation)
-{
-	GenerateID();
-	ObjectName = Name;
-	RenderType = renderType;
-
-	GameObjectPosition = Position;
-	GameObjectRotation = Rotation;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-}
-
-GameObject::GameObject(const std::string Name, GameObjectRenderType renderType, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
-{
-	GenerateID();
-	ObjectName = Name;
-	RenderType = renderType;
-
-	GameObjectPosition = Position;
-	GameObjectRotation = Rotation;
-	GameObjectScale = Scale;
-
-	GameObjectTransform = glm::mat4(1.0f);
-	GameObjectTransform = glm::translate(GameObjectTransform, GameObjectPosition);
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	GameObjectTransform = glm::rotate(GameObjectTransform, glm::radians(GameObjectRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	GameObjectTransform = glm::scale(GameObjectTransform, GameObjectScale);
-}
-
 GameObject::~GameObject()
 {
 }
