@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::BuildRenderPass()
+void RenderPass2D::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -31,7 +31,7 @@ void RenderPass2D::BuildRenderPass()
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
+    BuildRenderPassPipelines(gameObjectList);
     SetUpCommandBuffers();
 }
 
@@ -89,7 +89,7 @@ void RenderPass2D::RenderPassDesc()
     }
 }
 
-void RenderPass2D::BuildRenderPassPipelines()
+void RenderPass2D::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -108,13 +108,15 @@ void RenderPass2D::BuildRenderPassPipelines()
     pipelineInfo.renderPass = renderPass;
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
-
-    renderer2DPipeline.InitializePipeline(pipelineInfo);
-    drawLinePipeline.InitializePipeline(pipelineInfo);
-    wireframePipeline.InitializePipeline(pipelineInfo);
+    for (int x = 0; x < gameObjectList.size(); x++)
+    {
+       Renderer2DPipeline.emplace_back(JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+    }
 }
 
-VkCommandBuffer RenderPass2D::Draw()
+VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -153,32 +155,28 @@ VkCommandBuffer RenderPass2D::Draw()
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+    for (int x = 0; x < gameObjectList.size(); x++)
     {
-
-            for (auto& mesh : MeshRendererManager::GetMeshList())
+        switch (gameObjectList[x]->RenderType)
+        {
+        case GameObjectRenderType::kSpriteRenderer:
+        {
+            if (GLTFSceneManager::WireframeModeFlag)
             {
-                switch (mesh->GetMeshType())
-                {
-                case MeshTypeEnum::kMeshSprite:
-                {
-                    if (GLTFSceneManager::WireframeModeFlag)
-                    {
-                        wireframePipeline.Draw(commandBuffer, mesh);
-                    }
-                    else
-                    {
-                        renderer2DPipeline.Draw(commandBuffer, mesh);
-                    }
-                    break;
-                }
-                case MeshTypeEnum::kMeshLine:
-                {
-                    drawLinePipeline.Draw(commandBuffer, mesh);
-                    break;
-                }
-                }
+                WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
-        
+            else
+            {
+                Renderer2DPipeline[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+            }
+            break;
+        }
+        case GameObjectRenderType::kLineRenderer2D:
+        {
+            LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+            break;
+        }
+        }
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -193,9 +191,18 @@ void RenderPass2D::Destroy()
     renderedTexture->Destroy();
     depthTexture->Destroy();
 
-    renderer2DPipeline.Destroy();
-    drawLinePipeline.Destroy();
-    wireframePipeline.Destroy();
+    for (int x = 0; x < Renderer2DPipeline.size(); x++)
+    {
+        Renderer2DPipeline[x].Destroy();
+    }
+    for (int x = 0; x < WireframePipelineList.size(); x++)
+    {
+        WireframePipelineList[x].Destroy();
+    }
+    for (int x = 0; x < LinePipelineList.size(); x++)
+    {
+        LinePipelineList[x].Destroy();
+    }
 
     RenderPass::Destroy();
 }

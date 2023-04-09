@@ -9,7 +9,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GameObject>> gameObjectList)
+void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -99,7 +99,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>> gameObjectList)
+void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -128,7 +128,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> gameObjectList)
+VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -186,6 +186,18 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> ga
                 }
                 break;
             }
+            case GameObjectRenderType::kSpriteRenderer:
+            {
+                if (GLTFSceneManager::WireframeModeFlag)
+                {
+                    WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                }
+                else
+                {
+                    PBRPipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                }
+                break;
+            }
             case GameObjectRenderType::kLineRenderer3D:
             {
                 LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
@@ -193,7 +205,6 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>> ga
             }
         }
     }
-
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

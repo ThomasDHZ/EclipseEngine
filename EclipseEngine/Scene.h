@@ -26,11 +26,13 @@
 #include "RayTracePBRRenderer.h"
 #include "ParticleSystem.h"
 #include "GLTFRenderer.h"
+#include "GLTFRenderer2D.h"
 
 class Scene
 {
 private:
-	GLTFRenderer pbrRenderer;
+	//GLTFRenderer pbrRenderer;
+	GLTFRenderer2D spriteRenderer;
 public:
 	Scene();
 	~Scene();

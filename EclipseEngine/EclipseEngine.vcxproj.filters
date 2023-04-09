@@ -270,7 +270,7 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Level2D</Filter>
     </ClCompile>
-    <ClCompile Include="LineRenderer3D.cpp">
+    <ClCompile Include="LineGameObject.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="LineRenderer2D.cpp">
@@ -507,7 +507,10 @@
     <ClCompile Include="GLTFRenderPass2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRenderer.cpp">
+    <ClCompile Include="SpriteGameObject2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteGameObject3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -650,7 +653,7 @@
     <ClInclude Include="LineRenderer2D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="LineRenderer3D.h">
+    <ClInclude Include="LineGameObject.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GridRenderer3D.h">
@@ -899,7 +902,10 @@
     <ClInclude Include="GLTFRenderPass2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRenderer.h">
+    <ClInclude Include="SpriteGameObject2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteGameObject3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

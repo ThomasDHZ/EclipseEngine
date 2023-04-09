@@ -1,24 +1,18 @@
 #pragma once
 #include "RenderPass.h"
-#include "GraphicsPipeline.h"
-#include "RenderedTexture.h"
-#include "RenderedColorTexture.h"
-#include "RenderedDepthTexture.h"
-#include "GameObjectManager.h"
-#include "MeshRendererManager.h"
-#include "LinePipeline.h"
-#include "WireFramePipeline.h"
+#include "JsonGraphicsPipeline.h"
 #include "Renderer2DPipeline.h"
+
 
 class RenderPass2D : public RenderPass
 {
 private:
-	Renderer2DPipeline renderer2DPipeline;
-	LinePipeline drawLinePipeline;
-	WireFramePipeline wireframePipeline;
+	std::vector<JsonGraphicsPipeline> Renderer2DPipeline;
+	std::vector<JsonGraphicsPipeline> WireframePipelineList;
+	std::vector<JsonGraphicsPipeline> LinePipelineList;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines();
+	void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 
 public:
 	RenderPass2D();
@@ -27,8 +21,8 @@ public:
 	std::shared_ptr<RenderedColorTexture> renderedTexture;
 	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
-	void BuildRenderPass();
-	VkCommandBuffer Draw();
+	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 	void Destroy();
 };
 

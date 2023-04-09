@@ -21,7 +21,7 @@ class GLTFRenderPass : public RenderPass
 
 
 		void RenderPassDesc();
-		void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>> gameObjectList);
+		void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 
 public:
 	GLTFRenderPass();
@@ -29,8 +29,8 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>> gameObjectList);
-	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>> gameObjectList);
+	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 	void Destroy();
 };
 

@@ -4,33 +4,40 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
+layout (location = 0) in vec3 inPosition;
+layout (location = 1) in vec2 aUV;
+layout (location = 2) in vec3 aColor;
+
+layout(location = 0) out vec3 FragPos;
+layout(location = 1) out vec2 UV;
+layout(location = 3) out vec3 Color;
+
+#include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
-
-layout (location = 0) in vec2 InPosition;
-layout (location = 1) in vec2 InUV;
-layout (location = 2) in vec3 InColor;
-
-layout(location = 0) out vec2 FragPos;
-layout(location = 1) out vec2 UV;
-layout(location = 2) out vec3 Color;
+#include "Lights.glsl"
+#include "SceneData.glsl"
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
 
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    float Timer;
-} sceneData;
 void main() {
+
+// if(gl_VertexIndex == 0)
+//	{
+//		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
+//	}
+    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
+    FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
+    Color = aColor;
+    UV = aUV;
+    Normal = mat3(MeshTransform) * aNormal;
+	Tangent = aTangent;
+	BiTangent = aBitangent;
     gl_Position = sceneData.proj * 
                   sceneData.view *                
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
-                  vec4(InPosition, 0.0f, 1.0);
-    Color = InColor;
-    UV = InUV;
+                  MeshTransform * 
+                  vec4(inPosition, 1.0);
 }

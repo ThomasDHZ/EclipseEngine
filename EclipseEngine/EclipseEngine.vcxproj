@@ -226,7 +226,7 @@
     <ClCompile Include="LineMesh3D.cpp" />
     <ClCompile Include="LinePipeline.cpp" />
     <ClCompile Include="LineRenderer2D.cpp" />
-    <ClCompile Include="LineRenderer3D.cpp" />
+    <ClCompile Include="LineGameObject.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="Mesh3D.cpp" />
     <ClCompile Include="MeshPicker2DPipeline.cpp" />
@@ -261,7 +261,8 @@
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="InstanceMesh.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
-    <ClCompile Include="SpriteRenderer.cpp" />
+    <ClCompile Include="SpriteGameObject2D.cpp" />
+    <ClCompile Include="SpriteGameObject3D.cpp" />
     <ClCompile Include="Temp_GLTFMesh.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
@@ -355,7 +356,7 @@
     <ClInclude Include="LineMesh3D.h" />
     <ClInclude Include="LinePipeline.h" />
     <ClInclude Include="LineRenderer2D.h" />
-    <ClInclude Include="LineRenderer3D.h" />
+    <ClInclude Include="LineGameObject.h" />
     <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="Mesh3D.h" />
     <ClInclude Include="MeshPicker2DPipeline.h" />
@@ -390,7 +391,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="InstanceMesh.h" />
     <ClInclude Include="SkyboxPipeline.h" />
-    <ClInclude Include="SpriteRenderer.h" />
+    <ClInclude Include="SpriteGameObject2D.h" />
+    <ClInclude Include="SpriteGameObject3D.h" />
     <ClInclude Include="Temp_GLTFMesh.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Tile.h" />

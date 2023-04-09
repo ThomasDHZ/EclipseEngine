@@ -130,6 +130,13 @@ public:
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, GameObjectTransform, GameObjectID);
 	}
 
+	template <class T>
+	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<GLTFMaterial> material)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, material, GameObjectTransform, GameObjectID);
+	}
+
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);
@@ -138,6 +145,7 @@ public:
 
 
 	virtual void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
+	virtual void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet);
 	virtual void Update(float DeltaTime);
 	virtual void Destroy();

@@ -237,9 +237,58 @@ public:
 		}
 	}
 
+	template <class T>
+	void LoadModel(const std::string& NodeName, const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<GLTFMaterial> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+	{
+		GenerateID();
+
+		ParentGameObjectID = gameObjectID;
+		GameObjectTransformMatrix = glm::mat4(1.0f);
+
+		MaterialList.emplace_back(material);
+
+		std::vector<T> VertexList = vertexList;
+		std::vector<uint32_t> IndexList = indexList;
+		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+		std::shared_ptr<GLTFNode> node = std::make_shared<GLTFNode>();
+		node->NodeID = 0;
+		node->ParentModelID = ModelID;
+		node->ParentGameObjectID = gameObjectID;
+		node->NodeName = NodeName;
+		node->ModelTransformMatrix = ModelTransformMatrix;
+		node->NodeTransformMatrix = glm::mat4(1.0f);
+		node->Position = glm::vec3(0.0f);
+		node->Rotation = glm::vec3(0.0f);
+		node->Scale = glm::vec3(1.0f);
+		node->Material = MaterialList[0];
+
+		GLTFMeshLoader3D GltfMeshLoader;
+		GltfMeshLoader.node = node;
+		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
+		GltfMeshLoader.ParentModelID = ModelID;
+		GltfMeshLoader.NodeID = node->NodeID;
+		GltfMeshLoader.VertexCount = VertexList.size();
+		GltfMeshLoader.IndexCount = IndexList.size();
+		GltfMeshLoader.BoneCount = 0;
+		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+
+		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
+		MeshList.emplace_back(mesh);
+
+		Update(GameObjectMatrix);
+		UpdateMeshPropertiesBuffer();
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshTransformBuffer();
+		}
+	}
+
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
+	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();
 

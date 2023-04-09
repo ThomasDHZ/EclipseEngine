@@ -609,6 +609,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
         switch (gameObject->RenderType)
         {
         case GameObjectRenderType::kModelRenderer:
+        case GameObjectRenderType::kSpriteRenderer:
             {
                 for (int y = 0; y < gameObject->GetMaterialList().size(); y++)
                 {

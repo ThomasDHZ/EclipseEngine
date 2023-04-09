@@ -172,6 +172,19 @@ void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout Shader
 	}
 }
 
+void Temp_GLTFMesh::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
+{
+	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &MaterialList[0]->descriptorSet, 0, nullptr);
+	if (IndexCount == 0)
+	{
+		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
+	}
+	else
+	{
+		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
+	}
+}
+
 void Temp_GLTFMesh::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet)
 {
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
