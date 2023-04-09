@@ -21,6 +21,12 @@ private:
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
+	VulkanBuffer scratchBuffer;
+	AccelerationStructureBuffer TopLevelAccelerationStructure;
+
+	int AccelerationStructureInstanceCount;
+	VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst;
+
 	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
@@ -31,6 +37,8 @@ private:
 	glm::mat4 ModelTransformMatrix;
 
 	void GenerateID();
+	void RTXModelStartUp();
+	void UpdateTopLevelAccelerationStructure();
 
 	template <class T>
 	std::vector<T> GetVertexData(std::vector<GLTFVertex> vertexList)

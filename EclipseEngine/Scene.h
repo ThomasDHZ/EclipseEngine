@@ -31,8 +31,8 @@
 class Scene
 {
 private:
-	//GLTFRenderer pbrRenderer;
-	GLTFRenderer2D spriteRenderer;
+	GLTFRenderer pbrRenderer;
+	//GLTFRenderer2D spriteRenderer;
 public:
 	Scene();
 	~Scene();

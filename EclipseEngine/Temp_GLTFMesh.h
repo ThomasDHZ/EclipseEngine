@@ -18,6 +18,8 @@ struct GLTFMeshLoader3D
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
+	VulkanBuffer VertexBuffer;
+	VulkanBuffer IndexBuffer;
 	InstancingDataStruct instanceData;
 
 	std::vector<MeshBoneWeights> BoneWeightList;
@@ -35,11 +37,21 @@ private:
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BoneCount = 0;
+	uint32_t TriangleCount = 0;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
 	std::shared_ptr<GLTFMaterial> gltfMaterial;
+
+
+	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
+	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
+
+	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);
+
+
+	void UpdateMeshBottomLevelAccelerationStructure();
 public:
 	Temp_GLTFMesh();
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);
@@ -57,7 +69,12 @@ public:
 	MeshProperties meshProperties;
 
 	VulkanBuffer MeshTransformBuffer;
+	VulkanBuffer MeshTransformInverseBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
+	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
+
+	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
+	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
@@ -67,8 +84,6 @@ public:
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
-	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
-	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);

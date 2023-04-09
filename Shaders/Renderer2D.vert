@@ -10,7 +10,7 @@ layout (location = 2) in vec3 aColor;
 
 layout(location = 0) out vec3 FragPos;
 layout(location = 1) out vec2 UV;
-layout(location = 3) out vec3 Color;
+layout(location = 2) out vec3 Color;
 
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
@@ -20,8 +20,6 @@ layout(location = 3) out vec3 Color;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
 
 void main() {
 
@@ -33,9 +31,6 @@ void main() {
     FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
-    Normal = mat3(MeshTransform) * aNormal;
-	Tangent = aTangent;
-	BiTangent = aBitangent;
     gl_Position = sceneData.proj * 
                   sceneData.view *                
                   MeshTransform * 

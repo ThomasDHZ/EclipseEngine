@@ -111,8 +111,8 @@ void RenderPass2D::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObje
     for (int x = 0; x < gameObjectList.size(); x++)
     {
        Renderer2DPipeline.emplace_back(JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-       LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-       WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       //LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       //WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
 }
 
@@ -163,7 +163,7 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
         {
             if (GLTFSceneManager::WireframeModeFlag)
             {
-                WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+               // WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
             else
             {
@@ -173,7 +173,7 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
         }
         case GameObjectRenderType::kLineRenderer2D:
         {
-            LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+           // LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             break;
         }
         }
@@ -195,14 +195,14 @@ void RenderPass2D::Destroy()
     {
         Renderer2DPipeline[x].Destroy();
     }
-    for (int x = 0; x < WireframePipelineList.size(); x++)
-    {
-        WireframePipelineList[x].Destroy();
-    }
-    for (int x = 0; x < LinePipelineList.size(); x++)
-    {
-        LinePipelineList[x].Destroy();
-    }
+    //for (int x = 0; x < WireframePipelineList.size(); x++)
+    //{
+    //    WireframePipelineList[x].Destroy();
+    //}
+    //for (int x = 0; x < LinePipelineList.size(); x++)
+    //{
+    //    LinePipelineList[x].Destroy();
+    //}
 
     RenderPass::Destroy();
 }

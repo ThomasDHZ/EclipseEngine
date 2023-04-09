@@ -8,8 +8,8 @@ class RenderPass2D : public RenderPass
 {
 private:
 	std::vector<JsonGraphicsPipeline> Renderer2DPipeline;
-	std::vector<JsonGraphicsPipeline> WireframePipelineList;
-	std::vector<JsonGraphicsPipeline> LinePipelineList;
+	//std::vector<JsonGraphicsPipeline> WireframePipelineList;
+	//std::vector<JsonGraphicsPipeline> LinePipelineList;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);

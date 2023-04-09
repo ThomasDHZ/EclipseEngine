@@ -26,22 +26,10 @@ struct VoidVertex {
 
 struct LineVertex2D {
     glm::vec2 pos = glm::vec2(0.0f);
-    glm::vec4 color = glm::vec4(1.0f);
+    glm::vec3 color = glm::vec3(1.0f);
 
     LineVertex2D()
     {
-    }
-
-    LineVertex2D(glm::vec2 Pos)
-    {
-        pos = Pos;
-        color = glm::vec4(1.0f);
-    }
-
-    LineVertex2D(glm::vec2 Pos, glm::vec4 Color)
-    {
-        pos = Pos;
-        color = Color;
     }
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
@@ -71,7 +59,7 @@ struct LineVertex2D {
         VkVertexInputAttributeDescription ColorAttribute;
         ColorAttribute.binding = 0;
         ColorAttribute.location = 1;
-        ColorAttribute.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        ColorAttribute.format = VK_FORMAT_R32G32B32_SFLOAT;
         ColorAttribute.offset = offsetof(LineVertex2D, color);
         AttributeDescriptionList.emplace_back(ColorAttribute);
 

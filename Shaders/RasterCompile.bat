@@ -88,16 +88,6 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthDebugShader.vert -o ../x64/Shaders/DepthDebugShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthDebugShader.frag -o ../x64/Shaders/DepthDebugShaderFrag.spv
 
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.vert -o GBufferVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.frag -o GBufferFrag.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.vert -o ../x64/Shaders/GBufferVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 GBuffer.frag -o ../x64/Shaders/GBufferFrag.spv
-
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BRDFShader.vert -o BRDFShaderVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BRDFShader.frag -o BRDFShaderFrag.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BRDFShader.vert -o ../x64/Shaders/BRDFShaderVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 BRDFShader.frag -o ../x64/Shaders/BRDFShaderFrag.spv
-
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 OutlineRenderer.vert -o OutlineRendererVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 OutlineRenderer.frag -o OutlineRendererFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 OutlineRenderer.vert -o ../x64/Shaders/OutlineRendererVert.spv

@@ -1,5 +1,6 @@
 #include "Temp_GLTFMesh.h"
 #include "SceneManager.h"
+#include "Math.h"
 
 Temp_GLTFMesh::Temp_GLTFMesh()
 {
@@ -21,6 +22,7 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	VertexCount = meshLoader.VertexCount;
 	IndexCount = meshLoader.IndexCount;
 	//BoneCount = meshLoader.node->BoneCount;
+	TriangleCount = IndexCount / 3;
 
 	GameObjectTransform = meshLoader.GameObjectTransform;
 	ModelTransform = meshLoader.ModelTransform;
@@ -36,7 +38,12 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	
 	MeshTransformBuffer = meshLoader.node->TransformBuffer;
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	
+	glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
+	VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
+	MeshTransformInverseBuffer.CreateBuffer(&inverseMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	RTXMeshStartUp(meshLoader.VertexBuffer, meshLoader.IndexBuffer);
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
@@ -79,6 +86,16 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 	MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
+
+
+	if(IndexCount != 0)
+	{
+		glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
+		VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
+		MeshTransformInverseBuffer.CopyBufferToMemory(&inverseMatrix, sizeof(inverseMatrix));
+
+		UpdateMeshBottomLevelAccelerationStructure();
+	}
 }
 
 void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
@@ -138,6 +155,44 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	//}
 }
 
+void Temp_GLTFMesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer)
+{
+	if (GraphicsDevice::IsRayTracingFeatureActive())
+	{
+		MeshTransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+		BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
+
+		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress{};
+		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress{};
+		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress{};
+
+		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
+		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
+		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(MeshTransformInverseBuffer.GetBuffer());
+
+		TriangleCount = IndexCount / 3;
+
+		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
+		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+		AccelerationStructureGeometry.geometry.triangles.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR;
+		AccelerationStructureGeometry.geometry.triangles.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+		AccelerationStructureGeometry.geometry.triangles.vertexData = VertexBufferDeviceAddress;
+		AccelerationStructureGeometry.geometry.triangles.maxVertex = VertexCount;
+		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex3D);
+		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
+		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
+		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
+		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
+		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
+		AccelerationStructureBuildRangeInfo.firstVertex = 0;
+		AccelerationStructureBuildRangeInfo.transformOffset = 0;
+
+		UpdateMeshBottomLevelAccelerationStructure();
+	}
+}
+
 VkDescriptorBufferInfo Temp_GLTFMesh::UpdateMeshPropertiesBuffer()
 {
 	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
@@ -159,6 +214,62 @@ std::vector<VkDescriptorBufferInfo> Temp_GLTFMesh::UpdateMeshTransformBuffer()
 	return TransformMatrixBuffer;
 }
 
+void Temp_GLTFMesh::UpdateMeshBottomLevelAccelerationStructure()
+{
+	if (GraphicsDevice::IsRayTracingFeatureActive())
+	{
+		std::vector<uint32_t> PrimitiveCountList{ TriangleCount };
+		std::vector<VkAccelerationStructureGeometryKHR> AccelerationStructureGeometryList{ AccelerationStructureGeometry };
+		std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationBuildStructureRangeInfos{ AccelerationStructureBuildRangeInfo };
+
+		VkAccelerationStructureBuildGeometryInfoKHR AccelerationStructureBuildGeometryInfo = {};
+		AccelerationStructureBuildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		AccelerationStructureBuildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
+		AccelerationStructureBuildGeometryInfo.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;;
+		AccelerationStructureBuildGeometryInfo.geometryCount = static_cast<uint32_t>(AccelerationStructureGeometryList.size());
+		AccelerationStructureBuildGeometryInfo.pGeometries = AccelerationStructureGeometryList.data();
+
+		PrimitiveCountList.resize(AccelerationBuildStructureRangeInfos.size());
+		for (auto x = 0; x < AccelerationBuildStructureRangeInfos.size(); x++)
+		{
+			PrimitiveCountList[x] = AccelerationBuildStructureRangeInfos[x].primitiveCount;
+		}
+
+		VkAccelerationStructureBuildSizesInfoKHR AccelerationStructureBuildSizesInfo = {};
+		AccelerationStructureBuildSizesInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR;
+		VulkanRenderer::vkGetAccelerationStructureBuildSizesKHR(VulkanRenderer::GetDevice(), VK_ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR, &AccelerationStructureBuildGeometryInfo, PrimitiveCountList.data(), &AccelerationStructureBuildSizesInfo);
+
+		if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
+		{
+			BottomLevelAccelerationBuffer.CreateAccelerationStructure(VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR, AccelerationStructureBuildSizesInfo);
+		}
+
+		VulkanBuffer scratchBuffer = VulkanBuffer(nullptr, AccelerationStructureBuildSizesInfo.buildScratchSize, VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+		scratchBuffer.SetBufferAddress(VulkanRenderer::GetBufferDeviceAddress(scratchBuffer.GetBuffer()));
+
+		VkAccelerationStructureBuildGeometryInfoKHR AccelerationBuildGeometryInfo = {};
+		AccelerationBuildGeometryInfo.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+		AccelerationBuildGeometryInfo.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
+		AccelerationBuildGeometryInfo.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+		AccelerationBuildGeometryInfo.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
+		AccelerationBuildGeometryInfo.geometryCount = static_cast<uint32_t>(AccelerationStructureGeometryList.size());
+		AccelerationBuildGeometryInfo.pGeometries = AccelerationStructureGeometryList.data();
+		AccelerationBuildGeometryInfo.scratchData.deviceAddress = scratchBuffer.GetBufferDeviceAddress();
+		if (BottomLevelAccelerationBuffer.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
+		{
+			AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
+		}
+		else
+		{
+			AccelerationBuildGeometryInfo.srcAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
+			AccelerationBuildGeometryInfo.dstAccelerationStructure = BottomLevelAccelerationBuffer.GetAccelerationStructureHandle();
+		}
+
+		BottomLevelAccelerationBuffer.AccelerationCommandBuffer(AccelerationBuildGeometryInfo, AccelerationBuildStructureRangeInfos);
+
+		scratchBuffer.DestroyBuffer();
+	}
+}
 
 void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
 {
@@ -202,4 +313,5 @@ void Temp_GLTFMesh::Destroy()
 {
 	MeshPropertiesBuffer.DestroyBuffer();
 	MeshTransformBuffer.DestroyBuffer();
+	BottomLevelAccelerationBuffer.Destroy();
 }
