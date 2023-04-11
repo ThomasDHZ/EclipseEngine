@@ -55,7 +55,7 @@ void RayTracePBRRenderer::ImGuiUpdate()
 void RayTracePBRRenderer::Draw(SceneProperties& sceneProperties, std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
     CommandBufferSubmitList.emplace_back(meshPickerRenderPass.Draw());
-    CommandBufferSubmitList.emplace_back(rayTraceRenderPass.Draw());
+    //CommandBufferSubmitList.emplace_back(rayTraceRenderPass.Draw());
     CommandBufferSubmitList.emplace_back(FrameBufferRenderer.Draw());
    // AnimationRenderer.Compute();
 }

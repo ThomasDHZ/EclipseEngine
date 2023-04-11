@@ -21,8 +21,8 @@ void GLTFRenderer::BuildRenderer()
 
 	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
 	//if(gameObjectList.size() == 0)
-	//gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
-	//gameObjectList.back()->LoadRenderObject<Vertex3D>(b);
+	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
+	gameObjectList.back()->LoadRenderObject<Vertex3D>(a);
 
 
 	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
@@ -33,9 +33,9 @@ void GLTFRenderer::BuildRenderer()
 	material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
     material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	
-	const std::string asdf = "sprite";
-	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(asdf, material));
-	gameObjectList.emplace_back(sprite);
+	//const std::string asdf = "sprite";
+	//std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(asdf, material));
+	//gameObjectList.emplace_back(sprite);
 
 	//int width = 500;
 	//int height = 500;
@@ -85,7 +85,7 @@ void GLTFRenderer::BuildRenderer()
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 	GLTF_BRDFRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());

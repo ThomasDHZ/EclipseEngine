@@ -1,5 +1,6 @@
 #include "GLTF_Temp_Model.h"
 #include "SceneManager.h"
+#include "Math.h"
 
 uint64_t GLTF_Temp_Model::ModelIDCounter = 0;
 
@@ -52,59 +53,21 @@ void GLTF_Temp_Model::RTXModelStartUp()
 	InstanceBuffer.DestroyBuffer();
 }
 
-void GLTF_Temp_Model::UpdateTopLevelAccelerationStructure()
+void GLTF_Temp_Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex)
 {
-
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	for (auto& mesh : MeshList)
 	{
-		std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
+		glm::mat4 GLMTransformMatrix2 = GameObjectTransformMatrix * ModelTransformMatrix;
+		VkTransformMatrixKHR transformMatrix = EngineMath::GLMToVkTransformMatrix(GLMTransformMatrix2);
 
-
-		for (int x = 0; x < GameObjectManager::GetModelRendererGameObjects().size(); x++)
-		{
-			const auto modelRenderer = static_cast<ModelRenderer*>(GameObjectManager::GetModelRendererGameObjects()[x].get());
-			modelRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(modelRenderer->GetGameObjectMatrix(), AccelerationStructureInstanceList);
-		}
-
-		VulkanBuffer InstanceBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstanceBuffer.GetBuffer());
-
-		VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
-		AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
-		AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_INSTANCES_KHR;
-		AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
-		AccelerationStructureGeometry.geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
-		AccelerationStructureGeometry.geometry.instances.arrayOfPointers = VK_FALSE;
-		AccelerationStructureGeometry.geometry.instances.data = DeviceOrHostAddressConst;
-
-		VkAccelerationStructureBuildGeometryInfoKHR AccelerationStructureBuildGeometryInfo2 = {};
-		AccelerationStructureBuildGeometryInfo2.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
-		AccelerationStructureBuildGeometryInfo2.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
-		AccelerationStructureBuildGeometryInfo2.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
-		AccelerationStructureBuildGeometryInfo2.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
-		AccelerationStructureBuildGeometryInfo2.geometryCount = 1;
-		AccelerationStructureBuildGeometryInfo2.pGeometries = &AccelerationStructureGeometry;
-		AccelerationStructureBuildGeometryInfo2.scratchData.deviceAddress = scratchBuffer.GetBufferDeviceAddress();
-
-		if (TopLevelAccelerationStructure.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
-		{
-			AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
-		}
-		else
-		{
-			AccelerationStructureBuildGeometryInfo2.srcAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
-			AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
-		}
-
-		VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo = {};
-		AccelerationStructureBuildRangeInfo.primitiveCount = static_cast<uint32_t>(AccelerationStructureInstanceList.size());
-		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
-		AccelerationStructureBuildRangeInfo.firstVertex = 0;
-		AccelerationStructureBuildRangeInfo.transformOffset = 0;
-		std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationStructureBuildRangeInfoList = { AccelerationStructureBuildRangeInfo };
-
-		TopLevelAccelerationStructure.AccelerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
-		InstanceBuffer.DestroyBuffer();
+		VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
+		AccelerationStructureInstance.transform = transformMatrix;
+		AccelerationStructureInstance.instanceCustomIndex = customIndex; // I can see problems here later on.
+		AccelerationStructureInstance.mask = 0xFF;
+		AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
+		AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+		AccelerationStructureInstance.accelerationStructureReference = mesh->GetBLASBufferDeviceAddress();
+		AccelerationStructureInstanceList.emplace_back(AccelerationStructureInstance);
 	}
 }
 
@@ -121,6 +84,24 @@ void GLTF_Temp_Model::Update(const glm::mat4& GameObjectTransformMatrix)
 	{
 		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
 	}
+}
+
+VkDescriptorBufferInfo GLTF_Temp_Model::UpdateVertexBuffer()
+{
+	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
+	//MeshPropertiesmBufferInfo.buffer = VertexPropertiesBuffer[);
+	MeshPropertiesmBufferInfo.offset = 0;
+	MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
+	return MeshPropertiesmBufferInfo;
+}
+
+VkDescriptorBufferInfo GLTF_Temp_Model::UpdateIndexBuffer()
+{
+	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
+//	MeshPropertiesmBufferInfo.buffer = IndexPropertiesBuffer.GetBuffer();
+	MeshPropertiesmBufferInfo.offset = 0;
+	MeshPropertiesmBufferInfo.range = VK_WHOLE_SIZE;
+	return MeshPropertiesmBufferInfo;
 }
 
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()

@@ -29,6 +29,8 @@ private:
 
 	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 
+	std::vector<VkDescriptorBufferInfo> VertexPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> IndexPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
@@ -38,7 +40,6 @@ private:
 
 	void GenerateID();
 	void RTXModelStartUp();
-	void UpdateTopLevelAccelerationStructure();
 
 	template <class T>
 	std::vector<T> GetVertexData(std::vector<GLTFVertex> vertexList)
@@ -127,18 +128,16 @@ public:
 		{
 			GLTFMeshLoader3D GltfMeshLoader;
 			GltfMeshLoader.node = node;
-
 			GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 			GltfMeshLoader.ParentModelID = ModelID;
 			GltfMeshLoader.NodeID = node->NodeID;
-
+			GltfMeshLoader.VertexBuffer = VertexBuffer;
+			GltfMeshLoader.IndexBuffer = IndexBuffer;
 			GltfMeshLoader.VertexCount = VertexList.size();
 			GltfMeshLoader.IndexCount = IndexList.size();
 			GltfMeshLoader.BoneCount = 0;
-
 			GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
 			GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
-
 			std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 			MeshList.emplace_back(mesh);
 		}
@@ -181,6 +180,7 @@ public:
 		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 		GltfMeshLoader.ParentModelID = ModelID;
 		GltfMeshLoader.NodeID = node->NodeID;
+		GltfMeshLoader.VertexBuffer = VertexBuffer;
 		GltfMeshLoader.VertexCount = VertexList.size();
 		GltfMeshLoader.IndexCount = 0;
 		GltfMeshLoader.BoneCount = 0;
@@ -229,6 +229,8 @@ public:
 		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 		GltfMeshLoader.ParentModelID = ModelID;
 		GltfMeshLoader.NodeID = node->NodeID;
+		GltfMeshLoader.VertexBuffer = VertexBuffer;
+		GltfMeshLoader.IndexBuffer = IndexBuffer;
 		GltfMeshLoader.VertexCount = VertexList.size();
 		GltfMeshLoader.IndexCount = IndexList.size();
 		GltfMeshLoader.BoneCount = 0;
@@ -277,6 +279,8 @@ public:
 		GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
 		GltfMeshLoader.ParentModelID = ModelID;
 		GltfMeshLoader.NodeID = node->NodeID;
+		GltfMeshLoader.VertexBuffer = VertexBuffer;
+		GltfMeshLoader.IndexBuffer = IndexBuffer;
 		GltfMeshLoader.VertexCount = VertexList.size();
 		GltfMeshLoader.IndexCount = IndexList.size();
 		GltfMeshLoader.BoneCount = 0;
@@ -294,11 +298,15 @@ public:
 	}
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);
+	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();
+
+	VkDescriptorBufferInfo UpdateVertexBuffer();
+	VkDescriptorBufferInfo UpdateIndexBuffer();
 
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return MeshList; }
 	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return MaterialList; }

@@ -513,6 +513,9 @@
     <ClCompile Include="SpriteGameObject3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLTFRTXRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -906,6 +909,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpriteGameObject3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFRTXRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

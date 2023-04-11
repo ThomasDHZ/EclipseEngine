@@ -205,6 +205,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
     <ClCompile Include="GLTFRenderPass2D.cpp" />
+    <ClCompile Include="GLTFRTXRenderer.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
@@ -333,6 +334,7 @@
     <ClInclude Include="GLTFIrradiancePipeline.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
     <ClInclude Include="GLTFRenderPass2D.h" />
+    <ClInclude Include="GLTFRTXRenderer.h" />
     <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />

@@ -9,7 +9,26 @@ layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 layout(location = 1) rayPayloadEXT bool shadowed;
 hitAttributeEXT vec2 attribs;
 
-#include "RTXPBRBindingLayout.glsl"
+layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;
+layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
+layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
+layout(binding = 3) buffer Indices { uint i[]; } indices[];
+layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 5) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 6) uniform sampler2D AlbedoMap;
+layout(binding = 7) uniform sampler2D NormalMap;
+layout(binding = 8) uniform sampler2D MetallicRoughnessMap;
+layout(binding = 9) uniform sampler2D AmbientOcclusionMap;
+layout(binding = 10) uniform sampler2D AlphaMap;
+layout(binding = 11) uniform sampler2D DepthMap;
+layout(binding = 12) uniform sampler2D BRDFMap;
+layout(binding = 13) uniform samplerCube IrradianceMap;
+layout(binding = 14) uniform samplerCube PrefilterMap;
+layout(binding = 15) buffer SunLightBuffer { SunLight sunLight; } SULight[];
+layout(binding = 16) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 17) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 18) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+
 #include "PBRMaterial.glsl"
 #include "PBRFunctions.glsl"
 #include "PBRRTXLight.glsl"
