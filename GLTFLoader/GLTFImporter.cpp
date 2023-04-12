@@ -91,9 +91,6 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 		TinyGltfTextureSamplerLoader SamplerLoader{};
 		tinygltf::Material glTFMaterial = model.materials[x];
 
-		const int imageIndex = tinygltfTexture[x].source;
-		const int samplerIndex = tinygltfTexture[x].sampler;
-
 		//if (glTFMaterial.values.find("baseColorFactor") != glTFMaterial.values.end())
 		//{
 		//	material->Albedo = glm::make_vec4(glTFMaterial.values["baseColorFactor"].ColorFactor().data());
@@ -111,66 +108,73 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 
 		if (glTFMaterial.values.find("baseColorTexture") != glTFMaterial.values.end())
 		{
-			const uint32_t TextureIndex = glTFMaterial.pbrMetallicRoughness.baseColorTexture.index;
-			if (TextureIndex <= 68)
+			const uint32_t TextureIndex = tinygltfTexture[glTFMaterial.values["baseColorTexture"].TextureIndex()].source;
+			const uint32_t SamplerIndex = tinygltfTexture[glTFMaterial.values["baseColorTexture"].TextureIndex()].sampler;
+
+			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+			if (tinygltfSampler.size() > 0)
 			{
-				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
-				data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-				material->AlbedoMap = data.TextureList.back();
+				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
+
+			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
+			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->AlbedoMap = data.TextureList.back();
 		}
 
 		if (glTFMaterial.additionalValues.find("occlusionTexture") != glTFMaterial.additionalValues.end())
 		{
-			const uint32_t TextureIndex = glTFMaterial.occlusionTexture.index;
-			if (TextureIndex <= 68)
+			const uint32_t TextureIndex = tinygltfTexture[glTFMaterial.additionalValues["occlusionTexture"].TextureIndex()].source;
+			const uint32_t SamplerIndex = tinygltfTexture[glTFMaterial.additionalValues["occlusionTexture"].TextureIndex()].sampler;
+
+			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+			if (tinygltfSampler.size() > 0)
 			{
-				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-				if (tinygltfSampler.size() > 0)
-				{
-					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
-				}
-				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
-				data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-				material->AmbientOcclusionMap = data.TextureList.back();
+				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
+
+			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
+			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->AmbientOcclusionMap = data.TextureList.back();
+
 		}
 
 		if (glTFMaterial.additionalValues.find("normalTexture") != glTFMaterial.additionalValues.end())
 		{
-			const uint32_t TextureIndex = glTFMaterial.normalTexture.index;
-			if (TextureIndex <= 68)
+			const uint32_t TextureIndex = tinygltfTexture[glTFMaterial.additionalValues["normalTexture"].TextureIndex()].source;
+			const uint32_t SamplerIndex = tinygltfTexture[glTFMaterial.additionalValues["normalTexture"].TextureIndex()].sampler;
+
+			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+			if (tinygltfSampler.size() > 0)
 			{
-				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-				if (tinygltfSampler.size() > 0)
-				{
-					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
-				}
-				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
-				data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-				material->NormalMap = data.TextureList.back();
+				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
+
+			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
+			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->NormalMap = data.TextureList.back();
+
 		}
 
 		if (glTFMaterial.values.find("metallicRoughnessTexture") != glTFMaterial.values.end())
 		{
-			const uint32_t TextureIndex = glTFMaterial.pbrMetallicRoughness.metallicRoughnessTexture.index;
-			if (TextureIndex <= 68)
+			const uint32_t TextureIndex = tinygltfTexture[glTFMaterial.values["metallicRoughnessTexture"].TextureIndex()].source;
+			const uint32_t SamplerIndex = tinygltfTexture[glTFMaterial.values["metallicRoughnessTexture"].TextureIndex()].sampler;
+
+			LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
+			if (tinygltfSampler.size() > 0)
 			{
-				LoadTextureDetails(tinygltfImage[TextureIndex], TextureLoader);
-				if (tinygltfSampler.size() > 0)
-				{
-					LoadSamplerDetails(tinygltfSampler[samplerIndex], SamplerLoader);
-				}
-				data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
-				data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-				data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-				material->MetallicRoughnessMap = data.TextureList.back();
+				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
+
+			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
+			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
+			material->MetallicRoughnessMap = data.TextureList.back();
+
 		}
 
 		data.MaterialList.emplace_back(material);

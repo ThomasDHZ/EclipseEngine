@@ -246,7 +246,7 @@ PBRMaterial BuildPBRMaterial(vec2 UV)
     material.Albedo = texture(AlbedoMap, UV).rgb;
 	material.Metallic = texture(MetallicRoughnessMap, UV).b;
 	material.Roughness = texture(MetallicRoughnessMap, UV).g;
-    material.AmbientOcclusion = texture(MetallicRoughnessMap, UV).r;
+    material.AmbientOcclusion = texture(AmbientOcclusionMap, UV).r;
 	//material.Emission = .4f;
     return material;
 }
