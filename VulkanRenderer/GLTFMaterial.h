@@ -11,6 +11,7 @@ private:
 	uint64_t MaterialID = 0;
 	uint64_t MaterialBufferIndex = 0;
 
+
 	void GenerateID();
 
 public:
@@ -36,6 +37,8 @@ public:
 	GLTFMaterial();
 	GLTFMaterial(const std::string& materialName);
 	~GLTFMaterial();
+
+	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 
 	VkDescriptorImageInfo GetAlbedoMapDescriptor();
 	VkDescriptorImageInfo GetMetallicRoughnessMapDescriptor();

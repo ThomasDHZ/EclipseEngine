@@ -1,9 +1,10 @@
 #include "GLTFSceneManager.h"
 SkyBoxView							               GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
-bool											   GLTFSceneManager::WireframeModeFlag = false;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
+std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
+std::vector<std::shared_ptr<Texture2D>>			   GLTFSceneManager::Texture2DList;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
@@ -16,7 +17,80 @@ std::vector<std::shared_ptr<GLTFSpotLight>>        GLTFSceneManager::SpotLightLi
 //std::shared_ptr<Camera>					       GLTFSceneManager::activeCamera;
 float                                              GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float									           GLTFSceneManager::PreRenderedMapSize = 256.0f;
+bool											   GLTFSceneManager::WireframeModeFlag = false;
 
+void GLTFSceneManager::UpdateBufferIndex()
+{
+	for (int x = 0; x < Texture2DList.size(); x++)
+	{
+		Texture2DList[x]->UpdateTextureBufferIndex(x);
+	}
+
+	for (int x = 0; x < MaterialList.size(); x++)
+	{
+		MaterialList[x]->UpdateMaterialBufferIndex(x);
+	}
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(const TinyGltfTextureLoader& textureLoader)
+{
+	uint64_t textureID = 0;
+	for (auto texture : Texture2DList)
+	{
+		if (texture->GetFilePath() == textureLoader.uri)
+		{
+			return texture;
+		}
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(std::string name)
+{
+	uint64_t textureID = 0;
+	for (auto texture : Texture2DList)
+	{
+		if (texture->GetFilePath() == name)
+		{
+			return texture;
+		}
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture2D> texture)
+{
+	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
+	if (isTextureLoaded != nullptr)
+	{
+		return isTextureLoaded;
+	}
+
+	Texture2DList.emplace_back(texture);
+
+	UpdateBufferIndex();
+	VulkanRenderer::UpdateRendererFlag = true;
+	return texture;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(const TinyGltfTextureLoader& textureLoader, const TinyGltfTextureSamplerLoader& samplerLoader, VkFormat format, TextureTypeEnum textureType)
+{
+	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(textureLoader);
+	if (isTextureLoaded != nullptr)
+	{
+		return isTextureLoaded;
+	}
+
+	std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(textureLoader, samplerLoader, format, textureType));
+	Texture2DList.emplace_back(texture);
+	Texture2DList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	UpdateBufferIndex();
+	VulkanRenderer::UpdateRendererFlag = true;
+	return texture;
+}
 
 void GLTFSceneManager::AddSunLight(std::shared_ptr<GLTFSunLight> sunLight)
 {

@@ -1,6 +1,7 @@
 #include "GLTFImporter.h"
 #include <glm/glm/gtc/type_ptr.inl>
 #include <glm/gtc/quaternion.hpp>
+#include "VRAMManager.h"
 
 void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
@@ -117,10 +118,9 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap)));
-			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->AlbedoMap = data.TextureList.back();
+			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap);
+			material->AlbedoMap = texture;
+		
 		}
 
 		if (glTFMaterial.additionalValues.find("occlusionTexture") != glTFMaterial.additionalValues.end())
@@ -134,10 +134,8 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap)));
-			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->AmbientOcclusionMap = data.TextureList.back();
+			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap);
+			material->AmbientOcclusionMap = texture;
 
 		}
 
@@ -152,10 +150,8 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap)));
-			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->NormalMap = data.TextureList.back();
+			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap);
+			material->NormalMap = texture;
 
 		}
 
@@ -170,13 +166,12 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			data.TextureList.emplace_back(std::make_shared<Texture2D>(Texture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap)));
-			data.TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			data.TextureList.back()->SetTextureBufferIndex(TextureIndex);
-			material->MetallicRoughnessMap = data.TextureList.back();
+			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap);
+			material->MetallicRoughnessMap = texture;
 
 		}
 
+		VRAMManager::AddMaterial(material);
 		data.MaterialList.emplace_back(material);
 	}
 }

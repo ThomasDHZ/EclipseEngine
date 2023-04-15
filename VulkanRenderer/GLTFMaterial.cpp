@@ -15,6 +15,11 @@ GLTFMaterial::~GLTFMaterial()
 {
 }
 
+void GLTFMaterial::UpdateMaterialBufferIndex(uint64_t bufferIndex)
+{
+	MaterialBufferIndex = bufferIndex;
+}
+
 VkDescriptorImageInfo GLTFMaterial::GetAlbedoMapDescriptor()
 {
 	if (AlbedoMap != nullptr)

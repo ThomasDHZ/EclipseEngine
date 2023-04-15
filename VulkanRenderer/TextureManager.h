@@ -26,11 +26,11 @@ private:
 		return nullptr;
 	}
 
-	static void UpdateBufferIndex()
+	static void UpdateTextureBufferIndex()
 	{
 		for (int x = 0; x < Texture2DList.size(); x++)
 		{
-			Texture2DList[x]->SetTextureBufferIndex(x);
+			Texture2DList[x]->UpdateTextureBufferIndex(x);
 		}
 	}
 
@@ -76,7 +76,7 @@ public:
 
 		Texture2DList.emplace_back(texture);
 
-		UpdateBufferIndex();
+		UpdateTextureBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return texture;
 	}
@@ -92,7 +92,7 @@ public:
 		const std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(TextureLocation, textureType, format));
 		Texture2DList.emplace_back(texture);
 
-		UpdateBufferIndex();
+		UpdateTextureBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return texture;
 	}
@@ -102,7 +102,7 @@ public:
 		const std::shared_ptr<TextureAtlus> texture = std::make_shared<TextureAtlus>(TextureAtlus(TextureLocation, TextureCellSize));
 		Texture2DList.emplace_back(texture);
 
-		UpdateBufferIndex();
+		UpdateTextureBufferIndex();
 		VulkanRenderer::UpdateRendererFlag = true;
 		return texture;
 	}

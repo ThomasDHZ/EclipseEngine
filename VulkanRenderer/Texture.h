@@ -128,7 +128,7 @@ public:
 
     void Destroy();
 
-    void SetTextureBufferIndex(uint64_t bufferIndex);
+    void UpdateTextureBufferIndex(uint64_t bufferIndex);
 
     static void CopyTexture(VkCommandBuffer& commandBuffer, Texture* srcTexture, Texture* dstTexture);
     static void CopyTexture(VkCommandBuffer& commandBuffer, Texture* srcTexture, Texture* dstTexture, uint32_t MipLevel);

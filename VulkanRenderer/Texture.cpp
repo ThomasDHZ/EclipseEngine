@@ -817,7 +817,7 @@ void Texture::Destroy()
 	Sampler = VK_NULL_HANDLE;
 }
 
-void Texture::SetTextureBufferIndex(uint64_t bufferIndex)
+void Texture::UpdateTextureBufferIndex(uint64_t bufferIndex)
 {
 	TextureBufferIndex = bufferIndex;
 }

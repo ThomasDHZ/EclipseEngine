@@ -76,9 +76,7 @@ public:
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 
-	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
-	std::vector<VkDescriptorSet> descripterSetList;
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
