@@ -1,6 +1,6 @@
 #include "Temp_GLTFMesh.h"
 #include "SceneManager.h"
-#include "Math.h"
+#include "EngineMath.h"
 
 Temp_GLTFMesh::Temp_GLTFMesh()
 {

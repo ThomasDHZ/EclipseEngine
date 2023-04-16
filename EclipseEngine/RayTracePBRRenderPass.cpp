@@ -1,5 +1,5 @@
 #include "RayTracePBRRenderPass.h"
-#include "Math.h"
+#include "EngineMath.h"
 #include "MeshRendererManager.h"
 
 RayTracePBRRenderPass::RayTracePBRRenderPass() : RenderPass()

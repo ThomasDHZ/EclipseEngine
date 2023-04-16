@@ -539,7 +539,7 @@
     <ClInclude Include="MaterialManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="EngineMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayTracingPipeline.h">

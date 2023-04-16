@@ -1,6 +1,6 @@
 #include "GLTF_Temp_Model.h"
 #include "SceneManager.h"
-#include "Math.h"
+#include "EngineMath.h"
 
 uint64_t GLTF_Temp_Model::ModelIDCounter = 0;
 

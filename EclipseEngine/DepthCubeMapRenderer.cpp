@@ -1,6 +1,6 @@
 #include "DepthCubeMapRenderer.h"
 #include "LightManager.h"
-#include "Math.h"
+#include "EngineMath.h"
 
 DepthCubeMapRenderer::DepthCubeMapRenderer() : RenderPass()
 {
