@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <array>
+#include <cmath>
 
 #include "Window.h"
 #include "VulkanDebugger.h"
