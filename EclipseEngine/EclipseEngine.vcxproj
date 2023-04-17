@@ -409,7 +409,6 @@
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="MaterialManager.h" />
-    <ClInclude Include="EngineMath.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RayTraceRenderer.h" />

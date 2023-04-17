@@ -5,11 +5,13 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EclipseEngine", "EclipseEngine\EclipseEngine.vcxproj", "{674F6E98-51B1-4C73-B0C2-F2C402937C83}"
 	ProjectSection(ProjectDependencies) = postProject
-		{797AC059-EFD1-42CB-9422-885B5552C924} = {797AC059-EFD1-42CB-9422-885B5552C924}
 		{3CACE6F3-402C-46CB-B6A5-F53B3A190B25} = {3CACE6F3-402C-46CB-B6A5-F53B3A190B25}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VulkanRenderer", "VulkanRenderer\VulkanRenderer.vcxproj", "{3CACE6F3-402C-46CB-B6A5-F53B3A190B25}"
+	ProjectSection(ProjectDependencies) = postProject
+		{797AC059-EFD1-42CB-9422-885B5552C924} = {797AC059-EFD1-42CB-9422-885B5552C924}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLTFLoader", "GLTFLoader\GLTFLoader.vcxproj", "{797AC059-EFD1-42CB-9422-885B5552C924}"
 EndProject
