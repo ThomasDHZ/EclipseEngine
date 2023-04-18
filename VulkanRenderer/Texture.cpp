@@ -23,32 +23,31 @@ Texture::Texture()
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 }
 
-Texture::Texture(const TinyGltfTextureLoader& textureLoader, VkFormat format, TextureTypeEnum textureType)
+Texture::Texture(const GLTFTextureLoader& textureLoader)
 {
 	GenerateID();
 
-	if (textureLoader.name.empty())
+	if (textureLoader.TextureLoader.name.empty())
 	{
-		TextureName = textureLoader.name;
+		TextureName = textureLoader.TextureLoader.name;
 	}
 	else
 	{
-		TextureName = textureLoader.uri;
+		TextureName = textureLoader.TextureLoader.uri;
 	}
-	FilePath = textureLoader.uri;
+	FilePath = textureLoader.TextureLoader.uri;
 
-	TextureType = textureType;
-	Width = textureLoader.width;
-	Height = textureLoader.height;
+	Width = textureLoader.TextureLoader.width;
+	Height = textureLoader.TextureLoader.height;
 	Depth = 1;
 
-	TextureType = textureType;
-	StartTextureByteFormat = format;
-	TextureByteFormat = format;
+	TextureType = textureLoader.TextureType;
+	StartTextureByteFormat = textureLoader.Format;
+	TextureByteFormat = textureLoader.Format;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
-	LoadTexture(textureLoader, format);
+	LoadTexture(textureLoader);
 }
 
 Texture::Texture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType)
@@ -104,20 +103,20 @@ Texture::~Texture()
 {
 }
 
-void Texture::LoadTexture(const TinyGltfTextureLoader& textureLoader, VkFormat format)
+void Texture::LoadTexture(const GLTFTextureLoader& textureLoader)
 {
-	void* image = (void*)&textureLoader.image[0];
-	VulkanBuffer StagingBuffer(image, textureLoader.image.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	void* image = (void*)&textureLoader.TextureLoader.image[0];
+	VulkanBuffer StagingBuffer(image, textureLoader.TextureLoader.image.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	VkImageCreateInfo ImageCreateInfo = {};
 	ImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 	ImageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
-	ImageCreateInfo.extent.width = textureLoader.width;
-	ImageCreateInfo.extent.height = textureLoader.height;
+	ImageCreateInfo.extent.width = textureLoader.TextureLoader.width;
+	ImageCreateInfo.extent.height = textureLoader.TextureLoader.height;
 	ImageCreateInfo.extent.depth = 1;
 	ImageCreateInfo.mipLevels = 1;
 	ImageCreateInfo.arrayLayers = 1;
-	ImageCreateInfo.format = format;
+	ImageCreateInfo.format = textureLoader.Format;
 	ImageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 	ImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	ImageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;

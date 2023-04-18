@@ -6,6 +6,7 @@
 #include <VulkanRenderer.h>
 #include <JsonConverter.h>
 #include "GameObject.h"
+#include <GLTFSceneManager.h>
 
 enum DescriptorBindingPropertiesEnum
 {

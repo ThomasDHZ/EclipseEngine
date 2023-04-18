@@ -1,48 +1,47 @@
 #include "GLTFImporter.h"
 #include <glm/glm/gtc/type_ptr.inl>
 #include <glm/gtc/quaternion.hpp>
-#include "VRAMManager.h"
 
 void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
-	if (node.mesh == -1)
-	{
-		auto color = glm::vec3(1.0f);
-		auto intensity = 0.0f;
+	//if (node.mesh == -1)
+	//{
+	//	auto color = glm::vec3(1.0f);
+	//	auto intensity = 0.0f;
 
-		for (auto& light : model.lights)
-		{
-			std::string baseName = node.name;
-			if (node.name.find("_Orientation") != std::string::npos)
-			{
-				int stringPos = node.name.find("_Orientation");
-				baseName = baseName.substr(0, stringPos);
-			}
-			if (light.name == baseName)
-			{
-				if (light.type == "point")
-				{
+	//	for (auto& light : model.lights)
+	//	{
+	//		std::string baseName = node.name;
+	//		if (node.name.find("_Orientation") != std::string::npos)
+	//		{
+	//			int stringPos = node.name.find("_Orientation");
+	//			baseName = baseName.substr(0, stringPos);
+	//		}
+	//		if (light.name == baseName)
+	//		{
+	//			if (light.type == "point")
+	//			{
 
-					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					GLTFSceneManager::AddPointlLight(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
-				}
-				if (light.type == "directional")
-				{
-					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					GLTFSceneManager::AddSunLight(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-					GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-				}
-				if (light.type == "spot")
-				{
-					glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-					GLTFSceneManager::AddSpotLight(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
-				}
-			}
-		}
-	}
+	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+	//				GLTFSceneManager::AddPointlLight(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
+	//			}
+	//			if (light.type == "directional")
+	//			{
+	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+	//				GLTFSceneManager::AddSunLight(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+	//				GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
+	//			}
+	//			if (light.type == "spot")
+	//			{
+	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
+	//				GLTFSceneManager::AddSpotLight(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
+	//			}
+	//		}
+	//	}
+	//}
 }
 
-void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyGltfTextureLoader& TextureLoader)
+void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, GLTFTextureDetails& TextureLoader)
 {
 	TextureLoader.image = tinygltfImage.image;
 	TextureLoader.uri = tinygltfImage.uri;
@@ -54,7 +53,7 @@ void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, TinyG
 	TextureLoader.width = tinygltfImage.width;
 }
 
-void GLTFImporter::LoadSamplerDetails(const tinygltf::Sampler tinygltfSampler, TinyGltfTextureSamplerLoader SamplerLoader)
+void GLTFImporter::LoadSamplerDetails(const tinygltf::Sampler tinygltfSampler, GLTFSamplerDetails SamplerLoader)
 {
 	SamplerLoader.magFilter = tinygltfSampler.magFilter;
 	SamplerLoader.minFilter = tinygltfSampler.magFilter;
@@ -86,10 +85,11 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 
 	for (uint32_t x = 0; x < model.materials.size(); x++)
 	{
-		std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(model.materials[x].name);
+		GLTFMaterialLoader material{};
+		material.MaterialName = model.materials[x].name;
 
-		TinyGltfTextureLoader TextureLoader{};
-		TinyGltfTextureSamplerLoader SamplerLoader{};
+		GLTFTextureDetails TextureLoader{};
+		GLTFSamplerDetails SamplerLoader{};
 		tinygltf::Material glTFMaterial = model.materials[x];
 
 		//if (glTFMaterial.values.find("baseColorFactor") != glTFMaterial.values.end())
@@ -118,9 +118,13 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_SRGB, TextureTypeEnum::kAlbedoTextureMap);
-			material->AlbedoMap = texture;
-		
+			GLTFTextureLoader loader{};
+			loader.TextureLoader = TextureLoader;
+			loader.SamplerLoader = SamplerLoader;
+			loader.Format = VK_FORMAT_R8G8B8A8_SRGB;
+			loader.TextureType = TextureTypeEnum::kAlbedoTextureMap;
+
+			material.AlbedoMap = loader;
 		}
 
 		if (glTFMaterial.additionalValues.find("occlusionTexture") != glTFMaterial.additionalValues.end())
@@ -134,9 +138,13 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kAmbientOcclusionTextureMap);
-			material->AmbientOcclusionMap = texture;
+			GLTFTextureLoader loader{};
+			loader.TextureLoader = TextureLoader;
+			loader.SamplerLoader = SamplerLoader;
+			loader.Format = VK_FORMAT_R8G8B8A8_UNORM;
+			loader.TextureType = TextureTypeEnum::kAmbientOcclusionTextureMap;
 
+			material.AmbientOcclusionMap = loader;
 		}
 
 		if (glTFMaterial.additionalValues.find("normalTexture") != glTFMaterial.additionalValues.end())
@@ -150,9 +158,13 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kNormalTextureMap);
-			material->NormalMap = texture;
+			GLTFTextureLoader loader{};
+			loader.TextureLoader = TextureLoader;
+			loader.SamplerLoader = SamplerLoader;
+			loader.Format = VK_FORMAT_R8G8B8A8_UNORM;
+			loader.TextureType = TextureTypeEnum::kNormalTextureMap;
 
+			material.NormalMap = loader;
 		}
 
 		if (glTFMaterial.values.find("metallicRoughnessTexture") != glTFMaterial.values.end())
@@ -166,12 +178,15 @@ void GLTFImporter::LoadMaterial(tinygltf::Model& model)
 				LoadSamplerDetails(tinygltfSampler[SamplerIndex], SamplerLoader);
 			}
 
-			std::shared_ptr<Texture2D> texture = VRAMManager::LoadTexture2D(TextureLoader, SamplerLoader, VK_FORMAT_R8G8B8A8_UNORM, TextureTypeEnum::kMetallicTextureMap);
-			material->MetallicRoughnessMap = texture;
+			GLTFTextureLoader loader{};
+			loader.TextureLoader = TextureLoader;
+			loader.SamplerLoader = SamplerLoader;
+			loader.Format = VK_FORMAT_R8G8B8A8_UNORM;
+			loader.TextureType = TextureTypeEnum::kNormalTextureMap;
 
+			material.MetallicRoughnessMap = loader;
 		}
 
-		VRAMManager::AddMaterial(material);
 		data.MaterialList.emplace_back(material);
 	}
 }

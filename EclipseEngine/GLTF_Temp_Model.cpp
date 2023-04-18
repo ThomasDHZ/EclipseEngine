@@ -53,6 +53,86 @@ void GLTF_Temp_Model::RTXModelStartUp()
 	InstanceBuffer.DestroyBuffer();
 }
 
+void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
+{
+	for (auto& loader : materialLoader)
+	{
+		std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial(loader.MaterialName));
+		material->Albedo = loader.Albedo;
+		material->Metallic = loader.Metallic;
+		material->Roughness = loader.Roughness;
+		material->AmbientOcclusion = loader.AmbientOcclusion;
+		material->Emission = loader.Emission;
+		material->Alpha = loader.Alpha;
+
+		if (loader.AlbedoMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AlbedoMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->AlbedoMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.MetallicRoughnessMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.MetallicRoughnessMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->MetallicRoughnessMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.AmbientOcclusionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AmbientOcclusionMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->AmbientOcclusionMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.NormalMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.NormalMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->NormalMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.DepthMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.DepthMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->DepthMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.AlphaMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AlphaMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->AlphaMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		if (loader.EmissionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
+		{
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.EmissionMap));
+			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			material->EmissionMap = texture;
+
+			TextureList.emplace_back(texture);
+		}
+
+		MaterialList.emplace_back(material);
+	}
+}
+
+
 void GLTF_Temp_Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex)
 {
 	for (auto& mesh : MeshList)

@@ -7,14 +7,14 @@
 #include "GLTFSpotLight.h"
 #include "GLTFPointLight.h"
 #include "Skybox.h"
-#include "GLTFMaterial.h"
-#
+//#include "GLTFMaterial.h"
+
 class GLTFSceneManager
 {
 private:
 	static float PBRCubeMapSize;
 	static float PreRenderedMapSize;
-	static std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+	//static std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 	static std::vector<std::shared_ptr<Texture2D>> Texture2DList;
 	static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
@@ -22,8 +22,8 @@ private:
 	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 
 	static void UpdateBufferIndex();
-	static std::shared_ptr<Texture2D> IsTexture2DLoaded(std::string name);
-	static std::shared_ptr<Texture2D> IsTexture2DLoaded(const TinyGltfTextureLoader& textureLoader);
+	//static std::shared_ptr<Texture2D> IsTexture2DLoaded(std::string name);
+	//static std::shared_ptr<Texture2D> IsTexture2DLoaded(const GLTFTextureLoader& textureLoader);
 
 public:
 	static bool WireframeModeFlag;
@@ -38,9 +38,9 @@ public:
 	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 
-	static std::shared_ptr<Texture2D> LoadTexture2D(std::shared_ptr<Texture2D> texture);
-	static std::shared_ptr<Texture2D> LoadTexture2D(const TinyGltfTextureLoader& textureLoader, const TinyGltfTextureSamplerLoader& samplerLoader, VkFormat format, TextureTypeEnum textureType);
-	static void AddMaterial(const std::shared_ptr<GLTFMaterial> material);
+	//static std::shared_ptr<Texture2D> LoadTexture2D(std::shared_ptr<Texture2D> texture);
+	//static std::shared_ptr<Texture2D> LoadTexture2D(GLTFTextureLoader& textureLoader);
+	//static void AddMaterial(const std::shared_ptr<GLTFMaterial> material);
 	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
 	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
 	static void AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight);

@@ -32,7 +32,6 @@ void GLTFRenderer::BuildRenderer()
 
 
 	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
-	TinyGltfTextureSamplerLoader SamplerLoader{};
 
 	std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
 	std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";

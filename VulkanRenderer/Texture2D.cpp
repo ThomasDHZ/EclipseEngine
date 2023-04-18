@@ -45,14 +45,14 @@ Texture2D::Texture2D(const std::string TextureLocation, TextureTypeEnum textureT
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-Texture2D::Texture2D(const TinyGltfTextureLoader& textureLoader, const TinyGltfTextureSamplerLoader& samplerLoader, VkFormat format, TextureTypeEnum textureType) : Texture(textureLoader, format, textureType)
+Texture2D::Texture2D(const GLTFTextureLoader& textureLoader) : Texture(textureLoader)
 {
 	Depth = 1;
 	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
 
-	CreateTextureView(format);
+	CreateTextureView(textureLoader.Format);
 	CreateTextureSampler();
 
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);

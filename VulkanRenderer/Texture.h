@@ -4,30 +4,7 @@
 #include "stb_image.h"
 #include "JsonConverter.h"
 #include "Pixel.h"
-
-enum TextureTypeEnum
-{
-    kUndefinedTexture,
-    kTextureAtlus,
-    kRenderedColorTexture,
-    kRenderedDepthTexture,
-    kReadableTexture,
-    kDiffuseTextureMap,
-    kSpecularTextureMap,
-    kAlbedoTextureMap,
-    kMetallicTextureMap,
-    kRoughnessTextureMap,
-    kAmbientOcclusionTextureMap,
-    kNormalTextureMap,
-    kDepthTextureMap,
-    kAlphaTextureMap,
-    kEmissionTextureMap,
-    kCubeMapTexture,
-    kCubeMapDepthTexture,
-    kEnvironmentTexture,
-    kRenderedCubeMap,
-    kBakedTexture
-};
+#include <GLTFImporter.h>
 
 struct TextureLoader
 {
@@ -39,27 +16,6 @@ struct TextureLoader
     TextureTypeEnum TextureType;
 };
 
-struct TinyGltfTextureLoader
-{
-    std::string name;
-    std::string uri;
-    int width;
-    int height;
-    int component;
-    int bits;
-    int pixel_type;
-    std::vector<unsigned char> image;
-};
-
-struct TinyGltfTextureSamplerLoader
-{
-    std::string name;
-    int minFilter = VK_FILTER_NEAREST;
-    int magFilter = VK_FILTER_NEAREST;
-    int wrapU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    int wrapV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-};
-
 class Texture
 {
 private:
@@ -67,7 +23,7 @@ private:
     uint64_t TextureID = 0;
     uint64_t TextureBufferIndex = 0;
 
-    void LoadTexture(const TinyGltfTextureLoader& textureLoader, VkFormat format);
+    void LoadTexture(const GLTFTextureLoader& textureLoader);
     void LoadTexture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format);
     void LoadTexture(const std::vector<Pixel>& pixels, const glm::ivec2& Resolution, VkFormat format);
     void LoadTexture(const std::vector<glm::vec4>& pixels, const glm::ivec2& Resolution, VkFormat format);
@@ -96,7 +52,7 @@ protected:
 
 public:
     Texture();
-    Texture(const TinyGltfTextureLoader& textureLoader, VkFormat format, TextureTypeEnum textureType);
+    Texture(const GLTFTextureLoader& textureLoader);
     Texture(const Pixel& ClearColor, const glm::ivec2& Resolution, VkFormat format, TextureTypeEnum textureType);
     Texture(const std::vector<Pixel> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);
     Texture(const std::vector<glm::vec4> pixels, const glm::ivec2& Resolution, TextureTypeEnum textureType);

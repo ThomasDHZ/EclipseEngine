@@ -40,6 +40,7 @@ private:
 
 	void GenerateID();
 	void RTXModelStartUp();
+	void LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader);
 
 	template <class T>
 	std::vector<T> GetVertexData(std::vector<GLTFVertex> vertexList)
@@ -118,8 +119,7 @@ public:
 		std::vector<T> VertexList = GetVertexData<T>(gltfModelData.VertexList);
 		std::vector<uint32_t> IndexList = gltfModelData.IndexList;
 
-		TextureList = gltfModelData.TextureList;
-		MaterialList = gltfModelData.MaterialList;
+		LoadMaterials(gltfModelData.MaterialList);
 
 		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -173,7 +173,7 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-		node->Material = MaterialList[0];
+	//	node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
@@ -222,7 +222,7 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-		node->Material = MaterialList[0];
+	//	node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
@@ -272,7 +272,7 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-		node->Material = MaterialList[0];
+		//node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
