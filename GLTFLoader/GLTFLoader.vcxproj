@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="GLTFFileLoader.h" />
     <ClInclude Include="GLTFImporter.h" />
+    <ClInclude Include="GLTFLights.h" />
     <ClInclude Include="GLTFModel.h" />
     <ClInclude Include="GLTFScene.h" />
     <ClInclude Include="GLTFVertex.h" />

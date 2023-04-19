@@ -41,6 +41,7 @@ private:
 	void GenerateID();
 	void RTXModelStartUp();
 	void LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader);
+	void LoadLights(GLTFModelData& lights);
 
 	template <class T>
 	std::vector<T> GetVertexData(std::vector<GLTFVertex> vertexList)
@@ -120,6 +121,7 @@ public:
 		std::vector<uint32_t> IndexList = gltfModelData.IndexList;
 
 		LoadMaterials(gltfModelData.MaterialList);
+		LoadLights(gltfModelData);
 
 		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);

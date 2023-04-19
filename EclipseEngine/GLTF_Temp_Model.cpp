@@ -184,6 +184,26 @@ VkDescriptorBufferInfo GLTF_Temp_Model::UpdateIndexBuffer()
 	return MeshPropertiesmBufferInfo;
 }
 
+void GLTF_Temp_Model::LoadLights(GLTFModelData& lights)
+{
+	for (auto& light : lights.SunLightList)
+	{
+		GLTFSceneManager::AddSunLight(light);
+	}
+	for (auto& light : lights.DirectionalLightList)
+	{
+		GLTFSceneManager::AddDirectionalLight(light);
+	}
+	for (auto& light : lights.PointLightList)
+	{
+		GLTFSceneManager::AddPointLight(light);
+	}
+	for (auto& light : lights.SpotLightList)
+	{
+		GLTFSceneManager::AddSpotLight(light);
+	}
+}
+
 void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 {
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesDescriptorList;

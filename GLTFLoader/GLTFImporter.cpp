@@ -4,41 +4,59 @@
 
 void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 {
-	//if (node.mesh == -1)
-	//{
-	//	auto color = glm::vec3(1.0f);
-	//	auto intensity = 0.0f;
+	if (node.mesh == -1)
+	{
+		auto color = glm::vec3(1.0f);
+		auto intensity = 0.0f;
 
-	//	for (auto& light : model.lights)
-	//	{
-	//		std::string baseName = node.name;
-	//		if (node.name.find("_Orientation") != std::string::npos)
-	//		{
-	//			int stringPos = node.name.find("_Orientation");
-	//			baseName = baseName.substr(0, stringPos);
-	//		}
-	//		if (light.name == baseName)
-	//		{
-	//			if (light.type == "point")
-	//			{
+		for (auto& light : model.lights)
+		{
+			std::string baseName = node.name;
+			if (node.name.find("_Orientation") != std::string::npos)
+			{
+				int stringPos = node.name.find("_Orientation");
+				baseName = baseName.substr(0, stringPos);
+			}
+			if (light.name == baseName)
+			{
+				if (light.type == "point")
+				{
+					GLTFPointLightLoader pointLight{};
+					pointLight.name = light.name;
+					pointLight.position = glm::make_vec3(&node.translation[0]);
+					pointLight.diffuse = glm::vec3(glm::make_vec3(light.color.data()));
+					pointLight.intensity = light.intensity;
+					pointLight.radius = 1.0f;
+					data.PointLightList.emplace_back(pointLight);
+				}
+				if (light.type == "directional")
+				{
+					GLTFSunLightLoader sunLight{};
+					sunLight.name = light.name;
+					sunLight.position = glm::make_vec3(&node.translation[0]);
+					sunLight.diffuse = glm::vec3(glm::make_vec3(light.color.data()));
+					sunLight.intensity = light.intensity;
+					data.SunLightList.emplace_back(sunLight);
 
-	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-	//				GLTFSceneManager::AddPointlLight(std::make_shared<GLTFPointLight>(GLTFPointLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity, 1.0f)));
-	//			}
-	//			if (light.type == "directional")
-	//			{
-	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-	//				GLTFSceneManager::AddSunLight(std::make_shared<GLTFSunLight>(GLTFSunLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-	//				GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(light.name, glm::make_vec3(&node.translation[0]), color, light.intensity)));
-	//			}
-	//			if (light.type == "spot")
-	//			{
-	//				glm::vec3 color = glm::vec3(glm::make_vec3(light.color.data()));
-	//				GLTFSceneManager::AddSpotLight(std::make_shared<GLTFSpotLight>(GLTFSpotLight(light.name, glm::make_vec3(&node.translation[0]), glm::make_vec3(&node.rotation[0]), color, light.intensity)));
-	//			}
-	//		}
-	//	}
-	//}
+					GLTFDirectionalLightLoader directionalLight{};
+					directionalLight.name = light.name;
+					directionalLight.direction = glm::make_vec3(&node.translation[0]);
+					directionalLight.diffuse = glm::vec3(glm::make_vec3(light.color.data()));
+					directionalLight.intensity = light.intensity;
+					data.DirectionalLightList.emplace_back(directionalLight);
+				}
+				if (light.type == "spot")
+				{
+					GLTFSpotLightLoader spotLight{};
+					spotLight.name = light.name;
+					spotLight.direction = glm::make_vec3(&node.translation[0]);
+					spotLight.diffuse = glm::vec3(glm::make_vec3(light.color.data()));
+					spotLight.intensity = light.intensity;
+					data.SpotLightList.emplace_back(spotLight);
+				}
+			}
+		}
+	}
 }
 
 void GLTFImporter::LoadTextureDetails(const tinygltf::Image tinygltfImage, GLTFTextureDetails& TextureLoader)

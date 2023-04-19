@@ -3,8 +3,8 @@ SkyBoxView							               GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
-//std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
-//std::vector<std::shared_ptr<Texture2D>>			   GLTFSceneManager::Texture2DList;
+std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
+std::vector<std::shared_ptr<Texture2D>>			   GLTFSceneManager::Texture2DList;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
@@ -19,78 +19,78 @@ float                                              GLTFSceneManager::PBRCubeMapS
 float									           GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool											   GLTFSceneManager::WireframeModeFlag = false;
 
-//void GLTFSceneManager::UpdateBufferIndex()
-//{
-//	for (int x = 0; x < Texture2DList.size(); x++)
-//	{
-//		Texture2DList[x]->UpdateTextureBufferIndex(x);
-//	}
-//
-//	for (int x = 0; x < MaterialList.size(); x++)
-//	{
-//		MaterialList[x]->UpdateMaterialBufferIndex(x);
-//	}
-//}
-//
-//std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(const TinyGltfTextureLoader& textureLoader)
-//{
-//	uint64_t textureID = 0;
-//	for (auto texture : Texture2DList)
-//	{
-//		if (texture->GetFilePath() == textureLoader.uri)
-//		{
-//			return texture;
-//		}
-//	}
-//
-//	return nullptr;
-//}
-//
-//std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(std::string name)
-//{
-//	uint64_t textureID = 0;
-//	for (auto texture : Texture2DList)
-//	{
-//		if (texture->GetFilePath() == name)
-//		{
-//			return texture;
-//		}
-//	}
-//
-//	return nullptr;
-//}
-//
-//std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture2D> texture)
-//{
-//	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
-//	if (isTextureLoaded != nullptr)
-//	{
-//		return isTextureLoaded;
-//	}
-//
-//	Texture2DList.emplace_back(texture);
-//
-//	UpdateBufferIndex();
-//	VulkanRenderer::UpdateRendererFlag = true;
-//	return texture;
-//}
-//
-//std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& textureLoader)
-//{
-//	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(textureLoader);
-//	if (isTextureLoaded != nullptr)
-//	{
-//		return isTextureLoaded;
-//	}
-//
-//	std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(textureLoader));
-//	Texture2DList.emplace_back(texture);
-//	Texture2DList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-//
-//	UpdateBufferIndex();
-//	VulkanRenderer::UpdateRendererFlag = true;
-//	return texture;
-//}
+void GLTFSceneManager::UpdateBufferIndex()
+{
+	for (int x = 0; x < Texture2DList.size(); x++)
+	{
+		Texture2DList[x]->UpdateTextureBufferIndex(x);
+	}
+
+	for (int x = 0; x < MaterialList.size(); x++)
+	{
+		MaterialList[x]->UpdateMaterialBufferIndex(x);
+	}
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(const GLTFTextureLoader& textureLoader)
+{
+	uint64_t textureID = 0;
+	for (auto texture : Texture2DList)
+	{
+		if (texture->GetFilePath() == textureLoader.TextureLoader.uri)
+		{
+			return texture;
+		}
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(std::string name)
+{
+	uint64_t textureID = 0;
+	for (auto texture : Texture2DList)
+	{
+		if (texture->GetFilePath() == name)
+		{
+			return texture;
+		}
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture2D> texture)
+{
+	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
+	if (isTextureLoaded != nullptr)
+	{
+		return isTextureLoaded;
+	}
+
+	Texture2DList.emplace_back(texture);
+
+	UpdateBufferIndex();
+	VulkanRenderer::UpdateRendererFlag = true;
+	return texture;
+}
+
+std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& textureLoader)
+{
+	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(textureLoader);
+	if (isTextureLoaded != nullptr)
+	{
+		return isTextureLoaded;
+	}
+
+	std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(textureLoader));
+	Texture2DList.emplace_back(texture);
+	Texture2DList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	UpdateBufferIndex();
+	VulkanRenderer::UpdateRendererFlag = true;
+	return texture;
+}
 
 void GLTFSceneManager::AddSunLight(std::shared_ptr<GLTFSunLight> sunLight)
 {
@@ -104,7 +104,7 @@ void GLTFSceneManager::AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight>
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
-void GLTFSceneManager::AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight)
+void GLTFSceneManager::AddPointLight(std::shared_ptr<GLTFPointLight> pointLight)
 {
 	PointLightList.emplace_back(pointLight);
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -113,6 +113,34 @@ void GLTFSceneManager::AddPointlLight(std::shared_ptr<GLTFPointLight> pointLight
 void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
 {
 	SpotLightList.emplace_back(spotLight);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddSunLight(GLTFSunLightLoader& sunLight)
+{
+	std::shared_ptr<GLTFSunLight> light = std::make_shared<GLTFSunLight>(GLTFSunLight(sunLight.name, sunLight.position, sunLight.diffuse, sunLight.intensity));
+	SunLightList.emplace_back(light);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddDirectionalLight(GLTFDirectionalLightLoader& directionalLight)
+{
+	std::shared_ptr<GLTFDirectionalLight> light = std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(directionalLight.name, directionalLight.direction, directionalLight.diffuse, directionalLight.intensity));
+	DirectionalLightList.emplace_back(light);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddPointLight(GLTFPointLightLoader& pointLight)
+{
+	std::shared_ptr<GLTFPointLight> light = std::make_shared<GLTFPointLight>(GLTFPointLight(pointLight.name, pointLight.position, pointLight.diffuse, pointLight.intensity, pointLight.radius));
+	PointLightList.emplace_back(light);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void GLTFSceneManager::AddSpotLight(GLTFSpotLightLoader& spotLight)
+{
+	std::shared_ptr<GLTFSpotLight> light = std::make_shared<GLTFSpotLight>(GLTFSpotLight(spotLight.name, spotLight.position, spotLight.direction, spotLight.diffuse, spotLight.intensity));
+	SpotLightList.emplace_back(light);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 

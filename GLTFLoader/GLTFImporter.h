@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vulkan/vulkan_core.h>
 #include "GLTFVertex.h"
+#include "GLTFLights.h"
 
 enum TextureTypeEnum
 {
@@ -118,6 +119,10 @@ struct GLTFModelData
 	std::vector<uint32_t> IndexList = std::vector<uint32_t>();
 	std::vector<std::shared_ptr<GLTFNode>> NodeList = std::vector<std::shared_ptr<GLTFNode>>();
 	std::vector<GLTFMaterialLoader> MaterialList = std::vector<GLTFMaterialLoader>();
+	std::vector<GLTFSunLightLoader> SunLightList = std::vector<GLTFSunLightLoader>();
+	std::vector<GLTFDirectionalLightLoader> DirectionalLightList = std::vector<GLTFDirectionalLightLoader>();
+	std::vector<GLTFPointLightLoader> PointLightList = std::vector<GLTFPointLightLoader>();
+	std::vector<GLTFSpotLightLoader> SpotLightList = std::vector<GLTFSpotLightLoader>();
 };
 
 class GLTFImporter
