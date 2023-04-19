@@ -3,7 +3,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
-#include <GLTFSceneManager.h>
+#include "GLTFSceneManager.h"
 #include "Camera.h"
 
 #include "RenderedColorTexture.h"

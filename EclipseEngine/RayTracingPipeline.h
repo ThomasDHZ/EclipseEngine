@@ -1,5 +1,5 @@
 #pragma once
-#include <GraphicsPipeline.h>
+#include "GraphicsPipeline.h"
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "UniformBuffer.h"

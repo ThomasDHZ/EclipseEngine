@@ -22,7 +22,7 @@
 #include "GLTFRenderPass.h"
 #include "IrradianceRenderPass.h"
 #include "PrefilterRenderPass.h"
-#include <GLTFSceneManager.h>
+#include "GLTFSceneManager.h"
 #include "LineGameObject.h"
 #include "PerspectiveCamera.h"
 

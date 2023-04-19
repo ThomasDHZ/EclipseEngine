@@ -1,5 +1,5 @@
 #pragma once
-#include <GLTF_GraphicsPipeline.h>
+#include "GLTF_GraphicsPipeline.h"
 #include "GLTF_Temp_Model.h"
 #include "JsonGraphicsPipeline.h"
 

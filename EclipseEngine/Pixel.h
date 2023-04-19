@@ -47,9 +47,9 @@ struct Pixel
 
     bool operator==(const Pixel& rhs) const
     {
-        return Red   == rhs.Red &&
-               Green == rhs.Green &&
-               Blue  == rhs.Blue;
+        return Red == rhs.Red &&
+            Green == rhs.Green &&
+            Blue == rhs.Blue;
     }
 };
 

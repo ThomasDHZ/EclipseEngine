@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include <GLTFModel.h>
 #include <basetsd.h>
-#include <GLTFMaterial.h>
+#include "GLTFMaterial.h"
 
 struct GLTFMeshLoader3D
 {

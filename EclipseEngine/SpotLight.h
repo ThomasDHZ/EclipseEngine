@@ -1,7 +1,7 @@
 #pragma once
-#include <Light.h>
-#include <UniformBuffer.h>
-#include <RenderedDepthTexture.h>
+#include "Light.h"
+#include "UniformBuffer.h"
+#include "RenderedDepthTexture.h"
 
 class SpotLight : public Light<SpotLightBuffer>
 {

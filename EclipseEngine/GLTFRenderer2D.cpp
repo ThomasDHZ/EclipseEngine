@@ -1,6 +1,6 @@
 #include "GLTFRenderer2D.h"
 #include "SpriteGameObject2D.h"
-#include <OrthographicCamera.h>
+#include "OrthographicCamera.h"
 
 GLTFRenderer2D::GLTFRenderer2D()
 {

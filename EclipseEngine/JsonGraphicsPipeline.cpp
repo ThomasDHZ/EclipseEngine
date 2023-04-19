@@ -1,5 +1,4 @@
-#include "..\VulkanRenderer\GLTF_GraphicsPipeline.h"
-#include "..\VulkanRenderer\GLTF_GraphicsPipeline.h"
+#include "GLTF_GraphicsPipeline.h"
 #include "JsonGraphicsPipeline.h"
 #include "SceneManager.h"
 

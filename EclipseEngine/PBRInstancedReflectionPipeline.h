@@ -1,5 +1,5 @@
 #pragma once
-#include <GraphicsPipeline.h>
+#include "GraphicsPipeline.h"
 #include "GameObjectManager.h"
 #include "MeshRendererManager.h"
 #include "LightManager.h"
@@ -7,7 +7,7 @@
 #include "RenderedDepthTexture.h"
 #include "RenderedCubeMapDepthTexture.h"
 #include "ConstMeshInfo.h"
-#include <GLTFSceneManager.h>
+#include "GLTFSceneManager.h"
 
 class PBRInstancedReflectionPipeline : public GraphicsPipeline
 {

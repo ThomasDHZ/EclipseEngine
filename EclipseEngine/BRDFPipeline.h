@@ -1,5 +1,5 @@
 #pragma once
-#include <GraphicsPipeline.h>
+#include "GraphicsPipeline.h"
 #include "SceneManager.h"
 #include "Mesh.h"
 class BRDFPipeline : public GraphicsPipeline

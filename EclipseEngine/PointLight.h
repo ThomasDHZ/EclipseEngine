@@ -1,6 +1,6 @@
 #pragma once
-#include <Light.h>
-#include <UniformBuffer.h>
+#include "Light.h"
+#include "UniformBuffer.h"
 #include "GameObjectManager.h"
 #include "RenderedCubeMapDepthTexture.h"
 #include "Model.h"

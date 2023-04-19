@@ -5,7 +5,7 @@
 #include "RayTracingPipeline.h"
 #include "LightManager.h"
 #include "GameObject.h"
-#include <GLTFSceneManager.h>
+#include "GLTFSceneManager.h"
 
 class RayTracePBRRenderPass : public RenderPass
 {

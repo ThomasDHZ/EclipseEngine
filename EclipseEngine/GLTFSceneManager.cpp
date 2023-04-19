@@ -10,6 +10,7 @@ std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::PrefilterMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::CubeMap = nullptr;
+std::vector<std::shared_ptr<GameObject>>		   GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<GLTFSunLight>>         GLTFSceneManager::SunLightList;
 std::vector<std::shared_ptr<GLTFDirectionalLight>> GLTFSceneManager::DirectionalLightList;
 std::vector<std::shared_ptr<GLTFPointLight>>       GLTFSceneManager::PointLightList;

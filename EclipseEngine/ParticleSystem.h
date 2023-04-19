@@ -1,6 +1,6 @@
 #pragma once
 #include "Particle.h"
-#include <RandomNumber.h>
+#include "RandomNumber.h"
 
 class ParticleSystem
 {
