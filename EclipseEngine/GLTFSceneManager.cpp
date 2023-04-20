@@ -169,7 +169,10 @@ void GLTFSceneManager::Update()
 	{
 		light->Update();
 	}
-
+	for (auto& obj : GameObjectList)
+	{
+		obj->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
+	}
 	SkyboxMesh->Update(ActiveCamera);
 
 	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
@@ -187,6 +190,10 @@ void GLTFSceneManager::Update()
 void GLTFSceneManager::Destroy()
 {
 	SkyboxMesh->Destroy();
+	for (auto& obj : GameObjectList)
+	{
+		obj->Destroy();
+	}
 	if (EnvironmentTexture != nullptr)
 	{
 		EnvironmentTexture->Destroy();

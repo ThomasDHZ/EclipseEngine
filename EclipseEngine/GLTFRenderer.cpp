@@ -21,6 +21,8 @@ void GLTFRenderer::BuildRenderer()
 
 	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
 	//if(gameObjectList.size() == 0)
+
+	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", a, GameObjectRenderType::kModelRenderer);
 	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
 	gameObjectList.back()->LoadRenderObject<Vertex3D>(a);
 
