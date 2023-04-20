@@ -11,9 +11,9 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)
+void GameObject::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	GameObjectRenderer->Draw(commandBuffer, shaderPipelineLayout);
+	GameObjectRenderer->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
 void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)

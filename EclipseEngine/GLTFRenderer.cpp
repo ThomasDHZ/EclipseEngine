@@ -23,14 +23,8 @@ void GLTFRenderer::BuildRenderer()
 	//if(gameObjectList.size() == 0)
 
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", a, GameObjectRenderType::kModelRenderer);
-	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
-	gameObjectList.back()->LoadRenderObject<Vertex3D>(a);
-
-	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
-	gameObjectList.back()->LoadRenderObject<Vertex3D>(b);
-
-	gameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D("Sphere", GameObjectRenderType::kModelRenderer)));
-	gameObjectList.back()->LoadRenderObject<Vertex3D>(c);
+	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
+	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", c, GameObjectRenderType::kModelRenderer);
 
 
 	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
@@ -103,17 +97,13 @@ void GLTFRenderer::BuildRenderer()
 	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	gLTFRenderPass.BuildRenderPass(gameObjectList);
+	gLTFRenderPass.BuildRenderPass(GLTFSceneManager::GameObjectList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 }
 
 void GLTFRenderer::Update()
 {
 	GLTFSceneManager::Update();
-	for (auto& obj : gameObjectList)
-	{
-		obj->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
-	}
 }
 
 void GLTFRenderer::ImGuiUpdate()
@@ -145,9 +135,9 @@ void GLTFRenderer::ImGuiUpdate()
 	//	ImGui::SliderFloat(("SLight Intensity " + std::to_string(x)).c_str(), &model.SpotLightList[x]->GetIntensityPtr()[0], 0.0f, 1.0f);
 	//}
 
-	ImGui::SliderFloat3("Position ", &gameObjectList[0]->GameObjectPosition.x, 0.0f, 100.0f);
-	ImGui::SliderFloat3("Rotation ", &gameObjectList[0]->GameObjectRotation.x, 0.0f, 360.0f);
-	ImGui::SliderFloat3("Scale ", &gameObjectList[0]->GameObjectScale.x, 0.0f, 1.0f);
+	//ImGui::SliderFloat3("Position ", &gameObjectList[0]->GameObjectPosition.x, 0.0f, 100.0f);
+	//ImGui::SliderFloat3("Rotation ", &gameObjectList[0]->GameObjectRotation.x, 0.0f, 360.0f);
+	//ImGui::SliderFloat3("Scale ", &gameObjectList[0]->GameObjectScale.x, 0.0f, 1.0f);
 	//if (SceneManager::EditorModeFlag)
 	//{
 	//	if (ImGui::Button("Play Mode"))
@@ -174,17 +164,13 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(gameObjectList));
+	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(GLTFSceneManager::GameObjectList));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void GLTFRenderer::Destroy()
 {
 	GLTFSceneManager::Destroy();
-	for (auto& obj : gameObjectList)
-	{
-		obj->Destroy();
-	}
 
 	environmentToCubeRenderPass.Destroy();
 	GLTF_BRDFRenderPass.Destroy();

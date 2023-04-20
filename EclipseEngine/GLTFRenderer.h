@@ -29,7 +29,7 @@
 class GLTFRenderer
 {
 private:
-	std::vector<std::shared_ptr<GameObject>> gameObjectList;
+	//std::vector<std::shared_ptr<GameObject>> gameObjectList;
 	std::shared_ptr<LineGameObject> mesh;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;

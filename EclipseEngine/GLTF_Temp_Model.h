@@ -17,7 +17,7 @@ private:
 
 	std::vector<GLTFPrimitive> PrimitiveList;
 	std::vector<MeshProperties> MeshPropertiesList;
-	std::vector<std::shared_ptr<Texture2D>> TextureList;
+	std::vector<std::shared_ptr<Texture>> TextureList;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
@@ -302,7 +302,7 @@ public:
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
+	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();

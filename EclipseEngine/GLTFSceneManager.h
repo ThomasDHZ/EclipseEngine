@@ -15,22 +15,26 @@ class GLTFSceneManager
 private:
 	static float PBRCubeMapSize;
 	static float PreRenderedMapSize;
-	static std::vector<std::shared_ptr<GameObject>> GameObjectList;
+
 	static std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
-	static std::vector<std::shared_ptr<Texture2D>> Texture2DList;
+	static std::vector<std::shared_ptr<Texture>> Texture2DList;
 	static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
 	static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
 	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
 
+	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
+
 	static void UpdateBufferIndex();
-	static std::shared_ptr<Texture2D> IsTexture2DLoaded(std::string name);
-	static std::shared_ptr<Texture2D> IsTexture2DLoaded(const GLTFTextureLoader& textureLoader);
+	static std::shared_ptr<Texture> IsTexture2DLoaded(std::string name);
+	static std::shared_ptr<Texture> IsTexture2DLoaded(const GLTFTextureLoader& textureLoader);
 
 public:
 	static bool WireframeModeFlag;
 	static SceneProperties sceneProperites;
 
+	static std::vector<std::shared_ptr<GameObject>> GameObjectList;
 	static std::shared_ptr<Camera> ActiveCamera;
 	static std::shared_ptr<Skybox> SkyboxMesh;
 	static SkyBoxView CubeMapInfo;
@@ -68,8 +72,8 @@ public:
 		GameObjectList.back()->LoadRenderObject<T>(FilePath);
 	}
 
-	static std::shared_ptr<Texture2D> LoadTexture2D(std::shared_ptr<Texture2D> texture);
-	static std::shared_ptr<Texture2D> LoadTexture2D(GLTFTextureLoader& textureLoader);
+	static std::shared_ptr<Texture> LoadTexture2D(std::shared_ptr<Texture> texture);
+	static std::shared_ptr<Texture> LoadTexture2D(GLTFTextureLoader& textureLoader);
 	static void AddMaterial(const std::shared_ptr<GLTFMaterial> material);
 	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
 	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
@@ -90,6 +94,8 @@ public:
 	static VkDescriptorImageInfo GetCubeMapDescriptor();
 	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 
+	static std::vector<VkDescriptorImageInfo>  GetTexturePropertiesBuffer();
+	static std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSunLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer();

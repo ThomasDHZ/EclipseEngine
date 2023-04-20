@@ -83,7 +83,7 @@ public:
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
-	void Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
+	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();

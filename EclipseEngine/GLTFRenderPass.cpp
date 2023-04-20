@@ -121,8 +121,8 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
 
     for (int x = 0; x < gameObjectList.size(); x++)
     {
-        LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-        WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       // LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+      //  WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
         PBRPipelineList.emplace_back(JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
     SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
@@ -178,7 +178,7 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                 //   WireframePipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
@@ -190,7 +190,7 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                  //  WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
@@ -200,7 +200,7 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             }
             case GameObjectRenderType::kLineRenderer3D:
             {
-                LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+               // LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 break;
             }
         }
@@ -224,14 +224,14 @@ void GLTFRenderPass::Destroy()
     {
         PBRPipelineList[x].Destroy();
     }
-    for (int x = 0; x < WireframePipelineList.size(); x++)
-    {
-        WireframePipelineList[x].Destroy();
-    }
-    for (int x = 0; x < LinePipelineList.size(); x++)
-    {
-        LinePipelineList[x].Destroy();
-    }
+    //for (int x = 0; x < WireframePipelineList.size(); x++)
+    //{
+    //    WireframePipelineList[x].Destroy();
+    //}
+    //for (int x = 0; x < LinePipelineList.size(); x++)
+    //{
+    //    LinePipelineList[x].Destroy();
+    //}
 
     RenderPass::Destroy();
 }

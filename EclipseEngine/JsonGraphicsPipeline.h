@@ -12,12 +12,8 @@ enum DescriptorBindingPropertiesEnum
 {
 	kModelTransformDescriptor,
 	kMeshPropertiesDescriptor,
-	kAlbedoMapDescriptor,
-	kNormalMapDescriptor,
-	kMetallicRoughnessMapDescriptor,
-	kAmbientOcclusionMapDescriptor,
-	kAlphaMapDescriptor,
-	kDepthMapDescriptor,
+	kTextureDescriptor,
+	kMaterialDescriptor,
 	kBRDFMapDescriptor,
 	kIrradianceMapDescriptor,
 	kPrefilterMapDescriptor,
@@ -93,6 +89,7 @@ public:
 	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
+	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
 	VkDescriptorSet CubeMapDescriptorSet = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
@@ -122,7 +119,7 @@ public:
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
-		gameObject->Draw(commandBuffer, ShaderPipelineLayout);
+		gameObject->Draw(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
 	template<class T>

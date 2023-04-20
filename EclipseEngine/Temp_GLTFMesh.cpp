@@ -271,13 +271,13 @@ void Temp_GLTFMesh::UpdateMeshBottomLevelAccelerationStructure()
 	}
 }
 
-void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
+void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout)
 {
 	for (auto& primitve : PrimitiveList)
 	{
 		if (primitve.IndexCount > 0)
 		{
-			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &MaterialList[primitve.material]->descriptorSet, 0, nullptr);
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
 	}

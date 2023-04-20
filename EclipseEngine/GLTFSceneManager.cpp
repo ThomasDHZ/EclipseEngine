@@ -4,7 +4,7 @@ SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
 std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
-std::vector<std::shared_ptr<Texture2D>>			   GLTFSceneManager::Texture2DList;
+std::vector<std::shared_ptr<Texture>>			   GLTFSceneManager::Texture2DList;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
@@ -33,7 +33,7 @@ void GLTFSceneManager::UpdateBufferIndex()
 	}
 }
 
-std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(const GLTFTextureLoader& textureLoader)
+std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(const GLTFTextureLoader& textureLoader)
 {
 	uint64_t textureID = 0;
 	for (auto texture : Texture2DList)
@@ -47,7 +47,7 @@ std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(const GLTFTexture
 	return nullptr;
 }
 
-std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(std::string name)
+std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(std::string name)
 {
 	uint64_t textureID = 0;
 	for (auto texture : Texture2DList)
@@ -61,9 +61,9 @@ std::shared_ptr<Texture2D> GLTFSceneManager::IsTexture2DLoaded(std::string name)
 	return nullptr;
 }
 
-std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture2D> texture)
+std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture> texture)
 {
-	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
+	std::shared_ptr<Texture> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
 	if (isTextureLoaded != nullptr)
 	{
 		return isTextureLoaded;
@@ -76,15 +76,15 @@ std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Textu
 	return texture;
 }
 
-std::shared_ptr<Texture2D> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& textureLoader)
+std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& textureLoader)
 {
-	std::shared_ptr<Texture2D> isTextureLoaded = IsTexture2DLoaded(textureLoader);
+	std::shared_ptr<Texture> isTextureLoaded = IsTexture2DLoaded(textureLoader);
 	if (isTextureLoaded != nullptr)
 	{
 		return isTextureLoaded;
 	}
 
-	std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(textureLoader));
+	std::shared_ptr<Texture> texture = std::make_shared<Texture2D>(Texture2D(textureLoader));
 	Texture2DList.emplace_back(texture);
 	Texture2DList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
@@ -284,6 +284,50 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 	}
 
 	return VulkanRenderer::GetNullDescriptor();
+}
+
+std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetTexturePropertiesBuffer()
+{
+	std::vector<VkDescriptorImageInfo>	TexturePropertiesBuffer;
+	if (SunLightList.size() == 0)
+	{
+		TexturePropertiesBuffer.emplace_back(VulkanRenderer::GetNullDescriptor());
+	}
+	else
+	{
+		for (auto& texture : Texture2DList)
+		{
+			VkDescriptorImageInfo albedoTextureDescriptor{};
+			albedoTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			albedoTextureDescriptor.imageView = texture->GetView();
+			albedoTextureDescriptor.sampler = texture->GetSampler();
+			TexturePropertiesBuffer.emplace_back(albedoTextureDescriptor);
+		}
+	}
+
+	return TexturePropertiesBuffer;
+}
+
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetMaterialPropertiesBuffer()
+{
+	std::vector<VkDescriptorBufferInfo>	MaterialPropertiesBuffer;
+	if (SunLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		MaterialPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : SunLightList)
+		{
+			light->GetLightPropertiesBuffer(MaterialPropertiesBuffer);
+		}
+	}
+
+	return MaterialPropertiesBuffer;
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetSunLightPropertiesBuffer()

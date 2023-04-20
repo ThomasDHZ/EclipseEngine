@@ -67,65 +67,58 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 
 		if (loader.AlbedoMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AlbedoMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->AlbedoMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AlbedoMap);
 			TextureList.emplace_back(texture);
+
+			material->AlbedoMap = texture;
 		}
 
 		if (loader.MetallicRoughnessMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.MetallicRoughnessMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->MetallicRoughnessMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.MetallicRoughnessMap);
 			TextureList.emplace_back(texture);
+
+			material->MetallicRoughnessMap = texture;
 		}
 
 		if (loader.AmbientOcclusionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AmbientOcclusionMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->AmbientOcclusionMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AmbientOcclusionMap);
 			TextureList.emplace_back(texture);
+
+			material->AmbientOcclusionMap = texture;
 		}
 
 		if (loader.NormalMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.NormalMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->NormalMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.NormalMap);
 			TextureList.emplace_back(texture);
+
+			material->NormalMap = texture;
 		}
 
 		if (loader.DepthMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.DepthMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->DepthMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.DepthMap);
 			TextureList.emplace_back(texture);
+
+			material->DepthMap = texture;
 		}
 
 		if (loader.AlphaMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.AlphaMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->AlphaMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AlphaMap);
 			TextureList.emplace_back(texture);
+
+			material->AlphaMap = texture;
 		}
 
 		if (loader.EmissionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(Texture2D(loader.EmissionMap));
-			texture->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-			material->EmissionMap = texture;
-
+			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.EmissionMap);
 			TextureList.emplace_back(texture);
+
+			material->EmissionMap = texture;
 		}
 
 		MaterialList.emplace_back(material);
@@ -214,7 +207,7 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
 
-void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)
+void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
@@ -224,7 +217,7 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkPipelineLayout shad
 	}
 	for (auto& mesh : MeshList)
 	{
-		mesh->Draw(commandBuffer, shaderPipelineLayout);
+		mesh->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 
