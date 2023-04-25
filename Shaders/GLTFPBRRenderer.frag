@@ -1,6 +1,8 @@
 #version 460
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_EXT_nonuniform_qualifier : enable
+#extension GL_EXT_scalar_block_layout : enable
+#extension GL_EXT_debug_printf : enable
 
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
@@ -32,6 +34,13 @@ struct MeshProperties
 	uint VertexBufferIndex;
 	uint IndexBufferIndex;
 	uint MaterialBufferIndex;
+	uint AlbedoMapIndex;
+	uint MetallicRoughnessMapIndex;
+	uint AmbientOcclusionMapIndex;
+	uint NormalMapIndex;
+	uint DepthMapIndex;
+	uint AlphaMapIndex;
+	uint EmissionMapIndex;
 	uint SkyBoxIndex;
 	mat4 MeshTransform;
 	vec2 UVOffset;
@@ -158,5 +167,9 @@ const float PI = 3.14159265359;
 
 void main()
 { 
-    outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+ if(gl_VertexIndex == 0)
+	{
+		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
+	}
+    outColor = vec4(texture(TextureMap[meshBuffer[sceneData.MeshIndex].meshProperties.AlbedoMapIndex], UV).rgb, 1.0f);
 }

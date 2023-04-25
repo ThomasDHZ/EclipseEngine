@@ -23,8 +23,8 @@ void GLTFRenderer::BuildRenderer()
 	//if(gameObjectList.size() == 0)
 
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", a, GameObjectRenderType::kModelRenderer);
-	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
-	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", c, GameObjectRenderType::kModelRenderer);
+	//GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
+	//GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", c, GameObjectRenderType::kModelRenderer);
 
 
 	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));

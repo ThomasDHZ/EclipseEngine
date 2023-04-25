@@ -115,7 +115,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
 
 
             std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)gameObjectList[x]->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+            //descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)gameObjectList[x]->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
             descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_ALL });
             descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
             descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
@@ -135,7 +135,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
             for (int y = 0; y < gameObjectList[x]->GetMaterialList().size(); y++)
             {
                 std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
+               // GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
                 GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetTransformMatrixBuffer()[0]);
                 GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, gameObjectList[x]->GetMaterialList()[y]->GetAlbedoMapDescriptor());
                 GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, gameObjectList[x]->GetMaterialList()[y]->GetNormalMapDescriptor());

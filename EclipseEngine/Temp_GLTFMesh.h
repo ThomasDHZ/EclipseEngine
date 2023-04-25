@@ -18,6 +18,7 @@ struct GLTFMeshLoader3D
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
+	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
@@ -43,7 +44,7 @@ private:
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 
-	std::shared_ptr<GLTFMaterial> gltfMaterial;
+	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
 
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
@@ -71,10 +72,10 @@ public:
 
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
-	VulkanBuffer MeshPropertiesBuffer;
+	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
-	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
+	std::vector<VkDescriptorBufferInfo> UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
@@ -84,6 +85,7 @@ public:
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();

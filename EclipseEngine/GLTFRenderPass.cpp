@@ -182,7 +182,7 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
                 }
                 else
                 {
-                    PBRPipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipelineList[x].DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }

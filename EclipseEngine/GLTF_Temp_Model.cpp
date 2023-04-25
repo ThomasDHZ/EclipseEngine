@@ -202,7 +202,10 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesDescriptorList;
 	for (auto mesh : MeshList)
 	{
-		MeshPropertiesDescriptorList.emplace_back(mesh->UpdateMeshPropertiesBuffer());
+		for (auto& meshBuffer : mesh->UpdateMeshPropertiesBuffer())
+		{
+			MeshPropertiesDescriptorList.emplace_back(meshBuffer);
+		}
 	}
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
@@ -218,6 +221,20 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descr
 	for (auto& mesh : MeshList)
 	{
 		mesh->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
+	}
+}
+
+void GLTF_Temp_Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+{
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+	if (IndexBuffer.Buffer != nullptr)
+	{
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+	}
+	for (auto& mesh : MeshList)
+	{
+		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
 	}
 }
 

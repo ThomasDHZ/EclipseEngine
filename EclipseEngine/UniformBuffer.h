@@ -161,7 +161,14 @@ struct MeshProperties
 	alignas(4) uint32_t VertexBufferIndex = 0;
 	alignas(4) uint32_t IndiceBufferIndex = 0;
 	alignas(4) uint32_t MaterialBufferIndex = 0;
-	alignas(4) uint32_t SkyBoxIndex = 0;
+	alignas(4) uint32_t AlbedoMap = -1;
+	alignas(4) uint32_t MetallicRoughnessMap = -1;
+	alignas(4) uint32_t AmbientOcclusionMap = -1;
+	alignas(4) uint32_t NormalMap = -1;
+	alignas(4) uint32_t DepthMap = -1;
+	alignas(4) uint32_t AlphaMap = -1;
+	alignas(4) uint32_t EmissionMap = -1;
+	alignas(4) uint32_t SkyBoxIndex = -1;
 	alignas(16) glm::mat4 MeshTransform = glm::mat4(1.0f);
 	alignas(8) glm::vec2 UVOffset = glm::vec2(0.0f);
 	alignas(8) glm::vec2 UVScale = glm::vec2(1.0f);

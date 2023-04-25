@@ -140,6 +140,8 @@ public:
 			GltfMeshLoader.BoneCount = 0;
 			GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
 			GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
+			GltfMeshLoader.gltfMaterialList = MaterialList;
+
 			std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 			MeshList.emplace_back(mesh);
 		}
@@ -175,7 +177,6 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-	//	node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
@@ -187,6 +188,7 @@ public:
 		GltfMeshLoader.IndexCount = 0;
 		GltfMeshLoader.BoneCount = 0;
 		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+		GltfMeshLoader.gltfMaterialList = MaterialList;
 		
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
@@ -224,7 +226,6 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-	//	node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
@@ -237,6 +238,7 @@ public:
 		GltfMeshLoader.IndexCount = IndexList.size();
 		GltfMeshLoader.BoneCount = 0;
 		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+		GltfMeshLoader.gltfMaterialList = MaterialList;
 
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
@@ -274,7 +276,6 @@ public:
 		node->Position = glm::vec3(0.0f);
 		node->Rotation = glm::vec3(0.0f);
 		node->Scale = glm::vec3(1.0f);
-		//node->Material = MaterialList[0];
 
 		GLTFMeshLoader3D GltfMeshLoader;
 		GltfMeshLoader.node = node;
@@ -287,6 +288,7 @@ public:
 		GltfMeshLoader.IndexCount = IndexList.size();
 		GltfMeshLoader.BoneCount = 0;
 		GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+		GltfMeshLoader.gltfMaterialList = MaterialList;
 
 		std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(Temp_GLTFMesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
@@ -303,6 +305,7 @@ public:
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet);
 	void Destroy();
