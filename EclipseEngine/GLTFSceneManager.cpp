@@ -93,6 +93,12 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	return texture;
 }
 
+void GLTFSceneManager::AddMaterial(const std::shared_ptr<GLTFMaterial> material)
+{
+	MaterialList.emplace_back(material);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
 void GLTFSceneManager::AddSunLight(std::shared_ptr<GLTFSunLight> sunLight)
 {
 	SunLightList.emplace_back(sunLight);
@@ -321,9 +327,9 @@ std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetMaterialPropertiesBuffe
 	}
 	else
 	{
-		for (auto& light : SunLightList)
+		for (auto& material : MaterialList)
 		{
-			light->GetLightPropertiesBuffer(MaterialPropertiesBuffer);
+			material->GetMaterialPropertiesBuffer(MaterialPropertiesBuffer);
 		}
 	}
 

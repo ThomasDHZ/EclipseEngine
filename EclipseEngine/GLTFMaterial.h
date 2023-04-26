@@ -3,6 +3,24 @@
 #include "VulkanBuffer.h"
 #include "Texture2D.h"
 
+struct GLTFMaterialBufferInfo
+{
+	alignas(16) glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	alignas(4) float Metallic = 0.0f;
+	alignas(4) float Roughness = 0.0f;
+	alignas(4) float AmbientOcclusion = 1.0f;
+	alignas(16) glm::vec3 Emission = glm::vec3(0.0f);
+	alignas(4) float Alpha = 1.0f;
+
+	alignas(4) uint32_t AlbedoMap = -1;
+	alignas(4) uint32_t MetallicRoughnessMap = -1;
+	alignas(4) uint32_t AmbientOcclusionMap = -1;
+	alignas(4) uint32_t NormalMap = -1;
+	alignas(4) uint32_t DepthMap = -1;
+	alignas(4) uint32_t AlphaMap = -1;
+	alignas(4) uint32_t EmissionMap = -1;
+};
+
 class GLTFMaterial
 {
 private:
@@ -11,6 +29,7 @@ private:
 	uint64_t MaterialID = 0;
 	uint64_t MaterialBufferIndex = 0;
 
+	VulkanBuffer MaterialBuffer;
 
 	void GenerateID();
 
@@ -22,7 +41,7 @@ public:
 	float AmbientOcclusion = 1.0f;
 	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
-
+	GLTFMaterialBufferInfo MaterialInfo;
 	std::string MaterialName;
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
@@ -40,6 +59,18 @@ public:
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 
+	void  GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& LightPropertiesBufferList)
+	{
+		VkDescriptorBufferInfo LightBufferInfo = {};
+		LightBufferInfo.buffer = MaterialBuffer.Buffer;
+		LightBufferInfo.offset = 0;
+		LightBufferInfo.range = VK_WHOLE_SIZE;
+		LightPropertiesBufferList.emplace_back(LightBufferInfo);
+	}
+	void UpdateBuffer()
+	{
+		MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+	}
 	VkDescriptorImageInfo GetAlbedoMapDescriptor();
 	VkDescriptorImageInfo GetMetallicRoughnessMapDescriptor();
 	VkDescriptorImageInfo GetAmbientOcclusionMapDescriptor();

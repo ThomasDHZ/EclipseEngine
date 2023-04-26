@@ -69,8 +69,8 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 		{
 			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AlbedoMap);
 			TextureList.emplace_back(texture);
-
 			material->AlbedoMap = texture;
+			material->MaterialInfo.AlbedoMap = material->AlbedoMap->GetTextureBufferIndex();
 		}
 
 		if (loader.MetallicRoughnessMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -79,6 +79,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->MetallicRoughnessMap = texture;
+			material->MaterialInfo.MetallicRoughnessMap = material->MetallicRoughnessMap->GetTextureBufferIndex();
 		}
 
 		if (loader.AmbientOcclusionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -87,6 +88,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->AmbientOcclusionMap = texture;
+			material->MaterialInfo.AmbientOcclusionMap = material->AmbientOcclusionMap->GetTextureBufferIndex();
 		}
 
 		if (loader.NormalMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -95,6 +97,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->NormalMap = texture;
+			material->MaterialInfo.NormalMap = material->NormalMap->GetTextureBufferIndex();
 		}
 
 		if (loader.DepthMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -103,6 +106,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->DepthMap = texture;
+			material->MaterialInfo.DepthMap = material->DepthMap->GetTextureBufferIndex();
 		}
 
 		if (loader.AlphaMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -111,6 +115,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->AlphaMap = texture;
+			material->MaterialInfo.AlphaMap = material->AlphaMap->GetTextureBufferIndex();
 		}
 
 		if (loader.EmissionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
@@ -119,9 +124,11 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 			TextureList.emplace_back(texture);
 
 			material->EmissionMap = texture;
+			material->MaterialInfo.EmissionMap = material->EmissionMap->GetTextureBufferIndex();
 		}
-
+		material->UpdateBuffer();
 		MaterialList.emplace_back(material);
+		GLTFSceneManager::AddMaterial(material);
 	}
 }
 

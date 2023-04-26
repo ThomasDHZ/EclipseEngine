@@ -303,7 +303,7 @@ void Temp_GLTFMesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 {
 	for (auto& primitve : PrimitiveList)
 	{
-		sceneProperties.MeshIndex = primitve.material;
+		sceneProperties.MaterialIndex = primitve.material;
 		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
 		if (primitve.IndexCount > 0)
 		{
