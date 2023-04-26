@@ -556,19 +556,19 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
     {
         switch (BindingList[x])
         {
-        case kModelTransformDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)gameObject->GetMeshPropertiesBuffer().size() }); break;
-        case kMeshPropertiesDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kMaterialDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size() }); break;
-        case kTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size() }); break;
-        case kBRDFMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kIrradianceMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kPrefilterMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kCubeMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kEnvironmentDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-        case kSunLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() }); break;
-        case kDirectionalLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() }); break;
-        case kPointLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() }); break;
-        case kSpotLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() }); break;
+            case kModelTransformDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)gameObject->GetMeshPropertiesBuffer().size() }); break;
+            case kMeshPropertiesDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kMaterialDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size() }); break;
+            case kTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size() }); break;
+            case kBRDFMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kIrradianceMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kPrefilterMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kCubeMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kEnvironmentDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kSunLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() }); break;
+            case kDirectionalLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() }); break;
+            case kPointLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() }); break;
+            case kSpotLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() }); break;
         }
     }
     DescriptorPool = CreateDescriptorPool(descriptorPoolSizeList, 1);
@@ -578,134 +578,56 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
     {
         switch (BindingList[x])
         {
-        case kModelTransformDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x, DescriptorList[x], (uint32_t)gameObject->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kMeshPropertiesDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kMaterialDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kTextureDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kBRDFMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kIrradianceMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kPrefilterMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kCubeMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kEnvironmentDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-        case kSunLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kDirectionalLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kPointLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
-        case kSpotLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kModelTransformDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x, DescriptorList[x], (uint32_t)gameObject->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kMeshPropertiesDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kMaterialDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kTextureDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kBRDFMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kIrradianceMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kPrefilterMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kCubeMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kEnvironmentDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kSunLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kDirectionalLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kPointLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+            case kSpotLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
         }
     }
-
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
-    if (gameObject != nullptr)
-    {
-        switch (gameObject->RenderType)
-        {
-        case GameObjectRenderType::kModelRenderer:
-        case GameObjectRenderType::kSpriteRenderer:
-            {
-                for (int y = 0; y < gameObject->GetMaterialList().size(); y++)
-                {
-                    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-                    for (int x = 0; x < BindingList.size(); x++)
-                    {
-                        switch (BindingList[x])
-                        {
-                        case kModelTransformDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshPropertiesBuffer()); break;
-                        case kMeshPropertiesDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshList()[0]->GetTransformMatrixBuffer()[0]); break;
-                        case kMaterialDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetMaterialPropertiesBuffer()); break;
-                        case kTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetTexturePropertiesBuffer()); break;
-                        case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
-                        case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
-                        case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
-                        case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
-                        case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
-                        case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
-                        case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
-                        case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
-                        case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
-                        }
-                    }
-                    DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
-                    std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-                    for (auto& DescriptorBinding : DescriptorBindingList)
-                    {
-                        switch (DescriptorBinding.DescriptorType)
-                        {
-                        case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
-                        case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
-                        case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
-                        }
-                    }
-                    vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-                }
-                break;
-            }
-            case GameObjectRenderType::kLineRenderer3D:
-            {
-                std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-                for (int x = 0; x < BindingList.size(); x++)
-                {
-                    switch (BindingList[x])
-                    {
-                    case kModelTransformDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshPropertiesBuffer()); break;
-                    case kMeshPropertiesDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshList()[0]->GetTransformMatrixBuffer()[0]); break;
-                    case kMaterialDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetMaterialPropertiesBuffer()); break;
-                    case kTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetTexturePropertiesBuffer()); break;
-                    case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
-                    case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
-                    case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
-                    case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
-                    case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
-                    case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
-                    case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
-                    case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
-                    case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
-                    }
-                }
-                CubeMapDescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
-
-                std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-                for (auto& DescriptorBinding : DescriptorBindingList)
-                {
-                    switch (DescriptorBinding.DescriptorType)
-                    {
-                    case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
-                    case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
-                    case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
-                    }
-                }
-                vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-                break;
-            }
-        }
-    }
-    else
+    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+    for (int x = 0; x < BindingList.size(); x++)
     {
-        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-        for (int x = 0; x < BindingList.size(); x++)
+        switch (BindingList[x])
         {
-            switch (BindingList[x])
-            {
-            case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
+            case kModelTransformDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshPropertiesBuffer()); break;
+            case kMeshPropertiesDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, gameObject->GetMeshList()[0]->GetTransformMatrixBuffer()[0]); break;
+            case kMaterialDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetMaterialPropertiesBuffer()); break;
+            case kTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetTexturePropertiesBuffer()); break;
             case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
+            case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
+            case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
             case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
-            }
+            case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
+            case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
+            case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
+            case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
+            case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
         }
-        CubeMapDescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
-
-        std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-        for (auto& DescriptorBinding : DescriptorBindingList)
-        {
-            switch (DescriptorBinding.DescriptorType)
-            {
-            case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
-            case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
-            case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(CubeMapDescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
-            }
-        }
-        vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
     }
+    DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
+    std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+    for (auto& DescriptorBinding : DescriptorBindingList)
+    {
+        switch (DescriptorBinding.DescriptorType)
+        {
+        case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
+        case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
+        case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
+        }
+    }
+    vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
 }
 
 void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)

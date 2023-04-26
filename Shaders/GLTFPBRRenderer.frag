@@ -157,6 +157,7 @@ layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 const float PI = 3.14159265359;
 
+Vertex RasterVertexBuilder();
 MaterialProperties BuildPBRMaterial(vec2 UV);
 float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
@@ -168,7 +169,6 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties pbrMateria
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties pbrMaterial);
 vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties pbrMaterial);
 vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir);
-Vertex RasterVertexBuilder();
 
 void main()
 { 
@@ -236,19 +236,64 @@ void main()
     outColor = vec4(color, 1.0f);
 }
 
+Vertex RasterVertexBuilder()
+{
+	Vertex vertex;
+	vertex.Position = FragPos;
+	vertex.UV = UV;
+	vertex.Normal = Normal;
+	vertex.Tangant = Tangent;
+	vertex.BiTangant = BiTangent;
+	vertex.Color = Color;
+
+	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
+
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+	{
+		vertex.UV.y = 1.0f - vertex.UV.y;
+	}
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+	{
+		vertex.UV.x = 1.0f - vertex.UV.x;
+	}
+
+	return vertex;
+}
+
 MaterialProperties BuildPBRMaterial(vec2 UV)
 {
-    uint a = sceneData.MaterialIndex;
-	MaterialProperties material = materialBuffer[a].materialProperties;
-    material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
-	material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
-	material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
-    material.AmbientOcclusion = texture(TextureMap[material.AmbientOcclusionMap], UV).r;
-    if(material.AmbientOcclusion.r == 0.0f)
-    {
-        material.AmbientOcclusion = .6f;
-    }
-	//material.Emission = .4f;
+	MaterialProperties material = materialBuffer[sceneData.MaterialIndex].materialProperties;
+
+  //  material.Albedo = material.Albedo;
+//	if (material.AlbedoMap != 0)
+//	{
+	    material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
+	//}
+
+   // material.Metallic = material.Metallic;
+	//if (material.MetallicRoughnessMap != 0)
+	//{
+	    material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
+	//}
+
+   // material.Roughness = material.Roughness;
+	//if (material.MetallicRoughnessMap != 0)
+	//{
+	    material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
+//	}
+
+//material.AmbientOcclusion = material.AmbientOcclusion;
+	//if (material.AmbientOcclusionMap != 0)
+	//{
+		material.AmbientOcclusion = texture(TextureMap[material.AmbientOcclusionMap], UV).r;
+	//}
+
+	//material.Emission = material.Emission;
+	//if (material.EmissionMap != 0)
+	//{
+		material.Emission = texture(TextureMap[material.EmissionMap], UV).rgb;
+	//}
 
     if(texture(TextureMap[material.AlbedoMap], UV).a == 0.0f)
 	{
@@ -479,29 +524,4 @@ vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir)
     vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
 
     return finalTexCoords;
-}
-
-Vertex RasterVertexBuilder()
-{
-	Vertex vertex;
-	vertex.Position = FragPos;
-	vertex.UV = UV;
-	vertex.Normal = Normal;
-	vertex.Tangant = Tangent;
-	vertex.BiTangant = BiTangent;
-	vertex.Color = Color;
-
-	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
-	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
-
-	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
-	{
-		vertex.UV.y = 1.0f - vertex.UV.y;
-	}
-	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
-	{
-		vertex.UV.x = 1.0f - vertex.UV.x;
-	}
-
-	return vertex;
 }

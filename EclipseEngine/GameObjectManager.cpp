@@ -68,7 +68,7 @@
 	 std::vector<std::shared_ptr<GameObject>> GameObjectList;
 	 for (auto& obj : objList)
 	 {
-		 if (obj->GetRenderType() == GameObjectRenderType::kMeshRenderer)
+		 if (obj->GetRenderType() == GameObjectRenderType::kModelRenderer)
 		 {
 			 GameObjectList.emplace_back(obj);
 		 }

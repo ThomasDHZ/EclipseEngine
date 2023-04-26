@@ -54,7 +54,7 @@ private:
 	void AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags = VK_SHADER_STAGE_ALL);
 
 	
-	void LoadDescriptorSets(nlohmann::json& json);
+	void LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GameObject> gameObject);
 
 protected:
 
@@ -90,13 +90,12 @@ public:
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
-	VkDescriptorSet CubeMapDescriptorSet = VK_NULL_HANDLE;
 
 	JsonGraphicsPipeline();
-	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	~JsonGraphicsPipeline();
 
-	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
 	void SaveGraphicsPipeline(const char* fileName, nlohmann::json& json);
 	void BuildAndSaveShaderPipeLine(nlohmann::json& json, BuildGraphicsPipelineInfo& buildPipelineInfo, VkDescriptorSetLayout descriptorSetLayout);
 	
@@ -105,13 +104,13 @@ public:
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
-		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
+		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 	}
 
 	void DrawCubeMap(VkCommandBuffer& commandBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
+		GLTFSceneManager::SkyboxMesh->Draw(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 	}
 
 	template<class T>
@@ -141,13 +140,13 @@ public:
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
-		gameObject->DrawLine(commandBuffer, ShaderPipelineLayout, CubeMapDescriptorSet);
+		gameObject->DrawLine(commandBuffer, ShaderPipelineLayout, DescriptorSet);
 	}
 
 	void DrawTexture(VkCommandBuffer& commandBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &CubeMapDescriptorSet, 0, nullptr);
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
 		vkCmdDraw(commandBuffer, 6, 1, 0, 0);
 	}
 

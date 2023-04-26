@@ -7,7 +7,6 @@
 enum GameObjectRenderType
 {
 	kNoRender,
-	kMeshRenderer,
 	kModelRenderer,
 	kSpriteRenderer,
 	kLineRenderer2D,
