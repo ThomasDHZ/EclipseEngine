@@ -120,11 +120,13 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     pipelineInfo.SampleCount = SampleCount;
 
     auto ad = std::vector<std::shared_ptr<GLTF_Temp_Model>> { gameObjectList[0]->GetGameObjectRenderer() };
-    pbrPipeline.InitializePipeline(pipelineInfo, ad);
+    oldpbrPipeline.InitializePipeline(pipelineInfo, ad);
+    oldwireframePipeline.InitializePipeline(pipelineInfo);
+    oldLinePipeline.InitializePipeline(pipelineInfo);
 
-       // LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-      //  WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-    PBRPipelineList = JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    PBRPipeline = JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 }
 
@@ -178,11 +180,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                 //   WireframePipelineList[x].Draw<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
-                    PBRPipelineList.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
@@ -190,17 +192,17 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                  //  WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    WireframePipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
-                    PBRPipelineList.DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
             case GameObjectRenderType::kLineRenderer3D:
             {
-               // LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                LinePipeline.DrawLine(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 break;
             }
         }
@@ -220,15 +222,9 @@ void GLTFRenderPass::Destroy()
     DepthTexture->Destroy();
 
     SkyBoxPipeline.Destroy();
-    PBRPipelineList.Destroy();
-    //for (int x = 0; x < WireframePipelineList.size(); x++)
-    //{
-    //    WireframePipelineList[x].Destroy();
-    //}
-    //for (int x = 0; x < LinePipelineList.size(); x++)
-    //{
-    //    LinePipelineList[x].Destroy();
-    //}
+    PBRPipeline.Destroy();
+    WireframePipeline.Destroy();
+    LinePipeline.Destroy();
 
     RenderPass::Destroy();
 }

@@ -48,8 +48,6 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
     nlohmann::json json;
     JsonGraphicsPipeline jsonPipeline{};
-    JsonConverter::to_json(json["CubeMapShader"], false);
-    JsonConverter::to_json(json["ObjectRendererType"], GameObjectRenderType::kModelRenderer);
 
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "GLTFPBRRendererVert.spv");
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "GLTFPBRRendererFrag.spv");

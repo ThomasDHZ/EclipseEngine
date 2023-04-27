@@ -21,14 +21,14 @@ void GameObject::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descri
 	GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
 }
 
-void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)
+void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	GameObjectRenderer->DrawSprite(commandBuffer, shaderPipelineLayout);
+	GameObjectRenderer->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
 }
 
-void GameObject::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet)
+void GameObject::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	GameObjectRenderer->DrawLine(commandBuffer, shaderPipelineLayout, descriptorSet);
+	GameObjectRenderer->DrawLine(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
 }
 
 void GameObject::Update(float DeltaTime)

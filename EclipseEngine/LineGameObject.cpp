@@ -141,7 +141,7 @@ LineGameObject::~LineGameObject()
 {
 }
 
-void LineGameObject::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet)
+void LineGameObject::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	GameObject::DrawLine(commandBuffer, shaderPipelineLayout, descriptorSet);
+	GameObject::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 }

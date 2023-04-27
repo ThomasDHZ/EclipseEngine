@@ -313,9 +313,10 @@ void Temp_GLTFMesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 	}
 }
 
-void Temp_GLTFMesh::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout)
+void Temp_GLTFMesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &MaterialList[0]->descriptorSet, 0, nullptr);
+	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &MaterialList[0]->descriptorSet, 0, nullptr);
 	if (IndexCount == 0)
 	{
 		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
@@ -326,9 +327,10 @@ void Temp_GLTFMesh::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout 
 	}
 }
 
-void Temp_GLTFMesh::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout ShaderPipelineLayout, VkDescriptorSet descriptorSet)
+void Temp_GLTFMesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 	if (IndexCount == 0)
 	{
 		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);

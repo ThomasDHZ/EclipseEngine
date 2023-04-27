@@ -245,25 +245,25 @@ void GLTF_Temp_Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet d
 	}
 }
 
-void GLTF_Temp_Model::DrawSprite(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout)
+void GLTF_Temp_Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
 	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawSprite(commandBuffer, shaderPipelineLayout);
+		mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
 	}
 }
 
-void GLTF_Temp_Model::DrawLine(VkCommandBuffer& commandBuffer, VkPipelineLayout shaderPipelineLayout, VkDescriptorSet descriptorSet)
+void GLTF_Temp_Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
 	//vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawLine(commandBuffer, shaderPipelineLayout, descriptorSet);
+		mesh->DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 	}
 }
 

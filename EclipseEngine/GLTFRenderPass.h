@@ -5,17 +5,19 @@
 #include "GLTF_SkyboxPipeline.h"
 #include "WireFramePipeline.h"
 #include "LinePipeline.h"
+#include "WireFramePipeline.h"
 class GLTFRenderPass : public RenderPass
 {
 	private:
 		std::shared_ptr<RenderedColorTexture> ColorTexture;
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-		GLTFPBRRenderPIpeline pbrPipeline;
-		//GLTF_SkyboxPipeline skyboxPipeline;
-		JsonGraphicsPipeline PBRPipelineList;
-		//std::vector<JsonGraphicsPipeline> WireframePipelineList;
-		//std::vector<JsonGraphicsPipeline> LinePipelineList;
+		GLTFPBRRenderPIpeline oldpbrPipeline;
+		WireFramePipeline oldwireframePipeline;
+		LinePipeline oldLinePipeline;
+		JsonGraphicsPipeline PBRPipeline;
+		JsonGraphicsPipeline WireframePipeline;
+		JsonGraphicsPipeline LinePipeline;
 		JsonGraphicsPipeline SkyBoxPipeline;
 
 

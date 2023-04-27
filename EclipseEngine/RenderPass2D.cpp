@@ -167,7 +167,7 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
             }
             else
             {
-                Renderer2DPipeline[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                Renderer2DPipeline[x].DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
             break;
         }
