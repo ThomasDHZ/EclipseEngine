@@ -12,17 +12,22 @@ layout(location = 0) out vec4 outColor;
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
+	uint MaterialIndex;
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
     vec3 MeshColorID;
     vec3 AmbientLight;
+    uint SunLightCount;
     uint DirectionalLightCount;
     uint PointLightCount;
     uint SpotLightCount;
     float Timer;
     float PBRMaxMipLevel;
+    uint frame;
+    int MaxRefeflectCount;
 } sceneData;
+
 void main() {
    outColor = vec4(lineColor);
 }

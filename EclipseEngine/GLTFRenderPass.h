@@ -15,12 +15,11 @@ class GLTFRenderPass : public RenderPass
 		GLTFPBRRenderPIpeline oldpbrPipeline;
 		WireFramePipeline oldwireframePipeline;
 		LinePipeline oldLinePipeline;
+
 		JsonGraphicsPipeline PBRPipeline;
 		JsonGraphicsPipeline WireframePipeline;
 		JsonGraphicsPipeline LinePipeline;
 		JsonGraphicsPipeline SkyBoxPipeline;
-
-
 
 		void RenderPassDesc();
 		void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);

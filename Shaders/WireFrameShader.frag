@@ -15,18 +15,6 @@ layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
-layout(binding = 4) uniform sampler2D BRDFMap;
-layout(binding = 5) uniform samplerCube IrradianceMap;
-layout(binding = 6) uniform samplerCube PrefilterMap;
-layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
-layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
-
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
