@@ -17,7 +17,7 @@ private:
 	static float PreRenderedMapSize;
 
 	static std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
-	static std::vector<std::shared_ptr<Texture>> Texture2DList;
+	static std::vector<std::shared_ptr<Texture>> TextureList;
 	static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
 	static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
@@ -94,6 +94,10 @@ public:
 	static VkDescriptorImageInfo GetCubeMapDescriptor();
 	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 
+	static std::vector<VkDescriptorBufferInfo> GetVertexPropertiesBuffer();
+	static std::vector<VkDescriptorBufferInfo> GetIndexPropertiesBuffer();
+	static std::vector<VkDescriptorBufferInfo> GetGameObjectPropertiesBuffer();
+	static std::vector<VkDescriptorBufferInfo> GetGameObjectTransformBuffer();
 	static std::vector<VkDescriptorImageInfo>  GetTexturePropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSunLightPropertiesBuffer();

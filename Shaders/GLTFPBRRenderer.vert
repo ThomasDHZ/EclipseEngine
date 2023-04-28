@@ -134,6 +134,7 @@ layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[]
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
+	uint PrimitiveIndex;
 	uint MaterialIndex;
     mat4 proj;
     mat4 view;
@@ -156,7 +157,7 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
+    mat4 MeshTransform = transformBuffer[0].transform;
     FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;

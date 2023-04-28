@@ -167,8 +167,8 @@ public:
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return GameObjectRenderer->GetMeshList(); }
 	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
 
-	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }
-	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return GameObjectRenderer->MeshList[0]->GetTransformMatrixBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetGameObjectPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }
+	std::vector<VkDescriptorBufferInfo> GetGameObjectTransformMatrixBuffer() { return GameObjectRenderer->GetTransformMatrixBuffer(); }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return GameObjectRenderer->GetTexturePropertiesBuffer(); }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return GameObjectRenderer->GetMaterialPropertiesBuffer(); }
 

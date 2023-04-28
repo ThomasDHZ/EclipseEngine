@@ -77,8 +77,7 @@ void GLTFRenderer::BuildRenderer()
 	//        }
 	//    }
 	//}
-
-	//gameObjectList.emplace_back(std::make_shared<LineGameObject>(LineGameObject("Sphere", VertexList)));
+	//GLTFSceneManager::AddGameObject<LineVertex3D>("Lines", a, GameObjectRenderType::kLineRenderer3D);
 
 	//gameObjectList.emplace_back(std::make_shared<LineRenderer3D>(LineRenderer3D("Line", VertexList)));
 

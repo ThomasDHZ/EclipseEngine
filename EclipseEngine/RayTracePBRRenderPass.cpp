@@ -136,7 +136,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
             {
                 std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
                // GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetTransformMatrixBuffer()[0]);
+                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetGameObjectTransformMatrixBuffer()[0]);
                 GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, gameObjectList[x]->GetMaterialList()[y]->GetAlbedoMapDescriptor());
                 GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, gameObjectList[x]->GetMaterialList()[y]->GetNormalMapDescriptor());
                 GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, gameObjectList[x]->GetMaterialList()[y]->GetMetallicRoughnessMapDescriptor());

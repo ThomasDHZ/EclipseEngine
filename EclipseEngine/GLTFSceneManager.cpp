@@ -4,7 +4,7 @@ SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
 std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
-std::vector<std::shared_ptr<Texture>>			   GLTFSceneManager::Texture2DList;
+std::vector<std::shared_ptr<Texture>>			   GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>            GLTFSceneManager::IrradianceMap = nullptr;
@@ -22,9 +22,9 @@ bool											   GLTFSceneManager::WireframeModeFlag = false;
 
 void GLTFSceneManager::UpdateBufferIndex()
 {
-	for (int x = 0; x < Texture2DList.size(); x++)
+	for (int x = 0; x < TextureList.size(); x++)
 	{
-		Texture2DList[x]->UpdateTextureBufferIndex(x);
+		TextureList[x]->UpdateTextureBufferIndex(x);
 	}
 
 	for (int x = 0; x < MaterialList.size(); x++)
@@ -36,7 +36,7 @@ void GLTFSceneManager::UpdateBufferIndex()
 std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(const GLTFTextureLoader& textureLoader)
 {
 	uint64_t textureID = 0;
-	for (auto texture : Texture2DList)
+	for (auto texture : TextureList)
 	{
 		if (texture->GetFilePath() == textureLoader.TextureLoader.uri)
 		{
@@ -50,7 +50,7 @@ std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(const GLTFTextureLo
 std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(std::string name)
 {
 	uint64_t textureID = 0;
-	for (auto texture : Texture2DList)
+	for (auto texture : TextureList)
 	{
 		if (texture->GetFilePath() == name)
 		{
@@ -69,7 +69,7 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture
 		return isTextureLoaded;
 	}
 
-	Texture2DList.emplace_back(texture);
+	TextureList.emplace_back(texture);
 
 	UpdateBufferIndex();
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -85,8 +85,8 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	}
 
 	std::shared_ptr<Texture> texture = std::make_shared<Texture2D>(Texture2D(textureLoader));
-	Texture2DList.emplace_back(texture);
-	Texture2DList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	TextureList.emplace_back(texture);
+	TextureList.back()->UpdateImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	UpdateBufferIndex();
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -292,16 +292,78 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 	return VulkanRenderer::GetNullDescriptor();
 }
 
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetVertexPropertiesBuffer()
+{
+	return std::vector<VkDescriptorBufferInfo>();
+}
+
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetIndexPropertiesBuffer()
+{
+	return std::vector<VkDescriptorBufferInfo>();
+}
+
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetGameObjectPropertiesBuffer()
+{
+	std::vector<VkDescriptorBufferInfo>	MeshPropertiesBuffer;
+	if (GameObjectList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		MeshPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& gameObject : GameObjectList)
+		{
+			VkDescriptorBufferInfo MeshProperitesBufferInfo = {};
+			MeshProperitesBufferInfo.buffer = gameObject->GetGameObjectPropertiesBuffer()[0].buffer;
+			MeshProperitesBufferInfo.offset = 0;
+			MeshProperitesBufferInfo.range = VK_WHOLE_SIZE;
+			MeshPropertiesBuffer.emplace_back(MeshProperitesBufferInfo);
+		}
+	}
+
+	return MeshPropertiesBuffer;
+}
+
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetGameObjectTransformBuffer()
+{
+	std::vector<VkDescriptorBufferInfo>	TransformPropertiesBuffer;
+	if (GameObjectList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		TransformPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& gameObject : GameObjectList)
+		{
+			VkDescriptorBufferInfo TransformBufferInfo = {};
+			TransformBufferInfo.buffer = gameObject->GetGameObjectTransformMatrixBuffer()[0].buffer;
+			TransformBufferInfo.offset = 0;
+			TransformBufferInfo.range = VK_WHOLE_SIZE;
+			TransformPropertiesBuffer.emplace_back(TransformBufferInfo);
+		}
+	}
+
+	return TransformPropertiesBuffer;
+}
+
 std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetTexturePropertiesBuffer()
 {
 	std::vector<VkDescriptorImageInfo>	TexturePropertiesBuffer;
-	if (SunLightList.size() == 0)
+	if (TextureList.size() == 0)
 	{
 		TexturePropertiesBuffer.emplace_back(VulkanRenderer::GetNullDescriptor());
 	}
 	else
 	{
-		for (auto& texture : Texture2DList)
+		for (auto& texture : TextureList)
 		{
 			VkDescriptorImageInfo albedoTextureDescriptor{};
 			albedoTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
