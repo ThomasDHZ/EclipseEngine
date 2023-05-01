@@ -1,6 +1,5 @@
 #pragma once
 #include "VulkanBuffer.h"
-#include "Material.h"
 
 struct SkyBoxView
 {

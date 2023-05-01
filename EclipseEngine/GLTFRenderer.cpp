@@ -26,13 +26,46 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sci-fi", c, GameObjectRenderType::kModelRenderer);
 
+	std::shared_ptr<GLTFMaterial> IronMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("IronMaterial"));
+	std::shared_ptr<GLTFMaterial> PlasticMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("PlasticMaterial"));
+	std::shared_ptr<GLTFMaterial> WallMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("WallMaterial"));
+	std::shared_ptr<GLTFMaterial> GoldMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GoldMaterial"));
+	std::shared_ptr<GLTFMaterial> GrassMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GrassMaterial"));
 
-	//std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
+	GLTFInstancingDataStruct instance = {};
+	std::vector<std::shared_ptr<GLTFMaterial>> instanceMaterialList;
+	instanceMaterialList.emplace_back(IronMaterial);
+	instanceMaterialList.emplace_back(PlasticMaterial);
+	instanceMaterialList.emplace_back(WallMaterial);
+	instanceMaterialList.emplace_back(GoldMaterial);
+	instanceMaterialList.emplace_back(GrassMaterial);
+	for (int x = 0; x < 5; x++)
+	{
+		for (int y = 0; y < 5; y++)
+		{
+			for (int z = 0; z < 5; z++)
+			{
+				GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
+				instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
+				instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
+				instance.MaterialList = instanceMaterialList;
+			}
+		}
+	}
+	GLTFSceneManager::AddGameObject<Vertex3D>("InstanceTest", b, instance, GameObjectRenderType::kInstanceRenderer);
 
-	//std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	//std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	//material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
- //   material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	//ModelLoader loader2{};
+	//loader2.instanceData = instance;
+	//loader2.FilePath = "../Models/sphere.obj";
+	//loader2.MeshType = MeshTypeEnum::kPolygonInstanced;
+
+
+	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
+
+	std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
+	std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
+	material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+    material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	
 	//const std::string asdf = "sprite";
 	//std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(asdf, material));

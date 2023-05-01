@@ -127,6 +127,12 @@ public:
 		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
 	}
 
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		gameObject->DrawInstancedMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+	}
+
 	void DrawSprite(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);

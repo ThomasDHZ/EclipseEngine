@@ -13,11 +13,11 @@ void Renderer3DPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
 {
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+    //std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = GLTFSceneManager::GetSpotLightPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+  //  std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo .../vfggggb= TextureManager::GetTexturemBufferList();
 
     VkDescriptorImageInfo ShadowMapBufferInfo;
     ShadowMapBufferInfo.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -29,11 +29,11 @@ void Renderer3DPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "Renderer3DFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
+  //  AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+//    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
    // AddTextureDescriptorSetBinding(DescriptorBindingList, 6, ShadowMapBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};

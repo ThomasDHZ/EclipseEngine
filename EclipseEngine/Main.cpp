@@ -3,9 +3,7 @@
 #include "Scene.h"
 #include <json.hpp>
 #include "GameObject.h"
-#include "TextureManager.h"
 #include "InterfaceRenderPass.h"
-#include "MaterialManager.h"
 #include "LightManager.h"
 #include "SoundDevice.h"
 #include "SoundEffectManager.h"
@@ -26,8 +24,6 @@ int main()
     SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
-    TextureManager::StartUp();
-    MaterialManager::StartUp();
     //TopLevelAccelerationStructureManager::StartUp();
     LightManager::StartUp();
     SceneManager::StartUp();
@@ -58,8 +54,6 @@ int main()
     SceneManager::Destory();
     TopLevelAccelerationStructureManager::Destroy();
     LightManager::Destory();
-    MaterialManager::Destroy();
-    TextureManager::Destroy();
     InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
     SoundEffectManager::Destroy();

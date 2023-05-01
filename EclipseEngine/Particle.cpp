@@ -22,7 +22,7 @@ Particle::Particle(ParticleLoader3D& particaleLoader) : Mesh3D()
 
 	VertexList = particaleLoader.VerticeList;
 	IndexList = particaleLoader.IndexList;
-	material = particaleLoader.MaterialPtr;
+	//material = particaleLoader.MaterialPtr;
 
 	MeshType = particaleLoader.MeshType;
 	MeshSubType = particaleLoader.MeshSubType;

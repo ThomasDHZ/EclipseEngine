@@ -217,6 +217,20 @@ void GLTF_Temp_Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet d
 	}
 }
 
+void GLTF_Temp_Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+{
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+	if (IndexBuffer.Buffer != nullptr)
+	{
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+	}
+	for (auto& mesh : MeshList)
+	{
+		mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	}
+}
+
 void GLTF_Temp_Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
 	VkDeviceSize offsets[] = { 0 };

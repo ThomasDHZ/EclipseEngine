@@ -12,7 +12,7 @@ void BillboardPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 {
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+    //std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = GLTFSceneManager::GetSpotLightPropertiesBuffer();
@@ -23,7 +23,7 @@ void BillboardPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "BillBoardShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
+   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);

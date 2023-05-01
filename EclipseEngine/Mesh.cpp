@@ -113,10 +113,6 @@ void Mesh::SetBufferIndex(int bufferIndex)
 	}
 }
 
-void Mesh::SetMaterial(std::shared_ptr<Material> materialPtr)
-{
-	material = materialPtr;
-}
 
 void Mesh::SetReflectionPoint(const glm::vec3& reflectionPoint)
 {

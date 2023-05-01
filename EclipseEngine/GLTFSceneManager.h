@@ -2,6 +2,7 @@
 #include "UniformBuffer.h"
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
+#include "EnvironmentTexture.h"
 #include "GLTFSunLight.h"
 #include "GLTFDirectionalLight.h"
 #include "GLTFSpotLight.h"
@@ -70,6 +71,34 @@ public:
 	{
 		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
 		GameObjectList.back()->LoadRenderObject<T>(FilePath);
+	}
+
+	template <class T>
+	static void AddGameObject(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType)
+	{
+		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
+		GameObjectList.back()->LoadRenderObject<T>(FilePath, instanceData);
+	}
+
+	template <class T>
+	static void AddGameObject(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position)
+	{
+		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
+		GameObjectList.back()->LoadRenderObject<T>(FilePath, instanceData);
+	}
+
+	template <class T>
+	static void AddGameObject(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation)
+	{
+		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
+		GameObjectList.back()->LoadRenderObject<T>(FilePath, instanceData);
+	}
+
+	template <class T>
+	static void AddGameObject(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+	{
+		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
+		GameObjectList.back()->LoadRenderObject<T>(FilePath, instanceData);
 	}
 
 	static std::shared_ptr<Texture> LoadTexture2D(std::shared_ptr<Texture> texture);

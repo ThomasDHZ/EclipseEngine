@@ -27,11 +27,11 @@ private:
 
 protected:
 	void MeshStartUp();
-	void MeshStartUp(std::shared_ptr<Material> materialPtr);
+	//void MeshStartUp(std::shared_ptr<Material> materialPtr);
 public:
 	Mesh2D();
 	Mesh2D(MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
-	Mesh2D(std::shared_ptr<Material> SpriteMaterial, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
+	//Mesh2D(std::shared_ptr<Material> SpriteMaterial, MeshSubTypeEnum meshSubType, uint64_t parentGameObjectID);
 	~Mesh2D();
 
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;

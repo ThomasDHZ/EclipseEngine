@@ -20,7 +20,7 @@ public:
 	glm::vec3 InstanceScale = glm::vec3(1.0f);
 
 	glm::mat4 InstanceMeshTransform;
-	std::shared_ptr<Material> material;
+	//std::shared_ptr<Material> material;
 
 	MeshProperties meshProperties;
 	MeshPropertiesUniformBuffer MeshPropertiesBuffer;

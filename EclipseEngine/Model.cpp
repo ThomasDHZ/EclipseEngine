@@ -99,8 +99,8 @@ void Model::LoadMesh(ModelLoader& modelLoader, aiNode* node, const aiScene* scen
 
 		/*if (LoadMaterial)
 		{*/
-			auto material = LoadMaterial(modelLoader.FilePath, mesh, scene);
-			meshLoader.MaterialPtr = material;
+		//	auto material = LoadMaterial(modelLoader.FilePath, mesh, scene);
+		//	meshLoader.MaterialPtr = material;
 	/*	}*/
 
 		AddMesh(meshLoader);
@@ -312,100 +312,100 @@ void Model::LoadBoneMeshTransform(const int NodeID, const glm::mat4& ParentMatri
 	}
 }
 
-std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene)
-{
-	MaterialProperties MaterialInfo;
-
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	auto directory = FilePath.substr(0, FilePath.find_last_of('/')) + '/';
-
-	aiColor3D color(0.f, 0.f, 0.f);
-	material->Get(AI_MATKEY_COLOR_AMBIENT, color);
-	MaterialInfo.Ambient.r = color.r;
-	MaterialInfo.Ambient.g = color.g;
-	MaterialInfo.Ambient.b = color.b;
-
-	material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-	MaterialInfo.Diffuse.r = color.r;
-	MaterialInfo.Diffuse.g = color.g;
-	MaterialInfo.Diffuse.b = color.b;
-
-	material->Get(AI_MATKEY_COLOR_SPECULAR, color);
-	MaterialInfo.Specular.r = color.r;
-	MaterialInfo.Specular.g = color.g;
-	MaterialInfo.Specular.b = color.b;
-
-	if (AI_SUCCESS != aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &MaterialInfo.Shininess) ||
-		MaterialInfo.Shininess == 0.0f)
-	{
-		MaterialInfo.Shininess = 0.1f;
-	}
-
-	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_REFLECTIVITY, &MaterialInfo.Reflectivness))
-	{
-		MaterialInfo.Reflectivness = 0.0f;
-	}
-
-	aiString TextureLocation;
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_DIFFUSE); x++)
-	{
-		material->GetTexture(aiTextureType_DIFFUSE, x, &TextureLocation);
-
-		MaterialInfo.DiffuseMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kDiffuseTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
-		MaterialInfo.AlbedoMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_METALNESS); x++)
-	{
-		material->GetTexture(aiTextureType_METALNESS, x, &TextureLocation);
-		MaterialInfo.MetallicMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS); x++)
-	{
-		material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, x, &TextureLocation);
-		MaterialInfo.RoughnessMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION); x++)
-	{
-		material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, x, &TextureLocation);
-		MaterialInfo.AmbientOcclusionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_SPECULAR); x++)
-	{
-		material->GetTexture(aiTextureType_SPECULAR, x, &TextureLocation);
-		MaterialInfo.SpecularMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kSpecularTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_NORMALS); x++)
-	{
-		material->GetTexture(aiTextureType_NORMALS, x, &TextureLocation);
-		MaterialInfo.NormalMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_HEIGHT); x++)
-	{
-		material->GetTexture(aiTextureType_HEIGHT, x, &TextureLocation);
-		MaterialInfo.DepthMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_OPACITY); x++)
-	{
-		material->GetTexture(aiTextureType_OPACITY, x, &TextureLocation);
-		MaterialInfo.AlphaMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_EMISSIVE); x++)
-	{
-		material->GetTexture(aiTextureType_EMISSIVE, x, &TextureLocation);
-		MaterialInfo.EmissionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
-	}
-
-	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialPBR, MaterialInfo);
-	return MaterialManager::GetMaterialByID(materialID);
-}
+//std::shared_ptr<Material> Model::LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene)
+//{
+//	MaterialProperties MaterialInfo;
+//
+//	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+//	auto directory = FilePath.substr(0, FilePath.find_last_of('/')) + '/';
+//
+//	aiColor3D color(0.f, 0.f, 0.f);
+//	material->Get(AI_MATKEY_COLOR_AMBIENT, color);
+//	MaterialInfo.Ambient.r = color.r;
+//	MaterialInfo.Ambient.g = color.g;
+//	MaterialInfo.Ambient.b = color.b;
+//
+//	material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+//	MaterialInfo.Diffuse.r = color.r;
+//	MaterialInfo.Diffuse.g = color.g;
+//	MaterialInfo.Diffuse.b = color.b;
+//
+//	material->Get(AI_MATKEY_COLOR_SPECULAR, color);
+//	MaterialInfo.Specular.r = color.r;
+//	MaterialInfo.Specular.g = color.g;
+//	MaterialInfo.Specular.b = color.b;
+//
+//	if (AI_SUCCESS != aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &MaterialInfo.Shininess) ||
+//		MaterialInfo.Shininess == 0.0f)
+//	{
+//		MaterialInfo.Shininess = 0.1f;
+//	}
+//
+//	if (AI_SUCCESS == aiGetMaterialFloat(material, AI_MATKEY_REFLECTIVITY, &MaterialInfo.Reflectivness))
+//	{
+//		MaterialInfo.Reflectivness = 0.0f;
+//	}
+//
+//	aiString TextureLocation;
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_DIFFUSE); x++)
+//	{
+//		material->GetTexture(aiTextureType_DIFFUSE, x, &TextureLocation);
+//
+//		MaterialInfo.DiffuseMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kDiffuseTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
+//		MaterialInfo.AlbedoMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_METALNESS); x++)
+//	{
+//		material->GetTexture(aiTextureType_METALNESS, x, &TextureLocation);
+//		MaterialInfo.MetallicMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS); x++)
+//	{
+//		material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, x, &TextureLocation);
+//		MaterialInfo.RoughnessMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION); x++)
+//	{
+//		material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, x, &TextureLocation);
+//		MaterialInfo.AmbientOcclusionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_SPECULAR); x++)
+//	{
+//		material->GetTexture(aiTextureType_SPECULAR, x, &TextureLocation);
+//		MaterialInfo.SpecularMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kSpecularTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_NORMALS); x++)
+//	{
+//		material->GetTexture(aiTextureType_NORMALS, x, &TextureLocation);
+//		MaterialInfo.NormalMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_HEIGHT); x++)
+//	{
+//		material->GetTexture(aiTextureType_HEIGHT, x, &TextureLocation);
+//		MaterialInfo.DepthMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_OPACITY); x++)
+//	{
+//		material->GetTexture(aiTextureType_OPACITY, x, &TextureLocation);
+//		MaterialInfo.AlphaMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	for (unsigned int x = 0; x < material->GetTextureCount(aiTextureType_EMISSIVE); x++)
+//	{
+//		material->GetTexture(aiTextureType_EMISSIVE, x, &TextureLocation);
+//		MaterialInfo.EmissionMap = TextureManager::LoadTexture2D(directory + TextureLocation.C_Str(), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_UNORM);
+//	}
+//
+//	uint64_t materialID = MaterialManager::AddMaterial(material->GetName().C_Str(), MaterialTypeEnum::kMaterialPBR, MaterialInfo);
+//	return MaterialManager::GetMaterialByID(materialID);
+//}
 
 void Model::LoadModel(ModelLoader& modelLoader)
 {

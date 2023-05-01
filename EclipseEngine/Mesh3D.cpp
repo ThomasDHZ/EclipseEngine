@@ -18,7 +18,7 @@ Mesh3D::Mesh3D(MeshLoader3D& meshLoader)
 
 	VertexList = meshLoader.VerticeList;
 	IndexList = meshLoader.IndexList;
-	material = meshLoader.MaterialPtr;
+	//material = meshLoader.MaterialPtr;
 
 	MeshType = meshLoader.MeshType;
 	MeshSubType = meshLoader.MeshSubType;
@@ -49,7 +49,7 @@ void Mesh3D::InstancingStartUp(InstancingDataStruct& instanceData)
 	{
 		for (auto& instance : instanceData.instanceMeshDataList)
 		{
-			InstancedData3D instanceData2;
+			InstancedVertexData3D instanceData2;
 
 			glm::mat4 TransformMatrix = glm::mat4(1.0f);
 			TransformMatrix = glm::translate(TransformMatrix, instance.InstancePosition);
@@ -58,14 +58,14 @@ void Mesh3D::InstancingStartUp(InstancingDataStruct& instanceData)
 			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 			TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
 
-			const auto matID = rand() % instanceData.MaterialList.size();
+			//const auto matID = rand() % instanceData.MaterialList.size();
 
 			instanceData2.InstanceModel = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-			instanceData2.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
+		//	instanceData2.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
 			InstancedDataList.emplace_back(instanceData2);
 		}
 
-		InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		InstanceBuffer.CreateBuffer(InstancedDataList.data(), InstancedDataList.size() * sizeof(InstancedVertexData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 
@@ -196,7 +196,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 					  MeshPosition + ReflectionPoint;
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
+//	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)
 	{
@@ -241,7 +241,7 @@ void Mesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMat
 		MeshPosition + ReflectionPoint;
 
 	meshProperties.MeshTransform = GameObjectTransformMatrix * ModelTransformMatrix * TransformMatrix;
-	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
+	//meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 
 	if (SelectedMesh)
 	{

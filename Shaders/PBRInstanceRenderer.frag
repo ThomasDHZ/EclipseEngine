@@ -10,78 +10,227 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 layout(location = 6) in flat int MaterialID;
 
-
 layout(location = 0) out vec4 outColor;
 
-#include "PBRBindingLayout.glsl"
-#include "PBRMaterial.glsl"
-#include "PBRFunctions.glsl"
-#include "PBRLight.glsl"
-#include "RasterVertexBuilder.glsl"
+struct Vertex
+{
+	vec3 Position;
+	float PositionPadding;
+	vec3 Normal;
+	float NormalPadding;
+	vec2 UV;
+	vec2 UVPadding;
+	vec3 Tangant;
+	float TangantPadding;
+	vec3 BiTangant;
+	float BiTangentPadding;
+	vec3 Color;
+	float ColorPadding;
+};
+
+struct MeshProperties
+{
+	uint VertexBufferIndex;
+	uint IndexBufferIndex;
+	uint MaterialBufferIndex;
+	uint AlbedoMapIndex;
+	uint MetallicRoughnessMapIndex;
+	uint AmbientOcclusionMapIndex;
+	uint NormalMapIndex;
+	uint DepthMapIndex;
+	uint AlphaMapIndex;
+	uint EmissionMapIndex;
+	uint SkyBoxIndex;
+	mat4 MeshTransform;
+	vec2 UVOffset;
+	vec2 UVScale;
+	vec2 UVFlip;
+	int SelectedMesh;
+	float heightScale;
+	float minLayers;
+	float maxLayers;
+};
+
+struct MaterialProperties
+{
+	vec3 Albedo;
+	float Metallic;
+	float Roughness;
+	float AmbientOcclusion;
+	vec3 Emission;
+	float Alpha;
+
+	uint AlbedoMap;
+	uint MetallicRoughnessMap;
+	uint AmbientOcclusionMap;
+	uint NormalMap;
+	uint DepthMap;
+	uint AlphaMap;
+	uint EmissionMap;
+};
+
+struct SunLight
+{
+	vec3 diffuse;
+	vec3 position;
+	mat4 LightSpaceMatrix;
+	float intensity;
+};
+
+struct DirectionalLight
+{
+	vec3 diffuse;
+	vec3 direction;
+	mat4 LightSpaceMatrix;
+	float intensity;
+};
+
+struct PointLight
+{
+	vec3 diffuse;
+	vec3 position;
+	mat4 LightSpaceMatrix;
+	float intensity;
+	float radius;
+};
+
+struct SpotLight
+{
+	vec3 diffuse;
+	vec3 position;
+	vec3 direction;
+	mat4 LightSpaceMatrix;
+	float intensity;
+
+    float cutOff;
+    float outerCutOff;
+    float constant;
+    float linear;
+    float quadratic;
+    mat4 lightSpaceMatrix;
+};
+
+layout(push_constant) uniform SceneData
+{
+    uint MeshIndex;
+    uint PrimitiveIndex;
+	uint MaterialIndex;
+    mat4 proj;
+    mat4 view;
+    vec3 CameraPos;
+    vec3 MeshColorID;
+    vec3 AmbientLight;
+    uint SunLightCount;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
+    float Timer;
+    float PBRMaxMipLevel;
+    uint frame;
+    int MaxRefeflectCount;
+} sceneData;
+
+struct PBRMaterial
+{
+	vec3 Albedo;
+	float Metallic;
+	float Roughness;
+	float AmbientOcclusion;
+	vec3 Emission;
+	float Alpha;
+
+	uint NormalMapID;
+	uint DepthMapID;
+};
+
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 4) uniform sampler2D BRDFMap;
+layout(binding = 5) uniform samplerCube IrradianceMap;
+layout(binding = 6) uniform samplerCube PrefilterMap;
+layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
+layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+
+const float PI = 3.14159265359;
+
+Vertex RasterVertexBuilder();
+MaterialProperties BuildPBRMaterial(vec2 UV);
 
 void main()
 { 
-   Vertex vertex = RasterVertexBuilder();
-   MaterialProperties material = materialBuffer[MaterialID].materialProperties;
+    Vertex vertex = RasterVertexBuilder();
+    MaterialProperties material = BuildPBRMaterial(vertex.UV);
 
-   PBRMaterial pbrMaterial = BuildPBRMaterial(material, vertex.UV);
+    outColor = vec4(material.Albedo, 1.0f);
+}
 
-   mat3 TBN = getTBNFromMap(vertex);
-   vec3 N = vertex.Normal;
+Vertex RasterVertexBuilder()
+{
+	Vertex vertex;
+	vertex.Position = FragPos;
+	vertex.UV = UV;
+	vertex.Normal = Normal;
+	vertex.Tangant = Tangent;
+	vertex.BiTangant = BiTangent;
+	vertex.Color = Color;
 
-   vec3 ViewPos  = sceneData.CameraPos;
-   vec3 FragPos2  = vertex.Position;
-   vec3 viewDir = normalize(ViewPos - FragPos2);
-   if (pbrMaterial.NormalMapID != 0)
-   {
-        ViewPos  = TBN * sceneData.CameraPos;
-        FragPos2  = TBN * vertex.Position;
+	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
-        if(pbrMaterial.DepthMapID != 0)
-        {
-            vertex.UV = ParallaxMapping(material.DepthMapID, vertex.UV,  viewDir);       
-            if(vertex.UV.x > 1.0 || vertex.UV.y > 1.0 || vertex.UV.x < 0.0 || vertex.UV.y < 0.0)
-            {
-              discard;
-            }
-        }
-        N = texture(TextureMap[material.NormalMapID], vertex.UV).rgb;
-        N = normalize(N * 2.0 - 1.0);
-        N = normalize(TBN * N);
-   }
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
+	{
+		vertex.UV.y = 1.0f - vertex.UV.y;
+	}
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
+	{
+		vertex.UV.x = 1.0f - vertex.UV.x;
+	}
 
-    vec3 V = normalize(sceneData.CameraPos - vertex.Position);
-    vec3 R = reflect(-V, N); 
+	return vertex;
+}
 
-    vec3 F0 = vec3(0.04f); 
-    F0 = mix(F0, pbrMaterial.Albedo, pbrMaterial.Metallic);
+MaterialProperties BuildPBRMaterial(vec2 UV)
+{
+	MaterialProperties material = materialBuffer[sceneData.MaterialIndex].materialProperties;
 
-    vec3 Lo = vec3(0.0);
-    Lo += CalcDirectionalLight(F0, V, N, pbrMaterial);
-    Lo += CalcPointLight(F0, V, N, vertex, pbrMaterial);
-    Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
+  //  material.Albedo = material.Albedo;
+//	if (material.AlbedoMap != 0)
+//	{
+	    material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
+	//}
 
-    vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, pbrMaterial.Roughness);
-    vec3 kS = F;
-    vec3 kD = 1.0 - kS;
-    kD *= 1.0 - pbrMaterial.Metallic;	  
-    
-    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], N).rgb;
-    vec3 diffuse      = irradiance * pbrMaterial.Albedo;
+   // material.Metallic = material.Metallic;
+	//if (material.MetallicRoughnessMap != 0)
+	//{
+	    material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
+	//}
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.SkyBoxIndex], R,  pbrMaterial.Roughness * sceneData.PBRMaxMipLevel).rgb;    
-    vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), pbrMaterial.Roughness)).rg;
-    vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
+   // material.Roughness = material.Roughness;
+	//if (material.MetallicRoughnessMap != 0)
+	//{
+	    material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
+//	}
 
-    vec3 ambient = pbrMaterial.Emission + ((kD * diffuse + specular) * pbrMaterial.AmbientOcclusion);
-    
-    vec3 color = ambient + Lo;
-    color = color / (color + vec3(1.0f));
-    color = pow(color, vec3(1.0f/2.2f)); 
+//material.AmbientOcclusion = material.AmbientOcclusion;
+	//if (material.AmbientOcclusionMap != 0)
+	//{
+		material.AmbientOcclusion = texture(TextureMap[material.AmbientOcclusionMap], UV).r;
+	//}
 
-    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
-    {
-        color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
-    }
-    outColor = vec4(color, 1.0f);
+	//material.Emission = material.Emission;
+	//if (material.EmissionMap != 0)
+	//{
+		material.Emission = texture(TextureMap[material.EmissionMap], UV).rgb;
+	//}
+
+    if(texture(TextureMap[material.AlbedoMap], UV).a == 0.0f)
+	{
+		discard;
+	}
+
+    return material;
 }

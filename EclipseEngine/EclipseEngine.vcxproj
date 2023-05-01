@@ -231,7 +231,6 @@
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="JsonConverter.cpp" />
-    <ClCompile Include="Material.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
@@ -302,7 +301,6 @@
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />
     <ClCompile Include="TextureBaker.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
@@ -315,7 +313,6 @@
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
     <ClCompile Include="RayTraceRenderPass.cpp" />
@@ -409,7 +406,6 @@
     <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="Material.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
@@ -484,7 +480,6 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureAtlus.h" />
     <ClInclude Include="TextureBaker.h" />
-    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
@@ -497,7 +492,6 @@
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
-    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RayTraceRenderer.h" />

@@ -11,9 +11,9 @@ DepthPipeline::~DepthPipeline()
 void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+   // std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    //std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -22,7 +22,7 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
+   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
   //  AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};

@@ -15,6 +15,6 @@ public:
 	PBRInstancePipeline();
 	~PBRInstancePipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, PBRRenderPassTextureSubmitList& textures);
+	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
 	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
 };

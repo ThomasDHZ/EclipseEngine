@@ -23,7 +23,7 @@ struct ParticleLoader3D
 
 	std::vector<Vertex3D> VerticeList;
 	std::vector<uint32_t> IndexList;
-	std::shared_ptr<Material> MaterialPtr = MaterialManager::GetDefaultMaterial();
+	//std::shared_ptr<Material> MaterialPtr = MaterialManager::GetDefaultMaterial();
 
 	MeshTypeEnum MeshType;
 	MeshSubTypeEnum MeshSubType;

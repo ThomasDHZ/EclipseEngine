@@ -159,9 +159,6 @@
     <ClCompile Include="RenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="MaterialManager.cpp">
-      <Filter>Source Files\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="RayTraceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -534,9 +531,6 @@
     <ClCompile Include="GLTFMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -547,9 +541,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TextureBaker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BakedTexture.cpp">
@@ -666,9 +657,6 @@
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectManager.h">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="RayTracingPipeline.h">
@@ -1028,9 +1016,6 @@
     <ClInclude Include="GLTFSceneManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFRenderer2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLTFRenderPass2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1058,9 +1043,6 @@
     <ClInclude Include="GLTFMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1071,9 +1053,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TextureAtlus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BakedTexture.h">
@@ -1198,6 +1177,9 @@
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFRenderer2D.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

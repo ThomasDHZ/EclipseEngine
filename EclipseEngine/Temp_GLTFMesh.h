@@ -4,6 +4,22 @@
 #include <basetsd.h>
 #include "GLTFMaterial.h"
 
+struct GLTFInstanceMeshDataStruct
+{
+	uint64_t MaterialBufferIndex = 0;
+	glm::vec3 InstancePosition = glm::vec3(0.0f);
+	glm::vec3 InstanceRotation = glm::vec3(0.0f);
+	glm::vec3 InstanceScale = glm::vec3(1.0f);
+	GLTFInstanceMeshDataStruct() {};
+};
+
+struct GLTFInstancingDataStruct
+{
+	std::vector<GLTFInstanceMeshDataStruct> InstanceMeshDataList;
+	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+	GLTFInstancingDataStruct() {};
+};
+
 struct GLTFMeshLoader3D
 {
 	std::shared_ptr<GLTFNode> node;
@@ -22,8 +38,8 @@ struct GLTFMeshLoader3D
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
-	InstancingDataStruct InstanceData;
 
+	GLTFInstancingDataStruct InstanceData;
 	std::vector<MeshBoneWeights> BoneWeightList;
 };
 
@@ -43,15 +59,28 @@ private:
 	uint32_t IndexCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t TriangleCount = 0;
+	uint32_t InstanceCount = 0;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
+
+	MeshProperties meshProperties;
 
 	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
+	std::vector<InstancingDataStruct> InstanceData;
+	std::vector<InstancedVertexData3D> InstancedVertexDataList;
+
+	VulkanBuffer MeshTransformBuffer;
+	VulkanBuffer MeshTransformInverseBuffer;
+	VulkanBuffer MeshPropertiesBuffer;
+	VulkanBuffer InstanceBuffer;
+	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
+
+	void InstancingStartUp(GLTFInstancingDataStruct& instanceData);
 	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);
 	void UpdateMeshBottomLevelAccelerationStructure();
 
@@ -69,18 +98,10 @@ public:
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
 
-	MeshProperties meshProperties;
-
-	VulkanBuffer MeshTransformBuffer;
-	VulkanBuffer MeshTransformInverseBuffer;
-	VulkanBuffer MeshPropertiesBuffer;
-	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
-
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
-	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 
 	void UpdateMeshBufferIndex(uint64_t bufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
@@ -88,6 +109,7 @@ public:
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
 	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void Destroy();

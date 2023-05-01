@@ -275,9 +275,9 @@ struct Vertex3D
     }
 };
 
-struct InstancedData3D
+struct InstancedVertexData3D
 {
-    InstancedData3D() {};
+    InstancedVertexData3D() {};
 
     glm::mat4 InstanceModel = glm::mat4(1.0f);
     uint32_t MaterialID = 0;
@@ -288,7 +288,7 @@ struct InstancedData3D
         VkVertexInputBindingDescription bindingDescription{};
 
         bindingDescription.binding = 1;
-        bindingDescription.stride = sizeof(InstancedData3D);
+        bindingDescription.stride = sizeof(InstancedVertexData3D);
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
         bindingDescriptionList.emplace_back(bindingDescription);
 
@@ -326,7 +326,7 @@ struct InstancedData3D
         AttributeDescription.binding = 1;
         AttributeDescription.location = 10;
         AttributeDescription.format = VK_FORMAT_R32_SINT;
-        AttributeDescription.offset = sizeof(InstancedData3D) - sizeof(uint32_t);
+        AttributeDescription.offset = sizeof(InstancedVertexData3D) - sizeof(uint32_t);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;

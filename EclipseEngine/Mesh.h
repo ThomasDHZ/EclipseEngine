@@ -4,7 +4,6 @@
 #include "Vertex.h"
 #include "VulkanRenderer.h"
 #include "UniformBuffer.h"
-#include "MaterialManager.h"
 #include "AccelerationStructureBuffer.h"
 #include "Bone.h"
 #include "Converters.h"
@@ -44,7 +43,7 @@ struct InstanceMeshDataStruct
 struct InstancingDataStruct
 {
 	std::vector<InstanceMeshDataStruct> instanceMeshDataList;
-	std::vector<std::shared_ptr<Material>> MaterialList;
+	//std::vector<std::shared_ptr<Material>> MaterialList;
 	InstancingDataStruct() {};
 };
 
@@ -94,9 +93,9 @@ protected:
 	glm::vec3 ReflectionPoint = glm::vec3(0.0f);
 
 	std::vector<InstancingDataStruct> InstanceData;
-	std::vector<InstancedData3D> InstancedDataList;
+	std::vector<InstancedVertexData3D> InstancedDataList;
 	
-	std::shared_ptr<Material> material;
+//	std::shared_ptr<Material> material;
 
 
 
@@ -129,7 +128,7 @@ public:
 	void SetParentGameObjectID(uint64_t GameObjectID);
 	void SetParentModel(uint64_t ModelID);
 	void SetBufferIndex(int bufferIndex);
-	void SetMaterial(std::shared_ptr<Material> materialPtr);
+	//void SetMaterial(std::shared_ptr<Material> materialPtr);
 	void SetReflectionPoint(const glm::vec3& reflectionPoint);
 
 	void GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList);
@@ -158,7 +157,7 @@ public:
 	glm::mat4 GetMeshTransformMatrix() { return MeshTransformMatrix; }
 	glm::vec3 GetReflectionPoint() { return ReflectionPoint; }
 
-	std::shared_ptr<Material> GetMaterial() { return material; }
+	//std::shared_ptr<Material> GetMaterial() { return material; }
 	MeshProperties GetMeshProperties() { return meshProperties; }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 

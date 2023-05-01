@@ -121,7 +121,7 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
     pipelineInfo.SampleCount = SampleCount;
 
     pbrPipeline.InitializePipeline(pipelineInfo, textures);
-    pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
+    //pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
     lightDebugPipeline.InitializePipeline(pipelineInfo);
     skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
     linePipeline.InitializePipeline(pipelineInfo);

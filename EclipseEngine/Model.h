@@ -12,7 +12,6 @@
 #include "AnimationPlayer3D.h"
 #include "ComputeAnimationPipeline.h"
 #include <GLTFScene.h>
-#include "TextureManager.h"
 
 const unsigned int MAX_BONE_VERTEX_COUNT = 4;
 
@@ -58,7 +57,7 @@ private:
 	void LoadBones(const aiNode* RootNode, const aiMesh* mesh, std::vector<Vertex3D>& VertexList);
 	std::vector<MeshBoneWeights> LoadBoneWeights(aiMesh* mesh, std::vector<Vertex3D>& VertexList);
 	void LoadBoneMeshTransform(const int NodeID, const glm::mat4& ParentMatrix);
-	std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
+	//std::shared_ptr<Material> LoadMaterial(const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 
 	void BoneWeightPlacement(std::vector<MeshBoneWeights>& VertexList, unsigned int vertexID, unsigned int bone_id, float weight);
 

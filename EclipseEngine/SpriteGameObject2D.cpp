@@ -57,6 +57,6 @@ void SpriteGameObject2D::Destroy()
 {
 }
 
-void SpriteGameObject2D::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
-{
-}
+//void SpriteGameObject2D::SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial)
+//{
+//}

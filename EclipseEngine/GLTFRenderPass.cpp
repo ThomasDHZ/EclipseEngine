@@ -123,11 +123,28 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     oldpbrPipeline.InitializePipeline(pipelineInfo, ad);
     oldwireframePipeline.InitializePipeline(pipelineInfo);
     oldLinePipeline.InitializePipeline(pipelineInfo);
+    oldinstancedPipeline.InitializePipeline(pipelineInfo);
 
-    LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    PBRPipeline = JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
+    //Main Renderers
+    {
+        LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRPipeline = JsonGraphicsPipeline("GLTFPBRPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
+    }
+
+    //Instanced Renderers
+    {
+        std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+        bindingDescriptions = Vertex3D::getBindingDescriptions();
+        bindingDescriptions.emplace_back(InstancedVertexData3D::getBindingDescriptions()[0]);
+
+        std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+        attributeDescriptions = Vertex3D::getAttributeDescriptions();
+        attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
+
+        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, gameObjectList[0], ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    }
 }
 
 VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
@@ -185,6 +202,18 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
                 else
                 {
                     PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                }
+                break;
+            }
+            case GameObjectRenderType::kInstanceRenderer:
+            {
+                if (GLTFSceneManager::WireframeModeFlag)
+                {
+                    //WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                }
+                else
+                {
+                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }

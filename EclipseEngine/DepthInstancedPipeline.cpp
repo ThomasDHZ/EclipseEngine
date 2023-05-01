@@ -11,9 +11,9 @@ DepthInstancedPipeline::~DepthInstancedPipeline()
 void DepthInstancedPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+   // std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+   // std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthIntencedShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -22,7 +22,7 @@ void DepthInstancedPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
+  //  AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
    // AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
@@ -35,11 +35,11 @@ void DepthInstancedPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
 
     std::vector<VkVertexInputBindingDescription> bindingDescriptions;
     bindingDescriptions = Vertex3D::getBindingDescriptions();
-    bindingDescriptions.emplace_back(InstancedData3D::getBindingDescriptions()[0]);
+    bindingDescriptions.emplace_back(InstancedVertexData3D::getBindingDescriptions()[0]);
 
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
     attributeDescriptions = Vertex3D::getAttributeDescriptions();
-    attributeDescriptions = InstancedData3D::AddInstnacingAttributeDescription(attributeDescriptions);
+    attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = bindingDescriptions;

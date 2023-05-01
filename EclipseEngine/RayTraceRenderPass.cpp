@@ -93,11 +93,11 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
     {
         VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
         VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
-        std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+      //  std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
         std::vector<VkDescriptorBufferInfo> MeshVertexBufferList = MeshRendererManager::GetMeshVertexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshIndexBufferList = MeshRendererManager::GetMeshIndexBuffer();
         std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-        std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+      //  std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
         std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
         std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
         std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = GLTFSceneManager::GetSpotLightPropertiesBuffer();
@@ -115,11 +115,11 @@ void RayTraceRenderPass::BuildRenderPassPipelines()
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MeshVertexBufferList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, MeshIndexBufferList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, MeshPropertiesBufferList);
-        AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, MaterialBufferList);
+       // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 5, MaterialBufferList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 6, DirectionalLightBufferInfoList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, PointLightBufferInfoList);
         AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, SpotLightBufferInfoList);
-        AddTextureDescriptorSetBinding(DescriptorBindingList, 9, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+       // AddTextureDescriptorSetBinding(DescriptorBindingList, 9, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
         AddTextureDescriptorSetBinding(DescriptorBindingList, 10, CubeMapBufferInfoList);
     }
 

@@ -86,7 +86,7 @@ void InstanceMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& Mo
 	TransformMatrix = glm::scale(TransformMatrix, InstanceScale);
 
 	meshProperties.MeshTransform = GameObjectMatrix * ModelMatrix * TransformMatrix;
-	meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
+	//meshProperties.MaterialBufferIndex = material->GetMaterialBufferIndex();
 }
 
 void InstanceMesh::GetMeshPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MeshPropertiesBufferList)

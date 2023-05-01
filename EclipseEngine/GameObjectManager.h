@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "MaterialManager.h"
 #include "GraphicsPipeline.h"
 #include <algorithm>
 

@@ -22,7 +22,7 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = GLTFSceneManager::GetSpotLightPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    //std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
     VkDescriptorImageInfo PositionTextureBuffer = AddTextureDescriptor(PositionTexture->View, PositionTexture->Sampler);
     VkDescriptorImageInfo TangentTextureeBuffer = AddTextureDescriptor(TangentTexture->View, TangentTexture->Sampler);
     VkDescriptorImageInfo BiTangentTextureBuffer = AddTextureDescriptor(BiTangentTexture->View, BiTangentTexture->Sampler);
@@ -42,7 +42,7 @@ void DeferredRendererPipeline::InitializePipeline(std::shared_ptr<RenderedColorT
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+   // AddTextureDescriptorSetBinding(DescriptorBindingList, 4, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 5, PositionTextureBuffer);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, TangentTextureeBuffer);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 7, BiTangentTextureBuffer);

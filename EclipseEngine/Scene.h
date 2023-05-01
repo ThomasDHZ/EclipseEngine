@@ -15,8 +15,6 @@
 #include "Texture2D.h"
 #include "GameObjectManager.h"
 #include "Renderer2D.h"
-#include "TextureManager.h"
-#include "MaterialManager.h"
 #include "RayTraceRenderer.h"
 #include "LightManager.h"
 #include "PBRRenderer.h"

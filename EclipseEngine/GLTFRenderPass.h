@@ -6,6 +6,7 @@
 #include "WireFramePipeline.h"
 #include "LinePipeline.h"
 #include "WireFramePipeline.h"
+#include "PBRInstancePipeline.h"
 class GLTFRenderPass : public RenderPass
 {
 	private:
@@ -13,10 +14,12 @@ class GLTFRenderPass : public RenderPass
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 		GLTFPBRRenderPIpeline oldpbrPipeline;
+		PBRInstancePipeline oldinstancedPipeline;
 		WireFramePipeline oldwireframePipeline;
 		LinePipeline oldLinePipeline;
 
 		JsonGraphicsPipeline PBRPipeline;
+		JsonGraphicsPipeline PBRInstancePipeline;
 		JsonGraphicsPipeline WireframePipeline;
 		JsonGraphicsPipeline LinePipeline;
 		JsonGraphicsPipeline SkyBoxPipeline;

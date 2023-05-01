@@ -11,9 +11,9 @@ DepthCubeMapPipeline::~DepthCubeMapPipeline()
 void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+  //  std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+  //  std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     VkDescriptorBufferInfo CubeMapSamplerBufferInfo = {};
     CubeMapSamplerBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
@@ -27,7 +27,7 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, CubeMapSamplerBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MeshPropertiesBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
+   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
  //  AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};

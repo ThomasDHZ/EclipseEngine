@@ -11,7 +11,6 @@
 
 #include "GameObjectManager.h"
 #include "LightManager.h"
-#include "MaterialManager.h"
 #include "TopLevelAccelerationStructureManager.h"
 #include "ComponentRenderer.h"
 #include "MusicPlayer.h"
@@ -216,13 +215,9 @@ public:
 
 	static void DestroyScene()
 	{
-		MaterialManager::DestroyScene();
-		TextureManager::DestroyScene();
 		GameObjectManager::DestroyScene();
 		MeshRendererManager::DestroyScene();
 		LightManager::DestroyScene();
-
-		TextureManager::StartUp();
 	}
 
 	static SceneType GetSceneType() { return sceneType; }

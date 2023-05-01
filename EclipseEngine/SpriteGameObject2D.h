@@ -33,5 +33,5 @@ public:
 	virtual void Update(float DeltaTime) override;
 	virtual void Destroy() override;
 
-	void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);
+	//void SetSpriteMaterial(std::shared_ptr<Material> SpriteMaterial);
 };

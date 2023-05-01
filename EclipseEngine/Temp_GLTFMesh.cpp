@@ -1,6 +1,7 @@
 #include "Temp_GLTFMesh.h"
 #include "SceneManager.h"
 #include "EngineMath.h"
+#include "RandomNumber.h"
 
 uint64_t Temp_GLTFMesh::MeshIDCounter = 0;
 
@@ -25,6 +26,7 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	IndexCount = meshLoader.IndexCount;
 	//BoneCount = meshLoader.node->BoneCount;
 	TriangleCount = IndexCount / 3;
+	InstanceCount = meshLoader.InstanceData.InstanceMeshDataList.size();
 
 	GameObjectTransform = meshLoader.GameObjectTransform;
 	ModelTransform = meshLoader.ModelTransform;
@@ -45,6 +47,7 @@ Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 	VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
 	MeshTransformInverseBuffer.CreateBuffer(&inverseMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	InstancingStartUp(meshLoader.InstanceData);
 	RTXMeshStartUp(meshLoader.VertexBuffer, meshLoader.IndexBuffer);
 }
 
@@ -200,6 +203,33 @@ void Temp_GLTFMesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& Ind
 	}
 }
 
+void Temp_GLTFMesh::InstancingStartUp(GLTFInstancingDataStruct& instanceData)
+{
+	InstanceCount = instanceData.InstanceMeshDataList.size();
+	if (InstanceCount > 0)
+	{
+		for (auto& instance : instanceData.InstanceMeshDataList)
+		{
+			InstancedVertexData3D instancVertexeData;
+
+			glm::mat4 TransformMatrix = glm::mat4(1.0f);
+			TransformMatrix = glm::translate(TransformMatrix, instance.InstancePosition);
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instance.InstanceRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			TransformMatrix = glm::scale(TransformMatrix, instance.InstanceScale);
+
+			const auto matID = rand() % instanceData.MaterialList.size();
+
+			instancVertexeData.InstanceModel = GameObjectTransform * ModelTransform * TransformMatrix;
+			instancVertexeData.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
+			InstancedVertexDataList.emplace_back(instancVertexeData);
+		}
+
+		InstanceBuffer.CreateBuffer(InstancedVertexDataList.data(), InstancedVertexDataList.size() * sizeof(InstancedVertexData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	}
+}
+
 VkDescriptorBufferInfo Temp_GLTFMesh::UpdateMeshPropertiesBuffer()
 {
 	VkDescriptorBufferInfo MeshPropertiesmBufferInfo = {};
@@ -302,6 +332,21 @@ void Temp_GLTFMesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
+	}
+}
+
+void Temp_GLTFMesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+{
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);
+	if (IndexCount == 0)
+	{
+		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
+	}
+	else
+	{
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
+		vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
 	}
 }
 

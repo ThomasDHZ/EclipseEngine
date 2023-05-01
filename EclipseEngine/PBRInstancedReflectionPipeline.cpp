@@ -17,11 +17,11 @@ void PBRInstancedReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipe
     SkyboxBufferInfo.range = VK_WHOLE_SIZE;
 
     std::vector<VkDescriptorBufferInfo> MeshPropertiesBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+   // std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> SpotLightBufferInfoList = GLTFSceneManager::GetSpotLightPropertiesBuffer();
-    std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    //std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     std::vector<VkDescriptorImageInfo> IrradianceMapBufferList;
     if (textures.IrradianceTextureList.size() == 0)
@@ -141,11 +141,11 @@ void PBRInstancedReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipe
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesBufferList);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
+    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, SpotLightBufferInfoList);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+   // AddTextureDescriptorSetBinding(DescriptorBindingList, 5, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 6, IrradianceMapBufferList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 7, PrefilterMapBufferList, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
     AddTextureDescriptorSetBinding(DescriptorBindingList, 8, BRDFBuffer, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
@@ -166,11 +166,11 @@ void PBRInstancedReflectionPipeline::InitializePipeline(PipelineInfoStruct& pipe
 
     std::vector<VkVertexInputBindingDescription> bindingDescriptions;
     bindingDescriptions = Vertex3D::getBindingDescriptions();
-    bindingDescriptions.emplace_back(InstancedData3D::getBindingDescriptions()[0]);
+    bindingDescriptions.emplace_back(InstancedVertexData3D::getBindingDescriptions()[0]);
 
     std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
     attributeDescriptions = Vertex3D::getAttributeDescriptions();
-    attributeDescriptions = InstancedData3D::AddInstnacingAttributeDescription(attributeDescriptions);
+    attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = bindingDescriptions;
