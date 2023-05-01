@@ -230,7 +230,7 @@ void main()
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
 
-    if(meshBuffer[0].meshProperties.SelectedMesh == 1)
+    if(meshBuffer[sceneData.MeshIndex].meshProperties.SelectedMesh == 1)
     {
         color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
     }
@@ -247,14 +247,14 @@ Vertex RasterVertexBuilder()
 	vertex.BiTangant = BiTangent;
 	vertex.Color = Color;
 
-	vertex.UV = vertex.UV + meshBuffer[0].meshProperties.UVOffset;
-	vertex.UV *= meshBuffer[0].meshProperties.UVScale;
+	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
 
-	if (meshBuffer[0].meshProperties.UVFlip.y == 1.0f)
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
 	{
 		vertex.UV.y = 1.0f - vertex.UV.y;
 	}
-	if (meshBuffer[0].meshProperties.UVFlip.x == 1.0f)
+	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
 	{
 		vertex.UV.x = 1.0f - vertex.UV.x;
 	}
@@ -351,9 +351,9 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 
 mat3 getTBNFromMap(Vertex vertex)
 {
-    vec3 T = normalize(mat3(meshBuffer[0].meshProperties.MeshTransform) * vec3(vertex.Tangant));
-    vec3 B = normalize(mat3(meshBuffer[0].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
-    vec3 N = normalize(mat3(meshBuffer[0].meshProperties.MeshTransform) * vertex.Normal);
+    vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.Tangant));
+    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
+    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vertex.Normal);
     return mat3(T, B, N);
 }
 

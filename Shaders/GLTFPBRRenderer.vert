@@ -157,7 +157,7 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    mat4 MeshTransform = transformBuffer[0].transform;
+    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
     FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;

@@ -132,51 +132,51 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
             descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
             DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
 
-            for (int y = 0; y < gameObjectList[x]->GetMaterialList().size(); y++)
-            {
-                std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-               // GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetGameObjectTransformMatrixBuffer()[0]);
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, gameObjectList[x]->GetMaterialList()[y]->GetAlbedoMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, gameObjectList[x]->GetMaterialList()[y]->GetNormalMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, gameObjectList[x]->GetMaterialList()[y]->GetMetallicRoughnessMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, gameObjectList[x]->GetMaterialList()[y]->GetAmbientOcclusionMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, gameObjectList[x]->GetMaterialList()[y]->GetAlphaMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, gameObjectList[x]->GetMaterialList()[y]->GetDepthMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
-                GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GLTFSceneManager::GetSunLightPropertiesBuffer());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
-                GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
-                gameObjectList[x]->GetMaterialList()[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1[0], DescriptorSetLayoutList[0]);
+            //for (int y = 0; y < gameObjectList[x]->GetMaterialList().size(); y++)
+            //{
+            //    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+            //   // GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
+            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetGameObjectTransformMatrixBuffer()[0]);
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, gameObjectList[x]->GetMaterialList()[y]->GetAlbedoMapDescriptor());
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, gameObjectList[x]->GetMaterialList()[y]->GetNormalMapDescriptor());
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, gameObjectList[x]->GetMaterialList()[y]->GetMetallicRoughnessMapDescriptor());
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, gameObjectList[x]->GetMaterialList()[y]->GetAmbientOcclusionMapDescriptor());
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, gameObjectList[x]->GetMaterialList()[y]->GetAlphaMapDescriptor());
+            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, gameObjectList[x]->GetMaterialList()[y]->GetDepthMapDescriptor());
+            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
+            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
+            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
+            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GLTFSceneManager::GetSunLightPropertiesBuffer());
+            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
+            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
+            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
+            //    gameObjectList[x]->GetMaterialList()[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1[0], DescriptorSetLayoutList[0]);
 
-                std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-                for (auto& DescriptorBinding : DescriptorBindingList)
-                {
-                    if (DescriptorBinding.BufferDescriptor.size() > 0)
-                    {
-                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
-                    }
-                    else if (DescriptorBinding.TextureDescriptor.size() > 0)
-                    {
-                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
-                    }
-                    else
-                    {
-                        writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
-                    }
-                }
-                vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-                for (int z = 0; z < gameObjectList.size(); z++)
-                {
-                    for (int w = 0; w < gameObjectList[z]->GetMeshList().size(); w++)
-                    {
-                        gameObjectList[z]->GetMeshList()[w]->MaterialList = gameObjectList[z]->GetMaterialList();
-                    }
-                }
-            }
+            //    std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+            //    for (auto& DescriptorBinding : DescriptorBindingList)
+            //    {
+            //        if (DescriptorBinding.BufferDescriptor.size() > 0)
+            //        {
+            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+            //        }
+            //        else if (DescriptorBinding.TextureDescriptor.size() > 0)
+            //        {
+            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+            //        }
+            //        else
+            //        {
+            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+            //        }
+            //    }
+            //    vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
+            //    for (int z = 0; z < gameObjectList.size(); z++)
+            //    {
+            //        for (int w = 0; w < gameObjectList[z]->GetMeshList().size(); w++)
+            //        {
+            //            gameObjectList[z]->GetMeshList()[w]->MaterialList = gameObjectList[z]->GetMaterialList();
+            //        }
+            //    }
+            //}
         }
     }
 

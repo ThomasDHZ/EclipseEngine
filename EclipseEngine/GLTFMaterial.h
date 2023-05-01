@@ -34,6 +34,8 @@ private:
 	void GenerateID();
 
 public:
+	std::string MaterialName;
+	GLTFMaterialBufferInfo MaterialInfo;
 
 	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
 	float Metallic = 0.0f;
@@ -41,8 +43,7 @@ public:
 	float AmbientOcclusion = 1.0f;
 	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
-	GLTFMaterialBufferInfo MaterialInfo;
-	std::string MaterialName;
+
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
 	std::shared_ptr<Texture> AmbientOcclusionMap = nullptr;
@@ -51,31 +52,13 @@ public:
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 
-	VkDescriptorSet descriptorSet;
-
 	GLTFMaterial();
 	GLTFMaterial(const std::string& materialName);
 	~GLTFMaterial();
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
+	void UpdateBuffer();
+	void GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList);
 
-	void  GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& LightPropertiesBufferList)
-	{
-		VkDescriptorBufferInfo LightBufferInfo = {};
-		LightBufferInfo.buffer = MaterialBuffer.Buffer;
-		LightBufferInfo.offset = 0;
-		LightBufferInfo.range = VK_WHOLE_SIZE;
-		LightPropertiesBufferList.emplace_back(LightBufferInfo);
-	}
-	void UpdateBuffer()
-	{
-		MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
-	}
-	VkDescriptorImageInfo GetAlbedoMapDescriptor();
-	VkDescriptorImageInfo GetMetallicRoughnessMapDescriptor();
-	VkDescriptorImageInfo GetAmbientOcclusionMapDescriptor();
-	VkDescriptorImageInfo GetNormalMapDescriptor();
-	VkDescriptorImageInfo GetDepthMapDescriptor();
-	VkDescriptorImageInfo GetAlphaMapDescriptor();
-	VkDescriptorImageInfo GetEmissionMapDescriptor();
+	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }
 };

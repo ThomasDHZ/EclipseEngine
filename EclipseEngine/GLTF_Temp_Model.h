@@ -13,12 +13,6 @@ private:
 	uint64_t ParentGameObjectID = 0;
 	uint64_t ModelID = 0;
 
-	std::string NodeName;
-
-	std::vector<GLTFPrimitive> PrimitiveList;
-	std::vector<MeshProperties> MeshPropertiesList;
-	std::vector<std::shared_ptr<Texture>> TextureList;
-
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer scratchBuffer;

@@ -67,65 +67,39 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 
 		if (loader.AlbedoMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AlbedoMap);
-			TextureList.emplace_back(texture);
-			material->AlbedoMap = texture;
-			material->MaterialInfo.AlbedoMap = material->AlbedoMap->GetTextureBufferIndex();
+			material->AlbedoMap = GLTFSceneManager::LoadTexture2D(loader.AlbedoMap);
 		}
 
 		if (loader.MetallicRoughnessMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.MetallicRoughnessMap);
-			TextureList.emplace_back(texture);
-
-			material->MetallicRoughnessMap = texture;
-			material->MaterialInfo.MetallicRoughnessMap = material->MetallicRoughnessMap->GetTextureBufferIndex();
+			material->MetallicRoughnessMap = GLTFSceneManager::LoadTexture2D(loader.MetallicRoughnessMap);
 		}
 
 		if (loader.AmbientOcclusionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AmbientOcclusionMap);
-			TextureList.emplace_back(texture);
-
-			material->AmbientOcclusionMap = texture;
-			material->MaterialInfo.AmbientOcclusionMap = material->AmbientOcclusionMap->GetTextureBufferIndex();
+			material->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(loader.AmbientOcclusionMap);
 		}
 
 		if (loader.NormalMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.NormalMap);
-			TextureList.emplace_back(texture);
-
-			material->NormalMap = texture;
-			material->MaterialInfo.NormalMap = material->NormalMap->GetTextureBufferIndex();
+			material->NormalMap = GLTFSceneManager::LoadTexture2D(loader.NormalMap);
 		}
 
 		if (loader.DepthMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.DepthMap);
-			TextureList.emplace_back(texture);
-
-			material->DepthMap = texture;
-			material->MaterialInfo.DepthMap = material->DepthMap->GetTextureBufferIndex();
+			material->DepthMap = GLTFSceneManager::LoadTexture2D(loader.DepthMap);
 		}
 
 		if (loader.AlphaMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.AlphaMap);
-			TextureList.emplace_back(texture);
-
-			material->AlphaMap = texture;
-			material->MaterialInfo.AlphaMap = material->AlphaMap->GetTextureBufferIndex();
+			material->AlphaMap = GLTFSceneManager::LoadTexture2D(loader.AlphaMap);
 		}
 
 		if (loader.EmissionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			std::shared_ptr<Texture> texture = GLTFSceneManager::LoadTexture2D(loader.EmissionMap);
-			TextureList.emplace_back(texture);
-
-			material->EmissionMap = texture;
-			material->MaterialInfo.EmissionMap = material->EmissionMap->GetTextureBufferIndex();
+			material->EmissionMap = GLTFSceneManager::LoadTexture2D(loader.EmissionMap);
 		}
+
 		material->UpdateBuffer();
 		MaterialList.emplace_back(material);
 		GLTFSceneManager::AddMaterial(material);
@@ -209,13 +183,11 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesDescriptorList;
 	for (auto mesh : MeshList)
 	{
-		for (auto& meshBuffer : mesh->UpdateMeshPropertiesBuffer())
-		{
-			MeshPropertiesDescriptorList.emplace_back(meshBuffer);
-		}
+		MeshPropertiesDescriptorList.emplace_back(mesh->UpdateMeshPropertiesBuffer());
 	}
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
+
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
@@ -272,10 +244,7 @@ void GLTF_Temp_Model::Destroy()
 	VertexBuffer.DestroyBuffer();
 	IndexBuffer.DestroyBuffer();
 
-	for (auto& texture : TextureList)
-	{
-		texture->Destroy();
-	}
+
 	for (auto& material : MeshPropertiesBufferList)
 	{
 		material.DestroyBuffer();

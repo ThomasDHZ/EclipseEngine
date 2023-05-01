@@ -22,11 +22,18 @@ bool											   GLTFSceneManager::WireframeModeFlag = false;
 
 void GLTFSceneManager::UpdateBufferIndex()
 {
+
+	for (int x = 0; x < GameObjectList.size(); x++)
+	{
+		for (int y = 0; y < GameObjectList[x]->GetGameObjectRenderer()->GetMeshList().size(); y++)
+		{
+			GameObjectList[x]->GetGameObjectRenderer()->GetMeshList()[y]->UpdateMeshBufferIndex(x);
+		}
+	}
 	for (int x = 0; x < TextureList.size(); x++)
 	{
 		TextureList[x]->UpdateTextureBufferIndex(x);
 	}
-
 	for (int x = 0; x < MaterialList.size(); x++)
 	{
 		MaterialList[x]->UpdateMaterialBufferIndex(x);
@@ -96,6 +103,7 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 void GLTFSceneManager::AddMaterial(const std::shared_ptr<GLTFMaterial> material)
 {
 	MaterialList.emplace_back(material);
+	UpdateBufferIndex();
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
@@ -159,6 +167,10 @@ void GLTFSceneManager::StartUp()
 
 void GLTFSceneManager::Update()
 {
+	if (VulkanRenderer::UpdateRendererFlag)
+	{
+		UpdateBufferIndex();
+	}
 	for (auto& light : SunLightList)
 	{
 		light->Update();
@@ -192,6 +204,7 @@ void GLTFSceneManager::Update()
 	}
 	sceneProperites.MaxReflectCount = 2;
 }
+
 
 void GLTFSceneManager::Destroy()
 {

@@ -22,7 +22,7 @@ struct GLTFMeshLoader3D
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
-	InstancingDataStruct instanceData;
+	InstancingDataStruct InstanceData;
 
 	std::vector<MeshBoneWeights> BoneWeightList;
 };
@@ -30,9 +30,12 @@ struct GLTFMeshLoader3D
 class Temp_GLTFMesh
 {
 private:
+	static uint64_t MeshIDCounter;
+
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
+	uint64_t MeshBufferIndex = -1;
 
 	std::string MeshName;
 
@@ -46,14 +49,12 @@ private:
 
 	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
 
-
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
 	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);
-
-
 	void UpdateMeshBottomLevelAccelerationStructure();
+
 public:
 	Temp_GLTFMesh();
 	Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader);
@@ -72,15 +73,16 @@ public:
 
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
-	std::vector<VulkanBuffer> MeshPropertiesBufferList;
+	VulkanBuffer MeshPropertiesBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
-	std::vector<VkDescriptorBufferInfo> UpdateMeshPropertiesBuffer();
+	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
 
+	void UpdateMeshBufferIndex(uint64_t bufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);

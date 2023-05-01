@@ -113,6 +113,7 @@ public:
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
 		GameObjectRenderer->LoadModel<T>(fileName, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	template <class T>
@@ -120,6 +121,7 @@ public:
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	template <class T>
@@ -127,6 +129,7 @@ public:
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	template <class T>
@@ -134,6 +137,7 @@ public:
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, material, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	virtual ~GameObject();

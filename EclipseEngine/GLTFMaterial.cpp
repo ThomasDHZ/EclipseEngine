@@ -18,111 +18,63 @@ GLTFMaterial::~GLTFMaterial()
 {
 }
 
+void GLTFMaterial::GenerateID()
+{
+	MaterialIDCounter++;
+	MaterialID = MaterialIDCounter;
+}
+
 void GLTFMaterial::UpdateMaterialBufferIndex(uint64_t bufferIndex)
 {
 	MaterialBufferIndex = bufferIndex;
 }
 
-VkDescriptorImageInfo GLTFMaterial::GetAlbedoMapDescriptor()
+void GLTFMaterial::UpdateBuffer()
 {
+	MaterialInfo.Albedo = Albedo;
+	MaterialInfo.Metallic = Metallic;
+	MaterialInfo.Roughness = Roughness;
+	MaterialInfo.AmbientOcclusion = AmbientOcclusion;
+	MaterialInfo.Emission = Emission;
+	MaterialInfo.Alpha = Alpha;
+
 	if (AlbedoMap != nullptr)
 	{
-		VkDescriptorImageInfo albedoTextureDescriptor{};
-		albedoTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		albedoTextureDescriptor.imageView = AlbedoMap->GetView();
-		albedoTextureDescriptor.sampler = AlbedoMap->GetSampler();
-		return albedoTextureDescriptor;
+		MaterialInfo.AlbedoMap = AlbedoMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetMetallicRoughnessMapDescriptor()
-{
 	if (MetallicRoughnessMap != nullptr)
 	{
-		VkDescriptorImageInfo metallicRoughnessTextureDescriptor{};
-		metallicRoughnessTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		metallicRoughnessTextureDescriptor.imageView = MetallicRoughnessMap->GetView();
-		metallicRoughnessTextureDescriptor.sampler = MetallicRoughnessMap->GetSampler();
-		return metallicRoughnessTextureDescriptor;
+		MaterialInfo.MetallicRoughnessMap = MetallicRoughnessMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetAmbientOcclusionMapDescriptor()
-{
 	if (AmbientOcclusionMap != nullptr)
 	{
-		VkDescriptorImageInfo ambientOcclusionMapTextureDescriptor{};
-		ambientOcclusionMapTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		ambientOcclusionMapTextureDescriptor.imageView = AmbientOcclusionMap->GetView();
-		ambientOcclusionMapTextureDescriptor.sampler = AmbientOcclusionMap->GetSampler();
-		return ambientOcclusionMapTextureDescriptor;
+		MaterialInfo.AmbientOcclusionMap = AmbientOcclusionMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetNormalMapDescriptor()
-{
 	if (NormalMap != nullptr)
 	{
-		VkDescriptorImageInfo normalTextureDescriptor{};
-		normalTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		normalTextureDescriptor.imageView = NormalMap->GetView();
-		normalTextureDescriptor.sampler = NormalMap->GetSampler();
-		return normalTextureDescriptor;
+		MaterialInfo.NormalMap = NormalMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetDepthMapDescriptor()
-{
 	if (DepthMap != nullptr)
 	{
-		VkDescriptorImageInfo depthTextureDescriptor{};
-		depthTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		depthTextureDescriptor.imageView = DepthMap->GetView();
-		depthTextureDescriptor.sampler = DepthMap->GetSampler();
-		return depthTextureDescriptor;
+		MaterialInfo.DepthMap = DepthMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetAlphaMapDescriptor()
-{
 	if (AlphaMap != nullptr)
 	{
-		VkDescriptorImageInfo alphaTextureDescriptor{};
-		alphaTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		alphaTextureDescriptor.imageView = AlphaMap->GetView();
-		alphaTextureDescriptor.sampler = AlphaMap->GetSampler();
-		return alphaTextureDescriptor;
+		MaterialInfo.AlphaMap = AlphaMap->GetTextureBufferIndex();
 	}
-
-	return VulkanRenderer::GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFMaterial::GetEmissionMapDescriptor()
-{
-	if (AlphaMap != nullptr)
+	if (EmissionMap != nullptr)
 	{
-		VkDescriptorImageInfo alphaTextureDescriptor{};
-		alphaTextureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		alphaTextureDescriptor.imageView = AlphaMap->GetView();
-		alphaTextureDescriptor.sampler = AlphaMap->GetSampler();
-		return alphaTextureDescriptor;
+		MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
-void GLTFMaterial::GenerateID()
+void GLTFMaterial::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList)
 {
-	MaterialIDCounter++;
-	MaterialID = MaterialIDCounter;
+	VkDescriptorBufferInfo MaterialBufferInfo = {};
+	MaterialBufferInfo.buffer = MaterialBuffer.Buffer;
+	MaterialBufferInfo.offset = 0;
+	MaterialBufferInfo.range = VK_WHOLE_SIZE;
+	MaterialBufferList.emplace_back(MaterialBufferInfo);
 }
