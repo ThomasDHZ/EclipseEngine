@@ -27,10 +27,39 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sci-fi", c, GameObjectRenderType::kModelRenderer);
 
 	std::shared_ptr<GLTFMaterial> IronMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("IronMaterial"));
+	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+	IronMaterial->MetallicRoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->AmbientOcclusionMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	GLTFSceneManager::AddMaterial(IronMaterial);
+
 	std::shared_ptr<GLTFMaterial> PlasticMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("PlasticMaterial"));
+	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+	IronMaterial->MetallicRoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->AmbientOcclusionMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	GLTFSceneManager::AddMaterial(IronMaterial);
+
 	std::shared_ptr<GLTFMaterial> WallMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("WallMaterial"));
+	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+	IronMaterial->MetallicRoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->AmbientOcclusionMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	GLTFSceneManager::AddMaterial(IronMaterial);
+
 	std::shared_ptr<GLTFMaterial> GoldMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GoldMaterial"));
+	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+	IronMaterial->MetallicRoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->AmbientOcclusionMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	GLTFSceneManager::AddMaterial(IronMaterial);
+
 	std::shared_ptr<GLTFMaterial> GrassMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GrassMaterial"));
+	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+	IronMaterial->MetallicRoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->AmbientOcclusionMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	GLTFSceneManager::AddMaterial(IronMaterial);
 
 	GLTFInstancingDataStruct instance = {};
 	std::vector<std::shared_ptr<GLTFMaterial>> instanceMaterialList;
