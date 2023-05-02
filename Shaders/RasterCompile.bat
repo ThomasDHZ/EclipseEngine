@@ -18,11 +18,6 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer2D.vert -o ../x64/Shaders/Renderer2DVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer2D.frag -o ../x64/Shaders/Renderer2DFrag.spv
 
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.vert -o Renderer3DVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.frag -o Renderer3DFrag.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.vert -o ../x64/Shaders/Renderer3DVert.spv
-C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 Renderer3D.frag -o ../x64/Shaders/Renderer3DFrag.spv
-
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.vert -o ParticleShaderert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.frag -o ParticleShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 ParticleShader.vert -o ../x64/Shaders/ParticleShaderVert.spv

@@ -14,7 +14,7 @@ void RayTracePBRRenderPass::StartUp()
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     RayTracedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
 
-   // BuildRenderPassPipelines();
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -31,7 +31,7 @@ void RayTracePBRRenderPass::SetUpCommandBuffers()
     }
 }
 
-void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+void RayTracePBRRenderPass::BuildRenderPassPipelines()
 {
     std::vector<VkPipelineShaderStageCreateInfo> ShaderList;
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaderList;
@@ -90,93 +90,83 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
         RayTraceShaderList.emplace_back(ShadwoHitShaderInfo);
     }
     {
-        for (int x = 0; x <= gameObjectList.size(); x++)
+        //layout(binding = 0, set = 0) uniform accelerationStructureEXT topLevelAS;
+        //layout(binding = 1, set = 0, rgba8) uniform image2D RayTracedTexture;
+        //layout(binding = 2, scalar) buffer Vertices { Vertex v[]; } vertices[];
+        //layout(binding = 3) buffer Indices { uint i[]; } indices[];
+        //layout(binding = 4) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+        //layout(binding = 5) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+        //layout(binding = 6) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+        //layout(binding = 7) uniform sampler2D TextureMap[];
+        //layout(binding = 8) uniform sampler2D BRDFMap;
+        //layout(binding = 9) uniform samplerCube IrradianceMap;
+        //layout(binding = 10) uniform samplerCube PrefilterMap;
+        //layout(binding = 11) buffer SunLightBuffer { SunLight sunLight; } SULight[];
+        //layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+        //layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+        //layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+
+
+        std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetGameObjectPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetGameObjectTransformBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() });
+        descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() });
+        DescriptorPool = GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList);
+
+        std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetGameObjectPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetGameObjectTransformBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 8, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 9, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 10, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+        DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
+
+
+        std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, GLTFSceneManager::GetGameObjectPropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, GLTFSceneManager::GetGameObjectTransformBuffer());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetMaterialPropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetTexturePropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetBRDFMapDescriptor());
+        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, GLTFSceneManager::GetIrradianceMapDescriptor());
+        GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, GLTFSceneManager::GetPrefilterMapDescriptor());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 7, GLTFSceneManager::GetSunLightPropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetPointLightPropertiesBuffer());
+        GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetSpotLightPropertiesBuffer());
+        DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
+
+        std::vector<VkWriteDescriptorSet> writeDescriptorSet;
+        for (auto& DescriptorBinding : DescriptorBindingList)
         {
-            std::vector<VkDescriptorPool> DescriptorPool1;
-
-            std::vector<VkDescriptorPoolSize> descriptorPoolSizeList;
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)gameObjectList[x]->GetMaterialPropertiesBuffer().size()});
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() });
-            descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() });
-            DescriptorPool1.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList));
-
-
-            std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
-            //descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)gameObjectList[x]->GetMeshPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 3, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 4, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 5, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 6, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 , VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 7, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 8, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 9, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 10, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 11, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-            descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
-            DescriptorSetLayoutList.emplace_back(GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding));
-
-            //for (int y = 0; y < gameObjectList[x]->GetMaterialList().size(); y++)
-            //{
-            //    std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-            //   // GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, gameObjectList[x]->GetMeshPropertiesBuffer());
-            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, gameObjectList[x]->GetGameObjectTransformMatrixBuffer()[0]);
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 2, gameObjectList[x]->GetMaterialList()[y]->GetAlbedoMapDescriptor());
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 3, gameObjectList[x]->GetMaterialList()[y]->GetNormalMapDescriptor());
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 4, gameObjectList[x]->GetMaterialList()[y]->GetMetallicRoughnessMapDescriptor());
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 5, gameObjectList[x]->GetMaterialList()[y]->GetAmbientOcclusionMapDescriptor());
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 6, gameObjectList[x]->GetMaterialList()[y]->GetAlphaMapDescriptor());
-            //    //GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 7, gameObjectList[x]->GetMaterialList()[y]->GetDepthMapDescriptor());
-            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 8, GLTFSceneManager::GetBRDFMapDescriptor());
-            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 9, GLTFSceneManager::GetIrradianceMapDescriptor());
-            //    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 10, GLTFSceneManager::GetPrefilterMapDescriptor());
-            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 11, GLTFSceneManager::GetSunLightPropertiesBuffer());
-            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
-            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
-            //    GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
-            //    gameObjectList[x]->GetMaterialList()[y]->descriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool1[0], DescriptorSetLayoutList[0]);
-
-            //    std::vector<VkWriteDescriptorSet> writeDescriptorSet;
-            //    for (auto& DescriptorBinding : DescriptorBindingList)
-            //    {
-            //        if (DescriptorBinding.BufferDescriptor.size() > 0)
-            //        {
-            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
-            //        }
-            //        else if (DescriptorBinding.TextureDescriptor.size() > 0)
-            //        {
-            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
-            //        }
-            //        else
-            //        {
-            //            writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(gameObjectList[x]->GetMaterialList()[y]->descriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
-            //        }
-            //    }
-            //    vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
-            //    for (int z = 0; z < gameObjectList.size(); z++)
-            //    {
-            //        for (int w = 0; w < gameObjectList[z]->GetMeshList().size(); w++)
-            //        {
-            //            gameObjectList[z]->GetMeshList()[w]->MaterialList = gameObjectList[z]->GetMaterialList();
-            //        }
-            //    }
-            //}
+            if (DescriptorBinding.BufferDescriptor.size() > 0)
+            {
+                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddBufferDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType));
+            }
+            else if (DescriptorBinding.TextureDescriptor.size() > 0)
+            {
+                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddTextureDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType));
+            }
+            else
+            {
+                writeDescriptorSet.emplace_back(GLTF_GraphicsDescriptors::AddAccelerationBuffer(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor));
+            }
         }
+        vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
     }
 
     if (RayTracePipeline == nullptr)
@@ -190,7 +180,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr
     }
 }
 
-VkCommandBuffer RayTracePBRRenderPass::Draw(std::shared_ptr<GameObject> gameObject)
+VkCommandBuffer RayTracePBRRenderPass::Draw()
 {
     VkCommandBufferBeginInfo cmdBufInfo{};
     cmdBufInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;

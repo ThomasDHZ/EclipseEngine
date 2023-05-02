@@ -90,9 +90,7 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
-	//MeshPropertiesBuffer.CopyBufferToMemory(&meshProperties, sizeof(MeshProperties));
-
-
+	
 	if(IndexCount != 0)
 	{
 		glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);

@@ -9,13 +9,13 @@
 class RayTracePBRRenderPass : public RenderPass
 {
 private:
-
+    VkDescriptorPool DescriptorPool;
     VkDescriptorSet DescriptorSet;
     VkDescriptorSetLayout DescriptorSetLayout;
     std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
 
     void SetUpCommandBuffers();
-    void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObject);
+    void BuildRenderPassPipelines();
 
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
@@ -26,7 +26,7 @@ public:
     ~RayTracePBRRenderPass();
 
     void StartUp();
-    VkCommandBuffer Draw(std::shared_ptr<GameObject> gameObject);
+    VkCommandBuffer Draw();
     void RebuildSwapChain();
     void Destroy();
 };

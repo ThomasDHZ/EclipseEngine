@@ -571,7 +571,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json)
             case kSpotLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() }); break;
         }
     }
-    DescriptorPool = CreateDescriptorPool(descriptorPoolSizeList, 1);
+    DescriptorPool = GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList);
 
     std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
     for (int x = 0; x < BindingList.size(); x++)

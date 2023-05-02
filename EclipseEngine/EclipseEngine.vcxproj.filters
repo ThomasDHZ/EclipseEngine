@@ -127,14 +127,8 @@
     <Filter Include="Shader\ComputeShaders">
       <UniqueIdentifier>{b4a60ae6-8a5a-4415-a22e-92dc21a94e6a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\RayTraceShaders\Raster">
-      <UniqueIdentifier>{16bb6acc-e59d-40e9-8dfd-559e786dbfe2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader\RayTraceShaders\PBR">
       <UniqueIdentifier>{f107c5f8-7072-40a4-a23f-7afa41c8f934}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader\RayTraceShaders\Hybrid">
-      <UniqueIdentifier>{199c10ad-53fc-4014-988c-d900f4494a4a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shader\Include\Raster">
       <UniqueIdentifier>{9030a743-e90d-4cbe-9ce7-487a7eaa2f24}</UniqueIdentifier>
@@ -157,9 +151,6 @@
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="RenderPass2D.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
-    <ClCompile Include="RayTraceRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="RayTracingPipeline.cpp">
@@ -185,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="RayTraceRenderer.cpp">
-      <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="Renderer2D.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
@@ -647,9 +635,6 @@
     <ClInclude Include="RayTracingPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="RayTraceRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
     <ClInclude Include="RenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
@@ -676,9 +661,6 @@
     </ClInclude>
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="RayTraceRenderer.h">
-      <Filter>Header Files\Renderer\Renderers</Filter>
     </ClInclude>
     <ClInclude Include="Renderer2D.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
@@ -971,27 +953,6 @@
     <ClInclude Include="JsonGraphicsPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentRenderer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject2D.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject3D.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFIrradiancePipeline.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFSceneManager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLTFRenderPass2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1154,8 +1115,29 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLTFSceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GLTFRenderer2D.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFIrradiancePipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1279,12 +1261,6 @@
     <None Include="..\Shaders\Renderer2D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\Renderer3D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\Renderer3D.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\SelectedObjectShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1402,24 +1378,6 @@
     <None Include="..\Shaders\PBRMiss.rmiss">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
     </None>
-    <None Include="..\Shaders\anyhit.rahit">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\anyhit1.rahit">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\closesthit.rchit">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\miss.rmiss">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\raygen.rgen">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\shadow.rmiss">
-      <Filter>Shader\RayTraceShaders\Raster</Filter>
-    </None>
     <None Include="..\Shaders\PBRShadow.rmiss">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
     </None>
@@ -1483,6 +1441,18 @@
     <None Include="packages.config" />
     <None Include="..\Shaders\GLTFLights.glsl">
       <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\MaterialSetUp.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\PBRLightFunctions.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\VertexBuilder.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\Vertex.glsl">
+      <Filter>Shader\Include\Raster</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -5,18 +5,14 @@
 #extension GL_EXT_debug_printf : enable
 
 #include "RTXPayload.glsl"
+#include "Vertex.glsl"
+#include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
+#include "GLTFLights.glsl"
+
 layout(location = 0) rayPayloadInEXT RayPayload rayHitInfo;
 hitAttributeEXT vec2 attribs;
 
-#include "RTXPBRBindingLayout.glsl"
-#include "PBRMaterial.glsl"
-#include "RTXVertexBuilder.glsl"
-#include "RTXRandom.glsl"
-
 void main() 
 {
-	Vertex vertex = BuildVertexInfo();
-	const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
-    MaterialProperties material = materialBuffer[materialID].materialProperties;
-
 }

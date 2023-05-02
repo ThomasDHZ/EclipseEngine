@@ -46,6 +46,14 @@ void Material::UpdateBuffer()
 	{
 		MaterialInfo.MetallicRoughnessMap = MetallicRoughnessMap->GetTextureBufferIndex();
 	}
+	if (MetallicMap != nullptr)
+	{
+		MaterialInfo.MetallicMap = MetallicMap->GetTextureBufferIndex();
+	}
+	if (RoughnessMap != nullptr)
+	{
+		MaterialInfo.RoughnessMap = RoughnessMap->GetTextureBufferIndex();
+	}
 	if (AmbientOcclusionMap != nullptr)
 	{
 		MaterialInfo.AmbientOcclusionMap = AmbientOcclusionMap->GetTextureBufferIndex();

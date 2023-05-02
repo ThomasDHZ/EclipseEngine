@@ -14,7 +14,6 @@
 #include "RenderedTexture.h"
 #include "Texture2D.h"
 #include "Renderer2D.h"
-#include "RayTraceRenderer.h"
 #include "PBRRenderer.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
@@ -27,8 +26,9 @@
 class Scene
 {
 private:
-	GLTFRenderer pbrRenderer;
+//	GLTFRenderer pbrRenderer;
 	//GLTFRenderer2D spriteRenderer;
+	RayTracePBRRenderer rayTraceRenderer;
 public:
 	Scene();
 	~Scene();

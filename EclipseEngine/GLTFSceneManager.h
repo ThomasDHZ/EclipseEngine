@@ -27,7 +27,6 @@ private:
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 
-	static void UpdateBufferIndex();
 	static std::shared_ptr<Texture> IsTexture2DLoaded(std::string name);
 	static std::shared_ptr<Texture> IsTexture2DLoaded(const GLTFTextureLoader& textureLoader);
 
@@ -117,6 +116,7 @@ public:
 	static void Update();
 	static void Destroy();
 
+	static void UpdateBufferIndex();
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
 	static VkDescriptorImageInfo GetIrradianceMapDescriptor();
 	static VkDescriptorImageInfo GetPrefilterMapDescriptor();

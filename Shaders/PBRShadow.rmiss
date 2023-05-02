@@ -3,11 +3,14 @@
 #extension GL_EXT_scalar_block_layout : enable
 
 #include "RTXPayload.glsl"
+#include "Vertex.glsl"
+#include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
+#include "GLTFLights.glsl"
+
 layout(location = 2) rayPayloadInEXT bool shadowed;
 
-#include "RTXPBRBindingLayout.glsl"
 
 void main()
 {
-	shadowed = true;
 }
