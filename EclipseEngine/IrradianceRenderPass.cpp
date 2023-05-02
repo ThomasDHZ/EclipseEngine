@@ -158,7 +158,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    IrradiancePipeline.LoadGraphicsPipeline("IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings));
+    IrradiancePipeline.LoadGraphicsPipeline("IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings));
 }
 
 VkCommandBuffer IrradianceRenderPass::Draw()

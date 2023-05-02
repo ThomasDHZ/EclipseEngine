@@ -21,6 +21,7 @@ class GLTFRenderPass : public RenderPass
 		JsonGraphicsPipeline PBRPipeline;
 		JsonGraphicsPipeline PBRInstancePipeline;
 		JsonGraphicsPipeline WireframePipeline;
+		JsonGraphicsPipeline WireframeInstancePipeline;
 		JsonGraphicsPipeline LinePipeline;
 		JsonGraphicsPipeline SkyBoxPipeline;
 

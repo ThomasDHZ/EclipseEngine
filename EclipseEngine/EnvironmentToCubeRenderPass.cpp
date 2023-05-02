@@ -114,7 +114,7 @@ void EnvironmentToCubeRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    EnvironmentToCubeRenderPassPipeline = JsonGraphicsPipeline("EnvironmentToCubePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, 0);
+    EnvironmentToCubeRenderPassPipeline = JsonGraphicsPipeline("EnvironmentToCubePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, 0);
 }
 
 VkCommandBuffer EnvironmentToCubeRenderPass::Draw()

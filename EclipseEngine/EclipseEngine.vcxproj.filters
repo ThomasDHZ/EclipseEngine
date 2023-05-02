@@ -1498,6 +1498,16 @@
     <None Include="imgui.ini">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="..\Shaders\InstanceWireFrame.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\InstanceWireFrame.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="packages.config" />
+    <None Include="..\Shaders\GLTFLights.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">

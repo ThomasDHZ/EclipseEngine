@@ -156,7 +156,7 @@ void PrefilterRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<R
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    PrefilterPipeline.LoadGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings));
+    PrefilterPipeline.LoadGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings));
 }
 
 VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)

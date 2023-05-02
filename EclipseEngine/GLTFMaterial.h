@@ -14,6 +14,8 @@ struct GLTFMaterialBufferInfo
 
 	alignas(4) uint32_t AlbedoMap = -1;
 	alignas(4) uint32_t MetallicRoughnessMap = -1;
+	alignas(4) uint32_t MetallicMap = -1;
+	alignas(4) uint32_t RoughnessMap = -1;
 	alignas(4) uint32_t AmbientOcclusionMap = -1;
 	alignas(4) uint32_t NormalMap = -1;
 	alignas(4) uint32_t DepthMap = -1;
@@ -46,6 +48,8 @@ public:
 
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
+	std::shared_ptr<Texture> MetallicMap = nullptr;
+	std::shared_ptr<Texture> RoughnessMap = nullptr;
 	std::shared_ptr<Texture> AmbientOcclusionMap = nullptr;
 	std::shared_ptr<Texture> NormalMap = nullptr;
 	std::shared_ptr<Texture> DepthMap = nullptr;

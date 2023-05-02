@@ -18,6 +18,7 @@ void WireFramePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     auto b = CreateShader(BaseShaderFilePath + "WireFrameShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
 
     nlohmann::json json;
+    nlohmann::json json2;
     JsonGraphicsPipeline jsonPipeline{};
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, BaseShaderFilePath + "WireFrameShaderVert.spv");
     jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, BaseShaderFilePath + "WireFrameShaderFrag.spv");
@@ -25,6 +26,15 @@ void WireFramePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     for (int x = 0; x < json["Shader"].size(); x++)
     {
         PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+    }
+
+    JsonGraphicsPipeline jsonPipeline2{};
+    jsonPipeline2.SavePipelineShaderStageCreateInfo(json2["Shader"][0], a, BaseShaderFilePath + "InstanceWireFrameVert.spv");
+    jsonPipeline2.SavePipelineShaderStageCreateInfo(json2["Shader"][1], b, BaseShaderFilePath + "InstanceWireFrameFrag.spv");
+
+    for (int x = 0; x < json["Shader"].size(); x++)
+    {
+        PipelineShaderStageList.emplace_back(jsonPipeline2.LoadPipelineShaderStageCreateInfo(json2["Shader"][x]));
     }
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
@@ -50,6 +60,7 @@ void WireFramePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     DepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
     jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
+    jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json2["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
     BuildVertexDescription VertexDescriptionInfo{};
     VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
@@ -73,9 +84,11 @@ void WireFramePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
 
     if (ShaderPipeline == nullptr)
     {
-        CreateGraphicsPipeline(buildGraphicsPipelineInfo);
+       // CreateGraphicsPipeline(buildGraphicsPipelineInfo);
         jsonPipeline.BuildAndSaveShaderPipeLine(json, buildGraphicsPipelineInfo, DescriptorSetLayout);
+        jsonPipeline.BuildAndSaveShaderPipeLine(json2, buildGraphicsPipelineInfo, DescriptorSetLayout);
         jsonPipeline.SaveGraphicsPipeline("WireframePipeline.txt", json);
+        jsonPipeline.SaveGraphicsPipeline("WireframeInstancePipeline.txt", json2);
     }
     else
     {

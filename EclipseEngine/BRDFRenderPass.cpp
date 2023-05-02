@@ -127,7 +127,7 @@ void BRDFRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    BRDFPipeline = JsonGraphicsPipeline("BRDFPipeline.txt", VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, nullptr, ColorAttachmentList, SampleCount, 0);
+    BRDFPipeline = JsonGraphicsPipeline("BRDFPipeline.txt", VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, 0);
 }
 
 VkCommandBuffer BRDFRenderPass::Draw()

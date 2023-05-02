@@ -63,6 +63,8 @@ struct MaterialProperties
 
 	uint AlbedoMap;
 	uint MetallicRoughnessMap;
+    uint MetallicMap;
+    uint RoughnessMap;
 	uint AmbientOcclusionMap;
 	uint NormalMap;
 	uint DepthMap;
@@ -70,66 +72,8 @@ struct MaterialProperties
 	uint EmissionMap;
 };
 
-struct SunLight
-{
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-};
-
-struct DirectionalLight
-{
-	vec3 diffuse;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
-};
-
-struct PointLight
-{
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-	float radius;
-};
-
-struct SpotLight
-{
-	vec3 diffuse;
-	vec3 position;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
-
-    float cutOff;
-    float outerCutOff;
-    float constant;
-    float linear;
-    float quadratic;
-    mat4 lightSpaceMatrix;
-};
-
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-    uint PrimitiveIndex;
-	uint MaterialIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint SunLightCount;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-    uint frame;
-    int MaxRefeflectCount;
-} sceneData;
+#include "GLTFLights.glsl"
+#include "SceneData.glsl"
 
 struct PBRMaterial
 {
@@ -273,15 +217,21 @@ MaterialProperties BuildPBRMaterial(vec2 UV)
 	//}
 
    // material.Metallic = material.Metallic;
-	//if (material.MetallicRoughnessMap != 0)
-	//{
-	    material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
-	//}
+	if (material.MetallicRoughnessMap != 0)
+	{
+        material.Metallic = texture(TextureMap[material.MetallicMap], UV).r;
+        material.Roughness = texture(TextureMap[material.RoughnessMap], UV).r;
+	}
+    else
+    {
+        material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
+        material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
+    }
 
    // material.Roughness = material.Roughness;
 	//if (material.MetallicRoughnessMap != 0)
 	//{
-	    material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
+	    
 //	}
 
 //material.AmbientOcclusion = material.AmbientOcclusion;

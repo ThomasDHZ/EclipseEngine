@@ -9,9 +9,9 @@ JsonGraphicsPipeline::JsonGraphicsPipeline()
 {
 }
 
-JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
+JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
-    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, gameObject, ColorAttachments, samplecount, sizeofConstBuffer);
+    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
 JsonGraphicsPipeline::~JsonGraphicsPipeline()
@@ -541,7 +541,7 @@ VkPipelineColorBlendStateCreateInfo JsonGraphicsPipeline::LoadPipelineColorBlend
     return pipelineColorBlendStateCreateInfo;
 }
 
-void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_ptr<GameObject> gameObject)
+void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json)
 {
     std::vector<DescriptorBindingPropertiesEnum> BindingList;
     std::vector<VkDescriptorType> DescriptorList;
@@ -630,7 +630,7 @@ void JsonGraphicsPipeline::LoadDescriptorSets(nlohmann::json& json, std::shared_
     vkUpdateDescriptorSets(VulkanRenderer::GetDevice(), static_cast<uint32_t>(writeDescriptorSet.size()), writeDescriptorSet.data(), 0, nullptr);
 }
 
-void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::shared_ptr<GameObject> gameObject, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
+void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer)
 {
     if (ShaderPipeline != VK_NULL_HANDLE)
     {
@@ -658,7 +658,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vecto
         PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
     }
 
-    LoadDescriptorSets(json["DescriptorBindingLayout"], gameObject);
+    LoadDescriptorSets(json["DescriptorBindingLayout"]);
 
     if (ShaderPipeline == nullptr)
     {

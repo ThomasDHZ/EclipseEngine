@@ -110,7 +110,7 @@ void RenderPass2D::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObje
     pipelineInfo.SampleCount = SampleCount;
     for (int x = 0; x < gameObjectList.size(); x++)
     {
-       Renderer2DPipeline.emplace_back(JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       Renderer2DPipeline.emplace_back(JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
        //LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
        //WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
     }
