@@ -4,7 +4,6 @@
 #include <json.hpp>
 #include "GameObject.h"
 #include "InterfaceRenderPass.h"
-#include "LightManager.h"
 #include "SoundDevice.h"
 #include "SoundEffectManager.h"
 #include "Timer.h"
@@ -25,7 +24,6 @@ int main()
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
     //TopLevelAccelerationStructureManager::StartUp();
-    LightManager::StartUp();
     SceneManager::StartUp();
     
     Scene scene;
@@ -53,7 +51,6 @@ int main()
 
     SceneManager::Destory();
     TopLevelAccelerationStructureManager::Destroy();
-    LightManager::Destory();
     InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
     SoundEffectManager::Destroy();

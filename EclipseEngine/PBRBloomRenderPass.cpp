@@ -211,7 +211,7 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        {
+   /*     {
             for (auto& mesh : MeshRendererManager::GetMeshList())
             {
                 switch (mesh->GetMeshType())
@@ -223,7 +223,7 @@ VkCommandBuffer PBRBloomRenderPass::Draw()
                 }
                 }
             }
-        }
+        }*/
         vkCmdEndRenderPass(commandBuffer);
 
         DrawToBloomMap->UpdateImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

@@ -11,6 +11,6 @@ public:
 	~BillboardPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
+//	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh);
 };
 

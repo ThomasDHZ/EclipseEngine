@@ -1,6 +1,4 @@
 #include "PBRReflectionPreRenderPass.h"
-#include "LightManager.h"
-
 
 PBRReflectionPreRenderPass::PBRReflectionPreRenderPass() : RenderPass()
 {
@@ -15,26 +13,26 @@ void PBRReflectionPreRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList&
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
 
-    if (renderPass == nullptr)
-    {
-        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-    }
-    else
-    {
-        ClearTextureList();
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-        RenderPass::Destroy();
-    }
+    //if (renderPass == nullptr)
+    //{
+    //    RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    //    DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    //    for (const auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
+    //        ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+    //    }
+    //}
+    //else
+    //{
+    //    ClearTextureList();
+    //    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+    //    DepthTexture->RecreateRendererTexture(RenderPassResolution);
+    //    for (const auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
+    //        ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+    //    }
+    //    RenderPass::Destroy();
+    //}
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
@@ -51,26 +49,26 @@ void PBRReflectionPreRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& t
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = glm::vec2(cubeMapSize);
 
-    if (renderPass == nullptr)
-    {
-        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-    }
-    else
-    {
-        ClearTextureList();
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (const auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
-        }
-        RenderPass::Destroy();
-    }
+    //if (renderPass == nullptr)
+    //{
+    //    RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    //    DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+    //    for (const auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
+    //        ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+    //    }
+    //}
+    //else
+    //{
+    //    ClearTextureList();
+    //    RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+    //    DepthTexture->RecreateRendererTexture(RenderPassResolution);
+    //    for (const auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
+    //        ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+    //    }
+    //    RenderPass::Destroy();
+    //}
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(RenderedTexture->View);
@@ -271,34 +269,34 @@ VkCommandBuffer PBRReflectionPreRenderPass::Draw()
 
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    for (int x = 0; x < MeshRendererManager::GetMeshList().size(); x++)
-    {
-        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    //for (int x = 0; x < MeshRendererManager::GetMeshList().size(); x++)
+    //{
+    //    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-        const std::shared_ptr<Mesh> reflectingMesh = MeshRendererManager::GetMeshList()[x];
-        skyboxPipeline.Draw(commandBuffer);
-        for (auto& mesh : MeshRendererManager::GetMeshList())
-        {
+    //    const std::shared_ptr<Mesh> reflectingMesh = MeshRendererManager::GetMeshList()[x];
+    //    skyboxPipeline.Draw(commandBuffer);
+    //    for (auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
 
-            switch (mesh->GetMeshType())
-            {
+    //        switch (mesh->GetMeshType())
+    //        {
 
-            case MeshTypeEnum::kMeshPolygon:
-            {
-                pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh, x);
-                break;
-            }
-            default: break;
-            }
-        }
-        vkCmdEndRenderPass(commandBuffer);
+    //        case MeshTypeEnum::kMeshPolygon:
+    //        {
+    //            pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh, x);
+    //            break;
+    //        }
+    //        default: break;
+    //        }
+    //    }
+    //    vkCmdEndRenderPass(commandBuffer);
 
-        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        ReflectionCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        Texture::CopyCubeMap(commandBuffer, RenderedTexture, ReflectionCubeMapList[x]);
-        ReflectionCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    }
+    //    RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+    //    ReflectionCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+    //    Texture::CopyCubeMap(commandBuffer, RenderedTexture, ReflectionCubeMapList[x]);
+    //    ReflectionCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    //    RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    //}
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }

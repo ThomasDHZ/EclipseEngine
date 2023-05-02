@@ -11,7 +11,7 @@ BillboardPipeline::~BillboardPipeline()
 void BillboardPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+   // std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
     //std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
     std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = GLTFSceneManager::GetDirectionalLightPropertiesBuffer();
     std::vector<VkDescriptorBufferInfo> PointLightBufferInfoList = GLTFSceneManager::GetPointLightPropertiesBuffer();
@@ -22,7 +22,7 @@ void BillboardPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "BillBoardShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "BillBoardShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
+    //AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
    // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, MaterialBufferList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, DirectionalLightBufferInfoList);
     AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, PointLightBufferInfoList);
@@ -55,10 +55,10 @@ void BillboardPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruc
     }
 }
 
-void BillboardPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh)
-{
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BillboardSceneProperties), &GLTFSceneManager::sceneProperites);
-    mesh->Draw(commandBuffer);
-}
+//void BillboardPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh)
+//{
+//    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+//    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
+//    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(BillboardSceneProperties), &GLTFSceneManager::sceneProperites);
+//    //mesh->Draw(commandBuffer);
+//}

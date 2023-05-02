@@ -3,6 +3,9 @@
 #include <GLTFModel.h>
 #include <basetsd.h>
 #include "Material.h"
+#include "Bone.h"
+#include "UniformBuffer.h"
+#include "AccelerationStructureBuffer.h"
 
 struct GLTFInstanceMeshDataStruct
 {
@@ -18,6 +21,12 @@ struct GLTFInstancingDataStruct
 	std::vector<GLTFInstanceMeshDataStruct> InstanceMeshDataList;
 	std::vector<std::shared_ptr<Material>> MaterialList;
 	GLTFInstancingDataStruct() {};
+};
+
+struct MeshBoneWeights
+{
+	glm::ivec4 BoneID = glm::ivec4(0);
+	glm::vec4 BoneWeights = glm::vec4(0.0f);
 };
 
 struct GLTFMeshLoader3D
@@ -71,14 +80,14 @@ private:
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
-	std::vector<InstancingDataStruct> InstanceData;
-	std::vector<InstancedVertexData3D> InstancedVertexDataList;
-
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
 	VulkanBuffer InstanceBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
+
+	std::vector<GLTFInstancingDataStruct> InstanceData;
+	std::vector<InstancedVertexData3D> InstancedVertexDataList;
 
 	void InstancingStartUp(GLTFInstancingDataStruct& instanceData);
 	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);

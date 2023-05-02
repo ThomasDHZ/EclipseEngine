@@ -3,7 +3,6 @@
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "RayTracingPipeline.h"
-#include "LightManager.h"
 #include "GameObject.h"
 #include "GLTFSceneManager.h"
 

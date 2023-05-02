@@ -1,6 +1,4 @@
 #include "PBRReflectionRenderPass.h"
-#include "LightManager.h"
-
 
 PBRReflectionRenderPass::PBRReflectionRenderPass() : RenderPass()
 {
@@ -37,34 +35,34 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
     SetUpCommandBuffers();
 }
 
-void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh)
-{
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = glm::vec2(cubeMapSize);
-
-    if (renderPass == nullptr)
-    {
-        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-    }
-    else
-    {
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(textures);
-    SetUpCommandBuffers();
-    Draw(reflectingMesh);
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-}
+//void PBRReflectionRenderPass::OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh)
+//{
+//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+//    RenderPassResolution = glm::vec2(cubeMapSize);
+//
+//    if (renderPass == nullptr)
+//    {
+//        RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+//        DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+//    }
+//    else
+//    {
+//        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+//        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+//        RenderPass::Destroy();
+//    }
+//
+//    std::vector<VkImageView> AttachmentList;
+//    AttachmentList.emplace_back(RenderedTexture->View);
+//    AttachmentList.emplace_back(DepthTexture->View);
+//
+//    RenderPassDesc();
+//    CreateRendererFramebuffers(AttachmentList);
+//    BuildRenderPassPipelines(textures);
+//    SetUpCommandBuffers();
+//    Draw(reflectingMesh);
+//    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+//}
 
 
 void PBRReflectionRenderPass::RenderPassDesc()
@@ -168,74 +166,74 @@ void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmi
     skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
 }
 
-VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMesh)
-{
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[1].depthStencil = { 1.0f, 0 };
-
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = (float)RenderPassResolution.x;
-    viewport.height = (float)RenderPassResolution.y;
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-
-    VkRect2D rect2D{};
-    rect2D.offset = { 0, 0 };
-    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
-
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = renderPass;
-    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
-    renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
-    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-    renderPassInfo.pClearValues = clearValues.data();
-
-    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to begin recording command buffer.");
-    }
-
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    {
-        skyboxPipeline.Draw(commandBuffer);
-        for (auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            switch (mesh->GetMeshType())
-            {
-
-            case MeshTypeEnum::kMeshPolygon:
-            {
-                pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh);
-                break;
-            }
-            case MeshTypeEnum::kMeshPolygonInstanced:
-            {
-                pbrInstancedPipeline.Draw(commandBuffer, mesh, reflectingMesh);
-                break;
-            }
-            default: break;
-            }
-        }
-    }
-    vkCmdEndRenderPass(commandBuffer);
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to record command buffer.");
-    }
-
-    return commandBuffer;
-}
+//VkCommandBuffer PBRReflectionRenderPass::Draw(std::shared_ptr<Mesh> reflectingMesh)
+//{
+//
+//    VkCommandBufferBeginInfo beginInfo{};
+//    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+//    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+//
+//    std::array<VkClearValue, 2> clearValues{};
+//    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+//    clearValues[1].depthStencil = { 1.0f, 0 };
+//
+//    VkViewport viewport{};
+//    viewport.x = 0.0f;
+//    viewport.y = 0.0f;
+//    viewport.width = (float)RenderPassResolution.x;
+//    viewport.height = (float)RenderPassResolution.y;
+//    viewport.minDepth = 0.0f;
+//    viewport.maxDepth = 1.0f;
+//
+//    VkRect2D rect2D{};
+//    rect2D.offset = { 0, 0 };
+//    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+//
+//    VkRenderPassBeginInfo renderPassInfo{};
+//    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+//    renderPassInfo.renderPass = renderPass;
+//    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+//    renderPassInfo.renderArea.offset = { 0, 0 };
+//    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+//    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+//    renderPassInfo.pClearValues = clearValues.data();
+//
+//    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+//    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+//        throw std::runtime_error("Failed to begin recording command buffer.");
+//    }
+//
+//    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+//    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+//    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+//    {
+//        skyboxPipeline.Draw(commandBuffer);
+//        for (auto& mesh : MeshRendererManager::GetMeshList())
+//        {
+//            switch (mesh->GetMeshType())
+//            {
+//
+//            case MeshTypeEnum::kMeshPolygon:
+//            {
+//                pbrPipeline.Draw(commandBuffer, mesh, reflectingMesh);
+//                break;
+//            }
+//            case MeshTypeEnum::kMeshPolygonInstanced:
+//            {
+//                pbrInstancedPipeline.Draw(commandBuffer, mesh, reflectingMesh);
+//                break;
+//            }
+//            default: break;
+//            }
+//        }
+//    }
+//    vkCmdEndRenderPass(commandBuffer);
+//    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+//        throw std::runtime_error("Failed to record command buffer.");
+//    }
+//
+//    return commandBuffer;
+//}
 
 void PBRReflectionRenderPass::Destroy()
 {

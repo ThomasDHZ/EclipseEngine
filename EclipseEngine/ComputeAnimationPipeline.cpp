@@ -11,14 +11,14 @@ ComputeAnimationPipeline::~ComputeAnimationPipeline()
 
 void ComputeAnimationPipeline::StartUp()
 {
-	for (auto& mesh : MeshRendererManager::GetMeshList())
-	{
-		auto mesh3D = static_cast<Mesh3D*>(mesh.get());
-		if (mesh3D->GetBoneCount() > 0)
-		{
-			meshPtr.emplace_back(mesh3D);
-		}
-	}
+	//for (auto& mesh : MeshRendererManager::GetMeshList())
+	//{
+	//	auto mesh3D = static_cast<Mesh3D*>(mesh.get());
+	//	if (mesh3D->GetBoneCount() > 0)
+	//	{
+	//		meshPtr.emplace_back(mesh3D);
+	//	}
+	//}
 
 	SetUpDescriptorBindings();
 	CreateShaderPipeLine();
@@ -41,14 +41,14 @@ void ComputeAnimationPipeline::SetUpDescriptorBindings()
 	std::vector<VkDescriptorBufferInfo> MeshDataBufferInfo;
 	std::vector<VkDescriptorBufferInfo> BoneTransformBufferInfo;
 
-	for (auto& mesh : meshPtr)
-	{
-		VertexBufferCopy.emplace_back(mesh->GetVertexVulkanBufferPtr());
-		VertexBufferInfo.emplace_back(AddBufferDescriptor(mesh->VertexBuffer));
-		BoneWeightBufferInfo.emplace_back(AddBufferDescriptor(mesh->BoneWeightBuffer));
-		MeshDataBufferInfo.emplace_back(AddBufferDescriptor(mesh->MeshPropertiesBuffer.VulkanBufferData));
-		BoneTransformBufferInfo.emplace_back(AddBufferDescriptor(mesh->BoneTransformBuffer));
-	}
+	//for (auto& mesh : meshPtr)
+	//{
+	//	VertexBufferCopy.emplace_back(mesh->GetVertexVulkanBufferPtr());
+	//	VertexBufferInfo.emplace_back(AddBufferDescriptor(mesh->VertexBuffer));
+	//	BoneWeightBufferInfo.emplace_back(AddBufferDescriptor(mesh->BoneWeightBuffer));
+	//	MeshDataBufferInfo.emplace_back(AddBufferDescriptor(mesh->MeshPropertiesBuffer.VulkanBufferData));
+	//	BoneTransformBufferInfo.emplace_back(AddBufferDescriptor(mesh->BoneTransformBuffer));
+	//}
 
 	std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
 	AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, VertexBufferInfo);
@@ -99,38 +99,38 @@ void ComputeAnimationPipeline::Compute()
 	CommandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
 	vkBeginCommandBuffer(commandBuffer, &CommandBufferBeginInfo);
 
-	for (int x = 0; x < meshPtr.size(); x++)
-	{
-		ConstMeshInfo meshInfo;
-		meshInfo.MeshIndex = x;
+	//for (int x = 0; x < meshPtr.size(); x++)
+	//{
+	//	ConstMeshInfo meshInfo;
+	//	meshInfo.MeshIndex = x;
 
-		VkBufferMemoryBarrier BufferMemoryBarrier{};
-		BufferMemoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
-		BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		BufferMemoryBarrier.buffer = VertexBufferCopy[x]->Buffer;
-		BufferMemoryBarrier.size = VK_WHOLE_SIZE;
-		BufferMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
-		BufferMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-		BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &BufferMemoryBarrier, 0, nullptr);
+	//	VkBufferMemoryBarrier BufferMemoryBarrier{};
+	//	BufferMemoryBarrier.sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+	//	BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	BufferMemoryBarrier.buffer = VertexBufferCopy[x]->Buffer;
+	//	BufferMemoryBarrier.size = VK_WHOLE_SIZE;
+	//	BufferMemoryBarrier.srcAccessMask = VK_ACCESS_HOST_WRITE_BIT;
+	//	BufferMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+	//	BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_HOST_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, 0, 0, nullptr, 1, &BufferMemoryBarrier, 0, nullptr);
 
-		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, ShaderPipeline);
-		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, 0);
-		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(ConstMeshInfo), &meshInfo);
-		vkCmdDispatch(commandBuffer, VertexBufferCopy[x]->GetBufferSize(), 1, 1);
+	//	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, ShaderPipeline);
+	//	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, 0);
+	//	vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(ConstMeshInfo), &meshInfo);
+	//	vkCmdDispatch(commandBuffer, VertexBufferCopy[x]->GetBufferSize(), 1, 1);
 
-		BufferMemoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
-		BufferMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
-		BufferMemoryBarrier.buffer = VertexBufferCopy[x]->Buffer;
-		BufferMemoryBarrier.size = VK_WHOLE_SIZE;
-		BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-		vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 1, &BufferMemoryBarrier, 0, nullptr);
+	//	BufferMemoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+	//	BufferMemoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+	//	BufferMemoryBarrier.buffer = VertexBufferCopy[x]->Buffer;
+	//	BufferMemoryBarrier.size = VK_WHOLE_SIZE;
+	//	BufferMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	BufferMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+	//	vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 1, &BufferMemoryBarrier, 0, nullptr);
 
-		meshPtr[x]->GetVertexVulkanBufferPtr()->CopyBufferToMemory(&meshPtr[x]->GetVertexList()[0], sizeof(Vertex3D) * meshPtr[x]->GetVertexList().size());
-	}
+	//	meshPtr[x]->GetVertexVulkanBufferPtr()->CopyBufferToMemory(&meshPtr[x]->GetVertexList()[0], sizeof(Vertex3D) * meshPtr[x]->GetVertexList().size());
+	//}
 	vkEndCommandBuffer(commandBuffer);
 
 	VkSubmitInfo submitInfo{};

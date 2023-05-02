@@ -212,7 +212,6 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
-    <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
@@ -251,7 +250,6 @@
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightDebugPipeline.cpp" />
-    <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
     <ClCompile Include="LinePipeline.cpp" />
@@ -264,7 +262,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
-    <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
@@ -429,7 +426,6 @@
     <ClInclude Include="Level2DRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightDebugPipeline.h" />
-    <ClInclude Include="LightManager.h" />
     <ClInclude Include="LineMesh2D.h" />
     <ClInclude Include="LineMesh3D.h" />
     <ClInclude Include="LinePipeline.h" />
@@ -442,7 +438,6 @@
     <ClInclude Include="MeshPickerRenderPass2D.h" />
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />
     <ClInclude Include="ParticleSystem.h" />
@@ -493,7 +488,6 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
-    <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Pixel.h" />

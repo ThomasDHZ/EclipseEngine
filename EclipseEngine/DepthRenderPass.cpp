@@ -1,6 +1,4 @@
 #include "DepthRenderPass.h"
-#include "LightManager.h"
-
 
 DepthRenderPass::DepthRenderPass() : RenderPass()
 {
@@ -10,74 +8,74 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
-{
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = TextureResolution;
-
-    if (renderPass == nullptr)
-    {
-        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : DirectionalLightList)
-        {
-            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-        }
-    }
-    else
-    {
-        ClearTextureList();
-        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : DirectionalLightList)
-        {
-            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-        }
-        RenderPass::Destroy();
-    }
-
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-}
-
-void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
-{
-    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-    RenderPassResolution = TextureResolution;
-
-    if (renderPass == nullptr)
-    {
-        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : DirectionalLightList)
-        {
-            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-        }
-    }
-    else
-    {
-        ClearTextureList();
-        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : DirectionalLightList)
-        {
-            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-        }
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines();
-    SetUpCommandBuffers();
-    Draw();
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-}
+//void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+//{
+//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+//    RenderPassResolution = TextureResolution;
+//
+//    if (renderPass == nullptr)
+//    {
+//        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+//        for (auto& light : DirectionalLightList)
+//        {
+//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+//        }
+//    }
+//    else
+//    {
+//        ClearTextureList();
+//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+//        for (auto& light : DirectionalLightList)
+//        {
+//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+//        }
+//        RenderPass::Destroy();
+//    }
+//
+//
+//    std::vector<VkImageView> AttachmentList;
+//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+//
+//    RenderPassDesc();
+//    CreateRendererFramebuffers(AttachmentList);
+//    BuildRenderPassPipelines();
+//    SetUpCommandBuffers();
+//}
+//
+//void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+//{
+//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+//    RenderPassResolution = TextureResolution;
+//
+//    if (renderPass == nullptr)
+//    {
+//        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+//        for (auto& light : DirectionalLightList)
+//        {
+//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+//        }
+//    }
+//    else
+//    {
+//        ClearTextureList();
+//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+//        for (auto& light : DirectionalLightList)
+//        {
+//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+//        }
+//        RenderPass::Destroy();
+//    }
+//
+//    std::vector<VkImageView> AttachmentList;
+//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+//
+//    RenderPassDesc();
+//    CreateRendererFramebuffers(AttachmentList);
+//    BuildRenderPassPipelines();
+//    SetUpCommandBuffers();
+//    Draw();
+//    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+//}
 
 
 void DepthRenderPass::RenderPassDesc()
@@ -203,28 +201,28 @@ VkCommandBuffer DepthRenderPass::Draw()
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-        {
-            for (auto& mesh : MeshRendererManager::GetMeshList())
-            {
-                switch (mesh->GetMeshType())
-                {
-                case MeshTypeEnum::kMeshPolygon:
-                {
-                    depthPipeline.Draw(commandBuffer, mesh, x);
-                    break;
-                }
-                case MeshTypeEnum::kMeshPolygonInstanced:
-                {
-                    depthInstancedPipeline.Draw(commandBuffer, mesh, x);
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-                }
-            }
-        }
+        //{
+        //    for (auto& mesh : MeshRendererManager::GetMeshList())
+        //    {
+        //        switch (mesh->GetMeshType())
+        //        {
+        //        case MeshTypeEnum::kMeshPolygon:
+        //        {
+        //            depthPipeline.Draw(commandBuffer, mesh, x);
+        //            break;
+        //        }
+        //        case MeshTypeEnum::kMeshPolygonInstanced:
+        //        {
+        //            depthInstancedPipeline.Draw(commandBuffer, mesh, x);
+        //            break;
+        //        }
+        //        default:
+        //        {
+        //            break;
+        //        }
+        //        }
+        //    }
+        //}
         vkCmdEndRenderPass(commandBuffer);
 
         RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);

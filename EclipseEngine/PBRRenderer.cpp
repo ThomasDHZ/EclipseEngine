@@ -37,7 +37,7 @@ void PBRRenderer::BuildRenderer()
 		submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = skyPrefilterRenderPass.PrefilterCubeMapList;
 
-		skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		//skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	//{
@@ -238,7 +238,7 @@ void PBRRenderer::BakeTextures(const char* FileName)
 		bakesubmitList.IrradianceTextureList = bakeskyIrradianceRenderPass.IrradianceCubeMapList;
 		bakesubmitList.PrefilterTextureList = bakeskyPrefilterRenderPass.PrefilterCubeMapList;
 
-		bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, GLTFSceneManager::GetPreRenderedMapSize());
+		//bakeskyPBRRenderPass.OneTimeDraw(bakesubmitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	{
@@ -249,7 +249,7 @@ void PBRRenderer::BakeTextures(const char* FileName)
 		bakesubmitList.IrradianceTextureList = bakegeoIrradianceRenderPass.IrradianceCubeMapList;
 		bakesubmitList.PrefilterTextureList = bakegeoPrefilterRenderPass.PrefilterCubeMapList;
 
-		bakegeoPBRRenderPass.OneTimeDraw(bakesubmitList, 256.0f);
+		//bakegeoPBRRenderPass.OneTimeDraw(bakesubmitList, 256.0f);
 	}
 
 	//BakeReflectionRenderPass.BakeReflectionMaps(bakesubmitList, 256.0f, 8192 / 4);

@@ -9,8 +9,6 @@
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
 
-#include "GameObjectManager.h"
-#include "LightManager.h"
 #include "TopLevelAccelerationStructureManager.h"
 #include "ComponentRenderer.h"
 #include "MusicPlayer.h"
@@ -84,10 +82,6 @@ public:
 
 	static void Update()
 	{
-		GameObjectManager::Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
-		MeshRendererManager::Update();
-		//TopLevelAccelerationStructureManager::Update();
-		LightManager::Update();
 
 		GLTFSceneManager::ActiveCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 		musicPlayer.UpdateBufferStream();
@@ -215,9 +209,7 @@ public:
 
 	static void DestroyScene()
 	{
-		GameObjectManager::DestroyScene();
-		MeshRendererManager::DestroyScene();
-		LightManager::DestroyScene();
+
 	}
 
 	static SceneType GetSceneType() { return sceneType; }

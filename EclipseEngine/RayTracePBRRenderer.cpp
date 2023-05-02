@@ -30,7 +30,7 @@ void RayTracePBRRenderer::Update()
         const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
         const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
 
-        MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
+      //  MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
     }
 }
 

@@ -153,19 +153,19 @@ VkCommandBuffer MeshPickerRenderPass3D::Draw()
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    {
-        for (auto& mesh : MeshRendererManager::GetMeshList())
-        {
-            switch (mesh->GetMeshType())
-            {
-            case MeshTypeEnum::kMeshPolygon:
-            {
-                MeshPickerPipeline.Draw(commandBuffer, mesh);
-                break;
-            }
-            }
-        }
-    }
+    //{
+    //    for (auto& mesh : MeshRendererManager::GetMeshList())
+    //    {
+    //        switch (mesh->GetMeshType())
+    //        {
+    //        case MeshTypeEnum::kMeshPolygon:
+    //        {
+    //            MeshPickerPipeline.Draw(commandBuffer, mesh);
+    //            break;
+    //        }
+    //        }
+    //    }
+    //}
 
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {

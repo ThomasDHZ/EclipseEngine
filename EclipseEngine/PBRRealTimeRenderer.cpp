@@ -33,7 +33,7 @@ void PBRRealTimeRenderer::BuildRenderer()
 		submitList.IrradianceTextureList = skyIrradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = skyPrefilterRenderPass.PrefilterCubeMapList;
 
-		skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		//skyPBRRenderPass.OneTimeDraw(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 	}
 	//Geometry Pass
 	{
@@ -67,20 +67,20 @@ void PBRRealTimeRenderer::BuildRenderer()
 
 void PBRRealTimeRenderer::Update()
 {
-	if (SceneManager::EditorModeFlag &&
-		!VulkanRenderer::ImGUILayerActive &&
-		Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
-	{
-		const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
-		const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
+	//if (SceneManager::EditorModeFlag &&
+	//	!VulkanRenderer::ImGUILayerActive &&
+	//	Mouse::GetMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+	//{
+	//	const glm::vec2 mouseCoord = Mouse::GetMouseCoords();
+	//	const Pixel pixel = meshPickerRenderPass.ReadPixel(mouseCoord);
 
-		MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
-	}
+	//	MeshRendererManager::SetSelectedMesh(MeshRendererManager::GetMeshByColorID(pixel));
+	//}
 
-	if (MeshRendererManager::GetSelectedMesh())
-	{
-		MeshRendererManager::GetSelectedMesh()->SetSelectedMesh(true);
-	}
+	//if (MeshRendererManager::GetSelectedMesh())
+	//{
+	//	MeshRendererManager::GetSelectedMesh()->SetSelectedMesh(true);
+	//}
 }
 
 void PBRRealTimeRenderer::ImGuiUpdate()
@@ -117,10 +117,10 @@ void PBRRealTimeRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmit
 
 	//SkyBox Pass
 	{
-		auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
+		//auto reflectingMesh = MeshRendererManager::GetMeshByID(31);
 		CommandBufferSubmitList.emplace_back(skyIrradianceRenderPass.Draw());
 		CommandBufferSubmitList.emplace_back(skyPrefilterRenderPass.Draw());
-		CommandBufferSubmitList.emplace_back(skyPBRRenderPass.Draw(reflectingMesh));
+		//CommandBufferSubmitList.emplace_back(skyPBRRenderPass.Draw(reflectingMesh));
 	}
 	//Geometry Pass
 	{

@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include "LineMesh3D.h"
-#include "GameObjectManager.h"
 
 class LineGameObject : public GameObject
 {

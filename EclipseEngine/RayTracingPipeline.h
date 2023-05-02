@@ -3,7 +3,6 @@
 #include "AccelerationStructureBuffer.h"
 #include "RenderedColorTexture.h"
 #include "UniformBuffer.h"
-#include "GameObjectManager.h"
 
 class RayTracingPipeline : public GraphicsPipeline
 {

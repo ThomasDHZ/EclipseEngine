@@ -13,6 +13,7 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
+#include "ComputeAnimationPipeline.h"
 
 class PBRRealTimeRenderer
 {

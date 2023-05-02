@@ -36,7 +36,7 @@ public:
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh = nullptr);
-	VkCommandBuffer Draw(std::shared_ptr<Mesh> reflectingMesh = nullptr);
+	//void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh = nullptr);
+	//VkCommandBuffer Draw(std::shared_ptr<Mesh> reflectingMesh = nullptr);
 	void Destroy();
 };

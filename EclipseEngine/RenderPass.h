@@ -1,7 +1,6 @@
 #pragma once
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
-#include "GameObjectManager.h"
 #include "GraphicsPipeline.h"
 #include "TopLevelAccelerationStructureManager.h"
 #include "SceneManager.h"

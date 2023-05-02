@@ -3,7 +3,6 @@
 #include "RenderedTexture.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "MeshRendererManager.h"
 #include "GraphicsPipeline.h"
 #include "MeshPicker2DPipeline.h"
 

@@ -13,13 +13,13 @@
 #include "ParticalSystemRenderer.h"
 #include "GLTF_Temp_Model.h"
 
-std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
+//std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 
 Scene::Scene()
 {
     SceneManager::sceneType = SceneType::kPBR;
    
-    MeshRendererManager::Update();
+    //MeshRendererManager::Update();
     //TopLevelAccelerationStructureManager::Update();
     BuildRenderers();
 }
@@ -60,13 +60,13 @@ void Scene::ImGuiUpdate()
    // spriteRenderer.ImGuiUpdate();
 
     SceneManager::ImGuiSceneHierarchy();
-    MeshRendererManager::GUIUpdate();
+   // MeshRendererManager::GUIUpdate();
     VulkanRenderer::ImGUILayerActive = ImGui::IsAnyItemHovered() || ImGui::IsWindowHovered() || ImGui::IsWindowFocused();
 }
 
 void Scene::BuildRenderers()
 {
-    MeshRendererManager::Update();
+    //MeshRendererManager::Update();
     pbrRenderer.BuildRenderer();
     //spriteRenderer.BuildRenderer();
     InterfaceRenderPass::RebuildSwapChain();
@@ -99,7 +99,7 @@ void Scene::Draw()
 
 void Scene::Destroy()
 {
-    GameObjectManager::Destroy();
+   // GameObjectManager::Destroy();
     pbrRenderer.Destroy();
     //spriteRenderer.Destroy();
 }

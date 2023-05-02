@@ -152,7 +152,7 @@ VkCommandBuffer MeshPickerRenderPass2D::Draw()
     vkCmdBeginRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &viewport);
     vkCmdSetScissor(CommandBuffer[VulkanRenderer::GetCMDIndex()], 0, 1, &rect2D);
-    {
+   /* {
         for (auto& mesh : MeshRendererManager::GetMeshList())
         {
             switch (mesh->GetMeshType())
@@ -164,7 +164,7 @@ VkCommandBuffer MeshPickerRenderPass2D::Draw()
             }
             }
         }
-    }
+    }*/
     vkCmdEndRenderPass(CommandBuffer[VulkanRenderer::GetCMDIndex()]);
     if (vkEndCommandBuffer(CommandBuffer[VulkanRenderer::GetCMDIndex()]) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

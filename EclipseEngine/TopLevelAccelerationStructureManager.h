@@ -2,7 +2,7 @@
 #include "VulkanRenderer.h"
 #include "Model.h"
 #include "GraphicsPipeline.h"
-#include "GameObjectManager.h"
+#include "AccelerationStructureBuffer.h"
 
 class TopLevelAccelerationStructureManager
 {
@@ -60,11 +60,11 @@ public:
             std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
 
 
-            for (int x = 0; x < GameObjectManager::GetModelRendererGameObjects().size(); x++)
-            {
+          //  for (int x = 0; x < GameObjectManager::GetModelRendererGameObjects().size(); x++)
+          //  {
                 //const auto modelRenderer = static_cast<ModelRenderer*>(GameObjectManager::GetModelRendererGameObjects()[x].get());
             //    modelRenderer->GetModel()->UpdateMeshTopLevelAccelerationStructure(modelRenderer->GetGameObjectMatrix(), AccelerationStructureInstanceList);
-            }
+          //  }
 
             VulkanBuffer InstanceBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
             DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstanceBuffer.GetBuffer());

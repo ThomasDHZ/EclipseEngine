@@ -1,5 +1,4 @@
 #include "IrradianceRenderPass.h"
-#include "LightManager.h"
 
 IrradianceRenderPass::IrradianceRenderPass() : RenderPass()
 {

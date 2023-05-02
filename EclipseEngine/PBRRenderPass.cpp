@@ -1,6 +1,4 @@
 #include "PBRRenderPass.h"
-#include "LightManager.h"
-
 
 PBRRenderPass::PBRRenderPass() : RenderPass()
 {
@@ -172,7 +170,7 @@ VkCommandBuffer PBRRenderPass::Draw()
     {
         skyboxPipeline.Draw(commandBuffer);
 
-        for (auto& mesh : MeshRendererManager::GetMeshList())
+       /* for (auto& mesh : MeshRendererManager::GetMeshList())
         {
             switch (mesh->GetMeshType())
             {
@@ -208,8 +206,8 @@ VkCommandBuffer PBRRenderPass::Draw()
                     linePipeline.Draw(commandBuffer, mesh);
                     break;
                 }
-            }
-        }
+            }*/
+        //}
     }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
