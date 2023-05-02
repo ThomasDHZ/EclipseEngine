@@ -23,7 +23,7 @@ struct GLTFMaterialBufferInfo
 	alignas(4) uint32_t EmissionMap = -1;
 };
 
-class GLTFMaterial
+class Material
 {
 private:
 	static uint64_t MaterialIDCounter;
@@ -56,9 +56,9 @@ public:
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
 
-	GLTFMaterial();
-	GLTFMaterial(const std::string& materialName);
-	~GLTFMaterial();
+	Material();
+	Material(const std::string& materialName);
+	~Material();
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 	void UpdateBuffer();

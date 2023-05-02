@@ -3,7 +3,7 @@ SkyBoxView							               GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;
-std::vector<std::shared_ptr<GLTFMaterial>>		   GLTFSceneManager::MaterialList;
+std::vector<std::shared_ptr<Material>>			   GLTFSceneManager::MaterialList;
 std::vector<std::shared_ptr<Texture>>			   GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>                GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>              GLTFSceneManager::BRDFTexture = nullptr;
@@ -100,7 +100,7 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	return texture;
 }
 
-void GLTFSceneManager::AddMaterial(const std::shared_ptr<GLTFMaterial> material)
+void GLTFSceneManager::AddMaterial(const std::shared_ptr<Material> material)
 {
 	MaterialList.emplace_back(material);
 	UpdateBufferIndex();

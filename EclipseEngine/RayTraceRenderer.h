@@ -3,6 +3,7 @@
 #include "RayTraceRenderPass.h"
 #include "MeshPickerRenderPass3D.h"
 #include "EnvironmentToCubeRenderPass.h"
+#include "ComputeAnimationPipeline.h"
 
 class RayTraceRenderer : public RenderPass
 {

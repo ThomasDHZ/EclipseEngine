@@ -26,7 +26,7 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sci-fi", c, GameObjectRenderType::kModelRenderer);
 
-	std::shared_ptr<GLTFMaterial> IronMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("IronMaterial"));
+	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	IronMaterial->MetallicMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	IronMaterial->RoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
@@ -34,7 +34,7 @@ void GLTFRenderer::BuildRenderer()
 	IronMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
-	std::shared_ptr<GLTFMaterial> PlasticMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("PlasticMaterial"));
+	std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
 	PlasticMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	PlasticMaterial->MetallicMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	PlasticMaterial->RoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
@@ -42,7 +42,7 @@ void GLTFRenderer::BuildRenderer()
 	PlasticMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GLTFSceneManager::AddMaterial(PlasticMaterial);
 
-	std::shared_ptr<GLTFMaterial> WallMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("WallMaterial"));
+	std::shared_ptr<Material> WallMaterial = std::make_shared<Material>(Material("WallMaterial"));
 	WallMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	WallMaterial->MetallicMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	WallMaterial->RoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
@@ -50,7 +50,7 @@ void GLTFRenderer::BuildRenderer()
 	WallMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GLTFSceneManager::AddMaterial(WallMaterial);
 
-	std::shared_ptr<GLTFMaterial> GoldMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GoldMaterial"));
+	std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
 	GoldMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	GoldMaterial->MetallicMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GoldMaterial->RoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
@@ -58,7 +58,7 @@ void GLTFRenderer::BuildRenderer()
 	GoldMaterial->NormalMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GLTFSceneManager::AddMaterial(GoldMaterial);
 
-	std::shared_ptr<GLTFMaterial> GrassMaterial = std::make_shared<GLTFMaterial>(GLTFMaterial("GrassMaterial"));
+	std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
 	GrassMaterial->AlbedoMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	GrassMaterial->MetallicMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/metallic.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	GrassMaterial->RoughnessMap = std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
@@ -67,7 +67,7 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::AddMaterial(GrassMaterial);
 
 	GLTFInstancingDataStruct instance = {};
-	std::vector<std::shared_ptr<GLTFMaterial>> instanceMaterialList;
+	std::vector<std::shared_ptr<Material>> instanceMaterialList;
 	instanceMaterialList.emplace_back(IronMaterial);
 	instanceMaterialList.emplace_back(PlasticMaterial);
 	instanceMaterialList.emplace_back(WallMaterial);
@@ -94,7 +94,7 @@ void GLTFRenderer::BuildRenderer()
 	//loader2.MeshType = MeshTypeEnum::kPolygonInstanced;
 
 
-	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
+	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
 
 	std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
 	std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";

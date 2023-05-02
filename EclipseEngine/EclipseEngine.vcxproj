@@ -214,7 +214,7 @@
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
-    <ClCompile Include="GLTFMaterial.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
     <ClCompile Include="GLTFRenderPass2D.cpp" />
@@ -264,7 +264,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
-    <ClCompile Include="ModelRenderer.cpp" />
     <ClCompile Include="MeshRendererManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
@@ -387,7 +386,7 @@
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
-    <ClInclude Include="GLTFMaterial.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
     <ClInclude Include="GLTFRenderPass2D.h" />
@@ -443,7 +442,6 @@
     <ClInclude Include="MeshPickerRenderPass2D.h" />
     <ClInclude Include="MeshPickerRenderPass3D.h" />
     <ClInclude Include="MeshRenderer.h" />
-    <ClInclude Include="ModelRenderer.h" />
     <ClInclude Include="MeshRendererManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="OutLinePipeline.h" />

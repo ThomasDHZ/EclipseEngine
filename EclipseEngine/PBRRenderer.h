@@ -17,6 +17,7 @@
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
 #include "GLTFSceneManager.h"
+#include "ComputeAnimationPipeline.h"
 
 class PBRRenderer
 {

@@ -18,7 +18,7 @@ void GLTFRenderer2D::BuildRenderer()
 	std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
 	std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
 
-	std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial("TestMaterial"));
+	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
 	material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
 	material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 

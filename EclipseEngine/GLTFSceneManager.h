@@ -8,7 +8,7 @@
 #include "GLTFSpotLight.h"
 #include "GLTFPointLight.h"
 #include "Skybox.h"
-#include "GLTFMaterial.h"
+#include "Material.h"
 #include "GameObject3D.h"
 
 class GLTFSceneManager
@@ -17,7 +17,7 @@ private:
 	static float PBRCubeMapSize;
 	static float PreRenderedMapSize;
 
-	static std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+	static std::vector<std::shared_ptr<Material>> MaterialList;
 	static std::vector<std::shared_ptr<Texture>> TextureList;
 	static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
@@ -103,7 +103,7 @@ public:
 
 	static std::shared_ptr<Texture> LoadTexture2D(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Texture> LoadTexture2D(GLTFTextureLoader& textureLoader);
-	static void AddMaterial(const std::shared_ptr<GLTFMaterial> material);
+	static void AddMaterial(const std::shared_ptr<Material> material);
 	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
 	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
 	static void AddPointLight(std::shared_ptr<GLTFPointLight> pointLight);

@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderPass.h"
 #include "PBRBloomPipeline.h"
+#include "ConstMeshInfo.h"
 
 class PBRBloomRenderPass : public RenderPass
 {

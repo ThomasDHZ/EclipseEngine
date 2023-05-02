@@ -8,12 +8,12 @@ PointLight::PointLight(PointLightBuffer light) : Light<PointLightBuffer>(light)
 {
 	LightBuffer.Update(light);
 
-    ModelLoader loader{};
-    loader.FilePath = "../Models/cube.obj";
-    loader.MeshType = MeshTypeEnum::kMeshLightDebug;
+ //   ModelLoader loader{};
+ //   loader.FilePath = "../Models/cube.obj";
+ //   loader.MeshType = MeshTypeEnum::kMeshLightDebug;
 
-	debugMesh = std::make_shared<ModelRenderer>(ModelRenderer("PLight1", loader, LightBuffer.UniformDataInfo.position));
-	GameObjectManager::AddGameObject(debugMesh);
+	//debugMesh = std::make_shared<ModelRenderer>(ModelRenderer("PLight1", loader, LightBuffer.UniformDataInfo.position));
+	//GameObjectManager::AddGameObject(debugMesh);
 }
 PointLight::~PointLight()
 {

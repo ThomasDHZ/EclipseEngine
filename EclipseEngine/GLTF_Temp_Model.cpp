@@ -57,7 +57,7 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 {
 	for (auto& loader : materialLoader)
 	{
-		std::shared_ptr<GLTFMaterial> material = std::make_shared<GLTFMaterial>(GLTFMaterial(loader.MaterialName));
+		std::shared_ptr<Material> material = std::make_shared<Material>(Material(loader.MaterialName));
 		material->Albedo = loader.Albedo;
 		material->Metallic = loader.Metallic;
 		material->Roughness = loader.Roughness;

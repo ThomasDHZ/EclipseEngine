@@ -2,7 +2,7 @@
 #include "Mesh.h"
 #include <GLTFModel.h>
 #include <basetsd.h>
-#include "GLTFMaterial.h"
+#include "Material.h"
 
 struct GLTFInstanceMeshDataStruct
 {
@@ -16,7 +16,7 @@ struct GLTFInstanceMeshDataStruct
 struct GLTFInstancingDataStruct
 {
 	std::vector<GLTFInstanceMeshDataStruct> InstanceMeshDataList;
-	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+	std::vector<std::shared_ptr<Material>> MaterialList;
 	GLTFInstancingDataStruct() {};
 };
 
@@ -34,7 +34,7 @@ struct GLTFMeshLoader3D
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
-	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
+	std::vector<std::shared_ptr<Material>> gltfMaterialList;
 
 	VulkanBuffer VertexBuffer;
 	VulkanBuffer IndexBuffer;
@@ -66,7 +66,7 @@ private:
 
 	MeshProperties meshProperties;
 
-	std::vector<std::shared_ptr<GLTFMaterial>> gltfMaterialList;
+	std::vector<std::shared_ptr<Material>> gltfMaterialList;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};

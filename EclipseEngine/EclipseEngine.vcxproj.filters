@@ -285,9 +285,6 @@
     <ClCompile Include="Level2D.cpp">
       <Filter>Source Files\Level2D</Filter>
     </ClCompile>
-    <ClCompile Include="ModelRenderer.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="MeshRenderer.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
@@ -528,7 +525,7 @@
     <ClCompile Include="GLTFSunLight.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFMaterial.cpp">
+    <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
@@ -780,9 +777,6 @@
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="BillBoardMeshRenderer.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelRenderer.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="DepthDebugRenderPass.h">
@@ -1040,7 +1034,7 @@
     <ClInclude Include="GLTFSunLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFMaterial.h">
+    <ClInclude Include="Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">

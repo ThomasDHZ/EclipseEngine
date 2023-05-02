@@ -1,12 +1,12 @@
-#include "GLTFMaterial.h"
+#include "Material.h"
 
-uint64_t GLTFMaterial::MaterialIDCounter = 0;
+uint64_t Material::MaterialIDCounter = 0;
 
-GLTFMaterial::GLTFMaterial()
+Material::Material()
 {
 }
 
-GLTFMaterial::GLTFMaterial(const std::string& materialName)
+Material::Material(const std::string& materialName)
 {
 	MaterialName = materialName;
 	MaterialIDCounter++;
@@ -14,22 +14,22 @@ GLTFMaterial::GLTFMaterial(const std::string& materialName)
 	MaterialBuffer = VulkanBuffer(&MaterialBuffer, sizeof(GLTFMaterialBufferInfo), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-GLTFMaterial::~GLTFMaterial()
+Material::~Material()
 {
 }
 
-void GLTFMaterial::GenerateID()
+void Material::GenerateID()
 {
 	MaterialIDCounter++;
 	MaterialID = MaterialIDCounter;
 }
 
-void GLTFMaterial::UpdateMaterialBufferIndex(uint64_t bufferIndex)
+void Material::UpdateMaterialBufferIndex(uint64_t bufferIndex)
 {
 	MaterialBufferIndex = bufferIndex;
 }
 
-void GLTFMaterial::UpdateBuffer()
+void Material::UpdateBuffer()
 {
 	MaterialInfo.Albedo = Albedo;
 	MaterialInfo.Metallic = Metallic;
@@ -70,7 +70,7 @@ void GLTFMaterial::UpdateBuffer()
 	MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
-void GLTFMaterial::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList)
+void Material::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList)
 {
 	VkDescriptorBufferInfo MaterialBufferInfo = {};
 	MaterialBufferInfo.buffer = MaterialBuffer.Buffer;

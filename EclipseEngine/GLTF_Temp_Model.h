@@ -92,7 +92,7 @@ private:
 
 public:
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> MeshList;
-	std::vector<std::shared_ptr<GLTFMaterial>> MaterialList;
+	std::vector<std::shared_ptr<Material>> MaterialList;
 	glm::vec3 ModelPosition = glm::vec3(0.0f);
 	glm::vec3 ModelRotation = glm::vec3(0.0f);
 	glm::vec3 ModelScale = glm::vec3(1.0f);
@@ -205,7 +205,7 @@ public:
 		ParentGameObjectID = gameObjectID;
 		GameObjectTransformMatrix = glm::mat4(1.0f);
 
-		MaterialList.emplace_back(std::make_shared<GLTFMaterial>(GLTFMaterial("Line Material")));
+		MaterialList.emplace_back(std::make_shared<Material>(Material("Line Material")));
 
 		std::vector<T> VertexList = vertexList;
 		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
@@ -252,7 +252,7 @@ public:
 		ParentGameObjectID = gameObjectID;
 		GameObjectTransformMatrix = glm::mat4(1.0f);
 
-		MaterialList.emplace_back(std::make_shared<GLTFMaterial>(GLTFMaterial("Line Material")));
+		MaterialList.emplace_back(std::make_shared<Material>(Material("Line Material")));
 
 		std::vector<T> VertexList = vertexList;
 		std::vector<uint32_t> IndexList = indexList;
@@ -295,7 +295,7 @@ public:
 	}
 
 	template <class T>
-	void LoadModel(const std::string& NodeName, const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<GLTFMaterial> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+	void LoadModel(const std::string& NodeName, const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 	{
 		GenerateID();
 
@@ -358,7 +358,7 @@ public:
 	VkDescriptorBufferInfo UpdateIndexBuffer();
 
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return MeshList; }
-	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return MaterialList; }
+	std::vector<std::shared_ptr<Material>> GetMaterialList() { return MaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }

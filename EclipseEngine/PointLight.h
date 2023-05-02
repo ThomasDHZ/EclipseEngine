@@ -4,7 +4,6 @@
 #include "GameObjectManager.h"
 #include "RenderedCubeMapDepthTexture.h"
 #include "Model.h"
-#include "ModelRenderer.h"
 
 class PointLight : public Light<PointLightBuffer>
 {

@@ -142,7 +142,7 @@ public:
 	}
 
 	template <class T>
-	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<GLTFMaterial> material)
+	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<Material> material)
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, material, GameObjectTransform, GameObjectID);
@@ -179,7 +179,7 @@ public:
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return GetComponentList(); };
 
 	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return GameObjectRenderer->GetMeshList(); }
-	std::vector<std::shared_ptr<GLTFMaterial>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
+	std::vector<std::shared_ptr<Material>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
 
 	std::vector<VkDescriptorBufferInfo> GetGameObjectPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }
 	std::vector<VkDescriptorBufferInfo> GetGameObjectTransformMatrixBuffer() { return GameObjectRenderer->GetTransformMatrixBuffer(); }

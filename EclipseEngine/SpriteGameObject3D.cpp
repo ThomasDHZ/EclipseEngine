@@ -198,7 +198,7 @@ SpriteGameObject3D::SpriteGameObject3D(const std::string Name, const glm::vec3& 
 	LoadRenderObject<Vertex3D>(SpriteVertexList, SpriteIndexList);
 }
 
-SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<GLTFMaterial> material) : GameObject3D(Name, kSpriteRenderer)
+SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material) : GameObject3D(Name, kSpriteRenderer)
 {
 	std::vector<Vertex3D> SpriteVertexList;
 
@@ -246,7 +246,7 @@ SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<G
 	LoadRenderObject<Vertex3D>(SpriteVertexList, SpriteIndexList, material);
 }
 
-SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<GLTFMaterial> material, const glm::vec3& position) : GameObject3D(Name, kSpriteRenderer, position)
+SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position) : GameObject3D(Name, kSpriteRenderer, position)
 {
 	std::vector<Vertex3D> SpriteVertexList;
 
@@ -294,7 +294,7 @@ SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<G
 	LoadRenderObject<Vertex3D>(SpriteVertexList, SpriteIndexList, material);
 }
 
-SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<GLTFMaterial> material, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, kSpriteRenderer, position, rotation)
+SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation) : GameObject3D(Name, kSpriteRenderer, position, rotation)
 {
 	std::vector<Vertex3D> SpriteVertexList;
 
@@ -342,7 +342,7 @@ SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<G
 	LoadRenderObject<Vertex3D>(SpriteVertexList, SpriteIndexList, material);
 }
 
-SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<GLTFMaterial> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, kSpriteRenderer, position, rotation, scale)
+SpriteGameObject3D::SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) : GameObject3D(Name, kSpriteRenderer, position, rotation, scale)
 {
 	std::vector<Vertex3D> SpriteVertexList;
 
