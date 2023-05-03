@@ -307,12 +307,26 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetVertexPropertiesBuffer()
 {
-	return std::vector<VkDescriptorBufferInfo>();
+	std::vector<VkDescriptorBufferInfo>	MeshPropertiesBuffer;
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		MeshPropertiesBuffer.emplace_back(nullBuffer);
+
+		return MeshPropertiesBuffer;
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetIndexPropertiesBuffer()
 {
-	return std::vector<VkDescriptorBufferInfo>();
+	std::vector<VkDescriptorBufferInfo>	MeshPropertiesBuffer;
+	VkDescriptorBufferInfo nullBuffer;
+	nullBuffer.buffer = VK_NULL_HANDLE;
+	nullBuffer.offset = 0;
+	nullBuffer.range = VK_WHOLE_SIZE;
+	MeshPropertiesBuffer.emplace_back(nullBuffer);
+
+	return MeshPropertiesBuffer;
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetGameObjectPropertiesBuffer()

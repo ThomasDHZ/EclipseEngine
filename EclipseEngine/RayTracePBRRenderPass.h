@@ -14,6 +14,11 @@ private:
     VkDescriptorSetLayout DescriptorSetLayout;
     std::vector<VkDescriptorSetLayout> DescriptorSetLayoutList;
 
+     AccelerationStructureBuffer TopLevelAccelerationStructure;
+     VulkanBuffer scratchBuffer;
+     int AccelerationStructureInstanceCount;
+     VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst;
+
     void SetUpCommandBuffers();
     void BuildRenderPassPipelines();
 
@@ -26,6 +31,7 @@ public:
     ~RayTracePBRRenderPass();
 
     void StartUp();
+    void Update();
     VkCommandBuffer Draw();
     void RebuildSwapChain();
     void Destroy();

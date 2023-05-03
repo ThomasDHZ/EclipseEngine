@@ -12,15 +12,16 @@ GLTFRenderer::~GLTFRenderer()
 void GLTFRenderer::BuildRenderer()
 {
 	GLTFSceneManager::StartUp();
+	GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
+
+	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
+	//if(gameObjectList.size() == 0)
+
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
-	GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
-
-	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
-	//if(gameObjectList.size() == 0)
 
 	GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
 	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);

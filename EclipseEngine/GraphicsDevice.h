@@ -226,7 +226,7 @@ public:
 	static const std::vector<const char*>* GetRequriedDeviceExtensionListPtr() { return &DeviceExtensionList; }
 	static int GetGraphicsFamily() { return GraphicsFamily; }
 	static int GetPresentFamily() { return PresentFamily; }
-	static bool IsRayTracingFeatureActive() { return false; }
+	static bool IsRayTracingFeatureActive() { return RayTracingFeature; }
 	static VkQueue GetGraphicsQueue() { return GraphicsQueue; }
 	static VkQueue GetPresentQueue() { return PresentQueue; }
 	static VkSampleCountFlagBits GetMaxSampleCount() { return MaxSampleCount; };
