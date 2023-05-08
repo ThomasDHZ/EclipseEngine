@@ -11,7 +11,7 @@ layout (location = 1) in vec4 aColor;
 
 layout(location = 0) out vec4 Color;
 
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 0) buffer TransformBuffer { mat4 transform; } transformBuffer[];
 
 layout(push_constant) uniform SceneData
 {
@@ -36,7 +36,7 @@ void main() {
 
 gl_Position = sceneData.proj * 
                   sceneData.view *                
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+                  transformBuffer[sceneData.MeshIndex].transform * 
                   vec4(inPosition, 1.0);
     Color = aColor;
 }

@@ -54,14 +54,14 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 	
-	if(IndexCount != 0)
+	/*if(IndexCount != 0)
 	{
 		glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
 		VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
 		MeshTransformInverseBuffer.CopyBufferToMemory(&inverseMatrix, sizeof(inverseMatrix));
 
 		UpdateMeshBottomLevelAccelerationStructure();
-	}
+	}*/
 }
 
 void Temp_GLTFMesh::UpdateMeshBufferIndex(uint64_t bufferIndex)
@@ -136,8 +136,10 @@ void Temp_GLTFMesh::MeshStartUp(GLTFMeshLoader3D& meshLoader)
 
 	ParentMesh = meshLoader.node->ParentMesh;
 	ChildMeshList = meshLoader.node->ChildMeshList;
-
 	PrimitiveList = meshLoader.node->PrimitiveList;
+
+	VertexBuffer = meshLoader.VertexBuffer;
+	IndexBuffer = meshLoader.IndexBuffer;
 
 	VertexCount = meshLoader.VertexCount;
 	IndexCount = meshLoader.IndexCount;
@@ -329,10 +331,13 @@ void Temp_GLTFMesh::UpdateMeshBottomLevelAccelerationStructure()
 
 void Temp_GLTFMesh::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout)
 {
+	VkDeviceSize offsets[] = { 0 };
 	for (auto& primitve : PrimitiveList)
 	{
 		if (primitve.IndexCount > 0)
 		{
+			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+			vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
@@ -345,7 +350,11 @@ void Temp_GLTFMesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 	{
 		sceneProperties.MeshIndex = MeshBufferIndex;
 		sceneProperties.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
+
+		VkDeviceSize offsets[] = { 0 };
 		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 		if (primitve.IndexCount > 0)
 		{
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
@@ -385,7 +394,10 @@ void Temp_GLTFMesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet d
 
 void Temp_GLTFMesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
+	VkDeviceSize offsets[] = { 0 };
+
 	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 	if (IndexCount == 0)
 	{
@@ -393,12 +405,14 @@ void Temp_GLTFMesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 	}
 	else
 	{
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 	}
 }
 
 void Temp_GLTFMesh::Destroy()
 {
+	//Vertex and Index Buffer gets destory on the Model/Child Mesh Classes.
 	//MeshPropertiesBuffer.DestroyBuffer();
 	MeshTransformBuffer.DestroyBuffer();
 	BottomLevelAccelerationBuffer.Destroy();

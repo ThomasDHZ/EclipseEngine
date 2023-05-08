@@ -173,6 +173,13 @@ public:
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
+	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, StartColor, EndColor, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
 	void LoadLineRenderObject(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
 	{
 		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());

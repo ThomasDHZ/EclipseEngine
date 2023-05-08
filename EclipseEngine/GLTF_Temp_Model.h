@@ -354,6 +354,7 @@ public:
 	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);

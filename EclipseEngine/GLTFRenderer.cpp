@@ -24,8 +24,8 @@ void GLTFRenderer::BuildRenderer()
 
 
 	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
-	GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
-	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
+	//GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
+	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 
 	/*std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
@@ -158,9 +158,43 @@ void GLTFRenderer::BuildRenderer()
 	        }
 	    }
 	}
-	//GLTFSceneManager::AddGameObject<LineVertex3D>("Lines", a, GameObjectRenderType::kLineRenderer3D);
-
 	 GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
+
+	//int width2 = 20;
+	//int height2 = 20;
+	//for (uint32_t y = 0; y < height2; y++)
+	//{
+	//	for (uint32_t x = 0; x < width2; x++)
+	//	{
+	//		glm::vec2 coord = { (float)x / width2, (float)y / height2 };
+	//		coord = coord * 2.0f - 1.0f;
+
+	//		uint8_t r = (uint8_t)(coord.x * 255.0f);
+	//		uint8_t g = (uint8_t)(coord.y * 255.0f);
+
+	//		glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+	//		glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+
+	//		float a = glm::dot(rayDirection, rayDirection);
+	//		float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+	//		float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+
+	//		//Quadratic forumla discriminat
+	//		//b^2 - 4ac;
+
+	//		float discriminant = (b * b) - 4.0f * a * c;
+
+	//		if (discriminant >= 0.0f)
+	//		{
+	//			GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f));
+	//		}
+	//		else
+	//		{
+	//			GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 1.0f, 01.0f, 1.00f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	//		}
+	//	}
+	//}
+	 //GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f), glm::vec3(5.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 

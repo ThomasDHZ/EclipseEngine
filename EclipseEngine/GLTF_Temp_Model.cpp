@@ -178,6 +178,24 @@ void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, const glm::vec
 		mesh->UpdateMeshTransformBuffer();
 	}
 }
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(LineMesh3D(LineName, StartPoint, EndPoint, StartColor, EndColor, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
 void GLTF_Temp_Model::LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
@@ -281,12 +299,6 @@ void GLTF_Temp_Model::UpdateMeshPropertiesBuffer()
 
 void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-	if (IndexBuffer.Buffer != nullptr)
-	{
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
-	}
 	for (auto& mesh : MeshList)
 	{
 		mesh->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
@@ -295,12 +307,6 @@ void GLTF_Temp_Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descr
 
 void GLTF_Temp_Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-	if (IndexBuffer.Buffer != nullptr)
-	{
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
-	}
 	for (auto& mesh : MeshList)
 	{
 		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
@@ -309,12 +315,6 @@ void GLTF_Temp_Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet d
 
 void GLTF_Temp_Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-	if (IndexBuffer.Buffer != nullptr)
-	{
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
-	}
 	for (auto& mesh : MeshList)
 	{
 		mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
@@ -323,9 +323,6 @@ void GLTF_Temp_Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescri
 
 void GLTF_Temp_Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
 		mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
@@ -334,12 +331,10 @@ void GLTF_Temp_Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet
 
 void GLTF_Temp_Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	VkDeviceSize offsets[] = { 0 };
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-	//vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
+		auto lineMesh = reinterpret_cast<LineMesh3D*>(mesh.get());
+		lineMesh->DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 	}
 }
 

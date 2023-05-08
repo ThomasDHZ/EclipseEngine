@@ -167,6 +167,12 @@ void GLTFSceneManager::AddLineGameObject3D( std::string Name, const glm::vec3& S
 	GameObjectList.back()->LoadLineRenderObject(StartPoint, EndPoint, Color);
 }
 
+void GLTFSceneManager::AddLineGameObject3D(std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
+	GameObjectList.back()->LoadLineRenderObject(StartPoint, EndPoint, StartColor, EndColor);
+}
+
 void GLTFSceneManager::AddLineGameObject3D( std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));

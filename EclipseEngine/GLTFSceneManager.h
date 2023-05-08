@@ -112,6 +112,7 @@ public:
 	static void AddLineGameObject3D(const std::string Name, std::vector<LineVertex3D>& lineVertexList);
 	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint);
 	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color);
+	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor);
 	static void AddLineGameObject3D(const std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ);
 
 

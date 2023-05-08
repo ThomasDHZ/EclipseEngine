@@ -75,6 +75,8 @@ protected:
 
 	MeshProperties meshProperties;
 
+	VulkanBuffer VertexBuffer;
+	VulkanBuffer IndexBuffer;
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
