@@ -26,9 +26,9 @@
 class Scene
 {
 private:
-//	GLTFRenderer pbrRenderer;
+	GLTFRenderer pbrRenderer;
 	//GLTFRenderer2D spriteRenderer;
-	RayTracePBRRenderer rayTraceRenderer;
+	//RayTracePBRRenderer rayTraceRenderer;
 public:
 	Scene();
 	~Scene();

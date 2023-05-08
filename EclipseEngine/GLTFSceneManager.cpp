@@ -20,6 +20,7 @@ float                                              GLTFSceneManager::PBRCubeMapS
 float									           GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool											   GLTFSceneManager::WireframeModeFlag = false;
 
+
 void GLTFSceneManager::UpdateBufferIndex()
 {
 
@@ -98,6 +99,78 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	UpdateBufferIndex();
 	VulkanRenderer::UpdateRendererFlag = true;
 	return texture;
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
+}
+
+void GLTFSceneManager::AddLineGameObject3D( std::string Name, std::vector<LineVertex3D>& lineVertexList)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
+	GameObjectList.back()->LoadLineRenderObject(lineVertexList);
+}
+
+void GLTFSceneManager::AddLineGameObject3D( std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
+	GameObjectList.back()->LoadLineRenderObject(StartPoint, EndPoint);
+}
+
+void GLTFSceneManager::AddLineGameObject3D( std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
+	GameObjectList.back()->LoadLineRenderObject(StartPoint, EndPoint, Color);
+}
+
+void GLTFSceneManager::AddLineGameObject3D( std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
+	GameObjectList.back()->LoadLineRenderObject(GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ);
 }
 
 void GLTFSceneManager::AddMaterial(const std::shared_ptr<Material> material)

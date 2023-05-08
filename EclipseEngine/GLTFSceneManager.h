@@ -94,11 +94,26 @@ public:
 	}
 
 	template <class T>
-	static void AddGameObject(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+	static void AddGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
 	{
 		GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, renderType)));
 		GameObjectList.back()->LoadRenderObject<T>(FilePath, instanceData);
 	}
+
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddLineGameObject3D(const std::string Name, std::vector<LineVertex3D>& lineVertexList);
+	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint);
+	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color);
+	static void AddLineGameObject3D(const std::string Name, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ);
+
 
 	static std::shared_ptr<Texture> LoadTexture2D(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Texture> LoadTexture2D(GLTFTextureLoader& textureLoader);

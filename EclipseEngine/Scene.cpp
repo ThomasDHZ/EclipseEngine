@@ -40,9 +40,9 @@ void Scene::Update()
     }
 
     SceneManager::Update();
-    //pbrRenderer.Update();
+    pbrRenderer.Update();
     //spriteRenderer.Update();
-    rayTraceRenderer.Update();
+    //rayTraceRenderer.Update();
 }
 
 void Scene::ImGuiUpdate()
@@ -57,9 +57,9 @@ void Scene::ImGuiUpdate()
         ImGui::Checkbox("Hybrid Mode", &SceneManager::HybridRendererActive);
     }
 
-   // pbrRenderer.ImGuiUpdate();
+    pbrRenderer.ImGuiUpdate();
    // spriteRenderer.ImGuiUpdate();
-    rayTraceRenderer.ImGuiUpdate();
+    //rayTraceRenderer.ImGuiUpdate();
 
     SceneManager::ImGuiSceneHierarchy();
    // MeshRendererManager::GUIUpdate();
@@ -69,9 +69,9 @@ void Scene::ImGuiUpdate()
 void Scene::BuildRenderers()
 {
     //MeshRendererManager::Update();
-  //  pbrRenderer.BuildRenderer();
+    pbrRenderer.BuildRenderer();
     //spriteRenderer.BuildRenderer();
-    rayTraceRenderer.BuildRenderer();
+    //rayTraceRenderer.BuildRenderer();
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
 }
@@ -87,9 +87,9 @@ void Scene::Draw()
         return;
     }
 
-    //pbrRenderer.Draw(CommandBufferSubmitList);
+    pbrRenderer.Draw(CommandBufferSubmitList);
     //spriteRenderer.Draw(CommandBufferSubmitList);
-    rayTraceRenderer.Draw(CommandBufferSubmitList);
+    //rayTraceRenderer.Draw(CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
@@ -104,7 +104,7 @@ void Scene::Draw()
 void Scene::Destroy()
 {
    // GameObjectManager::Destroy();
-    rayTraceRenderer.Destroy();
-   // pbrRenderer.Destroy();
+    //rayTraceRenderer.Destroy();
+    pbrRenderer.Destroy();
     //spriteRenderer.Destroy();
 }

@@ -23,12 +23,12 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-	GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
-	GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
-	GLTFSceneManager::AddGameObject<Vertex3D>("Sci-fi", c, GameObjectRenderType::kModelRenderer);
+	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
+	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 
-	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
+	/*std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
@@ -97,8 +97,8 @@ void GLTFRenderer::BuildRenderer()
 				instance.MaterialList = instanceMaterialList;
 			}
 		}
-	}
-	GLTFSceneManager::AddGameObject<Vertex3D>("InstanceTest", b, instance, GameObjectRenderType::kInstanceRenderer);
+	}*/
+	//GLTFSceneManager::AddGameObject<Vertex3D>("InstanceTest", b, instance, GameObjectRenderType::kInstanceRenderer);
 
 	//ModelLoader loader2{};
 	//loader2.instanceData = instance;
@@ -108,58 +108,59 @@ void GLTFRenderer::BuildRenderer()
 
 	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
 
-	std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
-    material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
-	
+	//std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
+	//std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
+	//material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
+ //   material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
+	//
 	//const std::string asdf = "sprite";
 	//std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(asdf, material));
 	//gameObjectList.emplace_back(sprite);
 
-	//int width = 500;
-	//int height = 500;
-	//float length = 10.0f;
-	//float radius = 0.5f;
-	//std::vector<LineVertex3D> VertexList;
-	//for (uint32_t y = 0; y < height; y++)
-	//{
-	//    for (uint32_t x = 0; x < width; x++)
-	//    {
-	//        glm::vec2 coord = { (float)x / width, (float)y / height };
-	//        coord = coord * 2.0f - 1.0f;
+	//GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
 
-	//        uint8_t r = (uint8_t)(coord.x * 255.0f);
-	//        uint8_t g = (uint8_t)(coord.y * 255.0f);
+	int width = 500;
+	int height = 500;
+	float length = 10.0f;
+	float radius = 0.5f;
+	std::vector<LineVertex3D> VertexList;
+	for (uint32_t y = 0; y < height; y++)
+	{
+	    for (uint32_t x = 0; x < width; x++)
+	    {
+	        glm::vec2 coord = { (float)x / width, (float)y / height };
+	        coord = coord * 2.0f - 1.0f;
 
-	//        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-	//        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+	        uint8_t r = (uint8_t)(coord.x * 255.0f);
+	        uint8_t g = (uint8_t)(coord.y * 255.0f);
 
-	//        float a = glm::dot(rayDirection, rayDirection);
-	//        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-	//        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+	        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+	        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
 
-	//        //Quadratic forumla discriminat
-	//        //b^2 - 4ac;
+	        float a = glm::dot(rayDirection, rayDirection);
+	        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+	        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
 
-	//        float discriminant = (b * b) - 4.0f * a * c;
+	        //Quadratic forumla discriminat
+	        //b^2 - 4ac;
 
-	//        if (discriminant >= 0.0f)
-	//        {
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
-	//        }
-	//        else
-	//        {
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
-	//        }
-	//    }
-	//}
+	        float discriminant = (b * b) - 4.0f * a * c;
+
+	        if (discriminant >= 0.0f)
+	        {
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+	        }
+	        else
+	        {
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+	            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+	        }
+	    }
+	}
 	//GLTFSceneManager::AddGameObject<LineVertex3D>("Lines", a, GameObjectRenderType::kLineRenderer3D);
 
-	//gameObjectList.emplace_back(std::make_shared<LineRenderer3D>(LineRenderer3D("Line", VertexList)));
-
+	 GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
 
 	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 

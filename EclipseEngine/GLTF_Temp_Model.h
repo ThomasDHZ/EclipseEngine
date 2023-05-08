@@ -4,6 +4,7 @@
 #include "Mesh3D.h"
 #include "Temp_GLTFMesh.h"
 #include "GLTF_GraphicsDescriptors.h"
+#include "LineMesh3D.h"
 
 class GLTF_Temp_Model
 {
@@ -106,7 +107,8 @@ public:
 		GenerateID();
 
 		ParentGameObjectID = gameObjectID;
-		GameObjectTransformMatrix = glm::mat4(1.0f);
+		GameObjectTransformMatrix = GameObjectMatrix;
+		//ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
 
 		GLTFModel model = GLTFModel(FilePath.c_str());
 		GLTFModelData gltfModelData = model.GetModelData();
@@ -154,7 +156,8 @@ public:
 		GenerateID();
 
 		ParentGameObjectID = gameObjectID;
-		GameObjectTransformMatrix = glm::mat4(1.0f);
+		GameObjectTransformMatrix = GameObjectMatrix;
+	//	ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
 
 		GLTFModel model = GLTFModel(FilePath.c_str());
 		GLTFModelData gltfModelData = model.GetModelData();
@@ -203,7 +206,8 @@ public:
 		GenerateID();
 
 		ParentGameObjectID = gameObjectID;
-		GameObjectTransformMatrix = glm::mat4(1.0f);
+		GameObjectTransformMatrix = GameObjectMatrix;
+		//ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
 
 		MaterialList.emplace_back(std::make_shared<Material>(Material("Line Material")));
 
@@ -250,7 +254,8 @@ public:
 		GenerateID();
 
 		ParentGameObjectID = gameObjectID;
-		GameObjectTransformMatrix = glm::mat4(1.0f);
+		GameObjectTransformMatrix = GameObjectMatrix;
+		//ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
 
 		MaterialList.emplace_back(std::make_shared<Material>(Material("Line Material")));
 
@@ -300,7 +305,8 @@ public:
 		GenerateID();
 
 		ParentGameObjectID = gameObjectID;
-		GameObjectTransformMatrix = glm::mat4(1.0f);
+		GameObjectTransformMatrix = GameObjectMatrix;
+	//	ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
 
 		MaterialList.emplace_back(material);
 
@@ -343,6 +349,12 @@ public:
 			mesh->UpdateMeshTransformBuffer();
 		}
 	}
+
+	void LoadLineMesh3D(const std::string& LineName, std::vector<LineVertex3D>& vertices, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);

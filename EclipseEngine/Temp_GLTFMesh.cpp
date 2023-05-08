@@ -11,44 +11,7 @@ Temp_GLTFMesh::Temp_GLTFMesh()
 
 Temp_GLTFMesh::Temp_GLTFMesh(GLTFMeshLoader3D& meshLoader)
 {
-	MeshID = meshLoader.node->NodeID;
-	ParentModelID = meshLoader.ParentModelID;
-	ParentGameObjectID = meshLoader.ParentGameObjectID;
-
-	MeshName = meshLoader.node->NodeName;
-
-	ParentMesh = meshLoader.node->ParentMesh;
-	ChildMeshList = meshLoader.node->ChildMeshList;
-
-	PrimitiveList = meshLoader.node->PrimitiveList;
-
-	VertexCount = meshLoader.VertexCount;
-	IndexCount = meshLoader.IndexCount;
-	//BoneCount = meshLoader.node->BoneCount;
-	TriangleCount = IndexCount / 3;
-	InstanceCount = meshLoader.InstanceData.InstanceMeshDataList.size();
-
-	GameObjectTransform = meshLoader.GameObjectTransform;
-	ModelTransform = meshLoader.ModelTransform;
-	MeshTransform = meshLoader.node->NodeTransformMatrix;
-
-	MeshPosition = meshLoader.node->Position;
-	MeshRotation = meshLoader.node->Rotation;
-	MeshScale = meshLoader.node->Scale;
-
-	gltfMaterialList = meshLoader.gltfMaterialList;
-
-	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	//MeshTransformBuffer = meshLoader.node->TransformBuffer;
-	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
-	VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
-	MeshTransformInverseBuffer.CreateBuffer(&inverseMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	InstancingStartUp(meshLoader.InstanceData);
-	RTXMeshStartUp(meshLoader.VertexBuffer, meshLoader.IndexBuffer);
+	MeshStartUp(meshLoader);
 }
 
 Temp_GLTFMesh::~Temp_GLTFMesh()
@@ -163,6 +126,49 @@ void Temp_GLTFMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& M
 	//}
 }
 
+void Temp_GLTFMesh::MeshStartUp(GLTFMeshLoader3D& meshLoader)
+{
+	MeshID = meshLoader.node->NodeID;
+	ParentModelID = meshLoader.ParentModelID;
+	ParentGameObjectID = meshLoader.ParentGameObjectID;
+
+	MeshName = meshLoader.node->NodeName;
+
+	ParentMesh = meshLoader.node->ParentMesh;
+	ChildMeshList = meshLoader.node->ChildMeshList;
+
+	PrimitiveList = meshLoader.node->PrimitiveList;
+
+	VertexCount = meshLoader.VertexCount;
+	IndexCount = meshLoader.IndexCount;
+	//BoneCount = meshLoader.node->BoneCount;
+	TriangleCount = IndexCount / 3;
+	InstanceCount = meshLoader.InstanceData.InstanceMeshDataList.size();
+
+	GameObjectTransform = meshLoader.GameObjectTransform;
+	ModelTransform = meshLoader.ModelTransform;
+	MeshTransform = meshLoader.node->NodeTransformMatrix;
+
+	MeshPosition = meshLoader.node->Position;
+	MeshRotation = meshLoader.node->Rotation;
+	MeshScale = meshLoader.node->Scale;
+
+	gltfMaterialList = meshLoader.gltfMaterialList;
+
+	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	//MeshTransformBuffer = meshLoader.node->TransformBuffer;
+	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
+	VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
+	MeshTransformInverseBuffer.CreateBuffer(&inverseMatrix, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	InstancingStartUp(meshLoader.InstanceData);
+	RTXMeshStartUp(meshLoader.VertexBuffer, meshLoader.IndexBuffer);
+	AnimationStartUp(meshLoader);
+}
+
 void Temp_GLTFMesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer)
 {
 	if (GraphicsDevice::IsRayTracingFeatureActive())
@@ -171,9 +177,9 @@ void Temp_GLTFMesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& Ind
 
 		BottomLevelAccelerationBuffer = AccelerationStructureBuffer();
 
-		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress{};
-		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress{};
-		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress{};
+		VkDeviceOrHostAddressConstKHR VertexBufferDeviceAddress;
+		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
+		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
 
 		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
 		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
@@ -191,7 +197,9 @@ void Temp_GLTFMesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& Ind
 		AccelerationStructureGeometry.geometry.triangles.vertexStride = sizeof(Vertex3D);
 		AccelerationStructureGeometry.geometry.triangles.indexType = VK_INDEX_TYPE_UINT32;
 		AccelerationStructureGeometry.geometry.triangles.indexData = IndexBufferDeviceAddress;
+
 		AccelerationStructureGeometry.geometry.triangles.transformData = TransformInverseBufferDeviceAddress;
+
 		AccelerationStructureBuildRangeInfo.primitiveCount = TriangleCount;
 		AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
 		AccelerationStructureBuildRangeInfo.firstVertex = 0;
@@ -225,6 +233,19 @@ void Temp_GLTFMesh::InstancingStartUp(GLTFInstancingDataStruct& instanceData)
 		}
 
 		InstanceBuffer.CreateBuffer(InstancedVertexDataList.data(), InstancedVertexDataList.size() * sizeof(InstancedVertexData3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	}
+}
+
+void Temp_GLTFMesh::AnimationStartUp(GLTFMeshLoader3D& meshLoader)
+{
+	BoneCount = meshLoader.BoneCount;
+	if (BoneCount > 0)
+	{
+		BoneWeightList = meshLoader.BoneWeightList;
+		BoneTransform.resize(BoneCount, glm::mat4(1.0f));
+
+		BoneWeightBuffer.CreateBuffer(BoneWeightList.data(), sizeof(MeshBoneWeights) * BoneWeightList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		BoneTransformBuffer.CreateBuffer(BoneTransform.data(), sizeof(glm::mat4) * BoneTransform.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 	}
 }
 

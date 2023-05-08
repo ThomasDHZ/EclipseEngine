@@ -35,4 +35,5 @@ layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 void main()
 {
+	rayPayload.color = texture(PrefilterMap, gl_WorldRayDirectionEXT).rgb;
 }

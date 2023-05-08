@@ -106,6 +106,96 @@ void GLTF_Temp_Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoa
 	}
 }
 
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, std::vector<LineVertex3D>& vertices, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, vertices, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(LineMesh3D(LineName, StartPoint, EndPoint, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec3& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(LineMesh3D(LineName, StartPoint, EndPoint, Color,  GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(LineMesh3D(LineName, StartPoint, EndPoint, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+void GLTF_Temp_Model::LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<Temp_GLTFMesh> mesh = std::make_shared<Temp_GLTFMesh>(LineMesh3D(GridName, GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
 
 void GLTF_Temp_Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex)
 {

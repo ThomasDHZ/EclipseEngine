@@ -57,13 +57,13 @@ class Temp_GLTFMesh
 private:
 	static uint64_t MeshIDCounter;
 
+protected:
+	std::string MeshName;
+
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
 	uint64_t MeshBufferIndex = -1;
-
-	std::string MeshName;
-
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BoneCount = 0;
@@ -75,22 +75,27 @@ private:
 
 	MeshProperties meshProperties;
 
-	std::vector<std::shared_ptr<Material>> gltfMaterialList;
-
-	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
-	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
-
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
 	VulkanBuffer InstanceBuffer;
+	VulkanBuffer BoneWeightBuffer;
+	VulkanBuffer BoneTransformBuffer;
 	AccelerationStructureBuffer BottomLevelAccelerationBuffer;
 
+	std::vector<std::shared_ptr<Material>> gltfMaterialList;
+	std::vector<MeshBoneWeights> BoneWeightList;
+	std::vector<glm::mat4> BoneTransform;
 	std::vector<GLTFInstancingDataStruct> InstanceData;
 	std::vector<InstancedVertexData3D> InstancedVertexDataList;
 
+	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
+	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
+
+	void MeshStartUp(GLTFMeshLoader3D& meshLoader);
 	void InstancingStartUp(GLTFInstancingDataStruct& instanceData);
 	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);
+	void AnimationStartUp(GLTFMeshLoader3D& meshLoader);
 	void UpdateMeshBottomLevelAccelerationStructure();
 
 public:
@@ -109,18 +114,17 @@ public:
 
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
-
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 
 	void UpdateMeshBufferIndex(uint64_t bufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
-	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
-	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
+	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
 	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
-	void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
+	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties);
 	void Destroy();
 
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; }

@@ -30,7 +30,11 @@ layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directiona
 layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
+
 void main()
 {		
- 
+    const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
+    MaterialProperties material = materialBuffer[materialID].materialProperties;
+
+    rayHitInfo.color = vec3(1.0f, 0.0f, 0.0f);
 }

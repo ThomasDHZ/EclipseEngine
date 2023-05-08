@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "GLTF_Temp_Model.h"
+#include "LineMesh3D.h"
 
 enum GameObjectRenderType
 {
@@ -149,6 +150,36 @@ public:
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, material, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
+
+
+	void LoadLineRenderObject(std::vector<LineVertex3D>& vertices)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadLineMesh3D(ObjectName, vertices, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
+	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
+	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, Color, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
+	void LoadLineRenderObject(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
+	{
+		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer->LoadLineMesh3D(ObjectName, GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
 
 	virtual ~GameObject();
 
