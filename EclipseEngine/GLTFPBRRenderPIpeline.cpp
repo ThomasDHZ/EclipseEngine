@@ -9,7 +9,7 @@ GLTFPBRRenderPIpeline::~GLTFPBRRenderPIpeline()
 {
 }
 
-void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<GLTF_Temp_Model>> modelList)
+void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<Model>> modelList)
 {
     VkSampler Sampler = nullptr;
     VkSamplerCreateInfo TextureImageSamplerInfo = {};
@@ -259,7 +259,7 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
     }
 }
 
-void GLTFPBRRenderPIpeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GLTF_Temp_Model> model)
+void GLTFPBRRenderPIpeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Model> model)
 {
     //vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     //model->Draw(commandBuffer, ShaderPipelineLayout);

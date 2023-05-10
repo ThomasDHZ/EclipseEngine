@@ -149,6 +149,34 @@ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::st
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 
+void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material)
+{
+	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(Name));
+	sprite->LoadSpriteGameObject3D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position)
+{
+	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(Name, position));
+	sprite->LoadSpriteGameObject3D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
+{
+	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(Name, position, rotation));
+	sprite->LoadSpriteGameObject3D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(Name, position, rotation, scale));
+	sprite->LoadSpriteGameObject3D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
 void GLTFSceneManager::AddLineGameObject3D( std::string Name, std::vector<LineVertex3D>& lineVertexList)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kLineRenderer3D)));
@@ -485,7 +513,7 @@ std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetTexturePropertiesBuffer(
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetMaterialPropertiesBuffer()
 {
 	std::vector<VkDescriptorBufferInfo>	MaterialPropertiesBuffer;
-	if (SunLightList.size() == 0)
+	if (MaterialList.size() == 0)
 	{
 		VkDescriptorBufferInfo nullBuffer;
 		nullBuffer.buffer = VK_NULL_HANDLE;

@@ -3,7 +3,7 @@
 #include "Component.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "GLTF_Temp_Model.h"
+#include "Model.h"
 #include "LineMesh3D.h"
 
 enum GameObjectRenderType
@@ -26,7 +26,7 @@ private:
 protected:
 	std::string ObjectName;
 	uint64_t GameObjectID;
-	std::shared_ptr<GLTF_Temp_Model> GameObjectRenderer;
+	std::shared_ptr<Model> GameObjectRenderer;
 	std::vector<std::shared_ptr<Component>> ComponentList;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
@@ -114,7 +114,7 @@ public:
 	template <class T>
 	void LoadRenderObject(const std::string& fileName)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadModel<T>(fileName, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
@@ -122,7 +122,7 @@ public:
 	template <class T>
 	void LoadRenderObject(const std::string& fileName, GLTFInstancingDataStruct& instanceData)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadModel<T>(fileName, instanceData, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
@@ -130,7 +130,7 @@ public:
 	template <class T>
 	void LoadRenderObject(const std::vector<T>& vertexList)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
@@ -138,7 +138,7 @@ public:
 	template <class T>
 	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
@@ -146,43 +146,42 @@ public:
 	template <class T>
 	void LoadRenderObject(const std::vector<T>& vertexList, const std::vector<uint32_t>& indexList, const std::shared_ptr<Material> material)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadModel<T>(ObjectName, vertexList, indexList, material, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
-
 	void LoadLineRenderObject(std::vector<LineVertex3D>& vertices)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadLineMesh3D(ObjectName, vertices, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, Color, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, StartColor, EndColor, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
 	void LoadLineRenderObject(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
 	{
-		GameObjectRenderer = std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model());
+		GameObjectRenderer = std::make_shared<Model>(Model());
 		GameObjectRenderer->LoadLineMesh3D(ObjectName, GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectTransform, GameObjectID);
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
@@ -210,14 +209,14 @@ public:
 	uint64_t GetGameObjectID() { return GameObjectID; }
 	GameObjectRenderType GetRenderType() { return RenderType; }
 
-	std::shared_ptr<GLTF_Temp_Model> GetGameObjectRenderer() { return GameObjectRenderer; }
+	std::shared_ptr<Model> GetGameObjectRenderer() { return GameObjectRenderer; }
 
 	std::shared_ptr<Component> GetComponentBySubType(ComponentSubType componentType);
 	std::shared_ptr<Component> GetComponentByType(ComponentType componentType);
 	std::shared_ptr<Component> GetComponentByID(uint64_t ComponentID);
 	std::vector<std::shared_ptr<Component>> GetComponentList() { return GetComponentList(); };
 
-	std::vector<std::shared_ptr<Temp_GLTFMesh>> GetMeshList() { return GameObjectRenderer->GetMeshList(); }
+	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return GameObjectRenderer->GetMeshList(); }
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
 
 	std::vector<VkDescriptorBufferInfo> GetGameObjectPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }

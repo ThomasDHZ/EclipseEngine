@@ -23,12 +23,12 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
 	//GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 
-	/*std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
+	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
@@ -38,7 +38,7 @@ void GLTFRenderer::BuildRenderer()
 	IronMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
-	std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
+	/**/std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
 	PlasticMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	PlasticMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	PlasticMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
@@ -97,7 +97,7 @@ void GLTFRenderer::BuildRenderer()
 				instance.MaterialList = instanceMaterialList;
 			}
 		}
-	}*/
+	}
 	//GLTFSceneManager::AddGameObject<Vertex3D>("InstanceTest", b, instance, GameObjectRenderType::kInstanceRenderer);
 
 	//ModelLoader loader2{};
@@ -113,9 +113,8 @@ void GLTFRenderer::BuildRenderer()
 	//material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
  //   material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	//
-	//const std::string asdf = "sprite";
-	//std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(asdf, material));
-	//gameObjectList.emplace_back(sprite);
+	const std::string asdf = "sprite";
+	GLTFSceneManager::AddSpriteGameObject3D(asdf, WallMaterial);
 
 	//GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
 
@@ -158,7 +157,7 @@ void GLTFRenderer::BuildRenderer()
 	        }
 	    }
 	}
-	 GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
+	// GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
 
 	//int width2 = 20;
 	//int height2 = 20;

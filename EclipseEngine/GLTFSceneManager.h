@@ -10,6 +10,7 @@
 #include "Skybox.h"
 #include "Material.h"
 #include "GameObject3D.h"
+#include "SpriteGameObject3D.h"
 
 class GLTFSceneManager
 {
@@ -108,6 +109,11 @@ public:
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material);
+	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);
+	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
 	static void AddLineGameObject3D(const std::string Name, std::vector<LineVertex3D>& lineVertexList);
 	static void AddLineGameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint);

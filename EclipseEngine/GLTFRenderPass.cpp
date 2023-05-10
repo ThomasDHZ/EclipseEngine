@@ -118,7 +118,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    auto ad = std::vector<std::shared_ptr<GLTF_Temp_Model>>{ gameObjectList[0]->GetGameObjectRenderer() };
+    auto ad = std::vector<std::shared_ptr<Model>>{ gameObjectList[0]->GetGameObjectRenderer() };
     oldpbrPipeline.InitializePipeline(pipelineInfo, ad);
     oldwireframePipeline.InitializePipeline(pipelineInfo);
     oldLinePipeline.InitializePipeline(pipelineInfo);

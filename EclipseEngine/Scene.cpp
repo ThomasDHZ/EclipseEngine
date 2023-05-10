@@ -8,10 +8,9 @@
 #include "LineGameObject.h"
 #include "GridRenderer3D.h"
 #include "BillBoardMeshRenderer.h"
-#include "MeshRenderer.h"
 #include "ReadableTexture.h"
 #include "ParticalSystemRenderer.h"
-#include "GLTF_Temp_Model.h"
+#include "Model.h"
 
 //std::vector<std::shared_ptr<GameObject>> GameObjectManager::objList;
 

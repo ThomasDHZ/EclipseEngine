@@ -314,15 +314,12 @@ void LineMesh3D::BuildGrid3D(glm::vec3 GridSize, glm::vec3 GridSpacing)
 
 void LineMesh3D::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	Temp_GLTFMesh::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
+	Mesh::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 }
 
 void LineMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	//VertexBuffer.CopyBufferToMemory(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex3D));
-	//IndexBuffer.CopyBufferToMemory(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t));
-
-	Temp_GLTFMesh::Update(GameObjectMatrix, ModelMatrix);
+	Mesh::Update(GameObjectMatrix, ModelMatrix);
 }
 
 void LineMesh3D::SetMeshPosition(float x, float y, float z)
@@ -344,7 +341,6 @@ void LineMesh3D::SetMeshPosition(const glm::vec3& position)
 {
 	MeshPosition = position;
 }
-
 
 void LineMesh3D::SetMeshRotation(const glm::vec3& rotation)
 {

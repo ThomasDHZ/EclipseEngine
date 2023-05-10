@@ -222,16 +222,7 @@
     <ClCompile Include="SoundEffectManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh2D.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh3D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="LineMesh3D.cpp">
@@ -263,9 +254,6 @@
     </ClCompile>
     <ClCompile Include="Level2D.cpp">
       <Filter>Source Files\Level2D</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshRenderer.cpp">
-      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Renderer3DPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
@@ -408,9 +396,6 @@
     <ClCompile Include="ConstMeshInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InstanceMesh.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
@@ -420,13 +405,10 @@
     <ClCompile Include="GLTFPBRRenderPIpeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="GLTF_Temp_Model.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="GLTFRenderPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Temp_GLTFMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp">
@@ -615,6 +597,12 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteMesh3D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -701,16 +689,7 @@
     <ClInclude Include="SoundEffectManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh2D.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh3D.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh3D.h">
@@ -740,17 +719,11 @@
     <ClInclude Include="GridRenderer3D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="BillBoardMeshRenderer.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="DepthDebugRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="DepthRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshRenderer.h">
-      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="LinePipeline.h">
       <Filter>Header Files</Filter>
@@ -902,9 +875,6 @@
     <ClInclude Include="ConstMeshInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InstanceMesh.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -914,13 +884,10 @@
     <ClInclude Include="GLTFPBRRenderPIpeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="GLTF_Temp_Model.h">
+    <ClInclude Include="Model.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="GLTFRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Temp_GLTFMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLTF_EnvironmentToCubePipeline.h">
@@ -1138,6 +1105,15 @@
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteMesh3D.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BillBoardMeshRenderer.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

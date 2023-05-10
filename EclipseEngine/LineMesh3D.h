@@ -1,7 +1,7 @@
 #pragma once
-#include "Temp_GLTFMesh.h"
+#include "Mesh.h"
 
-class LineMesh3D : public Temp_GLTFMesh
+class LineMesh3D : public Mesh
 {
 private:
 

@@ -10,10 +10,6 @@ public:
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position);
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
 	GameObject3D(const std::string Name, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-
-	GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint);
-	GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color);
-	GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList);
 	~GameObject3D();
 
 	virtual void Update(float DeltaTime) override;

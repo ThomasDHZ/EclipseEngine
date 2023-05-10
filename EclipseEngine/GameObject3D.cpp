@@ -20,18 +20,6 @@ GameObject3D::GameObject3D(const std::string Name, GameObjectRenderType renderTy
 {
 }
 
-GameObject3D::GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint)
-{
-}
-
-GameObject3D::GameObject3D(const std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
-{
-}
-
-GameObject3D::GameObject3D(const std::string Name, std::vector<LineVertex3D> VertexList)
-{
-}
-
 GameObject3D::~GameObject3D()
 {
 }

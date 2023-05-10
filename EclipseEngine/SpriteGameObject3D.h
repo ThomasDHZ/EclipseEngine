@@ -4,6 +4,8 @@
 class SpriteGameObject3D : public GameObject3D
 {
 private:
+	std::vector<Vertex3D> SpriteVertexList;
+	std::vector<uint32_t> SpriteIndexList;
 
 public:
 	SpriteGameObject3D();
@@ -11,9 +13,10 @@ public:
 	SpriteGameObject3D(const std::string Name, const glm::vec3& position);
 	SpriteGameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation);
 	SpriteGameObject3D(const std::string Name, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
-	SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material);
-	SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);
-	SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
-	SpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 	virtual ~SpriteGameObject3D();
+
+	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material);
+	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);
+	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
+	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 };
