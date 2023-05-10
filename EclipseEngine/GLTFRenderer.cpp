@@ -157,7 +157,7 @@ void GLTFRenderer::BuildRenderer()
 	        }
 	    }
 	}
-	// GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
+    GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
 
 	//int width2 = 20;
 	//int height2 = 20;

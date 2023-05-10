@@ -151,42 +151,6 @@ public:
 		VulkanRenderer::UpdateRendererFlag = true;
 	}
 
-	void LoadLineRenderObject(std::vector<LineVertex3D>& vertices)
-	{
-		GameObjectRenderer = std::make_shared<Model>(Model());
-		GameObjectRenderer->LoadLineMesh3D(ObjectName, vertices, GameObjectTransform, GameObjectID);
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint)
-	{
-		GameObjectRenderer = std::make_shared<Model>(Model());
-		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, GameObjectTransform, GameObjectID);
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& Color)
-	{
-		GameObjectRenderer = std::make_shared<Model>(Model());
-		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, Color, GameObjectTransform, GameObjectID);
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	void LoadLineRenderObject(const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor)
-	{
-		GameObjectRenderer = std::make_shared<Model>(Model());
-		GameObjectRenderer->LoadLineMesh3D(ObjectName, StartPoint, EndPoint, StartColor, EndColor, GameObjectTransform, GameObjectID);
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-	void LoadLineRenderObject(int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ)
-	{
-		GameObjectRenderer = std::make_shared<Model>(Model());
-		GameObjectRenderer->LoadLineMesh3D(ObjectName, GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectTransform, GameObjectID);
-		VulkanRenderer::UpdateRendererFlag = true;
-	}
-
-
 	virtual ~GameObject();
 
 	glm::vec3 GameObjectPosition = glm::vec3(0.0f);

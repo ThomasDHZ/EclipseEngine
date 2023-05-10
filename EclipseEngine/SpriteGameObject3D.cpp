@@ -27,27 +27,6 @@ SpriteGameObject3D::~SpriteGameObject3D()
 void SpriteGameObject3D::LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material)
 {
 	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadSpriteMesh3D(ObjectName, material, GameObjectTransform, GameObjectID);
-	VulkanRenderer::UpdateRendererFlag = true;
-}
-
-void SpriteGameObject3D::LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position)
-{
-	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadSpriteMesh3D(ObjectName, material, GameObjectTransform, GameObjectID);
-	VulkanRenderer::UpdateRendererFlag = true;
-}
-
-void SpriteGameObject3D::LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
-{
-	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadSpriteMesh3D(ObjectName, material, GameObjectTransform, GameObjectID);
-	VulkanRenderer::UpdateRendererFlag = true;
-}
-
-void SpriteGameObject3D::LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-{
-	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadSpriteMesh3D(ObjectName, material, GameObjectTransform, GameObjectID);
+	GameObjectRenderer->LoadSpriteMesh3D(Name, material, GameObjectTransform, GameObjectID);
 	VulkanRenderer::UpdateRendererFlag = true;
 }

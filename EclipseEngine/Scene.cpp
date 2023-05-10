@@ -5,7 +5,6 @@
 #include "LineMesh2D.h"
 #include "LineRenderer2D.h"
 #include "GridRenderer2D.h"
-#include "LineGameObject.h"
 #include "GridRenderer3D.h"
 #include "BillBoardMeshRenderer.h"
 #include "ReadableTexture.h"

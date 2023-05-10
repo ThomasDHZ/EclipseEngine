@@ -20,9 +20,9 @@ void RayTracePBRRenderer::BuildRenderer()
     auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-    GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
-    GLTFSceneManager::AddGameObject<Vertex3D>("Sphere", b, GameObjectRenderType::kModelRenderer);
-    GLTFSceneManager::AddGameObject<Vertex3D>("Sci-fi", c, GameObjectRenderType::kModelRenderer);
+    GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+    GLTFSceneManager::AddMeshGameObject3D("Sphere", b);
+    GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
     GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
     environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);

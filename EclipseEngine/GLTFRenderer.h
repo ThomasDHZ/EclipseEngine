@@ -23,14 +23,11 @@
 #include "IrradianceRenderPass.h"
 #include "PrefilterRenderPass.h"
 #include "GLTFSceneManager.h"
-#include "LineGameObject.h"
 #include "PerspectiveCamera.h"
 
 class GLTFRenderer
 {
 private:
-	//std::vector<std::shared_ptr<GameObject>> gameObjectList;
-	std::shared_ptr<LineGameObject> mesh;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;
 	IrradianceRenderPass irradianceRenderPass;

@@ -16,7 +16,4 @@ public:
 	virtual ~SpriteGameObject3D();
 
 	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material);
-	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);
-	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
-	void LoadSpriteGameObject3D(const std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 };

@@ -237,7 +237,7 @@
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Level2D</Filter>
     </ClCompile>
-    <ClCompile Include="LineGameObject.cpp">
+    <ClCompile Include="LineGameObject3D.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="LineRenderer2D.cpp">
@@ -447,25 +447,10 @@
     <ClCompile Include="ComponentRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLTFRenderer2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLTFRenderPass2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGameObject2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGameObject3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLTFRTXRenderer.cpp">
@@ -603,6 +588,21 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteGameObject3D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject2D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject3D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteGameObject2D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -713,7 +713,7 @@
     <ClInclude Include="LineRenderer2D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="LineGameObject.h">
+    <ClInclude Include="LineGameObject3D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GridRenderer3D.h">
@@ -923,12 +923,6 @@
     <ClInclude Include="GLTFRenderPass2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteGameObject2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGameObject3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GLTFRTXRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1091,15 +1085,6 @@
     <ClInclude Include="GLTFIrradiancePipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1114,6 +1099,21 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteGameObject2D.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteGameObject3D.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject2D.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject3D.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

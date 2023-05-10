@@ -256,7 +256,7 @@
     <ClCompile Include="LineMesh3D.cpp" />
     <ClCompile Include="LinePipeline.cpp" />
     <ClCompile Include="LineRenderer2D.cpp" />
-    <ClCompile Include="LineGameObject.cpp" />
+    <ClCompile Include="LineGameObject3D.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="MeshPicker2DPipeline.cpp" />
     <ClCompile Include="MeshPicker3DPipeline.cpp" />
@@ -428,7 +428,7 @@
     <ClInclude Include="LineMesh3D.h" />
     <ClInclude Include="LinePipeline.h" />
     <ClInclude Include="LineRenderer2D.h" />
-    <ClInclude Include="LineGameObject.h" />
+    <ClInclude Include="LineGameObject3D.h" />
     <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="MeshPicker2DPipeline.h" />
     <ClInclude Include="MeshPicker3DPipeline.h" />
