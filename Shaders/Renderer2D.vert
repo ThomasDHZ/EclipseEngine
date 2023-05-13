@@ -4,7 +4,7 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
-layout (location = 0) in vec3 inPosition;
+layout (location = 0) in vec2 inPosition;
 layout (location = 1) in vec2 aUV;
 layout (location = 2) in vec3 aColor;
 
@@ -20,6 +20,8 @@ layout(location = 2) out vec3 Color;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
 
 void main() {
 
@@ -28,11 +30,11 @@ void main() {
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
     mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
-    FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
+    FragPos = vec3(MeshTransform * vec4(inPosition.xy, 0.0f, 1.0));    
     Color = aColor;
     UV = aUV;
     gl_Position = sceneData.proj * 
                   sceneData.view *                
                   MeshTransform * 
-                  vec4(inPosition, 1.0);
+                  vec4(inPosition, 0.0f, 1.0f);
 }

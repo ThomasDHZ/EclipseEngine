@@ -10,6 +10,7 @@
 #include "Skybox.h"
 #include "Material.h"
 #include "GameObject3D.h"
+#include "SpriteGameObject2D.h"
 #include "SpriteGameObject3D.h"
 #include "LineGameObject3D.h"
 
@@ -54,6 +55,11 @@ public:
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material);
+	static void AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, int drawLayer);
+	static void AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, int drawLayer);
+	static void AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, int drawLayer);
 
 	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material);
 	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);

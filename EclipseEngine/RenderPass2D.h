@@ -7,12 +7,13 @@
 class RenderPass2D : public RenderPass
 {
 private:
-	std::vector<JsonGraphicsPipeline> Renderer2DPipeline;
+	Renderer2DPipeline oldRenderer2DPipeline;
+	JsonGraphicsPipeline Renderer2DPipeline;
 	//std::vector<JsonGraphicsPipeline> WireframePipelineList;
 	//std::vector<JsonGraphicsPipeline> LinePipelineList;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	void BuildRenderPassPipelines();
 
 public:
 	RenderPass2D();
@@ -21,7 +22,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> renderedTexture;
 	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	void BuildRenderPass();
 	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 	void Destroy();
 };

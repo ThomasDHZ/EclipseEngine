@@ -3,10 +3,6 @@
 
 class SpriteGameObject3D : public GameObject3D
 {
-private:
-	std::vector<Vertex3D> SpriteVertexList;
-	std::vector<uint32_t> SpriteIndexList;
-
 public:
 	SpriteGameObject3D();
 	SpriteGameObject3D(const std::string Name);

@@ -149,6 +149,34 @@ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::st
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 
+void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material)
+{
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	sprite->LoadSpriteGameObject2D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, int drawLayer)
+{
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	sprite->LoadSpriteGameObject2D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, int drawLayer)
+{
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	sprite->LoadSpriteGameObject2D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, int drawLayer)
+{
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	sprite->LoadSpriteGameObject2D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
 void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material)
 {
 	std::shared_ptr<SpriteGameObject3D> sprite = std::make_shared<SpriteGameObject3D>(SpriteGameObject3D(Name));

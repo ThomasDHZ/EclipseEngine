@@ -8,7 +8,7 @@ RenderPass2D::~RenderPass2D()
 {
 }
 
-void RenderPass2D::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+void RenderPass2D::BuildRenderPass()
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -31,7 +31,7 @@ void RenderPass2D::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gam
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(gameObjectList);
+    BuildRenderPassPipelines();
     SetUpCommandBuffers();
 }
 
@@ -89,7 +89,7 @@ void RenderPass2D::RenderPassDesc()
     }
 }
 
-void RenderPass2D::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+void RenderPass2D::BuildRenderPassPipelines()
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -108,12 +108,11 @@ void RenderPass2D::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObje
     pipelineInfo.renderPass = renderPass;
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
-    for (int x = 0; x < gameObjectList.size(); x++)
-    {
-       Renderer2DPipeline.emplace_back(JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+
+    oldRenderer2DPipeline.InitializePipeline(pipelineInfo);
+       Renderer2DPipeline = JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
        //LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
        //WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
-    }
 }
 
 VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
@@ -167,7 +166,7 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
             }
             else
             {
-                Renderer2DPipeline[x].DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
             break;
         }
@@ -191,10 +190,7 @@ void RenderPass2D::Destroy()
     renderedTexture->Destroy();
     depthTexture->Destroy();
 
-    for (int x = 0; x < Renderer2DPipeline.size(); x++)
-    {
-        Renderer2DPipeline[x].Destroy();
-    }
+    Renderer2DPipeline.Destroy();
     //for (int x = 0; x < WireframePipelineList.size(); x++)
     //{
     //    WireframePipelineList[x].Destroy();

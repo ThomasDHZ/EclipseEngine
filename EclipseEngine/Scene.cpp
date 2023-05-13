@@ -38,8 +38,8 @@ void Scene::Update()
     }
 
     SceneManager::Update();
-    pbrRenderer.Update();
-    //spriteRenderer.Update();
+   pbrRenderer.Update();
+  //  spriteRenderer.Update();
     //rayTraceRenderer.Update();
 }
 
@@ -56,7 +56,7 @@ void Scene::ImGuiUpdate()
     }
 
     pbrRenderer.ImGuiUpdate();
-   // spriteRenderer.ImGuiUpdate();
+ //   spriteRenderer.ImGuiUpdate();
     //rayTraceRenderer.ImGuiUpdate();
 
     SceneManager::ImGuiSceneHierarchy();
@@ -68,7 +68,7 @@ void Scene::BuildRenderers()
 {
     //MeshRendererManager::Update();
     pbrRenderer.BuildRenderer();
-    //spriteRenderer.BuildRenderer();
+   // spriteRenderer.BuildRenderer();
     //rayTraceRenderer.BuildRenderer();
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
@@ -86,7 +86,7 @@ void Scene::Draw()
     }
 
     pbrRenderer.Draw(CommandBufferSubmitList);
-    //spriteRenderer.Draw(CommandBufferSubmitList);
+  //  spriteRenderer.Draw(CommandBufferSubmitList);
     //rayTraceRenderer.Draw(CommandBufferSubmitList);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
@@ -104,5 +104,5 @@ void Scene::Destroy()
    // GameObjectManager::Destroy();
     //rayTraceRenderer.Destroy();
     pbrRenderer.Destroy();
-    //spriteRenderer.Destroy();
+  //  spriteRenderer.Destroy();
 }

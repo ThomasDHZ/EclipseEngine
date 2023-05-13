@@ -7,6 +7,7 @@
 #include "JsonConverter.h"
 #include "GameObject.h"
 #include "GLTFSceneManager.h"
+#include "GLTF_GraphicsPipeline.h"
 
 enum DescriptorBindingPropertiesEnum
 {

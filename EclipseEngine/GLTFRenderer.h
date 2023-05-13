@@ -24,10 +24,12 @@
 #include "PrefilterRenderPass.h"
 #include "GLTFSceneManager.h"
 #include "PerspectiveCamera.h"
+#include "VulkanPipelineEditor.h"
 
 class GLTFRenderer
 {
 private:
+	VulkanPipelineEditor pipelineEditor;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass GLTF_BRDFRenderPass;
 	IrradianceRenderPass irradianceRenderPass;

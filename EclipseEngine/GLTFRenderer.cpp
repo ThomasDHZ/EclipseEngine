@@ -23,10 +23,9 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
-	//GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
-	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
-
+	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
+	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
@@ -222,6 +221,7 @@ void GLTFRenderer::Update()
 
 void GLTFRenderer::ImGuiUpdate()
 {
+	pipelineEditor.Update();
 	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
 	//{
 	//	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);

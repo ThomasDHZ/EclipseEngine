@@ -8,15 +8,15 @@ GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderTy
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, drawLayer))
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, drawLayer), glm::vec3(rotation.x, rotation.y, 0.0f))
 {
 }
 
-GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, uint32_t Depth) : GameObject(Name, renderType, glm::vec3(position.x, position.y, Depth), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, drawLayer), glm::vec3(rotation.x, rotation.y, 0.0f), glm::vec3(scale.x, scale.y, 1.0f))
 {
 }
 
@@ -66,4 +66,8 @@ void GameObject2D::SetGameObjectScale(float x, float y)
 void GameObject2D::SetGameObjectScale(const glm::vec2& scale)
 {
 	GameObject::SetGameObjectRotation(scale.x, scale.y, 1.0f);
+}
+
+void GameObject2D::LoadSpriteGameObject2D(const std::string Name, std::shared_ptr<Material> material)
+{
 }

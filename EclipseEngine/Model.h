@@ -3,8 +3,6 @@
 #include "Vertex.h"
 #include "Mesh.h"
 #include "GLTF_GraphicsDescriptors.h"
-#include "LineMesh3D.h"
-#include "SpriteMesh3D.h"
 
 class Model
 {
@@ -350,6 +348,7 @@ public:
 		}
 	}
 
+	void LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void LoadLineMesh3D(const std::string& LineName, std::vector<LineVertex3D>& vertices, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);

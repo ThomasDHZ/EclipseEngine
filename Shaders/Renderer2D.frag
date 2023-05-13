@@ -69,19 +69,8 @@ struct PBRMaterial
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
-layout(binding = 2) uniform sampler2D AlbedoMap;
-layout(binding = 3) uniform sampler2D NormalMap;
-layout(binding = 4) uniform sampler2D MetallicRoughnessMap;
-layout(binding = 5) uniform sampler2D AmbientOcclusionMap;
-layout(binding = 6) uniform sampler2D AlphaMap;
-layout(binding = 7) uniform sampler2D DepthMap;
-layout(binding = 8) uniform sampler2D BRDFMap;
-layout(binding = 9) uniform samplerCube IrradianceMap;
-layout(binding = 10) uniform samplerCube PrefilterMap;
-layout(binding = 11) buffer SunLightBuffer { SunLight sunLight; } SULight[];
-layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
-layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
 
 layout(push_constant) uniform SceneData
 {
@@ -101,25 +90,14 @@ layout(push_constant) uniform SceneData
     int MaxRefeflectCount;
 } sceneData;
 
-PBRMaterial BuildPBRMaterial(vec2 UV)
-{
-	PBRMaterial material;
-    material.Albedo = texture(AlbedoMap, UV).rgb;
-	material.Metallic = texture(MetallicRoughnessMap, UV).b;
-	material.Roughness = texture(MetallicRoughnessMap, UV).g;
-    material.AmbientOcclusion = texture(MetallicRoughnessMap, UV).r;
-	//material.Emission = .4f;
-	material.Alpha = texture(AlphaMap, UV).r;
-    return material;
-}
+
 
 void main() {
-    PBRMaterial pbrMaterial = BuildPBRMaterial(UV);
 
-   vec3 result = pbrMaterial.Albedo;
+   vec3 result = vec3(1.0f, 0.0f, 0.0f);
 
    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
 		finalResult = pow(finalResult, vec3(1.0 / 2.2f));
 
-   outColor = vec4(finalResult, pbrMaterial.Alpha);
+   outColor = vec4(finalResult,1.0f);
 }

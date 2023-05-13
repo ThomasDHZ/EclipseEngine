@@ -5,7 +5,6 @@
 class GLTFRenderer2D
 {
 private:
-	std::vector<std::shared_ptr<GameObject>> gameObjectList;
 	RenderPass2D renderPass2D;
 	FrameBufferRenderPass frameBufferRenderPass;
 public:

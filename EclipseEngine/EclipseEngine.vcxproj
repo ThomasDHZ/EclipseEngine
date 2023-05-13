@@ -292,6 +292,7 @@
     <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SkyboxPipeline.cpp" />
+    <ClCompile Include="SpriteMesh2D.cpp" />
     <ClCompile Include="SpriteMesh3D.cpp" />
     <ClCompile Include="SpriteGameObject2D.cpp" />
     <ClCompile Include="SpriteGameObject3D.cpp" />
@@ -325,6 +326,7 @@
     <ClCompile Include="VRAMManager.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
+    <ClCompile Include="VulkanPipelineEditor.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="WireFramePipeline.cpp" />
@@ -464,6 +466,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SkyboxPipeline.h" />
+    <ClInclude Include="SpriteMesh2D.h" />
     <ClInclude Include="SpriteMesh3D.h" />
     <ClInclude Include="SpriteGameObject2D.h" />
     <ClInclude Include="SpriteGameObject3D.h" />
@@ -500,6 +503,7 @@
     <ClInclude Include="VRAMManager.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
+    <ClInclude Include="VulkanPipelineEditor.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />

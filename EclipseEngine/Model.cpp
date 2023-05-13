@@ -1,6 +1,9 @@
 #include "Model.h"
 #include "SceneManager.h"
 #include "EngineMath.h"
+#include "LineMesh3D.h"
+#include "SpriteMesh2D.h"
+#include "SpriteMesh3D.h"
 
 uint64_t Model::ModelIDCounter = 0;
 
@@ -103,6 +106,27 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 		material->UpdateBuffer();
 		MaterialList.emplace_back(material);
 		GLTFSceneManager::AddMaterial(material);
+	}
+}
+
+void Model::LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	MaterialList.emplace_back(material);
+
+	std::shared_ptr<SpriteMesh2D> mesh = std::make_shared<SpriteMesh2D>(SpriteMesh2D(spriteName, material, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
 	}
 }
 
