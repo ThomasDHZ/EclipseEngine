@@ -136,6 +136,18 @@
     <Filter Include="Shader\Include\RayTrace">
       <UniqueIdentifier>{74a924a7-e51a-47db-8b07-ed04dcc8a0ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ImGuiMenus">
+      <UniqueIdentifier>{682746e2-ab94-472e-9d65-19fd6aae2898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImGuiMenu">
+      <UniqueIdentifier>{9874f8f9-0d73-453e-8b3b-914e8e42eb6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ImGuiMenu\PipelineEditorMenu">
+      <UniqueIdentifier>{26a062a1-f7a0-4768-bc0d-4324a2e39b84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ImGuiMenus\PipelineEditorMenu">
+      <UniqueIdentifier>{4e34eddc-353c-4fc7-9411-985aeb7af5ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -608,6 +620,12 @@
     </ClCompile>
     <ClCompile Include="VulkanRenderer.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="StencilOpStateMenu.cpp">
+      <Filter>Source Files\ImGuiMenus\PipelineEditorMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="VKEnumConverters.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1125,6 +1143,12 @@
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="VulkanPipelineEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StencilOpStateMenu.h">
+      <Filter>Header Files\ImGuiMenu\PipelineEditorMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="VKEnumConverters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

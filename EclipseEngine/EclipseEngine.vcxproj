@@ -297,6 +297,7 @@
     <ClCompile Include="SpriteGameObject2D.cpp" />
     <ClCompile Include="SpriteGameObject3D.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="StencilOpStateMenu.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />
@@ -323,6 +324,7 @@
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="VKEnumConverters.cpp" />
     <ClCompile Include="VRAMManager.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
@@ -472,6 +474,7 @@
     <ClInclude Include="SpriteGameObject3D.h" />
     <ClInclude Include="STBIImport.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="StencilOpStateMenu.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureAtlus.h" />
@@ -500,6 +503,7 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VKEnumConverters.h" />
     <ClInclude Include="VRAMManager.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
