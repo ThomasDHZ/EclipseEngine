@@ -157,8 +157,6 @@
     <None Include="..\Shaders\GLTFBRDFShader.frag" />
     <None Include="..\Shaders\GLTFBRDFShader.vert" />
     <None Include="..\Shaders\GLTFLights.glsl" />
-    <None Include="..\Shaders\GLTFPBRRenderer.frag" />
-    <None Include="..\Shaders\GLTFPBRRenderer.vert" />
     <None Include="..\Shaders\InstanceWireFrame.frag" />
     <None Include="..\Shaders\InstanceWireFrame.vert" />
     <None Include="..\Shaders\MaterialSetUp.glsl" />
@@ -215,6 +213,7 @@
     <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
+    <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
@@ -234,7 +233,6 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="IrradianceRenderPass.cpp" />
-    <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="JsonConverter.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -329,6 +327,7 @@
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanPipelineEditor.cpp" />
+    <ClCompile Include="VulkanPipelineTools.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="WireFramePipeline.cpp" />
@@ -385,6 +384,7 @@
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFIrradiancePipeline.h" />
+    <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
@@ -406,7 +406,6 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="IrradianceRenderPass.h" />
-    <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="JsonConverter.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Math.h" />
@@ -508,6 +507,7 @@
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanPipelineEditor.h" />
+    <ClInclude Include="VulkanPipelineTools.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />

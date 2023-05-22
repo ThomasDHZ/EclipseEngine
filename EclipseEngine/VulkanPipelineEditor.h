@@ -254,7 +254,7 @@ private:
 	bool DepthWriteEnableSelecton = true;
 	bool DepthBoundsTestEnableSelecton = false;
 	bool StencilTestEnableSelecton = false;
-	const char* DepthCompareOpperationsSelecton = DepthCompareOpperationEnumList[0];
+	const char* DepthCompareOpperationsSelecton = DepthCompareOpperationEnumList[1];
 
 	//VkPipelineInputAssemblyStateCreateInfo
 	const char* TopologySelection = PrimitiveTopologyEnumList[2];
@@ -273,6 +273,8 @@ private:
 	const char* CullMode = CullModeEnumList[2];
 	const char* PolygonMode = PolygonModeEnumList[0];
 
+
+
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
 	{
 		VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
@@ -282,11 +284,15 @@ private:
 
 		return vertShaderStageInfo;
 	}
+
+	VkDescriptorType GetBindingType(DescriptorBindingPropertiesEnum bindingType);
 public:
 	VulkanPipelineEditor();
 	~VulkanPipelineEditor();
 
 	void Update();
+	void LoadPipeline();
+	void BuildPipeline();
 	void SavePipeline();
 };
 

@@ -29,6 +29,27 @@ VulkanPipelineEditor::~VulkanPipelineEditor()
 {
 }
 
+VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertiesEnum bindingType)
+{
+	switch (bindingType)
+	{
+		case DescriptorBindingPropertiesEnum::kModelTransformDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kMeshPropertiesDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kTextureDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kMaterialDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kBRDFMapDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kIrradianceMapDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kPrefilterMapDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kCubeMapDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kEnvironmentDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kSunLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kDirectionalLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kPointLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kSpotLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		default: throw std::runtime_error("Unkown binding type.");
+	}
+}
+
 void VulkanPipelineEditor::Update()
 {
 	ImGui::Begin("Pipeline Editor");
@@ -186,14 +207,102 @@ void VulkanPipelineEditor::Update()
 	ImGui::End();
 }
 
+void VulkanPipelineEditor::LoadPipeline()
+{
+	//std::string SceneInfo;
+	//std::ifstream SceneFile;
+	//SceneFile.open(BasePipelineFilePath + filePath);
+	//if (SceneFile.is_open())
+	//{
+	//	while (!SceneFile.eof())
+	//	{
+	//		getline(SceneFile, SceneInfo);
+	//	}
+	//}
+	//else std::cout << "Unable to open file";
+	//SceneFile.close();
+
+	//nlohmann::json json = nlohmann::json::parse(SceneInfo);
+
+	//std::vector<DescriptorBindingPropertiesEnum> BindingList;
+	//std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	//for (int x = 0; x < json["Shader"].size(); x++)
+	//{
+	//	PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+
+	//	VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo{};
+	//	PipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	//	PipelineShaderStageCreateInfo.stage = json["Shader"]["stage"];
+	//	PipelineShaderStageCreateInfo.module = ReadShaderFile(json["Shader"]["shaderFile"]);
+	//	PipelineShaderStageCreateInfo.pName = "main";
+	//	PipelineShaderStageCreateInfo.pSpecializationInfo = nullptr;
+	//	PipelineShaderStageCreateInfo.pNext = nullptr;
+	//	PipelineShaderStageList.emplace_back(PipelineShaderStageCreateInfo);
+	//}
+
+	//for (int x = 0; x < json["DescriptorBindingLayout"].size(); x++)
+	//{
+	//	BindingList.emplace_back(json["DescriptorBindingLayout"][x]["bindingType"]);
+	//}
+
+	//DepthTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthTestEnable"];
+	//DepthWriteEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthWriteEnable"];
+	//DepthBoundsTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthBoundsTestEnable"];
+	//StencilTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["stencilTestEnable"];
+ //   DepthCompareOpperationsSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthCompareOp"];
+
+	//VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo{};
+	//pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	//pipelineInputAssemblyStateCreateInfo.pNext = nullptr;
+	//pipelineInputAssemblyStateCreateInfo.flags = json["PipelineInputAssemblyStateCreateInfo"]["flags"];
+	//pipelineInputAssemblyStateCreateInfo.topology = json["PipelineInputAssemblyStateCreateInfo"]["topology"];
+	//pipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = json["PipelineInputAssemblyStateCreateInfo"]["primitiveRestartEnable"];
+
+	//VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo{};
+	//pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	//pipelineViewportStateCreateInfo.pNext = nullptr;
+	//pipelineViewportStateCreateInfo.flags = json["PipelineViewportStateCreateInfo"]["flags"];
+	//pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
+	//pipelineViewportStateCreateInfo.pViewports = nullptr;
+	//pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
+	//pipelineViewportStateCreateInfo.pViewports = nullptr;
+	//pipelineViewportStateCreateInfo.pScissors = nullptr;
+
+	//VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo{};
+	//pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	//pipelineRasterizationStateCreateInfo.pNext = nullptr;
+	//pipelineRasterizationStateCreateInfo.depthClampEnable = json["PipelineRasterizationStateCreateInfo"]["depthClampEnable"];
+	//pipelineRasterizationStateCreateInfo.rasterizerDiscardEnable = json["PipelineRasterizationStateCreateInfo"]["rasterizerDiscardEnable"];
+	//pipelineRasterizationStateCreateInfo.polygonMode = json["PipelineRasterizationStateCreateInfo"]["polygonMode"];
+	//pipelineRasterizationStateCreateInfo.cullMode = json["PipelineRasterizationStateCreateInfo"]["cullMode"];
+	//pipelineRasterizationStateCreateInfo.frontFace = json["PipelineRasterizationStateCreateInfo"]["frontFace"];
+	//pipelineRasterizationStateCreateInfo.depthBiasEnable = json["PipelineRasterizationStateCreateInfo"]["depthBiasEnable"];
+	//pipelineRasterizationStateCreateInfo.depthBiasConstantFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasConstantFactor"];
+	//pipelineRasterizationStateCreateInfo.depthBiasClamp = json["PipelineRasterizationStateCreateInfo"]["depthBiasClamp"];
+	//pipelineRasterizationStateCreateInfo.depthBiasSlopeFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasSlopeFactor"];
+	//pipelineRasterizationStateCreateInfo.lineWidth = json["PipelineRasterizationStateCreateInfo"]["lineWidth"];
+}
+
+void VulkanPipelineEditor::BuildPipeline()
+{
+}
+
 void VulkanPipelineEditor::SavePipeline()
 {
 	nlohmann::json json;
 	JsonGraphicsPipeline jsonPipeline{};
 
+	std::string vertString = "../Shaders/";
+	vertString.append(ShaderName);
+	vertString.append("Vert.spv");
+
+	std::string fragString = "../Shaders/";
+	fragString.append(ShaderName);
+	fragString.append("Frag.spv");
+
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	auto a = CreateShader("../Shaders/PBRInstanceRendererVert.spv", VK_SHADER_STAGE_VERTEX_BIT);
-	auto b = CreateShader("../Shaders/PBRInstanceRendererFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT);
+	auto vert = CreateShader(vertString, VK_SHADER_STAGE_VERTEX_BIT);
+	auto frag = CreateShader(fragString, VK_SHADER_STAGE_FRAGMENT_BIT);
 
 	std::string outputVert = "../Shaders/";
 	outputVert.append(ShaderName);
@@ -203,17 +312,12 @@ void VulkanPipelineEditor::SavePipeline()
 	outputFrag.append(ShaderName);
 	outputFrag.append("Frag.spv");
 
-	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], a, outputVert);
-	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], b, outputFrag);
-
-	for (int x = 0; x < json["Shader"].size(); x++)
-	{
-		PipelineShaderStageList.emplace_back(jsonPipeline.LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
-	}
+	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], vert, outputVert);
+	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], frag, outputFrag);
 
 	for (int x = 0; x < BindingSelectionList.size(); x++)
 	{
-		jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][x], VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x]));
+		jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][x], GetBindingType(DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x])), DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x]));
 	}
 
 	VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};

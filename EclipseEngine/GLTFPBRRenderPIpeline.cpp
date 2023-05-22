@@ -150,11 +150,41 @@ void GLTFPBRRenderPIpeline::InitializePipeline(PipelineInfoStruct& pipelineInfoS
 
         VkPipelineDepthStencilStateCreateInfo saveDepthStencilStateCreateInfo{};
         saveDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        //VkStructureType                           sType;
+        //const void* pNext;
+        //VkPipelineDepthStencilStateCreateFlags    flags;
+        //VkBool32                                  depthTestEnable;
+        //VkBool32                                  depthWriteEnable;
+        //VkCompareOp                               depthCompareOp;
+        //VkBool32                                  depthBoundsTestEnable;
+        //VkBool32                                  stencilTestEnable;
+        //VkStencilOpState                          front;
+        //VkStencilOpState                          back;
+        //float                                     minDepthBounds;
+        //float                                     maxDepthBounds;
+
+        VkStencilOpState front{};
+        VkStencilOpState back{};
+            /*{
+            VkStencilOp    failOp;
+            VkStencilOp    passOp;
+            VkStencilOp    depthFailOp;
+            VkCompareOp    compareOp;
+            uint32_t       compareMask;
+            uint32_t       writeMask;
+            uint32_t       reference;
+        } VkStencilOpState;*/
+
         saveDepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
         saveDepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
         saveDepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
         saveDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
         saveDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
+        saveDepthStencilStateCreateInfo.front = front;
+        saveDepthStencilStateCreateInfo.back = back;
+        saveDepthStencilStateCreateInfo.minDepthBounds = 0.0f;
+        saveDepthStencilStateCreateInfo.maxDepthBounds = 0.0f;
+
         jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], saveDepthStencilStateCreateInfo);
 
         VkPipelineInputAssemblyStateCreateInfo saveinputAssembly = {};

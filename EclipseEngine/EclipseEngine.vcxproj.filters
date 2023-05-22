@@ -414,9 +414,6 @@
     <ClCompile Include="ParticalSystemRenderer.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFPBRRenderPIpeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
@@ -626,6 +623,12 @@
     </ClCompile>
     <ClCompile Include="VKEnumConverters.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFPBRRenderPIpeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VulkanPipelineTools.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -905,9 +908,6 @@
     <ClInclude Include="ParticalSystemRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFPBRRenderPIpeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
@@ -1149,6 +1149,12 @@
       <Filter>Header Files\ImGuiMenu\PipelineEditorMenu</Filter>
     </ClInclude>
     <ClInclude Include="VKEnumConverters.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFPBRRenderPIpeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VulkanPipelineTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1428,12 +1434,6 @@
     </None>
     <None Include="..\Shaders\PBRLight.glsl">
       <Filter>Shader\Include\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\GLTFPBRRenderer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\GLTFPBRRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\GLTFBRDFShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
