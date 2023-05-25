@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "PrefilterPipeline.h"
 #include "JsonGraphicsPipeline.h"
 
 class PrefilterRenderPass : public RenderPass

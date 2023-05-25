@@ -195,7 +195,6 @@
     <ClCompile Include="BloomCombineRenderPass.cpp" />
     <ClCompile Include="GaussianBlurRenderPass.cpp" />
     <ClCompile Include="Bone.cpp" />
-    <ClCompile Include="BRDFPipeline.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
     <ClCompile Include="CubeMapSamplerPipeline.cpp" />
@@ -210,10 +209,8 @@
     <ClCompile Include="DepthPipeline.cpp" />
     <ClCompile Include="DepthRenderPass.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
-    <ClCompile Include="EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
-    <ClCompile Include="GLTFPBRRenderPIpeline.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
@@ -235,24 +232,22 @@
     <ClCompile Include="IrradianceRenderPass.cpp" />
     <ClCompile Include="JsonConverter.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
+    <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
     <ClCompile Include="GLTFRenderer.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
-    <ClCompile Include="GLTF_EnvironmentToCubePipeline.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="GLTF_SkyboxPipeline.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
-    <ClCompile Include="IrradiancePipeline.cpp" />
     <ClCompile Include="JsonGraphicsPipeline.cpp" />
     <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightDebugPipeline.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
-    <ClCompile Include="LinePipeline.cpp" />
     <ClCompile Include="LineRenderer2D.cpp" />
     <ClCompile Include="LineGameObject3D.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
@@ -260,7 +255,6 @@
     <ClCompile Include="MeshPicker3DPipeline.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
     <ClCompile Include="MeshPickerRenderPass3D.cpp" />
-    <ClCompile Include="OutLinePipeline.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticalSystemRenderer.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -272,11 +266,7 @@
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomRenderPass.cpp" />
     <ClCompile Include="PBRInstancedReflectionPipeline.cpp" />
-    <ClCompile Include="PBRInstancePipeline.cpp" />
-    <ClCompile Include="PBRPipeline.cpp" />
-    <ClCompile Include="PBRRealTimeRenderer.cpp" />
     <ClCompile Include="PBRReflectionPipeline.cpp" />
-    <ClCompile Include="PrefilterPipeline.cpp" />
     <ClCompile Include="RandomNumber.cpp" />
     <ClCompile Include="RayTracePBRRenderer.cpp" />
     <ClCompile Include="RayTracePBRRenderPass.cpp" />
@@ -330,7 +320,6 @@
     <ClCompile Include="VulkanPipelineTools.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
-    <ClCompile Include="WireFramePipeline.cpp" />
     <None Include="..\Shaders\Vertex.glsl" />
     <None Include="..\Shaders\VertexBuilder.glsl" />
     <None Include="imgui.ini" />
@@ -364,7 +353,6 @@
     <ClInclude Include="BloomCombineRenderPass.h" />
     <ClInclude Include="GaussianBlurRenderPass.h" />
     <ClInclude Include="Bone.h" />
-    <ClInclude Include="BRDFPipeline.h" />
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
@@ -380,11 +368,8 @@
     <ClInclude Include="DepthPipeline.h" />
     <ClInclude Include="DepthRenderPass.h" />
     <ClInclude Include="DirectionalLight.h" />
-    <ClInclude Include="EnvironmentToCubePipeline.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
-    <ClInclude Include="GLTFIrradiancePipeline.h" />
-    <ClInclude Include="GLTFPBRRenderPIpeline.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
@@ -415,13 +400,11 @@
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
     <ClInclude Include="GLTFRenderPass.h" />
-    <ClInclude Include="GLTF_EnvironmentToCubePipeline.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="GLTF_SkyboxPipeline.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
-    <ClInclude Include="IrradiancePipeline.h" />
     <ClInclude Include="JsonGraphicsPipeline.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />
@@ -429,7 +412,6 @@
     <ClInclude Include="LightDebugPipeline.h" />
     <ClInclude Include="LineMesh2D.h" />
     <ClInclude Include="LineMesh3D.h" />
-    <ClInclude Include="LinePipeline.h" />
     <ClInclude Include="LineRenderer2D.h" />
     <ClInclude Include="LineGameObject3D.h" />
     <ClInclude Include="Mesh2D.h" />
@@ -448,11 +430,7 @@
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomRenderPass.h" />
     <ClInclude Include="PBRInstancedReflectionPipeline.h" />
-    <ClInclude Include="PBRInstancePipeline.h" />
-    <ClInclude Include="PBRPipeline.h" />
-    <ClInclude Include="PBRRealTimeRenderer.h" />
     <ClInclude Include="PBRReflectionPipeline.h" />
-    <ClInclude Include="PrefilterPipeline.h" />
     <ClInclude Include="RandomNumber.h" />
     <ClInclude Include="RayTracePBRRenderer.h" />
     <ClInclude Include="RayTracePBRRenderPass.h" />
@@ -511,7 +489,6 @@
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="WireFramePipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\AdditionShader.frag" />

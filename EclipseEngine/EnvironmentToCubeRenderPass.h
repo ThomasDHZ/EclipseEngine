@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "GLTF_EnvironmentToCubePipeline.h"
 #include "JsonGraphicsPipeline.h"
 
 class EnvironmentToCubeRenderPass : public RenderPass

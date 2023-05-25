@@ -1,7 +1,6 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedColorTexture.h"
-#include "BRDFPipeline.h"
 #include "JsonGraphicsPipeline.h"
 
 class BRDFRenderPass : public RenderPass

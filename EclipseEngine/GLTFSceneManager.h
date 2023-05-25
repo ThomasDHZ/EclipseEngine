@@ -40,7 +40,6 @@ public:
 	static std::vector<std::shared_ptr<GameObject>> GameObjectList;
 	static std::shared_ptr<Camera> ActiveCamera;
 	static std::shared_ptr<Skybox> SkyboxMesh;
-	static SkyBoxView CubeMapInfo;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
 	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;

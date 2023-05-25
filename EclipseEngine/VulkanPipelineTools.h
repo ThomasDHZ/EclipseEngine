@@ -19,17 +19,21 @@ enum DescriptorBindingPropertiesEnum
 	kSunLightDescriptor,
 	kDirectionalLightDescriptor,
 	kPointLightDescriptor,
-	kSpotLightDescriptor
+	kSpotLightDescriptor,
+	kReflectionViewDescriptor
 };
 
 class VulkanPipelineTools
 {
+
 protected:
 	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
 	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
 	VkDescriptorPool DescriptorPool = VK_NULL_HANDLE;
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
+
+	CubeMapSamplerBuffer ReflectionMapSampler;
 
 	VkShaderModule ReadShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
@@ -64,7 +68,7 @@ protected:
 	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments);
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
-
+	VkDescriptorBufferInfo GetReflectionMapBuffer();
 
 public: 
 	VkPipelineShaderStageCreateInfo LoadPipelineShaderStageCreateInfo(nlohmann::json& json);

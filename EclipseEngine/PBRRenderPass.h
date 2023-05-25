@@ -4,12 +4,10 @@
 #include "RenderedDepthTexture.h"
 #include "RenderedCubeMapTexture.h"
 #include "SceneManager.h"
-#include "PBRPipeline.h"
+
 #include "SkyboxPipeline.h"
-#include "LinePipeline.h"
-#include "WireFramePipeline.h"
 #include "OutLinePipeline.h"
-#include "PBRInstancePipeline.h"
+//#include "PBRInstancePipeline.h"
 #include "LightDebugPipeline.h"
 
 
@@ -19,16 +17,16 @@ private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	PBRPipeline pbrPipeline;
-	PBRInstancePipeline pbrInstancePipeline;
+	//PBRPipeline pbrPipeline;
+	//PBRInstancePipeline pbrInstancePipeline;
 	LightDebugPipeline lightDebugPipeline;
 	SkyboxPipeline skyboxPipeline;
-	LinePipeline linePipeline;
+	//LinePipeline linePipeline;
 	OutLinePipeline outLinePipeline;
-	WireFramePipeline wireframePipeline;
+	//WireFramePipeline wireframePipeline;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
+	//void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
 	PBRRenderPass();
@@ -36,7 +34,7 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
+	//void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

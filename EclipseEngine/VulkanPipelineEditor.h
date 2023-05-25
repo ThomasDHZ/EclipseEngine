@@ -11,7 +11,7 @@
 #include "JsonGraphicsPipeline.h"
 #include "VKEnumConverters.h"
 
-class VulkanPipelineEditor
+class VulkanPipelineEditor : public VulkanPipelineTools
 {
 private:
 	struct DescriptorBindingProperties
@@ -32,6 +32,7 @@ private:
 			case kDirectionalLightDescriptor: return "kDirectionalLightDescriptor"; break;
 			case kPointLightDescriptor: return "kPointLightDescriptor"; break;
 			case kSpotLightDescriptor: return "kSpotLightDescriptor"; break;
+			case kReflectionViewDescriptor: return "kReflectionViewDescriptor"; break;
 			default: return "";
 			}
 		}
@@ -50,6 +51,7 @@ private:
 			if (input == "kDirectionalLightDescriptor") return kDirectionalLightDescriptor;
 			if (input == "kPointLightDescriptor") return kPointLightDescriptor;
 			if (input == "kSpotLightDescriptor") return kSpotLightDescriptor;
+			if (input == "kReflectionViewDescriptor") return kReflectionViewDescriptor;
 		}
 	};
 
@@ -230,7 +232,7 @@ private:
 	};
 
 
-	const char* PipelineDescriptorList[13] = {  "kModelTransformDescriptor", 
+	const char* PipelineDescriptorList[14] = {  "kModelTransformDescriptor", 
 											    "kMeshPropertiesDescriptor",
 											    "kTextureDescriptor", 
 												"kMaterialDescriptor", 
@@ -242,7 +244,8 @@ private:
 												"kSunLightDescriptor", 
 												"kDirectionalLightDescriptor", 
 												"kPointLightDescriptor", 
-												"kSpotLightDescriptor" };
+												"kSpotLightDescriptor",
+												"kReflectionViewDescriptor"};
 
 	char ShaderName[50];
 

@@ -84,6 +84,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
         case kDirectionalLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() }); break;
         case kPointLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() }); break;
         case kSpotLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() }); break;
+        case kReflectionViewDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
         }
     }
     DescriptorPool = GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList);
@@ -106,6 +107,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
         case kDirectionalLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
         case kPointLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
         case kSpotLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
+        case kReflectionViewDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
         }
     }
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
@@ -128,6 +130,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
         case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
         case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
         case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
+        case kReflectionViewDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GetReflectionMapBuffer()); break;
         }
     }
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
@@ -342,6 +345,15 @@ VkPipelineLayoutCreateInfo VulkanPipelineTools::LoadPipelineLayoutCreateInfo()
     pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 
     return pipelineLayoutCreateInfo;
+}
+
+VkDescriptorBufferInfo VulkanPipelineTools::GetReflectionMapBuffer()
+{
+    VkDescriptorBufferInfo ReflectionMapBuffer = {};
+    ReflectionMapBuffer.buffer = ReflectionMapSampler.GetVulkanBufferData().Buffer;
+    ReflectionMapBuffer.offset = 0;
+    ReflectionMapBuffer.range = VK_WHOLE_SIZE;
+    return ReflectionMapBuffer;
 }
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)

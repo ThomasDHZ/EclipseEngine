@@ -17,7 +17,6 @@
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
 #include "PBRReflectionPreRenderPass.h"
-#include "GLTFPBRRenderPIpeline.h"
 #include "EnvironmentToCubeRenderPass.h"
 #include "GLTFRenderPass.h"
 #include "IrradianceRenderPass.h"

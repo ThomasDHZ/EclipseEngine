@@ -46,6 +46,7 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 		case DescriptorBindingPropertiesEnum::kDirectionalLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kPointLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kSpotLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kReflectionViewDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		default: throw std::runtime_error("Unkown binding type.");
 	}
 }
@@ -209,18 +210,18 @@ void VulkanPipelineEditor::Update()
 
 void VulkanPipelineEditor::LoadPipeline()
 {
-	//std::string SceneInfo;
-	//std::ifstream SceneFile;
-	//SceneFile.open(BasePipelineFilePath + filePath);
-	//if (SceneFile.is_open())
-	//{
-	//	while (!SceneFile.eof())
-	//	{
-	//		getline(SceneFile, SceneInfo);
-	//	}
-	//}
-	//else std::cout << "Unable to open file";
-	//SceneFile.close();
+	/*std::string SceneInfo;
+	std::ifstream SceneFile;
+	SceneFile.open(BasePipelineFilePath + filePath);
+	if (SceneFile.is_open())
+	{
+		while (!SceneFile.eof())
+		{
+			getline(SceneFile, SceneInfo);
+		}
+	}
+	else std::cout << "Unable to open file";
+	SceneFile.close();*/
 
 	//nlohmann::json json = nlohmann::json::parse(SceneInfo);
 

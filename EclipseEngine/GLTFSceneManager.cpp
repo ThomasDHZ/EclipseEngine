@@ -1,5 +1,4 @@
 #include "GLTFSceneManager.h"
-SkyBoxView							               GLTFSceneManager::CubeMapInfo;
 SceneProperties							           GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>							   GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>                            GLTFSceneManager::SkyboxMesh;

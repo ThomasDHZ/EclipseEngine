@@ -1,22 +1,13 @@
 #pragma once
-#include "GLTFPBRRenderPIpeline.h"
 #include "RenderedColorTexture.h"
 #include "RenderPass.h"
 #include "GLTF_SkyboxPipeline.h"
-#include "WireFramePipeline.h"
-#include "LinePipeline.h"
-#include "WireFramePipeline.h"
-#include "PBRInstancePipeline.h"
+#include "JsonGraphicsPipeline.h"
 class GLTFRenderPass : public RenderPass
 {
 	private:
 		std::shared_ptr<RenderedColorTexture> ColorTexture;
 		std::shared_ptr<RenderedDepthTexture> DepthTexture;
-
-		GLTFPBRRenderPIpeline oldpbrPipeline;
-		PBRInstancePipeline oldinstancedPipeline;
-		WireFramePipeline oldwireframePipeline;
-		LinePipeline oldLinePipeline;
 
 		JsonGraphicsPipeline PBRPipeline;
 		JsonGraphicsPipeline PBRInstancePipeline;

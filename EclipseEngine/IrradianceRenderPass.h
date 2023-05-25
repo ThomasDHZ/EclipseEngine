@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderPass.h"
 #include "RenderedCubeMapTexture.h"
-#include "IrradiancePipeline.h"
+
 #include "JsonGraphicsPipeline.h"
 
 class IrradianceRenderPass : public RenderPass

@@ -8,35 +8,35 @@ PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
-{
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    if (renderPass == nullptr)
-    {
-        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-    }
-    else
-    {
-        ColorTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(textures);
-    SetUpCommandBuffers();
-}
+//void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
+//{
+//    SampleCount = GraphicsDevice::GetMaxSampleCount();
+//    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+//
+//    if (renderPass == nullptr)
+//    {
+//        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
+//        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+//        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+//    }
+//    else
+//    {
+//        ColorTexture->RecreateRendererTexture(RenderPassResolution);
+//        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
+//        DepthTexture->RecreateRendererTexture(RenderPassResolution);
+//        RenderPass::Destroy();
+//    }
+//
+//    std::vector<VkImageView> AttachmentList;
+//    AttachmentList.emplace_back(ColorTexture->View);
+//    AttachmentList.emplace_back(RenderedTexture->View);
+//    AttachmentList.emplace_back(DepthTexture->View);
+//
+//    RenderPassDesc();
+//    CreateRendererFramebuffers(AttachmentList);
+//    BuildRenderPassPipelines(textures);
+//    SetUpCommandBuffers();
+//}
 
 void PBRRenderPass::RenderPassDesc()
 {
@@ -98,34 +98,34 @@ void PBRRenderPass::RenderPassDesc()
 
 }
 
-void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
-{
-    VkPipelineColorBlendAttachmentState ColorAttachment;
-    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    ColorAttachment.blendEnable = VK_TRUE;
-    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
-    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
-    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
-    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
-    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
-    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
-
-    ColorAttachmentList.clear();
-    ColorAttachmentList.emplace_back(ColorAttachment);
-
-    PipelineInfoStruct pipelineInfo{};
-    pipelineInfo.renderPass = renderPass;
-    pipelineInfo.ColorAttachments = ColorAttachmentList;
-    pipelineInfo.SampleCount = SampleCount;
-
-    pbrPipeline.InitializePipeline(pipelineInfo, textures);
-    //pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
-    lightDebugPipeline.InitializePipeline(pipelineInfo);
-    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
-    linePipeline.InitializePipeline(pipelineInfo);
-    wireframePipeline.InitializePipeline(pipelineInfo);
-    outLinePipeline.InitializePipeline(pipelineInfo);
-}
+//void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
+//{
+//    VkPipelineColorBlendAttachmentState ColorAttachment;
+//    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+//    ColorAttachment.blendEnable = VK_TRUE;
+//    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+//    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+//    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+//    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+//    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+//    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+//
+//    ColorAttachmentList.clear();
+//    ColorAttachmentList.emplace_back(ColorAttachment);
+//
+//    PipelineInfoStruct pipelineInfo{};
+//    pipelineInfo.renderPass = renderPass;
+//    pipelineInfo.ColorAttachments = ColorAttachmentList;
+//    pipelineInfo.SampleCount = SampleCount;
+//
+//    pbrPipeline.InitializePipeline(pipelineInfo, textures);
+//    //pbrInstancePipeline.InitializePipeline(pipelineInfo, textures);
+//    lightDebugPipeline.InitializePipeline(pipelineInfo);
+//    skyboxPipeline.InitializePipeline(pipelineInfo, GLTFSceneManager::CubeMap);
+//    //linePipeline.InitializePipeline(pipelineInfo);
+//   // wireframePipeline.InitializePipeline(pipelineInfo);
+//    outLinePipeline.InitializePipeline(pipelineInfo);
+//}
 
 VkCommandBuffer PBRRenderPass::Draw()
 {
@@ -223,13 +223,13 @@ void PBRRenderPass::Destroy()
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
 
-    pbrPipeline.Destroy();
-    pbrInstancePipeline.Destroy();
+    //pbrPipeline.Destroy();
+    //pbrInstancePipeline.Destroy();
     lightDebugPipeline.Destroy();
     skyboxPipeline.Destroy();
-    linePipeline.Destroy();
+    //linePipeline.Destroy();
     outLinePipeline.Destroy();
-    wireframePipeline.Destroy();
+    //wireframePipeline.Destroy();
 
     RenderPass::Destroy();
 }

@@ -118,12 +118,6 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    auto ad = std::vector<std::shared_ptr<Model>>{ gameObjectList[0]->GetGameObjectRenderer() };
-    oldpbrPipeline.InitializePipeline(pipelineInfo, ad);
-    oldwireframePipeline.InitializePipeline(pipelineInfo);
-    oldLinePipeline.InitializePipeline(pipelineInfo);
-    oldinstancedPipeline.InitializePipeline(pipelineInfo);
-
     //Main Renderers
     {
         LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));

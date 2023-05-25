@@ -59,7 +59,7 @@ void PBRRenderer::BuildRenderer()
 		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
 		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
 
-		pbrRenderPass.BuildRenderPass(submitList);
+		//pbrRenderPass.BuildRenderPass(submitList);
 		pbrBloomRenderPass.BuildRenderPass(submitList);
 		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
 		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
