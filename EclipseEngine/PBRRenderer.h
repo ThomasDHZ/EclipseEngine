@@ -7,7 +7,6 @@
 #include "PrefilterRenderPass.h"
 #include "BRDFRenderPass.h"
 #include "SceneManager.h"
-#include "PBRReflectionRenderPass.h"
 #include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
 #include "DepthCubeMapRenderer.h"
@@ -15,7 +14,6 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
-#include "PBRReflectionPreRenderPass.h"
 #include "GLTFSceneManager.h"
 #include "ComputeAnimationPipeline.h"
 
@@ -31,7 +29,7 @@ private:
 
 	IrradianceRenderPass skyIrradianceRenderPass;
 	PrefilterRenderPass skyPrefilterRenderPass;
-	PBRReflectionRenderPass skyPBRRenderPass;
+	//PBRReflectionRenderPass skyPBRRenderPass;
 
 	//IrradianceRenderPass geoIrradianceRenderPass;
 	//PrefilterRenderPass geoPrefilterRenderPass;

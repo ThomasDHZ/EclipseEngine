@@ -357,6 +357,14 @@ void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptors
 	}
 }
 
+void Model::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+{
+	for (auto& mesh : MeshList)
+	{
+		mesh->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	}
+}
+
 void Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
 	for (auto& mesh : MeshList)

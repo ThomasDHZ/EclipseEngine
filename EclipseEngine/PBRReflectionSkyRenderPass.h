@@ -9,8 +9,9 @@
 #include "PBRReflectionPipeline.h"
 #include "CubeMapSamplerPipeline.h"
 #include "PBRInstancedReflectionPipeline.h"
+#include "JsonGraphicsPipeline.h"
 
-class PBRReflectionRenderPass : public RenderPass
+class PBRReflectionSkyRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -18,22 +19,20 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	PBRReflectionPipeline pbrPipeline;
-	PBRInstancedReflectionPipeline pbrInstancedPipeline;
-	CubeMapSamplerPipeline skyboxPipeline;
+	JsonGraphicsPipeline skyboxPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
-	PBRReflectionRenderPass();
-	~PBRReflectionRenderPass();
+	PBRReflectionSkyRenderPass();
+	~PBRReflectionSkyRenderPass();
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	//void OneTimeDraw(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh = nullptr);
-	//VkCommandBuffer Draw(std::shared_ptr<Mesh> reflectingMesh = nullptr);
+	void OneTimeDraw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, std::shared_ptr<Mesh> reflectingMesh = nullptr);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, std::shared_ptr<Mesh> reflectingMesh = nullptr);
 	void Destroy();
 };

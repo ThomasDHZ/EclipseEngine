@@ -11,8 +11,9 @@
 #include "PBRInstancedReflectionPipeline.h"
 #include "PBRBakeReflectionPipeline.h"
 #include "TextureBaker.h"
+#include "JsonGraphicsPipeline.h"
 
-class PBRReflectionPreRenderPass : public RenderPass
+class PBRReflectionMeshRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -20,8 +21,10 @@ private:
 	VkVertexInputBindingDescription VertexInputBindingDescription;
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
-	PBRBakeReflectionPipeline pbrPipeline;
-	CubeMapSamplerPipeline skyboxPipeline;
+	JsonGraphicsPipeline pbrReflectionPipeline;
+	JsonGraphicsPipeline spriteReflectionPipeline;
+	//PBRInstancedReflectionPipeline pbrInstancedPipeline;
+	JsonGraphicsPipeline skyboxPipeline;
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
 
@@ -30,15 +33,14 @@ private:
 	void ClearTextureList();
 
 public:
-	PBRReflectionPreRenderPass();
-	~PBRReflectionPreRenderPass();
+	PBRReflectionMeshRenderPass();
+	~PBRReflectionMeshRenderPass();
 
 	std::vector<std::shared_ptr<RenderedCubeMapTexture>> ReflectionCubeMapList;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	//void BakeReflectionMaps(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t bakedTextureAtlusSize);
-	VkCommandBuffer Draw();
+	void PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
 	void Destroy();
 };

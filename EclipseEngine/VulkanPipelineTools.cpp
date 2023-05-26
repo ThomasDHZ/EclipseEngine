@@ -130,7 +130,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
         case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
         case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
         case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
-        case kReflectionViewDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GetReflectionMapBuffer()); break;
+        case kReflectionViewDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, GetReflectionMapBuffer()); break;
         }
     }
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
@@ -141,6 +141,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
         switch (DescriptorBinding.DescriptorType)
         {
         case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
+        case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER: writeDescriptorSet.emplace_back(AddBufferDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.BufferDescriptor, DescriptorBinding.DescriptorType)); break;
         case VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER: writeDescriptorSet.emplace_back(AddTextureDescriptorSet(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.TextureDescriptor, DescriptorBinding.DescriptorType)); break;
         case VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR: writeDescriptorSet.emplace_back(AddAccelerationBuffer(DescriptorSet, DescriptorBinding.DescriptorSlotNumber, DescriptorBinding.AccelerationStructureDescriptor)); break;
         }

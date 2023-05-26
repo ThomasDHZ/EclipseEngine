@@ -46,7 +46,7 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 		case DescriptorBindingPropertiesEnum::kDirectionalLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kPointLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kSpotLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
-		case DescriptorBindingPropertiesEnum::kReflectionViewDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kReflectionViewDescriptor: return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; break;
 		default: throw std::runtime_error("Unkown binding type.");
 	}
 }

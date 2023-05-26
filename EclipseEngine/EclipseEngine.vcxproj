@@ -165,6 +165,8 @@
     <None Include="..\Shaders\PBRLightFunctions.glsl" />
     <None Include="..\Shaders\PBRMiss.rmiss" />
     <None Include="..\Shaders\PBRRaygen.rgen" />
+    <None Include="..\Shaders\PBRReflectionShader.frag" />
+    <None Include="..\Shaders\PBRReflectionShader.vert" />
     <None Include="..\Shaders\PBRShadow.rmiss" />
     <None Include="..\Shaders\RasterBindingLayout.glsl" />
     <None Include="..\Shaders\RasterLight.glsl" />
@@ -260,7 +262,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
     <ClCompile Include="PBRPlayRenderer.cpp" />
-    <ClCompile Include="PBRReflectionPreRenderPass.cpp" />
+    <ClCompile Include="PBRReflectionMeshRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
@@ -294,7 +296,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
-    <ClCompile Include="PBRReflectionRenderPass.cpp" />
+    <ClCompile Include="PBRReflectionSkyRenderPass.cpp" />
     <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -424,7 +426,7 @@
     <ClInclude Include="ParticalSystemRenderer.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PBRBakeReflectionPipeline.h" />
-    <ClInclude Include="PBRReflectionPreRenderPass.h" />
+    <ClInclude Include="PBRReflectionMeshRenderPass.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
     <ClInclude Include="PBRBloomReflectionPipeline.h" />
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />
@@ -460,7 +462,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
-    <ClInclude Include="PBRReflectionRenderPass.h" />
+    <ClInclude Include="PBRReflectionSkyRenderPass.h" />
     <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
@@ -562,8 +564,6 @@
     <None Include="..\Shaders\RasterVertexBuilder.glsl" />
     <None Include="..\Shaders\ReflectionPBRInstanceShader.frag" />
     <None Include="..\Shaders\ReflectionPBRInstanceShader.vert" />
-    <None Include="..\Shaders\ReflectionPBRShader.frag" />
-    <None Include="..\Shaders\ReflectionPBRShader.vert" />
     <None Include="..\Shaders\Renderer2D.frag" />
     <None Include="..\Shaders\Renderer2D.vert" />
     <None Include="..\Shaders\RTXPayload.glsl" />

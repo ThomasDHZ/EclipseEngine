@@ -3,6 +3,7 @@
 #extension GL_EXT_nonuniform_qualifier : enable
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
+#extension GL_EXT_multiview : enable
 
 layout (location = 0) in vec3 inPosition;
 layout (location = 1) in vec3 aNormal;
@@ -129,6 +130,7 @@ struct PBRMaterial
 	uint DepthMapID;
 };
 
+layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 11) uniform CubeMapViewSampler 
 {
     mat4 CubeMapFaceMatrix[6];
@@ -160,7 +162,7 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
+    mat4 MeshTransform = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] ;
     FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;

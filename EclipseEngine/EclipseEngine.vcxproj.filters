@@ -213,7 +213,7 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PBRReflectionRenderPass.cpp">
+    <ClCompile Include="PBRReflectionSkyRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="DepthRenderPass.cpp">
@@ -363,7 +363,7 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="PBRReflectionPreRenderPass.cpp">
+    <ClCompile Include="PBRReflectionMeshRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="RayTracePBRRenderPass.cpp">
@@ -665,7 +665,7 @@
     <ClInclude Include="BRDFRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="PBRReflectionRenderPass.h">
+    <ClInclude Include="PBRReflectionSkyRenderPass.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="SoundDevice.h">
@@ -821,7 +821,7 @@
     <ClInclude Include="CubeToEnvironmentPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PBRReflectionPreRenderPass.h">
+    <ClInclude Include="PBRReflectionMeshRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleLogger.h">
@@ -1198,12 +1198,6 @@
     <None Include="..\Shaders\PrefilterShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\ReflectionPBRShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\ReflectionPBRShader.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\Renderer2D.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1396,6 +1390,12 @@
     </None>
     <None Include="..\Shaders\Vertex.glsl">
       <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\PBRReflectionShader.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRReflectionShader.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

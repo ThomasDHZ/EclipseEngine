@@ -124,27 +124,27 @@ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::st
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
 }
 
-void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType)
+void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData)
 {
-	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kInstanceRenderer)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 
-void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position)
+void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position)
 {
-	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position)));
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kInstanceRenderer, position)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 
-void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation)
+void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation)
 {
-	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation)));
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kInstanceRenderer, position, rotation)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 
-void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, GameObjectRenderType renderType, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
 {
-	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation, scale)));
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kInstanceRenderer, position, rotation, scale)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, instanceData);
 }
 

@@ -12,7 +12,7 @@ private:
 	static std::string BasePipelineFilePath;
 
 protected:
-
+	CubeMapSamplerBuffer ReflectionSampler;
 
 public:
 	VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo, uint32_t modelCount);
@@ -52,6 +52,22 @@ public:
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+	}
+	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, glm::vec3 reflectPoint)
+	{
+        const glm::vec3 reflectPos = reflectPoint;
+        glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        ReflectionSampler.Update();
+
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+        gameObject->DrawReflectionMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, GLTFSceneManager::sceneProperites);
 	}
 
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)

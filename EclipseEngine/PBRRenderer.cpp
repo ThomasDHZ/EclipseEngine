@@ -51,19 +51,19 @@ void PBRRenderer::BuildRenderer()
 	//	ReflectionPreRenderPass.PreRenderPass(submitList, SceneManager::GetPreRenderedMapSize());
 	//}
 	//Main Render Pass
-	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
-		irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-		prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	//{
+	//	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { skyPBRRenderPass.RenderedTexture };
+	//	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	//	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
-		submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
-		submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
+	//	submitList.IrradianceTextureList = irradianceRenderPass.IrradianceCubeMapList;
+	//	submitList.PrefilterTextureList = prefilterRenderPass.PrefilterCubeMapList;
 
-		//pbrRenderPass.BuildRenderPass(submitList);
-		pbrBloomRenderPass.BuildRenderPass(submitList);
-		blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
-		bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
-	}
+	//	//pbrRenderPass.BuildRenderPass(submitList);
+	//	pbrBloomRenderPass.BuildRenderPass(submitList);
+	//	blurRenderPass.BuildRenderPass(pbrBloomRenderPass.BloomMapList);
+	//	bloomCombinePipeline.BuildRenderPass(blurRenderPass.BlurredTextureList);
+	//}
 
 	//	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(pbrRenderPass.RenderedTexture, pbrRenderPass.RenderedTexture);
@@ -184,7 +184,7 @@ void PBRRenderer::Destroy()
 	{
 		skyIrradianceRenderPass.Destroy();
 		skyPrefilterRenderPass.Destroy();
-		skyPBRRenderPass.Destroy();
+		/*skyPBRRenderPass.Destroy();*/
 	}
 	//Geometry Pass
 	{
@@ -213,11 +213,11 @@ void PBRRenderer::BakeTextures(const char* FileName)
 	DepthCubeMapRenderer bakeDepthCubeMapRenderPass;
 	IrradianceRenderPass bakeskyIrradianceRenderPass;
 	PrefilterRenderPass bakeskyPrefilterRenderPass;
-	PBRReflectionRenderPass bakeskyPBRRenderPass;
+	//PBRReflectionRenderPass bakeskyPBRRenderPass;
 	IrradianceRenderPass bakegeoIrradianceRenderPass;
 	PrefilterRenderPass bakegeoPrefilterRenderPass;
-	PBRReflectionRenderPass bakegeoPBRRenderPass;
-	PBRReflectionPreRenderPass BakeReflectionRenderPass;
+//	PBRReflectionRenderPass bakegeoPBRRenderPass;
+	//PBRReflectionPreRenderPass BakeReflectionRenderPass;
 
 	//Depth Pass
 	{
@@ -242,9 +242,9 @@ void PBRRenderer::BakeTextures(const char* FileName)
 	}
 	//Geometry Pass
 	{
-		std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { bakeskyPBRRenderPass.RenderedTexture };
-		bakegeoIrradianceRenderPass.OneTimeDraw(cubemap, 256.0f);
-		bakegeoPrefilterRenderPass.OneTimeDraw(cubemap, 256.0f);
+	//	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { bakeskyPBRRenderPass.RenderedTexture };
+		//bakegeoIrradianceRenderPass.OneTimeDraw(cubemap, 256.0f);
+		//bakegeoPrefilterRenderPass.OneTimeDraw(cubemap, 256.0f);
 
 		bakesubmitList.IrradianceTextureList = bakegeoIrradianceRenderPass.IrradianceCubeMapList;
 		bakesubmitList.PrefilterTextureList = bakegeoPrefilterRenderPass.PrefilterCubeMapList;
@@ -258,8 +258,8 @@ void PBRRenderer::BakeTextures(const char* FileName)
 	bakeDepthCubeMapRenderPass.Destroy();
 	bakeskyIrradianceRenderPass.Destroy();
 	bakeskyPrefilterRenderPass.Destroy();
-	bakeskyPBRRenderPass.Destroy();
+	//bakeskyPBRRenderPass.Destroy();
 	bakegeoIrradianceRenderPass.Destroy();
 	bakegeoPrefilterRenderPass.Destroy();
-	bakegeoPBRRenderPass.Destroy();
+	//bakegeoPBRRenderPass.Destroy();
 }

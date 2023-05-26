@@ -17,7 +17,6 @@
 #include "PBRRenderer.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
-#include "PBRRealTimeRenderer.h"
 #include "RayTracePBRRenderer.h"
 #include "ParticleSystem.h"
 #include "GLTFRenderer.h"
