@@ -29,24 +29,24 @@
 class GLTFRenderer
 {
 private:
-	VulkanPipelineEditor pipelineEditor;
-	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	BRDFRenderPass GLTF_BRDFRenderPass;
+	//VulkanPipelineEditor pipelineEditor;
+	//EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	BRDFRenderPass brdfRenderPass;
 
-	//SkyBox Reflection
-	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
-	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
-	PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
+	////SkyBox Reflection
+	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
+	//PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
+	//PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
 
-	//Mesh Reflection
-	IrradianceRenderPass meshReflectionIrradianceRenderPass;
-	PrefilterRenderPass meshReflectionPrefilterRenderPass;
-	PBRReflectionMeshRenderPass meshReflectionRenderPass;
+	////Mesh Reflection
+	//IrradianceRenderPass meshReflectionIrradianceRenderPass;
+	//PrefilterRenderPass meshReflectionPrefilterRenderPass;
+	//PBRReflectionMeshRenderPass meshReflectionRenderPass;
 	//Main
-	IrradianceRenderPass irradianceRenderPass;
-	PrefilterRenderPass prefilterRenderPass;
-	GLTFRenderPass gLTFRenderPass;
-	FrameBufferRenderPass frameBufferRenderPass;
+	//IrradianceRenderPass irradianceRenderPass;
+	//PrefilterRenderPass prefilterRenderPass;
+	//GLTFRenderPass gLTFRenderPass;
+	//FrameBufferRenderPass frameBufferRenderPass;
 
 public:
 	GLTFRenderer();

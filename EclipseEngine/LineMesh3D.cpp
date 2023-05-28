@@ -322,6 +322,11 @@ void LineMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& Mode
 	Mesh::Update(GameObjectMatrix, ModelMatrix);
 }
 
+void LineMesh3D::Destroy()
+{
+	Mesh::Destroy();
+}
+
 void LineMesh3D::SetMeshPosition(float x, float y, float z)
 {
 	MeshPosition = glm::vec3(x, y, z);

@@ -18,6 +18,8 @@ std::vector<std::shared_ptr<GLTFSpotLight>>        GLTFSceneManager::SpotLightLi
 float                                              GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float									           GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool											   GLTFSceneManager::WireframeModeFlag = false;
+VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
+VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
 
 
 void GLTFSceneManager::UpdateBufferIndex()
@@ -380,10 +382,38 @@ void GLTFSceneManager::StartUp()
 {
 	SkyboxMesh = std::make_shared<Skybox>();
 	SkyboxMesh->StartUp();
+
+	VkSamplerCreateInfo NullSamplerInfo = {};
+	NullSamplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	NullSamplerInfo.magFilter = VK_FILTER_NEAREST;
+	NullSamplerInfo.minFilter = VK_FILTER_NEAREST;
+	NullSamplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	NullSamplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	NullSamplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	NullSamplerInfo.anisotropyEnable = VK_TRUE;
+	NullSamplerInfo.maxAnisotropy = 16.0f;
+	NullSamplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	NullSamplerInfo.unnormalizedCoordinates = VK_FALSE;
+	NullSamplerInfo.compareEnable = VK_FALSE;
+	NullSamplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+	NullSamplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	NullSamplerInfo.minLod = 0;
+	NullSamplerInfo.maxLod = 0;
+	NullSamplerInfo.mipLodBias = 0;
+
+	if (vkCreateSampler(VulkanRenderer::GetDevice(), &NullSamplerInfo, nullptr, &NullSampler))
+	{
+		throw std::runtime_error("Failed to create Sampler.");
+	}
+
+	NullDescriptor.imageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	NullDescriptor.imageView = VK_NULL_HANDLE;
+	NullDescriptor.sampler = NullSampler;
 }
 
 void GLTFSceneManager::Update()
 {
+	ActiveCamera->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 	if (VulkanRenderer::UpdateRendererFlag)
 	{
 		UpdateBufferIndex();
@@ -408,6 +438,7 @@ void GLTFSceneManager::Update()
 	{
 		obj->Update(VulkanRenderer::GetFrameTimeDurationMilliseconds());
 	}
+
 	SkyboxMesh->Update(ActiveCamera);
 
 	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
@@ -426,9 +457,18 @@ void GLTFSceneManager::Update()
 void GLTFSceneManager::Destroy()
 {
 	SkyboxMesh->Destroy();
+	vkDestroySampler(VulkanRenderer::GetDevice(), NullSampler, nullptr);
 	for (auto& obj : GameObjectList)
 	{
 		obj->Destroy();
+	}
+	for (auto& texture : TextureList)
+	{
+		texture->Destroy();
+	}
+	for (auto& material : MaterialList)
+	{
+		material->Destroy();
 	}
 	if (EnvironmentTexture != nullptr)
 	{
@@ -463,7 +503,7 @@ VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
 		return BRDFMapDescriptor;
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	return GetNullDescriptor();
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetIrradianceMapDescriptor()
@@ -477,7 +517,7 @@ VkDescriptorImageInfo GLTFSceneManager::GetIrradianceMapDescriptor()
 		return IrradianceMapDescriptor;
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	return GetNullDescriptor();
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetPrefilterMapDescriptor()
@@ -491,7 +531,7 @@ VkDescriptorImageInfo GLTFSceneManager::GetPrefilterMapDescriptor()
 		return PrefilterMapDescriptor;
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	return GetNullDescriptor();
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()
@@ -505,7 +545,7 @@ VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()
 		return CubeMapDescriptor;
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	return GetNullDescriptor();
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
@@ -519,7 +559,7 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 		return SkyboxBufferInfo;
 	}
 
-	return VulkanRenderer::GetNullDescriptor();
+	return GetNullDescriptor();
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetVertexPropertiesBuffer()
@@ -603,7 +643,7 @@ std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetTexturePropertiesBuffer(
 	std::vector<VkDescriptorImageInfo>	TexturePropertiesBuffer;
 	if (TextureList.size() == 0)
 	{
-		TexturePropertiesBuffer.emplace_back(VulkanRenderer::GetNullDescriptor());
+		TexturePropertiesBuffer.emplace_back(GetNullDescriptor());
 	}
 	else
 	{

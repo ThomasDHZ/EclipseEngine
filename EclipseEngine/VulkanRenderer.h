@@ -52,9 +52,6 @@ private:
 	static VulkanDebugger VulkanDebug;
 	static VulkanSwapChain SwapChain;
 	static Timer FrameTimer;
-
-	static VkSampler NullSampler;
-	static VkDescriptorImageInfo NullDescriptor;
 public:
 
 	static bool UpdateRendererFlag;
@@ -102,6 +99,4 @@ public:
 	static uint32_t GetSwapChainImageCount() { return SwapChain.GetSwapChainImageCount(); }
 	static float 	GetFrameTimeDurationSeconds() { return FrameTimer.GetTimerDurationSeconds(); };
 	static float 	GetFrameTimeDurationMilliseconds() { return FrameTimer.GetTimerDurationMilliseconds(); };
-	static VkSampler GetNullSampler() { return NullSampler; }
-	static VkDescriptorImageInfo GetNullDescriptor() { return NullDescriptor; }
 };

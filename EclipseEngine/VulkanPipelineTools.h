@@ -20,7 +20,7 @@ enum DescriptorBindingPropertiesEnum
 	kDirectionalLightDescriptor,
 	kPointLightDescriptor,
 	kSpotLightDescriptor,
-	kReflectionViewDescriptor
+	kReflectionViewDescriptor,
 };
 
 class VulkanPipelineTools

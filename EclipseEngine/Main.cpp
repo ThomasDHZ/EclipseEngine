@@ -23,7 +23,6 @@ int main()
     SoundEffectManager::StartUp();
     VulkanRenderer::StartUp();
     InterfaceRenderPass::StartUp();
-    //TopLevelAccelerationStructureManager::StartUp();
     SceneManager::StartUp();
     
     Scene scene;
@@ -50,7 +49,6 @@ int main()
     scene.Destroy();
 
     SceneManager::Destory();
-    TopLevelAccelerationStructureManager::Destroy();
     InterfaceRenderPass::Destroy();
     VulkanRenderer::Destroy();
     SoundEffectManager::Destroy();

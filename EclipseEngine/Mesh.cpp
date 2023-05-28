@@ -429,8 +429,9 @@ void Mesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSe
 
 void Mesh::Destroy()
 {
-	//Vertex and Index Buffer gets destory on the Model/Child Mesh Classes.
-	//MeshPropertiesBuffer.DestroyBuffer();
+	//Vertex and Index Buffer gets destoryed on the Model/Child Mesh Classes.
+	MeshPropertiesBuffer.DestroyBuffer();
 	MeshTransformBuffer.DestroyBuffer();
+	MeshTransformInverseBuffer.DestroyBuffer();
 	BottomLevelAccelerationBuffer.Destroy();
 }

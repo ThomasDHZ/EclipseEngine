@@ -198,4 +198,7 @@ void JsonGraphicsPipeline::Destroy()
     ShaderPipelineLayout = VK_NULL_HANDLE;
     DescriptorPool = VK_NULL_HANDLE;
     DescriptorSetLayout = VK_NULL_HANDLE;
+
+    ReflectionSampler.Destroy();
+    ReflectionMapSampler.Destroy();
 }

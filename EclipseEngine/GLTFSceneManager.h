@@ -30,6 +30,9 @@ private:
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 
+	static VkSampler NullSampler;
+	static VkDescriptorImageInfo NullDescriptor;
+
 	static std::shared_ptr<Texture> IsTexture2DLoaded(std::string name);
 	static std::shared_ptr<Texture> IsTexture2DLoaded(const GLTFTextureLoader& textureLoader);
 
@@ -127,5 +130,7 @@ public:
 	static uint32_t GetSpotLightCount() { return SpotLightList.size(); }
 	static float GetPBRCubeMapSize() { return PBRCubeMapSize; }
 	static float GetPreRenderedMapSize() { return PreRenderedMapSize; }
+	static VkSampler GetNullSampler() { return NullSampler; }
+	static VkDescriptorImageInfo GetNullDescriptor() { return NullDescriptor; }
 };
 

@@ -78,6 +78,11 @@ void Material::UpdateBuffer()
 	MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
+void Material::Destroy()
+{
+	MaterialBuffer.DestroyBuffer();
+}
+
 void Material::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList)
 {
 	VkDescriptorBufferInfo MaterialBufferInfo = {};

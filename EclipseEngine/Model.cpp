@@ -394,6 +394,7 @@ void Model::Destroy()
 {
 	VertexBuffer.DestroyBuffer();
 	IndexBuffer.DestroyBuffer();
+	scratchBuffer.DestroyBuffer();
 
 	for (auto& material : MeshPropertiesBufferList)
 	{

@@ -62,6 +62,7 @@ public:
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 	void UpdateBuffer();
+	void Destroy();
 	void GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList);
 
 	uint64_t GetMaterialBufferIndex() { return MaterialBufferIndex; }

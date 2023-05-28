@@ -119,7 +119,6 @@ public:
 
 		VertexBuffer.CreateBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 		IndexBuffer.CreateBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
 		for (auto& node : gltfModelData.NodeList)
 		{
 			GLTFMeshLoader3D GltfMeshLoader;
@@ -136,16 +135,16 @@ public:
 			GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
 			GltfMeshLoader.gltfMaterialList = MaterialList;
 
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
-			MeshList.emplace_back(mesh);
+		/*	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
+			MeshList.emplace_back(mesh);*/
 		}
 
-		Update(GameObjectMatrix);
-		UpdateMeshPropertiesBuffer();
-		for (auto& mesh : MeshList)
-		{
-			mesh->UpdateMeshTransformBuffer();
-		}
+		//Update(GameObjectMatrix);
+		//UpdateMeshPropertiesBuffer();
+		//for (auto& mesh : MeshList)
+		//{
+		//	mesh->UpdateMeshTransformBuffer();
+		//}
 	}
 
 	template <class T>
