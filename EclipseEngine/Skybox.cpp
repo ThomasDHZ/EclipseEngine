@@ -75,3 +75,4 @@ void Skybox::Destroy()
 	VertexBuffer.DestroyBuffer();
 	IndexBuffer.DestroyBuffer();
 }
+

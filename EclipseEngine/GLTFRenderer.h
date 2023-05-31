@@ -34,14 +34,14 @@ private:
 	BRDFRenderPass brdfRenderPass;
 
 	////SkyBox Reflection
-	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
-	//PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
-	//PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
+	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
+	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
+	PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
 
 	////Mesh Reflection
-	//IrradianceRenderPass meshReflectionIrradianceRenderPass;
-	//PrefilterRenderPass meshReflectionPrefilterRenderPass;
-	//PBRReflectionMeshRenderPass meshReflectionRenderPass;
+	IrradianceRenderPass meshReflectionIrradianceRenderPass;
+	PrefilterRenderPass meshReflectionPrefilterRenderPass;
+	PBRReflectionMeshRenderPass meshReflectionRenderPass;
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

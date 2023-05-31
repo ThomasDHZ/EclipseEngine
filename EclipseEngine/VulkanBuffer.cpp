@@ -113,15 +113,17 @@ VkResult VulkanBuffer::UpdateBufferSize(VkDeviceSize bufferSize)
 
 void VulkanBuffer::DestroyBuffer()
 {
-	BufferDeviceAddress = 0;
-	if (Buffer != nullptr &&
-		BufferMemory != nullptr)
+	if (!IsBufferMemoryCleared())
 	{
 		vkDestroyBuffer(VulkanRenderer::GetDevice(), Buffer, nullptr);
 		vkFreeMemory(VulkanRenderer::GetDevice(), BufferMemory, nullptr);
 
+		BufferSize = 0;
+		BufferUsage = 0;
+		BufferProperties = 0;
 		Buffer = VK_NULL_HANDLE;
 		BufferMemory = VK_NULL_HANDLE;
+		data = VK_NULL_HANDLE;
 
 		if (BufferHandle != VK_NULL_HANDLE)
 		{
@@ -136,4 +138,27 @@ void VulkanBuffer::DestroyBuffer()
 void VulkanBuffer::SetBufferAddress(uint64_t BufferAddress)
 {
 	BufferDeviceAddress = BufferAddress;
+}
+
+bool VulkanBuffer::IsBufferMemoryCleared()
+{
+	if (this == nullptr)
+	{
+		return true;
+	}
+
+	if (BufferMemory == VK_NULL_HANDLE &&
+		BufferSize == 0 &&
+		BufferUsage == 0 &&
+		BufferProperties == 0 &&
+		BufferDeviceAddress == 0 &&
+		BufferHandle == VK_NULL_HANDLE &&
+		data == VK_NULL_HANDLE)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

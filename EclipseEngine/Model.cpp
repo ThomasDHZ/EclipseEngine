@@ -392,8 +392,15 @@ void Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorS
 
 void Model::Destroy()
 {
-	VertexBuffer.DestroyBuffer();
-	IndexBuffer.DestroyBuffer();
+	if (VertexBuffer != nullptr)
+	{
+		VertexBuffer->DestroyBuffer();
+	}
+	if (IndexBuffer != nullptr)
+	{
+		IndexBuffer->DestroyBuffer();
+	}
+
 	scratchBuffer.DestroyBuffer();
 
 	for (auto& material : MeshPropertiesBufferList)

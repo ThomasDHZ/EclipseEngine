@@ -292,6 +292,7 @@
 	    DepthTexture->Destroy();
 	
 		pbrReflectionPipeline.Destroy();
+		spriteReflectionPipeline.Destroy();
 	    skyboxPipeline.Destroy();
 	
 	    RenderPass::Destroy();

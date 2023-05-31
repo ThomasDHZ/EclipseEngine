@@ -174,11 +174,39 @@ void GLTFRenderer::BuildRenderer()
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
-	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
+	PBRRenderPassTextureSubmitList submitList;
+	//submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
+	//submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
+
+	{
+		//SkyBox Reflection Pass
+		{
+			std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
+			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+
+			submitList.IrradianceTextureList = skyBoxReflectionIrradianceRenderPass.IrradianceCubeMapList;
+			submitList.PrefilterTextureList = skyBoxReflectionPrefilterRenderPass.PrefilterCubeMapList;
+
+			skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		}
+		//Mesh Reflection Pass
+		{
+			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
+
+			submitList.IrradianceTextureList = meshReflectionIrradianceRenderPass.IrradianceCubeMapList;
+			submitList.PrefilterTextureList = meshReflectionPrefilterRenderPass.PrefilterCubeMapList;
+
+			meshReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		}
+		//Mesh Reflection Pass
+		{
+			irradianceRenderPass.OneTimeDraw(meshReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.OneTimeDraw(meshReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
+			gLTFRenderPass.BuildRenderPass(GLTFSceneManager::GameObjectList);
+		}
+	}
 
 	gLTFRenderPass.BuildRenderPass(GLTFSceneManager::GameObjectList);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
@@ -262,6 +290,12 @@ void GLTFRenderer::Destroy()
 
 	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
+	skyBoxReflectionIrradianceRenderPass.Destroy();
+	skyBoxReflectionPrefilterRenderPass.Destroy();
+	skyBoxReflectionRenderPass.Destroy();
+	meshReflectionIrradianceRenderPass.Destroy();
+	meshReflectionPrefilterRenderPass.Destroy();
+	meshReflectionRenderPass.Destroy();
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();
 	gLTFRenderPass.Destroy();

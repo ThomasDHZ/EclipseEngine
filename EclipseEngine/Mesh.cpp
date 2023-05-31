@@ -171,7 +171,7 @@ void Mesh::MeshStartUp(GLTFMeshLoader3D& meshLoader)
 	AnimationStartUp(meshLoader);
 }
 
-void Mesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer)
+void Mesh::RTXMeshStartUp(std::shared_ptr<VulkanBuffer> VertexBuffer, std::shared_ptr<VulkanBuffer> IndexBuffer)
 {
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
@@ -183,8 +183,8 @@ void Mesh::RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer)
 		VkDeviceOrHostAddressConstKHR IndexBufferDeviceAddress;
 		VkDeviceOrHostAddressConstKHR TransformInverseBufferDeviceAddress;
 
-		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer.GetBuffer());
-		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer.GetBuffer());
+		VertexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(VertexBuffer->GetBuffer());
+		IndexBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(IndexBuffer->GetBuffer());
 		TransformInverseBufferDeviceAddress.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(MeshTransformInverseBuffer.GetBuffer());
 
 		TriangleCount = IndexCount / 3;
@@ -336,8 +336,8 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, V
 	{
 		if (primitve.IndexCount > 0)
 		{
-			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-			vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
+			vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
 			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
 		}
@@ -353,8 +353,8 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 		if (primitve.IndexCount > 0)
 		{
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
@@ -373,8 +373,8 @@ void Mesh::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet de
 
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
-		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 		if (primitve.IndexCount > 0)
 		{
 			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
@@ -403,9 +403,9 @@ void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptor
 	VkDeviceSize offsets[] = { 0 };
 
 	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+	vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 	vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 }
 
@@ -414,7 +414,7 @@ void Mesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSe
 	VkDeviceSize offsets[] = { 0 };
 
 	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &sceneProperties);
-	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer.Buffer, offsets);
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
 	if (IndexCount == 0)
 	{
@@ -422,18 +422,16 @@ void Mesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSe
 	}
 	else
 	{
-		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer.Buffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 	}
 }
 
 void Mesh::Destroy()
 {
-	//Vertex and Index Buffer gets destoryed on the Model/Child Mesh Classes.
 	MeshPropertiesBuffer.DestroyBuffer();
 	MeshTransformBuffer.DestroyBuffer();
 	MeshTransformInverseBuffer.DestroyBuffer();
 	InstanceBuffer.DestroyBuffer();
 	BottomLevelAccelerationBuffer.Destroy();
-
 }

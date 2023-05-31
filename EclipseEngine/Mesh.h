@@ -45,8 +45,8 @@ struct GLTFMeshLoader3D
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
 	std::vector<std::shared_ptr<Material>> gltfMaterialList;
 
-	VulkanBuffer VertexBuffer;
-	VulkanBuffer IndexBuffer;
+	std::shared_ptr<VulkanBuffer> VertexBuffer;
+	std::shared_ptr<VulkanBuffer> IndexBuffer;
 
 	GLTFInstancingDataStruct InstanceData;
 	std::vector<MeshBoneWeights> BoneWeightList;
@@ -75,8 +75,8 @@ protected:
 
 	MeshProperties meshProperties;
 
-	VulkanBuffer VertexBuffer;
-	VulkanBuffer IndexBuffer;
+	std::shared_ptr<VulkanBuffer> VertexBuffer;
+	std::shared_ptr<VulkanBuffer> IndexBuffer;
 	VulkanBuffer MeshTransformBuffer;
 	VulkanBuffer MeshTransformInverseBuffer;
 	VulkanBuffer MeshPropertiesBuffer;
@@ -96,7 +96,7 @@ protected:
 
 	void MeshStartUp(GLTFMeshLoader3D& meshLoader);
 	void InstancingStartUp(GLTFInstancingDataStruct& instanceData);
-	void RTXMeshStartUp(VulkanBuffer& VertexBuffer, VulkanBuffer& IndexBuffer);
+	void RTXMeshStartUp(std::shared_ptr<VulkanBuffer> VertexBuffer, std::shared_ptr<VulkanBuffer> IndexBuffer);
 	void AnimationStartUp(GLTFMeshLoader3D& meshLoader);
 	void UpdateMeshBottomLevelAccelerationStructure();
 
