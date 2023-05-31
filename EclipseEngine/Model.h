@@ -135,16 +135,16 @@ public:
 			GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
 			GltfMeshLoader.gltfMaterialList = MaterialList;
 
-		/*	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
-			MeshList.emplace_back(mesh);*/
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
+			MeshList.emplace_back(mesh);
 		}
 
-		//Update(GameObjectMatrix);
-		//UpdateMeshPropertiesBuffer();
-		//for (auto& mesh : MeshList)
-		//{
-		//	mesh->UpdateMeshTransformBuffer();
-		//}
+		Update(GameObjectMatrix);
+		UpdateMeshPropertiesBuffer();
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshTransformBuffer();
+		}
 	}
 
 	template <class T>

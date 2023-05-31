@@ -48,7 +48,8 @@ void IrradianceRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeM
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
         for (int x = 0; x < cubeMapList.size(); x++)
         {
-            IrradianceCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT)));
+            auto a = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+            IrradianceCubeMapList.emplace_back(a);
         }
     }
     else

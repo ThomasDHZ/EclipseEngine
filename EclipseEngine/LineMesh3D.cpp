@@ -324,6 +324,8 @@ void LineMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& Mode
 
 void LineMesh3D::Destroy()
 {
+	VertexBuffer.DestroyBuffer();
+	IndexBuffer.DestroyBuffer();
 	Mesh::Destroy();
 }
 

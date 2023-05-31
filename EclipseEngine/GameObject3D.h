@@ -29,10 +29,5 @@ public:
 	glm::vec3* GetGameObjectPositionPtr() { return &GameObjectPosition; }
 	glm::vec3* GetGameObjectRotationPtr() { return &GameObjectRotation; }
 	glm::vec3* GetGameObjectScalePtr() { return &GameObjectScale; }
-
-	//virtual void to_json(nlohmann::json& json) override
-	//{
-	//	GameObject::to_json(json);
-	//}
 };
 

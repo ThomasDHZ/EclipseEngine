@@ -433,5 +433,7 @@ void Mesh::Destroy()
 	MeshPropertiesBuffer.DestroyBuffer();
 	MeshTransformBuffer.DestroyBuffer();
 	MeshTransformInverseBuffer.DestroyBuffer();
+	InstanceBuffer.DestroyBuffer();
 	BottomLevelAccelerationBuffer.Destroy();
+
 }

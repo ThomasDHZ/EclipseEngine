@@ -93,6 +93,13 @@ void SpriteMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& Mo
 	Mesh::Update(GameObjectMatrix, ModelMatrix);
 }
 
+void SpriteMesh3D::Destory()
+{
+	VertexBuffer.DestroyBuffer();
+	IndexBuffer.DestroyBuffer();
+	Mesh::Destroy();
+}
+
 void SpriteMesh3D::SetSpritePosition(float x, float y, float z)
 {
 	MeshPosition = glm::vec3(x, y, z);

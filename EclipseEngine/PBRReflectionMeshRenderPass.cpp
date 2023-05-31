@@ -195,9 +195,25 @@
 	    }
 	    ReflectionCubeMapList.clear();
 	}
+
+	void PBRReflectionMeshRenderPass::UpdateView(glm::vec3 reflectPoint)
+	{
+		const glm::vec3 reflectPos = reflectPoint;
+		glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+        ReflectionSampler.Update();
+	}
 	
 	VkCommandBuffer PBRReflectionMeshRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
 	{
+		UpdateView(glm::vec3(0.0f));
+
 	    VkCommandBufferBeginInfo beginInfo{};
 	    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -244,7 +260,7 @@
 			{
 				switch (gameObjectList[x]->RenderType)
 				{
-				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, gameObjectList[x], glm::vec3(0.0f)); break;
+				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, gameObjectList[x]); break;
 					//case GameObjectRenderType::kInstanceRenderer: pbrInstancedPipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);  break;
 					//case GameObjectRenderType::kSpriteRenderer: spriteReflectionPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites); break;
 				}
@@ -271,6 +287,7 @@
 	        reflectionMap->Destroy();
 	    }
 	
+		ReflectionSampler.Destroy();
 	    RenderedTexture->Destroy();
 	    DepthTexture->Destroy();
 	

@@ -28,9 +28,13 @@ private:
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
 
+	CubeMapSamplerBuffer ReflectionSampler;
+	CubeMapSamplerBuffer ReflectionMapSampler;
+
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 	void ClearTextureList();
+	void UpdateView(glm::vec3 reflectPoint);
 
 public:
 	PBRReflectionMeshRenderPass();

@@ -33,8 +33,6 @@ protected:
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
 
-	CubeMapSamplerBuffer ReflectionMapSampler;
-
 	VkShaderModule ReadShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);

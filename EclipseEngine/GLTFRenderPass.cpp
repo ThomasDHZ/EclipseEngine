@@ -244,10 +244,12 @@ void GLTFRenderPass::Destroy()
     RenderedTexture->Destroy();
     DepthTexture->Destroy();
 
-    SkyBoxPipeline.Destroy();
     PBRPipeline.Destroy();
+    PBRInstancePipeline.Destroy();
     WireframePipeline.Destroy();
+    WireframeInstancePipeline.Destroy();
     LinePipeline.Destroy();
+    SkyBoxPipeline.Destroy();
 
     RenderPass::Destroy();
 }

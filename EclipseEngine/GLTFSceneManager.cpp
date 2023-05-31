@@ -470,6 +470,22 @@ void GLTFSceneManager::Destroy()
 	{
 		material->Destroy();
 	}
+	for (auto& light : SunLightList)
+	{
+		light->Destroy();
+	}
+	for (auto& light : DirectionalLightList)
+	{
+		light->Destroy();
+	}
+	for (auto& light : PointLightList)
+	{
+		light->Destroy();
+	}
+	for (auto& light : SpotLightList)
+	{
+		light->Destroy();
+	}
 	if (EnvironmentTexture != nullptr)
 	{
 		EnvironmentTexture->Destroy();

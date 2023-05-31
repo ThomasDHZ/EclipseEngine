@@ -14,8 +14,10 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::StartUp();
 	GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
-	//modelList.emplace_back(std::make_shared<GLTF_Temp_Model>(GLTF_Temp_Model(a, glm::mat4(1.0f), 0)));
-	//if(gameObjectList.size() == 0)
+	/// <summary>
+	/// 
+	/// </summary>
+
 
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
@@ -23,9 +25,14 @@ void GLTFRenderer::BuildRenderer()
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
 	GLTFSceneManager::AddMeshGameObject3D("Sphere", d);
 	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
+
+	//	/// <summary>
+	///// 
+	///// </summary>
+
 
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
@@ -97,144 +104,84 @@ void GLTFRenderer::BuildRenderer()
 			}
 		}
 	}
-	//GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", d, instance);
+	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);
 
 
-	//std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
+	/// <summary>
+	/// 
+	/// </summary>
 
-	////std::string mario = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	////std::string mario2 = "C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp";
-	////material->AlbedoMap = std::make_shared<Texture2D>(Texture2D(mario, TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB));
- ////   material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
-	////
-	//const std::string asdf = "sprite";
-	//GLTFSceneManager::AddSpriteGameObject3D(asdf, WallMaterial);
+	std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>(Material("TestMaterial"));
+	GLTFSceneManager::UpdateBufferIndex();
+	spriteMaterial->UpdateBuffer();
+	GLTFSceneManager::AddMaterial(spriteMaterial);
 
-	////GLTFSceneManager::AddGameObject<Vertex3D>("sponza", a, GameObjectRenderType::kModelRenderer);
+	spriteMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 
-	//int width = 500;
-	//int height = 500;
-	//float length = 10.0f;
-	//float radius = 0.5f;
-	//std::vector<LineVertex3D> VertexList;
-	//for (uint32_t y = 0; y < height; y++)
-	//{
-	//    for (uint32_t x = 0; x < width; x++)
-	//    {
-	//        glm::vec2 coord = { (float)x / width, (float)y / height };
-	//        coord = coord * 2.0f - 1.0f;
+	const std::string asdf = "sprite";
+	GLTFSceneManager::AddSpriteGameObject3D(asdf, spriteMaterial);
+	
+	/// <summary>
+	/// 
+	/// </summary>
 
-	//        uint8_t r = (uint8_t)(coord.x * 255.0f);
-	//        uint8_t g = (uint8_t)(coord.y * 255.0f);
+	int width = 500;
+	int height = 500;
+	float length = 10.0f;
+	float radius = 0.5f;
+	std::vector<LineVertex3D> VertexList;
+	for (uint32_t y = 0; y < height; y++)
+	{
+		for (uint32_t x = 0; x < width; x++)
+		{
+			glm::vec2 coord = { (float)x / width, (float)y / height };
+			coord = coord * 2.0f - 1.0f;
 
-	//        glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-	//        glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
+			uint8_t r = (uint8_t)(coord.x * 255.0f);
+			uint8_t g = (uint8_t)(coord.y * 255.0f);
 
-	//        float a = glm::dot(rayDirection, rayDirection);
-	//        float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-	//        float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
+			glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
+			glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
 
-	//        //Quadratic forumla discriminat
-	//        //b^2 - 4ac;
+			float a = glm::dot(rayDirection, rayDirection);
+			float b = 2.0f * glm::dot(rayOrigin, rayDirection);
+			float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
 
-	//        float discriminant = (b * b) - 4.0f * a * c;
+			//Quadratic forumla discriminat
+			//b^2 - 4ac;
 
-	//        if (discriminant >= 0.0f)
-	//        {
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
-	//        }
-	//        else
-	//        {
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
-	//            VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
-	//        }
-	//    }
-	//}
- //   GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
+			float discriminant = (b * b) - 4.0f * a * c;
 
-	////int width2 = 20;
-	////int height2 = 20;
-	////for (uint32_t y = 0; y < height2; y++)
-	////{
-	////	for (uint32_t x = 0; x < width2; x++)
-	////	{
-	////		glm::vec2 coord = { (float)x / width2, (float)y / height2 };
-	////		coord = coord * 2.0f - 1.0f;
-
-	////		uint8_t r = (uint8_t)(coord.x * 255.0f);
-	////		uint8_t g = (uint8_t)(coord.y * 255.0f);
-
-	////		glm::vec3 rayOrigin(0.0f, 0.0f, 2.0f);
-	////		glm::vec3 rayDirection(coord.x, coord.y, -1.0f);
-
-	////		float a = glm::dot(rayDirection, rayDirection);
-	////		float b = 2.0f * glm::dot(rayOrigin, rayDirection);
-	////		float c = glm::dot(rayOrigin, rayOrigin) - radius * radius;
-
-	////		//Quadratic forumla discriminat
-	////		//b^2 - 4ac;
-
-	////		float discriminant = (b * b) - 4.0f * a * c;
-
-	////		if (discriminant >= 0.0f)
-	////		{
-	////			GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f));
-	////		}
-	////		else
-	////		{
-	////			GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 1.0f, 01.0f, 1.00f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-	////		}
-	////	}
-	////}
-	// //GLTFSceneManager::AddLineGameObject3D("Lines", glm::vec3(0.0f), glm::vec3(5.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+			if (discriminant >= 0.0f)
+			{
+				VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(1.0f, 0.0f, 0.8f, 1.0f)));
+				VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(1.0f, 0.0f, 0.8, 1.0f)));
+			}
+			else
+			{
+				VertexList.emplace_back(LineVertex3D(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec4(0.0f, 0.0f, 01.0f, 0.02f)));
+				VertexList.emplace_back(LineVertex3D(glm::vec3(coord.x, coord.y, -1.0f), glm::vec4(0.0f, 0.0f, 0.0f, 0.02f)));
+			}
+		}
+	}
+	GLTFSceneManager::AddLineGameObject3D("Lines", VertexList);
 
 	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
+	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	//GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	//GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
-
-	//environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
+	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
-	//std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
+	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
+	irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	GLTFSceneManager::IrradianceMap = irradianceRenderPass.IrradianceCubeMapList[0];
+	prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
+	GLTFSceneManager::PrefilterMap = prefilterRenderPass.PrefilterCubeMapList[0];
 
-	//PBRRenderPassTextureSubmitList submitList;
-	////submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
-	////submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
-
-	//{
-	//	//SkyBox Reflection Pass
-	//	//{
-	//	//	std::vector<std::shared_ptr<RenderedCubeMapTexture>> cubemap = { GLTFSceneManager::CubeMap };
-	//	//	skyBoxReflectionIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	//	//	skyBoxReflectionPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-
-	//	//	submitList.IrradianceTextureList = skyBoxReflectionIrradianceRenderPass.IrradianceCubeMapList;
-	//	//	submitList.PrefilterTextureList = skyBoxReflectionPrefilterRenderPass.PrefilterCubeMapList;
-
-	//	//	skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
-	//	//}
-	//	////Mesh Reflection Pass
-	//	//{
-	//	//	meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
-	//	//	meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
-
-	//	//	submitList.IrradianceTextureList = meshReflectionIrradianceRenderPass.IrradianceCubeMapList;
-	//	//	submitList.PrefilterTextureList = meshReflectionPrefilterRenderPass.PrefilterCubeMapList;
-
-	//	//	meshReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
-	//	//}
-	//	//Mesh Reflection Pass
-	////	{
-	////		irradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	////		prefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
-	////		gLTFRenderPass.BuildRenderPass(GLTFSceneManager::GameObjectList);
-	////	}
-	//}
-
-	//frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
+	gLTFRenderPass.BuildRenderPass(GLTFSceneManager::GameObjectList);
+	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 	VulkanRenderer::UpdateRendererFlag = true;
 	GLTFSceneManager::Update();
 }
@@ -305,18 +252,18 @@ void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
 	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
-	//CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(GLTFSceneManager::GameObjectList));
-	//CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(GLTFSceneManager::GameObjectList));
+	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
 void GLTFRenderer::Destroy()
 {
 	GLTFSceneManager::Destroy();
 
-	//environmentToCubeRenderPass.Destroy();
+	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
-	////irradianceRenderPass.Destroy();
-	////prefilterRenderPass.Destroy();
-	//gLTFRenderPass.Destroy();
-	//frameBufferRenderPass.Destroy();
+	irradianceRenderPass.Destroy();
+	prefilterRenderPass.Destroy();
+	gLTFRenderPass.Destroy();
+	frameBufferRenderPass.Destroy();
 }

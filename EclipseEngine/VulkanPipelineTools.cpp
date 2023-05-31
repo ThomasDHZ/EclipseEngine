@@ -351,7 +351,7 @@ VkPipelineLayoutCreateInfo VulkanPipelineTools::LoadPipelineLayoutCreateInfo()
 VkDescriptorBufferInfo VulkanPipelineTools::GetReflectionMapBuffer()
 {
     VkDescriptorBufferInfo ReflectionMapBuffer = {};
-    ReflectionMapBuffer.buffer = ReflectionMapSampler.GetVulkanBufferData().Buffer;
+  //  ReflectionMapBuffer.buffer = ReflectionMapSampler.GetVulkanBufferData().Buffer;
     ReflectionMapBuffer.offset = 0;
     ReflectionMapBuffer.range = VK_WHOLE_SIZE;
     return ReflectionMapBuffer;

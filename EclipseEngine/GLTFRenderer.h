@@ -30,7 +30,7 @@ class GLTFRenderer
 {
 private:
 	//VulkanPipelineEditor pipelineEditor;
-	//EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	////SkyBox Reflection
@@ -43,10 +43,10 @@ private:
 	//PrefilterRenderPass meshReflectionPrefilterRenderPass;
 	//PBRReflectionMeshRenderPass meshReflectionRenderPass;
 	//Main
-	//IrradianceRenderPass irradianceRenderPass;
-	//PrefilterRenderPass prefilterRenderPass;
-	//GLTFRenderPass gLTFRenderPass;
-	//FrameBufferRenderPass frameBufferRenderPass;
+	IrradianceRenderPass irradianceRenderPass;
+	PrefilterRenderPass prefilterRenderPass;
+	GLTFRenderPass gLTFRenderPass;
+	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
 	GLTFRenderer();
