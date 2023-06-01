@@ -512,8 +512,6 @@
     <None Include="..\Shaders\CubeMapToEnvironment.vert" />
     <None Include="..\Shaders\CubeMapView.frag" />
     <None Include="..\Shaders\CubeMapView.vert" />
-    <None Include="..\Shaders\DeferredRenderer.frag" />
-    <None Include="..\Shaders\DeferredRenderer.vert" />
     <None Include="..\Shaders\DepthCubeShader.frag" />
     <None Include="..\Shaders\DepthCubeShader.vert" />
     <None Include="..\Shaders\DepthDebugShader.frag" />

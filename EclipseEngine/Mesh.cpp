@@ -349,6 +349,7 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 	for (auto& primitve : PrimitiveList)
 	{
 		sceneProperties.MeshIndex = MeshBufferIndex;
+		sceneProperties.ReflectionIndex = ReflectionIndex;
 		sceneProperties.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
 		VkDeviceSize offsets[] = { 0 };
@@ -369,6 +370,7 @@ void Mesh::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet de
 	for (auto& primitve : PrimitiveList)
 	{
 		sceneProperties.MeshIndex = MeshBufferIndex;
+		sceneProperties.ReflectionIndex = ReflectionIndex;
 		sceneProperties.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
 		VkDeviceSize offsets[] = { 0 };

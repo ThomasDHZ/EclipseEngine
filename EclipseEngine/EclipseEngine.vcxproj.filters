@@ -1114,12 +1114,6 @@
     <None Include="..\Shaders\CubeMap.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\DeferredRenderer.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\DeferredRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\DepthCubeShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>

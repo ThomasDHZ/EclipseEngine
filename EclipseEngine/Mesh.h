@@ -69,6 +69,7 @@ protected:
 	uint32_t BoneCount = 0;
 	uint32_t TriangleCount = 0;
 	uint32_t InstanceCount = 0;
+	uint32_t ReflectionIndex = 0;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);

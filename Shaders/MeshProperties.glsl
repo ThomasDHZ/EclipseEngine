@@ -3,6 +3,7 @@ struct MeshProperties
 	uint VertexBufferIndex;
 	uint IndexBufferIndex;
 	uint MaterialBufferIndex;
+	uint ReflectionIndex;
 	uint AlbedoMapIndex;
 	uint MetallicRoughnessMapIndex;
 	uint AmbientOcclusionMapIndex;

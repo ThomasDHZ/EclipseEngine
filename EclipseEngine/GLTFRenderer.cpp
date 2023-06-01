@@ -282,8 +282,8 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
-	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
+	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::GameObjectList));
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(GLTFSceneManager::GameObjectList));
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
