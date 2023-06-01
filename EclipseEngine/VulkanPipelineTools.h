@@ -21,6 +21,8 @@ enum DescriptorBindingPropertiesEnum
 	kPointLightDescriptor,
 	kSpotLightDescriptor,
 	kReflectionViewDescriptor,
+	kReflectionIrradianceMapDescriptor,
+	kReflectionPrefilterMapDescriptor,
 };
 
 class VulkanPipelineTools

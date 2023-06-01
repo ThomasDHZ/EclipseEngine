@@ -185,6 +185,8 @@ void GLTFRenderer::BuildRenderer()
 			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(cubemap, GLTFSceneManager::GetPreRenderedMapSize());
 
+			GLTFSceneManager::LoadReflectionIrradianceTexture(skyBoxReflectionIrradianceRenderPass.IrradianceCubeMapList);
+			GLTFSceneManager::LoadReflectionIrradianceTexture(skyBoxReflectionPrefilterRenderPass.PrefilterCubeMapList);
 			submitList.IrradianceTextureList = skyBoxReflectionIrradianceRenderPass.IrradianceCubeMapList;
 			submitList.PrefilterTextureList = skyBoxReflectionPrefilterRenderPass.PrefilterCubeMapList;
 
@@ -195,6 +197,8 @@ void GLTFRenderer::BuildRenderer()
 			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
 			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.ReflectionCubeMapList, GLTFSceneManager::GetPreRenderedMapSize());
 
+			GLTFSceneManager::LoadReflectionIrradianceTexture(meshReflectionIrradianceRenderPass.IrradianceCubeMapList);
+			GLTFSceneManager::LoadReflectionIrradianceTexture(meshReflectionPrefilterRenderPass.PrefilterCubeMapList);
 			submitList.IrradianceTextureList = meshReflectionIrradianceRenderPass.IrradianceCubeMapList;
 			submitList.PrefilterTextureList = meshReflectionPrefilterRenderPass.PrefilterCubeMapList;
 
