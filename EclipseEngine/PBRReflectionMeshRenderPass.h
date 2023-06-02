@@ -28,7 +28,6 @@ private:
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedTexture;
 
-	CubeMapSamplerBuffer ReflectionSampler;
 	CubeMapSamplerBuffer ReflectionMapSampler;
 
 	void RenderPassDesc();
@@ -44,7 +43,7 @@ public:
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	void PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t reflectionIndex);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex);
 	void Destroy();
 };

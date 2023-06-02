@@ -83,9 +83,9 @@ SpriteMesh3D::~SpriteMesh3D()
 {
 }
 
-void SpriteMesh3D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void SpriteMesh3D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
 {
-	Mesh::DrawSprite(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
+	Mesh::DrawSprite(commandBuffer, descriptorSet, shaderPipelineLayout);
 }
 
 void SpriteMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)

@@ -349,44 +349,44 @@ void Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, 
 	}
 }
 
-void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 
-void Model::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void Model::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+		mesh->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, ReflectionIndex);
 	}
 }
 
-void Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+		mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 
-void Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+		mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 
-void Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
 		auto lineMesh = reinterpret_cast<LineMesh3D*>(mesh.get());
-		lineMesh->DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
+		lineMesh->DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout);
 	}
 }
 

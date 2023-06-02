@@ -38,7 +38,7 @@
 	    SetUpCommandBuffers();
 	}
 	
-	void PBRReflectionMeshRenderPass::PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+	void PBRReflectionMeshRenderPass::PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t reflectionIndex)
 	{
 	    SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	    RenderPassResolution = glm::vec2(cubeMapSize);
@@ -66,7 +66,7 @@
 	    CreateRendererFramebuffers(AttachmentList);
 	    BuildRenderPassPipelines(textures);
 	    SetUpCommandBuffers();
-	    Draw(gameObjectList);
+	    Draw(gameObjectList, reflectionIndex);
 	    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 	}
 	
@@ -168,7 +168,7 @@
 	
 		//Main Renderers
 		{
-			pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+			pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler);
 			skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 		}
 
@@ -201,16 +201,16 @@
 		const glm::vec3 reflectPos = reflectPoint;
 		glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-		ReflectionSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-        ReflectionSampler.Update();
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = reflectionProj * glm::lookAt(reflectPos, reflectPos + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		ReflectionMapSampler.Update();
 	}
 	
-	VkCommandBuffer PBRReflectionMeshRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+	VkCommandBuffer PBRReflectionMeshRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex)
 	{
 		UpdateView(glm::vec3(0.0f));
 
@@ -260,7 +260,7 @@
 			{
 				switch (gameObjectList[x]->RenderType)
 				{
-				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, gameObjectList[x]); break;
+				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, gameObjectList[x], reflectionIndex); break;
 					//case GameObjectRenderType::kInstanceRenderer: pbrInstancedPipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);  break;
 					//case GameObjectRenderType::kSpriteRenderer: spriteReflectionPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites); break;
 				}
@@ -287,7 +287,7 @@
 	        reflectionMap->Destroy();
 	    }
 	
-		ReflectionSampler.Destroy();
+		ReflectionMapSampler.Destroy();
 	    RenderedTexture->Destroy();
 	    DepthTexture->Destroy();
 	

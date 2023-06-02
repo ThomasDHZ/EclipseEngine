@@ -66,7 +66,8 @@ protected:
 	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments);
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
-	VkDescriptorBufferInfo GetReflectionMapBuffer();
+	VkDescriptorBufferInfo ReflectionViewBuffer;
+	VkDescriptorBufferInfo GetReflectionMapBuffer(CubeMapSamplerBuffer reflectionMapSampler);
 
 public: 
 	VkPipelineShaderStageCreateInfo LoadPipelineShaderStageCreateInfo(nlohmann::json& json);

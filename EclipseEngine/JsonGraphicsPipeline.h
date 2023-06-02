@@ -17,6 +17,7 @@ public:
 
 	JsonGraphicsPipeline();
 	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
+	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, CubeMapSamplerBuffer reflectionViewBuffer);
 	~JsonGraphicsPipeline();
 
 	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
@@ -45,34 +46,34 @@ public:
 		gameObject->Draw(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
+	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, uint32_t reflectionIndex)
 	{
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-        gameObject->DrawReflectionMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, GLTFSceneManager::sceneProperites);
+        gameObject->DrawReflectionMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, reflectionIndex);
 	}
 
-	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawInstancedMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+		gameObject->DrawInstancedMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawSprite(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	void DrawSprite(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawSprite(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+		gameObject->DrawSprite(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawLine(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	void DrawLine(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawLine(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
+		gameObject->DrawLine(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
 	void DrawTexture(VkCommandBuffer& commandBuffer)

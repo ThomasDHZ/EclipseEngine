@@ -29,16 +29,16 @@
 class GLTFRenderer
 {
 private:
-	//VulkanPipelineEditor pipelineEditor;
+	VulkanPipelineEditor pipelineEditor;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	////SkyBox Reflection
+	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
 	PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
 
-	////Mesh Reflection
+	//Mesh Reflection
 	IrradianceRenderPass meshReflectionIrradianceRenderPass;
 	PrefilterRenderPass meshReflectionPrefilterRenderPass;
 	PBRReflectionMeshRenderPass meshReflectionRenderPass;

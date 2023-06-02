@@ -312,9 +312,9 @@ void LineMesh3D::BuildGrid3D(glm::vec3 GridSize, glm::vec3 GridSpacing)
 {
 }
 
-void LineMesh3D::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void LineMesh3D::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
 {
-	Mesh::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
+	Mesh::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout);
 }
 
 void LineMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)

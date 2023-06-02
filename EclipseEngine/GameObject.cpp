@@ -16,29 +16,29 @@ void GameObject::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptor
 	GameObjectRenderer->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
-void GameObject::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void GameObject::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
-void GameObject::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void GameObject::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t reflectionIndex)
 {
-	GameObjectRenderer->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	GameObjectRenderer->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, reflectionIndex);
 }
 
-void GameObject::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void GameObject::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	GameObjectRenderer->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	GameObjectRenderer->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
-void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	GameObjectRenderer->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	GameObjectRenderer->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
-void GameObject::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
+void GameObject::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
-	GameObjectRenderer->DrawLine(commandBuffer, descriptorset, shaderPipelineLayout, sceneProperties);
+	GameObjectRenderer->DrawLine(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
 void GameObject::Update(float DeltaTime)

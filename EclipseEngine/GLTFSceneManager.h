@@ -26,7 +26,7 @@ private:
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
 	static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
 	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
-
+	
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
 
@@ -48,7 +48,7 @@ public:
 	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceMapList;
 	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterMapList;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
-
+	
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation);
@@ -123,6 +123,7 @@ public:
 	static std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer();
+	static VkDescriptorBufferInfo GetReflectionMapBuffer();
 
 	static std::vector<std::shared_ptr<GLTFSunLight>> GetSunLights() { return SunLightList; }
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }

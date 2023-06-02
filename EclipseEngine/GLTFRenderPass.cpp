@@ -191,11 +191,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x]);
                 }
                 else
                 {
-                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x]);
                 }
                 break;
             }
@@ -203,11 +203,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x]);
                 }
                 else
                 {
-                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x]);
                 }
                 break;
             }
@@ -215,17 +215,17 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    WireframePipeline.DrawSprite(commandBuffer, gameObjectList[x]);
                 }
                 else
                 {
-                    PBRPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                    PBRPipeline.DrawSprite(commandBuffer, gameObjectList[x]);
                 }
                 break;
             }
             case GameObjectRenderType::kLineRenderer3D:
             {
-                LinePipeline.DrawLine(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
                 break;
             }
         }
