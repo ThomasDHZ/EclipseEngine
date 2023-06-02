@@ -82,10 +82,10 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - material.Metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap[sceneData.ReflectionIndex], N).rgb;
+    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.ReflectionIndex], N).rgb;
     vec3 diffuse      = irradiance * material.Albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[sceneData.ReflectionIndex], R,  material.Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.ReflectionIndex], R,  material.Roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), material.Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
