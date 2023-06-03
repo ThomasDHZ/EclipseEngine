@@ -45,14 +45,19 @@ public:
 	static std::shared_ptr<Skybox> SkyboxMesh;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
-	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceMapList;
-	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterMapList;
+	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;
+	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 	
 	static void AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData);
 	static void AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position);
@@ -88,10 +93,6 @@ public:
 
 	static std::shared_ptr<Texture> LoadTexture2D(std::shared_ptr<Texture> texture);
 	static std::shared_ptr<Texture> LoadTexture2D(GLTFTextureLoader& textureLoader);
-	static void LoadReflectionIrradianceTexture(std::shared_ptr<RenderedCubeMapTexture> irradianceTexture);
-	static void LoadReflectionIrradianceTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> irradianceTextureList);
-	static void LoadReflectionPrefilterTexture(std::shared_ptr<RenderedCubeMapTexture> prefilterTexture);
-	static void LoadReflectionPrefilterTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> prefilterTextureList);
 	static void AddMaterial(const std::shared_ptr<Material> material);
 	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
 	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
@@ -108,8 +109,8 @@ public:
 
 	static void UpdateBufferIndex();
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
-	static std::vector<VkDescriptorImageInfo> GetIrradianceMapDescriptor();
-	static std::vector<VkDescriptorImageInfo> GetPrefilterMapDescriptor();
+	static VkDescriptorImageInfo GetIrradianceMapDescriptor();
+	static VkDescriptorImageInfo GetPrefilterMapDescriptor();
 	static VkDescriptorImageInfo GetCubeMapDescriptor();
 	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 
@@ -123,7 +124,6 @@ public:
 	static std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer();
-	static VkDescriptorBufferInfo GetReflectionMapBuffer();
 
 	static std::vector<std::shared_ptr<GLTFSunLight>> GetSunLights() { return SunLightList; }
 	static std::vector<std::shared_ptr<GLTFDirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }

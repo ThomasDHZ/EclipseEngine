@@ -141,7 +141,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     }
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -191,11 +191,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x]);
+                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x], 0);
                 }
                 else
                 {
-                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x]);
+                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x], 1);
                 }
                 break;
             }

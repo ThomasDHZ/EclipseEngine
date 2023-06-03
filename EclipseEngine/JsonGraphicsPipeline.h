@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <json.hpp>
+#include "ConstMeshInfo.h"
 
 #include "VulkanPipelineTools.h"
 
@@ -17,7 +18,7 @@ public:
 
 	JsonGraphicsPipeline();
 	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
-	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, CubeMapSamplerBuffer reflectionViewBuffer);
+	JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, CubeMapSamplerBuffer& reflectionViewBuffer, PBRRenderPassTextureSubmitList& submitList);
 	~JsonGraphicsPipeline();
 
 	void LoadGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer);
@@ -46,10 +47,10 @@ public:
 		gameObject->Draw(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
+	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, uint32_t reflectionIndex)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
+		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, reflectionIndex);
 	}
 
 	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, uint32_t reflectionIndex)

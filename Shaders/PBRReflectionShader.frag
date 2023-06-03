@@ -24,8 +24,8 @@ layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[]
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
 layout(binding = 4) uniform sampler2D BRDFMap;
-layout(binding = 5) uniform samplerCube IrradianceMap[];
-layout(binding = 6) uniform samplerCube PrefilterMap[];
+layout(binding = 5) uniform samplerCube IrradianceMap;
+layout(binding = 6) uniform samplerCube PrefilterMap;
 layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
 layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
@@ -82,10 +82,10 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - material.Metallic;	  
     
-    vec3 irradiance = texture(IrradianceMap[meshBuffer[sceneData.MeshIndex].meshProperties.ReflectionIndex], N).rgb;
+    vec3 irradiance = texture(IrradianceMap, N).rgb;
     vec3 diffuse      = irradiance * material.Albedo;
 
-    vec3 prefilteredColor = textureLod(PrefilterMap[meshBuffer[sceneData.MeshIndex].meshProperties.ReflectionIndex], R,  material.Roughness * sceneData.PBRMaxMipLevel).rgb;    
+    vec3 prefilteredColor = textureLod(PrefilterMap, R,  material.Roughness * sceneData.PBRMaxMipLevel).rgb;    
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), material.Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 

@@ -6,8 +6,8 @@ std::vector<std::shared_ptr<Material>>				 GLTFSceneManager::MaterialList;
 std::vector<std::shared_ptr<Texture>>				 GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>					 GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>				 GLTFSceneManager::BRDFTexture = nullptr;
-std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::IrradianceMapList;
-std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::PrefilterMapList;
+std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::IrradianceMap = nullptr;
+std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::PrefilterMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<GLTFSunLight>>			 GLTFSceneManager::SunLightList;
@@ -15,8 +15,8 @@ std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::Directiona
 std::vector<std::shared_ptr<GLTFPointLight>>		 GLTFSceneManager::PointLightList;
 std::vector<std::shared_ptr<GLTFSpotLight>>			 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
-float												 GLTFSceneManager::PBRCubeMapSize = 64.0f;
-float												 GLTFSceneManager::PreRenderedMapSize = 64.0f;
+float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
+float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
@@ -102,37 +102,36 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	return texture;
 }
 
-void GLTFSceneManager::LoadReflectionIrradianceTexture(std::shared_ptr<RenderedCubeMapTexture> irradianceTexture)
-{
-	IrradianceMapList.emplace_back(irradianceTexture);
-}
-
-void GLTFSceneManager::LoadReflectionIrradianceTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> irradianceTextureList)
-{
-	for (auto& texture : irradianceTextureList)
-	{
-		IrradianceMapList.emplace_back(texture);
-	}
-}
-
-void GLTFSceneManager::LoadReflectionPrefilterTexture(std::shared_ptr<RenderedCubeMapTexture> prefilterTexture)
-{
-	PrefilterMapList.emplace_back(prefilterTexture);
-}
-
-void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> prefilterTextureList)
-{
-	for (auto& texture : prefilterTextureList)
-	{
-		PrefilterMapList.emplace_back(texture);
-	}
-}
-
 void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
 }
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position)
+ {
+	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position)));
+	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+ }
+
+ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
+ {
+	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation)));
+	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+ }
+
+ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+ {
+	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation, scale)));
+	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+ }
+
 
 void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position)
 {
@@ -512,14 +511,10 @@ void GLTFSceneManager::Destroy()
 	{
 		light->Destroy();
 	}
-	for (auto& cubeMap : IrradianceMapList)
-	{
-		cubeMap->Destroy();
-	}
-	for (auto& cubeMap : PrefilterMapList)
-	{
-		cubeMap->Destroy();
-	}
+
+		IrradianceMap->Destroy();
+		PrefilterMap->Destroy();
+
 	if (EnvironmentTexture != nullptr)
 	{
 		EnvironmentTexture->Destroy();
@@ -544,52 +539,36 @@ VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
 		BRDFMapDescriptor.sampler = BRDFTexture->GetSampler();
 		return BRDFMapDescriptor;
 	}
+	 
+	return GetNullDescriptor();
+}
+
+VkDescriptorImageInfo GLTFSceneManager::GetIrradianceMapDescriptor()
+{
+	if (IrradianceMap != nullptr)
+	{
+		VkDescriptorImageInfo IrradianceMapDescriptor{};
+		IrradianceMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		IrradianceMapDescriptor.imageView = IrradianceMap->GetView();
+		IrradianceMapDescriptor.sampler = IrradianceMap->GetSampler();
+		return IrradianceMapDescriptor;
+	}
 
 	return GetNullDescriptor();
 }
 
-std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetIrradianceMapDescriptor()
+VkDescriptorImageInfo GLTFSceneManager::GetPrefilterMapDescriptor()
 {
-	std::vector<VkDescriptorImageInfo>	irradianceCubeMapBufferList;
-	if (IrradianceMapList.size() == 0)
+	if (PrefilterMap != nullptr)
 	{
-		irradianceCubeMapBufferList.emplace_back(GLTFSceneManager::GetNullDescriptor());
-	}
-	else
-	{
-		for (auto& cubeMap : IrradianceMapList)
-		{
-			VkDescriptorImageInfo irradianceCubeMapDescriptor{};
-			irradianceCubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			irradianceCubeMapDescriptor.imageView = cubeMap->GetView();
-			irradianceCubeMapDescriptor.sampler = cubeMap->GetSampler();
-			irradianceCubeMapBufferList.emplace_back(irradianceCubeMapDescriptor);
-		}
+		VkDescriptorImageInfo PrefilterMapDescriptor{};
+		PrefilterMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		PrefilterMapDescriptor.imageView = PrefilterMap->GetView();
+		PrefilterMapDescriptor.sampler = PrefilterMap->GetSampler();
+		return PrefilterMapDescriptor;
 	}
 
-	return irradianceCubeMapBufferList;
-}
-
-std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetPrefilterMapDescriptor()
-{
-	std::vector<VkDescriptorImageInfo>	prefilterCubeMapBufferList;
-	if (PrefilterMapList.size() == 0)
-	{
-		prefilterCubeMapBufferList.emplace_back(GLTFSceneManager::GetNullDescriptor());
-	}
-	else
-	{
-		for (auto& cubeMap : PrefilterMapList)
-		{
-			VkDescriptorImageInfo prefilterCubeMapDescriptor{};
-			prefilterCubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-			prefilterCubeMapDescriptor.imageView = cubeMap->GetView();
-			prefilterCubeMapDescriptor.sampler = cubeMap->GetSampler();
-			prefilterCubeMapBufferList.emplace_back(prefilterCubeMapDescriptor);
-		}
-	}
-
-	return prefilterCubeMapBufferList;
+	return GetNullDescriptor();
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()

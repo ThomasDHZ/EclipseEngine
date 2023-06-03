@@ -168,7 +168,7 @@
 	
 		//Main Renderers
 		{
-			pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler);
+			pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler, textures);
 			skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
 		}
 

@@ -26,7 +26,7 @@ public:
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
 	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
-	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex);
 	void Destroy();
 };
 

@@ -77,8 +77,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kMaterialDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size() }); break;
             case kTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size() }); break;
             case kBRDFMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
-            case kIrradianceMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t) GLTFSceneManager::GetIrradianceMapDescriptor().size() }); break;
-            case kPrefilterMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPrefilterMapDescriptor().size() }); break;
+            case kIrradianceMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kPrefilterMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kCubeMapDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kEnvironmentDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kSunLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size() }); break;
@@ -100,8 +100,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kMaterialDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetMaterialPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kTextureDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetTexturePropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kBRDFMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
-            case kIrradianceMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t) GLTFSceneManager::GetIrradianceMapDescriptor().size() , VK_SHADER_STAGE_ALL }); break;
-            case kPrefilterMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t) GLTFSceneManager::GetPrefilterMapDescriptor().size(), VK_SHADER_STAGE_ALL }); break;
+            case kIrradianceMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1 , VK_SHADER_STAGE_ALL }); break;
+            case kPrefilterMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kCubeMapDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kEnvironmentDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kSunLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSunLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
@@ -123,8 +123,30 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kMaterialDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetMaterialPropertiesBuffer()); break;
             case kTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetTexturePropertiesBuffer()); break;
             case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
-            case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor()); break;
-            case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor()); break;
+            case kIrradianceMapDescriptor:
+            {
+                if (ReflectionIrradianceBuffer.Used)
+                {
+                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionIrradianceBuffer.ImageInfo);
+                }
+                else
+                {
+                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor());
+                }
+                break;
+            }
+            case kPrefilterMapDescriptor: 
+            {
+                if (ReflectionPrefilterBuffer.Used)
+                {
+                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionPrefilterBuffer.ImageInfo);
+                }
+                else
+                {
+                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor());
+                }
+                break;
+            }
             case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
             case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
             case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
@@ -349,7 +371,7 @@ VkPipelineLayoutCreateInfo VulkanPipelineTools::LoadPipelineLayoutCreateInfo()
     return pipelineLayoutCreateInfo;
 }
 
-VkDescriptorBufferInfo VulkanPipelineTools::GetReflectionMapBuffer(CubeMapSamplerBuffer reflectionMapSampler)
+void VulkanPipelineTools::LoadReflectionSamplerBuffer(CubeMapSamplerBuffer& reflectionMapSampler)
 {
     VkDescriptorBufferInfo ReflectionMapBuffer = {};
     ReflectionMapBuffer.buffer = reflectionMapSampler.GetVulkanBufferData().Buffer;
@@ -357,7 +379,22 @@ VkDescriptorBufferInfo VulkanPipelineTools::GetReflectionMapBuffer(CubeMapSample
     ReflectionMapBuffer.range = VK_WHOLE_SIZE;
 
     ReflectionViewBuffer = ReflectionMapBuffer;
-    return ReflectionMapBuffer;
+}
+
+void VulkanPipelineTools::LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap)
+{
+    ReflectionIrradianceBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    ReflectionIrradianceBuffer.ImageInfo.imageView = reflectionIrradianceMap->GetView();
+    ReflectionIrradianceBuffer.ImageInfo.sampler = reflectionIrradianceMap->GetSampler();
+    ReflectionIrradianceBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadReflectionReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionReflectionPrefilterMap)
+{
+    ReflectionPrefilterBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    ReflectionPrefilterBuffer.ImageInfo.imageView = reflectionReflectionPrefilterMap->GetView();
+    ReflectionPrefilterBuffer.ImageInfo.sampler = reflectionReflectionPrefilterMap->GetSampler();
+    ReflectionPrefilterBuffer.Used = true;
 }
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)

@@ -42,6 +42,7 @@ private:
 	IrradianceRenderPass meshReflectionIrradianceRenderPass;
 	PrefilterRenderPass meshReflectionPrefilterRenderPass;
 	PBRReflectionMeshRenderPass meshReflectionRenderPass;
+
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

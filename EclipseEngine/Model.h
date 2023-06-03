@@ -148,6 +148,54 @@ public:
 	}
 
 	template <class T>
+	void LoadModel(const std::string FilePath, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+	{
+		GenerateID();
+
+		ParentGameObjectID = gameObjectID;
+		GameObjectTransformMatrix = GameObjectMatrix;
+		//ModelTransformMatrix = gltfModelData.NodeList[0]->ModelTransformMatrix;
+
+		GLTFModel model = GLTFModel(FilePath.c_str());
+		GLTFModelData gltfModelData = model.GetModelData();
+
+		std::vector<T> VertexList = GetVertexData<T>(gltfModelData.VertexList);
+		std::vector<uint32_t> IndexList = gltfModelData.IndexList;
+
+		LoadMaterials(gltfModelData.MaterialList);
+		LoadLights(gltfModelData);
+
+		VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(VertexList.data(), VertexList.size() * sizeof(T), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+		IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(IndexList.data(), IndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+		for (auto& node : gltfModelData.NodeList)
+		{
+			GLTFMeshLoader3D GltfMeshLoader;
+			GltfMeshLoader.node = node;
+			GltfMeshLoader.ParentGameObjectID = ParentGameObjectID;
+			GltfMeshLoader.ParentModelID = ModelID;
+			GltfMeshLoader.NodeID = node->NodeID;
+			GltfMeshLoader.VertexBuffer = VertexBuffer;
+			GltfMeshLoader.IndexBuffer = IndexBuffer;
+			GltfMeshLoader.VertexCount = VertexList.size();
+			GltfMeshLoader.IndexCount = IndexList.size();
+			GltfMeshLoader.BoneCount = 0;
+			GltfMeshLoader.GameObjectTransform = GameObjectMatrix;
+			GltfMeshLoader.ModelTransform = node->ModelTransformMatrix;
+			GltfMeshLoader.gltfMaterialList.emplace_back(material);
+
+			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
+			MeshList.emplace_back(mesh);
+		}
+
+		Update(GameObjectMatrix);
+		UpdateMeshPropertiesBuffer();
+		for (auto& mesh : MeshList)
+		{
+			mesh->UpdateMeshTransformBuffer();
+		}
+	}
+
+	template <class T>
 	void LoadModel(const std::string FilePath, GLTFInstancingDataStruct& instanceData, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 	{
 		GenerateID();
@@ -361,7 +409,7 @@ public:
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
 	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
-	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex);
 	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex);
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);

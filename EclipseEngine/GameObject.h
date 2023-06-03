@@ -120,6 +120,14 @@ public:
 	}
 
 	template <class T>
+	void LoadRenderObject(const std::string& fileName, std::shared_ptr<Material> material)
+	{
+		GameObjectRenderer = std::make_shared<Model>(Model());
+		GameObjectRenderer->LoadModel<T>(fileName, material, GameObjectTransform, GameObjectID);
+		VulkanRenderer::UpdateRendererFlag = true;
+	}
+
+	template <class T>
 	void LoadRenderObject(const std::string& fileName, GLTFInstancingDataStruct& instanceData)
 	{
 		GameObjectRenderer = std::make_shared<Model>(Model());
@@ -159,7 +167,7 @@ public:
 
 
 	virtual void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
-	virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
+	virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t reflectionIndex);
 	virtual void DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t reflectionIndex);
 	virtual void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	virtual void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);

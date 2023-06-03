@@ -344,7 +344,7 @@ void Mesh::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, V
 	}
 }
 
-void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
+void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex)
 {
 	for (auto& primitve : PrimitiveList)
 	{
