@@ -8,7 +8,7 @@ PrefilterRenderPass::~PrefilterRenderPass()
 {
 }
 
-void PrefilterRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize)
+void PrefilterRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -16,18 +16,12 @@ void PrefilterRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedCu
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        for (int x = 0; x < cubeMapList.size(); x++)
-        {
-            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
-        }
+        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        for (int x = 0; x < cubeMapList.size(); x++)
-        {
-            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
-        }
+        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
         RenderPass::Destroy();
     }
 
@@ -36,11 +30,11 @@ void PrefilterRenderPass::BuildRenderPass(std::vector<std::shared_ptr<RenderedCu
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(cubeMapList);
+    BuildRenderPassPipelines(cubeMap);
     SetUpCommandBuffers();
 }
 
-void PrefilterRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -48,18 +42,12 @@ void PrefilterRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMa
     if (renderPass == nullptr)
     {
         DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
-        for (int x = 0; x < cubeMapList.size(); x++)
-        {
-            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
-        }
+        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
     }
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        for (int x = 0; x < cubeMapList.size(); x++)
-        {
-            PrefilterCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels)));
-        }
+        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
         RenderPass::Destroy();
     }
 
@@ -68,7 +56,7 @@ void PrefilterRenderPass::OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMa
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(cubeMapList);
+    BuildRenderPassPipelines(cubeMap);
     SetUpCommandBuffers();
     Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
@@ -136,7 +124,7 @@ void PrefilterRenderPass::RenderPassDesc()
     }
 }
 
-void PrefilterRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList)
+void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture>& cubeMap)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -156,19 +144,17 @@ void PrefilterRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<R
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    PrefilterPipeline.LoadGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings));
+    PrefilterPipeline = JsonGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings), cubeMap);
 }
 
 VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
 {
-    for (int x = 0; x < PrefilterCubeMapList.size(); x++)
+
+    if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
+        PrefilterCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
     {
-        if (DrawToCubeMap->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL &&
-            PrefilterCubeMapList[x]->GetImageLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
-        {
-            DrawToCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            PrefilterCubeMapList[x]->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
-        }
+        DrawToCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        PrefilterCubeMap->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
     }
 
     VkCommandBufferBeginInfo beginInfo{};
@@ -200,33 +186,31 @@ VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
     if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
     }
-    for (int x = 0; x < PrefilterCubeMapList.size(); x++)
+
+    PrefilterCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
+    for (unsigned int mip = 0; mip < CubeMapMipLevels; mip++)
     {
-        prefiliter.CubeMapId = x;
-        PrefilterCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 0);
-        for (unsigned int mip = 0; mip < CubeMapMipLevels; mip++)
-        {
-            VkViewport viewport{};
-            viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
-            viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
+        VkViewport viewport{};
+        viewport.width = static_cast<float>(RenderPassResolution.x * std::pow(0.5f, mip));
+        viewport.height = static_cast<float>(RenderPassResolution.y * std::pow(0.5f, mip));
+        viewport.minDepth = 0.0f;
+        viewport.maxDepth = 1.0f;
 
-            prefiliter.SkyboxSize = RenderPassResolution.x;
-            prefiliter.roughness = (float)mip / (float)(CubeMapMipLevels - 1);
+        prefiliter.SkyboxSize = RenderPassResolution.x;
+        prefiliter.roughness = (float)mip / (float)(CubeMapMipLevels - 1);
 
-            vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-            vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-            PrefilterPipeline.DrawCubeMap<PrefilterSkyboxSettings>(commandBuffer, prefiliter);
-            vkCmdEndRenderPass(commandBuffer);
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        PrefilterPipeline.DrawCubeMap<PrefilterSkyboxSettings>(commandBuffer, prefiliter);
+        vkCmdEndRenderPass(commandBuffer);
 
-            DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-            Texture::CopyCubeMap(commandBuffer, DrawToCubeMap, PrefilterCubeMapList[x], mip);
-            DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        }
-        PrefilterCubeMapList[x]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+        DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        Texture::CopyCubeMap(commandBuffer, DrawToCubeMap, PrefilterCubeMap, mip);
+        DrawToCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
     }
+    PrefilterCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, 0);
+
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
@@ -236,10 +220,7 @@ VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)
 
 void PrefilterRenderPass::Destroy()
 {
-    for (auto prefilterMap : PrefilterCubeMapList)
-    {
-        prefilterMap->Destroy();
-    }
+    PrefilterCubeMap->Destroy();
     DrawToCubeMap->Destroy();
     PrefilterPipeline.Destroy();
     RenderPass::Destroy();

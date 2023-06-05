@@ -6,15 +6,14 @@ std::vector<std::shared_ptr<Material>>				 GLTFSceneManager::MaterialList;
 std::vector<std::shared_ptr<Texture>>				 GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>					 GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>				 GLTFSceneManager::BRDFTexture = nullptr;
-std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<GLTFSunLight>>			 GLTFSceneManager::SunLightList;
 std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::DirectionalLightList;
 std::vector<std::shared_ptr<GLTFPointLight>>		 GLTFSceneManager::PointLightList;
 std::vector<std::shared_ptr<GLTFSpotLight>>			 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
-float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
-float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
+float												 GLTFSceneManager::PBRCubeMapSize = 2048.0f;
+float												 GLTFSceneManager::PreRenderedMapSize = 2048.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
@@ -517,10 +516,6 @@ void GLTFSceneManager::Destroy()
 	{
 		BRDFTexture->Destroy();
 	}
-	if (CubeMap != nullptr)
-	{
-		CubeMap->Destroy();
-	}
 }
 
 VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
@@ -534,20 +529,6 @@ VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
 		return BRDFMapDescriptor;
 	}
 	 
-	return GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()
-{
-	if (CubeMap != nullptr)
-	{
-		VkDescriptorImageInfo CubeMapDescriptor{};
-		CubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		CubeMapDescriptor.imageView = CubeMap->GetView();
-		CubeMapDescriptor.sampler = CubeMap->GetSampler();
-		return CubeMapDescriptor;
-	}
-
 	return GetNullDescriptor();
 }
 

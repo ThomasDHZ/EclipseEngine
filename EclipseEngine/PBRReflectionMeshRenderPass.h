@@ -39,11 +39,11 @@ public:
 	PBRReflectionMeshRenderPass();
 	~PBRReflectionMeshRenderPass();
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> ReflectionCubeMapList;
+	std::shared_ptr<RenderedCubeMapTexture> RenderedReflectionCubeMap;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t reflectionIndex);
-	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex);
+	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
+	VkCommandBuffer Draw();
 	void Destroy();
 };

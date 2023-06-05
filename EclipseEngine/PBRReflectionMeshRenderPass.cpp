@@ -17,14 +17,14 @@
 		{
 			RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 			DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-			ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+			RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
 		}
 		else
 		{
 			ClearTextureList();
 			RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 			DepthTexture->RecreateRendererTexture(RenderPassResolution);
-			ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+			RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
 			RenderPass::Destroy();
 		}
 	
@@ -38,7 +38,7 @@
 	    SetUpCommandBuffers();
 	}
 	
-	void PBRReflectionMeshRenderPass::PreRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList, PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, uint32_t reflectionIndex)
+	void PBRReflectionMeshRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 	{
 	    SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	    RenderPassResolution = glm::vec2(cubeMapSize);
@@ -47,14 +47,14 @@
 		{
 			RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 			DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-			ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+			RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
 		}
 		else
 		{
 			ClearTextureList();
 			RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 			DepthTexture->RecreateRendererTexture(RenderPassResolution);
-			ReflectionCubeMapList.emplace_back(std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount)));
+			RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
 			RenderPass::Destroy();
 		}
 	
@@ -66,7 +66,7 @@
 	    CreateRendererFramebuffers(AttachmentList);
 	    BuildRenderPassPipelines(textures);
 	    SetUpCommandBuffers();
-	    Draw(gameObjectList, reflectionIndex);
+	    Draw();
 	    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 	}
 	
@@ -169,7 +169,7 @@
 		//Main Renderers
 		{
 			pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler, textures);
-			skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
+			skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
 		}
 
 		//Instanced Renderers
@@ -189,11 +189,7 @@
 	
 	void PBRReflectionMeshRenderPass::ClearTextureList()
 	{
-	    for (auto& reflectionTexture : ReflectionCubeMapList)
-	    {
-	        reflectionTexture->Destroy();
-	    }
-	    ReflectionCubeMapList.clear();
+		RenderedReflectionCubeMap->Destroy();
 	}
 
 	void PBRReflectionMeshRenderPass::UpdateView(glm::vec3 reflectPoint)
@@ -210,7 +206,7 @@
 		ReflectionMapSampler.Update();
 	}
 	
-	VkCommandBuffer PBRReflectionMeshRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex)
+	VkCommandBuffer PBRReflectionMeshRenderPass::Draw()
 	{
 		UpdateView(glm::vec3(0.0f));
 
@@ -250,17 +246,17 @@
 	
 	    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
 	    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-	    for (int x = 0; x < gameObjectList.size(); x++)
+	    for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
 	    {
 	        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 	
 	       // const std::shared_ptr<Mesh> reflectingMesh = gameObjectList[0]->GameObjectPosition();
 			skyboxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
-			for (int x = 0; x < gameObjectList.size(); x++)
+			for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
 			{
-				switch (gameObjectList[x]->RenderType)
+				switch (GLTFSceneManager::GameObjectList[x]->RenderType)
 				{
-				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, gameObjectList[x], reflectionIndex); break;
+				case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]); break;
 					//case GameObjectRenderType::kInstanceRenderer: pbrInstancedPipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);  break;
 					//case GameObjectRenderType::kSpriteRenderer: spriteReflectionPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites); break;
 				}
@@ -268,9 +264,9 @@
 	        vkCmdEndRenderPass(commandBuffer);
 	
 	        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-	        ReflectionCubeMapList[0]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	        Texture::CopyCubeMap(commandBuffer, RenderedTexture, ReflectionCubeMapList[0]);
-	        ReflectionCubeMapList[0]->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			RenderedReflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	        Texture::CopyCubeMap(commandBuffer, RenderedTexture, RenderedReflectionCubeMap);
+			RenderedReflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 	        RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 	    }
 	    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -282,10 +278,9 @@
 	
 	void PBRReflectionMeshRenderPass::Destroy()
 	{
-	    for (auto reflectionMap : ReflectionCubeMapList)
-	    {
-	        reflectionMap->Destroy();
-	    }
+
+		RenderedReflectionCubeMap->Destroy();
+
 	
 		ReflectionMapSampler.Destroy();
 	    RenderedTexture->Destroy();

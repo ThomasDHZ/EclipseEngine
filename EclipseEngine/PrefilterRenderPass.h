@@ -9,7 +9,7 @@ private:
 	uint32_t CubeMapMipLevels = 0;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture>& cubeMap);
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
 	JsonGraphicsPipeline PrefilterPipeline;
@@ -19,10 +19,10 @@ public:
 	~PrefilterRenderPass();
 
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterCubeMapList;
+	std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize);
-	void OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize);
+	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
 	VkCommandBuffer Draw(glm::vec3 DrawPosition = glm::vec3(0.0f));
 	void Destroy();
 };

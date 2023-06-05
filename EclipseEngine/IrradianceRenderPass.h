@@ -12,7 +12,7 @@ private:
 	JsonGraphicsPipeline IrradiancePipeline;
 
 	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList);
+	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMap);
 
 	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
 
@@ -20,10 +20,10 @@ public:
 	IrradianceRenderPass();
 	~IrradianceRenderPass();
 
-	std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceCubeMapList;
+	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize);
-	void OneTimeDraw(std::vector<std::shared_ptr<RenderedCubeMapTexture>>& cubeMapList, uint32_t cubeMapSize);
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize);
+	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

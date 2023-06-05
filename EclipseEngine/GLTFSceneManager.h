@@ -45,7 +45,6 @@ public:
 	static std::shared_ptr<Skybox> SkyboxMesh;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
-	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
@@ -107,7 +106,6 @@ public:
 
 	static void UpdateBufferIndex();
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
-	static VkDescriptorImageInfo GetCubeMapDescriptor();
 	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 
 	static std::vector<VkDescriptorBufferInfo> GetVertexPropertiesBuffer();

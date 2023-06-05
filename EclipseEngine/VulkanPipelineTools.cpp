@@ -125,7 +125,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
             case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionIrradianceBuffer.ImageInfo); break;
             case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionPrefilterBuffer.ImageInfo); break;
-            case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
+            case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, CubeMapbuffer.ImageInfo); break;
             case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
             case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
             case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
@@ -367,7 +367,15 @@ void VulkanPipelineTools::LoadReflectionIrradianceMapBuffer(std::shared_ptr<Rend
     ReflectionIrradianceBuffer.Used = true;
 }
 
-void VulkanPipelineTools::LoadReflectionReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionReflectionPrefilterMap)
+void VulkanPipelineTools::LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture> cubeMap)
+{
+    CubeMapbuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    CubeMapbuffer.ImageInfo.imageView = cubeMap->GetView();
+    CubeMapbuffer.ImageInfo.sampler = cubeMap->GetSampler();
+    CubeMapbuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionReflectionPrefilterMap)
 {
     ReflectionPrefilterBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     ReflectionPrefilterBuffer.ImageInfo.imageView = reflectionReflectionPrefilterMap->GetView();

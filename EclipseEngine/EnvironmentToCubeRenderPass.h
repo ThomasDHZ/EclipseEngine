@@ -15,6 +15,8 @@ public:
 	EnvironmentToCubeRenderPass();
 	~EnvironmentToCubeRenderPass();
 
+	std::shared_ptr<RenderedCubeMapTexture> RenderedCubeMap;
+
 	void BuildRenderPass(uint32_t cubeMapSize);
 	VkCommandBuffer Draw();
 	void OneTimeDraw(uint32_t cubeMapSize);

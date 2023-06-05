@@ -349,19 +349,19 @@ void Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, 
 	}
 }
 
-void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex)
+void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, ReflectionIndex);
+		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 
-void Model::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex)
+void Model::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)
 	{
-		mesh->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, ReflectionIndex);
+		mesh->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 	}
 }
 

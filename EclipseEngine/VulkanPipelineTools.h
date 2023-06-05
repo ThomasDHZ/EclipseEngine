@@ -23,7 +23,7 @@ enum DescriptorBindingPropertiesEnum
 	kReflectionViewDescriptor
 };
 
-struct ReflectionBindingLock
+struct DescriptorBindingLock
 {
 	bool Used = false;
 	VkDescriptorImageInfo ImageInfo;
@@ -73,11 +73,13 @@ protected:
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
 	VkDescriptorBufferInfo ReflectionViewBuffer;
-	ReflectionBindingLock ReflectionIrradianceBuffer;
-	ReflectionBindingLock ReflectionPrefilterBuffer;
+	DescriptorBindingLock ReflectionIrradianceBuffer;
+	DescriptorBindingLock ReflectionPrefilterBuffer;
+	DescriptorBindingLock CubeMapbuffer;
 	void LoadReflectionSamplerBuffer(CubeMapSamplerBuffer& reflectionMapSampler);
 	void LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionIrradianceMap);
-	void LoadReflectionReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionReflectionPrefilterMap);
+	void LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionPrefilterMap);
+	void LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 cubeMap);
 
 public: 
 	VkPipelineShaderStageCreateInfo LoadPipelineShaderStageCreateInfo(nlohmann::json& json);
