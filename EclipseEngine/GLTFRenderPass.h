@@ -17,7 +17,7 @@ class GLTFRenderPass : public RenderPass
 		JsonGraphicsPipeline SkyBoxPipeline;
 
 		void RenderPassDesc();
-		void BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
+		void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
 	GLTFRenderPass();
@@ -25,8 +25,8 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList);
-	VkCommandBuffer Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex);
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
+	VkCommandBuffer Draw();
 	void Destroy();
 };
 

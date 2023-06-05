@@ -8,7 +8,7 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+void GLTFRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
 {
     SampleCount = GraphicsDevice::GetMaxSampleCount();
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
@@ -34,7 +34,7 @@ void GLTFRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GameObject>>& g
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
-    BuildRenderPassPipelines(gameObjectList);
+    BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
 }
 
@@ -98,7 +98,7 @@ void GLTFRenderPass::RenderPassDesc()
 
 }
 
-void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+void GLTFRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
     VkPipelineColorBlendAttachmentState ColorAttachment;
     ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -121,8 +121,8 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
     //Main Renderers
     {
         LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+       // WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
         SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView));
     }
 
@@ -136,12 +136,12 @@ void GLTFRenderPass::BuildRenderPassPipelines(std::vector<std::shared_ptr<GameOb
         attributeDescriptions = Vertex3D::getAttributeDescriptions();
         attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
 
-        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        WireframeInstancePipeline = JsonGraphicsPipeline("WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
+        //WireframeInstancePipeline = JsonGraphicsPipeline("WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     }
 }
 
-VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList, uint32_t reflectionIndex)
+VkCommandBuffer GLTFRenderPass::Draw()
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -183,19 +183,19 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
 
     SkyBoxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
-    for (int x = 0; x < gameObjectList.size(); x++)
+    for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
     {
-        switch (gameObjectList[x]->RenderType)
+        switch (GLTFSceneManager::GameObjectList[x]->RenderType)
         {
             case GameObjectRenderType::kModelRenderer:
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                   WireframePipeline.DrawMesh(commandBuffer, gameObjectList[x], 0);
+                   WireframePipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], 0);
                 }
                 else
                 {
-                    PBRPipeline.DrawMesh(commandBuffer, gameObjectList[x], 1);
+                    PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], 1);
                 }
                 break;
             }
@@ -203,11 +203,11 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x]);
+                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                 }
                 else
                 {
-                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x]);
+                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                 }
                 break;
             }
@@ -215,17 +215,17 @@ VkCommandBuffer GLTFRenderPass::Draw(std::vector<std::shared_ptr<GameObject>>& g
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipeline.DrawSprite(commandBuffer, gameObjectList[x]);
+                    WireframePipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                 }
                 else
                 {
-                    PBRPipeline.DrawSprite(commandBuffer, gameObjectList[x]);
+                    PBRPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                 }
                 break;
             }
             case GameObjectRenderType::kLineRenderer3D:
             {
-                LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
+                LinePipeline.DrawLine(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                 break;
             }
         }

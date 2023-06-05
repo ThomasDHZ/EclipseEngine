@@ -123,30 +123,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kMaterialDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetMaterialPropertiesBuffer()); break;
             case kTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetTexturePropertiesBuffer()); break;
             case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
-            case kIrradianceMapDescriptor:
-            {
-                if (ReflectionIrradianceBuffer.Used)
-                {
-                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionIrradianceBuffer.ImageInfo);
-                }
-                else
-                {
-                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetIrradianceMapDescriptor());
-                }
-                break;
-            }
-            case kPrefilterMapDescriptor: 
-            {
-                if (ReflectionPrefilterBuffer.Used)
-                {
-                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionPrefilterBuffer.ImageInfo);
-                }
-                else
-                {
-                    AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPrefilterMapDescriptor());
-                }
-                break;
-            }
+            case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionIrradianceBuffer.ImageInfo); break;
+            case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionPrefilterBuffer.ImageInfo); break;
             case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapDescriptor()); break;
             case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
             case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;

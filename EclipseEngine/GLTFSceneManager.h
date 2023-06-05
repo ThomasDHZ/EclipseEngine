@@ -45,8 +45,6 @@ public:
 	static std::shared_ptr<Skybox> SkyboxMesh;
 	static std::shared_ptr<EnvironmentTexture>     EnvironmentTexture;
 	static std::shared_ptr<RenderedColorTexture>   BRDFTexture;
-	static std::shared_ptr<RenderedCubeMapTexture> IrradianceMap;
-	static std::shared_ptr<RenderedCubeMapTexture> PrefilterMap;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
@@ -109,8 +107,6 @@ public:
 
 	static void UpdateBufferIndex();
 	static VkDescriptorImageInfo GetBRDFMapDescriptor();
-	static VkDescriptorImageInfo GetIrradianceMapDescriptor();
-	static VkDescriptorImageInfo GetPrefilterMapDescriptor();
 	static VkDescriptorImageInfo GetCubeMapDescriptor();
 	static VkDescriptorImageInfo GetEnvironmentMapDescriptor();
 

@@ -6,8 +6,6 @@ std::vector<std::shared_ptr<Material>>				 GLTFSceneManager::MaterialList;
 std::vector<std::shared_ptr<Texture>>				 GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>					 GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>				 GLTFSceneManager::BRDFTexture = nullptr;
-std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::IrradianceMap = nullptr;
-std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::PrefilterMap = nullptr;
 std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<GLTFSunLight>>			 GLTFSceneManager::SunLightList;
@@ -511,10 +509,6 @@ void GLTFSceneManager::Destroy()
 	{
 		light->Destroy();
 	}
-
-		IrradianceMap->Destroy();
-		PrefilterMap->Destroy();
-
 	if (EnvironmentTexture != nullptr)
 	{
 		EnvironmentTexture->Destroy();
@@ -540,34 +534,6 @@ VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
 		return BRDFMapDescriptor;
 	}
 	 
-	return GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFSceneManager::GetIrradianceMapDescriptor()
-{
-	if (IrradianceMap != nullptr)
-	{
-		VkDescriptorImageInfo IrradianceMapDescriptor{};
-		IrradianceMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		IrradianceMapDescriptor.imageView = IrradianceMap->GetView();
-		IrradianceMapDescriptor.sampler = IrradianceMap->GetSampler();
-		return IrradianceMapDescriptor;
-	}
-
-	return GetNullDescriptor();
-}
-
-VkDescriptorImageInfo GLTFSceneManager::GetPrefilterMapDescriptor()
-{
-	if (PrefilterMap != nullptr)
-	{
-		VkDescriptorImageInfo PrefilterMapDescriptor{};
-		PrefilterMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		PrefilterMapDescriptor.imageView = PrefilterMap->GetView();
-		PrefilterMapDescriptor.sampler = PrefilterMap->GetSampler();
-		return PrefilterMapDescriptor;
-	}
-
 	return GetNullDescriptor();
 }
 
