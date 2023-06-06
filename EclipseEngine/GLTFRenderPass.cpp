@@ -121,7 +121,7 @@ void GLTFRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& te
     //Main Renderers
     {
         LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-       // WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        // WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
         PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
         SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
     }
@@ -187,47 +187,47 @@ VkCommandBuffer GLTFRenderPass::Draw()
     {
         switch (GLTFSceneManager::GameObjectList[x]->RenderType)
         {
-            case GameObjectRenderType::kModelRenderer:
+        case GameObjectRenderType::kModelRenderer:
+        {
+            if (GLTFSceneManager::WireframeModeFlag)
             {
-                if (GLTFSceneManager::WireframeModeFlag)
-                {
-                   WireframePipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                else
-                {
-                    PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                break;
+                WireframePipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
             }
-            case GameObjectRenderType::kInstanceRenderer:
+            else
             {
-                if (GLTFSceneManager::WireframeModeFlag)
-                {
-                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                else
-                {
-                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                break;
+                PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
             }
-            case GameObjectRenderType::kSpriteRenderer:
+            break;
+        }
+        case GameObjectRenderType::kInstanceRenderer:
+        {
+            if (GLTFSceneManager::WireframeModeFlag)
             {
-                if (GLTFSceneManager::WireframeModeFlag)
-                {
-                    WireframePipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                else
-                {
-                    PBRPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                }
-                break;
+                WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
             }
-            case GameObjectRenderType::kLineRenderer3D:
+            else
             {
-                LinePipeline.DrawLine(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                break;
+                PBRInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
             }
+            break;
+        }
+        case GameObjectRenderType::kSpriteRenderer:
+        {
+            if (GLTFSceneManager::WireframeModeFlag)
+            {
+                WireframePipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+            }
+            else
+            {
+                PBRPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+            }
+            break;
+        }
+        case GameObjectRenderType::kLineRenderer3D:
+        {
+            LinePipeline.DrawLine(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+            break;
+        }
         }
     }
     vkCmdEndRenderPass(commandBuffer);

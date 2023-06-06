@@ -38,11 +38,10 @@ private:
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
 	PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
 
-	//Mesh Reflection
+	////Mesh Reflection
 	IrradianceRenderPass meshReflectionIrradianceRenderPass;
 	PrefilterRenderPass meshReflectionPrefilterRenderPass;
 	PBRReflectionMeshRenderPass meshReflectionRenderPass;
-
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

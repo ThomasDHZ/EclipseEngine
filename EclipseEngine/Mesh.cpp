@@ -349,6 +349,7 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 	for (auto& primitve : PrimitiveList)
 	{
 		GLTFSceneManager::sceneProperites.MeshIndex = MeshBufferIndex;
+		GLTFSceneManager::sceneProperites.ReflectionIndex = ReflectionIndex;
 		GLTFSceneManager::sceneProperites.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
 		VkDeviceSize offsets[] = { 0 };
@@ -364,11 +365,12 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 }
 
 
-void Mesh::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
+void Mesh::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t ReflectionIndex)
 {
 	for (auto& primitve : PrimitiveList)
 	{
 		GLTFSceneManager::sceneProperites.MeshIndex = MeshBufferIndex;
+		GLTFSceneManager::sceneProperites.ReflectionIndex = ReflectionIndex;
 		GLTFSceneManager::sceneProperites.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
 		VkDeviceSize offsets[] = { 0 };

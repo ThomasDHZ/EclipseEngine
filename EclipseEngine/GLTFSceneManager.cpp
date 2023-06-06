@@ -6,6 +6,9 @@ std::vector<std::shared_ptr<Material>>				 GLTFSceneManager::MaterialList;
 std::vector<std::shared_ptr<Texture>>				 GLTFSceneManager::TextureList;
 std::shared_ptr<EnvironmentTexture>					 GLTFSceneManager::EnvironmentTexture = nullptr;
 std::shared_ptr<RenderedColorTexture>				 GLTFSceneManager::BRDFTexture = nullptr;
+std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::IrradianceMapList;
+std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::PrefilterMapList;
+std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<GLTFSunLight>>			 GLTFSceneManager::SunLightList;
 std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::DirectionalLightList;
@@ -99,36 +102,37 @@ std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(GLTFTextureLoader& text
 	return texture;
 }
 
+void GLTFSceneManager::LoadReflectionIrradianceTexture(std::shared_ptr<RenderedCubeMapTexture> irradianceTexture)
+{
+	IrradianceMapList.emplace_back(irradianceTexture);
+}
+
+void GLTFSceneManager::LoadReflectionIrradianceTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> irradianceTextureList)
+{
+	for (auto& texture : irradianceTextureList)
+	{
+		IrradianceMapList.emplace_back(texture);
+	}
+}
+
+void GLTFSceneManager::LoadReflectionPrefilterTexture(std::shared_ptr<RenderedCubeMapTexture> prefilterTexture)
+{
+	PrefilterMapList.emplace_back(prefilterTexture);
+}
+
+void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> prefilterTextureList)
+{
+	for (auto& texture : prefilterTextureList)
+	{
+		PrefilterMapList.emplace_back(texture);
+	}
+}
+
 void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
 }
-
-void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material)
-{
-	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
-	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
-}
-
- void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position)
- {
-	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position)));
-	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
- }
-
- void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
- {
-	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation)));
-	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
- }
-
- void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
- {
-	 GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation, scale)));
-	 GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
- }
-
 
 void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position)
 {
@@ -146,6 +150,30 @@ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::st
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation, scale)));
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer, position, rotation, scale)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
 }
 
 void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData)
@@ -508,6 +536,14 @@ void GLTFSceneManager::Destroy()
 	{
 		light->Destroy();
 	}
+	for (auto& cubeMap : IrradianceMapList)
+	{
+		cubeMap->Destroy();
+	}
+	for (auto& cubeMap : PrefilterMapList)
+	{
+		cubeMap->Destroy();
+	}
 	if (EnvironmentTexture != nullptr)
 	{
 		EnvironmentTexture->Destroy();
@@ -515,6 +551,10 @@ void GLTFSceneManager::Destroy()
 	if (BRDFTexture != nullptr)
 	{
 		BRDFTexture->Destroy();
+	}
+	if (CubeMap != nullptr)
+	{
+		CubeMap->Destroy();
 	}
 }
 
@@ -528,7 +568,65 @@ VkDescriptorImageInfo GLTFSceneManager::GetBRDFMapDescriptor()
 		BRDFMapDescriptor.sampler = BRDFTexture->GetSampler();
 		return BRDFMapDescriptor;
 	}
-	 
+
+	return GetNullDescriptor();
+}
+
+std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetIrradianceMapDescriptor()
+{
+	std::vector<VkDescriptorImageInfo>	irradianceCubeMapBufferList;
+	if (IrradianceMapList.size() == 0)
+	{
+		irradianceCubeMapBufferList.emplace_back(GLTFSceneManager::GetNullDescriptor());
+	}
+	else
+	{
+		for (auto& cubeMap : IrradianceMapList)
+		{
+			VkDescriptorImageInfo irradianceCubeMapDescriptor{};
+			irradianceCubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			irradianceCubeMapDescriptor.imageView = cubeMap->GetView();
+			irradianceCubeMapDescriptor.sampler = cubeMap->GetSampler();
+			irradianceCubeMapBufferList.emplace_back(irradianceCubeMapDescriptor);
+		}
+	}
+
+	return irradianceCubeMapBufferList;
+}
+
+std::vector<VkDescriptorImageInfo> GLTFSceneManager::GetPrefilterMapDescriptor()
+{
+	std::vector<VkDescriptorImageInfo>	prefilterCubeMapBufferList;
+	if (PrefilterMapList.size() == 0)
+	{
+		prefilterCubeMapBufferList.emplace_back(GLTFSceneManager::GetNullDescriptor());
+	}
+	else
+	{
+		for (auto& cubeMap : PrefilterMapList)
+		{
+			VkDescriptorImageInfo prefilterCubeMapDescriptor{};
+			prefilterCubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+			prefilterCubeMapDescriptor.imageView = cubeMap->GetView();
+			prefilterCubeMapDescriptor.sampler = cubeMap->GetSampler();
+			prefilterCubeMapBufferList.emplace_back(prefilterCubeMapDescriptor);
+		}
+	}
+
+	return prefilterCubeMapBufferList;
+}
+
+VkDescriptorImageInfo GLTFSceneManager::GetCubeMapDescriptor()
+{
+	if (CubeMap != nullptr)
+	{
+		VkDescriptorImageInfo CubeMapDescriptor{};
+		CubeMapDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		CubeMapDescriptor.imageView = CubeMap->GetView();
+		CubeMapDescriptor.sampler = CubeMap->GetSampler();
+		return CubeMapDescriptor;
+	}
+
 	return GetNullDescriptor();
 }
 

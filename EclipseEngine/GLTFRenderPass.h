@@ -5,19 +5,19 @@
 #include "JsonGraphicsPipeline.h"
 class GLTFRenderPass : public RenderPass
 {
-	private:
-		std::shared_ptr<RenderedColorTexture> ColorTexture;
-		std::shared_ptr<RenderedDepthTexture> DepthTexture;
+private:
+	std::shared_ptr<RenderedColorTexture> ColorTexture;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-		JsonGraphicsPipeline PBRPipeline;
-		JsonGraphicsPipeline PBRInstancePipeline;
-		JsonGraphicsPipeline WireframePipeline;
-		JsonGraphicsPipeline WireframeInstancePipeline;
-		JsonGraphicsPipeline LinePipeline;
-		JsonGraphicsPipeline SkyBoxPipeline;
+	JsonGraphicsPipeline PBRPipeline;
+	JsonGraphicsPipeline PBRInstancePipeline;
+	JsonGraphicsPipeline WireframePipeline;
+	JsonGraphicsPipeline WireframeInstancePipeline;
+	JsonGraphicsPipeline LinePipeline;
+	JsonGraphicsPipeline SkyBoxPipeline;
 
-		void RenderPassDesc();
-		void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
+	void RenderPassDesc();
+	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
 	GLTFRenderPass();
@@ -29,4 +29,3 @@ public:
 	VkCommandBuffer Draw();
 	void Destroy();
 };
-

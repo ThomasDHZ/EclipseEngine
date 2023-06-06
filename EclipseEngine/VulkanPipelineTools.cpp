@@ -351,12 +351,9 @@ VkPipelineLayoutCreateInfo VulkanPipelineTools::LoadPipelineLayoutCreateInfo()
 
 void VulkanPipelineTools::LoadReflectionSamplerBuffer(CubeMapSamplerBuffer& reflectionMapSampler)
 {
-    VkDescriptorBufferInfo ReflectionMapBuffer = {};
-    ReflectionMapBuffer.buffer = reflectionMapSampler.GetVulkanBufferData().Buffer;
-    ReflectionMapBuffer.offset = 0;
-    ReflectionMapBuffer.range = VK_WHOLE_SIZE;
-
-    ReflectionViewBuffer = ReflectionMapBuffer;
+    ReflectionViewBuffer.buffer = reflectionMapSampler.GetVulkanBufferData().Buffer;
+    ReflectionViewBuffer.offset = 0;
+    ReflectionViewBuffer.range = VK_WHOLE_SIZE;
 }
 
 void VulkanPipelineTools::LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionIrradianceMap)
@@ -367,20 +364,20 @@ void VulkanPipelineTools::LoadReflectionIrradianceMapBuffer(std::shared_ptr<Rend
     ReflectionIrradianceBuffer.Used = true;
 }
 
-void VulkanPipelineTools::LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture> cubeMap)
-{
-    CubeMapbuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    CubeMapbuffer.ImageInfo.imageView = cubeMap->GetView();
-    CubeMapbuffer.ImageInfo.sampler = cubeMap->GetSampler();
-    CubeMapbuffer.Used = true;
-}
-
 void VulkanPipelineTools::LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture> reflectionReflectionPrefilterMap)
 {
     ReflectionPrefilterBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     ReflectionPrefilterBuffer.ImageInfo.imageView = reflectionReflectionPrefilterMap->GetView();
     ReflectionPrefilterBuffer.ImageInfo.sampler = reflectionReflectionPrefilterMap->GetSampler();
     ReflectionPrefilterBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture> cubeMap)
+{
+    CubeMapbuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    CubeMapbuffer.ImageInfo.imageView = cubeMap->GetView();
+    CubeMapbuffer.ImageInfo.sampler = cubeMap->GetSampler();
+    CubeMapbuffer.Used = true;
 }
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)

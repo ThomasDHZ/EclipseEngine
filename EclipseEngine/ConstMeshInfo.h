@@ -17,8 +17,8 @@ struct ConstMeshInfo
 struct PBRRenderPassTextureSubmitList
 {
 	std::shared_ptr<RenderedCubeMapTexture> CubeMapTexture;
-	std::shared_ptr<RenderedCubeMapTexture> IrradianceTexture;
-	std::shared_ptr<RenderedCubeMapTexture> PrefilterTexture;
+	std::vector<std::shared_ptr<RenderedCubeMapTexture>> IrradianceTextureList;
+	std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterTextureList;
 	std::vector<std::shared_ptr<RenderedDepthTexture>> DirectionalLightTextureShadowMaps;
 	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> PointLightShadowMaps;
 	std::vector<std::shared_ptr<RenderedDepthTexture>> SpotLightTextureShadowMaps;

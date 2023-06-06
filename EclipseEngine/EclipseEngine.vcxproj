@@ -297,7 +297,6 @@
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="PBRReflectionSkyRenderPass.cpp" />
-    <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderPass.cpp" />
@@ -463,7 +462,6 @@
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="PBRReflectionSkyRenderPass.h" />
-    <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderPass.h" />
