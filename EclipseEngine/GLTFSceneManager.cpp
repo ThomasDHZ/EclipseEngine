@@ -15,8 +15,8 @@ std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::Directiona
 std::vector<std::shared_ptr<GLTFPointLight>>		 GLTFSceneManager::PointLightList;
 std::vector<std::shared_ptr<GLTFSpotLight>>			 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
-float												 GLTFSceneManager::PBRCubeMapSize = 2048.0f;
-float												 GLTFSceneManager::PreRenderedMapSize = 2048.0f;
+float												 GLTFSceneManager::PBRCubeMapSize = 128.0f;
+float												 GLTFSceneManager::PreRenderedMapSize = 128.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;

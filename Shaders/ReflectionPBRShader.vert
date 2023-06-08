@@ -129,7 +129,10 @@ struct PBRMaterial
 	uint DepthMapID;
 };
 
-layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 11) uniform CubeMapViewSampler 
+{
+    mat4 CubeMapFaceMatrix[6];
+} cubeMapViewSampler;
 
 layout(push_constant) uniform SceneData
 {
@@ -164,8 +167,7 @@ void main() {
     Normal = mat3(MeshTransform) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
-    gl_Position = sceneData.proj * 
-                  sceneData.view *                
-                  MeshTransform * 
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *              
+                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
 }

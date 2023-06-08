@@ -294,7 +294,7 @@ public:
 	~VulkanPipelineEditor();
 
 	void Update();
-	void LoadPipeline();
+	void LoadPipeline(std::string& pipelineFile);
 	void BuildPipeline();
 	void SavePipeline();
 };

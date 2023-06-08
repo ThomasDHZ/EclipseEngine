@@ -7,7 +7,6 @@
 #include "MeshProperties.glsl"
 
 layout(location = 0) out vec4 outColor;
-
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 
 layout(push_constant) uniform SceneData

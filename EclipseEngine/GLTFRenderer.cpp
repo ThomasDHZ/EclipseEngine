@@ -44,7 +44,7 @@ GLTFSceneManager::UpdateBufferIndex();
 IronMaterial->UpdateBuffer();
 GLTFSceneManager::AddMaterial(IronMaterial);
 
-	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
 	GLTFSceneManager::AddMeshGameObject3D("Sphere", d, GoldMaterial);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
@@ -200,8 +200,8 @@ GLTFSceneManager::AddMaterial(IronMaterial);
 	{
 		//SkyBox Reflection Pass
 		{
-			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionIrradianceRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionPrefilterRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 
 			PBRRenderPassTextureSubmitList submitList;
@@ -209,12 +209,12 @@ GLTFSceneManager::AddMaterial(IronMaterial);
 			submitList.IrradianceTextureList.emplace_back(skyBoxReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(skyBoxReflectionPrefilterRenderPass.PrefilterCubeMap);
 
-			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 		}
 		//Mesh Reflection Pass
 		{
-			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionIrradianceRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionPrefilterRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -225,8 +225,8 @@ GLTFSceneManager::AddMaterial(IronMaterial);
 		}
 		//Mesh Reflection Pass
 		{
-			irradianceRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			prefilterRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			irradianceRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -249,7 +249,7 @@ void GLTFRenderer::Update()
 
 void GLTFRenderer::ImGuiUpdate()
 {
-	//pipelineEditor.Update();
+	pipelineEditor.Update();
 	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
 	//{
 	//	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
@@ -259,12 +259,12 @@ void GLTFRenderer::ImGuiUpdate()
 	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	{
 		if (ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f))
-		{
+	/*	{
 			if (ImGui::IsMouseReleased(0) || ImGui::IsAnyItemActive() || ImGui::IsWindowFocused())
 			{
 				VulkanRenderer::UpdateRendererFlag = true;
 			}
-		}
+		}*/
 		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	}
@@ -312,16 +312,16 @@ void GLTFRenderer::ImGuiUpdate()
 
 void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());

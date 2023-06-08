@@ -2,9 +2,6 @@
 #include "JsonGraphicsPipeline.h"
 #include "SceneManager.h"
 
-std::string JsonGraphicsPipeline::BaseShaderFilePath = "../Shaders/";
-std::string JsonGraphicsPipeline::BasePipelineFilePath = "../Pipelines/";
-
 JsonGraphicsPipeline::JsonGraphicsPipeline()
 {
 }
@@ -82,7 +79,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vecto
 
     std::string SceneInfo;
     std::ifstream SceneFile;
-    SceneFile.open(BasePipelineFilePath + filePath);
+    SceneFile.open(PathConsts::PipelinePath + filePath);
     if (SceneFile.is_open())
     {
         while (!SceneFile.eof())
@@ -167,7 +164,7 @@ void JsonGraphicsPipeline::LoadGraphicsPipeline(const char* filePath, std::vecto
 
 void JsonGraphicsPipeline::SaveGraphicsPipeline(const char* fileName, nlohmann::json& json)
 {
-    std::ofstream pipelineFile(BasePipelineFilePath + fileName);
+    std::ofstream pipelineFile(PathConsts::PipelinePath + fileName);
     pipelineFile << json;
     pipelineFile.close();
 }

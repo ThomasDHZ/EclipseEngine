@@ -210,9 +210,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PBRReflectionSkyRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="DepthRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -360,7 +357,7 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="PBRReflectionMeshRenderPass.cpp">
+    <ClCompile Include="PBRReflectionRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="RayTracePBRRenderPass.cpp">
@@ -594,6 +591,9 @@
     <ClCompile Include="OutLinePipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="DebugPosMesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -658,9 +658,6 @@
     </ClInclude>
     <ClInclude Include="BRDFRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="PBRReflectionSkyRenderPass.h">
-      <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="SoundDevice.h">
       <Filter>Header Files\Engine\Audio</Filter>
@@ -815,7 +812,7 @@
     <ClInclude Include="CubeToEnvironmentPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PBRReflectionMeshRenderPass.h">
+    <ClInclude Include="PBRReflectionRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConsoleLogger.h">
@@ -1080,6 +1077,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VulkanPipelineTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugPosMesh.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PathConsts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

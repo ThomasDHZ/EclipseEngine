@@ -8,7 +8,7 @@
 #include "PrefilterRenderPass.h"
 #include "BRDFRenderPass.h"
 #include "SceneManager.h"
-#include "PBRReflectionMeshRenderPass.h"
+#include "PBRReflectionRenderPass.h"
 #include "DepthRenderPass.h"
 #include "DepthDebugRenderPass.h"
 #include "DepthCubeMapRenderer.h"
@@ -16,7 +16,6 @@
 #include "GaussianBlurRenderPass.h"
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
-#include "PBRReflectionMeshRenderPass.h"
 #include "EnvironmentToCubeRenderPass.h"
 #include "GLTFRenderPass.h"
 #include "IrradianceRenderPass.h"
@@ -24,7 +23,6 @@
 #include "GLTFSceneManager.h"
 #include "PerspectiveCamera.h"
 #include "VulkanPipelineEditor.h"
-#include "PBRReflectionSkyRenderPass.h"
 
 class GLTFRenderer
 {
@@ -36,12 +34,13 @@ private:
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
-	PBRReflectionMeshRenderPass skyBoxReflectionRenderPass;
+	PBRReflectionRenderPass skyBoxReflectionRenderPass;
 
 	////Mesh Reflection
 	IrradianceRenderPass meshReflectionIrradianceRenderPass;
 	PrefilterRenderPass meshReflectionPrefilterRenderPass;
-	PBRReflectionMeshRenderPass meshReflectionRenderPass;
+	PBRReflectionRenderPass meshReflectionRenderPass;
+
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;

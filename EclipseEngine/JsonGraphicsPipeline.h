@@ -8,10 +8,6 @@
 
 class JsonGraphicsPipeline : public VulkanPipelineTools
 {
-private:
-	static std::string BaseShaderFilePath;
-	static std::string BasePipelineFilePath;
-
 public:
 	VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo, uint32_t modelCount);
 	VkDescriptorPool LoadCreateDescriptorPool(nlohmann::json& json);
@@ -53,12 +49,6 @@ public:
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
-	}
-
-	void DrawReflectionMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, uint32_t reflectionIndex)
-	{
-        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-        gameObject->DrawReflectionMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, reflectionIndex);
 	}
 
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)

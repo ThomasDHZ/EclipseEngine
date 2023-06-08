@@ -13,7 +13,7 @@
 #include "TextureBaker.h"
 #include "JsonGraphicsPipeline.h"
 
-class PBRReflectionMeshRenderPass : public RenderPass
+class PBRReflectionRenderPass : public RenderPass
 {
 private:
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
@@ -36,8 +36,8 @@ private:
 	void UpdateView(glm::vec3 reflectPoint);
 
 public:
-	PBRReflectionMeshRenderPass();
-	~PBRReflectionMeshRenderPass();
+	PBRReflectionRenderPass();
+	~PBRReflectionRenderPass();
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedReflectionCubeMap;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;

@@ -53,6 +53,30 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 
 void VulkanPipelineEditor::Update()
 {
+	ImGui::Begin("Pipeline List");
+	
+	std::vector<std::string> pipelineListcharstring;
+	std::vector<const char *> pipelineListchar;
+	pipelineListchar.emplace_back("Default");
+
+	for (const auto& file : std::filesystem::directory_iterator(PathConsts::PipelinePath))
+	{
+		auto splitFile = file.path().string().substr(PathConsts::PipelinePath.size());
+		pipelineListcharstring.emplace_back(splitFile);
+	}
+	for (auto& list : pipelineListcharstring)
+	{
+		pipelineListchar.emplace_back(list.c_str());
+	}
+
+	int z = 0;
+	if (ImGui::ListBox("PipelineSelection", &z, pipelineListchar.data(), pipelineListchar.size()))
+	{
+		LoadPipeline(pipelineListcharstring[z]);
+	}
+
+	ImGui::End();
+
 	ImGui::Begin("Pipeline Editor");
 	//ImGui::BeginMenuBar();
 	//if (ImGui::BeginMenu("File"))
@@ -208,11 +232,11 @@ void VulkanPipelineEditor::Update()
 	ImGui::End();
 }
 
-void VulkanPipelineEditor::LoadPipeline()
+void VulkanPipelineEditor::LoadPipeline(std::string& pipelineFile)
 {
-	/*std::string SceneInfo;
+	std::string SceneInfo;
 	std::ifstream SceneFile;
-	SceneFile.open(BasePipelineFilePath + filePath);
+	SceneFile.open(PathConsts::PipelinePath + pipelineFile);
 	if (SceneFile.is_open())
 	{
 		while (!SceneFile.eof())
@@ -221,67 +245,67 @@ void VulkanPipelineEditor::LoadPipeline()
 		}
 	}
 	else std::cout << "Unable to open file";
-	SceneFile.close();*/
+	SceneFile.close();
 
-	//nlohmann::json json = nlohmann::json::parse(SceneInfo);
+	nlohmann::json json = nlohmann::json::parse(SceneInfo);
 
-	//std::vector<DescriptorBindingPropertiesEnum> BindingList;
-	//std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
-	//for (int x = 0; x < json["Shader"].size(); x++)
-	//{
-	//	PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
+	std::vector<DescriptorBindingPropertiesEnum> BindingList;
+	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	for (int x = 0; x < json["Shader"].size(); x++)
+	{
+		PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
 
-	//	VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo{};
-	//	PipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-	//	PipelineShaderStageCreateInfo.stage = json["Shader"]["stage"];
-	//	PipelineShaderStageCreateInfo.module = ReadShaderFile(json["Shader"]["shaderFile"]);
-	//	PipelineShaderStageCreateInfo.pName = "main";
-	//	PipelineShaderStageCreateInfo.pSpecializationInfo = nullptr;
-	//	PipelineShaderStageCreateInfo.pNext = nullptr;
-	//	PipelineShaderStageList.emplace_back(PipelineShaderStageCreateInfo);
-	//}
+		VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo{};
+		PipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		PipelineShaderStageCreateInfo.stage = json["Shader"]["stage"];
+		PipelineShaderStageCreateInfo.module = ReadShaderFile(json["Shader"]["shaderFile"]);
+		PipelineShaderStageCreateInfo.pName = "main";
+		PipelineShaderStageCreateInfo.pSpecializationInfo = nullptr;
+		PipelineShaderStageCreateInfo.pNext = nullptr;
+		PipelineShaderStageList.emplace_back(PipelineShaderStageCreateInfo);
+	}
 
-	//for (int x = 0; x < json["DescriptorBindingLayout"].size(); x++)
-	//{
-	//	BindingList.emplace_back(json["DescriptorBindingLayout"][x]["bindingType"]);
-	//}
+	for (int x = 0; x < json["DescriptorBindingLayout"].size(); x++)
+	{
+		BindingList.emplace_back(json["DescriptorBindingLayout"][x]["bindingType"]);
+	}
 
-	//DepthTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthTestEnable"];
-	//DepthWriteEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthWriteEnable"];
-	//DepthBoundsTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthBoundsTestEnable"];
-	//StencilTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["stencilTestEnable"];
- //   DepthCompareOpperationsSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthCompareOp"];
+	DepthTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthTestEnable"];
+	DepthWriteEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthWriteEnable"];
+	DepthBoundsTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthBoundsTestEnable"];
+	StencilTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["stencilTestEnable"];
+    //DepthCompareOpperationsSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthCompareOp"];
 
-	//VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo{};
-	//pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-	//pipelineInputAssemblyStateCreateInfo.pNext = nullptr;
-	//pipelineInputAssemblyStateCreateInfo.flags = json["PipelineInputAssemblyStateCreateInfo"]["flags"];
-	//pipelineInputAssemblyStateCreateInfo.topology = json["PipelineInputAssemblyStateCreateInfo"]["topology"];
-	//pipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = json["PipelineInputAssemblyStateCreateInfo"]["primitiveRestartEnable"];
+	VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo{};
+	pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+	pipelineInputAssemblyStateCreateInfo.pNext = nullptr;
+	pipelineInputAssemblyStateCreateInfo.flags = json["PipelineInputAssemblyStateCreateInfo"]["flags"];
+	pipelineInputAssemblyStateCreateInfo.topology = json["PipelineInputAssemblyStateCreateInfo"]["topology"];
+	pipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = json["PipelineInputAssemblyStateCreateInfo"]["primitiveRestartEnable"];
 
-	//VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo{};
-	//pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-	//pipelineViewportStateCreateInfo.pNext = nullptr;
-	//pipelineViewportStateCreateInfo.flags = json["PipelineViewportStateCreateInfo"]["flags"];
-	//pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
-	//pipelineViewportStateCreateInfo.pViewports = nullptr;
-	//pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
-	//pipelineViewportStateCreateInfo.pViewports = nullptr;
-	//pipelineViewportStateCreateInfo.pScissors = nullptr;
+	VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo{};
+	pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	pipelineViewportStateCreateInfo.pNext = nullptr;
+	pipelineViewportStateCreateInfo.flags = json["PipelineViewportStateCreateInfo"]["flags"];
+	pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
+	pipelineViewportStateCreateInfo.pViewports = nullptr;
+	pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
+	pipelineViewportStateCreateInfo.pViewports = nullptr;
+	pipelineViewportStateCreateInfo.pScissors = nullptr;
 
-	//VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo{};
-	//pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	//pipelineRasterizationStateCreateInfo.pNext = nullptr;
-	//pipelineRasterizationStateCreateInfo.depthClampEnable = json["PipelineRasterizationStateCreateInfo"]["depthClampEnable"];
-	//pipelineRasterizationStateCreateInfo.rasterizerDiscardEnable = json["PipelineRasterizationStateCreateInfo"]["rasterizerDiscardEnable"];
-	//pipelineRasterizationStateCreateInfo.polygonMode = json["PipelineRasterizationStateCreateInfo"]["polygonMode"];
-	//pipelineRasterizationStateCreateInfo.cullMode = json["PipelineRasterizationStateCreateInfo"]["cullMode"];
-	//pipelineRasterizationStateCreateInfo.frontFace = json["PipelineRasterizationStateCreateInfo"]["frontFace"];
-	//pipelineRasterizationStateCreateInfo.depthBiasEnable = json["PipelineRasterizationStateCreateInfo"]["depthBiasEnable"];
-	//pipelineRasterizationStateCreateInfo.depthBiasConstantFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasConstantFactor"];
-	//pipelineRasterizationStateCreateInfo.depthBiasClamp = json["PipelineRasterizationStateCreateInfo"]["depthBiasClamp"];
-	//pipelineRasterizationStateCreateInfo.depthBiasSlopeFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasSlopeFactor"];
-	//pipelineRasterizationStateCreateInfo.lineWidth = json["PipelineRasterizationStateCreateInfo"]["lineWidth"];
+	VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo{};
+	pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	pipelineRasterizationStateCreateInfo.pNext = nullptr;
+	pipelineRasterizationStateCreateInfo.depthClampEnable = json["PipelineRasterizationStateCreateInfo"]["depthClampEnable"];
+	pipelineRasterizationStateCreateInfo.rasterizerDiscardEnable = json["PipelineRasterizationStateCreateInfo"]["rasterizerDiscardEnable"];
+	pipelineRasterizationStateCreateInfo.polygonMode = json["PipelineRasterizationStateCreateInfo"]["polygonMode"];
+	pipelineRasterizationStateCreateInfo.cullMode = json["PipelineRasterizationStateCreateInfo"]["cullMode"];
+	pipelineRasterizationStateCreateInfo.frontFace = json["PipelineRasterizationStateCreateInfo"]["frontFace"];
+	pipelineRasterizationStateCreateInfo.depthBiasEnable = json["PipelineRasterizationStateCreateInfo"]["depthBiasEnable"];
+	pipelineRasterizationStateCreateInfo.depthBiasConstantFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasConstantFactor"];
+	pipelineRasterizationStateCreateInfo.depthBiasClamp = json["PipelineRasterizationStateCreateInfo"]["depthBiasClamp"];
+	pipelineRasterizationStateCreateInfo.depthBiasSlopeFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasSlopeFactor"];
+	pipelineRasterizationStateCreateInfo.lineWidth = json["PipelineRasterizationStateCreateInfo"]["lineWidth"];
 }
 
 void VulkanPipelineEditor::BuildPipeline()

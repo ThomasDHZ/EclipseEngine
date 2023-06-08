@@ -21,11 +21,6 @@ void GameObject::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descri
 	GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
 }
 
-void GameObject::DrawReflectionMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, uint32_t reflectionIndex)
-{
-	GameObjectRenderer->DrawReflectionMesh(commandBuffer, descriptorset, shaderPipelineLayout, reflectionIndex);
-}
-
 void GameObject::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	GameObjectRenderer->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout);

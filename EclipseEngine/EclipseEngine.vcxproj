@@ -188,6 +188,7 @@
     <ClCompile Include="CubeSamplerCamera.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
+    <ClCompile Include="DebugPosMesh.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
@@ -262,7 +263,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
     <ClCompile Include="PBRPlayRenderer.cpp" />
-    <ClCompile Include="PBRReflectionMeshRenderPass.cpp" />
+    <ClCompile Include="PBRReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
@@ -296,7 +297,6 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
-    <ClCompile Include="PBRReflectionSkyRenderPass.cpp" />
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderPass.cpp" />
@@ -343,6 +343,7 @@
     <ClInclude Include="CubeSamplerCamera.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
+    <ClInclude Include="DebugPosMesh.h" />
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameController.h" />
@@ -397,6 +398,7 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
+    <ClInclude Include="PathConsts.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="GLTFRenderer.h" />
@@ -425,7 +427,7 @@
     <ClInclude Include="ParticalSystemRenderer.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PBRBakeReflectionPipeline.h" />
-    <ClInclude Include="PBRReflectionMeshRenderPass.h" />
+    <ClInclude Include="PBRReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomPipeline.h" />
     <ClInclude Include="PBRBloomReflectionPipeline.h" />
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />
@@ -461,7 +463,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
-    <ClInclude Include="PBRReflectionSkyRenderPass.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderPass.h" />

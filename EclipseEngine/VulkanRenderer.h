@@ -5,6 +5,7 @@
 #include <array>
 #include <cmath>
 
+#include "PathConsts.h"
 #include "Window.h"
 #include "VulkanDebugger.h"
 #include "GraphicsDevice.h"

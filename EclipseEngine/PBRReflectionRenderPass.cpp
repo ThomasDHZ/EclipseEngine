@@ -1,14 +1,14 @@
-#include "PBRReflectionMeshRenderPass.h"
+#include "PBRReflectionRenderPass.h"
 
-PBRReflectionMeshRenderPass::PBRReflectionMeshRenderPass() : RenderPass()
+PBRReflectionRenderPass::PBRReflectionRenderPass() : RenderPass()
 {
 }
 
-PBRReflectionMeshRenderPass::~PBRReflectionMeshRenderPass()
+PBRReflectionRenderPass::~PBRReflectionRenderPass()
 {
 }
 
-void PBRReflectionMeshRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 {
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	RenderPassResolution = glm::vec2(cubeMapSize);
@@ -38,7 +38,7 @@ void PBRReflectionMeshRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList
 	SetUpCommandBuffers();
 }
 
-void PBRReflectionMeshRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
 {
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	RenderPassResolution = glm::vec2(cubeMapSize);
@@ -70,7 +70,7 @@ void PBRReflectionMeshRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& 
 	OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void PBRReflectionMeshRenderPass::RenderPassDesc()
+void PBRReflectionRenderPass::RenderPassDesc()
 {
 	std::vector<VkAttachmentDescription> AttachmentDescriptionList;
 	AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
@@ -146,7 +146,7 @@ void PBRReflectionMeshRenderPass::RenderPassDesc()
 
 }
 
-void PBRReflectionMeshRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
+void PBRReflectionRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
 	VkPipelineColorBlendAttachmentState ColorAttachment;
 	ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
@@ -169,7 +169,7 @@ void PBRReflectionMeshRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureS
 	//Main Renderers
 	{
 		pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler, textures);
-		skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
+		skyboxPipeline = JsonGraphicsPipeline("SkyBoxSampler.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
 	}
 
 	//Instanced Renderers
@@ -187,12 +187,12 @@ void PBRReflectionMeshRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureS
 	}
 }
 
-void PBRReflectionMeshRenderPass::ClearTextureList()
+void PBRReflectionRenderPass::ClearTextureList()
 {
 	RenderedReflectionCubeMap->Destroy();
 }
 
-void PBRReflectionMeshRenderPass::UpdateView(glm::vec3 reflectPoint)
+void PBRReflectionRenderPass::UpdateView(glm::vec3 reflectPoint)
 {
 	const glm::vec3 reflectPos = reflectPoint;
 	glm::mat4 reflectionProj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
@@ -206,9 +206,9 @@ void PBRReflectionMeshRenderPass::UpdateView(glm::vec3 reflectPoint)
 	ReflectionMapSampler.Update();
 }
 
-VkCommandBuffer PBRReflectionMeshRenderPass::Draw()
+VkCommandBuffer PBRReflectionRenderPass::Draw()
 {
-	UpdateView(glm::vec3(0.0f));
+	UpdateView(glm::vec3(0.0f, 5.0f, 0.0f));
 
 	VkCommandBufferBeginInfo beginInfo{};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -254,7 +254,7 @@ VkCommandBuffer PBRReflectionMeshRenderPass::Draw()
 	{
 		switch (GLTFSceneManager::GameObjectList[x]->RenderType)
 		{
-		case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawReflectionMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], 0); break;
+		case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]); break;
 			//case GameObjectRenderType::kInstanceRenderer: pbrInstancedPipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);  break;
 			//case GameObjectRenderType::kSpriteRenderer: spriteReflectionPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites); break;
 		}
@@ -274,11 +274,9 @@ VkCommandBuffer PBRReflectionMeshRenderPass::Draw()
 	return commandBuffer;
 }
 
-void PBRReflectionMeshRenderPass::Destroy()
+void PBRReflectionRenderPass::Destroy()
 {
-
 	RenderedReflectionCubeMap->Destroy();
-
 
 	ReflectionMapSampler.Destroy();
 	RenderedTexture->Destroy();
