@@ -1,32 +1,23 @@
 #pragma once
-#include "RenderPass.h"
 #include "RenderedColorTexture.h"
-#include "RenderedDepthTexture.h"
-#include "RenderedCubeMapTexture.h"
-#include "SceneManager.h"
-
-#include "SkyboxPipeline.h"
-#include "OutLinePipeline.h"
-//#include "PBRInstancePipeline.h"
-#include "LightDebugPipeline.h"
-
-
+#include "RenderPass.h"
+#include "JsonGraphicsPipeline.h"
 class PBRRenderPass : public RenderPass
 {
 private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
-	//PBRPipeline pbrPipeline;
-	//PBRInstancePipeline pbrInstancePipeline;
-	LightDebugPipeline lightDebugPipeline;
-	SkyboxPipeline skyboxPipeline;
-	//LinePipeline linePipeline;
-	OutLinePipeline outLinePipeline;
-	//WireFramePipeline wireframePipeline;
+	JsonGraphicsPipeline PBRPipeline;
+	JsonGraphicsPipeline PBRInstancePipeline;
+	JsonGraphicsPipeline WireframePipeline;
+	JsonGraphicsPipeline WireframeInstancePipeline;
+	JsonGraphicsPipeline LinePipeline;
+	JsonGraphicsPipeline SkyBoxPipeline;
+	JsonGraphicsPipeline lightReflectionPipeline;
 
 	void RenderPassDesc();
-	//void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
+	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
 	PBRRenderPass();
@@ -34,7 +25,7 @@ public:
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
 
-	//void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
+	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
 	VkCommandBuffer Draw();
 	void Destroy();
 };

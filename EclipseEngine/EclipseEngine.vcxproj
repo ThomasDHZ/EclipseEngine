@@ -200,7 +200,6 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
-    <ClCompile Include="CubeMapSamplerPipeline.cpp" />
     <ClCompile Include="DeferredRendererPipeline.cpp" />
     <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
@@ -214,6 +213,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
+    <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
@@ -236,12 +236,11 @@
     <ClCompile Include="JsonConverter.cpp" />
     <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="OutLinePipeline.cpp" />
+    <ClCompile Include="PBRRenderer.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="PrefilterRenderPass.cpp" />
-    <ClCompile Include="GLTFRenderer.cpp" />
-    <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
-    <ClCompile Include="GLTF_SkyboxPipeline.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
@@ -269,7 +268,6 @@
     <ClCompile Include="PBRBloomReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomRenderPass.cpp" />
     <ClCompile Include="PBRInstancedReflectionPipeline.cpp" />
-    <ClCompile Include="PBRReflectionPipeline.cpp" />
     <ClCompile Include="RandomNumber.cpp" />
     <ClCompile Include="RayTracePBRRenderer.cpp" />
     <ClCompile Include="RayTracePBRRenderPass.cpp" />
@@ -280,9 +278,7 @@
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
     <ClCompile Include="Renderer2DPipeline.cpp" />
-    <ClCompile Include="Renderer3DPipeline.cpp" />
     <ClCompile Include="Skybox.cpp" />
-    <ClCompile Include="SkyboxPipeline.cpp" />
     <ClCompile Include="SpriteMesh2D.cpp" />
     <ClCompile Include="SpriteMesh3D.cpp" />
     <ClCompile Include="SpriteGameObject2D.cpp" />
@@ -297,7 +293,6 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
-    <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
@@ -313,8 +308,6 @@
     <ClCompile Include="SoundDevice.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
-    <ClCompile Include="VKEnumConverters.cpp" />
-    <ClCompile Include="VRAMManager.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanPipelineEditor.cpp" />
@@ -358,7 +351,6 @@
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
-    <ClInclude Include="CubeMapSamplerPipeline.h" />
     <ClInclude Include="DeferredRendererPipeline.h" />
     <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
@@ -372,6 +364,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
+    <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
@@ -399,12 +392,11 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PathConsts.h" />
+    <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
-    <ClInclude Include="GLTFRenderer.h" />
-    <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
-    <ClInclude Include="GLTF_SkyboxPipeline.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="GridRenderer2D.h" />
     <ClInclude Include="GridRenderer3D.h" />
@@ -433,7 +425,6 @@
     <ClInclude Include="PBRBloomReflectionRenderPass.h" />
     <ClInclude Include="PBRBloomRenderPass.h" />
     <ClInclude Include="PBRInstancedReflectionPipeline.h" />
-    <ClInclude Include="PBRReflectionPipeline.h" />
     <ClInclude Include="RandomNumber.h" />
     <ClInclude Include="RayTracePBRRenderer.h" />
     <ClInclude Include="RayTracePBRRenderPass.h" />
@@ -444,10 +435,8 @@
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
     <ClInclude Include="Renderer2DPipeline.h" />
-    <ClInclude Include="Renderer3DPipeline.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Skybox.h" />
-    <ClInclude Include="SkyboxPipeline.h" />
     <ClInclude Include="SpriteMesh2D.h" />
     <ClInclude Include="SpriteMesh3D.h" />
     <ClInclude Include="SpriteGameObject2D.h" />
@@ -463,7 +452,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
-    <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
@@ -481,8 +469,6 @@
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="UniformBuffer.h" />
     <ClInclude Include="Vertex.h" />
-    <ClInclude Include="VKEnumConverters.h" />
-    <ClInclude Include="VRAMManager.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanPipelineEditor.h" />

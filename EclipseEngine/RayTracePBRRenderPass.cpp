@@ -213,11 +213,11 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
-    VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
+    //VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
+    //VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
 
-    GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure);
-    GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor);
+ /*   GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure);
+    GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor);*/
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetVertexPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetIndexPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetGameObjectPropertiesBuffer());

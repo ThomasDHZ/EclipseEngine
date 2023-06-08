@@ -1,32 +1,58 @@
 #pragma once
-#include "RenderedColorTexture.h"
-#include "RenderPass.h"
-#include "GLTF_SkyboxPipeline.h"
+#include "VulkanRenderer.h"
 #include "JsonGraphicsPipeline.h"
-class GLTFRenderPass : public RenderPass
+
+#include <fstream>
+
+struct RenderPassInput
+{
+	std::vector<JsonGraphicsPipeline> RendererPipelineList;
+	std::vector<std::shared_ptr<RenderedColorTexture>> MultiSampledColorTextureList;
+	std::vector<std::shared_ptr<RenderedColorTexture>> ColorTextureList;
+	std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
+};
+
+class GLTFRenderPass
 {
 private:
-	std::shared_ptr<RenderedColorTexture> ColorTexture;
-	std::shared_ptr<RenderedDepthTexture> DepthTexture;
+	VkShaderModule ReadShaderFile(const std::string& filename);
 
-	JsonGraphicsPipeline PBRPipeline;
-	JsonGraphicsPipeline PBRInstancePipeline;
-	JsonGraphicsPipeline WireframePipeline;
-	JsonGraphicsPipeline WireframeInstancePipeline;
-	JsonGraphicsPipeline LinePipeline;
-	JsonGraphicsPipeline SkyBoxPipeline;
-	JsonGraphicsPipeline lightReflectionPipeline;
+protected:
+	std::vector<JsonGraphicsPipeline> RendererPipelineList;
+	std::vector<std::shared_ptr<RenderedColorTexture>> MultiSampledColorTextureList;
+	std::vector<std::shared_ptr<RenderedColorTexture>> ColorTextureList;
+	std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
 
-	void RenderPassDesc();
-	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
+	glm::ivec2 RenderPassResolution;
+
+	VkRenderPass renderPass = VK_NULL_HANDLE;
+	std::vector<VkCommandBuffer> CommandBuffer;
+	std::vector<VkFramebuffer> RenderPassFramebuffer;
+
+	VkSampleCountFlagBits SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
+	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+	VkVertexInputBindingDescription VertexInputBindingDescription;
+	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
+
+	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
+	virtual void CreateRendererFramebuffers(std::vector<VkImageView>& AttachmentList);
+	virtual void RenderPassDesc();
+	virtual void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 
 public:
+
 	GLTFRenderPass();
 	~GLTFRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::vector<std::shared_ptr<RenderedColorTexture>> RenderedTexture;
 
-	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
-	VkCommandBuffer Draw();
-	void Destroy();
+	virtual void OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer);
+	virtual void SetUpCommandBuffers();
+	virtual void BuildRenderPass(PBRRenderPassTextureSubmitList& textures);
+	virtual void Destroy();
+	virtual VkCommandBuffer Draw();
+
+	VkCommandBuffer GetCommandBuffer() { return CommandBuffer[VulkanRenderer::GetCMDIndex()]; }
 };
+

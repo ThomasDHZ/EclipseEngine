@@ -198,9 +198,6 @@
     <ClCompile Include="DeferredRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="PBRRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="BRDFRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -261,12 +258,6 @@
     <ClCompile Include="Level2D.cpp">
       <Filter>Source Files\Level2D</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer3DPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyboxPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="BillboardPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
@@ -288,13 +279,7 @@
     <ClCompile Include="MeshPicker3DPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="PBRReflectionPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer2DPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeMapSamplerPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp">
@@ -381,22 +366,16 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFRenderPass.cpp">
+    <ClCompile Include="PBRRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTF_SkyboxPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PrefilterRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IrradianceRenderPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BloomCombine.cpp">
@@ -516,9 +495,6 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VRAMManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -582,9 +558,6 @@
     <ClCompile Include="StencilOpStateMenu.cpp">
       <Filter>Source Files\ImGuiMenus\PipelineEditorMenu</Filter>
     </ClCompile>
-    <ClCompile Include="VKEnumConverters.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VulkanPipelineTools.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -593,6 +566,12 @@
     </ClCompile>
     <ClCompile Include="DebugPosMesh.cpp">
       <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="PBRRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFRenderPass.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -648,9 +627,6 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="DeferredRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="PBRRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
@@ -710,16 +686,7 @@
     <ClInclude Include="DepthRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="SkyboxPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer3DPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer2DPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="PBRReflectionPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="OutLinePipeline.h">
@@ -744,9 +711,6 @@
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="BillboardPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeMapSamplerPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="DepthCubeMapPipeline.h">
@@ -842,22 +806,16 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFRenderPass.h">
+    <ClInclude Include="PBRRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnvironmentToCubeRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTF_SkyboxPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PrefilterRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IrradianceRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BloomCombine.h">
@@ -986,9 +944,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VRAMManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VulkanBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1073,9 +1028,6 @@
     <ClInclude Include="StencilOpStateMenu.h">
       <Filter>Header Files\ImGuiMenu\PipelineEditorMenu</Filter>
     </ClInclude>
-    <ClInclude Include="VKEnumConverters.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VulkanPipelineTools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1083,6 +1035,12 @@
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="PathConsts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

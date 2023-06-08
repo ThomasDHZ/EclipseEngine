@@ -1,15 +1,15 @@
-#include "GLTFRenderer.h"
+#include "PBRRenderer.h"
 #include "SpriteGameObject3D.h"
 
-GLTFRenderer::GLTFRenderer()
+PBRRenderer::PBRRenderer()
 {
 }
 
-GLTFRenderer::~GLTFRenderer()
+PBRRenderer::~PBRRenderer()
 {
 }
 
-void GLTFRenderer::BuildRenderer()
+void PBRRenderer::BuildRenderer()
 {
 	GLTFSceneManager::StartUp();
 	GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
@@ -35,14 +35,14 @@ void GLTFRenderer::BuildRenderer()
 	GLTFSceneManager::AddMaterial(GoldMaterial);
 
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
-IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-IronMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-IronMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-GLTFSceneManager::UpdateBufferIndex();
-IronMaterial->UpdateBuffer();
-GLTFSceneManager::AddMaterial(IronMaterial);
+	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	GLTFSceneManager::UpdateBufferIndex();
+	IronMaterial->UpdateBuffer();
+	GLTFSceneManager::AddMaterial(IronMaterial);
 
 	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
 	GLTFSceneManager::AddMeshGameObject3D("Sphere", d, GoldMaterial);
@@ -139,7 +139,7 @@ GLTFSceneManager::AddMaterial(IronMaterial);
 
 	//const std::string asdf = "sprite";
 	//GLTFSceneManager::AddSpriteGameObject3D(asdf, spriteMaterial);
-	
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -242,12 +242,12 @@ GLTFSceneManager::AddMaterial(IronMaterial);
 	GLTFSceneManager::Update();
 }
 
-void GLTFRenderer::Update()
+void PBRRenderer::Update()
 {
 	GLTFSceneManager::Update();
 }
 
-void GLTFRenderer::ImGuiUpdate()
+void PBRRenderer::ImGuiUpdate()
 {
 	pipelineEditor.Update();
 	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
@@ -259,13 +259,13 @@ void GLTFRenderer::ImGuiUpdate()
 	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	{
 		if (ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f))
-	/*	{
-			if (ImGui::IsMouseReleased(0) || ImGui::IsAnyItemActive() || ImGui::IsWindowFocused())
-			{
-				VulkanRenderer::UpdateRendererFlag = true;
-			}
-		}*/
-		ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
+			/*	{
+					if (ImGui::IsMouseReleased(0) || ImGui::IsAnyItemActive() || ImGui::IsWindowFocused())
+					{
+						VulkanRenderer::UpdateRendererFlag = true;
+					}
+				}*/
+			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 	}
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
@@ -310,7 +310,7 @@ void GLTFRenderer::ImGuiUpdate()
 	//}
 }
 
-void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
+void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
@@ -327,15 +327,15 @@ void GLTFRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
-void GLTFRenderer::Destroy()
+void PBRRenderer::Destroy()
 {
 	GLTFSceneManager::Destroy();
 
 	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
-	//skyBoxReflectionIrradianceRenderPass.Destroy();
-	//skyBoxReflectionPrefilterRenderPass.Destroy();
-	//skyBoxReflectionRenderPass.Destroy();
+	skyBoxReflectionIrradianceRenderPass.Destroy();
+	skyBoxReflectionPrefilterRenderPass.Destroy();
+	skyBoxReflectionRenderPass.Destroy();
 	meshReflectionIrradianceRenderPass.Destroy();
 	meshReflectionPrefilterRenderPass.Destroy();
 	meshReflectionRenderPass.Destroy();

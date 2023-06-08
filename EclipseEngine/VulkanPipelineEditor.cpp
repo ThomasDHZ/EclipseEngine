@@ -116,6 +116,42 @@ void VulkanPipelineEditor::Update()
 		}
 	}
 
+	//int ColorBlendAttachment = 0;
+	//bool					   blendEnable;
+	//BlendFactorMode            srcColorBlendFactor;
+	//BlendFactorMode            dstColorBlendFactor;
+	//BlendOpMode                colorBlendOp;
+	//BlendFactorMode            srcAlphaBlendFactor;
+	//BlendFactorMode            dstAlphaBlendFactor;
+	//BlendOpMode                alphaBlendOp;
+	//VkColorComponentFlags    colorWriteMask;
+
+	//ImGui::InputInt("Number of Bindings", &BindingDescriptorNum);
+	//BindingSelectionList.resize(BindingDescriptorNum);
+	//for (int x = 0; x < BindingSelectionList.size(); x++)
+	//{
+	//	ImGui::Separator();
+
+	//	if (ImGui::BeginCombo(("Binding " + std::to_string(x)).c_str(), BindingSelectionList[x]))
+	//	{
+	//		for (int n = 0; n < IM_ARRAYSIZE(PipelineDescriptorList); n++)
+	//		{
+	//			bool is_selected = (BindingSelectionList[x] == PipelineDescriptorList[n]);
+	//			if (ImGui::Selectable(PipelineDescriptorList[n], is_selected))
+	//			{
+	//				BindingSelectionList[x] = PipelineDescriptorList[n];
+	//				if (is_selected)
+	//				{
+	//					ImGui::SetItemDefaultFocus();
+	//				}
+	//			}
+	//		}
+	//		ImGui::EndCombo();
+	//	}
+
+	//	ImGui::Separator();
+	//}
+
 
 	ImGui::Separator();
 	ImGui::Text("Depth Stencil State Create Info:");
@@ -234,9 +270,14 @@ void VulkanPipelineEditor::Update()
 
 void VulkanPipelineEditor::LoadPipeline(std::string& pipelineFile)
 {
+	/*if (ShaderPipeline != VK_NULL_HANDLE)
+	{
+		Destroy();
+	}
+
 	std::string SceneInfo;
 	std::ifstream SceneFile;
-	SceneFile.open(PathConsts::PipelinePath + pipelineFile);
+	SceneFile.open(PathConsts::PipelinePath + filePath);
 	if (SceneFile.is_open())
 	{
 		while (!SceneFile.eof())
@@ -249,63 +290,74 @@ void VulkanPipelineEditor::LoadPipeline(std::string& pipelineFile)
 
 	nlohmann::json json = nlohmann::json::parse(SceneInfo);
 
-	std::vector<DescriptorBindingPropertiesEnum> BindingList;
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
 	for (int x = 0; x < json["Shader"].size(); x++)
 	{
 		PipelineShaderStageList.emplace_back(LoadPipelineShaderStageCreateInfo(json["Shader"][x]));
-
-		VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo{};
-		PipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		PipelineShaderStageCreateInfo.stage = json["Shader"]["stage"];
-		PipelineShaderStageCreateInfo.module = ReadShaderFile(json["Shader"]["shaderFile"]);
-		PipelineShaderStageCreateInfo.pName = "main";
-		PipelineShaderStageCreateInfo.pSpecializationInfo = nullptr;
-		PipelineShaderStageCreateInfo.pNext = nullptr;
-		PipelineShaderStageList.emplace_back(PipelineShaderStageCreateInfo);
 	}
 
-	for (int x = 0; x < json["DescriptorBindingLayout"].size(); x++)
+	LoadDescriptorSets(json["DescriptorBindingLayout"]);
+
+	if (ShaderPipeline == nullptr)
 	{
-		BindingList.emplace_back(json["DescriptorBindingLayout"][x]["bindingType"]);
+		VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+		vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+		vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(VertexBindingDescriptions.size());
+		vertexInputInfo.pVertexBindingDescriptions = VertexBindingDescriptions.data();
+		vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(VertexAttributeDescriptions.size());
+		vertexInputInfo.pVertexAttributeDescriptions = VertexAttributeDescriptions.data();
+
+		VkPipelineDepthStencilStateCreateInfo depthStencilStateCreateInfo = LoadPipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"]);
+		VkPipelineInputAssemblyStateCreateInfo inputAssembly = LoadPipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"]);
+		VkPipelineViewportStateCreateInfo viewportState = LoadPipelineViewportStateCreateInfo(json["PipelineViewportStateCreateInfo"]);
+		VkPipelineRasterizationStateCreateInfo rasterizer = LoadPipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"]);
+		VkPipelineMultisampleStateCreateInfo multisampling = LoadPipelineMultisampleStateCreateInfo(json["PipelineMultisampleStateCreateInfo"], samplecount);
+		VkPipelineColorBlendStateCreateInfo colorBlending = LoadPipelineColorBlendStateCreateInfo(json["PipelineColorBlendStateCreateInfo"], ColorAttachments);
+
+		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+		pipelineLayoutInfo.setLayoutCount = 1;
+		pipelineLayoutInfo.pSetLayouts = &DescriptorSetLayout;
+		pipelineLayoutInfo.pushConstantRangeCount = 1;
+		if (sizeofConstBuffer != 0)
+		{
+			VkPushConstantRange pushConstantRange{};
+			pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+			pushConstantRange.offset = 0;
+			pushConstantRange.size = sizeofConstBuffer;
+			pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
+		}
+
+		if (vkCreatePipelineLayout(VulkanRenderer::GetDevice(), &pipelineLayoutInfo, nullptr, &ShaderPipelineLayout) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create pipeline layout.");
+		}
+
+		VkGraphicsPipelineCreateInfo pipelineInfo{};
+		pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+		pipelineInfo.stageCount = static_cast<uint32_t>(PipelineShaderStageList.size());
+		pipelineInfo.pStages = PipelineShaderStageList.data();
+		pipelineInfo.pVertexInputState = &vertexInputInfo;
+		pipelineInfo.pInputAssemblyState = &inputAssembly;
+		pipelineInfo.pViewportState = &viewportState;
+		pipelineInfo.pRasterizationState = &rasterizer;
+		pipelineInfo.pMultisampleState = &multisampling;
+		pipelineInfo.pDepthStencilState = &depthStencilStateCreateInfo;
+		pipelineInfo.pColorBlendState = &colorBlending;
+		pipelineInfo.layout = ShaderPipelineLayout;
+		pipelineInfo.renderPass = renderPass;
+		pipelineInfo.subpass = 0;
+		pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
+
+		VkResult result = vkCreateGraphicsPipelines(VulkanRenderer::GetDevice(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &ShaderPipeline);
+		if (result != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create pipeline.");
+		}
 	}
 
-	DepthTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthTestEnable"];
-	DepthWriteEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthWriteEnable"];
-	DepthBoundsTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthBoundsTestEnable"];
-	StencilTestEnableSelecton = json["PipelineDepthStencilStateCreateInfo"]["stencilTestEnable"];
-    //DepthCompareOpperationsSelecton = json["PipelineDepthStencilStateCreateInfo"]["depthCompareOp"];
-
-	VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo{};
-	pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-	pipelineInputAssemblyStateCreateInfo.pNext = nullptr;
-	pipelineInputAssemblyStateCreateInfo.flags = json["PipelineInputAssemblyStateCreateInfo"]["flags"];
-	pipelineInputAssemblyStateCreateInfo.topology = json["PipelineInputAssemblyStateCreateInfo"]["topology"];
-	pipelineInputAssemblyStateCreateInfo.primitiveRestartEnable = json["PipelineInputAssemblyStateCreateInfo"]["primitiveRestartEnable"];
-
-	VkPipelineViewportStateCreateInfo pipelineViewportStateCreateInfo{};
-	pipelineViewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-	pipelineViewportStateCreateInfo.pNext = nullptr;
-	pipelineViewportStateCreateInfo.flags = json["PipelineViewportStateCreateInfo"]["flags"];
-	pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
-	pipelineViewportStateCreateInfo.pViewports = nullptr;
-	pipelineViewportStateCreateInfo.viewportCount = json["PipelineViewportStateCreateInfo"]["viewportCount"];
-	pipelineViewportStateCreateInfo.pViewports = nullptr;
-	pipelineViewportStateCreateInfo.pScissors = nullptr;
-
-	VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo{};
-	pipelineRasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-	pipelineRasterizationStateCreateInfo.pNext = nullptr;
-	pipelineRasterizationStateCreateInfo.depthClampEnable = json["PipelineRasterizationStateCreateInfo"]["depthClampEnable"];
-	pipelineRasterizationStateCreateInfo.rasterizerDiscardEnable = json["PipelineRasterizationStateCreateInfo"]["rasterizerDiscardEnable"];
-	pipelineRasterizationStateCreateInfo.polygonMode = json["PipelineRasterizationStateCreateInfo"]["polygonMode"];
-	pipelineRasterizationStateCreateInfo.cullMode = json["PipelineRasterizationStateCreateInfo"]["cullMode"];
-	pipelineRasterizationStateCreateInfo.frontFace = json["PipelineRasterizationStateCreateInfo"]["frontFace"];
-	pipelineRasterizationStateCreateInfo.depthBiasEnable = json["PipelineRasterizationStateCreateInfo"]["depthBiasEnable"];
-	pipelineRasterizationStateCreateInfo.depthBiasConstantFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasConstantFactor"];
-	pipelineRasterizationStateCreateInfo.depthBiasClamp = json["PipelineRasterizationStateCreateInfo"]["depthBiasClamp"];
-	pipelineRasterizationStateCreateInfo.depthBiasSlopeFactor = json["PipelineRasterizationStateCreateInfo"]["depthBiasSlopeFactor"];
-	pipelineRasterizationStateCreateInfo.lineWidth = json["PipelineRasterizationStateCreateInfo"]["lineWidth"];
+	for (auto& shader : PipelineShaderStageList)
+	{
+		vkDestroyShaderModule(VulkanRenderer::GetDevice(), shader.module, nullptr);
+	}*/
 }
 
 void VulkanPipelineEditor::BuildPipeline()
@@ -317,25 +369,15 @@ void VulkanPipelineEditor::SavePipeline()
 	nlohmann::json json;
 	JsonGraphicsPipeline jsonPipeline{};
 
-	std::string vertString = "../Shaders/";
-	vertString.append(ShaderName);
-	vertString.append("Vert.spv");
-
-	std::string fragString = "../Shaders/";
-	fragString.append(ShaderName);
-	fragString.append("Frag.spv");
+	std::string vertString = PathConsts::ShaderPath + ShaderName + "Vert.spv";
+	std::string fragString = PathConsts::ShaderPath + ShaderName + "Frag.spv";
 
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
 	auto vert = CreateShader(vertString, VK_SHADER_STAGE_VERTEX_BIT);
 	auto frag = CreateShader(fragString, VK_SHADER_STAGE_FRAGMENT_BIT);
 
-	std::string outputVert = "../Shaders/";
-	outputVert.append(ShaderName);
-	outputVert.append("Vert.spv");
-
-	std::string outputFrag = "../Shaders/";
-	outputFrag.append(ShaderName);
-	outputFrag.append("Frag.spv");
+	std::string outputVert = PathConsts::ShaderPath + ShaderName + "Vert.spv";
+	std::string outputFrag = PathConsts::ShaderPath + ShaderName + "Frag.spv";
 
 	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], vert, outputVert);
 	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], frag, outputFrag);

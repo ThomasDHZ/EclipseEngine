@@ -18,13 +18,14 @@
 #include "SoundSource.h"
 #include "RayTracePBRRenderer.h"
 #include "ParticleSystem.h"
-#include "GLTFRenderer.h"
+#include "RenderPass.h"
 #include "GLTFRenderer2D.h"
+#include "PBRRenderer.h"
 
 class Scene
 {
 private:
-	GLTFRenderer pbrRenderer;
+	PBRRenderer pbrRenderer;
 	//GLTFRenderer2D spriteRenderer;
 	//RayTracePBRRenderer rayTraceRenderer;
 public:

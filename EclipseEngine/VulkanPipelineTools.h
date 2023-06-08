@@ -39,6 +39,11 @@ protected:
 	VkDescriptorSetLayout DescriptorSetLayout = VK_NULL_HANDLE;
 	VkDescriptorSet DescriptorSet = VK_NULL_HANDLE;
 
+	VkDescriptorBufferInfo ReflectionViewBuffer;
+	DescriptorBindingLock ReflectionIrradianceBuffer;
+	DescriptorBindingLock ReflectionPrefilterBuffer;
+	DescriptorBindingLock CubeMapbuffer;
+
 	VkShaderModule ReadShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);
@@ -70,12 +75,11 @@ protected:
 	VkPipelineRasterizationStateCreateInfo LoadPipelineRasterizationStateCreateInfo(nlohmann::json& json);
 	VkPipelineMultisampleStateCreateInfo LoadPipelineMultisampleStateCreateInfo(nlohmann::json& json, VkSampleCountFlagBits sampleCount);
 	VkPipelineColorBlendStateCreateInfo LoadPipelineColorBlendStateCreateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments);
+	
+	std::vector<VkPipelineColorBlendAttachmentState> LoadPipelineColorBlendAttachmentStateInfo(nlohmann::json& json);
+
 	VkPipelineLayoutCreateInfo LoadPipelineLayoutCreateInfo();
 
-	VkDescriptorBufferInfo ReflectionViewBuffer;
-	DescriptorBindingLock ReflectionIrradianceBuffer;
-	DescriptorBindingLock ReflectionPrefilterBuffer;
-	DescriptorBindingLock CubeMapbuffer;
 	void LoadReflectionSamplerBuffer(CubeMapSamplerBuffer& reflectionMapSampler);
 	void LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionIrradianceMap);
 	void LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionPrefilterMap);
@@ -87,6 +91,7 @@ public:
 	void SaveDescriptorBindingLayout(nlohmann::json& json, VkDescriptorType descriptorType, DescriptorBindingPropertiesEnum descriptorBindingPropertiesEnum);
 	void SaveCreateDescriptorPool(nlohmann::json& json, VkDescriptorPoolCreateInfo descriptorPoolCreateInfo);
 	void SaveBufferDescriptorSet(nlohmann::json& json, VkWriteDescriptorSet writeDescriptorSet);
+
 	void SavePipelineDepthStencilStateCreateInfo(nlohmann::json& json, VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo);
 	void SavePipelineShaderStageCreateInfo(nlohmann::json& json, VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo, std::string filename);
 	void SavePipelineInputAssemblyStateCreateInfo(nlohmann::json& json, VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo);
@@ -94,5 +99,7 @@ public:
 	void SavePipelineRasterizationStateCreateInfo(nlohmann::json& json, VkPipelineRasterizationStateCreateInfo pipelineRasterizationStateCreateInfo);
 	void SavePipelineMultisampleStateCreateInfo(nlohmann::json& json, VkPipelineMultisampleStateCreateInfo pipelineMultisampleStateCreateInfo);
 	void SavePipelineColorBlendStateCreateInfo(nlohmann::json& json, VkPipelineColorBlendStateCreateInfo pipelineColorBlendStateCreateInfo);
+
+	void SavePipelineColorBlendAttachmentStateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& pipelineColorBlendAttachmentStateList);
 };
 

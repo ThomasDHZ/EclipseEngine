@@ -489,6 +489,29 @@ VkPipelineColorBlendStateCreateInfo VulkanPipelineTools::LoadPipelineColorBlendS
     return pipelineColorBlendStateCreateInfo;
 }
 
+std::vector<VkPipelineColorBlendAttachmentState> VulkanPipelineTools::LoadPipelineColorBlendAttachmentStateInfo(nlohmann::json& json)
+{
+    std::vector<VkPipelineColorBlendAttachmentState> pipelineColorBlendAttachmentStateList;
+    for (int x = 0; x < json.size(); x++)
+    {
+        VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState;
+        pipelineColorBlendAttachmentState.colorWriteMask = json[x]["colorWriteMask"];
+        pipelineColorBlendAttachmentState.blendEnable = json[x]["blendEnable"];
+
+        pipelineColorBlendAttachmentState.colorBlendOp = json[x]["colorBlendOp"];
+        pipelineColorBlendAttachmentState.srcColorBlendFactor = json[x]["srcColorBlendFactor"];
+        pipelineColorBlendAttachmentState.dstColorBlendFactor = json[x]["dstColorBlendFactor"];
+
+        pipelineColorBlendAttachmentState.alphaBlendOp = json[x]["alphaBlendOp"];
+        pipelineColorBlendAttachmentState.srcAlphaBlendFactor = json[x]["srcAlphaBlendFactor"];
+        pipelineColorBlendAttachmentState.dstAlphaBlendFactor = json[x]["dstAlphaBlendFactor"];
+
+        pipelineColorBlendAttachmentStateList.emplace_back();
+    }
+
+    return pipelineColorBlendAttachmentStateList;
+}
+
 void VulkanPipelineTools::SaveDescriptorBindingLayout(nlohmann::json& json, VkDescriptorType descriptorType, DescriptorBindingPropertiesEnum descriptorBindingPropertiesEnum)
 {
     JsonConverter::to_json(json["descriptorType"], descriptorType);
@@ -596,4 +619,21 @@ void VulkanPipelineTools::SavePipelineColorBlendStateCreateInfo(nlohmann::json& 
     JsonConverter::to_json(json["blendConstants"][1], pipelineColorBlendStateCreateInfo.blendConstants[1]);
     JsonConverter::to_json(json["blendConstants"][2], pipelineColorBlendStateCreateInfo.blendConstants[2]);
     JsonConverter::to_json(json["blendConstants"][3], pipelineColorBlendStateCreateInfo.blendConstants[3]);
+}
+
+void VulkanPipelineTools::SavePipelineColorBlendAttachmentStateInfo(nlohmann::json& json, std::vector<VkPipelineColorBlendAttachmentState>& pipelineColorBlendAttachmentStateList)
+{
+    for (int x = 0; x < pipelineColorBlendAttachmentStateList.size(); x++)
+    {
+        JsonConverter::to_json(json["colorWriteMask"][x], pipelineColorBlendAttachmentStateList[x].colorWriteMask);
+        JsonConverter::to_json(json["blendEnable"][x], pipelineColorBlendAttachmentStateList[x].blendEnable);
+
+        JsonConverter::to_json(json["colorBlendOp"][x], pipelineColorBlendAttachmentStateList[x].colorBlendOp);
+        JsonConverter::to_json(json["srcColorBlendFactor"][x], pipelineColorBlendAttachmentStateList[x].srcColorBlendFactor);
+        JsonConverter::to_json(json["dstColorBlendFactor"][x], pipelineColorBlendAttachmentStateList[x].dstColorBlendFactor);
+
+        JsonConverter::to_json(json["alphaBlendOp"][x], pipelineColorBlendAttachmentStateList[x].alphaBlendOp);
+        JsonConverter::to_json(json["srcAlphaBlendFactor"][x], pipelineColorBlendAttachmentStateList[x].srcAlphaBlendFactor);
+        JsonConverter::to_json(json["dstAlphaBlendFactor"][x], pipelineColorBlendAttachmentStateList[x].dstAlphaBlendFactor);
+    }
 }

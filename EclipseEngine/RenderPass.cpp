@@ -2,7 +2,6 @@
 
 RenderPass::RenderPass()
 {
-
 }
 
 RenderPass::~RenderPass()
@@ -56,7 +55,6 @@ void RenderPass::SetUpCommandBuffers()
     }
 }
 
-
 VkShaderModule RenderPass::ReadShaderFile(const std::string& filename)
 {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -84,23 +82,6 @@ VkShaderModule RenderPass::ReadShaderFile(const std::string& filename)
     }
 
     return shaderModule;
-}
-
-VkWriteDescriptorSetAccelerationStructureKHR RenderPass::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR* handle)
-{
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = {};
-    AccelerationDescriptorStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
-    AccelerationDescriptorStructure.accelerationStructureCount = 1;
-    AccelerationDescriptorStructure.pAccelerationStructures = handle;
-    return AccelerationDescriptorStructure;
-}
-
-VkDescriptorImageInfo RenderPass::AddRayTraceStorageImageDescriptor(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkImageLayout ImageLayout, VkImageView& ImageView)
-{
-    VkDescriptorImageInfo RayTraceImageDescriptor{};
-    RayTraceImageDescriptor.imageView = ImageView;
-    RayTraceImageDescriptor.imageLayout = ImageLayout;
-    return RayTraceImageDescriptor;
 }
 
 VkPipelineShaderStageCreateInfo RenderPass::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
@@ -134,120 +115,4 @@ void RenderPass::CreateRendererFramebuffers(std::vector<VkImageView>& Attachment
             throw std::runtime_error("Failed to create FrameBuffer.");
         }
     }
-}
-
-void RenderPass::AddAccelerationDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
-    DescriptorSetBinding.AccelerationStructureDescriptor = accelerationStructure;
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddStorageTextureSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-VkDescriptorImageInfo RenderPass::AddTextureDescriptor(std::shared_ptr<Texture> texture)
-{
-    VkDescriptorImageInfo DescriptorImage{};
-    DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    DescriptorImage.imageView = texture->View;
-    DescriptorImage.sampler = texture->Sampler;
-    return DescriptorImage;
-}
-
-VkDescriptorImageInfo RenderPass::AddTextureDescriptor(VkImageView view, VkSampler sampler)
-{
-    VkDescriptorImageInfo DescriptorImage{};
-    DescriptorImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    DescriptorImage.imageView = view;
-    DescriptorImage.sampler = sampler;
-    return DescriptorImage;
-}
-
-void RenderPass::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorImageInfo>& TextureImageInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    DescriptorSetBinding.TextureDescriptor = TextureImageInfo;
-    DescriptorSetBinding.Count = TextureImageInfo.size();
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddTextureDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorImageInfo& TextureImageInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    DescriptorSetBinding.TextureDescriptor = std::vector<VkDescriptorImageInfo>{ TextureImageInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddUniformBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = BufferInfo.size();
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo>& BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = BufferInfo.size();
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void RenderPass::AddNullDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = VK_SHADER_STAGE_ALL;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    DescriptorSetBinding.Count = 0;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }

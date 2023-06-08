@@ -1,4 +1,3 @@
-
 #pragma once
 #include "MeshPickerRenderPass3D.h"
 #include "FrameBufferRenderPass.h"
@@ -17,14 +16,13 @@
 #include "BloomCombineRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
 #include "EnvironmentToCubeRenderPass.h"
-#include "GLTFRenderPass.h"
 #include "IrradianceRenderPass.h"
 #include "PrefilterRenderPass.h"
 #include "GLTFSceneManager.h"
 #include "PerspectiveCamera.h"
 #include "VulkanPipelineEditor.h"
 
-class GLTFRenderer
+class PBRRenderer
 {
 private:
 	VulkanPipelineEditor pipelineEditor;
@@ -44,12 +42,13 @@ private:
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
-	GLTFRenderPass gLTFRenderPass;
+	PBRRenderPass gLTFRenderPass;
+
 	FrameBufferRenderPass frameBufferRenderPass;
 
 public:
-	GLTFRenderer();
-	~GLTFRenderer();
+	PBRRenderer();
+	~PBRRenderer();
 
 	void BuildRenderer();
 	void Update();
