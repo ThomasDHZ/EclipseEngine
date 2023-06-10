@@ -53,6 +53,34 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 
 void VulkanPipelineEditor::Update()
 {
+	ImGui::Begin("Render Pass Editor");
+
+	ImGui::InputInt("Number of MultiSampled Textures", &MultiSampledColorTextureCount);
+	MultiSampledTextureMenuList.resize(MultiSampledColorTextureCount);
+	for (int x = 0; x < MultiSampledTextureMenuList.size(); x++)
+	{
+		std::string name = ("MultiSampled Texture " + std::to_string(x));
+		MultiSampledTextureMenuList[x].ImGuiUpdate(name, x);
+	}
+
+	ImGui::InputInt("Number of Color Textures", &ColorTextureCount);
+	ColorTextureMenuList.resize(ColorTextureCount);
+	for (int x = 0; x < ColorTextureMenuList.size(); x++)
+	{
+		std::string name = ("Color Texture " + std::to_string(x));
+		ColorTextureMenuList[x].ImGuiUpdate(name, x);
+	}
+
+	ImGui::InputInt("Number of Depth Textures", &DepthTextureCount);
+	DepthtextureMenuList.resize(DepthTextureCount);
+	for (int x = 0; x < DepthtextureMenuList.size(); x++)
+	{
+		std::string name = ("Depth Texture " + std::to_string(x));
+		DepthtextureMenuList[x].ImGuiUpdate(name, x);
+	}
+
+	ImGui::End();
+
 	ImGui::Begin("Pipeline List");
 	
 	std::vector<std::string> pipelineListcharstring;
@@ -162,12 +190,12 @@ void VulkanPipelineEditor::Update()
 	ImGui::Checkbox("Stencil Test", &StencilTestEnableSelecton);
 	if (ImGui::BeginCombo("Depth Compare Opperation", DepthCompareOpperationsSelecton))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(DepthCompareOpperationEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::DepthCompareOpperationEnumList); n++)
 		{
-			bool is_selected = (DepthCompareOpperationsSelecton == DepthCompareOpperationEnumList[n]);
-			if (ImGui::Selectable(DepthCompareOpperationEnumList[n], is_selected))
+			bool is_selected = (DepthCompareOpperationsSelecton == VulkanMenu::DepthCompareOpperationEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::DepthCompareOpperationEnumList[n], is_selected))
 			{
-				DepthCompareOpperationsSelecton = DepthCompareOpperationEnumList[n];
+				DepthCompareOpperationsSelecton = VulkanMenu::DepthCompareOpperationEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -183,12 +211,12 @@ void VulkanPipelineEditor::Update()
 	ImGui::Checkbox("Primitive Restart", &PrimitiveRestartEnableSelection);
 	if (ImGui::BeginCombo("Topology", TopologySelection))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(PrimitiveTopologyEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::PrimitiveTopologyEnumList); n++)
 		{
-			bool is_selected = (TopologySelection == PrimitiveTopologyEnumList[n]);
-			if (ImGui::Selectable(PrimitiveTopologyEnumList[n], is_selected))
+			bool is_selected = (TopologySelection == VulkanMenu::PrimitiveTopologyEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::PrimitiveTopologyEnumList[n], is_selected))
 			{
-				TopologySelection = PrimitiveTopologyEnumList[n];
+				TopologySelection = VulkanMenu::PrimitiveTopologyEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -213,12 +241,12 @@ void VulkanPipelineEditor::Update()
 	ImGui::InputFloat("RasterizerDiscardEnable", &LineWidth);
 	if (ImGui::BeginCombo("Front Face Type", FrontFace))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(FrontFaceEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::FrontFaceEnumList); n++)
 		{
-			bool is_selected = (FrontFace == FrontFaceEnumList[n]);
-			if (ImGui::Selectable(FrontFaceEnumList[n], is_selected))
+			bool is_selected = (FrontFace == VulkanMenu::FrontFaceEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::FrontFaceEnumList[n], is_selected))
 			{
-				FrontFace = FrontFaceEnumList[n];
+				FrontFace = VulkanMenu::FrontFaceEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -229,12 +257,12 @@ void VulkanPipelineEditor::Update()
 	}
 	if (ImGui::BeginCombo("Cull Mode", CullMode))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(CullModeEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::CullModeEnumList); n++)
 		{
-			bool is_selected = (CullMode == CullModeEnumList[n]);
-			if (ImGui::Selectable(CullModeEnumList[n], is_selected))
+			bool is_selected = (CullMode == VulkanMenu::CullModeEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::CullModeEnumList[n], is_selected))
 			{
-				CullMode = CullModeEnumList[n];
+				CullMode = VulkanMenu::CullModeEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -245,12 +273,12 @@ void VulkanPipelineEditor::Update()
 	}
 	if (ImGui::BeginCombo("Polygon Type", PolygonMode))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(PolygonModeEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::PolygonModeEnumList); n++)
 		{
-			bool is_selected = (PolygonMode == PolygonModeEnumList[n]);
-			if (ImGui::Selectable(PolygonModeEnumList[n], is_selected))
+			bool is_selected = (PolygonMode == VulkanMenu::PolygonModeEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::PolygonModeEnumList[n], is_selected))
 			{
-				PolygonMode = PolygonModeEnumList[n];
+				PolygonMode = VulkanMenu::PolygonModeEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -384,7 +412,7 @@ void VulkanPipelineEditor::SavePipeline()
 
 	for (int x = 0; x < BindingSelectionList.size(); x++)
 	{
-		jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][x], GetBindingType(DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x])), DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x]));
+		jsonPipeline.SaveDescriptorBindingLayout(json["DescriptorBindingLayout"][x], GetBindingType(VulkanMenu::DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x])), VulkanMenu::DescriptorBindingProperties::SelectionToEnum(BindingSelectionList[x]));
 	}
 
 	VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
@@ -393,12 +421,12 @@ void VulkanPipelineEditor::SavePipeline()
 	DepthStencilStateCreateInfo.depthWriteEnable = DepthWriteEnableSelecton;
 	DepthStencilStateCreateInfo.depthBoundsTestEnable = DepthBoundsTestEnableSelecton;
 	DepthStencilStateCreateInfo.stencilTestEnable = StencilTestEnableSelecton;
-	DepthStencilStateCreateInfo.depthCompareOp = CompareOpperation::SelectionToEnum(DepthCompareOpperationsSelecton);
+	DepthStencilStateCreateInfo.depthCompareOp = VulkanMenu::CompareOpperation::SelectionToEnum(DepthCompareOpperationsSelecton);
 	jsonPipeline.SavePipelineDepthStencilStateCreateInfo(json["PipelineDepthStencilStateCreateInfo"], DepthStencilStateCreateInfo);
 
 	VkPipelineInputAssemblyStateCreateInfo saveinputAssembly = {};
 	saveinputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-	saveinputAssembly.topology = PrimitiveTopology::SelectionToEnum(TopologySelection);
+	saveinputAssembly.topology = VulkanMenu::PrimitiveTopology::SelectionToEnum(TopologySelection);
 	saveinputAssembly.primitiveRestartEnable = PrimitiveRestartEnableSelection;
 	jsonPipeline.SavePipelineInputAssemblyStateCreateInfo(json["PipelineInputAssemblyStateCreateInfo"], saveinputAssembly);
 
@@ -414,9 +442,9 @@ void VulkanPipelineEditor::SavePipeline()
 	saverasterizer.depthBiasEnable = DepthBiasEnable;
 	saverasterizer.rasterizerDiscardEnable = RasterizerDiscardEnable;
 	saverasterizer.lineWidth = LineWidth;
-	saverasterizer.frontFace = FrontFace::SelectionToEnum(FrontFace);
-	saverasterizer.cullMode = CullMode::SelectionToEnum(CullMode);
-	saverasterizer.polygonMode = PolygonMode::SelectionToEnum(PolygonMode);
+	saverasterizer.frontFace = VulkanMenu::FrontFace::SelectionToEnum(FrontFace);
+	saverasterizer.cullMode = VulkanMenu::CullMode::SelectionToEnum(CullMode);
+	saverasterizer.polygonMode = VulkanMenu::PolygonMode::SelectionToEnum(PolygonMode);
 	jsonPipeline.SavePipelineRasterizationStateCreateInfo(json["PipelineRasterizationStateCreateInfo"], saverasterizer);
 
 	VkPipelineMultisampleStateCreateInfo savemultisampling{};
