@@ -480,6 +480,7 @@
     <ClInclude Include="VulkanPipelineTools.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
+    <ClInclude Include="VulkanEnumToMenuList.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

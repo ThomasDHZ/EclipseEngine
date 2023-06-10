@@ -19,12 +19,12 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 
 	if (ImGui::BeginCombo("Texture Format:", TextureFormatSelection))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(TextureFormatEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VKEnumToList::VkFormatEnumList); n++)
 		{
-			bool is_selected = (TextureFormatSelection == TextureFormatEnumList[n]);
-			if (ImGui::Selectable(TextureFormatEnumList[n], is_selected))
+			bool is_selected = (TextureFormatSelection == VKEnumToList::VkFormatEnumList[n]);
+			if (ImGui::Selectable(VKEnumToList::VkFormatEnumList[n], is_selected))
 			{
-				TextureFormatSelection = TextureFormatEnumList[n];
+				TextureFormatSelection = VKEnumToList::VkFormatEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -36,12 +36,12 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 
 	if (ImGui::BeginCombo("Multi Sampling", MulitSamplerEnumSelection))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(MultiSamplerEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VKEnumToList::VkSampleCountFlagBitsEnumList); n++)
 		{
-			bool is_selected = (MulitSamplerEnumSelection == MultiSamplerEnumList[n]);
-			if (ImGui::Selectable(MultiSamplerEnumList[n], is_selected))
+			bool is_selected = (MulitSamplerEnumSelection == VKEnumToList::VkSampleCountFlagBitsEnumList[n]);
+			if (ImGui::Selectable(VKEnumToList::VkSampleCountFlagBitsEnumList[n], is_selected))
 			{
-				MulitSamplerEnumSelection = MultiSamplerEnumList[n];
+				MulitSamplerEnumSelection = VKEnumToList::VkSampleCountFlagBitsEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -58,8 +58,8 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 VkAttachmentDescription AddTextureAttachmentMenu::GetTextureAttachmentDescription()
 {
 	VkAttachmentDescription RenderedColorTextureAttachment = {};
-	RenderedColorTextureAttachment.format = TextureFormatProperties::SelectionToEnum(TextureFormatSelection);
-	RenderedColorTextureAttachment.samples = SamplerCountProperties::SelectionToEnum(MulitSamplerEnumSelection);
+	RenderedColorTextureAttachment.format = VKEnumToList::VkFormatConverter::SelectionToEnum(TextureFormatSelection);
+	RenderedColorTextureAttachment.samples = VKEnumToList::VkSampleCountFlagBitsConverter::SelectionToEnum(MulitSamplerEnumSelection);
 	RenderedColorTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	RenderedColorTextureAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	RenderedColorTextureAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;

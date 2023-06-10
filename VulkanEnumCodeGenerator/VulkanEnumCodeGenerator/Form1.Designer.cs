@@ -44,7 +44,6 @@
             this.VulkanEnumRichTextBox.Size = new System.Drawing.Size(318, 365);
             this.VulkanEnumRichTextBox.TabIndex = 1;
             this.VulkanEnumRichTextBox.Text = "";
-            this.VulkanEnumRichTextBox.TextChanged += new System.EventHandler(this.VulkanEnumRichTextBox_TextChanged);
             // 
             // label1
             // 
@@ -71,7 +70,6 @@
             this.ReturnCodeRichTextBox.Size = new System.Drawing.Size(318, 365);
             this.ReturnCodeRichTextBox.TabIndex = 3;
             this.ReturnCodeRichTextBox.Text = "";
-            this.ReturnCodeRichTextBox.TextChanged += new System.EventHandler(this.ReturnCodeRichTextBox_TextChanged);
             // 
             // ConvertButton
             // 
@@ -98,7 +96,6 @@
             this.VulkanEnumTextBox.Name = "VulkanEnumTextBox";
             this.VulkanEnumTextBox.Size = new System.Drawing.Size(190, 23);
             this.VulkanEnumTextBox.TabIndex = 7;
-            this.VulkanEnumTextBox.TextChanged += new System.EventHandler(this.VulkanEnumTextBox_TextChanged);
             // 
             // Form1
             // 
