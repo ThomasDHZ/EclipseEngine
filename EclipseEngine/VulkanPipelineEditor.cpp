@@ -54,29 +54,184 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 void VulkanPipelineEditor::Update()
 {
 	ImGui::Begin("Render Pass Editor");
+	ImGui::Separator();
+	ImGui::InputText("Render Pass Name", RenderPassName, IM_ARRAYSIZE(RenderPassName));
 
-	ImGui::InputInt("Number of MultiSampled Textures", &MultiSampledColorTextureCount);
+	ImGui::Separator();
+	if (ImGui::BeginCombo("Texture Resolution:", TextureResolutionSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(TextureResolutionList); n++)
+		{
+			bool is_selected = (TextureResolutionSelection == TextureResolutionList[n]);
+			if (ImGui::Selectable(TextureResolutionList[n], is_selected))
+			{
+				TextureResolutionSelection = TextureResolutionList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Color Texture Format:", ColorTextureFormatSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkFormatEnumList); n++)
+		{
+			bool is_selected = (ColorTextureFormatSelection == VulkanMenu::VkFormatEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkFormatEnumList[n], is_selected))
+			{
+				ColorTextureFormatSelection = VulkanMenu::VkFormatEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Depth Texture Format:", DepthTextureFormatSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkFormatEnumList); n++)
+		{
+			bool is_selected = (DepthTextureFormatSelection == VulkanMenu::VkFormatEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkFormatEnumList[n], is_selected))
+			{
+				DepthTextureFormatSelection = VulkanMenu::VkFormatEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Multi Sampling", MulitSamplerEnumSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkSampleCountFlagBitsEnumList); n++)
+		{
+			bool is_selected = (MulitSamplerEnumSelection == VulkanMenu::VkSampleCountFlagBitsEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkSampleCountFlagBitsEnumList[n], is_selected))
+			{
+				MulitSamplerEnumSelection = VulkanMenu::VkSampleCountFlagBitsEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+	ImGui::Separator();
+	if(ImGui::InputInt("Number of MultiSampled Textures", &MultiSampledColorTextureCount));
+	{
+		if (MultiSampledColorTextureCount < 0)
+		{
+			MultiSampledColorTextureCount = 0;
+		}
+		if (MultiSampledColorTextureCount > AttachmentLimit)
+		{
+			MultiSampledColorTextureCount = AttachmentLimit;
+		}
+	}
 	MultiSampledTextureMenuList.resize(MultiSampledColorTextureCount);
 	for (int x = 0; x < MultiSampledTextureMenuList.size(); x++)
 	{
 		std::string name = ("MultiSampled Texture " + std::to_string(x));
-		MultiSampledTextureMenuList[x].ImGuiUpdate(name, x);
+		MultiSampledTextureMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 1) + x);
 	}
 
-	ImGui::InputInt("Number of Color Textures", &ColorTextureCount);
+	if (ImGui::InputInt("Number of Color Textures", &ColorTextureCount));
+	{
+		if (ColorTextureCount < 0)
+		{
+			ColorTextureCount = 0;
+		}
+		if (ColorTextureCount > AttachmentLimit)
+		{
+			ColorTextureCount = AttachmentLimit;
+		}
+	}
 	ColorTextureMenuList.resize(ColorTextureCount);
 	for (int x = 0; x < ColorTextureMenuList.size(); x++)
 	{
 		std::string name = ("Color Texture " + std::to_string(x));
-		ColorTextureMenuList[x].ImGuiUpdate(name, x);
+		ColorTextureMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 2) + x);
 	}
 
-	ImGui::InputInt("Number of Depth Textures", &DepthTextureCount);
-	DepthtextureMenuList.resize(DepthTextureCount);
-	for (int x = 0; x < DepthtextureMenuList.size(); x++)
+	if (ImGui::InputInt("Number of Output Color Textures", &OutputColorTextureCount))
 	{
-		std::string name = ("Depth Texture " + std::to_string(x));
-		DepthtextureMenuList[x].ImGuiUpdate(name, x);
+		if (OutputColorTextureCount < 0)
+		{
+			OutputColorTextureCount = 0;
+		}
+		if (OutputColorTextureCount > AttachmentLimit)
+		{
+			OutputColorTextureCount = AttachmentLimit;
+		}
+	}
+
+	OutputColorTextureMenuList.resize(OutputColorTextureCount);
+	for (int x = 0; x < OutputColorTextureMenuList.size(); x++)
+	{
+		std::string name = ("Output Color Texture " + std::to_string(x));
+		OutputColorTextureMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 3) + x);
+	}
+
+	std::string name = "Depth Texture";
+	DepthtextureMenu.ImGuiUpdate(name, (AttachmentLimit * 2) + 1);
+	ImGui::Checkbox("Use Output Depth Texture", &UseOutPutDepthTexture);
+	if (UseOutPutDepthTexture)
+	{
+		name = "Output Depth Texture";
+		OutputDepthTextureMenu.ImGuiUpdate(name, (AttachmentLimit * 2) + 2);
+	}
+
+	ImGui::Separator();
+
+	ImGui::InputInt("Subpass Dependency", &SubpassDependencyCount);
+	SubpassDependencyMenuList.resize(SubpassDependencyCount);
+	for (int x = 0; x < SubpassDependencyMenuList.size(); x++)
+	{
+		std::string name = ("Subpass Dependency " + std::to_string(x));
+		SubpassDependencyMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 4) + x);
+	}
+
+	ImGui::InputInt("Pipeline Count", &AddPipelineCount);
+	AddPipelineMenuList.resize(AddPipelineCount);
+	for (int x = 0; x < AddPipelineMenuList.size(); x++)
+	{
+		std::string name = ("Pipeline Selecton " + std::to_string(x));
+		AddPipelineMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 6) + x);
+	}
+
+
+	if (ImGui::InputInt("Blending Attachments:", &AddColorBlendAttachmentStateCount));
+	{
+		if (AddColorBlendAttachmentStateCount < 0)
+		{
+			AddColorBlendAttachmentStateCount = 0;
+		}
+		if (AddColorBlendAttachmentStateCount > AttachmentLimit)
+		{
+			AddColorBlendAttachmentStateCount = AttachmentLimit;
+		}
+	}
+
+	ColorBlendAttachmentMenuList.resize(AddColorBlendAttachmentStateCount);
+	for (int x = 0; x < ColorBlendAttachmentMenuList.size(); x++)
+	{
+		std::string name = ("Color Texture " + std::to_string(x));
+		ColorBlendAttachmentMenuList[x].ImGuiUpdate(name, (AttachmentLimit * 5) + x);
+	}
+
+
+	if (ImGui::Button("Save"))
+	{
+		SaveRenderPass();
 	}
 
 	ImGui::End();
@@ -143,43 +298,6 @@ void VulkanPipelineEditor::Update()
 			ImGui::EndCombo();
 		}
 	}
-
-	//int ColorBlendAttachment = 0;
-	//bool					   blendEnable;
-	//BlendFactorMode            srcColorBlendFactor;
-	//BlendFactorMode            dstColorBlendFactor;
-	//BlendOpMode                colorBlendOp;
-	//BlendFactorMode            srcAlphaBlendFactor;
-	//BlendFactorMode            dstAlphaBlendFactor;
-	//BlendOpMode                alphaBlendOp;
-	//VkColorComponentFlags    colorWriteMask;
-
-	//ImGui::InputInt("Number of Bindings", &BindingDescriptorNum);
-	//BindingSelectionList.resize(BindingDescriptorNum);
-	//for (int x = 0; x < BindingSelectionList.size(); x++)
-	//{
-	//	ImGui::Separator();
-
-	//	if (ImGui::BeginCombo(("Binding " + std::to_string(x)).c_str(), BindingSelectionList[x]))
-	//	{
-	//		for (int n = 0; n < IM_ARRAYSIZE(PipelineDescriptorList); n++)
-	//		{
-	//			bool is_selected = (BindingSelectionList[x] == PipelineDescriptorList[n]);
-	//			if (ImGui::Selectable(PipelineDescriptorList[n], is_selected))
-	//			{
-	//				BindingSelectionList[x] = PipelineDescriptorList[n];
-	//				if (is_selected)
-	//				{
-	//					ImGui::SetItemDefaultFocus();
-	//				}
-	//			}
-	//		}
-	//		ImGui::EndCombo();
-	//	}
-
-	//	ImGui::Separator();
-	//}
-
 
 	ImGui::Separator();
 	ImGui::Text("Depth Stencil State Create Info:");
@@ -390,6 +508,63 @@ void VulkanPipelineEditor::LoadPipeline(std::string& pipelineFile)
 
 void VulkanPipelineEditor::BuildPipeline()
 {
+}
+
+void VulkanPipelineEditor::SaveRenderPass()
+{
+	nlohmann::json json;
+
+	for (int x = 0; x < MultiSampledTextureMenuList.size(); x++)
+	{
+		MultiSampledTextureMenuList[x].SaveTextureAttachmentDescription(json["MultiSampledTextureList"][x]);
+	}
+	for (int x = 0; x < ColorTextureMenuList.size(); x++)
+	{
+		ColorTextureMenuList[x].SaveTextureAttachmentDescription(json["ColorTextureList"][x]);
+	}
+	for (int x = 0; x < OutputColorTextureMenuList.size(); x++)
+	{
+		OutputColorTextureMenuList[x].SaveTextureAttachmentDescription(json["OutputColorTextureList"][x]);
+	}
+
+	std::string selection(TextureResolutionSelection);
+	std::string delimiter = "x";
+
+	size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+	std::string token;
+	std::vector<std::string> res;
+
+	while ((pos_end = selection.find(delimiter, pos_start)) != std::string::npos) {
+		token = selection.substr(pos_start, pos_end - pos_start);
+		pos_start = pos_end + delim_len;
+		res.push_back(token);
+	}
+
+	res.push_back(selection.substr(pos_start));
+	glm::vec2 textureResolution = glm::vec2(stoi(res[0]), stoi(res[1]));
+
+	JsonConverter::to_json(json["textureResolution"], textureResolution);
+	json["colorTextureFormat"] = VulkanMenu::VkFormatConverter::SelectionToEnum(ColorTextureFormatSelection);
+	json["depthTextureFormat"] = VulkanMenu::VkFormatConverter::SelectionToEnum(DepthTextureFormatSelection);
+	json["multiSampleCount"] = VulkanMenu::VkSampleCountFlagBitsConverter::SelectionToEnum(MulitSamplerEnumSelection);
+
+	DepthtextureMenu.SaveTextureAttachmentDescription(json["DepthTexture"]);
+	OutputDepthTextureMenu.SaveTextureAttachmentDescription(json["OutputDepthtexture"]);
+	for (int x = 0; x < ColorBlendAttachmentMenuList.size(); x++)
+	{
+		ColorBlendAttachmentMenuList[x].SaveAddColorBlendAttachmentState(json["ColorBlendAttachment"][x]);
+	}
+	for (int x = 0; x < SubpassDependencyMenuList.size(); x++)
+	{
+		SubpassDependencyMenuList[x].SaveSubpassDependency(json["SubPassDependency"][x]);
+	}
+
+	std::string renderPassName = PathConsts::RenderPassPath + RenderPassName;
+	renderPassName.append(".txt");
+
+	std::ofstream pipelineFile(renderPassName);
+	pipelineFile << json;
+	pipelineFile.close();
 }
 
 void VulkanPipelineEditor::SavePipeline()

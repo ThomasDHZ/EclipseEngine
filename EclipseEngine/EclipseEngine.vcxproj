@@ -174,6 +174,9 @@
       <FileType>Document</FileType>
     </None>
     <ClCompile Include="AccelerationStructureBuffer.cpp" />
+    <ClCompile Include="AddColorBlendAttachmentState.cpp" />
+    <ClCompile Include="AddPipelineMenu.cpp" />
+    <ClCompile Include="AddSubpassDependencyMenu.cpp" />
     <ClCompile Include="AddTextureAttachmentMenu.cpp" />
     <ClCompile Include="Animation3D.cpp" />
     <ClCompile Include="AnimationPlayer3D.cpp" />
@@ -190,6 +193,7 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="DebugPosMesh.cpp" />
+    <ClCompile Include="EclipseGUI.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObject2D.cpp" />
@@ -323,6 +327,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
+    <ClInclude Include="AddColorBlendAttachmentState.h" />
+    <ClInclude Include="AddPipelineMenu.h" />
+    <ClInclude Include="AddSubpassDependencyMenu.h" />
     <ClInclude Include="AddTextureAttachmentMenu.h" />
     <ClInclude Include="Animation3D.h" />
     <ClInclude Include="AnimationPlayer3D.h" />
@@ -340,6 +347,7 @@
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="DebugPosMesh.h" />
+    <ClInclude Include="EclipseGUI.h" />
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnvironmentTexture.h" />
     <ClInclude Include="GameController.h" />
@@ -480,7 +488,6 @@
     <ClInclude Include="VulkanPipelineTools.h" />
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
-    <ClInclude Include="VulkanEnumToMenuList.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

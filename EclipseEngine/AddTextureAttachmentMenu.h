@@ -1,6 +1,7 @@
 #pragma once
 #include "VulkanRenderer.h"
-#include "VulkanEnumToMenuList.h"
+#include "VulkanMenu.h"
+#include "JsonConverter.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_vulkan.h"
@@ -9,15 +10,18 @@
 class AddTextureAttachmentMenu
 {
 private:
-	glm::vec2 TextureResolution = glm::vec2(0.0f);
-	const char* TextureFormatSelection = VKEnumToList::VkFormatEnumList[50];
-    const char* MulitSamplerEnumSelection = VKEnumToList::VkSampleCountFlagBitsEnumList[0];
+	const char* loadOpSelection = VulkanMenu::VkAttachmentLoadOpEnumList[0];
+	const char* storeOpSelection = VulkanMenu::VkAttachmentStoreOpEnumList[0];
+	const char* stencilLoadOpSelection = VulkanMenu::VkAttachmentLoadOpEnumList[0];
+	const char* stencilStoreOpSelection = VulkanMenu::VkAttachmentStoreOpEnumList[0];
+	const char* initialLayoutSelection = VulkanMenu::VkImageLayoutEnumList[0];
+	const char* finalLayoutSelection = VulkanMenu::VkImageLayoutEnumList[0];
 
 public:
     AddTextureAttachmentMenu();
 	~AddTextureAttachmentMenu();
 
 	void ImGuiUpdate(std::string& textureName, int id);
-    VkAttachmentDescription GetTextureAttachmentDescription();
+	void SaveTextureAttachmentDescription(nlohmann::json& json);
 };
 

@@ -15,16 +15,15 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 	ImGui::Separator();
 
 	ImGui::PushID(id);
-	ImGui::InputFloat2("Texture Resolution", &TextureResolution[0]);
 
-	if (ImGui::BeginCombo("Texture Format:", TextureFormatSelection))
+	if (ImGui::BeginCombo("Load Op", loadOpSelection))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(VKEnumToList::VkFormatEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkAttachmentLoadOpEnumList); n++)
 		{
-			bool is_selected = (TextureFormatSelection == VKEnumToList::VkFormatEnumList[n]);
-			if (ImGui::Selectable(VKEnumToList::VkFormatEnumList[n], is_selected))
+			bool is_selected = (loadOpSelection == VulkanMenu::VkAttachmentLoadOpEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkAttachmentLoadOpEnumList[n], is_selected))
 			{
-				TextureFormatSelection = VKEnumToList::VkFormatEnumList[n];
+				loadOpSelection = VulkanMenu::VkAttachmentLoadOpEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -34,14 +33,82 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 		ImGui::EndCombo();
 	}
 
-	if (ImGui::BeginCombo("Multi Sampling", MulitSamplerEnumSelection))
+	if (ImGui::BeginCombo("Store Op", storeOpSelection))
 	{
-		for (int n = 0; n < IM_ARRAYSIZE(VKEnumToList::VkSampleCountFlagBitsEnumList); n++)
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkAttachmentStoreOpEnumList); n++)
 		{
-			bool is_selected = (MulitSamplerEnumSelection == VKEnumToList::VkSampleCountFlagBitsEnumList[n]);
-			if (ImGui::Selectable(VKEnumToList::VkSampleCountFlagBitsEnumList[n], is_selected))
+			bool is_selected = (storeOpSelection == VulkanMenu::VkAttachmentStoreOpEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkAttachmentStoreOpEnumList[n], is_selected))
 			{
-				MulitSamplerEnumSelection = VKEnumToList::VkSampleCountFlagBitsEnumList[n];
+				storeOpSelection = VulkanMenu::VkAttachmentStoreOpEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Stencil Load Op", stencilLoadOpSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkAttachmentLoadOpEnumList); n++)
+		{
+			bool is_selected = (stencilLoadOpSelection == VulkanMenu::VkAttachmentLoadOpEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkAttachmentLoadOpEnumList[n], is_selected))
+			{
+				stencilLoadOpSelection = VulkanMenu::VkAttachmentLoadOpEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Stencil Store Op", stencilStoreOpSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkAttachmentStoreOpEnumList); n++)
+		{
+			bool is_selected = (stencilStoreOpSelection == VulkanMenu::VkAttachmentStoreOpEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkAttachmentStoreOpEnumList[n], is_selected))
+			{
+				stencilStoreOpSelection = VulkanMenu::VkAttachmentStoreOpEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Initial Layout", initialLayoutSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkImageLayoutEnumList); n++)
+		{
+			bool is_selected = (initialLayoutSelection == VulkanMenu::VkImageLayoutEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkImageLayoutEnumList[n], is_selected))
+			{
+				initialLayoutSelection = VulkanMenu::VkImageLayoutEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("Final Layout", finalLayoutSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(VulkanMenu::VkImageLayoutEnumList); n++)
+		{
+			bool is_selected = (finalLayoutSelection == VulkanMenu::VkImageLayoutEnumList[n]);
+			if (ImGui::Selectable(VulkanMenu::VkImageLayoutEnumList[n], is_selected))
+			{
+				finalLayoutSelection = VulkanMenu::VkImageLayoutEnumList[n];
 				if (is_selected)
 				{
 					ImGui::SetItemDefaultFocus();
@@ -55,17 +122,12 @@ void AddTextureAttachmentMenu::ImGuiUpdate(std::string& textureName, int id)
 	ImGui::Separator();
 }
 
-VkAttachmentDescription AddTextureAttachmentMenu::GetTextureAttachmentDescription()
+void AddTextureAttachmentMenu::SaveTextureAttachmentDescription(nlohmann::json& json)
 {
-	VkAttachmentDescription RenderedColorTextureAttachment = {};
-	RenderedColorTextureAttachment.format = VKEnumToList::VkFormatConverter::SelectionToEnum(TextureFormatSelection);
-	RenderedColorTextureAttachment.samples = VKEnumToList::VkSampleCountFlagBitsConverter::SelectionToEnum(MulitSamplerEnumSelection);
-	RenderedColorTextureAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-	RenderedColorTextureAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-	RenderedColorTextureAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	RenderedColorTextureAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-	RenderedColorTextureAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	RenderedColorTextureAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-	return RenderedColorTextureAttachment;
+	json["loadOp"] = VulkanMenu::VkAttachmentLoadOpConverter::SelectionToEnum(loadOpSelection);
+	json["storeOp"] = VulkanMenu::VkAttachmentStoreOpConverter::SelectionToEnum(storeOpSelection);
+	json["stencilLoadOp"] = VulkanMenu::VkAttachmentLoadOpConverter::SelectionToEnum(stencilLoadOpSelection);
+	json["stencilStoreOp"] = VulkanMenu::VkAttachmentStoreOpConverter::SelectionToEnum(stencilStoreOpSelection);
+	json["initialLayout"] = VulkanMenu::VkImageLayoutConverter::SelectionToEnum(initialLayoutSelection);
+	json["finalLayout"] = VulkanMenu::VkImageLayoutConverter::SelectionToEnum(finalLayoutSelection);
 }

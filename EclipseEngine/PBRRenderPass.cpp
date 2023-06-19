@@ -1,101 +1,19 @@
 #include "PBRRenderPass.h"
 
-PBRRenderPass::PBRRenderPass() : RenderPass()
+PBRRenderPass::PBRRenderPass() : GLTFRenderPass()
 {
 }
+
 
 PBRRenderPass::~PBRRenderPass()
 {
 }
 
-void PBRRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
+void PBRRenderPass::BuildRenderPass(std::string& renderPass, PBRRenderPassTextureSubmitList& textures)
 {
-    SampleCount = GraphicsDevice::GetMaxSampleCount();
-    RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
-
-    if (renderPass == nullptr)
-    {
-        ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-        RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-        DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-    }
-    else
-    {
-        ColorTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderedTexture->RecreateRendererTexture(RenderPassResolution);
-        DepthTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPass::Destroy();
-    }
-
-    std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(ColorTexture->View);
-    AttachmentList.emplace_back(RenderedTexture->View);
-    AttachmentList.emplace_back(DepthTexture->View);
-
-    RenderPassDesc();
-    CreateRendererFramebuffers(AttachmentList);
+    GLTFRenderPass::BuildRenderPass(renderPass, textures);
     BuildRenderPassPipelines(textures);
     SetUpCommandBuffers();
-}
-
-void PBRRenderPass::RenderPassDesc()
-{
-    std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(ColorTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(RenderedTexture->GetAttachmentDescription());
-    AttachmentDescriptionList.emplace_back(DepthTexture->GetAttachmentDescription());
-
-    std::vector<VkAttachmentReference> ColorRefsList;
-    ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    std::vector<VkAttachmentReference> MultiSampleReferenceList;
-    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
-
-    VkSubpassDescription subpassDescription = {};
-    subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
-    subpassDescription.pColorAttachments = ColorRefsList.data();
-    subpassDescription.pDepthStencilAttachment = &depthReference;
-    subpassDescription.pResolveAttachments = MultiSampleReferenceList.data();
-
-    std::vector<VkSubpassDependency> DependencyList;
-
-    VkSubpassDependency FirstDependency = {};
-    FirstDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-    FirstDependency.dstSubpass = 0;
-    FirstDependency.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    FirstDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    FirstDependency.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
-    FirstDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    FirstDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-    DependencyList.emplace_back(FirstDependency);
-
-    VkSubpassDependency SecondDependency = {};
-    SecondDependency.srcSubpass = 0;
-    SecondDependency.dstSubpass = VK_SUBPASS_EXTERNAL;
-    SecondDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-    SecondDependency.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
-    SecondDependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
-    SecondDependency.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-    SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-    DependencyList.emplace_back(SecondDependency);
-
-    VkRenderPassCreateInfo renderPassInfo = {};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
-    renderPassInfo.pAttachments = AttachmentDescriptionList.data();
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpassDescription;
-    renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
-    renderPassInfo.pDependencies = DependencyList.data();
-
-    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
-    {
-        throw std::runtime_error("Failed to create Buffer RenderPass.");
-    }
-
 }
 
 void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
@@ -113,17 +31,12 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
 
-    PipelineInfoStruct pipelineInfo{};
-    pipelineInfo.renderPass = renderPass;
-    pipelineInfo.ColorAttachments = ColorAttachmentList;
-    pipelineInfo.SampleCount = SampleCount;
-
     //Main Renderers
     {
-        LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
-        SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
+        LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SceneProperties));
+        WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SceneProperties));
+        PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SceneProperties), textures);
+        SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SkyBoxView), textures.CubeMapTexture);
        // lightReflectionPipeline = JsonGraphicsPipeline("LightReflectionPosDebug.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, 0);
     }
 
@@ -137,8 +50,8 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
         attributeDescriptions = Vertex3D::getAttributeDescriptions();
         attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
 
-        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
-        WireframeInstancePipeline = JsonGraphicsPipeline("WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SceneProperties), textures);
+        WireframeInstancePipeline = JsonGraphicsPipeline("WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_8_BIT, sizeof(SceneProperties));
     }
 }
 
@@ -241,9 +154,9 @@ VkCommandBuffer PBRRenderPass::Draw()
 
 void PBRRenderPass::Destroy()
 {
-    ColorTexture->Destroy();
-    RenderedTexture->Destroy();
-    DepthTexture->Destroy();
+    //ColorTexture->Destroy();
+    //RenderedTexture->Destroy();
+    //DepthTexture->Destroy();
 
     PBRPipeline.Destroy();
     PBRInstancePipeline.Destroy();
@@ -252,5 +165,5 @@ void PBRRenderPass::Destroy()
     LinePipeline.Destroy();
     SkyBoxPipeline.Destroy();
 
-    RenderPass::Destroy();
+    GLTFRenderPass::Destroy();
 }

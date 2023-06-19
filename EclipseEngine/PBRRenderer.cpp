@@ -200,8 +200,8 @@ void PBRRenderer::BuildRenderer()
 	{
 		//SkyBox Reflection Pass
 		{
-			skyBoxReflectionIrradianceRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			skyBoxReflectionPrefilterRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 
 			PBRRenderPassTextureSubmitList submitList;
@@ -209,12 +209,12 @@ void PBRRenderer::BuildRenderer()
 			submitList.IrradianceTextureList.emplace_back(skyBoxReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(skyBoxReflectionPrefilterRenderPass.PrefilterCubeMap);
 
-			skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 		}
 		//Mesh Reflection Pass
 		{
-			meshReflectionIrradianceRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			meshReflectionPrefilterRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -225,19 +225,20 @@ void PBRRenderer::BuildRenderer()
 		}
 		//Mesh Reflection Pass
 		{
-			irradianceRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			prefilterRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			irradianceRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
 			submitList.IrradianceTextureList.emplace_back(irradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(prefilterRenderPass.PrefilterCubeMap);
 
-			gLTFRenderPass.BuildRenderPass(submitList);
+			std::string a = "PBRRenderPass.txt";
+			gLTFRenderPass.BuildRenderPass(a, submitList);
 		}
 	}
 
-	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
+	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTextureList[0], gLTFRenderPass.RenderedTextureList[0]);
 	VulkanRenderer::UpdateRendererFlag = true;
 	GLTFSceneManager::Update();
 }
@@ -312,16 +313,16 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw());
 
-	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw());
 
-	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());

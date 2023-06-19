@@ -11,6 +11,9 @@
 #include "JsonGraphicsPipeline.h"
 #include "VulkanMenu.h"
 #include "AddTextureAttachmentMenu.h"
+#include "AddSubpassDependencyMenu.h"
+#include "AddColorBlendAttachmentState.h"
+#include "AddPipelineMenu.h"
 
 class VulkanPipelineEditor : public VulkanPipelineTools
 {
@@ -30,33 +33,81 @@ private:
 											"kSpotLightDescriptor",
 											"kReflectionViewDescriptor" };
 
-	//std::vector<std::shared_ptr<RenderedColorTexture>> MultiSampledColorTextureList;
-	//std::vector<std::shared_ptr<RenderedColorTexture>> ColorTextureList;
-	//std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
+	const char* TextureResolutionList[34]{
+	"1 x 1",
+	"2 x 2",
+	"4 x 4",
+	"8 x 8",
+	"16 x 16",
+	"32 x 32",
+	"64 x 64",
+	"128 x 128",
+	"256 x 256",
+	"512 x 512",
+	"1024 x 1024",
+	"4096 x 4096",
+	"800 x 600",
+	"1024 x 768",
+	"1152 x 864",
+	"1176 x 664",
+	"1208 x 720",
+	"1208 x 768",
+	"1208 x 800",
+	"1208 x 960",
+	"1208 x 1024",
+	"1360 x 768",
+	"1400 x 1050",
+	"1440 x 900",
+	"1600 x 900",
+	"1600 x 1024",
+	"1600 x 1200",
+	"1680 x 1050",
+	"1920 x 1080",
+	"1920 x 1200",
+	"2048 x 1536",
+	"2560 x 1440",
+	"2560 x 1600",
+	"3840 x 2160"
+	};
+	const int AttachmentLimit = 10;
+	const int DepenencyLimit = 10;
 
-	int MultiSampledColorTextureCount = 0;
+	char RenderPassName[50];
+	const char* TextureResolutionSelection = TextureResolutionList[28];
+	const char* ColorTextureFormatSelection = VulkanMenu::VkFormatEnumList[37];
+	const char* DepthTextureFormatSelection = VulkanMenu::VkFormatEnumList[126];
+	const char* MulitSamplerEnumSelection = VulkanMenu::VkSampleCountFlagBitsEnumList[0];
+
+	int TextureImageCount = 0;
+
+	int MultiSampledColorTextureCount = 1;
 	std::vector<AddTextureAttachmentMenu> MultiSampledTextureMenuList;
 
-	int ColorTextureCount = 0;
+	int ColorTextureCount = 1;
 	std::vector<AddTextureAttachmentMenu> ColorTextureMenuList;
 
-	int DepthTextureCount = 0;
-	std::vector<AddTextureAttachmentMenu> DepthtextureMenuList;
+	int OutputColorTextureCount = 0;
+	std::vector<AddTextureAttachmentMenu> OutputColorTextureMenuList;
+
+	AddTextureAttachmentMenu DepthtextureMenu;
+
+	bool UseOutPutDepthTexture = false;
+	AddTextureAttachmentMenu OutputDepthTextureMenu;
+
+	int SubpassDependencyCount = 0;
+	std::vector<AddSubpassDependencyMenu> SubpassDependencyMenuList;
+
+	int AddColorBlendAttachmentStateCount = 0;
+	std::vector<AddColorBlendAttachmentState> ColorBlendAttachmentMenuList;
+
+	int AddPipelineCount = 0;
+	std::vector<AddPipelineMenu> AddPipelineMenuList;
+	//int 
 
 	char ShaderName[50];
 
 	int BindingDescriptorNum = 0;
 	std::vector<const char*> BindingSelectionList;
-
-	int ColorBlendAttachment = 0;
-	bool					   blendEnable;
-	VulkanMenu::BlendFactorMode            srcColorBlendFactor;
-	VulkanMenu::BlendFactorMode            dstColorBlendFactor;
-	VulkanMenu::BlendOpMode                colorBlendOp;
-	VulkanMenu::BlendFactorMode            srcAlphaBlendFactor;
-	VulkanMenu::BlendFactorMode            dstAlphaBlendFactor;
-	VulkanMenu::BlendOpMode                alphaBlendOp;
-	//VkColorComponentFlags    colorWriteMask;
 
 	//VkPipelineDepthStencilStateCreateInfo
 	bool DepthTestEnableSelecton = true;
@@ -102,6 +153,7 @@ public:
 	void Update();
 	void LoadPipeline(std::string& pipelineFile);
 	void BuildPipeline();
+	void SaveRenderPass();
 	void SavePipeline();
 };
 

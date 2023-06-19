@@ -8,38 +8,138 @@ GLTFRenderPass::~GLTFRenderPass()
 {
 }
 
-void GLTFRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& textures)
+void GLTFRenderPass::BuildRenderPass(std::string& renderPassFile, PBRRenderPassTextureSubmitList& textures)
 {
-    //SampleCount = GraphicsDevice::GetMaxSampleCount();
-    //RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
+    std::string SceneInfo;
+    std::ifstream SceneFile;
+    SceneFile.open(PathConsts::RenderPassPath + renderPassFile);
+    if (SceneFile.is_open())
+    {
+        while (!SceneFile.eof())
+        {
+            getline(SceneFile, SceneInfo);
+        }
+    }
+    else std::cout << "Unable to open file";
+    SceneFile.close();
 
-    //if (renderPass == nullptr)
+    std::vector<VkImageView> AttachmentList;
+    std::vector<VkAttachmentDescription> AttachmentDescriptionList;
+
+    nlohmann::json json = nlohmann::json::parse(SceneInfo);
+
+    JsonConverter::from_json(json["textureResolution"], RenderPassResolution);
+    VkFormat colorFormat = json["colorTextureFormat"];
+    VkFormat depthFormat = json["depthTextureFormat"];
+    VkSampleCountFlagBits sampleCount = json["multiSampleCount"];
+
+    for (int x = 0; x < json["MultiSampledTextureList"].size(); x++)
+    {
+        MultiSampledColorTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, colorFormat, sampleCount)));
+        AttachmentList.emplace_back(MultiSampledColorTextureList[x]->View);
+
+        VkAttachmentDescription attachmentDescription = LoadTextureAttachmentDescription(json["MultiSampledTextureList"][x]);
+        attachmentDescription.format = colorFormat;
+        attachmentDescription.samples = sampleCount;
+        AttachmentDescriptionList.emplace_back(attachmentDescription);
+    }
+    for (int x = 0; x < json["ColorTextureList"].size(); x++)
+    {
+        ColorTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, colorFormat, VK_SAMPLE_COUNT_1_BIT)));
+        AttachmentList.emplace_back(ColorTextureList[x]->View);
+
+        VkAttachmentDescription attachmentDescription = LoadTextureAttachmentDescription(json["ColorTextureList"][x]);
+        attachmentDescription.format = colorFormat;
+        attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
+        AttachmentDescriptionList.emplace_back(attachmentDescription);
+    }
+    for (int x = 0; x < json["OutputColorTextureList"].size(); x++)
+    {
+        RenderedTextureList.emplace_back(std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, colorFormat, VK_SAMPLE_COUNT_1_BIT)));
+        AttachmentList.emplace_back(RenderedTextureList[x]->View);
+
+        VkAttachmentDescription attachmentDescription = LoadTextureAttachmentDescription(json["OutputColorTextureList"][x]);
+        attachmentDescription.format = colorFormat;
+        attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT;
+        AttachmentDescriptionList.emplace_back(attachmentDescription);
+    }
+    {
+        DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, sampleCount)));
+        AttachmentList.emplace_back(DepthTextureList[0]->View);
+
+        VkAttachmentDescription attachmentDescription = LoadTextureAttachmentDescription(json["DepthTexture"]);
+        attachmentDescription.format = depthFormat;
+        attachmentDescription.samples = sampleCount;
+        AttachmentDescriptionList.emplace_back(attachmentDescription);
+    }
     //{
-    //    MultiSampledColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    //    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    //    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    //    RenderedDepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(textureResolution, sampleCount)));
+    //    AttachmentList.emplace_back(RenderedDepthTextureList[0]->View);
 
-    //    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    //    VkAttachmentDescription attachmentDescription = LoadTextureAttachmentDescription(json["OutputDepthtexture"]);
+    //    attachmentDescription.format = depthFormat;
+    //    attachmentDescription.samples = sampleCount;
+    //    AttachmentDescriptionList.emplace_back(attachmentDescription);
     //}
-    //else
-    //{
-    //    MultiSampledColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, SampleCount));
-    //    ColorTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    //    DepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+    
+    std::vector<VkAttachmentReference> ColorRefsList;
+    ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    //    RenderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
-    //    GLTFRenderPass::Destroy();
-    //}
+    std::vector<VkAttachmentReference> MultiSampleReferenceList;
+    MultiSampleReferenceList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    //std::vector<VkImageView> AttachmentList;
-    //AttachmentList.emplace_back(ColorTexture->View);
-    //AttachmentList.emplace_back(RenderedTexture->View);
-    //AttachmentList.emplace_back(DepthTexture->View);
+    VkAttachmentReference DepthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+
+    std::vector<VkSubpassDescription> SubpassDescriptionList{};
+    VkSubpassDescription subpassDescription = {};
+    subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
+    subpassDescription.pColorAttachments = ColorRefsList.data();
+    subpassDescription.pDepthStencilAttachment = &DepthReference;
+    subpassDescription.pResolveAttachments = MultiSampleReferenceList.data();
+    SubpassDescriptionList.emplace_back(subpassDescription);
+
+    std::vector<VkSubpassDependency> DependencyList;
+    VkSubpassDependency FirstDependency = {};
+    FirstDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    FirstDependency.dstSubpass = 0;
+    FirstDependency.srcStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    FirstDependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    FirstDependency.srcAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    FirstDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    FirstDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+    DependencyList.emplace_back(FirstDependency);
+
+    VkSubpassDependency SecondDependency = {};
+    SecondDependency.srcSubpass = 0;
+    SecondDependency.dstSubpass = VK_SUBPASS_EXTERNAL;
+    SecondDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    SecondDependency.dstStageMask = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    SecondDependency.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    SecondDependency.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+    SecondDependency.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+    DependencyList.emplace_back(SecondDependency);
+
+    VkRenderPassCreateInfo renderPassInfo = {};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.attachmentCount = static_cast<uint32_t>(AttachmentDescriptionList.size());
+    renderPassInfo.pAttachments = AttachmentDescriptionList.data();
+    renderPassInfo.subpassCount = static_cast<uint32_t>(SubpassDescriptionList.size());
+    renderPassInfo.pSubpasses = SubpassDescriptionList.data();
+    renderPassInfo.dependencyCount = static_cast<uint32_t>(DependencyList.size());
+    renderPassInfo.pDependencies = DependencyList.data();
+
+    if (vkCreateRenderPass(VulkanRenderer::GetDevice(), &renderPassInfo, nullptr, &renderPass))
+    {
+        throw std::runtime_error("Failed to create Buffer RenderPass.");
+    }
+
+   CreateRendererFramebuffers(AttachmentList);
 }
 
 void GLTFRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures)
 {
-
+   
 }
 
 void GLTFRenderPass::Destroy()
@@ -132,6 +232,32 @@ VkPipelineShaderStageCreateInfo GLTFRenderPass::CreateShader(const std::string& 
     vertShaderStageInfo.pName = "main";
 
     return vertShaderStageInfo;
+}
+
+VkAttachmentDescription GLTFRenderPass::LoadTextureAttachmentDescription(nlohmann::json& json)
+{
+    VkAttachmentDescription RenderedColorTextureAttachment = {};
+    RenderedColorTextureAttachment.loadOp = json["loadOp"];
+    RenderedColorTextureAttachment.storeOp = json["storeOp"];
+    RenderedColorTextureAttachment.stencilLoadOp = json["stencilLoadOp"];
+    RenderedColorTextureAttachment.stencilStoreOp = json["stencilStoreOp"];
+    RenderedColorTextureAttachment.initialLayout = json["initialLayout"];
+    RenderedColorTextureAttachment.finalLayout = json["finalLayout"];
+
+    return RenderedColorTextureAttachment;
+}
+
+VkSubpassDependency GLTFRenderPass::LoadSubPassDependency(nlohmann::json& json)
+{
+    VkSubpassDependency SubpassDependency{};
+    SubpassDependency.srcSubpass = json["srcSubpass"];
+    SubpassDependency.dstSubpass = json["dstSubpass"];
+    SubpassDependency.srcStageMask = json["srcStageMask"];
+    SubpassDependency.dstStageMask = json["dstStageMask"];
+    SubpassDependency.srcAccessMask = json["srcAccessMask"];
+    SubpassDependency.dstAccessMask = json["dstAccessMask"];
+    SubpassDependency.dependencyFlags = json["dependencyFlags"];
+    return SubpassDependency;
 }
 
 void GLTFRenderPass::CreateRendererFramebuffers(std::vector<VkImageView>& AttachmentList)
