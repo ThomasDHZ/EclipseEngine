@@ -2,13 +2,11 @@
 #include "Light.h"
 #include "UniformBuffer.h"
 #include "RenderedCubeMapDepthTexture.h"
-#include "Model.h"
 
 class PointLight : public Light<PointLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedCubeMapDepthTexture> LightViewTexture;
-	//std::shared_ptr<GameObject> debugMesh;
 
 public:
 	PointLight();

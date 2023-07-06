@@ -273,6 +273,23 @@ void VulkanPipelineEditor::Update()
 	ImGui::Text("Shader Locations:");
 
 	ImGui::InputText("Shader Name", ShaderName, IM_ARRAYSIZE(ShaderName));
+	if (ImGui::BeginCombo("Pipeline Render Type", PipelineTypeSelection))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(PipelineTypeEnumList); n++)
+		{
+			bool is_selected = (PipelineTypeSelection == PipelineTypeEnumList[n]);
+			if (ImGui::Selectable(PipelineTypeEnumList[n], is_selected))
+			{
+				PipelineTypeSelection = PipelineTypeEnumList[n];
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+		}
+		ImGui::EndCombo();
+	}
+	
 
 	ImGui::Separator();
 	ImGui::Text("Descriptor Sets:");
@@ -558,6 +575,10 @@ void VulkanPipelineEditor::SaveRenderPass()
 	{
 		SubpassDependencyMenuList[x].SaveSubpassDependency(json["SubPassDependency"][x]);
 	}
+	for (int x = 0; x < AddPipelineMenuList.size(); x++)
+	{
+		AddPipelineMenuList[x].SavePipeline(json["Shader"][x]);
+	}
 
 	std::string renderPassName = PathConsts::RenderPassPath + RenderPassName;
 	renderPassName.append(".txt");
@@ -582,6 +603,7 @@ void VulkanPipelineEditor::SavePipeline()
 	std::string outputVert = PathConsts::ShaderPath + ShaderName + "Vert.spv";
 	std::string outputFrag = PathConsts::ShaderPath + ShaderName + "Frag.spv";
 
+	JsonConverter::to_json(json["PipelineRenderType"], PipelineRenderTypeConverter::SelectionToEnum(PipelineTypeSelection));
 	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][0], vert, outputVert);
 	jsonPipeline.SavePipelineShaderStageCreateInfo(json["Shader"][1], frag, outputFrag);
 

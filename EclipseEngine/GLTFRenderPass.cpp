@@ -156,7 +156,129 @@ void GLTFRenderPass::Destroy()
 
 VkCommandBuffer GLTFRenderPass::Draw()
 {
-    return VkCommandBuffer();
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    std::array<VkClearValue, 3> clearValues{};
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[2].depthStencil = { 1.0f, 0 };
+
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = (float)RenderPassResolution.x;
+    viewport.height = (float)RenderPassResolution.y;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+
+    VkRect2D rect2D{};
+    rect2D.offset = { 0, 0 };
+    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to begin recording command buffer.");
+    }
+
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+    vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+
+    for (auto& pipeline : RendererPipelineList)
+    {
+        if (pipeline.PipelineType == PipelineRenderType::kPipelineSkyboxRenderer)
+        {
+            pipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
+        }
+    }
+    for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
+    {
+        for (auto& pipeline : RendererPipelineList)
+        {
+            switch (GLTFSceneManager::GameObjectList[x]->RenderType)
+            {
+                case GameObjectRenderType::kModelRenderer:
+                {
+                    if (GLTFSceneManager::WireframeModeFlag)
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
+                        {
+                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    else
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineModelRenderer)
+                        {
+                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    break;
+                }
+                case GameObjectRenderType::kInstanceRenderer:
+                {
+                    if (GLTFSceneManager::WireframeModeFlag)
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
+                        {
+                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    else
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineInstanceRenderer)
+                        {
+                            pipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    break;
+                }
+                case GameObjectRenderType::kSpriteRenderer:
+                {
+                    if (GLTFSceneManager::WireframeModeFlag)
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
+                        {
+                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    else
+                    {
+                        if (pipeline.PipelineType == PipelineRenderType::kPipelineSpriteRenderer)
+                        {
+                            pipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                        }
+                    }
+                    break;
+                }
+                case GameObjectRenderType::kLineRenderer3D:
+                {
+                    if (pipeline.PipelineType == PipelineRenderType::kPipelineLineRenderer3D)
+                    {
+                        pipeline.DrawLine(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    vkCmdEndRenderPass(commandBuffer);
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to record command buffer.");
+    }
+
+    return commandBuffer;
 }
 
 void GLTFRenderPass::OneTimeRenderPassSubmit(VkCommandBuffer* CMDBuffer)

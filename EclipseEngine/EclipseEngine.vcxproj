@@ -205,8 +205,6 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
-    <ClCompile Include="DeferredRendererPipeline.cpp" />
-    <ClCompile Include="DeferredRenderPass.cpp" />
     <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
     <ClCompile Include="DepthCubeMapPipeline.cpp" />
     <ClCompile Include="DepthCubeMapRenderer.cpp" />
@@ -362,8 +360,6 @@
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
-    <ClInclude Include="DeferredRendererPipeline.h" />
-    <ClInclude Include="DeferredRenderPass.h" />
     <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
     <ClInclude Include="DepthCubeMapPipeline.h" />
     <ClInclude Include="DepthCubeMapRenderer.h" />
@@ -405,6 +401,7 @@
     <ClInclude Include="PathConsts.h" />
     <ClInclude Include="PBRRenderer.h" />
     <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="PipelineRenderType.h" />
     <ClInclude Include="PrefilterRenderPass.h" />
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />

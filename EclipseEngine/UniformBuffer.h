@@ -142,6 +142,7 @@ struct BillboardSceneProperties : public SceneProperties
 struct DirectionalLightProjection
 {
 	alignas(4) uint32_t MeshIndex;
+	alignas(4) uint32_t MaterialIndex;
 	alignas(4) uint32_t LightIndex;
 };
 

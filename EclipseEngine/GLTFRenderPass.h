@@ -38,7 +38,6 @@ protected:
 	VkAttachmentDescription LoadTextureAttachmentDescription(nlohmann::json& json);
 	VkSubpassDependency LoadSubPassDependency(nlohmann::json& json);
 
-
 	virtual void CreateRendererFramebuffers(std::vector<VkImageView>& AttachmentList);
 	virtual void RenderPassDesc();
 	virtual void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);

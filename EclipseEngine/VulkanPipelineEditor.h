@@ -69,6 +69,7 @@ private:
 	"2560 x 1600",
 	"3840 x 2160"
 	};
+
 	const int AttachmentLimit = 10;
 	const int DepenencyLimit = 10;
 
@@ -105,6 +106,7 @@ private:
 	//int 
 
 	char ShaderName[50];
+	const char* PipelineTypeSelection = PipelineTypeEnumList[0];
 
 	int BindingDescriptorNum = 0;
 	std::vector<const char*> BindingSelectionList;

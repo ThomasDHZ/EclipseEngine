@@ -1,8 +1,23 @@
 #pragma once
 #include "UniformBuffer.h"
 
+class LightBase
+{
+private:
+public:
+	LightBase()
+	{
+
+	}
+
+	~LightBase()
+	{
+
+	}
+};
+
 template <class T>
-class Light
+class Light : public LightBase
 {
 
 protected:
@@ -11,12 +26,12 @@ protected:
 
 public:
 
-	Light()
+	Light() : LightBase()
 	{
 
 	}
 
-	Light(T UniformData)
+	Light(T UniformData) : LightBase()
 	{
 	}
 

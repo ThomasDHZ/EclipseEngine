@@ -15,7 +15,8 @@ enum GameObjectRenderType
 	kLineRenderer2D,
 	kLineRenderer3D,
 	kGridRenderer2D,
-	kGridRenderer3D
+	kGridRenderer3D,
+	kDebugRenderer
 };
 
 class GameObject

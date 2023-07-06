@@ -44,7 +44,7 @@ void PBRRenderer::BuildRenderer()
 	IronMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
-	//GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
 	GLTFSceneManager::AddMeshGameObject3D("Sphere", d, GoldMaterial);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 

@@ -5,6 +5,54 @@
 
 namespace VulkanMenu
 {
+	enum PipelineRenderType
+	{
+		kPipelineModelRenderer,
+		kPipelineInstanceRenderer,
+		kPipelineSpriteRenderer,
+		kPipelineLineRenderer2D,
+		kPipelineLineRenderer3D,
+		kPipelineWireFrameRender,
+		kPipelineSkyboxRenderer
+	};
+
+	const char* PipelineTypeEnumList[7] = { "kPipelineModelRenderer",
+													"kPipelineInstanceRenderer",
+													"kPipelineSpriteRenderer",
+													"kPipelineLineRenderer2D",
+													"kPipelineLineRenderer3D",
+													"kPipelineWireFrameRender",
+													"kPipelineSkyboxRenderer" };
+
+	struct PipelineRenderTypeConverter
+	{
+		static const char* SelectionToString(PipelineRenderType input)
+		{
+			switch (input)
+			{
+			case kPipelineModelRenderer: return "kPipelineModelRenderer"; break;
+			case kPipelineInstanceRenderer: return "kPipelineInstanceRenderer"; break;
+			case kPipelineSpriteRenderer: return "kPipelineSpriteRenderer"; break;
+			case kPipelineLineRenderer2D: return "kPipelineLineRenderer2D"; break;
+			case kPipelineLineRenderer3D: return "kPipelineLineRenderer3D"; break;
+			case kPipelineWireFrameRender: return "kPipelineWireFrameRender"; break;
+			case kPipelineSkyboxRenderer: return "kPipelineSkyboxRenderer"; break;
+			default: return "";
+			}
+		}
+
+		static PipelineRenderType SelectionToEnum(std::string input)
+		{
+			if (input == "kPipelineModelRenderer") return kPipelineModelRenderer;
+			if (input == "kPipelineInstanceRenderer") return kPipelineInstanceRenderer;
+			if (input == "kPipelineSpriteRenderer") return kPipelineSpriteRenderer;
+			if (input == "kPipelineLineRenderer2D") return kPipelineLineRenderer2D;
+			if (input == "kPipelineLineRenderer3D") return kPipelineLineRenderer3D;
+			if (input == "kPipelineWireFrameRender") return kPipelineWireFrameRender;
+			if (input == "kPipelineSkyboxRenderer") return kPipelineSkyboxRenderer;
+		}
+	};
+
 	const char* VkBlendOpEnumList[52]{
 "VK_BLEND_OP_ADD",
 "VK_BLEND_OP_SUBTRACT",

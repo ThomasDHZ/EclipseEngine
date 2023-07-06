@@ -3,12 +3,15 @@
 #include <string>
 #include <json.hpp>
 
+#include "VulkanMenu.h"
 #include "VulkanPipelineTools.h"
 #include "ConstMeshInfo.h"
 
 class JsonGraphicsPipeline : public VulkanPipelineTools
 {
 public:
+	VulkanMenu::PipelineRenderType PipelineType;
+
 	VkDescriptorPool CreateDescriptorPool(std::vector<VkDescriptorPoolSize> DescriptorPoolInfo, uint32_t modelCount);
 	VkDescriptorPool LoadCreateDescriptorPool(nlohmann::json& json);
 
