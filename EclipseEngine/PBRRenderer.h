@@ -29,6 +29,9 @@ private:
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
+	//Depth/Shadow Pass
+	DepthRenderPass DepthPassRenderPass;
+
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;

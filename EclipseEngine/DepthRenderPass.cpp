@@ -8,74 +8,74 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-//void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
-//{
-//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-//    RenderPassResolution = TextureResolution;
-//
-//    if (renderPass == nullptr)
-//    {
-//        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-//        for (auto& light : DirectionalLightList)
-//        {
-//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//    }
-//    else
-//    {
-//        ClearTextureList();
-//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-//        for (auto& light : DirectionalLightList)
-//        {
-//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//        RenderPass::Destroy();
-//    }
-//
-//
-//    std::vector<VkImageView> AttachmentList;
-//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-//
-//    RenderPassDesc();
-//    CreateRendererFramebuffers(AttachmentList);
-//    BuildRenderPassPipelines();
-//    SetUpCommandBuffers();
-//}
-//
-//void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
-//{
-//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-//    RenderPassResolution = TextureResolution;
-//
-//    if (renderPass == nullptr)
-//    {
-//        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-//        for (auto& light : DirectionalLightList)
-//        {
-//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//    }
-//    else
-//    {
-//        ClearTextureList();
-//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-//        for (auto& light : DirectionalLightList)
-//        {
-//            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//        RenderPass::Destroy();
-//    }
-//
-//    std::vector<VkImageView> AttachmentList;
-//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-//
-//    RenderPassDesc();
-//    CreateRendererFramebuffers(AttachmentList);
-//    BuildRenderPassPipelines();
-//    SetUpCommandBuffers();
-//    Draw();
-//    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-//}
+void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : DirectionalLightList)
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (auto& light : DirectionalLightList)
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+        RenderPass::Destroy();
+    }
+
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+}
+
+void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : DirectionalLightList)
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (auto& light : DirectionalLightList)
+        {
+            DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+        }
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
 
 
 void DepthRenderPass::RenderPassDesc()
@@ -148,7 +148,7 @@ void DepthRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    depthPipeline.InitializePipeline(pipelineInfo);
+    DepthPipeline = JsonGraphicsPipeline("DepthShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, sizeof(DepthSceneData));
     depthInstancedPipeline.InitializePipeline(pipelineInfo);
 }
 
@@ -198,31 +198,31 @@ VkCommandBuffer DepthRenderPass::Draw()
     }
     for (int x = 0; x < DepthTextureList.size(); x++)
     {
+        DepthSceneData a = DepthSceneData();
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-        //{
-        //    for (auto& mesh : MeshRendererManager::GetMeshList())
-        //    {
-        //        switch (mesh->GetMeshType())
-        //        {
-        //        case MeshTypeEnum::kMeshPolygon:
-        //        {
-        //            depthPipeline.Draw(commandBuffer, mesh, x);
-        //            break;
-        //        }
-        //        case MeshTypeEnum::kMeshPolygonInstanced:
-        //        {
-        //            depthInstancedPipeline.Draw(commandBuffer, mesh, x);
-        //            break;
-        //        }
-        //        default:
-        //        {
-        //            break;
-        //        }
-        //        }
-        //    }
-        //}
+        for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
+        {
+            switch (GLTFSceneManager::GameObjectList[x]->RenderType)
+            {
+                case GameObjectRenderType::kModelRenderer:
+                {
+                    //DepthPipeline.DrawMesh<DepthSceneData>(commandBuffer, GLTFSceneManager::GameObjectList[x], a);
+                    break;
+                }
+                case GameObjectRenderType::kInstanceRenderer:
+                {
+                    DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                    break;
+                }
+                case GameObjectRenderType::kSpriteRenderer:
+                {
+                    DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    break;
+                }
+            }
+        }
         vkCmdEndRenderPass(commandBuffer);
 
         RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
@@ -246,7 +246,7 @@ void DepthRenderPass::Destroy()
         depthTexture->Destroy();
     }
     RenderPassDepthTexture->Destroy();
-    depthPipeline.Destroy();
+    DepthPipeline.Destroy();
     depthInstancedPipeline.Destroy();
     RenderPass::Destroy();
 }

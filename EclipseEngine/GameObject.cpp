@@ -11,21 +11,6 @@ GameObject::~GameObject()
 {
 }
 
-void GameObject::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	GameObjectRenderer->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
-}
-
-void GameObject::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
-}
-
-void GameObject::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	GameObjectRenderer->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout);
-}
-
 void GameObject::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	GameObjectRenderer->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout);

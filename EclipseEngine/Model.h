@@ -408,9 +408,41 @@ public:
 	void Update(const glm::mat4& GameObjectTransformMatrix);
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
-	void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout);
-	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
-	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
+
+	template<class T>
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
+	template<class T>
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawInstancedMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout);
+		}
+	}
+
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	void Destroy();

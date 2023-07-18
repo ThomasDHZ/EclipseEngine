@@ -105,11 +105,11 @@ VkCommandBuffer PBRRenderPass::Draw()
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframePipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    WireframePipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
-                    PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
@@ -117,11 +117,11 @@ VkCommandBuffer PBRRenderPass::Draw()
             {
                 if (GLTFSceneManager::WireframeModeFlag)
                 {
-                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    WireframeInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 else
                 {
-                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    PBRInstancePipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
                 break;
             }
@@ -139,7 +139,7 @@ VkCommandBuffer PBRRenderPass::Draw()
             }
             case GameObjectRenderType::kDebugRenderer:
             {
-                lightReflectionPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                lightReflectionPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 break;
             }
             case GameObjectRenderType::kLineRenderer3D:

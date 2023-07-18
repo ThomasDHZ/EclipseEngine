@@ -41,23 +41,31 @@ public:
 	}
 
 	template<class T>
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, T& constBuffer)
+	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, T& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
-		gameObject->Draw(commandBuffer, DescriptorSet, ShaderPipelineLayout);
+		gameObject->DrawMesh<T>(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
 	}
 
-	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
+	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
+		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
 	}
 
-	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)
+	template<class T>
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, T& constBuffer)
 	{
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-		gameObject->DrawInstancedMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout);
+		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(T), &constBuffer);
+		gameObject->DrawInstancedMesh<T>(commandBuffer, DescriptorSet, ShaderPipelineLayout);
+	}
+
+	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, SceneProperties& constBuffer)
+	{
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+		gameObject->DrawInstancedMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, constBuffer);
 	}
 
 	void DrawSprite(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject)

@@ -254,7 +254,7 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
 	{
 		switch (GLTFSceneManager::GameObjectList[x]->RenderType)
 		{
-		case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]); break;
+		case GameObjectRenderType::kModelRenderer: pbrReflectionPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites); break;
 			//case GameObjectRenderType::kInstanceRenderer: pbrInstancedPipeline.DrawInstancedMesh(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);  break;
 			//case GameObjectRenderType::kSpriteRenderer: spriteReflectionPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites); break;
 		}

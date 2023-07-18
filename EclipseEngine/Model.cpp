@@ -341,30 +341,6 @@ void Model::UpdateMeshPropertiesBuffer()
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
 
-void Model::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	for (auto& mesh : MeshList)
-	{
-		mesh->Draw(commandBuffer, descriptorset, shaderPipelineLayout);
-	}
-}
-
-void Model::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	for (auto& mesh : MeshList)
-	{
-		mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout);
-	}
-}
-
-void Model::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	for (auto& mesh : MeshList)
-	{
-		mesh->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout);
-	}
-}
-
 void Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)

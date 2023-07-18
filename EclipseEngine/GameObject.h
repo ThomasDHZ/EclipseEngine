@@ -167,9 +167,28 @@ public:
 	glm::vec3 GameObjectScale = glm::vec3(1.0f);
 
 
-	virtual void Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
-	virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
-	virtual void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
+		template<class T>
+		void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+		{
+			GameObjectRenderer->DrawMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+
+		virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+		{
+			GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+
+		template<class T>
+		void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+		{
+			GameObjectRenderer->DrawInstancedMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout);
+		}
+
+		virtual void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+		{
+			GameObjectRenderer->DrawInstancedMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+
 	virtual void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);
 	virtual void Update(float DeltaTime);

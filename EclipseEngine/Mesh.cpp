@@ -329,31 +329,16 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 	}
 }
 
-void Mesh::Draw(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout ShaderPipelineLayout)
-{
-	VkDeviceSize offsets[] = { 0 };
-	for (auto& primitve : PrimitiveList)
-	{
-		if (primitve.IndexCount > 0)
-		{
-			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
-			vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
-			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
-			vkCmdDrawIndexed(commandBuffer, primitve.IndexCount, 1, primitve.FirstIndex, 0, 0);
-		}
-	}
-}
-
-void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
+void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
 	for (auto& primitve : PrimitiveList)
 	{
-		GLTFSceneManager::sceneProperites.MeshIndex = MeshBufferIndex;
-		GLTFSceneManager::sceneProperites.ReflectionIndex = ReflectionIndex;
-		GLTFSceneManager::sceneProperites.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
+		constBuffer.MeshIndex = MeshBufferIndex;
+		constBuffer.ReflectionIndex = ReflectionIndex;
+		constBuffer.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
 		VkDeviceSize offsets[] = { 0 };
-		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
+		vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &constBuffer);
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
 		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 		if (primitve.IndexCount > 0)
@@ -364,7 +349,7 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 	}
 }
 
-void Mesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
+void Mesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);

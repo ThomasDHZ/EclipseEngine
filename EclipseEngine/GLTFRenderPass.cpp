@@ -214,14 +214,14 @@ VkCommandBuffer GLTFRenderPass::Draw()
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
                         {
-                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawMesh<SceneProperties>(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     else
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineModelRenderer)
                         {
-                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawMesh<SceneProperties>(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     break;
@@ -232,14 +232,14 @@ VkCommandBuffer GLTFRenderPass::Draw()
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
                         {
-                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawMesh<SceneProperties>(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     else
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineInstanceRenderer)
                         {
-                            pipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     break;
@@ -250,7 +250,7 @@ VkCommandBuffer GLTFRenderPass::Draw()
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
                         {
-                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawMesh<SceneProperties>(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     else
