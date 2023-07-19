@@ -22,6 +22,8 @@ class Light : public LightBase
 
 protected:
 	std::string LightName;
+	glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
+	glm::mat4 ViewMatrix = glm::mat4(1.0f);
 	UniformBuffer<T> LightBuffer;
 
 public:
@@ -58,5 +60,8 @@ public:
 		LightBufferInfo.range = VK_WHOLE_SIZE;
 		LightPropertiesBufferList.emplace_back(LightBufferInfo);
 	}
+
+	glm::mat4 GetProjectionMatrix() { return ProjectionMatrix; }
+	glm::mat4 GetViewMatrix() { return ViewMatrix; }
 };
 

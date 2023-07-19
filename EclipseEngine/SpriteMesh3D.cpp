@@ -1,4 +1,5 @@
 #include "SpriteMesh3D.h"
+#include "GLTFSceneManager.h"
 
 SpriteMesh3D::SpriteMesh3D()
 {
@@ -83,9 +84,9 @@ SpriteMesh3D::~SpriteMesh3D()
 {
 }
 
-void SpriteMesh3D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
+void SpriteMesh3D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties)
 {
-	Mesh::DrawSprite(commandBuffer, descriptorSet, shaderPipelineLayout);
+	Mesh::DrawSprite<SceneProperties>(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 }
 
 void SpriteMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)

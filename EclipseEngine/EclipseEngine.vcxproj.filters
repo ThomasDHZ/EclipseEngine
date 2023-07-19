@@ -402,9 +402,6 @@
     <ClCompile Include="GLTFSceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFDirectionalLight.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLTFPointLight.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -584,6 +581,9 @@
     </ClCompile>
     <ClCompile Include="AddPipelineMenu.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFDirectionalLight.cpp">
+      <Filter>Source Files\Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

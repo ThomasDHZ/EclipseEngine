@@ -250,14 +250,14 @@ VkCommandBuffer GLTFRenderPass::Draw()
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineWireFrameRender)
                         {
-                            pipeline.DrawMesh<SceneProperties>(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                            pipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     else
                     {
                         if (pipeline.PipelineType == PipelineRenderType::kPipelineSpriteRenderer)
                         {
-                            pipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                            pipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                         }
                     }
                     break;

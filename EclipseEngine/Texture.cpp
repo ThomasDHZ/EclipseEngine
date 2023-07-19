@@ -1045,3 +1045,8 @@ void Texture::CopyCubeMapLayer(VkCommandBuffer& commandBuffer, std::shared_ptr<T
 	copyImage.extent.depth = 1;
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
+
+void Texture::ImGuiShowTexture(const ImVec2& TextureDisplaySize)
+{
+	ImGui::Image(ImGuiDescriptorSet, TextureDisplaySize);
+}

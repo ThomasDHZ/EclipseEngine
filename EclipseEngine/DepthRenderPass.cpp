@@ -198,27 +198,29 @@ VkCommandBuffer DepthRenderPass::Draw()
     }
     for (int x = 0; x < DepthTextureList.size(); x++)
     {
-        DepthSceneData a = DepthSceneData();
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
         {
+            DepthSceneData depthSceneData = DepthSceneData();
+            depthSceneData.LightIndex = x;
+
             switch (GLTFSceneManager::GameObjectList[x]->RenderType)
             {
                 case GameObjectRenderType::kModelRenderer:
                 {
-                    //DepthPipeline.DrawMesh<DepthSceneData>(commandBuffer, GLTFSceneManager::GameObjectList[x], a);
+                    DepthPipeline.DrawMesh<DepthSceneData>(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
                     break;
                 }
                 case GameObjectRenderType::kInstanceRenderer:
                 {
-                    DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                    //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                     break;
                 }
                 case GameObjectRenderType::kSpriteRenderer:
                 {
-                    DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
                     break;
                 }
             }

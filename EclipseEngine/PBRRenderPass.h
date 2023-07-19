@@ -1,10 +1,13 @@
 #pragma once
 #include "RenderedColorTexture.h"
-#include "GLTFRenderPass.h"
+#include "RenderPass.h"
 #include "JsonGraphicsPipeline.h"
-class PBRRenderPass : public GLTFRenderPass
+class PBRRenderPass : public RenderPass
 {
 private:
+	std::shared_ptr<RenderedColorTexture> ColorTexture;
+
+
 	JsonGraphicsPipeline PBRPipeline;
 	JsonGraphicsPipeline PBRInstancePipeline;
 	JsonGraphicsPipeline WireframePipeline;
@@ -19,7 +22,10 @@ public:
 	PBRRenderPass();
 	~PBRRenderPass();
 
+	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
+	void RenderPassDesc();
 	void BuildRenderPass(std::string& renderPass, PBRRenderPassTextureSubmitList& textures);
 	VkCommandBuffer Draw();
 	void Destroy();

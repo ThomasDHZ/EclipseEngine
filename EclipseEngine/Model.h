@@ -426,6 +426,14 @@ public:
 		}
 	}
 
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, DepthSceneData& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
 	template<class T>
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
 	{
@@ -443,7 +451,23 @@ public:
 		}
 	}
 
-	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
+	template<class T>
+	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawSprite<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
+	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
 	void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	void Destroy();
 

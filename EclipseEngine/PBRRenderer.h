@@ -20,6 +20,7 @@
 #include "PrefilterRenderPass.h"
 #include "GLTFSceneManager.h"
 #include "PerspectiveCamera.h"
+#include "OrthographicCamera.h"
 #include "VulkanPipelineEditor.h"
 
 class PBRRenderer

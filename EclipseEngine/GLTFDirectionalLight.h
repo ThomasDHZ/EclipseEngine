@@ -13,9 +13,9 @@ public:
 	GLTFDirectionalLight(GLTFDirectionalLightBuffer light);
 	~GLTFDirectionalLight();
 
-	glm::vec2 LeftRight = glm::vec2(-180.0f, 192.0f);
-	glm::vec2 TopBottom = glm::vec2(-110.0f, 117.0f);
-	glm::vec2 NearFar = glm::vec2(-5000.0f, 460.0f);
+	glm::vec2 LeftRight = glm::vec2(-5.0f, 5.0f);
+	glm::vec2 TopBottom = glm::vec2(-5.0f, 5.0f);
+	glm::vec2 NearFar = glm::vec2(-5.0f, 5.0f);
 
 
 	void Update();

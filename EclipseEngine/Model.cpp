@@ -341,14 +341,6 @@ void Model::UpdateMeshPropertiesBuffer()
 	MeshPropertiesBuffer = MeshPropertiesDescriptorList;
 }
 
-void Model::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout)
-{
-	for (auto& mesh : MeshList)
-	{
-		mesh->DrawSprite(commandBuffer, descriptorset, shaderPipelineLayout);
-	}
-}
-
 void Model::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
 {
 	for (auto& mesh : MeshList)

@@ -166,7 +166,7 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
             }
             else
             {
-                Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x]);
+                //Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x]);
             }
             break;
         }
