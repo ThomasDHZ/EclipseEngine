@@ -148,8 +148,9 @@ void DepthRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    DepthPipeline = JsonGraphicsPipeline("DepthShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, sizeof(DepthSceneData));
-    depthInstancedPipeline.InitializePipeline(pipelineInfo);
+  //  DepthPipeline = JsonGraphicsPipeline("DepthShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, sizeof(DepthSceneData));
+    DepthPipeline.InitializePipeline(pipelineInfo);
+   // depthInstancedPipeline.InitializePipeline(pipelineInfo);
 }
 
 void DepthRenderPass::ClearTextureList()
@@ -210,7 +211,8 @@ VkCommandBuffer DepthRenderPass::Draw()
             {
                 case GameObjectRenderType::kModelRenderer:
                 {
-                    DepthPipeline.DrawMesh<DepthSceneData>(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
+                    DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
+                   // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
                     break;
                 }
                 case GameObjectRenderType::kInstanceRenderer:
@@ -249,6 +251,6 @@ void DepthRenderPass::Destroy()
     }
     RenderPassDepthTexture->Destroy();
     DepthPipeline.Destroy();
-    depthInstancedPipeline.Destroy();
+    //depthInstancedPipeline.Destroy();
     RenderPass::Destroy();
 }

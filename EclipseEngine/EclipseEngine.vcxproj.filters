@@ -1367,14 +1367,17 @@
     <None Include="..\Shaders\VertexBuilder.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
-    <None Include="..\Shaders\Vertex.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
     <None Include="..\Shaders\PBRReflectionShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\PBRReflectionShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\PBRMaterialProperties.glsl">
+      <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\Vertex.glsl">
+      <Filter>Shader\Include\Raster</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

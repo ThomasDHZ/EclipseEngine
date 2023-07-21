@@ -5,13 +5,15 @@
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
 
-#include "Vertex.glsl"
+#include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
 
-layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 0) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 4) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 
 layout(push_constant) uniform DirectionalLightProjection
 {

@@ -163,6 +163,7 @@
     <None Include="..\Shaders\PBRAnyhit.rahit" />
     <None Include="..\Shaders\PBRAnyhit1.rahit" />
     <None Include="..\Shaders\PBRLightFunctions.glsl" />
+    <None Include="..\Shaders\PBRMaterialProperties.glsl" />
     <None Include="..\Shaders\PBRMiss.rmiss" />
     <None Include="..\Shaders\PBRRaygen.rgen" />
     <None Include="..\Shaders\PBRReflectionShader.frag" />

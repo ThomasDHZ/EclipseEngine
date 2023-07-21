@@ -20,10 +20,11 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, MeshPropertiesmBufferList);
-  //  AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, DirectionalLightBufferInfoList);
-   // AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, MaterialBufferList);
-  //  AddTextureDescriptorSetBinding(DescriptorBindingList, 3, RenderedTextureBufferInfo, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 0, GLTFSceneManager::GetGameObjectTransformBuffer()[0]);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, GLTFSceneManager::GetGameObjectPropertiesBuffer()[0]);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetMaterialPropertiesBuffer()[0]);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetTexturePropertiesBuffer()[0], VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()[0]);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -69,14 +70,11 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
     }
 }
 
-//void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, uint32_t x)
-//{
-//    DirectionalLightProjection directionalLightProjection;
-//    directionalLightProjection.MeshIndex = mesh->GetMeshBufferIndex();
-//    directionalLightProjection.LightIndex = x;
-//
-//    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,ShaderPipeline);
-//    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
-//    vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(DirectionalLightProjection), &directionalLightProjection);
-//    mesh->Draw(commandBuffer);
-//}
+void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, uint32_t x)
+{
+    DepthSceneData directionalLightProjection;
+    directionalLightProjection.LightIndex = x;
+
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
+    mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);
+}

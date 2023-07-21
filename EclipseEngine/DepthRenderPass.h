@@ -11,9 +11,8 @@
 class DepthRenderPass : public RenderPass
 {
 private:
-	std::shared_ptr<RenderedDepthTexture> RenderPassDepthTexture;
-	JsonGraphicsPipeline DepthPipeline;
-	DepthInstancedPipeline depthInstancedPipeline;
+	DepthPipeline DepthPipeline;
+	//DepthInstancedPipeline depthInstancedPipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
@@ -22,7 +21,7 @@ private:
 public:
 	DepthRenderPass();
 	~DepthRenderPass();
-
+	std::shared_ptr<RenderedDepthTexture> RenderPassDepthTexture;
 	std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
 
 	void BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution);

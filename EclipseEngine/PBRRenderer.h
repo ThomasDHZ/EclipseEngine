@@ -32,6 +32,7 @@ private:
 
 	//Depth/Shadow Pass
 	DepthRenderPass DepthPassRenderPass;
+	DepthDebugRenderPass depthDebugRenderPass;
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;

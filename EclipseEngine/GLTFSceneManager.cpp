@@ -492,7 +492,7 @@ void GLTFSceneManager::Update()
 	SkyboxMesh->Update(ActiveCamera);
 
 	sceneProperites.CameraPos = GLTFSceneManager::ActiveCamera->GetPosition();
-	sceneProperites.view = DirectionalLightList[0]->GetViewMatrix();
+	sceneProperites.view = GLTFSceneManager::ActiveCamera->GetViewMatrix();
 	sceneProperites.proj = GLTFSceneManager::ActiveCamera->GetProjectionMatrix();
 	sceneProperites.Timer = (float)glfwGetTime();
 	sceneProperites.frame++;

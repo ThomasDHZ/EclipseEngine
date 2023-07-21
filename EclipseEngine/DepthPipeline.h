@@ -9,5 +9,5 @@ public:
 	~DepthPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
-	//void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, uint32_t x);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, uint32_t x);
 };

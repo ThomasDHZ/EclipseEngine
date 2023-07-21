@@ -37,7 +37,7 @@ PBRRenderer::PBRRenderer()
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
 	GLTFSceneManager::AddMeshGameObject3D("sponza", a);
-	GLTFSceneManager::AddMeshGameObject3D("Sphere", d, GoldMaterial);
+	//GLTFSceneManager::AddMeshGameObject3D("Sphere", d, GoldMaterial);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 	//	/// <summary>
@@ -202,7 +202,7 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::BuildRenderer()
 {
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
@@ -256,7 +256,7 @@ void PBRRenderer::BuildRenderer()
 			gLTFRenderPass.BuildRenderPass(a, submitList);
 		}
 	}
-
+	depthDebugRenderPass.BuildRenderPass(DepthPassRenderPass.DepthTextureList[0]);
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 	VulkanRenderer::UpdateRendererFlag = true;
 	GLTFSceneManager::Update();
@@ -264,6 +264,17 @@ void PBRRenderer::BuildRenderer()
 
 void PBRRenderer::Update()
 {
+	GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix = glm::mat4(1.358, 0.00, 0.00, 0.00,
+																			  0.00, -2.41421, 0.00, 0.00,
+																			  0.00, 0.00, -1.00002, -0.20,
+																			  0.00, 0.00, -1.00, 0.00);
+		
+		GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix = glm::mat4(1.00, 0.00, -4.37114E-08, 2.18557E-07,
+																			 0.00, 1.00, 0.00, 0.00,
+																			 4.37114E-08, 0.00, 1.00, -5.00,
+																			 0.00, 0.00, 0.00, 1.00);
+	GLTFSceneManager::GetDirectionalLights()[0]->LightBuffer.UniformDataInfo.LightSpaceMatrix = GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix * GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix;
+
 	GLTFSceneManager::Update();
 }
 
@@ -288,13 +299,13 @@ void PBRRenderer::ImGuiUpdate()
 			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
 		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
 
-		ImGui::SliderFloat2(("DLight LeftRight " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetLeftRightPtr()->x, 0.0f, 100.0f);
-		ImGui::SliderFloat2(("DLight NearFar " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetNearFarPtr()->x, 0.0f, 100.0f);
-		ImGui::SliderFloat2(("DLight TopBottom " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetTopBottomPtr()->x, 0.0f, 100.0f);
+		ImGui::SliderFloat2(("DLight LeftRight " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetLeftRightPtr()->x, -100.0f, 100.0f);
+		ImGui::SliderFloat2(("DLight NearFar " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetNearFarPtr()->x, -100.0f, 100.0f);
+		ImGui::SliderFloat2(("DLight TopBottom " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetTopBottomPtr()->x, -100.0f, 100.0f);
 	}
 
 	//gLTFRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
-	DepthPassRenderPass.DepthTextureList[0]->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
+	depthDebugRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
 
 	
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
@@ -353,7 +364,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
-
+	CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
