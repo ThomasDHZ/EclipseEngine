@@ -15,6 +15,7 @@ JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkV
 {
     LoadReflectionIrradianceMapBuffer(submitList.IrradianceTextureList[0]);
     LoadReflectionPrefilterMapBuffer(submitList.PrefilterTextureList[0]);
+    LoadDirectionalShadowBuffer(submitList.DirectionalLightTextureShadowMaps[0]);
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
@@ -24,11 +25,24 @@ JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkV
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
+JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, std::shared_ptr<RenderedDepthTexture> depthTexture)
+{
+    LoadDepthTextureBuffer(depthTexture);
+    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
+}
+
+JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, std::shared_ptr<RenderedColorTexture> colorTexture)
+{
+    LoadTextureBuffer(colorTexture);
+    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
+}
+
 JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, CubeMapSamplerBuffer& reflectionViewBuffer, PBRRenderPassTextureSubmitList& submitList)
 {
     LoadReflectionSamplerBuffer(reflectionViewBuffer);
     LoadReflectionIrradianceMapBuffer(submitList.IrradianceTextureList[0]);
     LoadReflectionPrefilterMapBuffer(submitList.PrefilterTextureList[0]);
+    LoadDirectionalShadowBuffer(submitList.DirectionalLightTextureShadowMaps[0]);
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 

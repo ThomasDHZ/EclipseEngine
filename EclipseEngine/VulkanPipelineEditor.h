@@ -18,7 +18,7 @@
 class VulkanPipelineEditor : public VulkanPipelineTools
 {
 private:
-	const char* PipelineDescriptorList[14] = { "kModelTransformDescriptor",
+	const char* PipelineDescriptorList[19] = { "kModelTransformDescriptor",
 											"kMeshPropertiesDescriptor",
 											"kTextureDescriptor",
 											"kMaterialDescriptor",
@@ -31,7 +31,12 @@ private:
 											"kDirectionalLightDescriptor",
 											"kPointLightDescriptor",
 											"kSpotLightDescriptor",
-											"kReflectionViewDescriptor" };
+											"kReflectionViewDescriptor",
+											"kDirectionalShadowDescriptor",
+											"kPointShadowDescriptor",
+											"kSpotShadowDescriptor",
+											"kViewTextureDescriptor",
+											"kViewDepthTextureDescriptor" };
 
 	const char* TextureResolutionList[34]{
 	"1 x 1",

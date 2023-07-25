@@ -86,8 +86,14 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kPointLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() }); break;
             case kSpotLightDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() }); break;
             case kReflectionViewDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kDirectionalShadowDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kPointShadowDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kSpotShadowDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kViewTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kViewDepthTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
         }
     }
+
     DescriptorPool = GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList);
 
     std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
@@ -109,6 +115,11 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kPointLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kSpotLightDescriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL }); break;
             case kReflectionViewDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kDirectionalShadowDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kPointShadowDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kSpotShadowDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kViewTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kViewDepthTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
         }
     }
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
@@ -125,13 +136,18 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kBRDFMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetBRDFMapDescriptor()); break;
             case kIrradianceMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionIrradianceBuffer.ImageInfo); break;
             case kPrefilterMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, ReflectionPrefilterBuffer.ImageInfo); break;
-            case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, CubeMapbuffer.ImageInfo); break;
+            case kCubeMapDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, CubeMapBuffer.ImageInfo); break;
             case kEnvironmentDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetEnvironmentMapDescriptor()); break;
             case kSunLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSunLightPropertiesBuffer()); break;
             case kDirectionalLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetDirectionalLightPropertiesBuffer()); break;
             case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
             case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
             case kReflectionViewDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, ReflectionViewBuffer); break;
+            case kDirectionalShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DirectionalShadowBuffer.ImageInfo); break;
+            case kPointShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, PointShadowBuffer.ImageInfo); break;
+            case kSpotShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, SpotShadowBuffer.ImageInfo); break;
+            case kViewTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
+            case kViewDepthTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
         }
     }
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
@@ -372,12 +388,52 @@ void VulkanPipelineTools::LoadReflectionPrefilterMapBuffer(std::shared_ptr<Rende
     ReflectionPrefilterBuffer.Used = true;
 }
 
+void VulkanPipelineTools::LoadDirectionalShadowBuffer(std::shared_ptr<RenderedDepthTexture> directionalShadow)
+{
+    DirectionalShadowBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    DirectionalShadowBuffer.ImageInfo.imageView = directionalShadow->GetView();
+    DirectionalShadowBuffer.ImageInfo.sampler = directionalShadow->GetSampler();
+    DirectionalShadowBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadPointShadowBuffer(std::shared_ptr<RenderedCubeMapDepthTexture> pointShadow)
+{
+    PointShadowBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    PointShadowBuffer.ImageInfo.imageView = pointShadow->GetView();
+    PointShadowBuffer.ImageInfo.sampler = pointShadow->GetSampler();
+    PointShadowBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadSpotShadowBufferr(std::shared_ptr<RenderedDepthTexture> spotShadow)
+{
+    SpotShadowBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    SpotShadowBuffer.ImageInfo.imageView = spotShadow->GetView();
+    SpotShadowBuffer.ImageInfo.sampler = spotShadow->GetSampler();
+    SpotShadowBuffer.Used = true;
+}
+
 void VulkanPipelineTools::LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture> cubeMap)
 {
-    CubeMapbuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    CubeMapbuffer.ImageInfo.imageView = cubeMap->GetView();
-    CubeMapbuffer.ImageInfo.sampler = cubeMap->GetSampler();
-    CubeMapbuffer.Used = true;
+    CubeMapBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    CubeMapBuffer.ImageInfo.imageView = cubeMap->GetView();
+    CubeMapBuffer.ImageInfo.sampler = cubeMap->GetSampler();
+    CubeMapBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadTextureBuffer(std::shared_ptr<RenderedColorTexture> colorTexture)
+{
+    TextureBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    TextureBuffer.ImageInfo.imageView = colorTexture->GetView();
+    TextureBuffer.ImageInfo.sampler = colorTexture->GetSampler();
+    TextureBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadDepthTextureBuffer(std::shared_ptr<RenderedDepthTexture>	 depthTexture)
+{
+    DepthBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    DepthBuffer.ImageInfo.imageView = depthTexture->GetView();
+    DepthBuffer.ImageInfo.sampler = depthTexture->GetSampler();
+    DepthBuffer.Used = true;
 }
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)

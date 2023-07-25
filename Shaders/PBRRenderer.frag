@@ -13,96 +13,98 @@ layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
 
+
 struct Vertex
 {
-	vec3 Position;
-	float PositionPadding;
-	vec3 Normal;
-	float NormalPadding;
-	vec2 UV;
-	vec2 UVPadding;
-	vec3 Tangant;
-	float TangantPadding;
-	vec3 BiTangant;
-	float BiTangentPadding;
-	vec3 Color;
-	float ColorPadding;
-};
-
-struct MeshProperties
-{
-	uint VertexBufferIndex;
-	uint IndexBufferIndex;
-	uint MaterialBufferIndex;
-	uint AlbedoMapIndex;
-	uint MetallicRoughnessMapIndex;
-	uint AmbientOcclusionMapIndex;
-	uint NormalMapIndex;
-	uint DepthMapIndex;
-	uint AlphaMapIndex;
-	uint EmissionMapIndex;
-	uint SkyBoxIndex;
-	mat4 MeshTransform;
-	vec2 UVOffset;
-	vec2 UVScale;
-	vec2 UVFlip;
-	int SelectedMesh;
-	float heightScale;
-	float minLayers;
-	float maxLayers;
+    vec3 Position;
+    float PositionPadding;
+    vec3 Normal;
+    float NormalPadding;
+    vec2 UV;
+    vec2 UVPadding;
+    vec3 Tangant;
+    float TangantPadding;
+    vec3 BiTangant;
+    float BiTangentPadding;
+    vec3 Color;
+    float ColorPadding;
 };
 
 struct MaterialProperties
 {
-	vec3 Albedo;
-	float Metallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint AlbedoMap;
-	uint MetallicRoughnessMap;
-	uint AmbientOcclusionMap;
-	uint NormalMap;
-	uint DepthMap;
-	uint AlphaMap;
-	uint EmissionMap;
+    vec3 Albedo;
+    float Metallic;
+    float Roughness;
+    float AmbientOcclusion;
+    vec3 Emission;
+    float Alpha;
+    uint AlbedoMap;
+    uint MetallicRoughnessMap;
+    uint MetallicMap;
+    uint RoughnessMap;
+    uint AmbientOcclusionMap;
+    uint NormalMap;
+    uint DepthMap;
+    uint AlphaMap;
+    uint EmissionMap;
 };
 
-struct SunLight
+struct MeshProperties
 {
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
+    uint VertexBufferIndex;
+    uint IndexBufferIndex;
+    uint MaterialBufferIndex;
+    uint ReflectionIndex;
+    uint AlbedoMapIndex;
+    uint MetallicRoughnessMapIndex;
+    uint AmbientOcclusionMapIndex;
+    uint NormalMapIndex;
+    uint DepthMapIndex;
+    uint AlphaMapIndex;
+    uint EmissionMapIndex;
+    uint SkyBoxIndex;
+    mat4 MeshTransform;
+    vec2 UVOffset;
+    vec2 UVScale;
+    vec2 UVFlip;
+    int SelectedMesh;
+    float heightScale;
+    float minLayers;
+    float maxLayers;
 };
 
 struct DirectionalLight
 {
-	vec3 diffuse;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
+    vec3 diffuse;
+    vec3 direction;
+    mat4 LightSpaceMatrix;
+    float intensity;
 };
 
 struct PointLight
 {
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-	float radius;
+    vec3 diffuse;
+    vec3 position;
+    mat4 LightSpaceMatrix;
+    float intensity;
+    float radius;
+};
+
+struct SunLight
+{
+    vec3 diffuse;
+    vec3 position;
+    mat4 LightSpaceMatrix;
+    float intensity;
 };
 
 struct SpotLight
 {
-	vec3 diffuse;
-	vec3 position;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
-
+    vec3 diffuse;
+    vec3 position;
+    vec3 direction;
+    mat4 LightSpaceMatrix;
+    float intensity;
     float cutOff;
     float outerCutOff;
     float constant;
@@ -115,8 +117,7 @@ layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
     uint PrimitiveIndex;
-	uint MaterialIndex;
-    uint ReflectionIndex;
+    uint MaterialIndex;
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
@@ -132,19 +133,6 @@ layout(push_constant) uniform SceneData
     int MaxRefeflectCount;
 } sceneData;
 
-struct PBRMaterial
-{
-	vec3 Albedo;
-	float Metallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint NormalMapID;
-	uint DepthMapID;
-};
-
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
@@ -156,26 +144,278 @@ layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
 layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 11) uniform sampler2D ShadowMap[];
 
 const float PI = 3.14159265359;
 
-Vertex RasterVertexBuilder();
-MaterialProperties BuildPBRMaterial(vec2 UV);
-float DistributionGGX(vec3 N, vec3 H, float roughness);
-float GeometrySchlickGGX(float NdotV, float roughness);
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
-vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
-mat3 getTBNFromMap(Vertex vertex);
-vec3 CalcSunLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties pbrMaterial);
-vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties pbrMaterial);
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties pbrMaterial);
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties pbrMaterial);
-vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir);
+const mat4 LightBiasMatrix = mat4(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.5, 0.5, 0.0, 1.0);
+
+vec3 gridSamplingDisk[20] = vec3[]
+(
+    vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
+    vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+    vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
+    vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
+    vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
+    );
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
+{
+    float shadow = 1.0f;
+    if (fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0)
+    {
+        float dist = texture(ShadowMap[index], fragPosLightSpace.st + offset).r;
+        if (fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z)
+        {
+            shadow = 0.1f;
+        }
+    }
+    return shadow;
+}
+
+float filterPCF(vec4 sc, int index)
+{
+    ivec2 texDim = textureSize(ShadowMap[index], 0);
+    float scale = 1.5;
+    float dx = scale * 1.0 / float(texDim.x);
+    float dy = scale * 1.0 / float(texDim.y);
+
+    float shadowFactor = 0.0;
+    int count = 0;
+    int range = 1;
+
+    for (int x = -range; x <= range; x++)
+    {
+        for (int y = -range; y <= range; y++)
+        {
+            shadowFactor += ShadowCalculation(sc, vec2(dx * x, dy * y), index);
+            count++;
+        }
+
+    }
+    return shadowFactor / count;
+}
+
+//float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
+//{
+//    float far_plane = 500.0f;
+//    vec3 fragToLight = fragPos - PLight[index].pointLight.position;
+//    float currentDepth = length(fragToLight);
+//
+//    float shadow = 0.0;
+//    float bias = 0.15;
+//    int samples = 20;
+//    float viewDistance = length(viewPos - fragPos);
+//    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+//    for (int i = 0; i < samples; ++i)
+//    {
+//        float closestDepth = texture(PointShadowMap[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
+//        closestDepth *= far_plane;   // undo mapping [0;1]
+//        if (currentDepth - bias > closestDepth)
+//            shadow += 1.0;
+//    }
+//    shadow /= float(samples);
+//
+//    return shadow;
+//}
+
+Vertex RasterVertexBuilder()
+{
+    Vertex vertex;
+    vertex.Position = FragPos;
+    vertex.UV = UV;
+    vertex.Normal = Normal;
+    vertex.Tangant = Tangent;
+    vertex.BiTangant = BiTangent;
+    vertex.Color = Color;
+    vertex.UV += meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
+    vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
+    if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0)
+    {
+        vertex.UV.y = 1.0 - vertex.UV.y;
+    }
+    if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0)
+    {
+        vertex.UV.x = 1.0 - vertex.UV.x;
+    }
+    return vertex;
+}
+
+MaterialProperties BuildPBRMaterial(uint materialId, vec2 UV_1)
+{
+    MaterialProperties material = materialBuffer[materialId].materialProperties;
+
+ //  material.Albedo = material.Albedo;
+//	if (material.AlbedoMap != 0)
+//	{
+	    material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
+	//}
+
+   // material.Metallic = material.Metallic;
+	if (material.MetallicRoughnessMap != 0)
+	{
+        material.Metallic = texture(TextureMap[material.MetallicMap], UV).r;
+        material.Roughness = texture(TextureMap[material.RoughnessMap], UV).r;
+	}
+    else
+    {
+        material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
+        material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
+    }
+
+   // material.Roughness = material.Roughness;
+	//if (material.MetallicRoughnessMap != 0)
+	//{
+	    
+//	}
+
+//material.AmbientOcclusion = material.AmbientOcclusion;
+	//if (material.AmbientOcclusionMap != 0)
+	//{
+		material.AmbientOcclusion = 0.1f;
+	//}
+
+	//material.Emission = material.Emission;
+	//if (material.EmissionMap != 0)
+	//{
+		material.Emission = texture(TextureMap[material.EmissionMap], UV).rgb;
+	//}
+
+    if(texture(TextureMap[material.AlbedoMap], UV).a == 0.0f)
+	{
+		discard;
+	}
+
+    return material;
+}
+
+mat3 getTBNFromMap(Vertex vertex)
+{
+    vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vec3(vertex.Tangant));
+    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vec3(vertex.BiTangant));
+    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vertex.Normal);
+    return mat3(vec3(T), vec3(B), vec3(N));
+}
+
+float DistributionGGX(vec3 N, vec3 H, float roughness)
+{
+    float a = roughness * roughness;
+    float a2 = a * a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+    float nom = a2;
+    float denom = (NdotH2 * (a2 - 1.0)) + 1.0;
+    denom = (3.1415927410125732421875 * denom) * denom;
+    return nom / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = roughness + 1.0;
+    float k = (r * r) / 8.0;
+    float nom = NdotV;
+    float denom = (NdotV * (1.0 - k)) + k;
+    return nom / denom;
+}
+
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float param = NdotV;
+    float param_1 = roughness;
+    float ggx2 = GeometrySchlickGGX(param, param_1);
+    float param_2 = NdotL;
+    float param_3 = roughness;
+    float ggx1 = GeometrySchlickGGX(param_2, param_3);
+    return ggx1 * ggx2;
+}
+
+vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+    return F0 + ((max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0));
+}
+
+vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
+{
+    vec3 Lo = vec3(0.0);
+
+    for (int x = 0; x < sceneData.DirectionalLightCount; x++)
+    {
+        vec3 L = normalize(-DLight[x].directionalLight.direction);
+        vec3 H = normalize(V + L);
+        float watts = DLight[x].directionalLight.intensity;
+        vec3 radiance = DLight[x].directionalLight.diffuse * watts;
+
+        float NDF = DistributionGGX(N, H, material.Roughness);
+        float G = GeometrySmith(N, V, L, material.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
+
+        vec3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular = numerator / denominator;
+
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - material.Metallic;
+
+        float NdotL = max(dot(N, L), 0.0);
+
+        vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.LightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+        float shadow = filterPCF(LightSpace / LightSpace.w, x);
+
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL * shadow;
+    }
+    return Lo;
+}
+
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
+{
+    vec3 Lo = vec3(0.0);
+    for (int x = 0; x < sceneData.PointLightCount; x++)
+    {
+        vec3 L = normalize(PLight[x].pointLight.position - vertex.Position);
+        vec3 H = normalize(V + L);
+
+        float distance = length(PLight[x].pointLight.position - vertex.Position);
+        float Kc = 1.0f;
+        float Kl = 2 / PLight[x].pointLight.radius;
+        float Kq = 1 / (PLight[x].pointLight.radius * PLight[x].pointLight.radius);
+        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));
+
+        float watts = PLight[x].pointLight.intensity;
+        vec3 radiance = PLight[x].pointLight.diffuse * watts * attenuation;
+
+        float NDF = DistributionGGX(N, H, material.Roughness);
+        float G = GeometrySmith(N, V, L, material.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
+
+        vec3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular = numerator / denominator;
+
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - material.Metallic;
+
+        float NdotL = max(dot(N, L), 0.0);
+
+        //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
+        //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
+
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;// * shadow;
+    }
+    return Lo;
+}
 
 void main()
 { 
     Vertex vertex = RasterVertexBuilder();
-    MaterialProperties material = BuildPBRMaterial(vertex.UV);
+    MaterialProperties material = BuildPBRMaterial(sceneData.MaterialIndex, vertex.UV);
     
    mat3 TBN = getTBNFromMap(vertex);
    vec3 N = vertex.Normal;
@@ -236,300 +476,4 @@ void main()
         color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
     }
     outColor = vec4(color, 1.0f);
-}
-
-Vertex RasterVertexBuilder()
-{
-	Vertex vertex;
-	vertex.Position = FragPos;
-	vertex.UV = UV;
-	vertex.Normal = Normal;
-	vertex.Tangant = Tangent;
-	vertex.BiTangant = BiTangent;
-	vertex.Color = Color;
-
-	vertex.UV = vertex.UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
-	vertex.UV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;
-
-	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.y == 1.0f)
-	{
-		vertex.UV.y = 1.0f - vertex.UV.y;
-	}
-	if (meshBuffer[sceneData.MeshIndex].meshProperties.UVFlip.x == 1.0f)
-	{
-		vertex.UV.x = 1.0f - vertex.UV.x;
-	}
-
-	return vertex;
-}
-
-MaterialProperties BuildPBRMaterial(vec2 UV)
-{
-	MaterialProperties material = materialBuffer[sceneData.MaterialIndex].materialProperties;
-
-  //  material.Albedo = material.Albedo;
-//	if (material.AlbedoMap != 0)
-//	{
-	    material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
-	//}
-
-   // material.Metallic = material.Metallic;
-//	if (material.MetallicRoughnessMap != 0)
-//	{
-//        material.Metallic = texture(TextureMap[material.MetallicMap], UV).r;
-//        material.Roughness = texture(TextureMap[material.RoughnessMap], UV).r;
-//	}
-//    else
-//    {
-        material.Metallic = texture(TextureMap[material.MetallicRoughnessMap], UV).b;
-        material.Roughness = texture(TextureMap[material.MetallicRoughnessMap], UV).g;
-//    }
-
-   // material.Roughness = material.Roughness;
-	//if (material.MetallicRoughnessMap != 0)
-	//{
-	    
-//	}
-
-//material.AmbientOcclusion = material.AmbientOcclusion;
-	//if (material.AmbientOcclusionMap != 0)
-	//{
-		material.AmbientOcclusion = 1.0f;
-	//}
-
-	//material.Emission = material.Emission;
-	//if (material.EmissionMap != 0)
-	//{
-		material.Emission = texture(TextureMap[material.EmissionMap], UV).rgb;
-	//}
-
-    if(texture(TextureMap[material.AlbedoMap], UV).a == 0.0f)
-	{
-		discard;
-	}
-
-    return material;
-}
-
-float DistributionGGX(vec3 N, vec3 H, float roughness)
-{
-    float a = roughness * roughness;
-    float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
-
-    float nom = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
-}
-
-float GeometrySchlickGGX(float NdotV, float roughness)
-{
-    float r = (roughness + 1.0);
-    float k = (r * r) / 8.0;
-
-    float nom = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return nom / denom;
-}
-
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
-{
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
-
-    return ggx1 * ggx2;
-}
-
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
-    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-}
-
-vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
-{
-    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-}
-
-mat3 getTBNFromMap(Vertex vertex)
-{
-    vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.Tangant));
-    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec3(vertex.BiTangant));
-    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vertex.Normal);
-    return mat3(T, B, N);
-}
-
-vec3 CalcSunLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
-{
-    vec3 Lo = vec3(0.0);
-    for (int x = 0; x < sceneData.SunLightCount; x++)
-    {
-        vec3 L = normalize(SULight[x].sunLight.position - vertex.Position);
-        vec3 H = normalize(V + L);
-        float watts = SULight[x].sunLight.intensity;
-        vec3 radiance = SULight[x].sunLight.diffuse * watts;
-
-        float NDF = DistributionGGX(N, H, material.Roughness);
-        float G = GeometrySmith(N, V, L, material.Roughness);
-        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
-
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - material.Metallic;
-
-        float NdotL = max(dot(N, L), 0.0);
-
-      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;// * shadow;
-    }
-    return Lo;
-}
-
-vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
-{
-    vec3 Lo = vec3(0.0);
-
-    for (int x = 0; x < sceneData.DirectionalLightCount; x++)
-    {
-        vec3 L = normalize(-DLight[x].directionalLight.direction);
-        vec3 H = normalize(V + L);
-        float watts = DLight[x].directionalLight.intensity;
-        vec3 radiance = DLight[x].directionalLight.diffuse * watts;
-
-        float NDF = DistributionGGX(N, H, material.Roughness);
-        float G = GeometrySmith(N, V, L, material.Roughness);
-        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
-
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - material.Metallic;
-
-        float NdotL = max(dot(N, L), 0.0);
-
-      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;// * shadow;
-    }
-    return Lo;
-}
-
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
-{
-    vec3 Lo = vec3(0.0);
-    for (int x = 0; x < sceneData.PointLightCount; x++)
-    {
-        vec3 L = normalize(PLight[x].pointLight.position - vertex.Position);
-        vec3 H = normalize(V + L);
-
-        float distance = length(PLight[x].pointLight.position - vertex.Position);
-        float Kc = 1.0f;
-        float Kl = 2 / PLight[x].pointLight.radius;
-        float Kq = 1 / (PLight[x].pointLight.radius * PLight[x].pointLight.radius); 
-        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));  
-        
-        float watts = PLight[x].pointLight.intensity;
-        vec3 radiance = PLight[x].pointLight.diffuse * watts * attenuation;
-
-        float NDF = DistributionGGX(N, H, material.Roughness);
-        float G = GeometrySmith(N, V, L, material.Roughness);
-        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
-
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - material.Metallic;
-
-        float NdotL = max(dot(N, L), 0.0);
-
-      //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-      //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;// * shadow;
-    }
-    return Lo;
-}
-
-/*vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, PBRMaterial pbrMaterial)
-{
-    vec3 Lo = vec3(0.0);
-    for (int x = 0; x < sceneData.SpotLightCount; x++)
-    {
-        vec3 L = normalize(SLight[x].spotLight.position - vertex.Position);
-        vec3 H = normalize(V + L);
-        float theta = dot(L, normalize(-SLight[x].spotLight.direction));
-        float epsilon = SLight[x].spotLight.cutOff - SLight[x].spotLight.outerCutOff;
-        float intensity = clamp((theta - SLight[x].spotLight.outerCutOff) / epsilon, 0.0, 1.0);
-        float distance = length(SLight[x].spotLight.position - vertex.Position);
-        float attenuation = 1.0 / (distance * distance);
-        attenuation *= intensity;
-        float watts = SLight[x].spotLight.intensity;
-        vec3 radiance = SLight[x].spotLight.diffuse * watts * attenuation;
-        float NDF = DistributionGGX(N, H, pbrMaterial.Roughness);
-        float G = GeometrySmith(N, V, L, pbrMaterial.Roughness);
-        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, pbrMaterial.Roughness);
-        vec3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        vec3 specular = numerator / denominator;
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - pbrMaterial.Metallic;
-        float NdotL = max(dot(N, L), 0.0);
-        Lo += (kD * pbrMaterial.Albedo / PI + specular) * radiance * NdotL;
-    }
-    return Lo;
-}*/
-
-
-vec2 ParallaxMapping(uint depthMapID, vec2 texCoords, vec3 viewDir)
-{
-    const float heightScale = meshBuffer[sceneData.MeshIndex].meshProperties.heightScale;
-    const float minLayers = meshBuffer[sceneData.MeshIndex].meshProperties.minLayers;
-    const float maxLayers = meshBuffer[sceneData.MeshIndex].meshProperties.maxLayers;
-
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-    float layerDepth = 1.0 / numLayers;
-    float currentLayerDepth = 0.0;
-
-    viewDir.y = -viewDir.y;
-    vec2 P = viewDir.xy / viewDir.z * heightScale;
-    vec2 deltaTexCoords = P / numLayers;
-
-    vec2  currentTexCoords = texCoords;
-    float currentDepthMapValue = texture(TextureMap[depthMapID], currentTexCoords).r;
-
-    while (currentLayerDepth < currentDepthMapValue)
-    {
-        currentTexCoords -= deltaTexCoords;
-        currentDepthMapValue = texture(TextureMap[depthMapID], currentTexCoords).r;
-        currentLayerDepth += layerDepth;
-    }
-
-    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-
-    float afterDepth = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = texture(TextureMap[depthMapID], prevTexCoords).r - currentLayerDepth + layerDepth;
-
-    float weight = afterDepth / (afterDepth - beforeDepth);
-    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
-
-    return finalTexCoords;
 }

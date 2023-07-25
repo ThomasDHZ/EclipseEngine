@@ -10,7 +10,9 @@ PBRRenderer::PBRRenderer()
 	/// 
 	/// </summary>
 
-
+	/// <summary>
+	/// 
+	/// </summary>
 	auto a = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFSponza/Sponza.gltf";
 	auto b = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
@@ -192,7 +194,7 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
-	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 }
 
 PBRRenderer::~PBRRenderer()
@@ -210,7 +212,7 @@ void PBRRenderer::BuildRenderer()
 	{
 		//Depth Pass
 		{
-			DepthPassRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
+			DepthPassRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(4096.0f));
 		}
 
 		PBRRenderPassTextureSubmitList submitList;
@@ -227,6 +229,9 @@ void PBRRenderer::BuildRenderer()
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
 			submitList.IrradianceTextureList.emplace_back(skyBoxReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(skyBoxReflectionPrefilterRenderPass.PrefilterCubeMap);
+			submitList.DirectionalLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			//submitList.PointLightShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			submitList.SpotLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
 
 			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 		}
@@ -239,6 +244,9 @@ void PBRRenderer::BuildRenderer()
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
 			submitList.IrradianceTextureList.emplace_back(meshReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(meshReflectionPrefilterRenderPass.PrefilterCubeMap);
+			submitList.DirectionalLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			//submitList.PointLightShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			submitList.SpotLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
 
 			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
 		}
@@ -251,6 +259,9 @@ void PBRRenderer::BuildRenderer()
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
 			submitList.IrradianceTextureList.emplace_back(irradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(prefilterRenderPass.PrefilterCubeMap);
+			submitList.DirectionalLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			//submitList.PointLightShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
+			submitList.SpotLightTextureShadowMaps.emplace_back(DepthPassRenderPass.RenderPassDepthTexture);
 
 			std::string a = "PBRRenderPass.txt";
 			gLTFRenderPass.BuildRenderPass(a, submitList);
@@ -264,17 +275,6 @@ void PBRRenderer::BuildRenderer()
 
 void PBRRenderer::Update()
 {
-	GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix = glm::mat4(1.358, 0.00, 0.00, 0.00,
-																			  0.00, -2.41421, 0.00, 0.00,
-																			  0.00, 0.00, -1.00002, -0.20,
-																			  0.00, 0.00, -1.00, 0.00);
-		
-		GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix = glm::mat4(1.00, 0.00, -4.37114E-08, 2.18557E-07,
-																			 0.00, 1.00, 0.00, 0.00,
-																			 4.37114E-08, 0.00, 1.00, -5.00,
-																			 0.00, 0.00, 0.00, 1.00);
-	GLTFSceneManager::GetDirectionalLights()[0]->LightBuffer.UniformDataInfo.LightSpaceMatrix = GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix * GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix;
-
 	GLTFSceneManager::Update();
 }
 

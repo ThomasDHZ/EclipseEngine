@@ -1734,6 +1734,11 @@ namespace VulkanMenu
 			case kPointLightDescriptor: return "kPointLightDescriptor"; break;
 			case kSpotLightDescriptor: return "kSpotLightDescriptor"; break;
 			case kReflectionViewDescriptor: return "kReflectionViewDescriptor"; break;
+			case kDirectionalShadowDescriptor: return "kDirectionalShadowDescriptor"; break;
+			case kPointShadowDescriptor: return "kPointShadowDescriptor"; break;
+			case kSpotShadowDescriptor: return "kSpotShadowDescriptor"; break;
+			case kViewTextureDescriptor: return "kViewTextureDescriptor"; break;
+			case kViewDepthTextureDescriptor: return "kViewDepthTextureDescriptor"; break;
 			default: return "";
 			}
 		}
@@ -1753,6 +1758,11 @@ namespace VulkanMenu
 			if (input == "kPointLightDescriptor") return kPointLightDescriptor;
 			if (input == "kSpotLightDescriptor") return kSpotLightDescriptor;
 			if (input == "kReflectionViewDescriptor") return kReflectionViewDescriptor;
+			if (input == "kDirectionalShadowDescriptor") return kDirectionalShadowDescriptor;
+			if (input == "kPointShadowDescriptor") return kPointShadowDescriptor;
+			if (input == "kSpotShadowDescriptor") return kSpotShadowDescriptor;
+			if (input == "kViewTextureDescriptor") return kViewTextureDescriptor;
+			if (input == "kViewDepthTextureDescriptor") return kViewDepthTextureDescriptor;
 		}
 	};
 

@@ -2,7 +2,6 @@
 #include "RenderPass.h"
 #include "RenderedColorTexture.h"
 #include "RenderedDepthTexture.h"
-#include "DepthDebugPipeline.h"
 
 class DepthDebugRenderPass : public RenderPass
 {
@@ -10,7 +9,7 @@ private:
 	void BuildRenderPass();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedDepthTexture> depthTexture);
 
-	DepthDebugPipeline depthDebugPipeline;
+	JsonGraphicsPipeline DepthDebugPipeline;
 
 public:
 	DepthDebugRenderPass();

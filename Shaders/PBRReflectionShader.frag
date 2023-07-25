@@ -30,6 +30,7 @@ layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
 layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 11) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
 #include "RasterVertexBuilder.glsl"
 #include "MaterialSetUp.glsl"

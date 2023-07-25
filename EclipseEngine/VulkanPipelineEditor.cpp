@@ -47,6 +47,11 @@ VkDescriptorType VulkanPipelineEditor::GetBindingType(DescriptorBindingPropertie
 		case DescriptorBindingPropertiesEnum::kPointLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kSpotLightDescriptor: return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; break;
 		case DescriptorBindingPropertiesEnum::kReflectionViewDescriptor: return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; break;
+		case DescriptorBindingPropertiesEnum::kDirectionalShadowDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kPointShadowDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kSpotShadowDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kViewTextureDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
+		case DescriptorBindingPropertiesEnum::kViewDepthTextureDescriptor: return VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER; break;
 		default: throw std::runtime_error("Unknown binding type.");
 	}
 }

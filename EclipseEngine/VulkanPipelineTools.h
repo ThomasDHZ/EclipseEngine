@@ -20,7 +20,12 @@ enum DescriptorBindingPropertiesEnum
 	kDirectionalLightDescriptor,
 	kPointLightDescriptor,
 	kSpotLightDescriptor,
-	kReflectionViewDescriptor
+	kReflectionViewDescriptor,
+	kDirectionalShadowDescriptor,
+	kPointShadowDescriptor,
+	kSpotShadowDescriptor,
+	kViewTextureDescriptor,
+	kViewDepthTextureDescriptor,
 };
 
 struct DescriptorBindingLock
@@ -42,7 +47,12 @@ protected:
 	VkDescriptorBufferInfo ReflectionViewBuffer;
 	DescriptorBindingLock ReflectionIrradianceBuffer;
 	DescriptorBindingLock ReflectionPrefilterBuffer;
-	DescriptorBindingLock CubeMapbuffer;
+	DescriptorBindingLock DirectionalShadowBuffer;
+	DescriptorBindingLock PointShadowBuffer;
+	DescriptorBindingLock SpotShadowBuffer;
+	DescriptorBindingLock CubeMapBuffer;
+	DescriptorBindingLock TextureBuffer;
+	DescriptorBindingLock DepthBuffer;
 
 	VkShaderModule ReadShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
@@ -83,7 +93,12 @@ protected:
 	void LoadReflectionSamplerBuffer(CubeMapSamplerBuffer& reflectionMapSampler);
 	void LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionIrradianceMap);
 	void LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionPrefilterMap);
+	void LoadDirectionalShadowBuffer(std::shared_ptr<RenderedDepthTexture>	 directionalShadow);
+	void LoadPointShadowBuffer(std::shared_ptr<RenderedCubeMapDepthTexture>	 pointShadow);
+	void LoadSpotShadowBufferr(std::shared_ptr<RenderedDepthTexture>	 spotShadow);
 	void LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 cubeMap);
+	void LoadTextureBuffer(std::shared_ptr<RenderedColorTexture>	 colorTexture);
+	void LoadDepthTextureBuffer(std::shared_ptr<RenderedDepthTexture>	 depthTexture);
 
 public: 
 	VkPipelineShaderStageCreateInfo LoadPipelineShaderStageCreateInfo(nlohmann::json& json);
