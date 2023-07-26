@@ -31,7 +31,8 @@ private:
 	BRDFRenderPass brdfRenderPass;
 
 	//Depth/Shadow Pass
-	DepthRenderPass DepthPassRenderPass;
+	DepthRenderPass depthRenderPass;
+	DepthCubeMapRenderer depthCubeMapRenderPass;
 	DepthDebugRenderPass depthDebugRenderPass;
 
 	//SkyBox Reflection

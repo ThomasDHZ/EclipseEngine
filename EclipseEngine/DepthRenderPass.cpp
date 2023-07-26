@@ -202,16 +202,16 @@ VkCommandBuffer DepthRenderPass::Draw()
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-        for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
+        for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
         {
             DepthSceneData depthSceneData = DepthSceneData();
             depthSceneData.LightIndex = x;
 
-            switch (GLTFSceneManager::GameObjectList[x]->RenderType)
+            switch (GLTFSceneManager::GameObjectList[y]->RenderType)
             {
                 case GameObjectRenderType::kModelRenderer:
                 {
-                    DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
+                    DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], x);
                    // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
                     break;
                 }

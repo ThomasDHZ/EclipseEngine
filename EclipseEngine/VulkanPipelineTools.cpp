@@ -143,7 +143,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kPointLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetPointLightPropertiesBuffer()); break;
             case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
             case kReflectionViewDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, ReflectionViewBuffer); break;
-            case kDirectionalShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DirectionalShadowBuffer.ImageInfo); break;
+          // case kDirectionalShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DirectionalShadowBuffer.ImageInfo); break;
             case kPointShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, PointShadowBuffer.ImageInfo); break;
             case kSpotShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, SpotShadowBuffer.ImageInfo); break;
             case kViewTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;

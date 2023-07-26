@@ -14,7 +14,7 @@ public:
 	~DepthCubeMapPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
-	//void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<Mesh> mesh, glm::vec3 CubeMapSamplerPos, uint32_t x);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, glm::vec3 CubeMapSamplerPos, uint32_t x);
 	void Destroy() override;
 };
 

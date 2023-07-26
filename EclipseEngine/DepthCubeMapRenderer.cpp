@@ -9,75 +9,75 @@ DepthCubeMapRenderer::~DepthCubeMapRenderer()
 {
 }
 
-//void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<PointLight>> PointLightList, glm::vec2 TextureResolution)
-//{
-//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-//    RenderPassResolution = TextureResolution;
-//
-//    if (renderPass == nullptr)
-//    {
-//        RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-//        for (auto& light : GLTFSceneManager::GetPointLights())
-//        {
-//            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//    }
-//    else
-//    {
-//        ClearTextureList();
-//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-//        for (auto& light : PointLightList)
-//        {
-//            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
-//            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-//        }
-//        RenderPass::Destroy();
-//    }
-//
-//    std::vector<VkImageView> AttachmentList;
-//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-//
-//    RenderPassDesc();
-//    CreateRendererFramebuffers(AttachmentList);
-//    BuildRenderPassPipelines();
-//    SetUpCommandBuffers();
-//}
-//
-//void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<PointLight>> PointLightList, glm::vec2 TextureResolution)
-//{
-//    SampleCount = VK_SAMPLE_COUNT_1_BIT;
-//    RenderPassResolution = TextureResolution;
-//
-//    if (renderPass == nullptr)
-//    {
-//        RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-//        for (auto& light : LightManager::GetPointLights())
-//        {
-//            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
-//        }
-//    }
-//    else
-//    {
-//        ClearTextureList();
-//        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-//        for (auto& light : PointLightList)
-//        {
-//            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
-//            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-//        }
-//        RenderPass::Destroy();
-//    }
-//
-//    std::vector<VkImageView> AttachmentList;
-//    AttachmentList.emplace_back(RenderPassDepthTexture->View);
-//
-//    RenderPassDesc();
-//    CreateRendererFramebuffers(AttachmentList);
-//    BuildRenderPassPipelines();
-//    SetUpCommandBuffers();
-//    Draw(PointLightList);
-//    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-//}
+void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : GLTFSceneManager::GetPointLights())
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (auto& light : PointLightList)
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+}
+
+void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution)
+{
+    SampleCount = VK_SAMPLE_COUNT_1_BIT;
+    RenderPassResolution = TextureResolution;
+
+    if (renderPass == nullptr)
+    {
+        RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
+        for (auto& light : GLTFSceneManager::GetPointLights())
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+        }
+    }
+    else
+    {
+        ClearTextureList();
+        RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
+        for (auto& light : PointLightList)
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(RenderPassDepthTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines();
+    SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
 
 void DepthCubeMapRenderer::RenderPassDesc()
 {
@@ -180,77 +180,85 @@ void DepthCubeMapRenderer::ClearTextureList()
     DepthCubeMapTextureList.clear();
 }
 
-//VkCommandBuffer DepthCubeMapRenderer::Draw(std::vector<std::shared_ptr<PointLight>> PointLightList)
-//{
-//
-//    VkCommandBufferBeginInfo beginInfo{};
-//    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-//    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-//
-//    std::array<VkClearValue, 1> clearValues{};
-//    clearValues[0].depthStencil = { 1.0f, 0 };
-//
-//    VkViewport viewport{};
-//    viewport.x = 0.0f;
-//    viewport.y = 0.0f;
-//    viewport.width = (float)RenderPassResolution.x;
-//    viewport.height = (float)RenderPassResolution.y;
-//    viewport.minDepth = 0.0f;
-//    viewport.maxDepth = 1.0f;
-//
-//    VkRect2D rect2D{};
-//    rect2D.offset = { 0, 0 };
-//    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
-//
-//    VkRenderPassBeginInfo renderPassInfo{};
-//    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-//    renderPassInfo.renderPass = renderPass;
-//    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
-//    renderPassInfo.renderArea.offset = { 0, 0 };
-//    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
-//    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-//    renderPassInfo.pClearValues = clearValues.data();
-//
-//    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
-//    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-//        throw std::runtime_error("Failed to begin recording command buffer.");
-//    }
-//    for (int x = 0; x < DepthCubeMapTextureList.size(); x++)
-//    {
-//        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-//        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-//        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-//        {
-//            for (auto& mesh : MeshRendererManager::GetMeshList())
-//            {
-//                switch (mesh->GetMeshType())
-//                {
-//                case MeshTypeEnum::kMeshPolygon:
-//                {
-//                    depthCubeMapPipeline.Draw(commandBuffer, mesh, PointLightList[x]->GetPosition(), x);
-//                    break;
-//                }
-//                default:
-//                {
-//                    break;
-//                }
-//                }
-//            }
-//        }
-//        vkCmdEndRenderPass(commandBuffer);
-//
-//        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-//        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-//        Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
-//        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-//        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-//    }
-//    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-//        throw std::runtime_error("Failed to record command buffer.");
-//    }
-//
-//    return commandBuffer;
-//}
+VkCommandBuffer DepthCubeMapRenderer::Draw()
+{
+
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    std::array<VkClearValue, 1> clearValues{};
+    clearValues[0].depthStencil = { 1.0f, 0 };
+
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = (float)RenderPassResolution.x;
+    viewport.height = (float)RenderPassResolution.y;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+
+    VkRect2D rect2D{};
+    rect2D.offset = { 0, 0 };
+    rect2D.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = renderPass;
+    renderPassInfo.framebuffer = RenderPassFramebuffer[VulkanRenderer::GetImageIndex()];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = { (uint32_t)RenderPassResolution.x, (uint32_t)RenderPassResolution.y };
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    VkCommandBuffer commandBuffer = CommandBuffer[VulkanRenderer::GetCMDIndex()];
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to begin recording command buffer.");
+    }
+    for (int x = 0; x < DepthCubeMapTextureList.size(); x++)
+    {
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+        for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
+        {
+            DepthSceneData depthSceneData = DepthSceneData();
+            depthSceneData.LightIndex = x;
+
+            switch (GLTFSceneManager::GameObjectList[y]->RenderType)
+            {
+            case GameObjectRenderType::kModelRenderer:
+            {
+               // depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
+                depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], GLTFSceneManager::GetPointLights()[x]->GetPosition(), x);
+                break;
+            }
+            case GameObjectRenderType::kInstanceRenderer:
+            {
+                //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                break;
+            }
+            case GameObjectRenderType::kSpriteRenderer:
+            {
+                //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                break;
+            }
+            }
+        }
+        vkCmdEndRenderPass(commandBuffer);
+
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    }
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+        throw std::runtime_error("Failed to record command buffer.");
+    }
+
+    return commandBuffer;
+}
 
 void DepthCubeMapRenderer::Destroy()
 {

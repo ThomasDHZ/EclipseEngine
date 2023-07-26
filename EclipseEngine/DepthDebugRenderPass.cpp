@@ -104,7 +104,7 @@ void DepthDebugRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedDept
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    DepthDebugPipeline = JsonGraphicsPipeline("DepthDebugShader.txt", VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, 0, depthTexture);
+    depthDebugPipeline.InitializePipeline(pipelineInfo, depthTexture);
 }
 
 VkCommandBuffer DepthDebugRenderPass::Draw()
@@ -144,7 +144,7 @@ VkCommandBuffer DepthDebugRenderPass::Draw()
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    DepthDebugPipeline.DrawTexture(commandBuffer);
+    depthDebugPipeline.Draw(commandBuffer);
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
@@ -156,6 +156,6 @@ VkCommandBuffer DepthDebugRenderPass::Draw()
 void DepthDebugRenderPass::Destroy()
 {
     RenderedTexture->Destroy();
-    DepthDebugPipeline.Destroy();
+    depthDebugPipeline.Destroy();
     RenderPass::Destroy();
 }
