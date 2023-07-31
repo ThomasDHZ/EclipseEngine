@@ -28,8 +28,8 @@ void DepthDebugPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStru
     DepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS;
 
     BuildVertexDescription VertexDescriptionInfo{};
-    VertexDescriptionInfo.VertexBindingDescriptions = Vertex3D::getBindingDescriptions();
-    VertexDescriptionInfo.VertexAttributeDescriptions = Vertex3D::getAttributeDescriptions();
+    VertexDescriptionInfo.VertexBindingDescriptions = VoidVertex::getBindingDescriptions();
+    VertexDescriptionInfo.VertexAttributeDescriptions = VoidVertex::getAttributeDescriptions();
     VertexDescriptionInfo.VertexTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     VertexDescriptionInfo.PolygonMode = VK_POLYGON_MODE_FILL;
     VertexDescriptionInfo.CullMode = VK_CULL_MODE_NONE;

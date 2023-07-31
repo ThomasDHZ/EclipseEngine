@@ -89,30 +89,26 @@ layout (location = 5) in vec3 aColor;
 layout(location = 0) out vec3 FragPos;
 layout(location = 1) out vec2 UV;
 
-layout(binding = 0) uniform ViewSampler
-{
-    mat4 CubeMapFaceMatrix;
-} viewSampler;
-
-layout(binding = 0) buffer TransformBuffer { mat4 transform; } transformBuffer[];
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
-layout(binding = 4) buffer PointLightBuffer { PointLight pointLight; } PLight[];
-
 layout(push_constant) uniform SceneData
 {
   uint MeshIndex;
   uint LightIndex;
 } sceneData;
 
+layout(binding = 0) uniform ViewSampler
+{
+    mat4 CubeMapFaceMatrix[6];
+} viewSampler;
+layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
 
 void main() {
-    FragPos = vec3(viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
+    FragPos = vec3(viewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
                    meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                    vec4(inPosition.xyz, 1.0));    
     UV = aUV;
-    gl_Position = viewSampler.CubeMapFaceMatrix[sceneData.LightIndex] * 
+    gl_Position = viewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
 }

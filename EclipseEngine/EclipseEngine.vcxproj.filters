@@ -276,9 +276,6 @@
     <ClCompile Include="Renderer2DPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="DepthCubeMapRenderer.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -585,6 +582,9 @@
     <ClCompile Include="GLTFDirectionalLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
+    <ClCompile Include="DepthCubeDebugRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -721,9 +721,6 @@
     </ClInclude>
     <ClInclude Include="DepthCubeMapPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthCubeMapDebuggerRenderer.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="DepthCubeMapRenderer.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
@@ -1071,6 +1068,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PipelineRenderType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthCubeDebugRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

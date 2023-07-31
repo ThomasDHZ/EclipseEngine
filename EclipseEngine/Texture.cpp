@@ -983,6 +983,74 @@ void Texture::CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Textur
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 
+void Texture::CopyCubeSideToTextureMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.srcSubresource.baseArrayLayer = side;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = srcCubeTexture->Width;
+	copyImage.extent.height = srcCubeTexture->Height;
+	copyImage.extent.depth = 1;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdCopyImage(SingleCommand, srcCubeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+}
+
+void Texture::CopyCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.srcSubresource.baseArrayLayer = side;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = srcCubeTexture->Width;
+	copyImage.extent.height = srcCubeTexture->Height;
+	copyImage.extent.depth = 1;
+
+	vkCmdCopyImage(commandBuffer, srcCubeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+}
+
+void Texture::CopyDepthCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.srcSubresource.baseArrayLayer = side;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = srcCubeTexture->Width;
+	copyImage.extent.height = srcCubeTexture->Height;
+	copyImage.extent.depth = 1;
+
+	vkCmdCopyImage(commandBuffer, srcCubeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+}
+
 void Texture::CopyDepthCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture)
 {
 	VkImageCopy copyImage = {};
@@ -1023,6 +1091,52 @@ void Texture::CopyDepthCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<T
 	copyRegion.extent.height = (uint32_t)static_cast<float>(srcTexture->Height * std::pow(0.5f, MipLevel));
 	copyRegion.extent.depth = 1;
 	vkCmdCopyImage(commandBuffer, srcTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
+}
+
+void Texture::CopyCubeSideToDepthMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.srcSubresource.baseArrayLayer = side;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = srcCubeTexture->Width;
+	copyImage.extent.height = srcCubeTexture->Height;
+	copyImage.extent.depth = 1;
+
+	auto SingleCommand = VulkanRenderer::BeginSingleTimeCommands();
+	vkCmdCopyImage(SingleCommand, srcCubeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
+	VkResult result = VulkanRenderer::EndSingleTimeCommands(SingleCommand);
+}
+
+void Texture::CopyCubeSideToDepthMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture)
+{
+	VkImageCopy copyImage = {};
+	copyImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.srcSubresource.baseArrayLayer = side;
+	copyImage.srcSubresource.mipLevel = 0;
+	copyImage.srcSubresource.layerCount = 1;
+	copyImage.srcOffset = { 0, 0, 0 };
+
+	copyImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+	copyImage.dstSubresource.baseArrayLayer = 0;
+	copyImage.dstSubresource.mipLevel = 0;
+	copyImage.dstSubresource.layerCount = 1;
+	copyImage.dstOffset = { 0, 0, 0 };
+
+	copyImage.extent.width = srcCubeTexture->Width;
+	copyImage.extent.height = srcCubeTexture->Height;
+	copyImage.extent.depth = 1;
+
+	vkCmdCopyImage(commandBuffer, srcCubeTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstTexture->Image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyImage);
 }
 
 void Texture::CopyCubeMapLayer(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t layer, uint32_t MipLevel)

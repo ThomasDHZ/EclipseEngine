@@ -39,9 +39,11 @@ public:
 
 	std::shared_ptr<RenderedCubeMapTexture> RenderedReflectionCubeMap;
 	std::shared_ptr<RenderedCubeMapDepthTexture> DepthTexture;
+	std::shared_ptr<RenderedColorTexture> CubeMapSide[6];
+	std::shared_ptr<RenderedDepthTexture> DepthCubeMapSide[6];
 
 	void BuildRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize);
-	VkCommandBuffer Draw();
+	void PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 reflectPoint);
+	VkCommandBuffer Draw(glm::vec3 reflectPoint);
 	void Destroy();
 };

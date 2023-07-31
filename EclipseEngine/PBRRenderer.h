@@ -22,18 +22,21 @@
 #include "PerspectiveCamera.h"
 #include "OrthographicCamera.h"
 #include "VulkanPipelineEditor.h"
+#include "DepthCubeDebugRenderPass.h"
 
 class PBRRenderer
 {
 private:
+	glm::vec3 pos = glm::vec3(1000.0f, 2000.0f, 0.0f);
 	VulkanPipelineEditor pipelineEditor;
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
-	DepthCubeMapRenderer depthCubeMapRenderPass;
-	DepthDebugRenderPass depthDebugRenderPass;
+	//DepthCubeMapRenderer depthCubeMapRenderPass[7];
+	//DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthCubeDebugRenderPass[6];
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;

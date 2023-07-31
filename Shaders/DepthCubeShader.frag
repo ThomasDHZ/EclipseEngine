@@ -10,11 +10,13 @@
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
 
-layout(binding = 0) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 0) uniform ViewSampler
+{
+    mat4 CubeMapFaceMatrix[6];
+} viewSampler;
 layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
-layout(binding = 4) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 
 layout(push_constant) uniform DepthSceneData
 {
@@ -22,6 +24,7 @@ layout(push_constant) uniform DepthSceneData
     uint LightIndex;
 } sceneData;
 
+layout(location = 0) out vec4 outColor;
 
 void main()
 {		
@@ -44,4 +47,6 @@ void main()
    {
         FinalUV.x = 1.0f - FinalUV.x;
    }
+
+   outColor = vec4(texture(TextureMap[material.AlbedoMapID], FinalUV).rgb, 1.0f);
 }

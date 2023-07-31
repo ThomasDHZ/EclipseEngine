@@ -99,8 +99,15 @@ public:
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);
 
+    static void CopyCubeSideToTextureMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
+    static void CopyCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
+    static void CopyDepthCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
+
     static void CopyDepthCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyDepthCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t MipLevel);
+
+    static void CopyCubeSideToDepthMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
+    static void CopyCubeSideToDepthMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
 
     static void CopyMipLevelToCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeMapLayer(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture, uint32_t layer, uint32_t MipLevel);

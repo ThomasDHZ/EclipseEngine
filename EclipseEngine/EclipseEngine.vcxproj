@@ -194,6 +194,7 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="DebugPosMesh.cpp" />
+    <ClCompile Include="DepthCubeDebugRenderPass.cpp" />
     <ClCompile Include="EclipseGUI.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -206,7 +207,6 @@
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
-    <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
     <ClCompile Include="DepthCubeMapPipeline.cpp" />
     <ClCompile Include="DepthCubeMapRenderer.cpp" />
     <ClCompile Include="DepthDebugPipeline.cpp" />
@@ -346,6 +346,7 @@
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="DebugPosMesh.h" />
+    <ClInclude Include="DepthCubeDebugRenderPass.h" />
     <ClInclude Include="EclipseGUI.h" />
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnvironmentTexture.h" />
@@ -361,7 +362,6 @@
     <ClInclude Include="BRDFRenderPass.h" />
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
-    <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
     <ClInclude Include="DepthCubeMapPipeline.h" />
     <ClInclude Include="DepthCubeMapRenderer.h" />
     <ClInclude Include="DepthDebugPipeline.h" />

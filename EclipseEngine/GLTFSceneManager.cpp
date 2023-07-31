@@ -1,4 +1,5 @@
 #include "GLTFSceneManager.h"
+#include "ConsoleLogger.h"
 SceneProperties										 GLTFSceneManager::sceneProperites;
 std::shared_ptr<Camera>								 GLTFSceneManager::ActiveCamera;
 std::shared_ptr<Skybox>								 GLTFSceneManager::SkyboxMesh;
@@ -15,8 +16,8 @@ std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::Directiona
 std::vector<std::shared_ptr<GLTFPointLight>>		 GLTFSceneManager::PointLightList;
 std::vector<std::shared_ptr<GLTFSpotLight>>			 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
-float												 GLTFSceneManager::PBRCubeMapSize = 128.0f;
-float												 GLTFSceneManager::PreRenderedMapSize = 128.0f;
+float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
+float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
@@ -501,6 +502,8 @@ void GLTFSceneManager::Update()
 		sceneProperites.frame = 0;
 	}
 	sceneProperites.MaxReflectCount = 2;
+
+	ConsoleLogger::MatrixLogger("View", sceneProperites.proj * sceneProperites.view);
 }
 
 

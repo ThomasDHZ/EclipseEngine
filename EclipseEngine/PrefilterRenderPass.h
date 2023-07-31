@@ -11,14 +11,14 @@ private:
 	void RenderPassDesc();
 	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture>& cubeMap);
 
-	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
+
 	JsonGraphicsPipeline PrefilterPipeline;
 
 public:
 	PrefilterRenderPass();
 	~PrefilterRenderPass();
 
-
+	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
 	std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
 
 	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize);

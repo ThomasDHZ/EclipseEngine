@@ -17,7 +17,12 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
 	{
 		RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 		DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
+		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+		for (unsigned int x = 0; x < 6; x++)
+		{
+			CubeMapSide[x] = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+			DepthCubeMapSide[x] = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+		}
 	}
 	else
 	{
@@ -38,7 +43,7 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
 	SetUpCommandBuffers();
 }
 
-void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize)
+void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 reflectPoint)
 {
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	RenderPassResolution = glm::vec2(cubeMapSize);
@@ -47,7 +52,12 @@ void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& text
 	{
 		RenderedTexture = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
 		DepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
-		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
+		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+		for (unsigned int x = 0; x < 6; x++)
+		{
+			CubeMapSide[x] = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+			DepthCubeMapSide[x] = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, VK_SAMPLE_COUNT_1_BIT));
+		}
 	}
 	else
 	{
@@ -66,7 +76,7 @@ void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& text
 	CreateRendererFramebuffers(AttachmentList);
 	BuildRenderPassPipelines(textures);
 	SetUpCommandBuffers();
-	Draw();
+	Draw(reflectPoint);
 	OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
@@ -206,9 +216,9 @@ void PBRReflectionRenderPass::UpdateView(glm::vec3 reflectPoint)
 	ReflectionMapSampler.Update();
 }
 
-VkCommandBuffer PBRReflectionRenderPass::Draw()
+VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 reflectPoint)
 {
-	UpdateView(glm::vec3(0.0f, 5.0f, 0.0f));
+	UpdateView(reflectPoint);
 
 	VkCommandBufferBeginInfo beginInfo{};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -266,6 +276,20 @@ VkCommandBuffer PBRReflectionRenderPass::Draw()
 	Texture::CopyCubeMap(commandBuffer, RenderedTexture, RenderedReflectionCubeMap);
 	RenderedReflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 	RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	for (unsigned int x = 0; x < 6; x++)
+	{
+		Texture::CopyCubeSideToTextureMap(commandBuffer, RenderedTexture, x, CubeMapSide[x]);
+	}
+	RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	for (unsigned int x = 0; x < 6; x++)
+	{
+		Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthTexture, x, DepthCubeMapSide[x]);
+	}
+	DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to record command buffer.");
