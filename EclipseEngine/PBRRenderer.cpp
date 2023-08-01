@@ -277,12 +277,12 @@ void PBRRenderer::BuildRenderer()
 
 
 	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTextureList[0]);
-	//depthCubeDebugRenderPass[0].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[0]);
-	//depthCubeDebugRenderPass[1].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[1]);
-	//depthCubeDebugRenderPass[2].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[2]);
-	//depthCubeDebugRenderPass[3].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[3]);
-	//depthCubeDebugRenderPass[4].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[4]);
-	//depthCubeDebugRenderPass[5].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[5]);
+	depthCubeDebugRenderPass[0].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[0]);
+	depthCubeDebugRenderPass[1].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[1]);
+	depthCubeDebugRenderPass[2].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[2]);
+	depthCubeDebugRenderPass[3].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[3]);
+	depthCubeDebugRenderPass[4].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[4]);
+	depthCubeDebugRenderPass[5].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[5]);
 
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -342,17 +342,17 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::SameLine();
 	meshReflectionRenderPass.CubeMapSide[5]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
 
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	ImGui::SameLine();
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	ImGui::SameLine();
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	ImGui::SameLine();
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	ImGui::SameLine();
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	ImGui::SameLine();
+	depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
 
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
 	//{
@@ -409,24 +409,24 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 		//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[0].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[1].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[2].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[3].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[4].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[5].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[0].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[1].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[2].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[3].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[4].Draw());
+	CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[5].Draw());
 
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(pos));
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
 
 	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(pos));
+	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
 
 	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
 
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }

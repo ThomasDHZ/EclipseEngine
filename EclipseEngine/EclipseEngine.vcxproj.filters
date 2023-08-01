@@ -585,6 +585,12 @@
     <ClCompile Include="DepthCubeDebugRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="TestPBRReflectionRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPBRCubeMapRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1071,6 +1077,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DepthCubeDebugRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPBRReflectionRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPBRCubeMapRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

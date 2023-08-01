@@ -169,7 +169,7 @@ void main() {
     Normal = mat3(MeshTransform) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
-    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *              
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[0] *              
                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
                   vec4(inPosition, 1.0);
 }
