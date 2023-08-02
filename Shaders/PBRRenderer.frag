@@ -157,12 +157,12 @@ const mat4 LightBiasMatrix = mat4(
 
 vec3 gridSamplingDisk[20] = vec3[]
 (
-    vec3(1, 1, 1), vec3(1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
-    vec3(1, 1, -1), vec3(1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
-    vec3(1, 1, 0), vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
-    vec3(1, 0, 1), vec3(-1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
-    vec3(0, 1, 1), vec3(0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
-    );
+   vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1), 
+   vec3(1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1, 1,  0),
+   vec3(1, 0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1, 0, -1),
+   vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
+);
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec2 offset, int index)
 {
@@ -203,7 +203,9 @@ float filterPCF(vec4 sc, int index)
 
 float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
 {
-    float far_plane = 500.0f;
+    float near_plane = 1.0f;
+    float far_plane = 25.0f;
+
     vec3 fragToLight = fragPos - PLight[index].pointLight.position;
     float currentDepth = length(fragToLight);
 
@@ -212,11 +214,11 @@ float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
     int samples = 20;
     float viewDistance = length(viewPos - fragPos);
     float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
-    for (int i = 0; i < samples; ++i)
+    for(int i = 0; i < samples; ++i)
     {
         float closestDepth = texture(PointShadowMap[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
         closestDepth *= far_plane;   // undo mapping [0;1]
-        if (currentDepth - bias > closestDepth)
+        if(currentDepth - bias > closestDepth)
             shadow += 1.0;
     }
     shadow /= float(samples);
@@ -369,7 +371,8 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
         vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.LightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
         float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL * shadow;
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+        Lo *= shadow;
     }
     return Lo;
 }
@@ -405,8 +408,16 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, Materi
 
         float NdotL = max(dot(N, L), 0.0);
        // vec3 fragPos, vec3 viewPos, int index
-        float shadow = CubeShadowCalculation(V, viewPos, x);
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL * shadow;
+       float EPSILON = 0.15;
+       float SHADOW_OPACITY = 0.005;
+
+       vec3 lightVec = vertex.Position - PLight[x].pointLight.position;
+       float dist = length(lightVec);
+
+        float shadow = (dist <= texture(PointShadowMap[x], lightVec).r + EPSILON) ? 1.0 : SHADOW_OPACITY;
+
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+        Lo *= vec3(shadow);
     }
     return Lo;
 }
@@ -448,7 +459,7 @@ void main()
 
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
-  Lo += CalcDirectionalLight(F0, V, N, material);
+  // Lo += CalcDirectionalLight(F0, V, N, material);
    Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
@@ -466,7 +477,7 @@ void main()
 
     vec3 ambient = ((kD * diffuse + specular) * material.AmbientOcclusion);
     
-    vec3 color = ambient + Lo;
+    vec3 color = Lo;
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
 
@@ -475,13 +486,5 @@ void main()
         color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
     }
 
-    if(CubeShadowCalculation(V, ViewPos, 0) > 0.0f)
-    {
-         outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    }
-    else 
-    {
-        outColor = vec4(color, 1.0f);
-    }
-    
+     outColor = vec4(color, 1.0f);
 }

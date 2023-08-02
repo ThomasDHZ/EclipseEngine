@@ -243,6 +243,7 @@ void PBRRenderer::BuildRenderer()
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].RenderPassDepthTexture);
+			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].RenderPassDepthTexture);
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
@@ -263,6 +264,7 @@ void PBRRenderer::BuildRenderer()
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].RenderPassDepthTexture);
+			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].RenderPassDepthTexture);
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
@@ -283,6 +285,7 @@ void PBRRenderer::BuildRenderer()
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].RenderPassDepthTexture);
 			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].RenderPassDepthTexture);
+			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].RenderPassDepthTexture);
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			std::string a = "PBRRenderPass.txt";
@@ -322,7 +325,11 @@ void PBRRenderer::ImGuiUpdate()
 	//ImGui::SliderFloat(("DLight Far " + std::to_string(1)).c_str(), &depthCubeMapRenderPass[0].Far, -100.0f, 100.0f);
 	//ImGui::SliderFloat3(("DLight Pos " + std::to_string(1)).c_str(), &depthCubeMapRenderPass[0].Position.x, -100.0f, 100.0f);
 
-	ImGui::SliderFloat3(("pos " + std::to_string(1)).c_str(), &pos.x, -1000.0f, 1000.0f);
+
+	ImGui::SliderFloat3(("PLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetPositionPtr()->x, -50.0f, 50.0f);
+	ImGui::SliderFloat3(("PLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetDiffusePtr()->x, 0.0f, 1.0f);
+	ImGui::SliderFloat(("PLight Radius " + std::to_string(1)).c_str(), GLTFSceneManager::GetPointLights()[0]->GetRadiusPtr(), 0.0f, 15.0f);
+	ImGui::SliderFloat(("PLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetIntensityPtr()[0], 0.0f, 100.0f);
 
 	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	{
