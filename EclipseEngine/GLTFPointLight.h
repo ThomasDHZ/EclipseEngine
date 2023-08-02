@@ -25,6 +25,7 @@ public:
 	glm::vec3 GetPosition() { return LightBuffer.UniformDataInfo.position; }
 	glm::vec3* GetPositionPtr() { return &LightBuffer.UniformDataInfo.position; }
 	glm::vec3* GetDiffusePtr() { return &LightBuffer.UniformDataInfo.diffuse; }
+	float GetRadius() { return LightBuffer.UniformDataInfo.radius; }
 	float* GetIntensityPtr() { return &LightBuffer.UniformDataInfo.intensity; }
 	float* GetRadiusPtr() { return &LightBuffer.UniformDataInfo.radius; }
 };

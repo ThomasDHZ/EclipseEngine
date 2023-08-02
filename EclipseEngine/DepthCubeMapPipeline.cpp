@@ -21,9 +21,10 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
     AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, CubeMapSamplerBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, GLTFSceneManager::GetGameObjectPropertiesBuffer()[0]);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetMaterialPropertiesBuffer()[0]);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetTexturePropertiesBuffer()[0], VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, GLTFSceneManager::GetGameObjectTransformBuffer()[0]);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetGameObjectPropertiesBuffer()[0]);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetMaterialPropertiesBuffer()[0]);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetTexturePropertiesBuffer()[0], VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
@@ -69,13 +70,10 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
     }
 }
 
-void DepthCubeMapPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, glm::vec2 Aspect, glm::vec3 CubeMapSamplerPos, uint32_t x)
+void DepthCubeMapPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, glm::vec2 Aspect, glm::vec3 CubeMapSamplerPos, uint32_t x, DepthSceneData& depthSceneData)
 {
-    DepthSceneData directionalLightProjection;
-    directionalLightProjection.LightIndex = x;
-
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);
+    mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, depthSceneData);
 }
 void DepthCubeMapPipeline::Destroy()
 {

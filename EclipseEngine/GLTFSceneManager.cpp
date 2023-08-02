@@ -502,8 +502,6 @@ void GLTFSceneManager::Update()
 		sceneProperites.frame = 0;
 	}
 	sceneProperites.MaxReflectCount = 2;
-
-	ConsoleLogger::MatrixLogger("View", sceneProperites.proj * sceneProperites.view);
 }
 
 

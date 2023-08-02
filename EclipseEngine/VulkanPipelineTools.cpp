@@ -144,7 +144,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kSpotLightDescriptor: AddStorageBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetSpotLightPropertiesBuffer()); break;
             case kReflectionViewDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, ReflectionViewBuffer); break;
             case kDirectionalShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DirectionalShadowBuffer.ImageInfo); break;
-            case kPointShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, PointShadowBuffer.ImageInfo); break;
+            case kPointShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, PointShadowBuffers); break;
             case kSpotShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, SpotShadowBuffer.ImageInfo); break;
             case kViewTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
             case kViewDepthTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
@@ -396,12 +396,19 @@ void VulkanPipelineTools::LoadDirectionalShadowBuffer(std::shared_ptr<RenderedDe
     DirectionalShadowBuffer.Used = true;
 }
 
-void VulkanPipelineTools::LoadPointShadowBuffer(std::shared_ptr<RenderedCubeMapDepthTexture> pointShadow)
+void VulkanPipelineTools::LoadPointShadowBuffers(std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointShadowTextures)
 {
-    PointShadowBuffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    PointShadowBuffer.ImageInfo.imageView = pointShadow->GetView();
-    PointShadowBuffer.ImageInfo.sampler = pointShadow->GetSampler();
-    PointShadowBuffer.Used = true;
+    std::vector<VkDescriptorImageInfo> pointShadowBuffers;
+    for (auto& shadowTexture : pointShadowTextures)
+    {
+        VkDescriptorImageInfo PointShadowBuffer{};
+        PointShadowBuffer.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        PointShadowBuffer.imageView = shadowTexture->GetView();
+        PointShadowBuffer.sampler = shadowTexture->GetSampler();
+        pointShadowBuffers.emplace_back(PointShadowBuffer);
+    }
+
+    PointShadowBuffers = pointShadowBuffers;
 }
 
 void VulkanPipelineTools::LoadSpotShadowBufferr(std::shared_ptr<RenderedDepthTexture> spotShadow)

@@ -115,7 +115,7 @@ void TestPBRCubeMapRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubm
 
     //Main Renderers
     {
-        pbrReflectionPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
+        pbrReflectionPipeline = JsonGraphicsPipeline("PBRReflectionShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), ReflectionMapSampler, textures);
         skyboxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
     }
 
@@ -183,6 +183,10 @@ VkCommandBuffer TestPBRCubeMapRenderPass::Draw(glm::vec3 reflectPoint)
 
    // GLTFSceneManager::sceneProperites.CubeMapView = 0;
 
+    const glm::vec3 reflectPos = reflectPoint;
+    GLTFSceneManager::sceneProperites.proj = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+    GLTFSceneManager::sceneProperites.view = glm::lookAt(reflectPos, reflectPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+
     skyboxPipeline.DrawCubeMap<SkyBoxView>(commandBuffer, GLTFSceneManager::SkyboxMesh->skyBoxView);
     for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
     {
@@ -238,17 +242,17 @@ VkCommandBuffer TestPBRCubeMapRenderPass::Draw(glm::vec3 reflectPoint)
     }
 
     DrawToTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-    for (unsigned int x = 0; x < 6; x++)
-    {
+    //for (unsigned int x = 0; x < 6; x++)
+    //{
         Texture::CopyTexture(commandBuffer, DrawToTexture, RenderedTexture);
-    }
+    //}
     DrawToTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     DrawToDepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-    for (unsigned int x = 0; x < 6; x++)
-    {
+ /*   for (unsigned int x = 0; x < 6; x++)
+    {*/
         Texture::CopyDepthTexture(commandBuffer, DrawToDepthTexture, DepthTexture);
-    }
+   /* }*/
     DrawToDepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     vkCmdEndRenderPass(commandBuffer);

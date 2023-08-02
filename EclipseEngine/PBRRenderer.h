@@ -37,8 +37,8 @@ private:
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass[7];
-	DepthDebugRenderPass depthDebugRenderPass;
-	DepthDebugRenderPass depthCubeDebugRenderPass[6];
+	//DepthDebugRenderPass depthDebugRenderPass;
+	//DepthDebugRenderPass depthCubeDebugRenderPass[6];
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
@@ -53,7 +53,7 @@ private:
 	//Main
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
-	TestPBRCubeMapRenderPass gLTFRenderPass;
+	PBRRenderPass gLTFRenderPass;
 
 	TestPBRCubeMapRenderPass adsf;
 	TestPBRReflectionRenderPass testPBRReflectionRenderPass;

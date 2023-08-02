@@ -14,9 +14,10 @@ layout(binding = 0) uniform ViewSampler
 {
     mat4 CubeMapFaceMatrix[6];
 } viewSampler;
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 3) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 4) uniform sampler2D TextureMap[];
 
 layout(push_constant) uniform DepthSceneData
 {

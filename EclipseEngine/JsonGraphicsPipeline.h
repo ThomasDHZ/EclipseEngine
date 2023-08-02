@@ -59,7 +59,6 @@ public:
 	void DrawMesh(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> gameObject, DepthSceneData& constBuffer)
 	{
 		DepthSceneData directionalLightProjection;
-		directionalLightProjection.LightIndex = 0;
 
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		gameObject->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);

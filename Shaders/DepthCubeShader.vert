@@ -99,16 +99,19 @@ layout(binding = 0) uniform ViewSampler
 {
     mat4 CubeMapFaceMatrix[6];
 } viewSampler;
-layout(binding = 1) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
-layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
-layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 3) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 4) uniform sampler2D TextureMap[];
 
-void main() {
-    FragPos = vec3(viewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
-                   meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
-                   vec4(inPosition.xyz, 1.0));    
+void main() 
+{
+    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
+    FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
+
     UV = aUV;
-    gl_Position = viewSampler.CubeMapFaceMatrix[gl_ViewIndex] * 
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+
+    gl_Position = viewSampler.CubeMapFaceMatrix[gl_ViewIndex] *               
+                  MeshTransform * 
                   vec4(inPosition, 1.0);
 }

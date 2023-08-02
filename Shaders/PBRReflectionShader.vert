@@ -131,6 +131,16 @@ struct PBRMaterial
 };
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
+layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
+layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
+layout(binding = 3) uniform sampler2D TextureMap[];
+layout(binding = 4) uniform sampler2D BRDFMap;
+layout(binding = 5) uniform samplerCube IrradianceMap;
+layout(binding = 6) uniform samplerCube PrefilterMap;
+layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
+layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
+layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
+layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 11) uniform CubeMapViewSampler 
 {
     mat4 CubeMapFaceMatrix[6];
@@ -162,14 +172,14 @@ void main() {
 //	{
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
-    mat4 MeshTransform = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] ;
+    mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
     FragPos = vec3(MeshTransform * vec4(inPosition.xyz, 1.0));    
     Color = aColor;
     UV = aUV;
     Normal = mat3(MeshTransform) * aNormal;
 	Tangent = aTangent;
 	BiTangent = aBitangent;
-    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[0] *              
-                  meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform * 
+    gl_Position = cubeMapViewSampler.CubeMapFaceMatrix[gl_ViewIndex] *               
+                  MeshTransform * 
                   vec4(inPosition, 1.0);
 }

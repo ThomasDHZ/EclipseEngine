@@ -48,7 +48,7 @@ protected:
 	DescriptorBindingLock ReflectionIrradianceBuffer;
 	DescriptorBindingLock ReflectionPrefilterBuffer;
 	DescriptorBindingLock DirectionalShadowBuffer;
-	DescriptorBindingLock PointShadowBuffer;
+	std::vector<VkDescriptorImageInfo> PointShadowBuffers;
 	DescriptorBindingLock SpotShadowBuffer;
 	DescriptorBindingLock CubeMapBuffer;
 	DescriptorBindingLock TextureBuffer;
@@ -94,7 +94,7 @@ protected:
 	void LoadReflectionIrradianceMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionIrradianceMap);
 	void LoadReflectionPrefilterMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 reflectionPrefilterMap);
 	void LoadDirectionalShadowBuffer(std::shared_ptr<RenderedDepthTexture>	 directionalShadow);
-	void LoadPointShadowBuffer(std::shared_ptr<RenderedCubeMapDepthTexture>	 pointShadow);
+	void LoadPointShadowBuffers(std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> pointShadowTextures);
 	void LoadSpotShadowBufferr(std::shared_ptr<RenderedDepthTexture>	 spotShadow);
 	void LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 cubeMap);
 	void LoadTextureBuffer(std::shared_ptr<RenderedColorTexture>	 colorTexture);

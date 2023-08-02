@@ -145,6 +145,7 @@ layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directional
 layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 layout(binding = 11) uniform sampler2D ShadowMap[];
+layout(binding = 12) uniform samplerCube PointShadowMap[];
 
 const float PI = 3.14159265359;
 
@@ -200,28 +201,28 @@ float filterPCF(vec4 sc, int index)
     return shadowFactor / count;
 }
 
-//float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
-//{
-//    float far_plane = 500.0f;
-//    vec3 fragToLight = fragPos - PLight[index].pointLight.position;
-//    float currentDepth = length(fragToLight);
-//
-//    float shadow = 0.0;
-//    float bias = 0.15;
-//    int samples = 20;
-//    float viewDistance = length(viewPos - fragPos);
-//    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
-//    for (int i = 0; i < samples; ++i)
-//    {
-//        float closestDepth = texture(PointShadowMap[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
-//        closestDepth *= far_plane;   // undo mapping [0;1]
-//        if (currentDepth - bias > closestDepth)
-//            shadow += 1.0;
-//    }
-//    shadow /= float(samples);
-//
-//    return shadow;
-//}
+float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
+{
+    float far_plane = 500.0f;
+    vec3 fragToLight = fragPos - PLight[index].pointLight.position;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+    float viewDistance = length(viewPos - fragPos);
+    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    for (int i = 0; i < samples; ++i)
+    {
+        float closestDepth = texture(PointShadowMap[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= far_plane;   // undo mapping [0;1]
+        if (currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
+
+    return shadow;
+}
 
 Vertex RasterVertexBuilder()
 {
@@ -373,7 +374,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
     return Lo;
 }
 
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, MaterialProperties material)
 {
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.PointLightCount; x++)
@@ -403,11 +404,9 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties m
         kD *= 1.0 - material.Metallic;
 
         float NdotL = max(dot(N, L), 0.0);
-
-        //  vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.lightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-        //  float shadow = filterPCF(LightSpace / LightSpace.w, x);
-
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;// * shadow;
+       // vec3 fragPos, vec3 viewPos, int index
+        float shadow = CubeShadowCalculation(V, viewPos, x);
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL * shadow;
     }
     return Lo;
 }
@@ -450,7 +449,7 @@ void main()
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
   Lo += CalcDirectionalLight(F0, V, N, material);
-   Lo += CalcPointLight(F0, V, N, vertex, material);
+   Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
@@ -475,5 +474,14 @@ void main()
     {
         color = mix(color, vec3(1.0f, 0.0f, 0.0f), .35f);
     }
-    outColor = vec4(color, 1.0f);
+
+    if(CubeShadowCalculation(V, ViewPos, 0) > 0.0f)
+    {
+         outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+    else 
+    {
+        outColor = vec4(color, 1.0f);
+    }
+    
 }

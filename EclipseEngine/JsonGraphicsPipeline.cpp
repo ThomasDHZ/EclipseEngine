@@ -16,6 +16,7 @@ JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkV
     LoadReflectionIrradianceMapBuffer(submitList.IrradianceTextureList[0]);
     LoadReflectionPrefilterMapBuffer(submitList.PrefilterTextureList[0]);
     LoadDirectionalShadowBuffer(submitList.DirectionalLightTextureShadowMaps[0]);
+    LoadPointShadowBuffers(submitList.PointLightShadowMaps);
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
@@ -43,6 +44,7 @@ JsonGraphicsPipeline::JsonGraphicsPipeline(const char* filePath, std::vector<VkV
     LoadReflectionIrradianceMapBuffer(submitList.IrradianceTextureList[0]);
     LoadReflectionPrefilterMapBuffer(submitList.PrefilterTextureList[0]);
     LoadDirectionalShadowBuffer(submitList.DirectionalLightTextureShadowMaps[0]);
+    LoadPointShadowBuffers(submitList.PointLightShadowMaps);
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 

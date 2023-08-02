@@ -241,7 +241,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(int lightIndex)
         throw std::runtime_error("Failed to begin recording command buffer.");
     }
 
-        glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 100.0f);
+        glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = ProjectionMatrix * glm::lookAt(GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition() + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = ProjectionMatrix * glm::lookAt(GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition() + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
@@ -250,13 +250,6 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(int lightIndex)
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = ProjectionMatrix * glm::lookAt(GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition() + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = ProjectionMatrix * glm::lookAt(GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition() + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         cubeMapSampler.Update();
-
-        //ConsoleLogger::MatrixLogger("View 1", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0]);
-        //ConsoleLogger::MatrixLogger("View 2", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1]);
-        //ConsoleLogger::MatrixLogger("View 3", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2]);
-        //ConsoleLogger::MatrixLogger("View 4", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3]);
-        //ConsoleLogger::MatrixLogger("View 5", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4]);
-        //ConsoleLogger::MatrixLogger("View 6", cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5]);
 
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
@@ -271,7 +264,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(int lightIndex)
             case GameObjectRenderType::kModelRenderer:
             {
                // depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
-                depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], RenderPassResolution, GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), lightIndex);
+                depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], RenderPassResolution, GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), lightIndex, depthSceneData);
                 break;
             }
             case GameObjectRenderType::kInstanceRenderer:

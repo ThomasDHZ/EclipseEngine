@@ -277,19 +277,19 @@ VkCommandBuffer PBRReflectionRenderPass::Draw(glm::vec3 reflectPoint)
 	RenderedReflectionCubeMap->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 	RenderedTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-	RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-	for (unsigned int x = 0; x < 6; x++)
-	{
-		Texture::CopyCubeSideToTextureMap(commandBuffer, RenderedTexture, x, CubeMapSide[x]);
-	}
-	RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	//RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	//for (unsigned int x = 0; x < 6; x++)
+	//{
+	//	Texture::CopyCubeSideToTextureMap(commandBuffer, RenderedTexture, x, CubeMapSide[x]);
+	//}
+	//RenderedTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-	DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-	for (unsigned int x = 0; x < 6; x++)
-	{
-		Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthTexture, x, DepthCubeMapSide[x]);
-	}
-	DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+	//DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+	//for (unsigned int x = 0; x < 6; x++)
+	//{
+	//	Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthTexture, x, DepthCubeMapSide[x]);
+	//}
+	//DepthTexture->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to record command buffer.");
