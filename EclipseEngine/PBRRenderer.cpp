@@ -300,6 +300,21 @@ void PBRRenderer::Update()
 void PBRRenderer::ImGuiUpdate()
 {
 	pipelineEditor.Update();
+//	ImGui::Begin("Light Manager");
+//ImGui::Separator();
+//
+//ImGui::ListBox("PipelineSelection", &lightSelection, pipelineListchar.data(), pipelineListchar.size());
+//if (lightSelection != 0)
+//{
+//	ImGui::LabelText(GLTFSceneManager::GetPointLights()[lightSelection]->GetLightName().c_str(), "");
+//	ImGui::Checkbox("Static Light", GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatusPtr());
+//	ImGui::SliderFloat3("PLight direction", &GLTFSceneManager::GetPointLights()[lightSelection]->GetPositionPtr()->x, -50.0f, 50.0f);
+//	ImGui::SliderFloat3("PLight Diffuse", &GLTFSceneManager::GetPointLights()[lightSelection]->GetDiffusePtr()->x, 0.0f, 1.0f);
+//	ImGui::SliderFloat("PLight Radius", GLTFSceneManager::GetPointLights()[lightSelection]->GetRadiusPtr(), 0.0f, 15.0f);
+//	ImGui::SliderFloat("PLight Intensity", &GLTFSceneManager::GetPointLights()[lightSelection]->GetIntensityPtr()[0], 0.0f, 100.0f);
+//}
+//ImGui::End();
+
 	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
 	//{
 	//	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
