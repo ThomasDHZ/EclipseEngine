@@ -25,13 +25,9 @@ public:
 	DepthCubeMapRenderer();
 	~DepthCubeMapRenderer();
 
-	std::shared_ptr<RenderedCubeMapTexture> DrawToCubeMap;
 	std::shared_ptr<RenderedCubeMapDepthTexture> RenderPassDepthTexture;
+	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> DepthCubeMapTextureList;
 	std::shared_ptr<RenderedDepthTexture> CubeMapSide[6];
-
-	float Near = 0.1f;
-	float Far = 10000.0f;
-	glm::vec3 Position = glm::vec3(-0.0114120245f, 0.538504183f, 0.0162323173f);
 
 	void BuildRenderPass(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution);
 	void OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution, int lightIndex);

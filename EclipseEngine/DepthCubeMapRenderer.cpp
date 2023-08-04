@@ -17,12 +17,11 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
 
     if (renderPass == nullptr)
     {
-        DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
         RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-        //for (auto& light : GLTFSceneManager::GetPointLights())
-        //{
-        //    DepthCubeMapTextureList = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-        //}
+        for (auto& light : GLTFSceneManager::GetPointLights())
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+        }
 
        for (unsigned int x = 0; x < 6; x++)
         {
@@ -32,18 +31,16 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
     else
     {
         ClearTextureList(); 
-        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        //for (auto& light : PointLightList)
-        //{
-          //  DepthCubeMapTextureList = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-          //  DepthCubeMapTextureList->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-       /* }*/
+        for (auto& light : PointLightList)
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DrawToCubeMap->View);
     AttachmentList.emplace_back(RenderPassDepthTexture->View);
 
     RenderPassDesc();
@@ -59,12 +56,11 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLigh
 
     if (renderPass == nullptr)
     {
-        DrawToCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
         RenderPassDepthTexture = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-  /*      for (auto& light : GLTFSceneManager::GetPointLights())
-        {*/
-          //  DepthCubeMapTextureList = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-        /*}*/
+        for (auto& light : GLTFSceneManager::GetPointLights())
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+        }
 
         for (unsigned int x = 0; x < 6; x++)
         {
@@ -74,18 +70,16 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLigh
     else
     {
         ClearTextureList();
-        DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-     /*   for (auto& light : PointLightList)
-        {*/
-        //    DepthCubeMapTextureList = std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount));
-        //    DepthCubeMapTextureList->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-   /*     }*/
+        for (auto& light : PointLightList)
+        {
+            DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
-    AttachmentList.emplace_back(DrawToCubeMap->View);
     AttachmentList.emplace_back(RenderPassDepthTexture->View);
 
     RenderPassDesc();
@@ -99,7 +93,6 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLigh
 void DepthCubeMapRenderer::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
-    AttachmentDescriptionList.emplace_back(DrawToCubeMap->GetAttachmentDescription());
 
     VkAttachmentDescription DepthAttachment = {};
     DepthAttachment.format = VK_FORMAT_D32_SFLOAT;
@@ -112,16 +105,11 @@ void DepthCubeMapRenderer::RenderPassDesc()
     DepthAttachment.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
     AttachmentDescriptionList.emplace_back(DepthAttachment);
 
-    std::vector<VkAttachmentReference> ColorRefsList;
-    ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
-
-    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 0, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     subpassDescription.pDepthStencilAttachment = &depthReference;
-    subpassDescription.colorAttachmentCount = static_cast<uint32_t>(ColorRefsList.size());
-    subpassDescription.pColorAttachments = ColorRefsList.data();
 
     std::vector<VkSubpassDependency> DependencyList;
 
@@ -211,9 +199,8 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(int lightIndex)
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { 0.0f, 0.0f, 0.0f };
-    clearValues[1].depthStencil = { 1.0f, 0 };
+    std::array<VkClearValue, 1> clearValues{};
+    clearValues[0].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -251,41 +238,44 @@ VkCommandBuffer DepthCubeMapRenderer::Draw(int lightIndex)
         cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = ProjectionMatrix * glm::lookAt(GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition() + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
         cubeMapSampler.Update();
 
-        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-        for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
+        for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
         {
-            DepthSceneData depthSceneData = DepthSceneData();
-            depthSceneData.LightIndex = 0;
+            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+            vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+            vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+            for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
+            {
+                DepthSceneData depthSceneData = DepthSceneData();
+                depthSceneData.LightIndex = x;
 
-            switch (GLTFSceneManager::GameObjectList[y]->RenderType)
-            {
-            case GameObjectRenderType::kModelRenderer:
-            {
-               // depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
-                depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], RenderPassResolution, GLTFSceneManager::GetPointLights()[lightIndex]->GetPosition(), lightIndex, depthSceneData);
-                break;
+                switch (GLTFSceneManager::GameObjectList[y]->RenderType)
+                {
+                case GameObjectRenderType::kModelRenderer:
+                {
+                    // depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[x], x);
+                    depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], RenderPassResolution, GLTFSceneManager::GetPointLights()[x]->GetPosition(), x, depthSceneData);
+                    break;
+                }
+                case GameObjectRenderType::kInstanceRenderer:
+                {
+                    //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                    break;
+                }
+                case GameObjectRenderType::kSpriteRenderer:
+                {
+                    //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                    break;
+                }
+                }
             }
-            case GameObjectRenderType::kInstanceRenderer:
-            {
-                //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
-                break;
-            }
-            case GameObjectRenderType::kSpriteRenderer:
-            {
-                //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                break;
-            }
-            }
+            vkCmdEndRenderPass(commandBuffer);
+
+            RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+            Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
+            DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
-        vkCmdEndRenderPass(commandBuffer);
-
-        //RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-        //DepthCubeMapTextureList->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-        //Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList);
-        //DepthCubeMapTextureList->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        //RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 
     //DepthCubeMapTextureList->UpdateCubeMapLayout(VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
