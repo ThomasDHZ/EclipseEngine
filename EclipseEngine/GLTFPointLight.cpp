@@ -34,6 +34,16 @@ GLTFPointLight::~GLTFPointLight()
 
 void GLTFPointLight::Update()
 {
+	glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
+
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[0] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[1] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[2] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[3] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[4] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	cubeMapSampler.UniformDataInfo.CubeMapFaceMatrix[5] = ProjectionMatrix * glm::lookAt(LightBuffer.UniformDataInfo.position, LightBuffer.UniformDataInfo.position + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	cubeMapSampler.Update();
+
 	Light::Update();
 
 	//ProjectionMatrix = glm::ortho(LeftRight.x, LeftRight.y, TopBottom.x, TopBottom.y, NearFar.x, NearFar.y);
@@ -53,3 +63,4 @@ void GLTFPointLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTex
 {
 	LightViewTexture = lightViewTexture;
 }
+

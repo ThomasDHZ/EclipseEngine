@@ -6,8 +6,6 @@
 class DepthCubeMapRenderer : public RenderPass
 {
 private:
-	CubeMapSamplerBuffer cubeMapSampler;
-
 	std::vector<VkPipelineColorBlendAttachmentState> ColorAttachmentList;
 	std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
 	VkVertexInputBindingDescription VertexInputBindingDescription;
@@ -30,8 +28,8 @@ public:
 	std::shared_ptr<RenderedDepthTexture> CubeMapSide[6];
 
 	void BuildRenderPass(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution);
-	void OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution, int lightIndex);
+	void OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution);
 
-	VkCommandBuffer Draw(int lightIndex);
+	VkCommandBuffer Draw();
 	void Destroy();
 };

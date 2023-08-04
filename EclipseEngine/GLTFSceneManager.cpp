@@ -860,3 +860,25 @@ std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetSpotLightPropertiesBuff
 
 	return SpotLightPropertiesBuffer;
 }
+
+std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetCubeMapSamplerBuffer()
+{
+	std::vector<VkDescriptorBufferInfo>	PointLightPropertiesBuffer;
+	if (SpotLightList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		PointLightPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& light : PointLightList)
+		{
+			light->GetCubeMapSamplerBuffer(PointLightPropertiesBuffer);
+		}
+	}
+
+	return PointLightPropertiesBuffer;
+}

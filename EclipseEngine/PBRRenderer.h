@@ -36,7 +36,7 @@ private:
 
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
-	DepthCubeMapRenderer depthCubeMapRenderPass[7];
+	DepthCubeMapRenderer depthCubeMapRenderPass;
 	//DepthDebugRenderPass depthDebugRenderPass;
 	//DepthDebugRenderPass depthCubeDebugRenderPass[6];
 

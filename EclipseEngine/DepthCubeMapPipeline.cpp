@@ -8,23 +8,26 @@ DepthCubeMapPipeline::~DepthCubeMapPipeline()
 {
 }
 
-void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, CubeMapSamplerBuffer& cubeMapSampler)
+void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
-    VkDescriptorBufferInfo CubeMapSamplerBufferInfo = {};
-    CubeMapSamplerBufferInfo.buffer = cubeMapSampler.GetVulkanBufferData().Buffer;
-    CubeMapSamplerBufferInfo.offset = 0;
-    CubeMapSamplerBufferInfo.range = VK_WHOLE_SIZE;
+    std::vector<VkDescriptorBufferInfo> CubeMapSamplerBufferInfoList;
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthCubeShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthCubeShaderFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
 
+    auto a = GLTFSceneManager::GetCubeMapSamplerBuffer();
+    auto b = GLTFSceneManager::GetGameObjectTransformBuffer();
+    auto c = GLTFSceneManager::GetGameObjectPropertiesBuffer();
+    auto d = GLTFSceneManager::GetMaterialPropertiesBuffer();
+    auto e = GLTFSceneManager::GetTexturePropertiesBuffer();
+
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, CubeMapSamplerBufferInfo, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, GLTFSceneManager::GetGameObjectTransformBuffer()[0]);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetGameObjectPropertiesBuffer()[0]);
-    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetMaterialPropertiesBuffer()[0]);
-    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetTexturePropertiesBuffer()[0], VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
+    AddUniformBufferDescriptorSetBinding(DescriptorBindingList, 0, a);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 1, b);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, c);
+    AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, d);
+    AddTextureDescriptorSetBinding(DescriptorBindingList, 4, e, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR);
 
     VkPipelineDepthStencilStateCreateInfo DepthStencilStateCreateInfo{};
     DepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;

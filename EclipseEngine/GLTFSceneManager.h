@@ -128,6 +128,7 @@ public:
 	static std::vector<VkDescriptorBufferInfo> GetDirectionalLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer();
+	static std::vector<VkDescriptorBufferInfo> GetCubeMapSamplerBuffer();
 	static VkDescriptorBufferInfo GetReflectionMapBuffer();
 
 	static std::vector<std::shared_ptr<GLTFSunLight>> GetSunLights() { return SunLightList; }

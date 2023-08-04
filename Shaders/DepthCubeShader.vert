@@ -92,13 +92,14 @@ layout(location = 1) out vec2 UV;
 layout(push_constant) uniform SceneData
 {
   uint MeshIndex;
+  uint MaterialIndex;
   uint LightIndex;
 } sceneData;
 
 layout(binding = 0) uniform ViewSampler
 {
     mat4 CubeMapFaceMatrix[6];
-} viewSampler;
+} viewSampler[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
 layout(binding = 2) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 3) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
@@ -111,7 +112,7 @@ void main()
 
     UV = aUV;
 
-    gl_Position = viewSampler.CubeMapFaceMatrix[gl_ViewIndex] *               
+    gl_Position = viewSampler[sceneData.LightIndex].CubeMapFaceMatrix[gl_ViewIndex] *               
                   MeshTransform * 
                   vec4(inPosition, 1.0);
 }

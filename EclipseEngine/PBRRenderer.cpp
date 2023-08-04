@@ -213,13 +213,7 @@ void PBRRenderer::BuildRenderer()
 		//Depth Pass
 		{
 			depthRenderPass.BuildRenderPass(GLTFSceneManager::GetDirectionalLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[0].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[1].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[2].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[3].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[4].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[5].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
-			depthCubeMapRenderPass[6].BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
+			depthCubeMapRenderPass.BuildRenderPass(GLTFSceneManager::GetPointLights(), glm::vec2(512.0f));
 		}
 
 		PBRRenderPassTextureSubmitList submitList;
@@ -237,13 +231,10 @@ void PBRRenderer::BuildRenderer()
 			submitList.IrradianceTextureList.emplace_back(skyBoxReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(skyBoxReflectionPrefilterRenderPass.PrefilterCubeMap);
 			submitList.DirectionalLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[0].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[1].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[2].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].DepthCubeMapTextureList[0]);
+			for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
+			{
+				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
+			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
@@ -258,13 +249,10 @@ void PBRRenderer::BuildRenderer()
 			submitList.IrradianceTextureList.emplace_back(meshReflectionIrradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(meshReflectionPrefilterRenderPass.PrefilterCubeMap);
 			submitList.DirectionalLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[0].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[1].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[2].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].DepthCubeMapTextureList[0]);
+			for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
+			{
+				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
+			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
@@ -279,13 +267,10 @@ void PBRRenderer::BuildRenderer()
 			submitList.IrradianceTextureList.emplace_back(irradianceRenderPass.IrradianceCubeMap);
 			submitList.PrefilterTextureList.emplace_back(prefilterRenderPass.PrefilterCubeMap);
 			submitList.DirectionalLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[0].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[1].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[2].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[3].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[4].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[5].DepthCubeMapTextureList[0]);
-			submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass[6].DepthCubeMapTextureList[0]);
+			for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
+			{
+				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
+			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthRenderPass.RenderPassDepthTexture);
 
 			std::string a = "PBRRenderPass.txt";
@@ -421,12 +406,7 @@ void PBRRenderer::ImGuiUpdate()
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[0].Draw(0));
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[1].Draw(1));
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[2].Draw(2));
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[3].Draw(3));
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[4].Draw(4));
-	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[5].Draw(5));
+	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
 
 	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[0].Draw(0));
 	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[1].Draw(1));
