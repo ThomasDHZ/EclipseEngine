@@ -204,7 +204,7 @@ float filterPCF(vec4 sc, int index)
 float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
 {
     float near_plane = 1.0f;
-    float far_plane = 25.0f;
+    float far_plane = 5.0f;
 
     vec3 fragToLight = fragPos - PLight[index].pointLight.position;
     float currentDepth = length(fragToLight);
@@ -372,7 +372,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
         float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
-        Lo *= shadow;
+      //  Lo *= shadow;
     }
     return Lo;
 }
@@ -414,9 +414,9 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, Materi
        vec3 lightVec = vertex.Position - PLight[x].pointLight.position;
        float dist = length(lightVec);
 
-        float shadow = (dist <= texture(PointShadowMap[x], lightVec).r + EPSILON) ? 1.0 : SHADOW_OPACITY;
+        float shadow = CubeShadowCalculation(vertex.Position, V, x);
 
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;  
         Lo *= vec3(shadow);
     }
     return Lo;
@@ -459,7 +459,7 @@ void main()
 
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
-  // Lo += CalcDirectionalLight(F0, V, N, material);
+   Lo += CalcDirectionalLight(F0, V, N, material);
    Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
@@ -477,7 +477,7 @@ void main()
 
     vec3 ambient = ((kD * diffuse + specular) * material.AmbientOcclusion);
     
-    vec3 color = Lo;
+    vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0f));
     color = pow(color, vec3(1.0f/2.2f)); 
 
