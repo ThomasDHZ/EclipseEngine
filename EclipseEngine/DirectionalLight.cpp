@@ -6,7 +6,7 @@ DirectionalLight::DirectionalLight() : Light<DirectionalLightBuffer>()
 
 }
 
-DirectionalLight::DirectionalLight(DirectionalLightBuffer light) : Light<DirectionalLightBuffer>(light)
+DirectionalLight::DirectionalLight(DirectionalLightBuffer light) : Light<DirectionalLightBuffer>(LightTypeEnum::kDirectionalLight, light)
 {
 	LightBuffer.Update(light);
 }

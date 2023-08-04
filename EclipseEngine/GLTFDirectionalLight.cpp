@@ -15,7 +15,7 @@ GLTFDirectionalLight::GLTFDirectionalLight(const std::string name, glm::vec3 Dir
 	LightBuffer.Update();
 }
 
-GLTFDirectionalLight::GLTFDirectionalLight(GLTFDirectionalLightBuffer light) : Light<GLTFDirectionalLightBuffer>(light)
+GLTFDirectionalLight::GLTFDirectionalLight(GLTFDirectionalLightBuffer light) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight, light)
 {
 	LightBuffer.Update(light);
 }

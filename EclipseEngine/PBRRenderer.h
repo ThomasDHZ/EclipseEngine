@@ -63,6 +63,9 @@ private:
 public:
 	PBRRenderer();
 	~PBRRenderer();
+	std::vector<std::string> pipelineListcharstring;
+	std::vector<const char*> pipelineListchar;
+	int lightSelection = 0;
 
 	void BuildRenderer();
 	void Update();

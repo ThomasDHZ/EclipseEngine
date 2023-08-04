@@ -4,7 +4,7 @@ PointLight::PointLight() : Light<PointLightBuffer>()
 
 }
 
-PointLight::PointLight(PointLightBuffer light) : Light<PointLightBuffer>(light)
+PointLight::PointLight(PointLightBuffer light) : Light<PointLightBuffer>(LightTypeEnum::kPointLight, light)
 {
 	LightBuffer.Update(light);
 }

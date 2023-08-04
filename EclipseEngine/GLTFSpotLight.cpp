@@ -14,7 +14,7 @@ GLTFSpotLight::GLTFSpotLight(const std::string name, glm::vec3 Position, glm::ve
 	LightBuffer.Update();
 }
 
-GLTFSpotLight::GLTFSpotLight(GLTFSpotLightBuffer light) : Light<GLTFSpotLightBuffer>(light)
+GLTFSpotLight::GLTFSpotLight(GLTFSpotLightBuffer light) : Light<GLTFSpotLightBuffer>(LightTypeEnum::kSpotLight, light)
 {
 	LightBuffer.Update(light);
 }

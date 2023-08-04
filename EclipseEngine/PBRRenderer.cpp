@@ -194,6 +194,17 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
+
+	for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
+	{
+		std::string splitFile = GLTFSceneManager::GetPointLights()[x]->GetLightName();
+		pipelineListcharstring.emplace_back(splitFile);
+	}
+	for (auto& list : pipelineListcharstring)
+	{
+		pipelineListchar.emplace_back(list.c_str());
+	}
+
 	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 }
 
@@ -278,15 +289,6 @@ void PBRRenderer::BuildRenderer()
 		}
 	}
 
-
-	//depthDebugRenderPass.BuildRenderPass(depthRenderPass.DepthTextureList[0]);
-	//depthCubeDebugRenderPass[0].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[0]);
-	//depthCubeDebugRenderPass[1].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[1]);
-	//depthCubeDebugRenderPass[2].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[2]);
-	//depthCubeDebugRenderPass[3].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[3]);
-	//depthCubeDebugRenderPass[4].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[4]);
-	//depthCubeDebugRenderPass[5].BuildRenderPass(meshReflectionRenderPass.DepthCubeMapSide[5]);
-
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 	VulkanRenderer::UpdateRendererFlag = true;
 	GLTFSceneManager::Update();
@@ -300,36 +302,50 @@ void PBRRenderer::Update()
 void PBRRenderer::ImGuiUpdate()
 {
 	pipelineEditor.Update();
-//	ImGui::Begin("Light Manager");
-//ImGui::Separator();
-//
-//ImGui::ListBox("PipelineSelection", &lightSelection, pipelineListchar.data(), pipelineListchar.size());
-//if (lightSelection != 0)
-//{
-//	ImGui::LabelText(GLTFSceneManager::GetPointLights()[lightSelection]->GetLightName().c_str(), "");
-//	ImGui::Checkbox("Static Light", GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatusPtr());
-//	ImGui::SliderFloat3("PLight direction", &GLTFSceneManager::GetPointLights()[lightSelection]->GetPositionPtr()->x, -50.0f, 50.0f);
-//	ImGui::SliderFloat3("PLight Diffuse", &GLTFSceneManager::GetPointLights()[lightSelection]->GetDiffusePtr()->x, 0.0f, 1.0f);
-//	ImGui::SliderFloat("PLight Radius", GLTFSceneManager::GetPointLights()[lightSelection]->GetRadiusPtr(), 0.0f, 15.0f);
-//	ImGui::SliderFloat("PLight Intensity", &GLTFSceneManager::GetPointLights()[lightSelection]->GetIntensityPtr()[0], 0.0f, 100.0f);
-//}
-//ImGui::End();
+	ImGui::Begin("Light Manager");
+	ImGui::Separator();
 
-	//for (int x = 0; x < model.GetSunLightPropertiesBuffer().size(); x++)
-	//{
-	//	ImGui::SliderFloat3(("Sun Light direction " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetPositionPtr()->x, -1000.0f, 1000.0f);
-	//	ImGui::SliderFloat3(("Sun Light Diffuse " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-	//	ImGui::SliderFloat(("Sun Light Intensity " + std::to_string(x)).c_str(), &model.SunLightList[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
-	//}
-	//ImGui::SliderFloat(("DLight Near " + std::to_string(1)).c_str(), &depthCubeMapRenderPass[0].Near, -100.0f, 100.0f);
-	//ImGui::SliderFloat(("DLight Far " + std::to_string(1)).c_str(), &depthCubeMapRenderPass[0].Far, -100.0f, 100.0f);
-	//ImGui::SliderFloat3(("DLight Pos " + std::to_string(1)).c_str(), &depthCubeMapRenderPass[0].Position.x, -100.0f, 100.0f);
+	ImGui::ListBox("PipelineSelection", &lightSelection, pipelineListchar.data(), pipelineListchar.size());
+	if (lightSelection != 0)
+	{
 
+		ImGui::LabelText(GLTFSceneManager::GetPointLights()[lightSelection]->GetLightName().c_str(), "");
+		ImGui::Checkbox("Static Light", GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatusPtr());
 
-	ImGui::SliderFloat3(("PLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetPositionPtr()->x, -50.0f, 50.0f);
-	ImGui::SliderFloat3(("PLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetDiffusePtr()->x, 0.0f, 1.0f);
-	ImGui::SliderFloat(("PLight Radius " + std::to_string(1)).c_str(), GLTFSceneManager::GetPointLights()[0]->GetRadiusPtr(), 0.0f, 15.0f);
-	ImGui::SliderFloat(("PLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetPointLights()[0]->GetIntensityPtr()[0], 0.0f, 100.0f);
+		for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
+		{
+			if (x == lightSelection)
+			{
+				GLTFSceneManager::GetPointLights()[x]->SetSelectedLight(true);
+			}
+			else
+			{
+				GLTFSceneManager::GetPointLights()[x]->SetSelectedLight(false);
+			}
+		}
+
+		if (!GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatus())
+		{
+			ImGui::SliderFloat3("Point Light direction", &GLTFSceneManager::GetPointLights()[lightSelection]->GetPositionPtr()->x, -50.0f, 50.0f);
+		}
+
+		ImGui::SliderFloat3("Point Light Diffuse", &GLTFSceneManager::GetPointLights()[lightSelection]->GetDiffusePtr()->x, 0.0f, 1.0f);
+		ImGui::SliderFloat("Point Light Radius", GLTFSceneManager::GetPointLights()[lightSelection]->GetRadiusPtr(), 0.0f, 15.0f);
+		ImGui::SliderFloat("Point Light Intensity", &GLTFSceneManager::GetPointLights()[lightSelection]->GetIntensityPtr()[0], 0.0f, 100.0f);
+
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[0]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+		ImGui::SameLine();
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[1]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+		ImGui::SameLine();
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[2]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+		ImGui::SameLine();
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[3]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+		ImGui::SameLine();
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[4]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+		ImGui::SameLine();
+		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[5]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+	}
+	ImGui::End();
 
 	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
 	{
@@ -350,31 +366,6 @@ void PBRRenderer::ImGuiUpdate()
 
 	//gLTFRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
 	//depthDebugRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
-
-
-	//meshReflectionRenderPass.CubeMapSide[0]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//meshReflectionRenderPass.CubeMapSide[1]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//meshReflectionRenderPass.CubeMapSide[2]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//meshReflectionRenderPass.CubeMapSide[3]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//meshReflectionRenderPass.CubeMapSide[4]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//meshReflectionRenderPass.CubeMapSide[5]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	//ImGui::SameLine();
-	//depthCubeDebugRenderPass->RenderedTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
 
 	//for (int x = 0; x < model.GetPointLightPropertiesBuffer().size(); x++)
 	//{

@@ -4,7 +4,7 @@ SpotLight::SpotLight() : Light<SpotLightBuffer>()
 
 }
 
-SpotLight::SpotLight(SpotLightBuffer light) : Light<SpotLightBuffer>(light)
+SpotLight::SpotLight(SpotLightBuffer light) : Light<SpotLightBuffer>(LightTypeEnum::kSpotLight, light)
 {
 	LightBuffer.Update(light);
 }

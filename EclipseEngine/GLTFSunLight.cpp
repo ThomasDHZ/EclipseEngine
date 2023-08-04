@@ -15,7 +15,7 @@ GLTFSunLight::GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3
 }
 
 
-GLTFSunLight::GLTFSunLight(GLTFSunLightBuffer light) : Light<GLTFSunLightBuffer>(light)
+GLTFSunLight::GLTFSunLight(GLTFSunLightBuffer light) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight, light)
 {
 	LightBuffer.Update(light);
 
