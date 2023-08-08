@@ -23,8 +23,6 @@
 #include "OrthographicCamera.h"
 #include "VulkanPipelineEditor.h"
 #include "DepthCubeDebugRenderPass.h"
-#include "TestPBRReflectionRenderPass.h"
-#include "TestPBRCubeMapRenderPass.h"
 #include "LightManagerMenu.h"
 
 class PBRRenderer
@@ -38,8 +36,6 @@ private:
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
-	//DepthDebugRenderPass depthDebugRenderPass;
-	//DepthDebugRenderPass depthCubeDebugRenderPass[6];
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
@@ -55,9 +51,6 @@ private:
 	IrradianceRenderPass irradianceRenderPass;
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass gLTFRenderPass;
-
-	TestPBRCubeMapRenderPass adsf;
-	TestPBRReflectionRenderPass testPBRReflectionRenderPass;
 
 	FrameBufferRenderPass frameBufferRenderPass;
 

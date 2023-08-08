@@ -290,8 +290,6 @@
     <ClCompile Include="SpriteGameObject3D.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="StencilOpStateMenu.cpp" />
-    <ClCompile Include="TestPBRCubeMapRenderPass.cpp" />
-    <ClCompile Include="TestPBRReflectionRenderPass.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />
@@ -455,8 +453,6 @@
     <ClInclude Include="STBIImport.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="StencilOpStateMenu.h" />
-    <ClInclude Include="TestPBRCubeMapRenderPass.h" />
-    <ClInclude Include="TestPBRReflectionRenderPass.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureAtlus.h" />

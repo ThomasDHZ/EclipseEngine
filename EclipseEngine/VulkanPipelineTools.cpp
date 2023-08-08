@@ -91,6 +91,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kSpotShadowDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kViewTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kViewDepthTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kCubeMapSamplerDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetCubeMapSamplerBuffer().size() }); break;
         }
     }
 
@@ -120,6 +121,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kSpotShadowDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kViewTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kViewDepthTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kCubeMapSamplerDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetCubeMapSamplerBuffer().size(), VK_SHADER_STAGE_ALL}); break;
         }
     }
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
@@ -148,6 +150,7 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kSpotShadowDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, SpotShadowBuffer.ImageInfo); break;
             case kViewTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
             case kViewDepthTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
+            case kCubeMapSamplerDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapSamplerBuffer()); break;
         }
     }
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);

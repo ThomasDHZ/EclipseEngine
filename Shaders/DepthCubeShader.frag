@@ -25,8 +25,6 @@ layout(push_constant) uniform DepthSceneData
     uint LightIndex;
 } sceneData;
 
-layout(location = 0) out vec4 outColor;
-
 void main()
 {		
    const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
@@ -48,6 +46,4 @@ void main()
    {
         FinalUV.x = 1.0f - FinalUV.x;
    }
-
-   outColor = vec4(texture(TextureMap[material.AlbedoMapID], FinalUV).rgb, 1.0f);
 }

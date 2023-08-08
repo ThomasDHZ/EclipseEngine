@@ -1739,6 +1739,7 @@ namespace VulkanMenu
 			case kSpotShadowDescriptor: return "kSpotShadowDescriptor"; break;
 			case kViewTextureDescriptor: return "kViewTextureDescriptor"; break;
 			case kViewDepthTextureDescriptor: return "kViewDepthTextureDescriptor"; break;
+			case kCubeMapSamplerDescriptor: return "kCubeMapSamplerDescriptor"; break;
 			default: return "";
 			}
 		}
@@ -1763,6 +1764,7 @@ namespace VulkanMenu
 			if (input == "kSpotShadowDescriptor") return kSpotShadowDescriptor;
 			if (input == "kViewTextureDescriptor") return kViewTextureDescriptor;
 			if (input == "kViewDepthTextureDescriptor") return kViewDepthTextureDescriptor;
+			if (input == "kCubeMapSamplerDescriptor") return kCubeMapSamplerDescriptor;
 		}
 	};
 

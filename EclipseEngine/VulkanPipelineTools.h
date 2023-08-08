@@ -26,6 +26,7 @@ enum DescriptorBindingPropertiesEnum
 	kSpotShadowDescriptor,
 	kViewTextureDescriptor,
 	kViewDepthTextureDescriptor,
+	kCubeMapSamplerDescriptor
 };
 
 struct DescriptorBindingLock

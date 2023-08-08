@@ -12,7 +12,7 @@ private:
 	std::vector<VkVertexInputAttributeDescription> VertexInputAttributeDescription;
 
 	DepthCubeMapPipeline depthCubeMapPipeline;
-	
+	JsonGraphicsPipeline depthCubeMapPipeline2;
 
 
 	void RenderPassDesc();
