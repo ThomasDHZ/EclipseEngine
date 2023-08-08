@@ -194,18 +194,7 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
-
-	for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
-	{
-		std::string splitFile = GLTFSceneManager::GetPointLights()[x]->GetLightName();
-		pipelineListcharstring.emplace_back(splitFile);
-	}
-	for (auto& list : pipelineListcharstring)
-	{
-		pipelineListchar.emplace_back(list.c_str());
-	}
-
-	GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 }
 
 PBRRenderer::~PBRRenderer()
@@ -290,79 +279,25 @@ void PBRRenderer::BuildRenderer()
 	}
 
 	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
-	VulkanRenderer::UpdateRendererFlag = true;
 	GLTFSceneManager::Update();
+	lightManagerMenu.Update();
+
+	VulkanRenderer::UpdateRendererFlag = true;
 }
 
 void PBRRenderer::Update()
 {
 	GLTFSceneManager::Update();
+	if (VulkanRenderer::UpdateRendererFlag == true)
+	{
+		lightManagerMenu.Update();
+	}
 }
 
 void PBRRenderer::ImGuiUpdate()
 {
 	pipelineEditor.Update();
-	ImGui::Begin("Light Manager");
-	ImGui::Separator();
-
-	ImGui::ListBox("PipelineSelection", &lightSelection, pipelineListchar.data(), pipelineListchar.size());
-	if (lightSelection != 0)
-	{
-
-		ImGui::LabelText(GLTFSceneManager::GetPointLights()[lightSelection]->GetLightName().c_str(), "");
-		ImGui::Checkbox("Static Light", GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatusPtr());
-
-		for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
-		{
-			if (x == lightSelection)
-			{
-				GLTFSceneManager::GetPointLights()[x]->SetSelectedLight(true);
-			}
-			else
-			{
-				GLTFSceneManager::GetPointLights()[x]->SetSelectedLight(false);
-			}
-		}
-
-		if (!GLTFSceneManager::GetPointLights()[lightSelection]->GetStaticLightStatus())
-		{
-			ImGui::SliderFloat3("Point Light direction", &GLTFSceneManager::GetPointLights()[lightSelection]->GetPositionPtr()->x, -50.0f, 50.0f);
-		}
-
-		ImGui::SliderFloat3("Point Light Diffuse", &GLTFSceneManager::GetPointLights()[lightSelection]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat("Point Light Radius", GLTFSceneManager::GetPointLights()[lightSelection]->GetRadiusPtr(), 0.0f, 15.0f);
-		ImGui::SliderFloat("Point Light Intensity", &GLTFSceneManager::GetPointLights()[lightSelection]->GetIntensityPtr()[0], 0.0f, 100.0f);
-
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[0]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-		ImGui::SameLine();
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[1]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-		ImGui::SameLine();
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[2]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-		ImGui::SameLine();
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[3]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-		ImGui::SameLine();
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[4]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-		ImGui::SameLine();
-		GLTFSceneManager::GetPointLights()[lightSelection]->CubeMapSide[5]->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-	}
-	ImGui::End();
-
-	for (int x = 0; x < GLTFSceneManager::GetDirectionalLights().size(); x++)
-	{
-		if (ImGui::SliderFloat3(("DLight direction " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDirectionPtr()->x, -1.0f, 1.0f))
-			/*	{
-					if (ImGui::IsMouseReleased(0) || ImGui::IsAnyItemActive() || ImGui::IsWindowFocused())
-					{
-						VulkanRenderer::UpdateRendererFlag = true;
-					}
-				}*/
-			ImGui::SliderFloat3(("DLight Diffuse " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetDiffusePtr()->x, 0.0f, 1.0f);
-		ImGui::SliderFloat(("DLight Intensity " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetIntensityPtr()[0], 0.0f, 100.0f);
-
-		ImGui::SliderFloat2(("DLight LeftRight " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetLeftRightPtr()->x, -100.0f, 100.0f);
-		ImGui::SliderFloat2(("DLight NearFar " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetNearFarPtr()->x, -100.0f, 100.0f);
-		ImGui::SliderFloat2(("DLight TopBottom " + std::to_string(1)).c_str(), &GLTFSceneManager::GetDirectionalLights()[x]->GetTopBottomPtr()->x, -100.0f, 100.0f);
-	}
+	lightManagerMenu.ImGuiUpdate();
 
 	//gLTFRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
 	//depthDebugRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));

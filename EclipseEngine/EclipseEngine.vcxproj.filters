@@ -180,12 +180,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>Source Files\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="PointLight.cpp">
-      <Filter>Source Files\Lights</Filter>
-    </ClCompile>
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
@@ -399,9 +393,6 @@
     <ClCompile Include="GLTFSceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFPointLight.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLTFSpotLight.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
@@ -591,6 +582,12 @@
     <ClCompile Include="TestPBRCubeMapRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LightManagerMenu.cpp">
+      <Filter>Source Files\ImGuiMenus</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFPointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -628,12 +625,6 @@
     </ClInclude>
     <ClInclude Include="MeshPickerRenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>Header Files\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>Header Files\Lights</Filter>
     </ClInclude>
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files\Lights</Filter>
@@ -1083,6 +1074,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestPBRCubeMapRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManagerMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

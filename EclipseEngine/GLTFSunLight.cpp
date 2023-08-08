@@ -5,7 +5,7 @@ GLTFSunLight::GLTFSunLight() : Light<GLTFSunLightBuffer>()
 
 }
 
-GLTFSunLight::GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity)
+GLTFSunLight::GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;

@@ -214,10 +214,10 @@
     <ClCompile Include="DepthInstancedPipeline.cpp" />
     <ClCompile Include="DepthPipeline.cpp" />
     <ClCompile Include="DepthRenderPass.cpp" />
-    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="GLTFDirectionalLight.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="LightManagerMenu.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="GLTFPointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
@@ -300,7 +300,6 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
-    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
@@ -371,10 +370,10 @@
     <ClInclude Include="DepthInstancedPipeline.h" />
     <ClInclude Include="DepthPipeline.h" />
     <ClInclude Include="DepthRenderPass.h" />
-    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="GLTFDirectionalLight.h" />
     <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="LightManagerMenu.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="GLTFPointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
@@ -466,7 +465,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
-    <ClInclude Include="PointLight.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="InterfaceRenderPass.h" />

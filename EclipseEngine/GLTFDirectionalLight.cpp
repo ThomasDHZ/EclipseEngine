@@ -6,7 +6,7 @@ GLTFDirectionalLight::GLTFDirectionalLight() : Light<GLTFDirectionalLightBuffer>
 
 }
 
-GLTFDirectionalLight::GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity)
+GLTFDirectionalLight::GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;

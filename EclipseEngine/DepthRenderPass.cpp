@@ -19,6 +19,7 @@ void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectiona
         for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
     else
@@ -28,6 +29,7 @@ void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectiona
         for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
     }
@@ -53,6 +55,7 @@ void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLig
         for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
     else
@@ -62,6 +65,7 @@ void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLig
         for (auto& light : DirectionalLightList)
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
+            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
     }
@@ -233,6 +237,13 @@ VkCommandBuffer DepthRenderPass::Draw()
         Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, DepthTextureList[x]);
         DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
+        if (GLTFSceneManager::GetDirectionalLights()[x]->GetSelectedLightStatus())
+        {
+            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture);
+            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
     }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

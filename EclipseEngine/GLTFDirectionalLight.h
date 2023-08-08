@@ -6,7 +6,7 @@
 class GLTFDirectionalLight : public Light<GLTFDirectionalLightBuffer>
 {
 private:
-	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
+
 public:
 	GLTFDirectionalLight();
 	GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity);
@@ -17,6 +17,7 @@ public:
 	glm::vec2 NearFar = glm::vec2(100, -8.580f);
 	glm::vec2 TopBottom = glm::vec2(-7.644f, 11.388f);
 
+	std::shared_ptr<RenderedDepthTexture> LightViewTexture;
 
 	void Update();
 	void Destroy() override;

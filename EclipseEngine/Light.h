@@ -38,6 +38,7 @@ public:
 	}
 
 	std::string GetLightName() { return LightName; }
+	LightTypeEnum GetLightType() { return LightType; }
 	glm::mat4 GetProjectionMatrix() { return ProjectionMatrix; }
 	glm::mat4 GetViewMatrix() { return ViewMatrix; }
 	bool GetStaticLightStatus() { return StaticLight; }
@@ -58,6 +59,11 @@ public:
 	Light() : LightBase()
 	{
 
+	}
+
+	Light(LightTypeEnum lightType) : LightBase()
+	{
+		LightType = lightType;
 	}
 
 	Light(LightTypeEnum lightType, T UniformData) : LightBase()

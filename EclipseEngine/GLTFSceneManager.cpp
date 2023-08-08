@@ -882,3 +882,27 @@ std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetCubeMapSamplerBuffer()
 
 	return PointLightPropertiesBuffer;
 }
+
+std::vector<std::shared_ptr<LightBase>> GLTFSceneManager::GetAllLights()
+{
+	std::vector<std::shared_ptr<LightBase>> lights;
+
+	for (auto& sunLight : SunLightList)
+	{
+		lights.emplace_back(sunLight);
+	}
+	for (auto& directionalLight : DirectionalLightList)
+	{
+		lights.emplace_back(directionalLight);
+	}	
+	for (auto& pointLight : PointLightList)
+	{
+		lights.emplace_back(pointLight);
+	}	
+	for (auto& spotLight : SpotLightList)
+	{
+		lights.emplace_back(spotLight);
+	}
+
+	return lights;
+}

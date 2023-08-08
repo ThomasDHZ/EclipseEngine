@@ -4,7 +4,7 @@ GLTFSpotLight::GLTFSpotLight() : Light<GLTFSpotLightBuffer>()
 
 }
 
-GLTFSpotLight::GLTFSpotLight(const std::string name, glm::vec3 Position, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity)
+GLTFSpotLight::GLTFSpotLight(const std::string name, glm::vec3 Position, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFSpotLightBuffer>(LightTypeEnum::kSpotLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;

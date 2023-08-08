@@ -25,6 +25,7 @@
 #include "DepthCubeDebugRenderPass.h"
 #include "TestPBRReflectionRenderPass.h"
 #include "TestPBRCubeMapRenderPass.h"
+#include "LightManagerMenu.h"
 
 class PBRRenderer
 {
@@ -60,12 +61,11 @@ private:
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
+	LightManagerMenu lightManagerMenu;
+
 public:
 	PBRRenderer();
 	~PBRRenderer();
-	std::vector<std::string> pipelineListcharstring;
-	std::vector<const char*> pipelineListchar;
-	int lightSelection = 0;
 
 	void BuildRenderer();
 	void Update();

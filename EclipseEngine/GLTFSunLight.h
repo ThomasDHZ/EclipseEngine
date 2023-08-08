@@ -2,6 +2,7 @@
 #include "Light.h"
 #include "UniformBuffer.h"
 #include "RenderedCubeMapDepthTexture.h"
+#include "RenderedDepthTexture.h"
 
 class GLTFSunLight : public Light<GLTFSunLightBuffer>
 {
@@ -20,6 +21,7 @@ public:
 
 	void SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture);
 
+	std::shared_ptr<RenderedDepthTexture> CubeMapSide[6];
 	std::shared_ptr<RenderedCubeMapDepthTexture> GetLightViewTexture() { return LightViewTexture; }
 
 	glm::vec3 GetPosition() { return LightBuffer.UniformDataInfo.position; }
