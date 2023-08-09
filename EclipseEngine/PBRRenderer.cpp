@@ -18,7 +18,7 @@ PBRRenderer::PBRRenderer()
 	auto d = "C:/Users/dotha/source/repos/EclipseEngine/Models/GLTFGold/Gold.gltf";
 	auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
-	std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
+	/*std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
 	GoldMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GoldMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GoldMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
@@ -26,7 +26,7 @@ PBRRenderer::PBRRenderer()
 	GoldMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GLTFSceneManager::UpdateBufferIndex();
 	GoldMaterial->UpdateBuffer();
-	GLTFSceneManager::AddMaterial(GoldMaterial);
+	GLTFSceneManager::AddMaterial(GoldMaterial);*/
 
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
 	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
@@ -124,15 +124,15 @@ PBRRenderer::PBRRenderer()
 	/// 
 	/// </summary>
 
-	std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>(Material("TestMaterial"));
-	GLTFSceneManager::UpdateBufferIndex();
-	spriteMaterial->UpdateBuffer();
-	GLTFSceneManager::AddMaterial(spriteMaterial);
+	//std::shared_ptr<Material> spriteMaterial = std::make_shared<Material>(Material("TestMaterial"));
+	//GLTFSceneManager::UpdateBufferIndex();
+	//spriteMaterial->UpdateBuffer();
+	//GLTFSceneManager::AddMaterial(spriteMaterial);
 
-	spriteMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	//spriteMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 
-	const std::string asdf = "sprite";
-	GLTFSceneManager::AddSpriteGameObject3D(asdf, spriteMaterial);
+	//const std::string asdf = "sprite";
+	//GLTFSceneManager::AddSpriteGameObject3D(asdf, spriteMaterial);
 
 	/// <summary>
 	/// 
@@ -194,7 +194,8 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
-	//GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	/*GLTFSceneManager::AddDirectionalLight(std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	GLTFSceneManager::AddPointLight(std::make_shared<GLTFPointLight>(GLTFPointLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f, 1.0f)));*/
 }
 
 PBRRenderer::~PBRRenderer()
@@ -217,8 +218,8 @@ void PBRRenderer::BuildRenderer()
 		}
 
 		PBRRenderPassTextureSubmitList submitList;
-		//submitList.DirectionalLightTextureShadowMaps = DepthPassRenderPass.DepthTextureList;
-		//submitList.PointLightShadowMaps = DepthCubeMapRenderPass.DepthCubeMapTextureList;
+		submitList.DirectionalLightTextureShadowMaps = depthRenderPass.DepthTextureList;
+		submitList.PointLightShadowMaps = depthCubeMapRenderPass.DepthCubeMapTextureList;
 
 		//SkyBox Reflection Pass
 		{
@@ -296,7 +297,7 @@ void PBRRenderer::Update()
 
 void PBRRenderer::ImGuiUpdate()
 {
-	pipelineEditor.Update();
+	//pipelineEditor.Update();
 	lightManagerMenu.ImGuiUpdate();
 
 	//gLTFRenderPass.RenderedTexture->ImGuiShowTexture(ImVec2(200.0f, 200.0f));
@@ -349,23 +350,6 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[0].Draw(0));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[1].Draw(1));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[2].Draw(2));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[3].Draw(3));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[4].Draw(4));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[5].Draw(5));
-	//CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass[6].Draw(6));
-
-		//CommandBufferSubmitList.emplace_back(depthDebugRenderPass.Draw());
-
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[0].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[1].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[2].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[3].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[4].Draw());
-	//CommandBufferSubmitList.emplace_back(depthCubeDebugRenderPass[5].Draw());
-
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
@@ -387,14 +371,21 @@ void PBRRenderer::Destroy()
 
 	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
+
+	depthRenderPass.Destroy();
+	depthCubeMapRenderPass.Destroy();
+
 	skyBoxReflectionIrradianceRenderPass.Destroy();
 	skyBoxReflectionPrefilterRenderPass.Destroy();
 	skyBoxReflectionRenderPass.Destroy();
+	
 	meshReflectionIrradianceRenderPass.Destroy();
 	meshReflectionPrefilterRenderPass.Destroy();
 	meshReflectionRenderPass.Destroy();
+	
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();
 	gLTFRenderPass.Destroy();
+	
 	frameBufferRenderPass.Destroy();
 }

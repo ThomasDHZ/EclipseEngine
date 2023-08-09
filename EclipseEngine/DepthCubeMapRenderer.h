@@ -14,6 +14,7 @@ private:
 	DepthCubeMapPipeline depthCubeMapPipeline;
 	JsonGraphicsPipeline depthCubeMapPipeline2;
 
+	bool FirstDraw = true;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();

@@ -28,8 +28,9 @@
 class PBRRenderer
 {
 private:
-	glm::vec3 pos = glm::vec3(1000.0f, 2000.0f, 0.0f);
-	VulkanPipelineEditor pipelineEditor;
+	//VulkanPipelineEditor pipelineEditor;
+	LightManagerMenu lightManagerMenu;
+	
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
@@ -53,8 +54,6 @@ private:
 	PBRRenderPass gLTFRenderPass;
 
 	FrameBufferRenderPass frameBufferRenderPass;
-
-	LightManagerMenu lightManagerMenu;
 
 public:
 	PBRRenderer();

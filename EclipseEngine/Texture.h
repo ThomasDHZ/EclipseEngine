@@ -101,6 +101,7 @@ public:
 
     static void CopyCubeSideToTextureMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
     static void CopyCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
+    static void CopyDepthCubeSideToTextureMap(std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
     static void CopyDepthCubeSideToTextureMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcCubeTexture, int side, std::shared_ptr<Texture> dstTexture);
 
     static void CopyDepthCubeMap(VkCommandBuffer& commandBuffer, std::shared_ptr<Texture> srcTexture, std::shared_ptr<Texture> dstTexture);

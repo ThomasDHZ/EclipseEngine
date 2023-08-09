@@ -21,6 +21,7 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
         for (auto& light : GLTFSceneManager::GetPointLights())
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             for (unsigned int x = 0; x < 6; x++)
             {
                 light->CubeMapSide[x] = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
@@ -46,6 +47,8 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    Draw();
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
 void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution)
@@ -59,6 +62,8 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLigh
         for (auto& light : GLTFSceneManager::GetPointLights())
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
+            DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
             for (unsigned int x = 0; x < 6; x++)
             {
                 light->CubeMapSide[x] = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
@@ -184,11 +189,11 @@ void DepthCubeMapRenderer::BuildRenderPassPipelines()
 
 void DepthCubeMapRenderer::ClearTextureList()
 {
-    //for (auto& depthTexture : DepthCubeMapTextureList)
-    //{
-       // depthTexture->Destroy();
-    //}
-    //DepthCubeMapTextureList.clear();
+    for (auto& depthTexture : DepthCubeMapTextureList)
+    {
+        depthTexture->Destroy();
+    }
+    DepthCubeMapTextureList.clear();
 }
 
 VkCommandBuffer DepthCubeMapRenderer::Draw()
@@ -229,7 +234,8 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
 
     for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
     {
-        if (!GLTFSceneManager::GetPointLights()[x]->GetStaticLightStatus())
+        if (FirstDraw || 
+            !GLTFSceneManager::GetPointLights()[x]->GetStaticLightStatus())
         {
             DepthSceneData depthSceneData = DepthSceneData();
             depthSceneData.LightIndex = x;
@@ -268,19 +274,25 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
             DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-
-            RenderPassDepthTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-            for (unsigned int cubeMapSide = 0; cubeMapSide < 6; cubeMapSide++)
+            if (FirstDraw ||
+                GLTFSceneManager::GetPointLights()[x]->GetSelectedLightStatus())
             {
-                Texture::CopyCubeSideToTextureMap(DepthCubeMapTextureList[x], cubeMapSide, GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]);
+                for (unsigned int cubeMapSide = 0; cubeMapSide < 6; cubeMapSide++)
+                {
+                    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                    GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+                    Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthCubeMapTextureList[x], cubeMapSide, GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]);
+                    GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                }
             }
-            RenderPassDepthTexture->UpdateCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }
-
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
+
+    FirstDraw = false;
 
     return commandBuffer;
 }

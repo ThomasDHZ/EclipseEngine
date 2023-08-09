@@ -14,7 +14,7 @@ private:
 	JsonGraphicsPipeline WireframeInstancePipeline;
 	JsonGraphicsPipeline LinePipeline;
 	JsonGraphicsPipeline SkyBoxPipeline;
-	JsonGraphicsPipeline lightReflectionPipeline;
+	//JsonGraphicsPipeline lightReflectionPipeline;
 
 	void BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& textures);
 

@@ -57,6 +57,11 @@ void GLTFPointLight::Update()
 void GLTFPointLight::Destroy()
 {
 	Light::Destroy();
+	cubeMapSampler.Destroy();
+	for (int x = 0; x < 6; x++)
+	{
+		CubeMapSide[x]->Destroy();
+	}
 }
 
 void GLTFPointLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
