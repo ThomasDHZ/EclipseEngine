@@ -19,7 +19,6 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
@@ -30,7 +29,6 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
@@ -57,7 +55,6 @@ void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
@@ -65,11 +62,9 @@ void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
     {
         ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        RenderPassDepthTexture->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            DepthTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
@@ -157,9 +152,9 @@ void DepthRenderPass::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-  //  DepthPipeline = JsonGraphicsPipeline("DepthShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, sizeof(DepthSceneData));
+    //  DepthPipeline = JsonGraphicsPipeline("DepthShader.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, VK_SAMPLE_COUNT_1_BIT, sizeof(DepthSceneData));
     DepthPipeline.InitializePipeline(pipelineInfo);
-   // depthInstancedPipeline.InitializePipeline(pipelineInfo);
+    // depthInstancedPipeline.InitializePipeline(pipelineInfo);
 }
 
 void DepthRenderPass::ClearTextureList()
@@ -214,38 +209,30 @@ VkCommandBuffer DepthRenderPass::Draw()
         for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
         {
             DepthSceneData depthSceneData = DepthSceneData();
+            depthSceneData.LightIndex = x;
 
             switch (GLTFSceneManager::GameObjectList[y]->RenderType)
             {
-                case GameObjectRenderType::kModelRenderer:
-                {
-                    DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], x);
-                    // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
-                    break;
-                }
-                case GameObjectRenderType::kInstanceRenderer:
-                {
-                    //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
-                    break;
-                }
-                case GameObjectRenderType::kSpriteRenderer:
-                {
-                    //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                    break;
-                }
+            case GameObjectRenderType::kModelRenderer:
+            {
+                DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], x);
+                // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
+                break;
+            }
+            case GameObjectRenderType::kInstanceRenderer:
+            {
+                //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                break;
+            }
+            case GameObjectRenderType::kSpriteRenderer:
+            {
+                //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                break;
+            }
             }
         }
         vkCmdEndRenderPass(commandBuffer);
-    }
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to record command buffer.");
-    }
 
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("Failed to begin recording command buffer.");
-    }
-    for (int x = 0; x < DepthTextureList.size(); x++)
-    {
         RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, DepthTextureList[x]);
@@ -264,6 +251,7 @@ VkCommandBuffer DepthRenderPass::Draw()
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }
+
     return commandBuffer;
 }
 

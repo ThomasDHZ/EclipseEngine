@@ -10,10 +10,10 @@ DepthPipeline::~DepthPipeline()
 
 void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 {
-  //  std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
-   // std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
-    //std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
-    //std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
+    //  std::vector<VkDescriptorBufferInfo> MeshPropertiesmBufferList = MeshRendererManager::GetMeshPropertiesBuffer();
+     // std::vector<VkDescriptorBufferInfo> MaterialBufferList = MaterialManager::GetMaterialBufferList();
+      //std::vector<VkDescriptorBufferInfo> DirectionalLightBufferInfoList = LightManager::GetDirectionalLightBuffer();
+      //std::vector<VkDescriptorImageInfo> RenderedTextureBufferInfo = TextureManager::GetTexturemBufferList();
 
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "DepthShaderVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
@@ -73,8 +73,7 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, uint32_t x)
 {
     DepthSceneData directionalLightProjection;
-    //directionalLightProjection.view = GLTFSceneManager::GetDirectionalLights()[x]->GetViewMatrix();
-    //directionalLightProjection.proj = GLTFSceneManager::GetDirectionalLights()[x]->GetProjectionMatrix();
+    directionalLightProjection.LightIndex = x;
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);

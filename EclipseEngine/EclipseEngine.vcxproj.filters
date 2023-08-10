@@ -444,9 +444,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CubeSamplerCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OrthographicCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -888,9 +885,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeSamplerCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OrthographicCamera.h">

@@ -190,7 +190,6 @@
     <ClCompile Include="ComponentRenderer.cpp" />
     <ClCompile Include="ConstMeshInfo.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
-    <ClCompile Include="CubeSamplerCamera.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="DebugPosMesh.cpp" />
@@ -341,7 +340,6 @@
     <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="ConstMeshInfo.h" />
     <ClInclude Include="CubeMapTexture.h" />
-    <ClInclude Include="CubeSamplerCamera.h" />
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="DebugPosMesh.h" />

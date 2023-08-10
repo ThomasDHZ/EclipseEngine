@@ -45,13 +45,6 @@ void GLTFPointLight::Update()
 	cubeMapSampler.Update();
 
 	Light::Update();
-
-	//ProjectionMatrix = glm::ortho(LeftRight.x, LeftRight.y, TopBottom.x, TopBottom.y, NearFar.x, NearFar.y);
-	//ProjectionMatrix[1][1] *= -1;
-
-	//ViewMatrix = glm::lookAt(LightBuffer.UniformDataInfo.position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	//LightBuffer.UniformDataInfo.LightSpaceMatrix = ProjectionMatrix * ViewMatrix;
 }
 
 void GLTFPointLight::Destroy()

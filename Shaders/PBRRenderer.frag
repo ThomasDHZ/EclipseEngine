@@ -372,7 +372,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
         float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
-      //  Lo *= shadow;
+        Lo *= shadow;
     }
     return Lo;
 }
@@ -417,7 +417,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, Materi
         float shadow = CubeShadowCalculation(vertex.Position, V, x);
 
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;  
-        Lo *= vec3(shadow);
+       // Lo *= vec3(shadow);
     }
     return Lo;
 }
@@ -460,7 +460,7 @@ void main()
     vec3 Lo = vec3(0.0);
  // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
    Lo += CalcDirectionalLight(F0, V, N, material);
-   Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
+ //  Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
   //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
