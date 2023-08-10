@@ -8,7 +8,7 @@ DepthRenderPass::~DepthRenderPass()
 {
 }
 
-void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -16,20 +16,22 @@ void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectiona
     if (renderPass == nullptr)
     {
         RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : DirectionalLightList)
+        for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            //light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+           // light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
     else
     {
         ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : DirectionalLightList)
+        for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            //light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+           // light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
     }
@@ -44,7 +46,7 @@ void DepthRenderPass::BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectiona
     SetUpCommandBuffers();
 }
 
-void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution)
+void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -52,20 +54,23 @@ void DepthRenderPass::OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLig
     if (renderPass == nullptr)
     {
         RenderPassDepthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
-        for (auto& light : DirectionalLightList)
+        for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            //light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            DepthTextureList.back()->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+          //  light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
     }
     else
     {
         ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : DirectionalLightList)
+        RenderPassDepthTexture->UpdateDepthImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-           // light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            DepthTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+          //  light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
         }
         RenderPass::Destroy();
     }
@@ -215,7 +220,7 @@ VkCommandBuffer DepthRenderPass::Draw()
                 case GameObjectRenderType::kModelRenderer:
                 {
                     DepthPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], x);
-                   // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
+                    // DepthPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], depthSceneData);
                     break;
                 }
                 case GameObjectRenderType::kInstanceRenderer:
@@ -230,7 +235,6 @@ VkCommandBuffer DepthRenderPass::Draw()
                 }
             }
         }
-
         vkCmdEndRenderPass(commandBuffer);
     }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
@@ -251,7 +255,9 @@ VkCommandBuffer DepthRenderPass::Draw()
         if (GLTFSceneManager::GetDirectionalLights()[x]->GetSelectedLightStatus())
         {
             RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+            GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
             Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture);
+            GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }

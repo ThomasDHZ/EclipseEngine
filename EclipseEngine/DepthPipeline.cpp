@@ -73,6 +73,8 @@ void DepthPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct)
 void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, uint32_t x)
 {
     DepthSceneData directionalLightProjection;
+    //directionalLightProjection.view = GLTFSceneManager::GetDirectionalLights()[x]->GetViewMatrix();
+    //directionalLightProjection.proj = GLTFSceneManager::GetDirectionalLights()[x]->GetProjectionMatrix();
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
     mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);

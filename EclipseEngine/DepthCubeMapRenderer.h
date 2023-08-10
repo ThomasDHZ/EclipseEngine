@@ -27,8 +27,8 @@ public:
 	std::shared_ptr<RenderedCubeMapDepthTexture> RenderPassDepthTexture;
 	std::vector<std::shared_ptr<RenderedCubeMapDepthTexture>> DepthCubeMapTextureList;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution);
-	void OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution);
+	void BuildRenderPass(glm::vec2 TextureResolution);
+	void OneTimeDraw(glm::vec2 TextureResolution);
 
 	VkCommandBuffer Draw();
 	void Destroy();

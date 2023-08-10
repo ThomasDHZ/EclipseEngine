@@ -28,7 +28,7 @@
 class PBRRenderer
 {
 private:
-	//VulkanPipelineEditor pipelineEditor;
+	VulkanPipelineEditor pipelineEditor;
 	LightManagerMenu lightManagerMenu;
 	
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
@@ -37,6 +37,7 @@ private:
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
+	DepthRenderPass depthSpotLightRenderPass;
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;

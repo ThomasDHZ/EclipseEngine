@@ -10,7 +10,7 @@ DepthCubeMapRenderer::~DepthCubeMapRenderer()
 {
 }
 
-void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution)
+void DepthCubeMapRenderer::BuildRenderPass(glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -32,7 +32,7 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
     {
         ClearTextureList(); 
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : PointLightList)
+        for (auto& light : GLTFSceneManager::GetPointLights())
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
             DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -47,11 +47,9 @@ void DepthCubeMapRenderer::BuildRenderPass(std::vector<std::shared_ptr<GLTFPoint
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
-    Draw();
-    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
 }
 
-void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLight>> PointLightList, glm::vec2 TextureResolution)
+void DepthCubeMapRenderer::OneTimeDraw(glm::vec2 TextureResolution)
 {
     SampleCount = VK_SAMPLE_COUNT_1_BIT;
     RenderPassResolution = TextureResolution;
@@ -74,7 +72,7 @@ void DepthCubeMapRenderer::OneTimeDraw(std::vector<std::shared_ptr<GLTFPointLigh
     {
         ClearTextureList();
         RenderPassDepthTexture->RecreateRendererTexture(RenderPassResolution);
-        for (auto& light : PointLightList)
+        for (auto& light : GLTFSceneManager::GetPointLights())
         {
             DepthCubeMapTextureList.emplace_back(std::make_shared<RenderedCubeMapDepthTexture>(RenderedCubeMapDepthTexture(RenderPassResolution, SampleCount)));
             DepthCubeMapTextureList.back()->UpdateDepthCubeMapLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);

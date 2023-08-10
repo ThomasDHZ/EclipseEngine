@@ -8,11 +8,13 @@
 #include "DepthInstancedPipeline.h"
 
 
+
 class DepthRenderPass : public RenderPass
 {
 private:
 	DepthPipeline DepthPipeline;
 	//DepthInstancedPipeline depthInstancedPipeline;
+	bool FirstDraw = true;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();
@@ -24,8 +26,8 @@ public:
 	std::shared_ptr<RenderedDepthTexture> RenderPassDepthTexture;
 	std::vector<std::shared_ptr<RenderedDepthTexture>> DepthTextureList;
 
-	void BuildRenderPass(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution);
+	void BuildRenderPass(glm::vec2 TextureResolution);
 	VkCommandBuffer Draw();
-	void OneTimeDraw(std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList, glm::vec2 TextureResolution);
+	void OneTimeDraw(glm::vec2 TextureResolution);
 	void Destroy();
 };
