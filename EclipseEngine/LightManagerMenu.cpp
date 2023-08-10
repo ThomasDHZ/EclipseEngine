@@ -89,7 +89,7 @@ void LightManagerMenu::ImGuiUpdate()
 			ImGui::SliderFloat2("NearFar ", &GLTFSceneManager::GetDirectionalLights()[directionLightIndex]->GetNearFarPtr()->x, -100.0f, 100.0f);
 			ImGui::SliderFloat2("TopBottom ", &GLTFSceneManager::GetDirectionalLights()[directionLightIndex]->GetTopBottomPtr()->x, -100.0f, 100.0f);
 
-			//GLTFSceneManager::GetDirectionalLights()[directionLightIndex]->LightViewTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+			GLTFSceneManager::GetDirectionalLights()[directionLightIndex]->LightViewTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
 		}
 		if (GLTFSceneManager::GetAllLights()[lightSelection]->GetLightType() == LightTypeEnum::kPointLight)
 		{

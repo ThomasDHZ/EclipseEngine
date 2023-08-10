@@ -289,6 +289,17 @@ void PBRRenderer::BuildRenderer()
 
 void PBRRenderer::Update()
 {
+	GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix = glm::mat4(1.358, 0.00, 0.00, 0.00,
+		0.00, -2.41421, 0.00, 0.00,
+		0.00, 0.00, -1.00002, -0.20,
+		0.00, 0.00, -1.00, 0.00);
+
+	GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix = glm::mat4(1.00, 0.00, -4.37114E-08, 2.18557E-07,
+		0.00, 1.00, 0.00, 0.00,
+		4.37114E-08, 0.00, 1.00, -5.00,
+		0.00, 0.00, 0.00, 1.00);
+	GLTFSceneManager::GetDirectionalLights()[0]->LightBuffer.UniformDataInfo.LightSpaceMatrix = GLTFSceneManager::GetDirectionalLights()[0]->ProjectionMatrix * GLTFSceneManager::GetDirectionalLights()[0]->ViewMatrix;
+
 	GLTFSceneManager::Update();
 	if (VulkanRenderer::UpdateRendererFlag == true)
 	{

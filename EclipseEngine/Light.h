@@ -16,12 +16,14 @@ protected:
 	std::string LightName;
 	LightTypeEnum LightType;
 
-	glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
-	glm::mat4 ViewMatrix = glm::mat4(1.0f);
 
 	bool StaticLight = true;
 	bool SelectedLight = false;
 public:
+
+	glm::mat4 ProjectionMatrix = glm::mat4(1.0f);
+	glm::mat4 ViewMatrix = glm::mat4(1.0f);
+
 	LightBase()
 	{
 
