@@ -180,9 +180,6 @@
     <ClCompile Include="MeshPickerRenderPass2D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="SpotLight.cpp">
-      <Filter>Source Files\Lights</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer2D.cpp">
       <Filter>Source Files\Renderer\Renderers</Filter>
     </ClCompile>
@@ -393,12 +390,6 @@
     <ClCompile Include="GLTFSceneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFSpotLight.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFSunLight.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -567,7 +558,7 @@
     <ClCompile Include="AddPipelineMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFDirectionalLight.cpp">
+    <ClCompile Include="DirectionalLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
     <ClCompile Include="DepthCubeDebugRenderPass.cpp">
@@ -576,7 +567,16 @@
     <ClCompile Include="LightManagerMenu.cpp">
       <Filter>Source Files\ImGuiMenus</Filter>
     </ClCompile>
-    <ClCompile Include="GLTFPointLight.cpp">
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLightDepthRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="SunLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
   </ItemGroup>
@@ -616,9 +616,6 @@
     </ClInclude>
     <ClInclude Include="MeshPickerRenderPass2D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>Header Files\Lights</Filter>
     </ClInclude>
     <ClInclude Include="Renderer2D.h">
       <Filter>Header Files\Renderer\Renderers</Filter>
@@ -825,18 +822,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLTFRTXRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFDirectionalLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFPointLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFSpotLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFSunLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
@@ -1060,6 +1045,21 @@
     </ClInclude>
     <ClInclude Include="LightManagerMenu.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLightDepthRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="SunLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Header Files\Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

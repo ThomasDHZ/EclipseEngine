@@ -128,19 +128,20 @@ void LightManagerMenu::ImGuiUpdate()
 			ImGui::LabelText(GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetLightName().c_str(), "");
 			ImGui::Checkbox("Static Light", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetStaticLightStatusPtr());
 
-			if (!GLTFSceneManager::GetPointLights()[spotLightIndex]->GetStaticLightStatus())
+			if (!GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetStaticLightStatus())
 			{
 				ImGui::SliderFloat3("Position", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetPositionPtr()->x, -1.0f, 1.0f);
 				ImGui::SliderFloat3("Direction", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetDirectionPtr()->x, -50.0f, 50.0f);
 			}
-			ImGui::SliderFloat3("Diffuse", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetDiffusePtr()->x, 0.0f, 1.0f);
-			ImGui::SliderFloat("Intensity", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetIntensityPtr(), 0.0f, 1.0f);
-			//ImGui::SliderFloat("Cut Off", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetCutOffPtr(), 0.0f, 1.0f);
-			//ImGui::SliderFloat("Outer Cut Off", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetOuterCutOffPtr(), 0.0f, 1.0f);
-			////alignas(4) float constant = 1.0f;
-			//ImGui::SliderFloat("Linear", GLTFSceneManager::GetSpotLights()[spotLightIndex]->(), 0.0f, 1.0f);
-			//alignas(4) float linear = 0.022f;
-			//alignas(4) float quadratic = 0.0019f;
+			ImGui::SliderFloat("Radius", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetRadiusPtr(), 0.0f, 15.0f);
+			ImGui::SliderFloat("Intensity", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetIntensityPtr()[0], 0.0f, 100.0f);
+			ImGui::SliderFloat("cutOff", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetCutOffPtr(), 0.0f, 15.0f);
+			ImGui::SliderFloat("outerCutOff", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetOuterCutOffPtr()[0], 0.0f, 100.0f);
+			ImGui::SliderFloat("constant", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetConstantPtr(), 0.0f, 15.0f);
+			ImGui::SliderFloat("linear", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetLinearPtr()[0], 0.0f, 100.0f);
+			ImGui::SliderFloat("quadratic", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetQuadraticPtr()[0], 0.0f, 100.0f);
+
+			GLTFSceneManager::GetSpotLights()[spotLightIndex]->LightViewTexture->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
 		}
 	}
 	ImGui::End();

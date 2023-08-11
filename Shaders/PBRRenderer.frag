@@ -103,14 +103,14 @@ struct SpotLight
     vec3 diffuse;
     vec3 position;
     vec3 direction;
-    mat4 LightSpaceMatrix;
+    mat4 lightSpaceMatrix;
     float intensity;
+    float radius;
     float cutOff;
     float outerCutOff;
     float constant;
     float linear;
     float quadratic;
-    mat4 lightSpaceMatrix;
 };
 
 layout(push_constant) uniform SceneData
@@ -377,7 +377,7 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
     return Lo;
 }
 
-vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, MaterialProperties material)
+vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
 {
     vec3 Lo = vec3(0.0);
     for (int x = 0; x < sceneData.PointLightCount; x++)
@@ -407,7 +407,7 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, Materi
         kD *= 1.0 - material.Metallic;
 
         float NdotL = max(dot(N, L), 0.0);
-       // vec3 fragPos, vec3 viewPos, int index
+
        float EPSILON = 0.15;
        float SHADOW_OPACITY = 0.005;
 
@@ -417,8 +417,49 @@ vec3 CalcPointLight(vec3 F0, vec3 V, vec3 N, vec3 viewPos, Vertex vertex, Materi
         float shadow = CubeShadowCalculation(vertex.Position, V, x);
 
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;  
-       // Lo *= vec3(shadow);
+        Lo *= vec3(shadow);
     }
+    return Lo;
+}
+
+vec3 CalcSpotLight(vec3 F0, vec3 V, vec3 N, Vertex vertex, MaterialProperties material)
+{
+    vec3 Lo = vec3(0.0);
+    for (int x = 0; x < sceneData.SpotLightCount; x++)
+    {
+        vec3 L = normalize(SLight[x].spotLight.position - vertex.Position);
+        vec3 H = normalize(V + L);
+
+        float theta = dot(L, normalize(-SLight[x].spotLight.direction));
+        float epsilon = SLight[x].spotLight.cutOff - SLight[x].spotLight.outerCutOff;
+        float intensity = clamp((theta - SLight[x].spotLight.outerCutOff) / epsilon, 0.0, 1.0);
+
+        float distance = length(PLight[x].pointLight.position - vertex.Position);
+        float Kc = 1.0f;
+        float Kl = 2 / SLight[x].spotLight.radius;
+        float Kq = 1 / (SLight[x].spotLight.radius * SLight[x].spotLight.radius);
+        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));
+
+        float watts = SLight[x].spotLight.intensity;
+        vec3 radiance = SLight[x].spotLight.diffuse * watts * attenuation;
+
+        float NDF = DistributionGGX(N, H, material.Roughness);
+        float G = GeometrySmith(N, V, L, material.Roughness);
+        vec3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
+
+        vec3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular = numerator / denominator;
+
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - material.Metallic;
+
+        float NdotL = max(dot(N, L), 0.0);
+
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+    }
+
     return Lo;
 }
 
@@ -458,10 +499,10 @@ void main()
     F0 = mix(F0, material.Albedo, material.Metallic);
 
     vec3 Lo = vec3(0.0);
- // Lo += CalcSunLight(F0, V, N, vertex, pbrMaterial);
+ // Lo += CalcSunLight(F0, V, N, vertex, material);
    Lo += CalcDirectionalLight(F0, V, N, material);
- //  Lo += CalcPointLight(F0, V, N, ViewPos, vertex, material);
-  //Lo += CalcSpotLight(F0, V, N, vertex, pbrMaterial);
+   Lo += CalcPointLight(F0, V, N, vertex, material);
+   Lo += CalcSpotLight(F0, V, N, vertex, material);
 
     vec3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
     vec3 kS = F;

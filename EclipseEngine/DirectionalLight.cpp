@@ -1,12 +1,12 @@
-#include "GLTFDirectionalLight.h"
+#include "DirectionalLight.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-GLTFDirectionalLight::GLTFDirectionalLight() : Light<GLTFDirectionalLightBuffer>()
+DirectionalLight::DirectionalLight() : Light<GLTFDirectionalLightBuffer>()
 {
 
 }
 
-GLTFDirectionalLight::GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight)
+DirectionalLight::DirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;
@@ -15,16 +15,16 @@ GLTFDirectionalLight::GLTFDirectionalLight(const std::string name, glm::vec3 Dir
 	LightBuffer.Update();
 }
 
-GLTFDirectionalLight::GLTFDirectionalLight(GLTFDirectionalLightBuffer light) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight, light)
+DirectionalLight::DirectionalLight(GLTFDirectionalLightBuffer light) : Light<GLTFDirectionalLightBuffer>(LightTypeEnum::kDirectionalLight, light)
 {
 	LightBuffer.Update(light);
 }
 
-GLTFDirectionalLight::~GLTFDirectionalLight()
+DirectionalLight::~DirectionalLight()
 {
 }
 
-void GLTFDirectionalLight::Update()
+void DirectionalLight::Update()
 {
 	ProjectionMatrix = glm::ortho(LeftRight.x, LeftRight.y, TopBottom.x, TopBottom.y, NearFar.x, NearFar.y);
 	ProjectionMatrix[1][1] *= -1;
@@ -36,12 +36,12 @@ void GLTFDirectionalLight::Update()
 	Light::Update();
 }
 
-void GLTFDirectionalLight::Destroy()
+void DirectionalLight::Destroy()
 {
 	Light::Destroy();
 }
 
-void GLTFDirectionalLight::SetLightViewTexture(std::shared_ptr<RenderedDepthTexture> lightViewTexture)
+void DirectionalLight::SetLightViewTexture(std::shared_ptr<RenderedDepthTexture> lightViewTexture)
 {
 	LightViewTexture = lightViewTexture;
 }

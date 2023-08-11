@@ -4,17 +4,17 @@
 #include "RenderedCubeMapDepthTexture.h"
 #include "RenderedDepthTexture.h"
 
-class GLTFSunLight : public Light<GLTFSunLightBuffer>
+class SunLight : public Light<GLTFSunLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedCubeMapDepthTexture> LightViewTexture;
 	//std::shared_ptr<GameObject> debugMesh;
 
 public:
-	GLTFSunLight();
-	GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity);
-	GLTFSunLight(GLTFSunLightBuffer light);
-	~GLTFSunLight();
+	SunLight();
+	SunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity);
+	SunLight(GLTFSunLightBuffer light);
+	~SunLight();
 
 	void Update() override;
 	void Destroy() override;

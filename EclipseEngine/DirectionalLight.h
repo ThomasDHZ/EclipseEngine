@@ -3,15 +3,15 @@
 #include "UniformBuffer.h"
 #include "RenderedDepthTexture.h"
 
-class GLTFDirectionalLight : public Light<GLTFDirectionalLightBuffer>
+class DirectionalLight : public Light<GLTFDirectionalLightBuffer>
 {
 private:
 
 public:
-	GLTFDirectionalLight();
-	GLTFDirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity);
-	GLTFDirectionalLight(GLTFDirectionalLightBuffer light);
-	~GLTFDirectionalLight();
+	DirectionalLight();
+	DirectionalLight(const std::string name, glm::vec3 Direction, glm::vec3 DiffuseColor, float Intesity);
+	DirectionalLight(GLTFDirectionalLightBuffer light);
+	~DirectionalLight();
 
 	glm::vec2 LeftRight = glm::vec2(-6.396, 17.941f);
 	glm::vec2 NearFar = glm::vec2(100, -8.580f);

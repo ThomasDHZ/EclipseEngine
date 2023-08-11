@@ -7,38 +7,6 @@ struct SkyBoxView
 	alignas(16) glm::mat4 view = glm::mat4(1.0f);
 };
 
-struct DirectionalLightBuffer {
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
-	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
-	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
-	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
-	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
-};
-
-struct PointLightBuffer {
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
-	alignas(16) glm::vec3 diffuse = glm::vec3(1.0f);
-	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
-	alignas(4) float constant = 1.0f;
-	alignas(4) float linear = 0.022f;
-	alignas(4) float quadratic = 0.0019f;
-	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
-};
-
-struct SpotLightBuffer {
-	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
-	alignas(16) glm::vec3 position = glm::vec3(0.0f);
-	alignas(16) glm::vec3 direction = glm::vec3(0.0f);
-	alignas(16) glm::vec3 specular = glm::vec3(1.0f);
-
-	alignas(4) float cutOff = glm::cos(glm::radians(12.5f));
-	alignas(4) float outerCutOff = glm::cos(glm::radians(15.0f));
-	alignas(4) float constant = 1.0f;
-	alignas(4) float linear = 0.022f;
-	alignas(4) float quadratic = 0.0019f;
-	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
-};
-
 struct GLTFSunLightBuffer {
 	alignas(16) glm::vec3 diffuse = glm::vec3(0.0f);
 	alignas(16) glm::vec3 position = glm::vec3(0.00001f);
@@ -67,6 +35,7 @@ struct GLTFSpotLightBuffer {
 	alignas(16) glm::vec3 direction = glm::vec3(0.00001f);
 	alignas(16) glm::mat4 LightSpaceMatrix = glm::mat4(1.0f);
 	alignas(4) float intensity = 1.0f;
+	alignas(4) float radius = 1.0f;
 	alignas(4) float cutOff = glm::cos(glm::radians(12.5f));
 	alignas(4) float outerCutOff = glm::cos(glm::radians(15.0f));
 	alignas(4) float constant = 1.0f;

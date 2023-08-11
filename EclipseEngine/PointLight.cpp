@@ -1,11 +1,11 @@
-#include "GLTFPointLight.h"
+#include "PointLight.h"
 
-GLTFPointLight::GLTFPointLight() : Light<GLTFPointLightBuffer>()
+PointLight::PointLight() : Light<GLTFPointLightBuffer>()
 {
 
 }
 
-GLTFPointLight::GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float Radius) : Light<GLTFPointLightBuffer>(LightTypeEnum::kPointLight)
+PointLight::PointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float Radius) : Light<GLTFPointLightBuffer>(LightTypeEnum::kPointLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;
@@ -16,7 +16,7 @@ GLTFPointLight::GLTFPointLight(const std::string name, glm::vec3 Position, glm::
 }
 
 
-GLTFPointLight::GLTFPointLight(GLTFPointLightBuffer light) : Light<GLTFPointLightBuffer>(LightTypeEnum::kPointLight, light)
+PointLight::PointLight(GLTFPointLightBuffer light) : Light<GLTFPointLightBuffer>(LightTypeEnum::kPointLight, light)
 {
 	LightBuffer.Update(light);
 
@@ -28,11 +28,11 @@ GLTFPointLight::GLTFPointLight(GLTFPointLightBuffer light) : Light<GLTFPointLigh
 	//GameObjectManager::AddGameObject(debugMesh);
 }
 
-GLTFPointLight::~GLTFPointLight()
+PointLight::~PointLight()
 {
 }
 
-void GLTFPointLight::Update()
+void PointLight::Update()
 {
 	glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10000.0f);
 
@@ -47,7 +47,7 @@ void GLTFPointLight::Update()
 	Light::Update();
 }
 
-void GLTFPointLight::Destroy()
+void PointLight::Destroy()
 {
 	Light::Destroy();
 	cubeMapSampler.Destroy();
@@ -57,7 +57,7 @@ void GLTFPointLight::Destroy()
 	}
 }
 
-void GLTFPointLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
+void PointLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
 {
 	LightViewTexture = lightViewTexture;
 }

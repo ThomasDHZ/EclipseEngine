@@ -3,10 +3,10 @@
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
 #include "EnvironmentTexture.h"
-#include "GLTFSunLight.h"
-#include "GLTFDirectionalLight.h"
-#include "GLTFSpotLight.h"
-#include "GLTFPointLight.h"
+#include "SunLight.h"
+#include "DirectionalLight.h"
+#include "SpotLight.h"
+#include "PointLight.h"
 #include "Skybox.h"
 #include "Material.h"
 #include "GameObject3D.h"
@@ -22,10 +22,10 @@ private:
 
 	static std::vector<std::shared_ptr<Material>> MaterialList;
 	static std::vector<std::shared_ptr<Texture>> TextureList;
-	static std::vector<std::shared_ptr<GLTFSunLight>> SunLightList;
-	static std::vector<std::shared_ptr<GLTFDirectionalLight>> DirectionalLightList;
-	static std::vector<std::shared_ptr<GLTFPointLight>> PointLightList;
-	static std::vector<std::shared_ptr<GLTFSpotLight>> SpotLightList;
+	static std::vector<std::shared_ptr<SunLight>> SunLightList;
+	static std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList;
+	static std::vector<std::shared_ptr<PointLight>> PointLightList;
+	static std::vector<std::shared_ptr<SpotLight>> SpotLightList;
 	
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
@@ -98,10 +98,10 @@ public:
 	static void LoadReflectionPrefilterTexture(std::shared_ptr<RenderedCubeMapTexture> prefilterTexture);
 	static void LoadReflectionPrefilterTexture(std::vector<std::shared_ptr<RenderedCubeMapTexture>> prefilterTextureList);
 	static void AddMaterial(const std::shared_ptr<Material> material);
-	static void AddSunLight(std::shared_ptr<GLTFSunLight> sunLight);
-	static void AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight);
-	static void AddPointLight(std::shared_ptr<GLTFPointLight> pointLight);
-	static void AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight);
+	static void AddSunLight(std::shared_ptr<SunLight> sunLight);
+	static void AddDirectionalLight(std::shared_ptr<DirectionalLight> directionalLight);
+	static void AddPointLight(std::shared_ptr<PointLight> pointLight);
+	static void AddSpotLight(std::shared_ptr<SpotLight> spotLight);
 	static void AddSunLight(GLTFSunLightLoader& sunLight);
 	static void AddDirectionalLight(GLTFDirectionalLightLoader& directionalLight);
 	static void AddPointLight(GLTFPointLightLoader& pointLight);
@@ -132,10 +132,10 @@ public:
 	static VkDescriptorBufferInfo GetReflectionMapBuffer();
 
 	static std::vector<std::shared_ptr<LightBase>> GetAllLights();
-	static std::vector<std::shared_ptr<GLTFSunLight>> GetSunLights() { return SunLightList; }
-	static std::vector<std::shared_ptr<GLTFDirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }
-	static std::vector<std::shared_ptr<GLTFPointLight>> GetPointLights() { return PointLightList; }
-	static std::vector<std::shared_ptr<GLTFSpotLight>> GetSpotLights() { return SpotLightList; }
+	static std::vector<std::shared_ptr<SunLight>> GetSunLights() { return SunLightList; }
+	static std::vector<std::shared_ptr<DirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }
+	static std::vector<std::shared_ptr<PointLight>> GetPointLights() { return PointLightList; }
+	static std::vector<std::shared_ptr<SpotLight>> GetSpotLights() { return SpotLightList; }
 	static uint32_t GetSunLightCount() { return SunLightList.size(); }
 	static uint32_t GetDirectionalCount() { return DirectionalLightList.size(); }
 	static uint32_t GetPointLightCount() { return PointLightList.size(); }

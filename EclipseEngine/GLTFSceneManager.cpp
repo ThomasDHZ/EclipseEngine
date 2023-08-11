@@ -11,10 +11,10 @@ std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::Irradianc
 std::vector<std::shared_ptr<RenderedCubeMapTexture>> GLTFSceneManager::PrefilterMapList;
 std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
-std::vector<std::shared_ptr<GLTFSunLight>>			 GLTFSceneManager::SunLightList;
-std::vector<std::shared_ptr<GLTFDirectionalLight>>	 GLTFSceneManager::DirectionalLightList;
-std::vector<std::shared_ptr<GLTFPointLight>>		 GLTFSceneManager::PointLightList;
-std::vector<std::shared_ptr<GLTFSpotLight>>			 GLTFSceneManager::SpotLightList;
+std::vector<std::shared_ptr<SunLight>>			     GLTFSceneManager::SunLightList;
+std::vector<std::shared_ptr<DirectionalLight>>	     GLTFSceneManager::DirectionalLightList;
+std::vector<std::shared_ptr<PointLight>>		 GLTFSceneManager::PointLightList;
+std::vector<std::shared_ptr<SpotLight>>				 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
 float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
@@ -377,25 +377,25 @@ void GLTFSceneManager::AddMaterial(const std::shared_ptr<Material> material)
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
-void GLTFSceneManager::AddSunLight(std::shared_ptr<GLTFSunLight> sunLight)
+void GLTFSceneManager::AddSunLight(std::shared_ptr<SunLight> sunLight)
 {
 	SunLightList.emplace_back(sunLight);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
-void GLTFSceneManager::AddDirectionalLight(std::shared_ptr<GLTFDirectionalLight> directionalLight)
+void GLTFSceneManager::AddDirectionalLight(std::shared_ptr<DirectionalLight> directionalLight)
 {
 	DirectionalLightList.emplace_back(directionalLight);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
-void GLTFSceneManager::AddPointLight(std::shared_ptr<GLTFPointLight> pointLight)
+void GLTFSceneManager::AddPointLight(std::shared_ptr<PointLight> pointLight)
 {
 	PointLightList.emplace_back(pointLight);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
-void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
+void GLTFSceneManager::AddSpotLight(std::shared_ptr<SpotLight> spotLight)
 {
 	SpotLightList.emplace_back(spotLight);
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -403,28 +403,28 @@ void GLTFSceneManager::AddSpotLight(std::shared_ptr<GLTFSpotLight> spotLight)
 
 void GLTFSceneManager::AddSunLight(GLTFSunLightLoader& sunLight)
 {
-	std::shared_ptr<GLTFSunLight> light = std::make_shared<GLTFSunLight>(GLTFSunLight(sunLight.name, sunLight.position, sunLight.diffuse, sunLight.intensity));
+	std::shared_ptr<SunLight> light = std::make_shared<SunLight>(SunLight(sunLight.name, sunLight.position, sunLight.diffuse, sunLight.intensity));
 	SunLightList.emplace_back(light);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
 void GLTFSceneManager::AddDirectionalLight(GLTFDirectionalLightLoader& directionalLight)
 {
-	std::shared_ptr<GLTFDirectionalLight> light = std::make_shared<GLTFDirectionalLight>(GLTFDirectionalLight(directionalLight.name, directionalLight.direction, directionalLight.diffuse, directionalLight.intensity));
+	std::shared_ptr<DirectionalLight> light = std::make_shared<DirectionalLight>(DirectionalLight(directionalLight.name, directionalLight.direction, directionalLight.diffuse, directionalLight.intensity));
 	DirectionalLightList.emplace_back(light);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
 void GLTFSceneManager::AddPointLight(GLTFPointLightLoader& pointLight)
 {
-	std::shared_ptr<GLTFPointLight> light = std::make_shared<GLTFPointLight>(GLTFPointLight(pointLight.name, pointLight.position, pointLight.diffuse, pointLight.intensity, pointLight.radius));
+	std::shared_ptr<PointLight> light = std::make_shared<PointLight>(PointLight(pointLight.name, pointLight.position, pointLight.diffuse, pointLight.intensity, pointLight.radius));
 	PointLightList.emplace_back(light);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 
 void GLTFSceneManager::AddSpotLight(GLTFSpotLightLoader& spotLight)
 {
-	std::shared_ptr<GLTFSpotLight> light = std::make_shared<GLTFSpotLight>(GLTFSpotLight(spotLight.name, spotLight.position, spotLight.direction, spotLight.diffuse, spotLight.intensity));
+	std::shared_ptr<SpotLight> light = std::make_shared<SpotLight>(SpotLight(spotLight.name, spotLight.position, spotLight.direction, spotLight.diffuse, spotLight.intensity));
 	SpotLightList.emplace_back(light);
 	VulkanRenderer::UpdateRendererFlag = true;
 }

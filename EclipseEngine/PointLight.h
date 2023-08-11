@@ -5,7 +5,7 @@
 #include "RenderedDepthTexture.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-class GLTFPointLight : public Light<GLTFPointLightBuffer>
+class PointLight : public Light<GLTFPointLightBuffer>
 {
 private:
 	std::shared_ptr<RenderedCubeMapDepthTexture> LightViewTexture;
@@ -13,10 +13,10 @@ private:
 	//std::shared_ptr<GameObject> debugMesh;
 
 public:
-	GLTFPointLight();
-	GLTFPointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float radius);
-	GLTFPointLight(GLTFPointLightBuffer light);
-	~GLTFPointLight();
+	PointLight();
+	PointLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity, float radius);
+	PointLight(GLTFPointLightBuffer light);
+	~PointLight();
 
 	std::shared_ptr<RenderedDepthTexture> CubeMapSide[6];
 	CubeMapSamplerBuffer cubeMapSampler;

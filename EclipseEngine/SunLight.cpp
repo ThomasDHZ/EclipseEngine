@@ -1,11 +1,11 @@
-#include "GLTFSunLight.h"
+#include "SunLight.h"
 
-GLTFSunLight::GLTFSunLight() : Light<GLTFSunLightBuffer>()
+SunLight::SunLight() : Light<GLTFSunLightBuffer>()
 {
 
 }
 
-GLTFSunLight::GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight)
+SunLight::SunLight(const std::string name, glm::vec3 Position, glm::vec3 DiffuseColor, float Intesity) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight)
 {
 	LightName = name;
 	LightBuffer.UniformDataInfo.diffuse = DiffuseColor;
@@ -15,7 +15,7 @@ GLTFSunLight::GLTFSunLight(const std::string name, glm::vec3 Position, glm::vec3
 }
 
 
-GLTFSunLight::GLTFSunLight(GLTFSunLightBuffer light) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight, light)
+SunLight::SunLight(GLTFSunLightBuffer light) : Light<GLTFSunLightBuffer>(LightTypeEnum::kSunLight, light)
 {
 	LightBuffer.Update(light);
 
@@ -27,22 +27,22 @@ GLTFSunLight::GLTFSunLight(GLTFSunLightBuffer light) : Light<GLTFSunLightBuffer>
 	//GameObjectManager::AddGameObject(debugMesh);
 }
 
-GLTFSunLight::~GLTFSunLight()
+SunLight::~SunLight()
 {
 }
 
-void GLTFSunLight::Update()
+void SunLight::Update()
 {
 	Light::Update();
 	//debugMesh->GameObjectPosition = LightBuffer.UniformDataInfo.position;
 }
 
-void GLTFSunLight::Destroy()
+void SunLight::Destroy()
 {
 	Light::Destroy();
 }
 
-void GLTFSunLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
+void SunLight::SetLightViewTexture(std::shared_ptr<RenderedCubeMapDepthTexture> lightViewTexture)
 {
 	LightViewTexture = lightViewTexture;
 }

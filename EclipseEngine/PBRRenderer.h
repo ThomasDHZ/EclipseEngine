@@ -24,6 +24,7 @@
 #include "VulkanPipelineEditor.h"
 #include "DepthCubeDebugRenderPass.h"
 #include "LightManagerMenu.h"
+#include "SpotLightDepthRenderPass.h"
 
 class PBRRenderer
 {
@@ -37,7 +38,7 @@ private:
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
-	DepthRenderPass depthSpotLightRenderPass;
+	SpotLightDepthRenderPass depthSpotLightRenderPass;
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
