@@ -73,6 +73,11 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthCubeShader.vert -o ../x64/Shaders/DepthCubeShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthCubeShader.frag -o ../x64/Shaders/DepthCubeShaderFrag.spv
 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthSpotLightShader.vert -o DepthSpotLightShaderVert.spv 
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthSpotLightShader.frag -o DepthSpotLightShaderFrag.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthSpotLightShader.vert -o ../x64/Shaders/DepthSpotLightShaderVert.spv
+C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthSpotLightShader.frag -o ../x64/Shaders/DepthSpotLightShaderFrag.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthIntencedShader.vert -o DepthIntencedShaderVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthIntencedShader.frag -o DepthIntencedShaderFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 DepthIntencedShader.vert -o ../x64/Shaders/DepthIntencedShaderVert.spv

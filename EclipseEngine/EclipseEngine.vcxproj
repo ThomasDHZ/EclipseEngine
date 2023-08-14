@@ -154,6 +154,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\Shaders\DepthSpotLightShader.frag" />
+    <None Include="..\Shaders\DepthSpotLightShader.vert" />
     <None Include="..\Shaders\GLTFBRDFShader.frag" />
     <None Include="..\Shaders\GLTFBRDFShader.vert" />
     <None Include="..\Shaders\GLTFLights.glsl" />
@@ -194,6 +196,7 @@
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="DebugPosMesh.cpp" />
     <ClCompile Include="DepthCubeDebugRenderPass.cpp" />
+    <ClCompile Include="DepthSpotLightPipeline.cpp" />
     <ClCompile Include="EclipseGUI.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -344,6 +347,7 @@
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="DebugPosMesh.h" />
     <ClInclude Include="DepthCubeDebugRenderPass.h" />
+    <ClInclude Include="DepthSpotLightPipeline.h" />
     <ClInclude Include="EclipseGUI.h" />
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="EnvironmentTexture.h" />

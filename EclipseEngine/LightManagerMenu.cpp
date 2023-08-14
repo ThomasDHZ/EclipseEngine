@@ -130,7 +130,7 @@ void LightManagerMenu::ImGuiUpdate()
 
 			if (!GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetStaticLightStatus())
 			{
-				ImGui::SliderFloat3("Position", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetPositionPtr()->x, -1.0f, 1.0f);
+				ImGui::SliderFloat3("Position", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetPositionPtr()->x, -50.0f, 50.0f);
 				ImGui::SliderFloat3("Direction", &GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetDirectionPtr()->x, -50.0f, 50.0f);
 			}
 			ImGui::SliderFloat("Radius", GLTFSceneManager::GetSpotLights()[spotLightIndex]->GetRadiusPtr(), 0.0f, 15.0f);

@@ -6,11 +6,12 @@
 #include "SceneManager.h"
 #include "DepthPipeline.h"
 #include "DepthInstancedPipeline.h"
+#include "DepthSpotLightPipeline.h"
 
 class SpotLightDepthRenderPass : public RenderPass
 {
 private:
-	DepthPipeline DepthPipeline;
+	DepthSpotLightPipeline DepthPipeline;
 	//DepthInstancedPipeline depthInstancedPipeline;
 	bool FirstDraw = true;
 
