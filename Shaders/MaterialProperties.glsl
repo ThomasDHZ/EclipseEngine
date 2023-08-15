@@ -1,26 +1,18 @@
 struct MaterialProperties
 {
-	vec3 Ambient;
-	vec3 Diffuse;
-	vec3 Specular;
-	float Shininess;
-	float Reflectivness;
-
-	vec3 Albedo;
-	float Matallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint DiffuseMapID;
-	uint SpecularMapID;
-	uint AlbedoMapID;
-	uint MetallicMapID;
-	uint RoughnessMapID;
-	uint AmbientOcclusionMapID;
-	uint NormalMapID;
-	uint DepthMapID;
-	uint AlphaMapID;
-	uint EmissionMapID;
+    vec3 Albedo;
+    float Metallic;
+    float Roughness;
+    float AmbientOcclusion;
+    vec3 Emission;
+    float Alpha;
+    uint AlbedoMap;
+    uint MetallicRoughnessMap;
+    uint MetallicMap;
+    uint RoughnessMap;
+    uint AmbientOcclusionMap;
+    uint NormalMap;
+    uint DepthMap;
+    uint AlphaMap;
+    uint EmissionMap;
 };

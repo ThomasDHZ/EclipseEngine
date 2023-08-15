@@ -158,21 +158,20 @@
     <None Include="..\Shaders\DepthSpotLightShader.vert" />
     <None Include="..\Shaders\GLTFBRDFShader.frag" />
     <None Include="..\Shaders\GLTFBRDFShader.vert" />
-    <None Include="..\Shaders\GLTFLights.glsl" />
     <None Include="..\Shaders\InstanceWireFrame.frag" />
     <None Include="..\Shaders\InstanceWireFrame.vert" />
-    <None Include="..\Shaders\MaterialSetUp.glsl" />
+    <None Include="..\Shaders\LightFunctions.glsl" />
+    <None Include="..\Shaders\LightProperties.glsl" />
+    <None Include="..\Shaders\MaterialBuilder.glsl" />
     <None Include="..\Shaders\PBRAnyhit.rahit" />
     <None Include="..\Shaders\PBRAnyhit1.rahit" />
-    <None Include="..\Shaders\PBRLightFunctions.glsl" />
-    <None Include="..\Shaders\PBRMaterialProperties.glsl" />
     <None Include="..\Shaders\PBRMiss.rmiss" />
     <None Include="..\Shaders\PBRRaygen.rgen" />
     <None Include="..\Shaders\PBRReflectionShader.frag" />
     <None Include="..\Shaders\PBRReflectionShader.vert" />
     <None Include="..\Shaders\PBRShadow.rmiss" />
     <None Include="..\Shaders\RasterBindingLayout.glsl" />
-    <None Include="..\Shaders\RasterLight.glsl" />
+    <None Include="..\Shaders\RasterDepthVertexBuilder.glsl" />
     <None Include="..\Shaders\RTXPBRBindingLayout.glsl">
       <FileType>Document</FileType>
     </None>
@@ -526,7 +525,6 @@
     <None Include="..\Shaders\IrradianceShader.vert" />
     <None Include="..\Shaders\LightDebugShader.frag" />
     <None Include="..\Shaders\LightDebugShader.vert" />
-    <None Include="..\Shaders\Lights.glsl" />
     <None Include="..\Shaders\LineRenderer2D.frag" />
     <None Include="..\Shaders\LineRenderer2D.vert" />
     <None Include="..\Shaders\LineRenderer3D.frag" />
@@ -541,15 +539,12 @@
     <None Include="..\Shaders\OutlineRenderer.vert" />
     <None Include="..\Shaders\ParticleShader.frag" />
     <None Include="..\Shaders\ParticleShader.vert" />
-    <None Include="..\Shaders\PBRBindingLayout.glsl" />
     <None Include="..\Shaders\PBRBloomRenderer.frag" />
     <None Include="..\Shaders\PBRBloomRenderer.vert" />
     <None Include="..\Shaders\PBRClosesthit.rchit" />
     <None Include="..\Shaders\PBRFunctions.glsl" />
     <None Include="..\Shaders\PBRInstanceRenderer.frag" />
     <None Include="..\Shaders\PBRInstanceRenderer.vert" />
-    <None Include="..\Shaders\PBRLight.glsl" />
-    <None Include="..\Shaders\PBRMaterial.glsl" />
     <None Include="..\Shaders\PBRRenderer.frag" />
     <None Include="..\Shaders\PBRRenderer.vert" />
     <None Include="..\Shaders\PBRRTXLight.glsl" />

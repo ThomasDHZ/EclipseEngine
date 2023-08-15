@@ -4,46 +4,8 @@
 #extension GL_EXT_scalar_block_layout : enable
 #extension GL_EXT_debug_printf : enable
 
-struct MeshProperties
-{
-	uint VertexBufferIndex;
-	uint IndexBufferIndex;
-	uint MaterialBufferIndex;
-	uint AlbedoMapIndex;
-	uint MetallicRoughnessMapIndex;
-	uint AmbientOcclusionMapIndex;
-	uint NormalMapIndex;
-	uint DepthMapIndex;
-	uint AlphaMapIndex;
-	uint EmissionMapIndex;
-	uint SkyBoxIndex;
-	mat4 MeshTransform;
-	vec2 UVOffset;
-	vec2 UVScale;
-	vec2 UVFlip;
-	int SelectedMesh;
-	float heightScale;
-	float minLayers;
-	float maxLayers;
-};
-
-struct MaterialProperties
-{
-	vec3 Albedo;
-	float Metallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint AlbedoMap;
-	uint MetallicRoughnessMap;
-	uint AmbientOcclusionMap;
-	uint NormalMap;
-	uint DepthMap;
-	uint AlphaMap;
-	uint EmissionMap;
-};
+#include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
 
 struct DirectionalLight
 {
@@ -75,7 +37,6 @@ struct SpotLight
     float constant;
     float linear;
     float quadratic;
-    mat4 lightSpaceMatrix;
 };
 
 layout (location = 0) in vec3 inPosition;

@@ -1072,9 +1072,6 @@
     <None Include="..\Shaders\MeshProperties.glsl">
       <Filter>Shader\Include</Filter>
     </None>
-    <None Include="..\Shaders\Lights.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
     <None Include="..\Shaders\BillBoardShader.frag">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
@@ -1303,9 +1300,6 @@
     <None Include="..\Shaders\RasterBindingLayout.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
-    <None Include="..\Shaders\RasterLight.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
     <None Include="..\Shaders\RTXVertexBuilder.glsl">
       <Filter>Shader\Include\RayTrace</Filter>
     </None>
@@ -1321,16 +1315,7 @@
     <None Include="..\Shaders\PBRRTXLight.glsl">
       <Filter>Shader\Include\RayTrace</Filter>
     </None>
-    <None Include="..\Shaders\PBRMaterial.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\PBRBindingLayout.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
     <None Include="..\Shaders\PBRFunctions.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
-    <None Include="..\Shaders\PBRLight.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
     <None Include="..\Shaders\GLTFBRDFShader.frag">
@@ -1349,15 +1334,6 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="..\Shaders\GLTFLights.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\MaterialSetUp.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
-    <None Include="..\Shaders\PBRLightFunctions.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
     <None Include="..\Shaders\VertexBuilder.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
@@ -1367,9 +1343,6 @@
     <None Include="..\Shaders\PBRReflectionShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\PBRMaterialProperties.glsl">
-      <Filter>Shader\Include\Raster</Filter>
-    </None>
     <None Include="..\Shaders\Vertex.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
@@ -1378,6 +1351,18 @@
     </None>
     <None Include="..\Shaders\DepthSpotLightShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LightProperties.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\MaterialBuilder.glsl">
+      <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\RasterDepthVertexBuilder.glsl">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LightFunctions.glsl">
+      <Filter>Shader\Include\Raster</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

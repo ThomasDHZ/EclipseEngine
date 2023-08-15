@@ -19,116 +19,10 @@ layout(location = 3) out vec3 Tangent;
 layout(location = 4) out vec3 BiTangent;
 layout(location = 5) out vec3 Color;
 
-struct Vertex
-{
-	vec3 Position;
-	float PositionPadding;
-	vec3 Normal;
-	float NormalPadding;
-	vec2 UV;
-	vec2 UVPadding;
-	vec3 Tangant;
-	float TangantPadding;
-	vec3 BiTangant;
-	float BiTangentPadding;
-	vec3 Color;
-	float ColorPadding;
-};
-
-struct MeshProperties
-{
-	uint VertexBufferIndex;
-	uint IndexBufferIndex;
-	uint MaterialBufferIndex;
-	uint AlbedoMapIndex;
-	uint MetallicRoughnessMapIndex;
-	uint AmbientOcclusionMapIndex;
-	uint NormalMapIndex;
-	uint DepthMapIndex;
-	uint AlphaMapIndex;
-	uint EmissionMapIndex;
-	uint SkyBoxIndex;
-	mat4 MeshTransform;
-	vec2 UVOffset;
-	vec2 UVScale;
-	vec2 UVFlip;
-	int SelectedMesh;
-	float heightScale;
-	float minLayers;
-	float maxLayers;
-};
-
-struct MaterialProperties
-{
-	vec3 Albedo;
-	float Metallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint AlbedoMap;
-	uint MetallicRoughnessMap;
-	uint AmbientOcclusionMap;
-	uint NormalMap;
-	uint DepthMap;
-	uint AlphaMap;
-	uint EmissionMap;
-};
-
-struct SunLight
-{
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-};
-
-struct DirectionalLight
-{
-	vec3 diffuse;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
-};
-
-struct PointLight
-{
-	vec3 diffuse;
-	vec3 position;
-	mat4 LightSpaceMatrix;
-	float intensity;
-	float radius;
-};
-
-struct SpotLight
-{
-	vec3 diffuse;
-	vec3 position;
-	vec3 direction;
-	mat4 LightSpaceMatrix;
-	float intensity;
-
-    float cutOff;
-    float outerCutOff;
-    float constant;
-    float linear;
-    float quadratic;
-    mat4 lightSpaceMatrix;
-};
-
-struct PBRMaterial
-{
-	vec3 Albedo;
-	float Metallic;
-	float Roughness;
-	float AmbientOcclusion;
-	vec3 Emission;
-	float Alpha;
-
-	uint NormalMapID;
-	uint DepthMapID;
-};
+#include "vertex.glsl"
+#include "MeshProperties.glsl"
+#include "MaterialProperties.glsl"
+#include "LightProperties.glsl"
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
@@ -145,26 +39,10 @@ layout(binding = 11) uniform CubeMapViewSampler
 {
     mat4 CubeMapFaceMatrix[6];
 } cubeMapViewSampler;
+layout(binding = 12) uniform sampler2D ShadowMap[];
+layout(binding = 13) uniform samplerCube PointShadowMap[];
 
-layout(push_constant) uniform SceneData
-{
-    uint MeshIndex;
-	uint PrimitiveIndex;
-	uint MaterialIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint SunLightCount;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-    uint frame;
-    int MaxRefeflectCount;
-} sceneData;
+#include "SceneData.glsl"
 
 void main() {
 

@@ -12,11 +12,30 @@ layout(location = 6) in flat int MaterialID;
 
 layout(location = 0) out vec4 outColor;
 
-#include "Vertex.glsl"
+#include "vertex.glsl"
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
-#include "GLTFLights.glsl"
-#include "SceneData.glsl"
+#include "LightProperties.glsl"
+
+layout(push_constant) uniform SceneData
+{
+    uint MeshIndex;
+    uint PrimitiveIndex;
+    uint MaterialIndex;
+    mat4 proj;
+    mat4 view;
+    vec3 CameraPos;
+    vec3 MeshColorID;
+    vec3 AmbientLight;
+    uint SunLightCount;
+    uint DirectionalLightCount;
+    uint PointLightCount;
+    uint SpotLightCount;
+    float Timer;
+    float PBRMaxMipLevel;
+    uint frame;
+    int MaxRefeflectCount;
+} sceneData;
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
@@ -29,16 +48,18 @@ layout(binding = 7) buffer SunLightBuffer { SunLight sunLight; } SULight[];
 layout(binding = 8) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 9) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 10) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 11) uniform sampler2D ShadowMap[];
+layout(binding = 12) uniform samplerCube PointShadowMap[];
 
 #include "RasterVertexBuilder.glsl"
-#include "MaterialSetUp.glsl"
+#include "MaterialBuilder.glsl"
 #include "PBRFunctions.glsl"
-#include "PBRLightFunctions.glsl"
+#include "LightFunctions.glsl"
 
 void main()
 { 
     Vertex vertex = RasterVertexBuilder();
-    MaterialProperties material = BuildPBRMaterial(MaterialID, vertex.UV);
+    MaterialProperties material = BuildMaterial(MaterialID, vertex.UV);
     
    mat3 TBN = getTBNFromMap(vertex);
    vec3 N = vertex.Normal;
