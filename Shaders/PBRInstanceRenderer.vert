@@ -25,10 +25,9 @@ layout(location = 6) out int MaterialID;
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
 #include "LightProperties.glsl"
+#include "ConstSceneData.glsl"
 
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
-
-#include "SceneData.glsl"
 
 void main() {
 

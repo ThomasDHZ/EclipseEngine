@@ -5,6 +5,7 @@
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
+#include "Lights.glsl"
 
 layout(location = 0) in vec3 FragPos;
 layout(location = 1) in vec2 UV;
@@ -21,17 +22,13 @@ layout(binding = 4) uniform sampler2D TextureMap[];
 layout(push_constant) uniform DepthSceneData
 {
     uint MeshIndex;
-	uint MaterialIndex;
     uint LightIndex;
 } sceneData;
 
-#include "RasterDepthVertexBuilder.glsl"
-#include "MaterialBuilder.glsl"
-
 void main()
 {		
-    Vertex vertex = RasterDepthVertexBuilder();
-	MaterialProperties material = BuildDepthMaterial(sceneData.MaterialIndex, vertex.UV);
+   const uint materialID = meshBuffer[sceneData.MeshIndex].meshProperties.MaterialBufferIndex;
+   MaterialProperties material = materialBuffer[materialID].materialProperties;
 
    vec2 FinalUV = UV + meshBuffer[sceneData.MeshIndex].meshProperties.UVOffset;
         FinalUV *= meshBuffer[sceneData.MeshIndex].meshProperties.UVScale;

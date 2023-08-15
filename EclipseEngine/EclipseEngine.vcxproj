@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\Shaders\ConstSceneData.glsl" />
     <None Include="..\Shaders\DepthSpotLightShader.frag" />
     <None Include="..\Shaders\DepthSpotLightShader.vert" />
     <None Include="..\Shaders\GLTFBRDFShader.frag" />
@@ -557,7 +558,6 @@
     <None Include="..\Shaders\Renderer2D.vert" />
     <None Include="..\Shaders\RTXPayload.glsl" />
     <None Include="..\Shaders\RTXRandom.glsl" />
-    <None Include="..\Shaders\SceneData.glsl" />
     <None Include="..\Shaders\SelectedObjectShader.frag" />
     <None Include="..\Shaders\SelectedObjectShader.vert" />
     <None Include="..\Shaders\RTXVertexBuilder.glsl" />

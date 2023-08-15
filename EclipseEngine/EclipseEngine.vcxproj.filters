@@ -1258,9 +1258,6 @@
     <None Include="..\Shaders\BakeReflectionPBRShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\SceneData.glsl">
-      <Filter>Shader\Include</Filter>
-    </None>
     <None Include="..\Shaders\animateParticles.comp">
       <Filter>Shader\ComputeShaders</Filter>
     </None>
@@ -1363,6 +1360,9 @@
     </None>
     <None Include="..\Shaders\LightFunctions.glsl">
       <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\ConstSceneData.glsl">
+      <Filter>Shader\Include</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

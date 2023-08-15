@@ -23,6 +23,7 @@ layout(location = 5) out vec3 Color;
 #include "MeshProperties.glsl"
 #include "MaterialProperties.glsl"
 #include "LightProperties.glsl"
+#include "ConstSceneData.glsl"
 
 layout(binding = 0) buffer MeshPropertiesBuffer { MeshProperties meshProperties; } meshBuffer[];
 layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[];
@@ -41,8 +42,6 @@ layout(binding = 11) uniform CubeMapViewSampler
 } cubeMapViewSampler;
 layout(binding = 12) uniform sampler2D ShadowMap[];
 layout(binding = 13) uniform samplerCube PointShadowMap[];
-
-#include "SceneData.glsl"
 
 void main() {
 
