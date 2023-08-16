@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\Shaders\ConstLightViewSceneData.glsl" />
     <None Include="..\Shaders\ConstSceneData.glsl" />
     <None Include="..\Shaders\DepthSpotLightShader.frag" />
     <None Include="..\Shaders\DepthSpotLightShader.vert" />
@@ -195,7 +196,8 @@
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
     <ClCompile Include="CubeToEnvironmentRenderPass.cpp" />
     <ClCompile Include="DebugPosMesh.cpp" />
-    <ClCompile Include="DepthCubeDebugRenderPass.cpp" />
+    <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp" />
+    <ClCompile Include="DepthCubeMapRenderer.cpp" />
     <ClCompile Include="DepthSpotLightPipeline.cpp" />
     <ClCompile Include="EclipseGUI.cpp" />
     <ClCompile Include="EnvironmentTexture.cpp" />
@@ -210,9 +212,6 @@
     <ClCompile Include="BRDFRenderPass.cpp" />
     <ClCompile Include="ComputeAnimationPipeline.cpp" />
     <ClCompile Include="DepthCubeMapPipeline.cpp" />
-    <ClCompile Include="DepthCubeMapRenderer.cpp" />
-    <ClCompile Include="DepthDebugPipeline.cpp" />
-    <ClCompile Include="DepthDebugRenderPass.cpp" />
     <ClCompile Include="DepthInstancedPipeline.cpp" />
     <ClCompile Include="DepthPipeline.cpp" />
     <ClCompile Include="DepthRenderPass.cpp" />
@@ -346,7 +345,8 @@
     <ClInclude Include="CubeToEnvironmentPipeline.h" />
     <ClInclude Include="CubeToEnvironmentRenderPass.h" />
     <ClInclude Include="DebugPosMesh.h" />
-    <ClInclude Include="DepthCubeDebugRenderPass.h" />
+    <ClInclude Include="DepthCubeMapDebuggerRenderer.h" />
+    <ClInclude Include="DepthCubeMapRenderer.h" />
     <ClInclude Include="DepthSpotLightPipeline.h" />
     <ClInclude Include="EclipseGUI.h" />
     <ClInclude Include="EngineMath.h" />
@@ -364,9 +364,6 @@
     <ClInclude Include="ComputeAnimationPipeline.h" />
     <ClInclude Include="Converters.h" />
     <ClInclude Include="DepthCubeMapPipeline.h" />
-    <ClInclude Include="DepthCubeMapRenderer.h" />
-    <ClInclude Include="DepthDebugPipeline.h" />
-    <ClInclude Include="DepthDebugRenderPass.h" />
     <ClInclude Include="DepthInstancedPipeline.h" />
     <ClInclude Include="DepthPipeline.h" />
     <ClInclude Include="DepthRenderPass.h" />
@@ -510,8 +507,6 @@
     <None Include="..\Shaders\CubeMapView.vert" />
     <None Include="..\Shaders\DepthCubeShader.frag" />
     <None Include="..\Shaders\DepthCubeShader.vert" />
-    <None Include="..\Shaders\DepthDebugShader.frag" />
-    <None Include="..\Shaders\DepthDebugShader.vert" />
     <None Include="..\Shaders\DepthIntencedShader.frag" />
     <None Include="..\Shaders\DepthIntencedShader.vert" />
     <None Include="..\Shaders\DepthShader.frag" />

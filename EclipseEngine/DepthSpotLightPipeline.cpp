@@ -72,7 +72,7 @@ void DepthSpotLightPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfo
 
 void DepthSpotLightPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, uint32_t x)
 {
-    DepthSceneData directionalLightProjection;
+    LightViewSceneData directionalLightProjection;
     directionalLightProjection.LightIndex = x;
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);

@@ -426,7 +426,7 @@ public:
 		}
 	}
 
-	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, DepthSceneData& constBuffer)
+	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, LightViewSceneData& constBuffer)
 	{
 		for (auto& mesh : MeshList)
 		{

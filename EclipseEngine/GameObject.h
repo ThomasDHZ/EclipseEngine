@@ -178,7 +178,7 @@ public:
 		GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
 	}
 
-	virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, DepthSceneData& constBuffer)
+	virtual void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, LightViewSceneData& constBuffer)
 	{
 		GameObjectRenderer->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
 	}

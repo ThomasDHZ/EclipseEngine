@@ -13,7 +13,7 @@ public:
 	~DepthCubeMapPipeline();
 
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct);
-	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, DepthSceneData& depthSceneData);
+	void Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, LightViewSceneData& depthSceneData);
 	void Destroy() override;
 };
 

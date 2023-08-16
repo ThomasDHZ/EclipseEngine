@@ -235,7 +235,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
         if (FirstDraw || 
             !GLTFSceneManager::GetPointLights()[x]->GetStaticLightStatus())
         {
-            DepthSceneData depthSceneData = DepthSceneData();
+            LightViewSceneData depthSceneData = LightViewSceneData();
             depthSceneData.LightIndex = x;
 
             vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);

@@ -208,7 +208,7 @@ VkCommandBuffer DepthRenderPass::Draw()
         vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
         for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
         {
-            DepthSceneData depthSceneData = DepthSceneData();
+            LightViewSceneData depthSceneData = LightViewSceneData();
             depthSceneData.LightIndex = x;
 
             switch (GLTFSceneManager::GameObjectList[y]->RenderType)

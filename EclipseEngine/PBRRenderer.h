@@ -9,7 +9,6 @@
 #include "SceneManager.h"
 #include "PBRReflectionRenderPass.h"
 #include "DepthRenderPass.h"
-#include "DepthDebugRenderPass.h"
 #include "DepthCubeMapRenderer.h"
 #include "PBRBloomRenderPass.h"
 #include "GaussianBlurRenderPass.h"
@@ -22,7 +21,6 @@
 #include "PerspectiveCamera.h"
 #include "OrthographicCamera.h"
 #include "VulkanPipelineEditor.h"
-#include "DepthCubeDebugRenderPass.h"
 #include "LightManagerMenu.h"
 #include "SpotLightDepthRenderPass.h"
 

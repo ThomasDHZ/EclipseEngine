@@ -198,9 +198,6 @@
     <ClCompile Include="DepthRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="DepthDebugRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="SoundDevice.cpp">
       <Filter>Source Files\Engine\Audio</Filter>
     </ClCompile>
@@ -252,9 +249,6 @@
     <ClCompile Include="DepthPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="DepthDebugPipeline.cpp">
-      <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="FrameBufferPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
@@ -266,9 +260,6 @@
     </ClCompile>
     <ClCompile Include="Renderer2DPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="DepthCubeMapRenderer.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
     <ClCompile Include="DepthCubeMapPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
@@ -561,9 +552,6 @@
     <ClCompile Include="DirectionalLight.cpp">
       <Filter>Source Files\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="DepthCubeDebugRenderPass.cpp">
-      <Filter>Source Files\Renderer\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="LightManagerMenu.cpp">
       <Filter>Source Files\ImGuiMenus</Filter>
     </ClCompile>
@@ -581,6 +569,12 @@
     </ClCompile>
     <ClCompile Include="DepthSpotLightPipeline.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthCubeMapDebuggerRenderer.cpp">
+      <Filter>Source Files\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthCubeMapRenderer.cpp">
+      <Filter>Source Files\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -677,9 +671,6 @@
     <ClInclude Include="GridRenderer3D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="DepthDebugRenderPass.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
-    </ClInclude>
     <ClInclude Include="DepthRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
@@ -695,9 +686,6 @@
     <ClInclude Include="MeshPicker2DPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="DepthDebugPipeline.h">
-      <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
     <ClInclude Include="DepthPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
     </ClInclude>
@@ -709,9 +697,6 @@
     </ClInclude>
     <ClInclude Include="DepthCubeMapPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="DepthCubeMapRenderer.h">
-      <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
     <ClInclude Include="DepthInstancedPipeline.h">
       <Filter>Header Files\Renderer\Pipelines</Filter>
@@ -1043,9 +1028,6 @@
     <ClInclude Include="PipelineRenderType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DepthCubeDebugRenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LightManagerMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1066,6 +1048,12 @@
     </ClInclude>
     <ClInclude Include="DepthSpotLightPipeline.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthCubeMapDebuggerRenderer.h">
+      <Filter>Source Files\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthCubeMapRenderer.h">
+      <Filter>Source Files\Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1096,13 +1084,7 @@
     <None Include="..\Shaders\DepthCubeShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="..\Shaders\DepthDebugShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
     <None Include="..\Shaders\DepthShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\DepthDebugShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\DepthShader.vert">
@@ -1363,6 +1345,9 @@
     </None>
     <None Include="..\Shaders\ConstSceneData.glsl">
       <Filter>Shader\Include</Filter>
+    </None>
+    <None Include="..\Shaders\ConstLightViewSceneData.glsl">
+      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
