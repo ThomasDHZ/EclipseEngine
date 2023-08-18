@@ -300,7 +300,169 @@ void PBRRenderer::ImGuiUpdate()
 {
 	pipelineEditor.Update();
 	lightManagerMenu.ImGuiUpdate();
+	ImGui::ShowDemoWindow();
 
+	ImGui::Begin("Scene Hierarchy Manager");
+	int index = 0;
+	for (auto& obj : GLTFSceneManager::GameObjectList)
+	{
+		index++;
+		ImGui::PushID(index);
+		bool selectedModel = ImGui::TreeNodeEx(&obj->ObjectName, ImGuiTreeNodeFlags_DefaultOpen ||
+																			ImGuiTreeNodeFlags_FramePadding ||
+																			ImGuiTreeNodeFlags_OpenOnArrow ||
+																			ImGuiTreeNodeFlags_SpanAvailWidth,
+																obj->ObjectName.c_str());
+		ImGui::PopID();
+		if (selectedModel)
+		{
+			SelectedGameObject = obj;
+			for (auto& mesh : obj->GetMeshList())
+			{
+					bool selectedMesh = ImGui::TreeNodeEx(&mesh->MeshName, ImGuiTreeNodeFlags_DefaultOpen ||
+																			ImGuiTreeNodeFlags_FramePadding ||
+																			ImGuiTreeNodeFlags_OpenOnArrow ||
+																			ImGuiTreeNodeFlags_SpanAvailWidth ,
+																			mesh->MeshName.c_str());
+				if (selectedMesh)
+				{
+					SelectedMesh = mesh;
+					for (auto& material : mesh->GetMaterialList())
+					{
+						bool selectedMaterial = ImGui::TreeNodeEx(&material->MaterialName, ImGuiTreeNodeFlags_DefaultOpen ||
+							ImGuiTreeNodeFlags_FramePadding ||
+							ImGuiTreeNodeFlags_OpenOnArrow ||
+							ImGuiTreeNodeFlags_SpanAvailWidth,
+							material->MaterialName.c_str());
+						if (selectedMaterial)
+						{
+							SelectedMaterial = material;
+							ImGui::TreePop();
+						}
+					}
+
+					ImGui::TreePop();
+				}
+			}
+			ImGui::TreePop();
+		}
+	}
+	ImGui::End();
+
+	if (SelectedGameObject)
+	{
+		ImGui::Begin("Model Properties");
+		ImGui::SliderFloat3("Position ", &SelectedGameObject->GameObjectPosition.x, 0.0f, 100.0f);
+		ImGui::SliderFloat3("Rotation ", &SelectedGameObject->GameObjectRotation.x, 0.0f, 360.0f);
+		ImGui::SliderFloat3("Scale ", &SelectedGameObject->GameObjectScale.x, 0.0f, 1.0f);
+		ImGui::End();
+	}
+
+	if (SelectedMesh)
+	{
+		ImGui::Begin("Mesh Properties");
+		ImGui::SliderFloat3("Position ", &SelectedMesh->MeshPosition.x, 0.0f, 100.0f);
+		ImGui::SliderFloat3("Rotation ", &SelectedMesh->MeshRotation.x, 0.0f, 360.0f);
+		ImGui::SliderFloat3("Scale ", &SelectedMesh->MeshScale.x, 0.0f, 1.0f);
+		if (SelectedMaterial)
+		{
+			ImGui::Separator();
+			ImGui::LabelText(SelectedMaterial->MaterialName.c_str(), "");
+			ImGui::Separator();
+
+			if (SelectedMaterial->AlbedoMap)
+			{
+				ImGui::LabelText("Alebdo", "");
+				ImGui::SameLine();
+				SelectedMaterial->AlbedoMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
+				ImGui::ColorEdit3("Alebdo", (float*)&SelectedMaterial->Albedo.x, misc_flags);
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->MetallicRoughnessMap)
+			{
+				ImGui::LabelText("Metallic/Roughness", "");
+				ImGui::SameLine();
+				SelectedMaterial->MetallicRoughnessMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->MetallicMap)
+			{
+				ImGui::LabelText("Metallic", "");
+				ImGui::SameLine();
+				SelectedMaterial->MetallicMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGui::SliderFloat("Metallic ", &SelectedMaterial->Metallic, 0.0f, 1.0f);
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->RoughnessMap)
+			{
+				ImGui::LabelText("Roughness", "");
+				ImGui::SameLine();
+				SelectedMaterial->RoughnessMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGui::SliderFloat("Roughness ", &SelectedMaterial->Roughness, 0.0f, 1.0f);
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->EmissionMap)
+			{
+				ImGui::LabelText("Emission", "");
+				ImGui::SameLine();
+				SelectedMaterial->EmissionMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
+				ImGui::ColorEdit3("Emission", (float*)&SelectedMaterial->EmissionMap, misc_flags);
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->AmbientOcclusionMap)
+			{
+				ImGui::LabelText("Ambient Occlusion", "");
+				ImGui::SameLine();
+				SelectedMaterial->AmbientOcclusionMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGui::SliderFloat("Ambient Occlusion ", &SelectedMaterial->AmbientOcclusion, 0.0f, 1.0f);
+				ImGui::Separator();
+			}
+
+			if (SelectedMaterial->AlphaMap)
+			{
+				ImGui::LabelText("Alpha", "");
+				ImGui::SameLine();
+				SelectedMaterial->AlphaMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
+				ImGui::Separator();
+			}
+			else
+			{
+				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
+				ImGui::SliderFloat("Alpha ", &SelectedMaterial->Alpha, 0.0f, 1.0f);
+				ImGui::Separator();
+			}
+		}
+
+		ImGui::End();
+	}
+	
 	//ImGui::SliderFloat3("Position ", &gameObjectList[0]->GameObjectPosition.x, 0.0f, 100.0f);
 	//ImGui::SliderFloat3("Rotation ", &gameObjectList[0]->GameObjectRotation.x, 0.0f, 360.0f);
 	//ImGui::SliderFloat3("Scale ", &gameObjectList[0]->GameObjectScale.x, 0.0f, 1.0f);

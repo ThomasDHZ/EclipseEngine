@@ -331,8 +331,6 @@ void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 
 void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
-
-
 	for (auto& primitve : PrimitiveList)
 	{
 		constBuffer.MeshIndex = MeshBufferIndex;

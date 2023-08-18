@@ -265,6 +265,7 @@ void GLTFImporter::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::s
 
 			{
 				const tinygltf::Primitive& glTFPrimitive = mesh.primitives[x];
+
 				const float* PositionBuffer = nullptr;
 				const float* NormalsBuffer = nullptr;
 				const float* UVBuffer = nullptr;

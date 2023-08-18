@@ -25,7 +25,6 @@ private:
 	static uint64_t GameObjectIDCounter;
 
 protected:
-	std::string ObjectName;
 	uint64_t GameObjectID;
 	std::shared_ptr<Model> GameObjectRenderer;
 	std::vector<std::shared_ptr<Component>> ComponentList;
@@ -49,6 +48,7 @@ protected:
 	glm::vec3* GetGameObjectScalePtr() { return &GameObjectScale; }
 
 public:
+	std::string ObjectName;
 	GameObjectRenderType  RenderType;
 
 	void GenerateID();

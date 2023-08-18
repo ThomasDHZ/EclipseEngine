@@ -55,6 +55,9 @@ private:
 
 	FrameBufferRenderPass frameBufferRenderPass;
 
+	std::shared_ptr<GameObject> SelectedGameObject;
+	std::shared_ptr<Mesh> SelectedMesh;
+	std::shared_ptr<Material> SelectedMaterial;
 public:
 	PBRRenderer();
 	~PBRRenderer();

@@ -58,8 +58,6 @@ private:
 	static uint64_t MeshIDCounter;
 
 protected:
-	std::string MeshName;
-
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
@@ -105,6 +103,8 @@ public:
 	Mesh();
 	Mesh(GLTFMeshLoader3D& meshLoader);
 	~Mesh();
+
+	std::string MeshName;
 
 	std::shared_ptr<GLTFNode> ParentMesh = nullptr;
 	std::vector<std::shared_ptr<GLTFNode>> ChildMeshList;
@@ -174,6 +174,7 @@ public:
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);
 	virtual void Destroy();
 
+	std::vector<std::shared_ptr<Material>> GetMaterialList() { return gltfMaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; }
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 };
