@@ -109,9 +109,10 @@ void RenderPass2D::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    oldRenderer2DPipeline.InitializePipeline(pipelineInfo);
+    //oldRenderer2DPipeline.InitializePipeline(pipelineInfo);
        Renderer2DPipeline = JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-       //LinePipelineList.emplace_back(JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+       LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+
        //WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
 }
 
@@ -162,17 +163,22 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
         {
             if (GLTFSceneManager::WireframeModeFlag)
             {
-               // WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+                // WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
             else
             {
-                //Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x]);
+                Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
             }
             break;
         }
         case GameObjectRenderType::kLineRenderer2D:
         {
-           // LinePipelineList[x].DrawLine<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
+            LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
+            break;
+        }
+        case GameObjectRenderType::kGridRenderer2D:
+        {
+            LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
             break;
         }
         }

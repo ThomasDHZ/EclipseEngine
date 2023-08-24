@@ -75,6 +75,8 @@ layout(binding = 3) uniform sampler2D TextureMap[];
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
+    uint PrimitiveIndex;
+    uint MaterialIndex;
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
@@ -94,7 +96,10 @@ layout(push_constant) uniform SceneData
 
 void main() {
 
-   vec3 result = vec3(1.0f, 0.0f, 0.0f);
+	MaterialProperties material = materialBuffer[sceneData.MaterialIndex].materialProperties;
+	material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
+
+   vec3 result = material.Albedo;
 
    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
 		finalResult = pow(finalResult, vec3(1.0 / 2.2f));

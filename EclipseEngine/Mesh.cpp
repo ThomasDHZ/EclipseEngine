@@ -386,8 +386,9 @@ void Mesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 
 void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
-	VkDeviceSize offsets[] = { 0 };
+	constBuffer.MeshIndex = MeshBufferIndex;
 
+	VkDeviceSize offsets[] = { 0 };
 	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
 	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);

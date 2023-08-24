@@ -9,7 +9,6 @@ public:
 	FrameBufferPipeline();
 	~FrameBufferPipeline();
 
-	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedColorTexture> renderedTexture);
 	void InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::shared_ptr<RenderedColorTexture> renderedTexture, std::shared_ptr<RenderedColorTexture> bloomTexture);
 	void Draw(VkCommandBuffer& commandBuffer);
 };

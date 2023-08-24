@@ -81,7 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\dotha\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\include;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\include;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\dotha\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)GLTFLoader;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\include;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\include;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\lib;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.3.231.1\Lib;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,7 +132,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;OpenAL32.lib;sndfile.lib;VulkanRenderer.lib;GLTFLoader.lib;tinygltf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;OpenAL32.lib;sndfile.lib;GLTFLoader.lib;tinygltf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -219,6 +219,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
+    <ClCompile Include="LineGameObject2D.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="GLTFRenderer2D.cpp" />
@@ -226,6 +227,7 @@
     <ClCompile Include="GLTFRTXRenderer.cpp" />
     <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="SpriteRenderPass.cpp" />
     <ClCompile Include="SunLight.cpp" />
     <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />
     <ClCompile Include="GLTF_GraphicsPipeline.cpp" />
@@ -247,7 +249,6 @@
     <ClCompile Include="PBRRenderPass.cpp" />
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="GridRenderer2D.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="JsonGraphicsPipeline.cpp" />
     <ClCompile Include="Level2D.cpp" />
@@ -255,7 +256,6 @@
     <ClCompile Include="LightDebugPipeline.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
-    <ClCompile Include="LineRenderer2D.cpp" />
     <ClCompile Include="LineGameObject3D.cpp" />
     <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="MeshPicker2DPipeline.cpp" />
@@ -282,7 +282,6 @@
     <ClCompile Include="RenderedCubeMapTexture.cpp" />
     <ClCompile Include="RenderedDepthTexture.cpp" />
     <ClCompile Include="RenderedTexture.cpp" />
-    <ClCompile Include="Renderer2DPipeline.cpp" />
     <ClCompile Include="RenderPassEditor.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SpotLightDepthRenderPass.cpp" />
@@ -305,7 +304,6 @@
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RayTracingPipeline.cpp" />
-    <ClCompile Include="Renderer2D.cpp" />
     <ClCompile Include="RenderPass2D.cpp" />
     <ClCompile Include="RenderPassImageManager.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -319,6 +317,7 @@
     <ClCompile Include="VulkanPipelineTools.cpp" />
     <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
+    <None Include="..\Shaders\SpriteVertexBuilder.glsl" />
     <None Include="..\Shaders\Vertex.glsl" />
     <None Include="..\Shaders\VertexBuilder.glsl" />
     <None Include="imgui.ini" />
@@ -371,6 +370,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="LightManagerMenu.h" />
+    <ClInclude Include="LineGameObject2D.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="GLTFRenderer2D.h" />
@@ -378,6 +378,7 @@
     <ClInclude Include="GLTFRTXRenderer.h" />
     <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="SpriteRenderPass.h" />
     <ClInclude Include="SunLight.h" />
     <ClInclude Include="GLTF_GraphicsDescriptors.h" />
     <ClInclude Include="GLTF_GraphicsPipeline.h" />
@@ -405,8 +406,6 @@
     <ClInclude Include="PBRRenderPass.h" />
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="GridRenderer2D.h" />
-    <ClInclude Include="GridRenderer3D.h" />
     <ClInclude Include="JsonGraphicsPipeline.h" />
     <ClInclude Include="Level2D.h" />
     <ClInclude Include="Level2DRenderer.h" />
@@ -414,7 +413,6 @@
     <ClInclude Include="LightDebugPipeline.h" />
     <ClInclude Include="LineMesh2D.h" />
     <ClInclude Include="LineMesh3D.h" />
-    <ClInclude Include="LineRenderer2D.h" />
     <ClInclude Include="LineGameObject3D.h" />
     <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="MeshPicker2DPipeline.h" />
@@ -441,7 +439,6 @@
     <ClInclude Include="RenderedCubeMapTexture.h" />
     <ClInclude Include="RenderedDepthTexture.h" />
     <ClInclude Include="RenderedTexture.h" />
-    <ClInclude Include="Renderer2DPipeline.h" />
     <ClInclude Include="RenderPassEditor.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Skybox.h" />
@@ -466,7 +463,6 @@
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="RayTracingPipeline.h" />
-    <ClInclude Include="Renderer2D.h" />
     <ClInclude Include="RenderPass2D.h" />
     <ClInclude Include="RenderPassImageManager.h" />
     <ClInclude Include="Scene.h" />

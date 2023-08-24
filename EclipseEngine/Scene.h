@@ -13,7 +13,6 @@
 #include "GameObject3D.h"
 #include "RenderedTexture.h"
 #include "Texture2D.h"
-#include "Renderer2D.h"
 #include "SoundEffectManager.h"
 #include "SoundSource.h"
 #include "RayTracePBRRenderer.h"
@@ -26,7 +25,7 @@ class Scene
 {
 private:
 	PBRRenderer pbrRenderer;
-	//GLTFRenderer2D spriteRenderer;
+	GLTFRenderer2D spriteRenderer;
 	//RayTracePBRRenderer rayTraceRenderer;
 public:
 	Scene();

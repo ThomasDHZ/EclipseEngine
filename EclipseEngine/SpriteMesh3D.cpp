@@ -46,11 +46,8 @@ SpriteMesh3D::SpriteMesh3D(const std::string& SpriteName, std::shared_ptr<Materi
 	vertex4.Color = { 1.0f, 0.0f, 1.0f };
 	SpriteVertexList.emplace_back(vertex4);
 
-	SpriteIndexList = {
-
-		0, 1, 3,
-		1, 2, 3
-
+    SpriteIndexList = {
+		0, 1, 2, 2, 3, 0
 	};
 
 	MeshID = 0;

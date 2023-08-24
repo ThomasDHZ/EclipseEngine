@@ -1,16 +1,14 @@
 #pragma once
 #include "RenderPass.h"
 #include "JsonGraphicsPipeline.h"
-#include "Renderer2DPipeline.h"
 
 
 class RenderPass2D : public RenderPass
 {
 private:
-	Renderer2DPipeline oldRenderer2DPipeline;
 	JsonGraphicsPipeline Renderer2DPipeline;
 	//std::vector<JsonGraphicsPipeline> WireframePipelineList;
-	//std::vector<JsonGraphicsPipeline> LinePipelineList;
+	JsonGraphicsPipeline LinePipeline;
 
 	void RenderPassDesc();
 	void BuildRenderPassPipelines();

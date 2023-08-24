@@ -13,3 +13,10 @@ struct Vertex
     vec3 Color;
     float ColorPadding;
 };
+
+struct Vertex2D
+{
+    vec2 Position;
+    vec2 UV;
+    vec4 Color;
+};

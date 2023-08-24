@@ -210,21 +210,21 @@ void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<M
 
 void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, int drawLayer)
 {
-	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name, position, drawLayer));
 	sprite->LoadSpriteGameObject2D(Name, material);
 	GameObjectList.emplace_back(sprite);
 }
 
 void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, int drawLayer)
 {
-	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name, position, rotation, drawLayer));
 	sprite->LoadSpriteGameObject2D(Name, material);
 	GameObjectList.emplace_back(sprite);
 }
 
 void GLTFSceneManager::AddSpriteGameObject2D(std::string Name, std::shared_ptr<Material> material, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, int drawLayer)
 {
-	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name));
+	std::shared_ptr<SpriteGameObject2D> sprite = std::make_shared<SpriteGameObject2D>(SpriteGameObject2D(Name, position, rotation, scale, drawLayer));
 	sprite->LoadSpriteGameObject2D(Name, material);
 	GameObjectList.emplace_back(sprite);
 }
@@ -257,6 +257,96 @@ void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<M
 	GameObjectList.emplace_back(sprite);
 }
 
+void GLTFSceneManager::AddLineGameObject2D(std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& position, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& position, const glm::vec3& rotation, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, scale, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, const glm::vec3& position, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, scale, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, StartColor, EndColor, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, const glm::vec3& position, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, StartColor, EndColor, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, const glm::vec3& position, const glm::vec3& rotation, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, StartColor, EndColor, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, position, rotation, scale, drawLayer));
+	line->LoadLineGameObject2D(Name, StartPoint, EndPoint, StartColor, EndColor, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddGridGameObject2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, int drawLayer)
+{
+	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(GridName, drawLayer));
+	line->LoadGridGameObject2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, drawLayer);
+	GameObjectList.emplace_back(line);
+}
 
 void GLTFSceneManager::AddLineGameObject3D( std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint)
 {
