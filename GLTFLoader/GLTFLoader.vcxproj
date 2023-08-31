@@ -146,14 +146,12 @@
     <ClInclude Include="GLTFImporter.h" />
     <ClInclude Include="GLTFLights.h" />
     <ClInclude Include="GLTFModel.h" />
-    <ClInclude Include="GLTFScene.h" />
     <ClInclude Include="GLTFVertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLTFFileLoader.cpp" />
     <ClCompile Include="GLTFImporter.cpp" />
     <ClCompile Include="GLTFModel.cpp" />
-    <ClCompile Include="GLTFScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

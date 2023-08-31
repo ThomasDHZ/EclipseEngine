@@ -34,17 +34,20 @@ LineMesh2D::LineMesh2D(const std::string& LineName, std::vector<LineVertex2D>& v
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& startPoint, const glm::vec2& endPoint, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	LineVertexList =
 	{
-		{StartPoint, glm::vec3(1.0f)},
-		{EndPoint, glm::vec3(1.0f)}
+		{startPoint, glm::vec3(1.0f)},
+		{endPoint, glm::vec3(1.0f)}
 	};
 	LineIndexList = {
 		0, 1,
 		1, 0
 	};
+
+	StartPoint = startPoint;
+	EndPoint = endPoint;
 
 	MeshID = 0;
 	ParentModelID = modelObjectID;
@@ -74,17 +77,20 @@ LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint,
 
 }
 
-LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& Color, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& startPoint, const glm::vec2& endPoint, const glm::vec3& Color, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	LineVertexList =
 	{
-		{StartPoint, glm::vec4(Color.x, Color.y, Color.z, 1.0f)},
-		{EndPoint, glm::vec4(Color.x, Color.y, Color.z, 1.0f)}
+		{startPoint, glm::vec4(Color.x, Color.y, Color.z, 1.0f)},
+		{endPoint, glm::vec4(Color.x, Color.y, Color.z, 1.0f)}
 	};
 	LineIndexList = {
 		0, 1,
 		1, 0
 	};
+
+	StartPoint = startPoint;
+	EndPoint = endPoint;
 
 	MeshID = 0;
 	ParentModelID = modelObjectID;
@@ -114,17 +120,20 @@ LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint,
 
 }
 
-LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& startPoint, const glm::vec2& endPoint, const glm::vec4& Color, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	LineVertexList =
 	{
-		{StartPoint, Color},
-		{EndPoint, Color}
+		{startPoint, Color},
+		{endPoint, Color}
 	};
 	LineIndexList = {
 		0, 1,
 		1, 0
 	};
+
+	StartPoint = startPoint;
+	EndPoint = endPoint;
 
 	MeshID = 0;
 	ParentModelID = modelObjectID;
@@ -153,17 +162,20 @@ LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint,
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& StartColor, const glm::vec3& EndColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& startPoint, const glm::vec2& endPoint, const glm::vec3& StartColor, const glm::vec3& EndColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	LineVertexList =
 	{
-		{StartPoint, glm::vec4(StartColor.x, StartColor.y, StartColor.z, 1.0f)},
-		{EndPoint, glm::vec4(EndColor.x, EndColor.y, EndColor.z, 1.0f)}
+		{startPoint, glm::vec4(StartColor.x, StartColor.y, StartColor.z, 1.0f)},
+		{endPoint, glm::vec4(EndColor.x, EndColor.y, EndColor.z, 1.0f)}
 	};
 	LineIndexList = {
 		0, 1,
 		1, 0
 	};
+
+	StartPoint = startPoint;
+	EndPoint = endPoint;
 
 	MeshID = 0;
 	ParentModelID = modelObjectID;
@@ -192,17 +204,20 @@ LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint,
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 }
 
-LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& startPoint, const glm::vec2& endPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	LineVertexList =
 	{
-		{StartPoint, StartColor},
-		{EndPoint, EndColor}
+		{startPoint, StartColor},
+		{endPoint, EndColor}
 	};
 	LineIndexList = {
 		0, 1,
 		1, 0
 	};
+
+	StartPoint = startPoint;
+	EndPoint = endPoint;
 
 	MeshID = 0;
 	ParentModelID = modelObjectID;
@@ -229,156 +244,6 @@ LineMesh2D::LineMesh2D(const std::string& LineName, const glm::vec2& StartPoint,
 	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-}
-
-LineMesh2D::LineMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
-{
-	uint32_t indexCount = 0;
-	for (int x = 0; x <= GridSizeX; x++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2(0.0f, (GridSizeY * GridSpacingY));
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x + (x * GridSpacingX), StartPoint.y }, { glm::vec4(1.0f) }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x + (x * GridSpacingX), EndPoint.y }, { glm::vec4(1.0f) }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-	for (int y = 0; y <= GridSizeY; y++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2((GridSizeX * GridSpacingX), 0.0f);
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x, StartPoint.y + (y * GridSpacingY) }, { glm::vec4(1.0f) }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x , EndPoint.y + (y * GridSpacingY) }, { glm::vec4(1.0f) }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-
-	MeshID = 0;
-	ParentModelID = modelObjectID;
-	ParentGameObjectID = gameObjectID;
-
-	MeshName = GridName;
-
-	VertexCount = LineVertexList.size();
-	IndexCount = LineIndexList.size();
-	BoneCount = 0;
-	TriangleCount = 0;
-	InstanceCount = 0;
-
-	GameObjectTransform = GameObjectMatrix;
-	ModelTransform = ModelMatrix;
-	MeshTransform = glm::mat4(1.0f);
-
-	MeshPosition = glm::vec3(0.0f);
-	MeshRotation = glm::vec3(0.0f);
-	MeshScale = glm::vec3(1.0f);
-
-	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-}
-
-LineMesh2D::LineMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec3& LineColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
-{
-	uint32_t indexCount = 0;
-	for (int x = 0; x <= GridSizeX; x++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2(0.0f, (GridSizeY * GridSpacingY));
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x + (x * GridSpacingX), StartPoint.y }, { glm::vec4(LineColor.x, LineColor.y, LineColor.z, 1.0f) }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x + (x * GridSpacingX), EndPoint.y }, { glm::vec4(LineColor.x, LineColor.y, LineColor.z, 1.0f) }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-	for (int y = 0; y <= GridSizeY; y++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2((GridSizeX * GridSpacingX), 0.0f);
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x, StartPoint.y + (y * GridSpacingY) }, { glm::vec4(LineColor.x, LineColor.y, LineColor.z, 1.0f) }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x , EndPoint.y + (y * GridSpacingY) }, { glm::vec4(LineColor.x, LineColor.y, LineColor.z, 1.0f) }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-
-	MeshID = 0;
-	ParentModelID = modelObjectID;
-	ParentGameObjectID = gameObjectID;
-
-	MeshName = GridName;
-
-	VertexCount = LineVertexList.size();
-	IndexCount = LineIndexList.size();
-	BoneCount = 0;
-	TriangleCount = 0;
-	InstanceCount = 0;
-
-	GameObjectTransform = GameObjectMatrix;
-	ModelTransform = ModelMatrix;
-	MeshTransform = glm::mat4(1.0f);
-
-	MeshPosition = glm::vec3(0.0f);
-	MeshRotation = glm::vec3(0.0f);
-	MeshScale = glm::vec3(1.0f);
-
-	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-}
-
-LineMesh2D::LineMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec4& LineColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
-{
-	uint32_t indexCount = 0;
-	for (int x = 0; x <= GridSizeX; x++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2(0.0f, (GridSizeY * GridSpacingY));
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x + (x * GridSpacingX), StartPoint.y }, { LineColor }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x + (x * GridSpacingX), EndPoint.y }, { LineColor }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-	for (int y = 0; y <= GridSizeY; y++)
-	{
-		glm::vec2 StartPoint = glm::vec2(0.0f, 0.0f);
-		glm::vec2 EndPoint = glm::vec2((GridSizeX * GridSpacingX), 0.0f);
-		LineVertexList.emplace_back(LineVertex2D({ StartPoint.x, StartPoint.y + (y * GridSpacingY) }, { LineColor }));
-		LineVertexList.emplace_back(LineVertex2D({ EndPoint.x , EndPoint.y + (y * GridSpacingY) }, { LineColor }));
-		LineIndexList.emplace_back(indexCount++);
-		LineIndexList.emplace_back(indexCount++);
-	}
-
-	MeshID = 0;
-	ParentModelID = modelObjectID;
-	ParentGameObjectID = gameObjectID;
-
-	MeshName = GridName;
-
-	VertexCount = LineVertexList.size();
-	IndexCount = LineIndexList.size();
-	BoneCount = 0;
-	TriangleCount = 0;
-	InstanceCount = 0;
-
-	GameObjectTransform = GameObjectMatrix;
-	ModelTransform = ModelMatrix;
-	MeshTransform = glm::mat4(1.0f);
-
-	MeshPosition = glm::vec3(0.0f);
-	MeshRotation = glm::vec3(0.0f);
-	MeshScale = glm::vec3(1.0f);
-
-	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
-	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-
 }
 
 LineMesh2D::~LineMesh2D()
@@ -392,6 +257,13 @@ void LineMesh2D::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descri
 
 void LineMesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
+	LineVertexList =
+	{
+		{StartPoint, glm::vec3(1.0f)},
+		{EndPoint, glm::vec3(1.0f)}
+	};
+
+	VertexBuffer->UpdateBufferMemory(LineVertexList.data(), LineVertexList.size() * sizeof(LineVertex2D));
 	Mesh::Update(GameObjectMatrix, ModelMatrix);
 }
 

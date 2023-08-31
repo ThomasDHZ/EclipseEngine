@@ -1,0 +1,42 @@
+#include "LevelGameObject.h"
+
+LevelGameObject::LevelGameObject()
+{
+}
+
+LevelGameObject::LevelGameObject(const std::string Name) : GameObject2D(Name, kLevelRenderer)
+{
+}
+
+LevelGameObject::LevelGameObject(const std::string Name, const glm::vec2& position, int drawLayer) : GameObject2D(Name, kLevelRenderer, position, drawLayer)
+{
+}
+
+LevelGameObject::LevelGameObject(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, int drawLayer) : GameObject2D(Name, kLevelRenderer, position, rotation, drawLayer)
+{
+}
+
+LevelGameObject::LevelGameObject(const std::string Name, const glm::vec2& position, const glm::vec2& rotation, const glm::vec2& scale, int drawLayer) : GameObject2D(Name, kLevelRenderer, position, rotation, scale, drawLayer)
+{
+}
+
+LevelGameObject::~LevelGameObject()
+{
+}
+
+void LevelGameObject::Update(float DeltaTime)
+{
+	GameObject::Update(DeltaTime);
+}
+
+void LevelGameObject::Destroy()
+{
+}
+
+void LevelGameObject::LoadSpriteGameObject2D(const std::string Name, std::shared_ptr<Material> material)
+{
+	GameObjectRenderer = std::make_shared<Model>(Model());
+	GameObjectRenderer->LoadSpriteMesh2D(Name, material, GameObjectTransform, GameObjectID);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+

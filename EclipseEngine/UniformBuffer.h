@@ -179,13 +179,13 @@ public:
 
 	void Update()
 	{
-		VulkanBufferData.CopyBufferToMemory(&UniformDataInfo, sizeof(T));
+		VulkanBufferData.UpdateBufferMemory(&UniformDataInfo, sizeof(T));
 	}
 
 	void Update(T UniformData)
 	{
 		UniformDataInfo = UniformData;
-		VulkanBufferData.CopyBufferToMemory(&UniformDataInfo, sizeof(T));
+		VulkanBufferData.UpdateBufferMemory(&UniformDataInfo, sizeof(T));
 	}
 
 	void Destroy()

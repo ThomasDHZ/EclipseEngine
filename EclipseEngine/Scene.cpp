@@ -1,7 +1,6 @@
 #include "Scene.h"
 #include "EnvironmentTexture.h"
 #include "MusicPlayer.h"
-#include "Mesh2D.h"
 #include "LineMesh2D.h"
 #include "BillBoardMeshRenderer.h"
 #include "ReadableTexture.h"

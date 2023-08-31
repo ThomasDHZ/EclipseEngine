@@ -17,6 +17,8 @@ private:
 	static double LastX;
 	static double LastY;
 
+	static float ZoomAmt;
+
 	static bool MouseButtonPressed[3];
 	static bool IsDragging;
 
@@ -51,8 +53,9 @@ public:
 
 	static void MouseScrollCallback(GLFWwindow* window, double Xoffset, double Yoffset)
 	{
+		ZoomAmt += Yoffset / 50.0f;
 		mouse->ScrollX = Xoffset;
-		mouse->ScrollY = Yoffset;
+		mouse->ScrollY = ZoomAmt;
 	}
 
 	static glm::vec2 GetMouseCoords()
@@ -78,14 +81,14 @@ public:
 
 	static bool GetMouseButtonClicked(int button)
 	{
-
-			return MouseButtonPressed[button];
-		
+		return MouseButtonPressed[button];
 	}
+
 	static bool GetMouseButtonDragged(int button)
 	{
 		return MouseButtonPressed[button];
 	}
+
 	static bool GetMouseButtonPressed(int button)
 	{
 		return MouseButtonPressed[button];

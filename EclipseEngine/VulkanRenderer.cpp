@@ -34,6 +34,7 @@ double Mouse::XPos = 0;
 double Mouse::YPos = 0;
 double Mouse::LastX = 0;
 double Mouse::LastY = 0;
+float  Mouse::ZoomAmt = 0.0f;
 bool   Mouse::MouseButtonPressed[3];
 bool   Mouse::IsDragging = false;
 

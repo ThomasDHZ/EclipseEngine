@@ -207,17 +207,11 @@
     <ClCompile Include="SoundEffectManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh2D.cpp">
-      <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="LineMesh3D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="LineMesh2D.cpp">
       <Filter>Source Files\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Level2DRenderer.cpp">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Level2D</Filter>
@@ -340,9 +334,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BloomCombine.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PBRPlayRenderer.cpp">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="ReadableTexture.cpp">
@@ -570,6 +561,24 @@
     <ClCompile Include="LineGameObject2D.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="GridGameObject2D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GridMesh2D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SquareGameObject2D.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SquareMesh2D.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelGameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelMesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -632,17 +641,11 @@
     <ClInclude Include="SoundEffectManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh2D.h">
-      <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="LineMesh3D.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="LineMesh2D.h">
       <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Level2DRenderer.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Header Files\Level2D</Filter>
@@ -1039,6 +1042,24 @@
     </ClInclude>
     <ClInclude Include="LineGameObject2D.h">
       <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GridGameObject2D.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GridMesh2D.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SquareGameObject2D.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SquareMesh2D.h">
+      <Filter>Header Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelGameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelMesh.h">
+      <Filter>Header Files\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

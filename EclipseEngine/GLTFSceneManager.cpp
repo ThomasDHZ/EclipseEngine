@@ -129,6 +129,13 @@ void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_pt
 	}
 }
 
+void GLTFSceneManager::AddLevelGameObject(const std::string Name, std::shared_ptr<Material> material, int drawLayer)
+{
+	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(Name, glm::vec2(0.0f), drawLayer));
+	sprite->LoadSpriteGameObject2D(Name, material);
+	GameObjectList.emplace_back(sprite);
+}
+
 void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::string FilePath)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kModelRenderer)));
@@ -257,6 +264,34 @@ void GLTFSceneManager::AddSpriteGameObject3D(std::string Name, std::shared_ptr<M
 	GameObjectList.emplace_back(sprite);
 }
 
+void GLTFSceneManager::AddSquareGameObject2D(std::string Name, float Size, const glm::vec4& Color, int drawLayer)
+{
+	std::shared_ptr<SquareGameObject2D> line = std::make_shared<SquareGameObject2D>(SquareGameObject2D(Name, drawLayer));
+	line->LoadSquareGameObject2D(Name, Size, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, int drawLayer)
+{
+	std::shared_ptr<SquareGameObject2D> line = std::make_shared<SquareGameObject2D>(SquareGameObject2D(Name, position, drawLayer));
+	line->LoadSquareGameObject2D(Name, Size, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, int drawLayer)
+{
+	std::shared_ptr<SquareGameObject2D> line = std::make_shared<SquareGameObject2D>(SquareGameObject2D(Name, position, rotation, drawLayer));
+	line->LoadSquareGameObject2D(Name, Size, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
+void GLTFSceneManager::AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, int drawLayer)
+{
+	std::shared_ptr<SquareGameObject2D> line = std::make_shared<SquareGameObject2D>(SquareGameObject2D(Name, position, rotation, scale, drawLayer));
+	line->LoadSquareGameObject2D(Name, Size, Color, drawLayer);
+	GameObjectList.emplace_back(line);
+}
+
 void GLTFSceneManager::AddLineGameObject2D(std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, int drawLayer)
 {
 	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(Name, drawLayer));
@@ -343,9 +378,9 @@ void GLTFSceneManager::AddLineGameObject2D(const std::string Name, const glm::ve
 
 void GLTFSceneManager::AddGridGameObject2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, int drawLayer)
 {
-	std::shared_ptr<LineGameObject2D> line = std::make_shared<LineGameObject2D>(LineGameObject2D(GridName, drawLayer));
-	line->LoadGridGameObject2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, drawLayer);
-	GameObjectList.emplace_back(line);
+	std::shared_ptr<GridGameObject2D> grid = std::make_shared<GridGameObject2D>(GridGameObject2D(GridName, drawLayer));
+	grid->LoadGridGameObject2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, drawLayer);
+	GameObjectList.emplace_back(grid);
 }
 
 void GLTFSceneManager::AddLineGameObject3D( std::string Name, const glm::vec3& StartPoint, const glm::vec3& EndPoint)
@@ -971,6 +1006,27 @@ std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetCubeMapSamplerBuffer()
 	}
 
 	return PointLightPropertiesBuffer;
+}
+
+std::vector<GameObject2D*> GLTFSceneManager::Get2DGameObjects()
+{
+	std::vector<GameObject2D*>  gameObject2DList;
+
+	for (auto& gameObject2D : GameObjectList)
+	{
+		if (gameObject2D->GetRenderType() == kLevelRenderer ||
+			gameObject2D->GetRenderType() == kLineRenderer2D ||
+			gameObject2D->GetRenderType() == kGridRenderer2D ||
+			gameObject2D->GetRenderType() == kSquareRenderer2D ||
+			gameObject2D->GetRenderType() == kDebugRenderer ||
+			gameObject2D->GetRenderType() == kSpriteRenderer)
+		{
+			GameObject2D* gameObject2DPtr = static_cast<GameObject2D*>(gameObject2D.get());
+			gameObject2DList.emplace_back(gameObject2DPtr);
+		}
+	}
+
+	return gameObject2DList;
 }
 
 std::vector<std::shared_ptr<LightBase>> GLTFSceneManager::GetAllLights()

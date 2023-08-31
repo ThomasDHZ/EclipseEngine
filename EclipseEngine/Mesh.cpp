@@ -23,12 +23,12 @@ void Mesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& 
 	glm::mat4 GlobalTransform = ParentMatrix * glm::mat4(1.0f);
 	if (node == nullptr)
 	{
-		MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+		MeshTransformBuffer.UpdateBufferMemory(&GlobalTransform, sizeof(glm::mat4));
 	}
 	else
 	{
 		GlobalTransform = ParentMatrix * node->NodeTransformMatrix;
-		MeshTransformBuffer.CopyBufferToMemory(&GlobalTransform, sizeof(glm::mat4));
+		MeshTransformBuffer.UpdateBufferMemory(&GlobalTransform, sizeof(glm::mat4));
 	}
 
 	if (node == nullptr)
@@ -387,6 +387,7 @@ void Mesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
 	constBuffer.MeshIndex = MeshBufferIndex;
+	constBuffer.MaterialIndex = gltfMaterialList[0]->GetMaterialBufferIndex();
 
 	VkDeviceSize offsets[] = { 0 };
 	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);

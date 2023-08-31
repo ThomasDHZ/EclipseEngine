@@ -75,7 +75,7 @@ void Material::UpdateBuffer()
 		MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
 	}
 
-	MaterialBuffer.CopyBufferToMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::Destroy()

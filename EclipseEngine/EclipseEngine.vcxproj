@@ -218,6 +218,10 @@
     <ClCompile Include="FrameBufferPipeline.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="GLTFRenderPass.cpp" />
+    <ClCompile Include="GridGameObject2D.cpp" />
+    <ClCompile Include="GridMesh2D.cpp" />
+    <ClCompile Include="LevelGameObject.cpp" />
+    <ClCompile Include="LevelMesh.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
     <ClCompile Include="LineGameObject2D.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -228,6 +232,8 @@
     <ClCompile Include="GLTFSceneManager.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="SpriteRenderPass.cpp" />
+    <ClCompile Include="SquareGameObject2D.cpp" />
+    <ClCompile Include="SquareMesh2D.cpp" />
     <ClCompile Include="SunLight.cpp" />
     <ClCompile Include="GLTF_GraphicsDescriptors.cpp" />
     <ClCompile Include="GLTF_GraphicsPipeline.cpp" />
@@ -252,12 +258,10 @@
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="JsonGraphicsPipeline.cpp" />
     <ClCompile Include="Level2D.cpp" />
-    <ClCompile Include="Level2DRenderer.cpp" />
     <ClCompile Include="LightDebugPipeline.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
     <ClCompile Include="LineGameObject3D.cpp" />
-    <ClCompile Include="Mesh2D.cpp" />
     <ClCompile Include="MeshPicker2DPipeline.cpp" />
     <ClCompile Include="MeshPicker3DPipeline.cpp" />
     <ClCompile Include="MeshPickerRenderPass2D.cpp" />
@@ -266,7 +270,6 @@
     <ClCompile Include="ParticalSystemRenderer.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PBRBakeReflectionPipeline.cpp" />
-    <ClCompile Include="PBRPlayRenderer.cpp" />
     <ClCompile Include="PBRReflectionRenderPass.cpp" />
     <ClCompile Include="PBRBloomPipeline.cpp" />
     <ClCompile Include="PBRBloomReflectionPipeline.cpp" />
@@ -369,6 +372,10 @@
     <ClInclude Include="FrameBufferPipeline.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="GLTFRenderPass.h" />
+    <ClInclude Include="GridGameObject2D.h" />
+    <ClInclude Include="GridMesh2D.h" />
+    <ClInclude Include="LevelGameObject.h" />
+    <ClInclude Include="LevelMesh.h" />
     <ClInclude Include="LightManagerMenu.h" />
     <ClInclude Include="LineGameObject2D.h" />
     <ClInclude Include="Material.h" />
@@ -379,6 +386,8 @@
     <ClInclude Include="GLTFSceneManager.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="SpriteRenderPass.h" />
+    <ClInclude Include="SquareGameObject2D.h" />
+    <ClInclude Include="SquareMesh2D.h" />
     <ClInclude Include="SunLight.h" />
     <ClInclude Include="GLTF_GraphicsDescriptors.h" />
     <ClInclude Include="GLTF_GraphicsPipeline.h" />
@@ -408,13 +417,11 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="JsonGraphicsPipeline.h" />
     <ClInclude Include="Level2D.h" />
-    <ClInclude Include="Level2DRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightDebugPipeline.h" />
     <ClInclude Include="LineMesh2D.h" />
     <ClInclude Include="LineMesh3D.h" />
     <ClInclude Include="LineGameObject3D.h" />
-    <ClInclude Include="Mesh2D.h" />
     <ClInclude Include="MeshPicker2DPipeline.h" />
     <ClInclude Include="MeshPicker3DPipeline.h" />
     <ClInclude Include="MeshPickerRenderPass2D.h" />

@@ -4,6 +4,8 @@
 #include "Mesh.h"
 #include "GLTF_GraphicsDescriptors.h"
 #include "LineMesh2D.h"
+#include "GridMesh2D.h"
+#include "SquareMesh2D.h"
 
 class Model
 {
@@ -398,6 +400,9 @@ public:
 
 	void LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+
+	void LoadSquareMesh2D(const std::string& LineName, float Size, const glm::vec3& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadSquareMesh2D(const std::string& LineName, float Size, const glm::vec4& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void LoadLineMesh2D(const std::string& LineName, std::vector<LineVertex2D>& vertices, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPoint, const glm::vec2& EndPoint, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);

@@ -14,6 +14,9 @@
 #include "SpriteGameObject3D.h"
 #include "LineGameObject2D.h"
 #include "LineGameObject3D.h"
+#include "GridGameObject2D.h"
+#include "SquareGameObject2D.h"
+#include "LevelGameObject.h"
 
 class GLTFSceneManager
 {
@@ -50,6 +53,8 @@ public:
 	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterMapList;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	
+	static void AddLevelGameObject(const std::string Name, std::shared_ptr<Material> material, int drawLayer);
+
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation);
@@ -74,6 +79,11 @@ public:
 	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position);
 	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
 	static void AddSpriteGameObject3D(std::string Name, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, int drawLayer);
+	static void AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, int drawLayer);
+	static void AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, int drawLayer);
+	static void AddSquareGameObject2D(const std::string Name, float Size, const glm::vec4& Color, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale, int drawLayer);
 
 	static void AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, int drawLayer);
 	static void AddLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec3& position, int drawLayer);
@@ -145,7 +155,8 @@ public:
 	static std::vector<VkDescriptorBufferInfo> GetPointLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetSpotLightPropertiesBuffer();
 	static std::vector<VkDescriptorBufferInfo> GetCubeMapSamplerBuffer();
-	static VkDescriptorBufferInfo GetReflectionMapBuffer();
+
+	static std::vector<GameObject2D*> Get2DGameObjects();
 
 	static std::vector<std::shared_ptr<LightBase>> GetAllLights();
 	static std::vector<std::shared_ptr<SunLight>> GetSunLights() { return SunLightList; }

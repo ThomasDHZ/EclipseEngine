@@ -116,6 +116,16 @@ void OrthographicCamera::Update(float deltaTime)
 
 void OrthographicCamera::UpdateMouse()
 {
+	if (glfwGetMouseButton(Window::GetWindowPtr(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	{
+		double XPos = Mouse::GetMouseCoords().x;
+		double YPos = Mouse::GetMouseCoords().y;
+
+		Position.x += XPos + Mouse::GetLastMouseCoords().x;
+		Position.y += Mouse::GetLastMouseCoords().y + YPos;
+
+		Mouse::SetLastMouseCoords(glm::vec2(XPos, YPos));
+	}
 }
 
 void OrthographicCamera::UpdateKeyboard(float deltaTime)

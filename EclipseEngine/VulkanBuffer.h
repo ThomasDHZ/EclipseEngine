@@ -19,7 +19,7 @@ public:
 
 	VkResult CreateBuffer(void* BufferData, VkDeviceSize BufferSize, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
 	void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-	void CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize);
+	void UpdateBufferMemory(void* DataToCopy, VkDeviceSize BufferSize);
 	VkResult UpdateBufferSize(VkDeviceSize bufferSize);
 	void DestroyBuffer();
 

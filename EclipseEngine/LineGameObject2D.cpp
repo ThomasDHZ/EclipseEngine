@@ -51,10 +51,3 @@ void LineGameObject2D::LoadLineGameObject2D(const std::string Name, std::vector<
 	GameObjectRenderer->LoadLineMesh2D(Name, VertexList, GameObjectTransform, GameObjectID);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
-
-void LineGameObject2D::LoadGridGameObject2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, int drawLayer)
-{
-	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadGridMesh2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectTransform, GameObjectID);
-	VulkanRenderer::UpdateRendererFlag = true;
-}

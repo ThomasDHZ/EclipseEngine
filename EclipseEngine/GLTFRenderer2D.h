@@ -5,7 +5,7 @@
 class GLTFRenderer2D
 {
 private:
-	RenderPass2D renderPass2D;
+	RenderPass2D LevelRenderPass2D;
 	FrameBufferRenderPass frameBufferRenderPass;
 public:
 	GLTFRenderer2D();

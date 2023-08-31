@@ -150,6 +150,45 @@ void Model::LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Mate
 		mesh->UpdateMeshTransformBuffer();
 	}
 }
+
+void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm::vec3& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<SquareMesh2D> mesh = std::make_shared<SquareMesh2D>(SquareMesh2D(LineName, Size, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+
+void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm::vec4& Color, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+	std::shared_ptr<SquareMesh2D> mesh = std::make_shared<SquareMesh2D>(SquareMesh2D(LineName, Size, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	Update(GameObjectMatrix);
+	UpdateMeshPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+
 void Model::LoadLineMesh2D(const std::string& LineName, std::vector<LineVertex2D>& vertices, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
@@ -249,7 +288,7 @@ void Model::LoadGridMesh2D(const std::string& GridName, int GridSizeX, int GridS
 	GameObjectTransformMatrix = GameObjectMatrix;
 	ModelTransformMatrix = glm::mat4(1.0f);
 
-	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	std::shared_ptr<GridMesh2D> mesh = std::make_shared<GridMesh2D>(GridMesh2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
 	Update(GameObjectMatrix);

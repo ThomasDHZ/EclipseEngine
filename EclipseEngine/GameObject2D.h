@@ -4,7 +4,7 @@
 class GameObject2D : public GameObject
 {
 private:
-
+	int DrawLayer = 0;
 public:
 	GameObject2D();
 	GameObject2D(const std::string Name, GameObjectRenderType renderType);
@@ -30,5 +30,7 @@ public:
 	glm::vec2 GetGameObjectScale() { return glm::vec2(GameObject::GetGameObjectScale().x, GameObject::GetGameObjectScale().y); }
 
 	void LoadSpriteGameObject2D(const std::string Name, std::shared_ptr<Material> material);
+
+	int GetDrawLayer() { return DrawLayer; }
 };
 

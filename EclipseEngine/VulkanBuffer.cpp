@@ -69,7 +69,7 @@ void VulkanBuffer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSi
 	VulkanRenderer::EndSingleTimeCommands(commandBuffer);
 }
 
-void VulkanBuffer::CopyBufferToMemory(void* DataToCopy, VkDeviceSize BufferSize)
+void VulkanBuffer::UpdateBufferMemory(void* DataToCopy, VkDeviceSize BufferSize)
 {
 	memcpy(data, DataToCopy, (size_t)BufferSize);
 }

@@ -109,14 +109,12 @@ void RenderPass2D::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    //oldRenderer2DPipeline.InitializePipeline(pipelineInfo);
-       Renderer2DPipeline = JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-       LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-
-       //WireframePipelineList.emplace_back(JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, gameObjectList[x], ColorAttachmentList, SampleCount, sizeof(SceneProperties)));
+    Renderer2DPipeline = JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
 }
 
-VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gameObjectList)
+VkCommandBuffer RenderPass2D::Draw(std::vector<GameObject2D*> gameObjectList)
 {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -155,34 +153,59 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<std::shared_ptr<GameObject>>& gam
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    for (int x = 0; x < gameObjectList.size(); x++)
-    {
-        switch (gameObjectList[x]->RenderType)
+    //for (int v = 0; v < 4; v++)
+    //{
+        for (int x = 0; x < gameObjectList.size(); x++)
         {
-        case GameObjectRenderType::kSpriteRenderer:
-        {
-            if (GLTFSceneManager::WireframeModeFlag)
-            {
-                // WireframePipelineList[x].DrawSprite<SceneProperties>(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
-            }
-            else
-            {
-                Renderer2DPipeline.DrawSprite(commandBuffer, gameObjectList[x], GLTFSceneManager::sceneProperites);
-            }
-            break;
+            auto a = *gameObjectList[x];
+            auto gameObject = std::make_shared<GameObject2D>(a);
+           /* if (gameObject->GetDrawLayer() == v)
+            {*/
+                switch (gameObject->RenderType)
+                {
+                    case GameObjectRenderType::kSpriteRenderer:
+                    {
+                        if (GLTFSceneManager::WireframeModeFlag)
+                        {
+                            WireframePipeline.DrawSprite(commandBuffer, gameObject, GLTFSceneManager::sceneProperites);
+                        }
+                        else
+                        {
+                            Renderer2DPipeline.DrawSprite(commandBuffer, gameObject, GLTFSceneManager::sceneProperites);
+                        }
+                        break;
+                    }
+                    case GameObjectRenderType::kLevelRenderer:
+                    {
+                        if (GLTFSceneManager::WireframeModeFlag)
+                        {
+                            WireframePipeline.DrawSprite(commandBuffer, gameObject, GLTFSceneManager::sceneProperites);
+                        }
+                        else
+                        {
+                            Renderer2DPipeline.DrawSprite(commandBuffer, gameObject, GLTFSceneManager::sceneProperites);
+                        }
+                        break;
+                    }
+                    case GameObjectRenderType::kLineRenderer2D:
+                    {
+                        LinePipeline.DrawLine(commandBuffer, gameObject);
+                        break;
+                    }
+                    case GameObjectRenderType::kGridRenderer2D:
+                    {
+                        LinePipeline.DrawLine(commandBuffer, gameObject);
+                        break;
+                    }
+                    case GameObjectRenderType::kSquareRenderer2D:
+                    {
+                        LinePipeline.DrawLine(commandBuffer, gameObject);
+                        break;
+                    }
+                }
+            //}
         }
-        case GameObjectRenderType::kLineRenderer2D:
-        {
-            LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
-            break;
-        }
-        case GameObjectRenderType::kGridRenderer2D:
-        {
-            LinePipeline.DrawLine(commandBuffer, gameObjectList[x]);
-            break;
-        }
-        }
-    }
+    //}
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

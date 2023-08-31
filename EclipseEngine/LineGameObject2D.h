@@ -15,7 +15,5 @@ public:
 	void LoadLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& Color, int drawLayer);
 	void LoadLineGameObject2D(const std::string Name, const glm::vec2& StartPoint, const glm::vec2& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, int drawLayer);
 	void LoadLineGameObject2D(const std::string Name, std::vector<LineVertex2D> VertexList, int drawLayer);
-
-	void LoadGridGameObject2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, int drawLayer);
 };
 
