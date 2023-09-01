@@ -397,6 +397,21 @@ void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptor
 	vkCmdDrawIndexed(commandBuffer, IndexCount, 1, 0, 0, 0);
 }
 
+void Mesh::DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+{
+	VkDeviceSize offsets[] = { 0 };
+	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);
+	if (IndexCount == 0)
+	{
+		vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
+	}
+	else
+	{
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+		vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
+	}
+}
+
 void Mesh::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout)
 {
 	VkDeviceSize offsets[] = { 0 };

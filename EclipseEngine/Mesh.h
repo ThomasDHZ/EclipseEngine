@@ -10,6 +10,8 @@
 struct GLTFInstanceMeshDataStruct
 {
 	uint64_t MaterialBufferIndex = 0;
+	std::vector<Vertex2D> VertexData;
+	std::vector<uint32_t> IndiceData;
 	glm::vec3 InstancePosition = glm::vec3(0.0f);
 	glm::vec3 InstanceRotation = glm::vec3(0.0f);
 	glm::vec3 InstanceScale = glm::vec3(1.0f);
@@ -171,6 +173,23 @@ public:
 	}
 	virtual void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer);
 	
+	template<class T>
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);
+		if (IndexCount == 0)
+		{
+			vkCmdDraw(commandBuffer, VertexCount, 1, 0, 0);
+		}
+		else
+		{
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorset, 0, nullptr);
+			vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
+		}
+	}
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer);
+
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);
 	virtual void Destroy();
 

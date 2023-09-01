@@ -7,3 +7,5 @@
 //Tile::~Tile()
 //{
 //}
+
+#include "Tile.h"

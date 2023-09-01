@@ -225,9 +225,6 @@
     <ClCompile Include="BillBoardMeshRenderer.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Level2D.cpp">
-      <Filter>Source Files\Level2D</Filter>
-    </ClCompile>
     <ClCompile Include="BillboardPipeline.cpp">
       <Filter>Source Files\Renderer\Pipelines</Filter>
     </ClCompile>
@@ -579,6 +576,9 @@
     <ClCompile Include="LevelMesh.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="LevelTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -648,9 +648,6 @@
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
-      <Filter>Header Files\Level2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Level2D.h">
       <Filter>Header Files\Level2D</Filter>
     </ClInclude>
     <ClInclude Include="LineGameObject3D.h">
@@ -1061,6 +1058,9 @@
     <ClInclude Include="LevelMesh.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="LevelTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1157,9 +1157,6 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\Renderer2D.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\Renderer2D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\SelectedObjectShader.frag">
@@ -1357,6 +1354,9 @@
     </None>
     <None Include="..\Shaders\SpriteVertexBuilder.glsl">
       <Filter>Shader\Include\Raster</Filter>
+    </None>
+    <None Include="..\Shaders\Renderer2D.vert">
+      <Filter>Source Files\Engine\Renderer</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -153,14 +153,14 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<GameObject2D*> gameObjectList)
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
     vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
     vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-    //for (int v = 0; v < 4; v++)
-    //{
+    for (int w = VulkanRenderer::GetMax2DLayerCount(); w >= 0; w--)
+    {
         for (int x = 0; x < gameObjectList.size(); x++)
         {
             auto a = *gameObjectList[x];
             auto gameObject = std::make_shared<GameObject2D>(a);
-           /* if (gameObject->GetDrawLayer() == v)
-            {*/
+            if (gameObject->GetDrawLayer() == w)
+            {
                 switch (gameObject->RenderType)
                 {
                     case GameObjectRenderType::kSpriteRenderer:
@@ -203,9 +203,9 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<GameObject2D*> gameObjectList)
                         break;
                     }
                 }
-            //}
+            }
         }
-    //}
+    }
     vkCmdEndRenderPass(commandBuffer);
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

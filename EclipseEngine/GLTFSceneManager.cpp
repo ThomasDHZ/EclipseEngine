@@ -19,6 +19,7 @@ std::vector<std::shared_ptr<SpotLight>>				 GLTFSceneManager::SpotLightList;
 float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
+
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
 
@@ -129,10 +130,10 @@ void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_pt
 	}
 }
 
-void GLTFSceneManager::AddLevelGameObject(const std::string Name, std::shared_ptr<Material> material, int drawLayer)
+void GLTFSceneManager::AddLevelGameObject(const std::string Name, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
 {
 	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(Name, glm::vec2(0.0f), drawLayer));
-	sprite->LoadSpriteGameObject2D(Name, material);
+	sprite->LoadLevelGameObject2D(Name, materialList);
 	GameObjectList.emplace_back(sprite);
 }
 

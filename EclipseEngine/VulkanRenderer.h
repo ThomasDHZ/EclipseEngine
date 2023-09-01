@@ -53,10 +53,12 @@ private:
 	static VulkanDebugger VulkanDebug;
 	static VulkanSwapChain SwapChain;
 	static Timer FrameTimer;
+
 public:
 
 	static bool UpdateRendererFlag;
 	static bool ImGUILayerActive;
+	static uint32_t Max2DLayerCount;
 
 	static PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 	static PFN_vkCreateAccelerationStructureKHR vkCreateAccelerationStructureKHR;
@@ -100,4 +102,5 @@ public:
 	static uint32_t GetSwapChainImageCount() { return SwapChain.GetSwapChainImageCount(); }
 	static float 	GetFrameTimeDurationSeconds() { return FrameTimer.GetTimerDurationSeconds(); };
 	static float 	GetFrameTimeDurationMilliseconds() { return FrameTimer.GetTimerDurationMilliseconds(); };
+	static uint32_t GetMax2DLayerCount() { return Max2DLayerCount; }
 };

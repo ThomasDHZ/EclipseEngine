@@ -1,3 +1,7 @@
+
+class Tile
+{
+};
 //#pragma once
 //#include "Mesh2D.h"
 //

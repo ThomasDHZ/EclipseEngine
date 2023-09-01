@@ -97,6 +97,7 @@ PBRRenderer::PBRRenderer()
 	GrassMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(GrassMaterial);
 
+
 	GLTFInstancingDataStruct instance = {};
 	std::vector<std::shared_ptr<Material>> instanceMaterialList;
 	instanceMaterialList.emplace_back(IronMaterial);

@@ -222,6 +222,7 @@
     <ClCompile Include="GridMesh2D.cpp" />
     <ClCompile Include="LevelGameObject.cpp" />
     <ClCompile Include="LevelMesh.cpp" />
+    <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
     <ClCompile Include="LineGameObject2D.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -257,7 +258,6 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="GridRenderer3D.cpp" />
     <ClCompile Include="JsonGraphicsPipeline.cpp" />
-    <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="LightDebugPipeline.cpp" />
     <ClCompile Include="LineMesh2D.cpp" />
     <ClCompile Include="LineMesh3D.cpp" />
@@ -376,6 +376,7 @@
     <ClInclude Include="GridMesh2D.h" />
     <ClInclude Include="LevelGameObject.h" />
     <ClInclude Include="LevelMesh.h" />
+    <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />
     <ClInclude Include="LineGameObject2D.h" />
     <ClInclude Include="Material.h" />
@@ -416,7 +417,6 @@
     <ClInclude Include="EnvironmentToCubeRenderPass.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="JsonGraphicsPipeline.h" />
-    <ClInclude Include="Level2D.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightDebugPipeline.h" />
     <ClInclude Include="LineMesh2D.h" />

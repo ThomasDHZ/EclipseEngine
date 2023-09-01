@@ -37,18 +37,18 @@ public:
 
 	static void StartUp()
 	{
-		musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
-		musicPlayer.Play();
+		//musicPlayer.StartUp("../Music/AMBForst_Forest (ID 0100)_BSB.wav");
+		//musicPlayer.Play();
 	}
 
 	static void Update()
 	{
-		musicPlayer.UpdateBufferStream();
+		//musicPlayer.UpdateBufferStream();
 	}
 
 	static void Destory()
 	{
-		musicPlayer.Destroy();
+		//musicPlayer.Destroy();
 	}
 
 	static void ImGuiSceneHierarchy()
@@ -56,17 +56,17 @@ public:
 		ImGui::Begin("Sound Window");
 		if (ImGui::Button("Play"))
 		{
-			musicPlayer.Play();
+			//musicPlayer.Play();
 		}
 
 		if (ImGui::Button("Pause"))
 		{
-			musicPlayer.Pause();
+			//musicPlayer.Pause();
 		}
 
 		if (ImGui::Button("Stop"))
 		{
-			musicPlayer.Stop();
+			//musicPlayer.Stop();
 		}
 		ImGui::End();
 	}

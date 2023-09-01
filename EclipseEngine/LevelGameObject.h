@@ -4,14 +4,14 @@
 class LevelGameObject : public GameObject2D
 {
 private:
-	const std::vector<Vertex2D> SpriteVertexList =
+	const std::vector<Vertex2D> TileVertexList =
 	{
 	  { {0.0f, 0.0f},  {1.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
 	  { {1.0f, 0.0f},  {0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
 	  { {1.0f, 1.0f},  {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
 	  { {0.0f, 1.0f},  {1.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }
 	};
-	const std::vector<uint32_t> SpriteIndexList = {
+	const std::vector<uint32_t> TileIndexList = {
 		0, 1, 3,
 		1, 2, 3
 	};
@@ -27,6 +27,6 @@ public:
 	virtual void Update(float DeltaTime) override;
 	virtual void Destroy() override;
 
-	void LoadSpriteGameObject2D(const std::string Name, std::shared_ptr<Material> material);
+	void LoadLevelGameObject2D(const std::string Name, std::vector<std::shared_ptr<Material>> materialList);
 };
 

@@ -9,9 +9,13 @@ GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderTy
 	DrawLayer = 0;
 }
 
-GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, drawLayer))
+GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, 0.0f))
 {
 	DrawLayer = drawLayer;
+	if (DrawLayer > VulkanRenderer::GetMax2DLayerCount())
+	{
+		VulkanRenderer::Max2DLayerCount = DrawLayer;
+	}
 }
 
 GameObject2D::GameObject2D(const std::string Name, GameObjectRenderType renderType, const glm::vec2& position, const glm::vec2& rotation, int drawLayer) : GameObject(Name, renderType, glm::vec3(position.x, position.y, drawLayer), glm::vec3(rotation.x, rotation.y, 0.0f))

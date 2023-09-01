@@ -59,6 +59,7 @@ VkSurfaceKHR VulkanRenderer::Surface = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
 bool VulkanRenderer::UpdateRendererFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
+uint32_t VulkanRenderer::Max2DLayerCount = 5;
 
 Timer VulkanRenderer::FrameTimer = Timer();
 
