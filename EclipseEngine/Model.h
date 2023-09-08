@@ -469,6 +469,23 @@ public:
 	}
 
 	template<class T>
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawLevelLayer<T>(commandBuffer, descriptorset, shaderPipelineLayout);
+		}
+	}
+
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			mesh->DrawLevelLayer(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+		}
+	}
+
+	template<class T>
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
 	{
 		for (auto& mesh : MeshList)

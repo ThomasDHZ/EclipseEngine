@@ -197,6 +197,18 @@ public:
 	}
 
 	template<class T>
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		GameObjectRenderer->DrawLevelLayer<T>(commandBuffer, descriptorset, shaderPipelineLayout);
+	}
+
+	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		GameObjectRenderer->DrawLevelLayer(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+	}
+
+
+	template<class T>
 	void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
 	{
 		GameObjectRenderer->DrawSprite<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);

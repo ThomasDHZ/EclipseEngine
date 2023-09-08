@@ -54,6 +54,11 @@ void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatri
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 	
+	if (InstanceCount > 0)
+	{
+		InstanceBuffer.UpdateBufferMemory(InstancedVertex2DDataList.data(), InstancedVertex2DDataList.size() * sizeof(InstancedVertexData2D));
+	}
+
 	/*if(IndexCount != 0)
 	{
 		glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
@@ -238,6 +243,34 @@ void Mesh::InstancingStartUp(GLTFInstancingDataStruct& instanceData)
 	}
 }
 
+void Mesh::Instancing2DStartUp(GLTFInstancingDataStruct& instanceData)
+{
+	InstanceCount = instanceData.InstanceMeshDataList.size();
+	if (InstanceCount > 0)
+	{
+		for(int x= 0; x < instanceData.InstanceMeshDataList.size(); x++)
+		{
+			InstancedVertexData2D instancVertexeData;
+
+			glm::mat4 TransformMatrix = glm::mat4(1.0f);
+			TransformMatrix = glm::translate(TransformMatrix, glm::vec3(instanceData.InstanceMeshDataList[x].InstancePosition.x, instanceData.InstanceMeshDataList[x].InstancePosition.y, 0.0f));
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instanceData.InstanceMeshDataList[x].InstanceRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(instanceData.InstanceMeshDataList[x].InstanceRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			TransformMatrix = glm::scale(TransformMatrix, glm::vec3(instanceData.InstanceMeshDataList[x].InstanceScale.x, instanceData.InstanceMeshDataList[x].InstanceScale.y, 0.0f));
+
+			const auto matID = rand() % instanceData.MaterialList.size();
+
+			instancVertexeData.InstanceModel = TransformMatrix;
+			instancVertexeData.UVOffset = instanceData.UVOffset[x];
+			instancVertexeData.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
+			InstancedVertex2DDataList.emplace_back(instancVertexeData);
+		}
+
+		InstanceBuffer.CreateBuffer(InstancedVertex2DDataList.data(), InstancedVertex2DDataList.size() * sizeof(InstancedVertexData2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	}
+}
+
 void Mesh::AnimationStartUp(GLTFMeshLoader3D& meshLoader)
 {
 	BoneCount = meshLoader.BoneCount;
@@ -400,6 +433,8 @@ void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptor
 void Mesh::DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
 	VkDeviceSize offsets[] = { 0 };
+	vkCmdPushConstants(commandBuffer, shaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SceneProperties), &GLTFSceneManager::sceneProperites);
+	vkCmdBindVertexBuffers(commandBuffer, 0, 1, &VertexBuffer->Buffer, offsets);
 	vkCmdBindVertexBuffers(commandBuffer, 1, 1, InstanceBuffer.GetBufferPtr(), offsets);
 	if (IndexCount == 0)
 	{
@@ -408,6 +443,7 @@ void Mesh::DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descri
 	else
 	{
 		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderPipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+		vkCmdBindIndexBuffer(commandBuffer, IndexBuffer->Buffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
 	}
 }

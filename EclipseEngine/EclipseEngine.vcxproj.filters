@@ -1356,7 +1356,13 @@
       <Filter>Shader\Include\Raster</Filter>
     </None>
     <None Include="..\Shaders\Renderer2D.vert">
-      <Filter>Source Files\Engine\Renderer</Filter>
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LevelRenderer2D.frag">
+      <Filter>Shader\RasterizationShaders</Filter>
+    </None>
+    <None Include="..\Shaders\LevelRenderer2D.vert">
+      <Filter>Shader\RasterizationShaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

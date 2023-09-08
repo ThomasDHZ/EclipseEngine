@@ -182,6 +182,71 @@ struct Vertex2D
     }
 };
 
+struct InstancedVertexData2D
+{
+    InstancedVertexData2D() {};
+
+    glm::mat4 InstanceModel = glm::mat4(1.0f);
+    glm::vec2 UVOffset = glm::vec2(0.0f);
+    uint32_t MaterialID = 0;
+
+    static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
+    {
+        std::vector<VkVertexInputBindingDescription>  bindingDescriptionList{};
+        VkVertexInputBindingDescription bindingDescription{};
+
+        bindingDescription.binding = 1;
+        bindingDescription.stride = sizeof(InstancedVertexData2D);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_INSTANCE;
+        bindingDescriptionList.emplace_back(bindingDescription);
+
+        return bindingDescriptionList;
+    }
+
+    static std::vector<VkVertexInputAttributeDescription> AddInstnacingAttributeDescription(std::vector<VkVertexInputAttributeDescription>& AttributeDescriptions)
+    {
+        VkVertexInputAttributeDescription AttributeDescription;
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 3;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 0;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 4;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 1;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 5;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 2;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 6;
+        AttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
+        AttributeDescription.offset = sizeof(glm::vec4) * 3;
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 7;
+        AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
+        AttributeDescription.offset = offsetof(InstancedVertexData2D, UVOffset);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        AttributeDescription.binding = 1;
+        AttributeDescription.location = 8;
+        AttributeDescription.format = VK_FORMAT_R32_SINT;
+        AttributeDescription.offset = offsetof(InstancedVertexData2D, MaterialID);
+        AttributeDescriptions.emplace_back(AttributeDescription);
+
+        return AttributeDescriptions;
+    }
+};
+
 struct Vertex3D
 {
     glm::vec3 Position = glm::vec3(0.0f);

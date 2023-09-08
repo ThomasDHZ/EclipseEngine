@@ -6,6 +6,7 @@
 class RenderPass2D : public RenderPass
 {
 private:
+	JsonGraphicsPipeline LevelRenderer2DPipeline;
 	JsonGraphicsPipeline Renderer2DPipeline;
 	JsonGraphicsPipeline WireframePipeline;
 	JsonGraphicsPipeline LinePipeline;

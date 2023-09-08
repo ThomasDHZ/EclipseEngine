@@ -7,34 +7,16 @@ SpriteMesh2D::SpriteMesh2D()
 
 SpriteMesh2D::SpriteMesh2D(const std::string& SpriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
-	std::vector<Vertex2D> SpriteVertexList;
-	std::vector<uint32_t> SpriteIndexList;
-
-	Vertex2D vertex;
-	vertex.Position = { -0.5f, -0.5f};
-	vertex.UV = { 1.0f, 0.0f };
-	vertex.Color = { 1.0f, 0.0f, 0.0f, 1.0f };
-	SpriteVertexList.emplace_back(vertex);
-
-	Vertex2D vertex2;
-	vertex2.Position = { 0.5f, -0.5f};
-	vertex2.UV = { 0.0f, 0.0f };
-	vertex2.Color = { 0.0f, 1.0f, 0.0f, 1.0f };
-	SpriteVertexList.emplace_back(vertex2);
-
-	Vertex2D vertex3;
-	vertex3.Position = { 0.5f,  0.5f };
-	vertex3.UV = { 0.0f, 1.0f };
-	vertex3.Color = { 0.0f, 0.0f, 1.0f, 1.0f };
-	SpriteVertexList.emplace_back(vertex3);
-
-	Vertex2D vertex4;
-	vertex4.Position = { -0.5f,  0.5f };
-	vertex4.UV = { 1.0f, 1.0f };
-	SpriteVertexList.emplace_back(vertex4);
-
-    SpriteIndexList = {
-		0, 1, 2, 2, 3, 0
+	std::vector<Vertex2D> SpriteVertexList =
+	{
+	  { {0.0f, 0.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
+	  { {1.0f, 0.0f},  {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
+	  { {1.0f, 1.0f},  {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+	  { {0.0f, 1.0f},  {0.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }
+	};
+	std::vector<uint32_t> SpriteIndexList = {
+	   0, 1, 3,
+	   1, 2, 3
 	};
 
 	MeshID = 0;

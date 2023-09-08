@@ -35,9 +35,9 @@ void GLTFRenderer2D::BuildRenderer()
 	GLTFSceneManager::UpdateBufferIndex();
 
 	std::vector<std::shared_ptr<Material>> materialList;
-	materialList.emplace_back(material);
+	materialList.emplace_back(material3);
 
-	//GLTFSceneManager::AddLevelGameObject("Testobject", materialList, 0);
+	 GLTFSceneManager::AddLevelGameObject("Testobject", materialList, 0);
 	//GLTFSceneManager::AddLevelGameObject("Testobject2", material3, 2);
 
 	//for(int x = 0; x < 100; x++)
@@ -47,9 +47,9 @@ void GLTFRenderer2D::BuildRenderer()
 	//		GLTFSceneManager::AddSpriteGameObject2D("Testobject3", material, glm::vec2((float)x, (float)y), 1);
 	//	}
 	//}
-	//GLTFSceneManager::AddSpriteGameObject2D("Testobject2", material2, glm::vec2(1.5f, 0.0f), 1);
-	//GLTFSceneManager::AddSpriteGameObject2D("Testobject3", material3, glm::vec2(2.0f, 0.0f), 5);
-	//GLTFSceneManager::AddSpriteGameObject2D("Testobject4", material, glm::vec2(2.5f, 0.0f), 3);
+	GLTFSceneManager::AddSpriteGameObject2D("Testobject2", material2, glm::vec2(1.5f, 0.0f), 1);
+	GLTFSceneManager::AddSpriteGameObject2D("Testobject3", material3, glm::vec2(2.0f, 0.0f), 5);
+	GLTFSceneManager::AddSpriteGameObject2D("Testobject4", material, glm::vec2(2.5f, 0.0f), 3);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject5", material2, glm::vec2(0.0f, 1.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject6", material3, glm::vec2(1.0f, 1.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject7", material, glm::vec2(2.0f, 1.0f), 1);

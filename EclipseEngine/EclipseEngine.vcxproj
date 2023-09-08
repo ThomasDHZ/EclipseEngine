@@ -162,6 +162,8 @@
     <None Include="..\Shaders\GLTFBRDFShader.vert" />
     <None Include="..\Shaders\InstanceWireFrame.frag" />
     <None Include="..\Shaders\InstanceWireFrame.vert" />
+    <None Include="..\Shaders\LevelRenderer2D.frag" />
+    <None Include="..\Shaders\LevelRenderer2D.vert" />
     <None Include="..\Shaders\LightFunctions.glsl" />
     <None Include="..\Shaders\LightProperties.glsl" />
     <None Include="..\Shaders\MaterialBuilder.glsl" />
