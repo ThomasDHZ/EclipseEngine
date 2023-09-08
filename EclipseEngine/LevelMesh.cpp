@@ -34,8 +34,7 @@ LevelMesh::LevelMesh(const std::string& SpriteName, std::vector<std::shared_ptr<
 			instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 1.0f), float(y * 1.0f), 0.0f);
 
 			instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
-			instance.UVOffset.emplace_back(glm::vec2(0.0f));
-			//instance.UVOffset.emplace_back(glm::vec2(RandomNumber::GenerateRandomFloat(0.0f, 1.0f), RandomNumber::GenerateRandomFloat(0.0f, 1.0f)));
+			instance.UVOffset.emplace_back(glm::vec2(0.8f, 0.2f));
 			instance.MaterialList = materialList;
 		}
 	}

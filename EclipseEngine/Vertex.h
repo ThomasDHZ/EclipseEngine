@@ -243,6 +243,12 @@ struct InstancedVertexData2D
         AttributeDescription.offset = offsetof(InstancedVertexData2D, MaterialID);
         AttributeDescriptions.emplace_back(AttributeDescription);
 
+        //AttributeDescription.binding = 1;
+        //AttributeDescription.location = 9;
+        //AttributeDescription.format = VK_FORMAT_R8_;
+        //AttributeDescription.offset = offsetof(InstancedVertexData2D, MaterialID);
+        //AttributeDescriptions.emplace_back(AttributeDescription);
+
         return AttributeDescriptions;
     }
 };

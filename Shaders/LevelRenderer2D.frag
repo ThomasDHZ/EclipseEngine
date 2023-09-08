@@ -97,8 +97,9 @@ layout(push_constant) uniform SceneData
 
 
 void main() {
-
-	MaterialProperties material = materialBuffer[MaterialID].materialProperties;
+   	MaterialProperties material = materialBuffer[MaterialID].materialProperties;
+	material.Albedo = texture(TextureMap[material.AlbedoMap], UV + UVOffset).rgb;
+	material.Alpha = texture(TextureMap[material.AlbedoMap], UV + UVOffset).a;
 	
 	if(material.Alpha != 1.0f)
 	{
@@ -106,12 +107,9 @@ void main() {
 	}
 
    vec3 result = material.Albedo;
-   vec2 finalUV = vec2(0.0f);
-	finalUV.x = UV.x + UVOffset.x;
-	finalUV.y = UV.y + UVOffset.y;
-
+   
    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
 		finalResult = pow(finalResult, vec3(1.0 / 2.2f));
 
-   outColor = vec4(texture(TextureMap[1], finalUV).rgb,1.0f);
+   outColor = vec4(finalResult,1.0f);
 }
