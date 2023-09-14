@@ -130,10 +130,10 @@ void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_pt
 	}
 }
 
-void GLTFSceneManager::AddLevelGameObject(const std::string Name, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
+void GLTFSceneManager::AddLevelGameObject(const std::string Name, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
 {
-	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(Name, glm::vec2(0.0f), drawLayer));
-	sprite->LoadLevelGameObject2D(Name, materialList);
+	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(Name, levelBounds, glm::vec2(0.0f), drawLayer));
+	sprite->LoadLevelGameObject2D(Name, levelBounds, materialList);
 	GameObjectList.emplace_back(sprite);
 }
 

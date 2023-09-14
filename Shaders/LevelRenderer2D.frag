@@ -8,10 +8,11 @@
 #include "MaterialProperties.glsl"
 
 layout(location = 0) in vec2 Position;
-layout(location = 1) in vec2 UV;
+layout(location = 1) in vec2 VertexUV;
 layout(location = 2) in vec3 Color;
 layout(location = 3) in vec2 UVOffset;
 layout(location = 4) in flat int MaterialID;
+layout(location = 5) in vec2 SpriteFlip;
 
 layout(location = 0) out vec4 outColor;
 
@@ -74,6 +75,7 @@ layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[]
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
 
+
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
@@ -97,10 +99,20 @@ layout(push_constant) uniform SceneData
 
 
 void main() {
-   	MaterialProperties material = materialBuffer[MaterialID].materialProperties;
-	material.Albedo = texture(TextureMap[material.AlbedoMap], UV + UVOffset).rgb;
-	material.Alpha = texture(TextureMap[material.AlbedoMap], UV + UVOffset).a;
-	
+	vec2 UV = VertexUV + UVOffset;
+	if (SpriteFlip.x == 1.0f)
+    {
+        UV.x = 1.0 - UV.x;
+    }
+	if (SpriteFlip.y == 1.0f)
+    {
+        UV.y = 1.0 - UV.y;
+    }
+
+	MaterialProperties material = materialBuffer[MaterialID].materialProperties;
+	material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
+	material.Alpha = texture(TextureMap[material.AlbedoMap], UV).a;
+
 	if(material.Alpha != 1.0f)
 	{
 		discard;

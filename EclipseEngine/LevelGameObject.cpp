@@ -33,10 +33,10 @@ void LevelGameObject::Destroy()
 {
 }
 
-void LevelGameObject::LoadLevelGameObject2D(const std::string Name, std::vector<std::shared_ptr<Material>> materialList)
+void LevelGameObject::LoadLevelGameObject2D(const std::string Name, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList)
 {
 	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadLevelMesh2D(Name, materialList, GameObjectTransform, GameObjectID);
+	GameObjectRenderer->LoadSpriteLayerMesh2D(Name, levelBounds, materialList, GameObjectTransform, GameObjectID);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 

@@ -108,7 +108,7 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 		GLTFSceneManager::AddMaterial(material);
 	}
 }
-void Model::LoadLevelMesh2D(const std::string& levelName, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+void Model::LoadSpriteLayerMesh2D(const std::string& levelName, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
 
@@ -118,7 +118,8 @@ void Model::LoadLevelMesh2D(const std::string& levelName, std::vector<std::share
 
 	MaterialList = materialList;
 
-	std::shared_ptr<LevelMesh> mesh = std::make_shared<LevelMesh>(LevelMesh(levelName, materialList, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+
+	std::shared_ptr<SpriteLayerMesh> mesh = std::make_shared<SpriteLayerMesh>(SpriteLayerMesh(levelName, levelBounds, materialList, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
 	Update(GameObjectMatrix);

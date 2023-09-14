@@ -184,7 +184,9 @@
     <ClCompile Include="AddPipelineMenu.cpp" />
     <ClCompile Include="AddSubpassDependencyMenu.cpp" />
     <ClCompile Include="AddTextureAttachmentMenu.cpp" />
+    <ClCompile Include="Animation2D.cpp" />
     <ClCompile Include="Animation3D.cpp" />
+    <ClCompile Include="AnimationPlayer2D.cpp" />
     <ClCompile Include="AnimationPlayer3D.cpp" />
     <ClCompile Include="BakedTexture.cpp" />
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentRenderer.cpp" />
+    <ClCompile Include="Compute2DAnimation.cpp" />
     <ClCompile Include="ConstMeshInfo.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="CubeToEnvironmentPipeline.cpp" />
@@ -223,7 +226,7 @@
     <ClCompile Include="GridGameObject2D.cpp" />
     <ClCompile Include="GridMesh2D.cpp" />
     <ClCompile Include="LevelGameObject.cpp" />
-    <ClCompile Include="LevelMesh.cpp" />
+    <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
     <ClCompile Include="LineGameObject2D.cpp" />
@@ -300,7 +303,6 @@
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureAtlus.cpp" />
     <ClCompile Include="TextureBaker.cpp" />
-    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
@@ -334,7 +336,9 @@
     <ClInclude Include="AddPipelineMenu.h" />
     <ClInclude Include="AddSubpassDependencyMenu.h" />
     <ClInclude Include="AddTextureAttachmentMenu.h" />
+    <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animation3D.h" />
+    <ClInclude Include="AnimationPlayer2D.h" />
     <ClInclude Include="AnimationPlayer3D.h" />
     <ClInclude Include="BakedTexture.h" />
     <ClInclude Include="BillBoardMeshRenderer.h" />
@@ -343,6 +347,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />
+    <ClInclude Include="Compute2DAnimation.h" />
     <ClInclude Include="ConsoleLogger.h" />
     <ClInclude Include="ConstMeshInfo.h" />
     <ClInclude Include="CubeMapTexture.h" />
@@ -377,7 +382,7 @@
     <ClInclude Include="GridGameObject2D.h" />
     <ClInclude Include="GridMesh2D.h" />
     <ClInclude Include="LevelGameObject.h" />
-    <ClInclude Include="LevelMesh.h" />
+    <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />
     <ClInclude Include="LineGameObject2D.h" />
@@ -463,7 +468,6 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureAtlus.h" />
     <ClInclude Include="TextureBaker.h" />
-    <ClInclude Include="Tile.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />

@@ -213,9 +213,6 @@
     <ClCompile Include="LineMesh2D.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Source Files\Level2D</Filter>
-    </ClCompile>
     <ClCompile Include="LineGameObject3D.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
@@ -573,10 +570,19 @@
     <ClCompile Include="LevelGameObject.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="LevelMesh.cpp">
+    <ClCompile Include="SpriteLayerMesh.cpp">
       <Filter>Source Files\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="LevelTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Compute2DAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationPlayer2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -646,9 +652,6 @@
     </ClInclude>
     <ClInclude Include="LineMesh2D.h">
       <Filter>Header Files\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Header Files\Level2D</Filter>
     </ClInclude>
     <ClInclude Include="LineGameObject3D.h">
       <Filter>Header Files\GameObjects</Filter>
@@ -1055,10 +1058,19 @@
     <ClInclude Include="LevelGameObject.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="LevelMesh.h">
+    <ClInclude Include="SpriteLayerMesh.h">
       <Filter>Header Files\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="LevelTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compute2DAnimation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationPlayer2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

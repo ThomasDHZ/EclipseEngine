@@ -92,14 +92,12 @@ protected:
 	std::vector<glm::mat4> BoneTransform;
 	std::vector<GLTFInstancingDataStruct> InstanceData;
 	std::vector<InstancedVertexData3D> InstancedVertexDataList;
-	std::vector<InstancedVertexData2D> InstancedVertex2DDataList;
 
 	VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
 	VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo{};
 
 	void MeshStartUp(GLTFMeshLoader3D& meshLoader);
 	void InstancingStartUp(GLTFInstancingDataStruct& instanceData);
-	void Instancing2DStartUp(GLTFInstancingDataStruct& instanceData);
 	void RTXMeshStartUp(std::shared_ptr<VulkanBuffer> VertexBuffer, std::shared_ptr<VulkanBuffer> IndexBuffer);
 	void AnimationStartUp(GLTFMeshLoader3D& meshLoader);
 	void UpdateMeshBottomLevelAccelerationStructure();

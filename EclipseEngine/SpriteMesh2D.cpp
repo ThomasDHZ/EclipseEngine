@@ -9,10 +9,10 @@ SpriteMesh2D::SpriteMesh2D(const std::string& SpriteName, std::shared_ptr<Materi
 {
 	std::vector<Vertex2D> SpriteVertexList =
 	{
-	  { {0.0f, 0.0f},  {0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-	  { {1.0f, 0.0f},  {1.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-	  { {1.0f, 1.0f},  {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
-	  { {0.0f, 1.0f},  {0.0f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }
+	  { {0.0f, 1.0f},  {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },
+	  { {1.0f, 1.0f},  {1.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },
+	  { {1.0f, 0.0f},  {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+	  { {0.0f, 0.0f},  {0.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }
 	};
 	std::vector<uint32_t> SpriteIndexList = {
 	   0, 1, 3,

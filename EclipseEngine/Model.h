@@ -6,7 +6,7 @@
 #include "LineMesh2D.h"
 #include "GridMesh2D.h"
 #include "SquareMesh2D.h"
-#include "LevelMesh.h"
+#include "SpriteLayerMesh.h"
 
 class Model
 {
@@ -399,7 +399,7 @@ public:
 		}
 	}
 
-	void LoadLevelMesh2D(const std::string& levelName, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadSpriteLayerMesh2D(const std::string& levelName, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
