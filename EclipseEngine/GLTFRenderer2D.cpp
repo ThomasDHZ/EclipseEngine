@@ -13,11 +13,13 @@ GLTFRenderer2D::~GLTFRenderer2D()
 void GLTFRenderer2D::BuildRenderer()
 {
 	GLTFSceneManager::StartUp();
-	GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", VulkanRenderer::GetSwapChainResolutionVec2().x, VulkanRenderer::GetSwapChainResolutionVec2().y, 10.5f));
+	GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", 8.49414635f, 5.79752779f, 4.80515528f));
 
-	std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("Layout1"));
+	std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("MetalManTiles"));
 	material3->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-
+	material3->CheckPaletteSwapColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan-Recovered.png", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	material3->PaletteSwapPixelColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMapPaletteRotation.bmp", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	
 	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
 	material->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 
@@ -37,7 +39,7 @@ void GLTFRenderer2D::BuildRenderer()
 
 	std::vector<std::shared_ptr<Material>> materialList;
 	materialList.emplace_back(material3);
-	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(1,1), materialList, 0);
+	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(16, 16), glm::ivec2(500,300), materialList, 0);
 	
 	 //std::vector<std::shared_ptr<Material>> materialList2;
 	 //materialList2.emplace_back(material3);
@@ -61,8 +63,16 @@ void GLTFRenderer2D::BuildRenderer()
 	//GLTFSceneManager::AddSquareGameObject2D("sponza", 5, glm::vec4(1.0, 0.0f, 0.0f, 1.0f), 0);
 	//GLTFSceneManager::AddSquareGameObject2D("sponza", 4, glm::vec4(1.0, 0.0f, 0.0f, 1.0f), 0);
 
+
+
 	LevelRenderPass2D.BuildRenderPass();
-	frameBufferRenderPass.BuildRenderPass(LevelRenderPass2D.renderedTexture, LevelRenderPass2D.renderedTexture);
+
+	std::vector<std::shared_ptr<RenderedColorTexture>> textureList;
+	textureList.emplace_back(LevelRenderPass2D.bloomTexture);
+
+	BloomRenderPass.BuildRenderPass(textureList);
+	bloomCombineRenderPass.BuildRenderPass(BloomRenderPass.BlurredTextureList);
+	frameBufferRenderPass.BuildRenderPass(LevelRenderPass2D.renderedTexture, bloomCombineRenderPass.BloomTexture);
 
 	GLTFSceneManager::Update();
 	VulkanRenderer::UpdateRendererFlag = true;
@@ -80,6 +90,8 @@ void GLTFRenderer2D::ImGuiUpdate()
 void GLTFRenderer2D::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
 	CommandBufferSubmitList.emplace_back(LevelRenderPass2D.Draw(GLTFSceneManager::Get2DGameObjects()));
+	CommandBufferSubmitList.emplace_back(BloomRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(bloomCombineRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 

@@ -23,6 +23,8 @@ struct GLTFInstancingDataStruct
 	std::vector<GLTFInstanceMeshDataStruct> InstanceMeshDataList;
 	std::vector<glm::vec2> UVOffset;
 	std::vector<std::shared_ptr<Material>> MaterialList;
+	int PaletteRotation = 0;
+	int PaletteIndex = 0;
 	GLTFInstancingDataStruct() {};
 };
 
@@ -124,8 +126,8 @@ public:
 
 	void UpdateMeshBufferIndex(uint64_t bufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
+	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
+	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 
 	template<class T>
 	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
@@ -189,7 +191,7 @@ public:
 			vkCmdDrawIndexed(commandBuffer, IndexCount, InstanceCount, 0, 0, 0);
 		}
 	}
-	void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer);
+	virtual void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer);
 
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout);
 	virtual void Destroy();

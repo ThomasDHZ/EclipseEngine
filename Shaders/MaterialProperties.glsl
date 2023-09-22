@@ -6,6 +6,8 @@ struct MaterialProperties
 	float AmbientOcclusion;
 	vec3 Emission;
 	float Alpha;
+	vec3 CheckPixelForPaletteSwapColor;
+	vec3 PaletteSwapPixelColor;
 
 	uint AlbedoMap;
 	uint MetallicRoughnessMap;
@@ -16,4 +18,6 @@ struct MaterialProperties
 	uint DepthMap;
 	uint AlphaMap;
 	uint EmissionMap;
+	uint CheckPixelForPaletteSwapColorMap;
+	uint PaletteSwapPixelColorMap;
 };

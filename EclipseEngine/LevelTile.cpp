@@ -38,7 +38,7 @@ LevelTile::LevelTile(glm::ivec2 tilePositionOffset, glm::ivec2 tileOffset, glm::
 	Animated = true;
 	CurrentFrame = 0;
 	CurrentFrameTime = 0;
-	FrameHoldTime = 0;
+	FrameHoldTime = FrameTime;
 	AnimationFrameOffsets = animationFrameOffsets;
 
 
@@ -59,19 +59,19 @@ LevelTile::~LevelTile()
 {
 }
 
-void LevelTile::Update(std::shared_ptr<Timer> timer)
+void LevelTile::Update(float DeltaTime)
 {
 	if (Animated)
 	{
-		CurrentFrameTime += timer->GetTimerDurationMilliseconds();
-		while (CurrentFrameTime >= FrameHoldTime)
+		CurrentFrameTime += DeltaTime;
+		if(CurrentFrameTime >= FrameHoldTime)
 		{
 			CurrentFrame += 1;
 			if (CurrentFrame > AnimationFrameOffsets.size() - 1)
 			{
 				CurrentFrame = 0;
 			}
-			CurrentFrameTime -= FrameHoldTime;
+			CurrentFrameTime = 0.0f;
 		}
 
 		CurrentTileUV = glm::vec2(TileUVSize.x * AnimationFrameOffsets[CurrentFrame].x, TileUVSize.y * AnimationFrameOffsets[CurrentFrame].y);

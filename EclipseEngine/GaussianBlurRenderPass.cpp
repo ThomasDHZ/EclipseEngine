@@ -12,6 +12,7 @@ void GaussianBlurRenderPass::BuildRenderPass(std::vector<std::shared_ptr<Rendere
 {
     RenderPassResolution = VulkanRenderer::GetSwapChainResolutionVec2();
     TextureMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
+    TextureMapMipLevels = 7;
 
     if (renderPass == nullptr)
     {

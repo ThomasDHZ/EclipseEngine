@@ -130,10 +130,10 @@ void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_pt
 	}
 }
 
-void GLTFSceneManager::AddLevelGameObject(const std::string Name, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
+void GLTFSceneManager::AddLevelGameObject(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
 {
-	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(Name, levelBounds, glm::vec2(0.0f), drawLayer));
-	sprite->LoadLevelGameObject2D(Name, levelBounds, materialList);
+	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(levelName, levelBounds, glm::vec2(0.0f), drawLayer));
+	sprite->LoadLevelGameObject2D(levelName, tileSizeInPixels, levelBounds, materialList);
 	GameObjectList.emplace_back(sprite);
 }
 
@@ -628,6 +628,9 @@ void GLTFSceneManager::Update()
 		sceneProperites.frame = 0;
 	}
 	sceneProperites.MaxReflectCount = 2;
+
+	auto a = (int)sceneProperites.Timer % 5;
+	auto b = 34;
 }
 
 

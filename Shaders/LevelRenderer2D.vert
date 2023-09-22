@@ -11,6 +11,7 @@ layout (location = 3) in mat4 IntanceMatrix;
 layout (location = 7) in vec2 aUVOffset;
 layout (location = 8) in int aMaterialID;
 layout (location = 9) in vec2 aSpriteFlip;
+//layout(location = 10) in int aPixelOffset;
 
 layout(location = 0) out vec3 FragPos;
 layout(location = 1) out vec2 UV;
@@ -18,6 +19,7 @@ layout(location = 2) out vec3 Color;
 layout(location = 3) out vec2 UVOffset;
 layout(location = 4) out int MaterialID;
 layout(location = 5) out vec2 SpriteFlip;
+//layout(location = 6) out int PixelOffset;
 
 #include "VertexLayout.glsl"
 #include "MeshProperties.glsl"
@@ -41,6 +43,7 @@ void main() {
     UV = aUV;
     UVOffset = aUVOffset;
     MaterialID = aMaterialID;
+   // PixelOffset = aPixelOffset;
     SpriteFlip = aSpriteFlip;
     gl_Position = sceneData.proj * 
                   sceneData.view *                

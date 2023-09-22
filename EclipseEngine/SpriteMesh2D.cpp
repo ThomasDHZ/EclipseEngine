@@ -46,6 +46,14 @@ SpriteMesh2D::SpriteMesh2D(const std::string& SpriteName, std::shared_ptr<Materi
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(SpriteIndexList.data(), SpriteIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer = VulkanBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 SpriteMesh2D::~SpriteMesh2D()
@@ -57,9 +65,27 @@ void SpriteMesh2D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet de
 	Mesh::DrawSprite(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperites);
 }
 
-void SpriteMesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+void SpriteMesh2D::SetAnimation(uint32_t AnimationIndex)
 {
-	Mesh::Update(GameObjectMatrix, ModelMatrix);
+	AnimationPlayer.SetAnimation(AnimationIndex);
+}
+
+void SpriteMesh2D::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+{
+	//AnimationPlayer.Update(FlipSpriteX);
+
+
+	Mesh::Update(DeltaTime, GameObjectMatrix, ModelMatrix);
+}
+
+void SpriteMesh2D::AddAnimation(std::shared_ptr<Animation2D> animation)
+{
+	AnimationPlayer.AddAnimation(animation);
+}
+
+void SpriteMesh2D::AddAnimation(std::vector<std::shared_ptr<Animation2D>> AnimationList)
+{
+	AnimationPlayer.AddAnimation(AnimationList);
 }
 
 void SpriteMesh2D::SetSpritePosition(float x, float y, int drawLayer)

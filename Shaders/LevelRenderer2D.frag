@@ -13,8 +13,10 @@ layout(location = 2) in vec3 Color;
 layout(location = 3) in vec2 UVOffset;
 layout(location = 4) in flat int MaterialID;
 layout(location = 5) in vec2 SpriteFlip;
+//layout(location = 6) in flat int PixelOffset;
 
 layout(location = 0) out vec4 outColor;
+layout(location = 1) out vec4 outBloom;
 
 struct SunLight
 {
@@ -75,7 +77,6 @@ layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[]
 layout(binding = 2) buffer MaterialPropertiesBuffer { MaterialProperties materialProperties; } materialBuffer[];
 layout(binding = 3) uniform sampler2D TextureMap[];
 
-
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
@@ -96,8 +97,6 @@ layout(push_constant) uniform SceneData
     int MaxRefeflectCount;
 } sceneData;
 
-
-
 void main() {
 	vec2 UV = VertexUV + UVOffset;
 	if (SpriteFlip.x == 1.0f)
@@ -111,17 +110,46 @@ void main() {
 
 	MaterialProperties material = materialBuffer[MaterialID].materialProperties;
 	material.Albedo = texture(TextureMap[material.AlbedoMap], UV).rgb;
-	material.Alpha = texture(TextureMap[material.AlbedoMap], UV).a;
+	//material.Alpha = texture(TextureMap[material.AlbedoMap], UV).a;
+	material.CheckPixelForPaletteSwapColor = texture(TextureMap[material.CheckPixelForPaletteSwapColorMap], UV).rgb;
+	material.PaletteSwapPixelColor = texture(TextureMap[material.PaletteSwapPixelColorMap], UV).rgb;
 
-	if(material.Alpha != 1.0f)
+	if(material.CheckPixelForPaletteSwapColor == texelFetch(TextureMap[material.PaletteSwapPixelColorMap], ivec2(0), 0).rgb)
 	{
-		discard;
+		int palettePixel = (int(sceneData.Timer * 5) % 6) + 1;
+		material.PaletteSwapPixelColor = texelFetch(TextureMap[material.PaletteSwapPixelColorMap], ivec2(palettePixel, 0), 0).rgb;
+	}
+	else
+	{
+		material.PaletteSwapPixelColor = vec3(0.0f, 0.0f, 0.0f);
 	}
 
+
+	/*if(material.Alpha != 1.0f)
+	{
+		discard;
+	}*/
+
    vec3 result = material.Albedo;
-   
+      if(material.PaletteSwapPixelColor.r != 0.0f &&
+   material.PaletteSwapPixelColor.g != 0.0f &&
+   material.PaletteSwapPixelColor.b != 0.0f)
+   {
+		result = material.PaletteSwapPixelColor;
+   }
+
    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
 		finalResult = pow(finalResult, vec3(1.0 / 2.2f));
 
    outColor = vec4(finalResult,1.0f);
+   if(material.PaletteSwapPixelColor.r != 0.0f &&
+   material.PaletteSwapPixelColor.g != 0.0f &&
+   material.PaletteSwapPixelColor.b != 0.0f)
+   {
+		outBloom = vec4(material.PaletteSwapPixelColor, 1.0f);
+   }
+   else
+   {
+	outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+   }
 }

@@ -38,9 +38,9 @@ int main()
         ImGui::Render();
         scene.Update();
         scene.Draw();
-    //    //GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
-    //    //GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
-    //    //GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);
+            GameController::IsButtonPressed(GLFW_GAMEPAD_BUTTON_CROSS);
+            GameController::IsJoyStickMoved(GLFW_GAMEPAD_BUTTON_CROSS);
+            GameController::IsJoyStickMoved(GLFW_GAMEPAD_AXIS_LEFT_TRIGGER);
     }
     vkDeviceWaitIdle(VulkanRenderer::GetDevice());
 

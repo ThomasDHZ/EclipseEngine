@@ -6,21 +6,12 @@ SpriteLayerMesh::SpriteLayerMesh()
 {
 }
 
-SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<LevelTile>& levelTiles, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	GLTFInstancingDataStruct instance = {};
 	std::vector<std::shared_ptr<Material>> instanceMaterialList;
 
-	glm::ivec2 TileOffset = glm::ivec2(23, 0);
-	glm::vec2 TileUVSize = glm::vec2(0.02439f, 1.0f);
-
-	TileList.emplace_back(LevelTile(glm::ivec2(0, 0), glm::ivec2(23, 0), TileUVSize));
-	TileList.emplace_back(LevelTile(glm::ivec2(1, 0), glm::ivec2(0, 0), TileUVSize));
-	TileList.emplace_back(LevelTile(glm::ivec2(2, 0), glm::ivec2(1, 0), TileUVSize));
-	TileList.emplace_back(LevelTile(glm::ivec2(0, 1), glm::ivec2(2, 0), TileUVSize));
-	TileList.emplace_back(LevelTile(glm::ivec2(1, 1), glm::ivec2(3, 0), TileUVSize));
-	TileList.emplace_back(LevelTile(glm::ivec2(2, 1), glm::ivec2(4, 0), TileUVSize));
-
+	TileList = levelTiles;
 	for (auto& tile : TileList)
 	{
 		GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
@@ -30,6 +21,7 @@ SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, glm::ivec2 levelB
 
 		instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
 		instance.UVOffset.emplace_back(glm::vec2(0.0f, 0.0f));
+		instance.PaletteIndex = 0;
 		instance.MaterialList = materialList;
 	}
 
@@ -61,10 +53,29 @@ SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, glm::ivec2 levelB
 	MeshTransformBuffer = VulkanBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	Instancing2DStartUp(instance);
+
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 SpriteLayerMesh::~SpriteLayerMesh()
 {
+}
+
+void SpriteLayerMesh::AddTile(LevelTile tile)
+{
+	TileList.emplace_back(tile);
+}
+
+void SpriteLayerMesh::AddTiles(std::vector<LevelTile> tiles)
+{
+	TileList = tiles;
 }
 
 void SpriteLayerMesh::Instancing2DStartUp(GLTFInstancingDataStruct& instanceData)
@@ -97,22 +108,31 @@ void SpriteLayerMesh::Instancing2DStartUp(GLTFInstancingDataStruct& instanceData
 	}
 }
 
-void SpriteLayerMesh::DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperites)
+void SpriteLayerMesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	Mesh::DrawLevelLayer(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperites);
-}
-
-void SpriteLayerMesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
-{
-	Mesh::Update(GameObjectMatrix, ModelMatrix);
+	Mesh::Update(DeltaTime, GameObjectMatrix, ModelMatrix);
 
 	if (InstanceCount > 0)
 	{
 		for (int x = 0; x < InstancedVertex2DDataList.size(); x++)
 		{
-			//TileList[x].Update(timer);
-			InstancedVertex2DDataList[x].UVOffset = TileList[x].GetTileUVs();
+			TileList[x].Update(DeltaTime);
+			InstancedVertex2DDataList[x].UVOffset = TileList[x].GetCurrentTileUV();
+
+			//if (InstancedVertex2DDataList[x].PixelOffset < 5)
+			//{
+			//	InstancedVertex2DDataList[x].PixelOffset += 1;
+			//}
+			//else
+			//{
+			//	InstancedVertex2DDataList[x].PixelOffset = 0;
+			//}
 		}
 		InstanceBuffer.UpdateBufferMemory(InstancedVertex2DDataList.data(), InstancedVertex2DDataList.size() * sizeof(InstancedVertexData2D));
 	}
+}
+
+void SpriteLayerMesh::DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperites)
+{
+	Mesh::DrawLevelLayer(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperites);
 }

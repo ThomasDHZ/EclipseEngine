@@ -16,17 +16,20 @@ void RenderPass2D::BuildRenderPass()
     if (renderPass == nullptr)
     {
         renderedTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
+        bloomTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM));
         depthTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution));
     }
     else
     {
         renderedTexture->RecreateRendererTexture(RenderPassResolution);
+        bloomTexture->RecreateRendererTexture(RenderPassResolution);
         depthTexture->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(renderedTexture->View);
+    AttachmentList.emplace_back(bloomTexture->View);
     AttachmentList.emplace_back(depthTexture->View);
 
     RenderPassDesc();
@@ -39,12 +42,14 @@ void RenderPass2D::RenderPassDesc()
 {
     std::vector<VkAttachmentDescription> AttachmentDescriptionList;
     AttachmentDescriptionList.emplace_back(renderedTexture->GetAttachmentDescription());
+    AttachmentDescriptionList.emplace_back(bloomTexture->GetAttachmentDescription());
     AttachmentDescriptionList.emplace_back(depthTexture->GetAttachmentDescription());
 
     std::vector<VkAttachmentReference> ColorRefsList;
     ColorRefsList.emplace_back(VkAttachmentReference{ 0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
+    ColorRefsList.emplace_back(VkAttachmentReference{ 1, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL });
 
-    VkAttachmentReference depthReference = { 1, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference depthReference = { 2, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpassDescription = {};
     subpassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -103,6 +108,7 @@ void RenderPass2D::BuildRenderPassPipelines()
 
     ColorAttachmentList.clear();
     ColorAttachmentList.emplace_back(ColorAttachment);
+    ColorAttachmentList.emplace_back(ColorAttachment);
 
     PipelineInfoStruct pipelineInfo{};
     pipelineInfo.renderPass = renderPass;
@@ -133,9 +139,10 @@ VkCommandBuffer RenderPass2D::Draw(std::vector<GameObject2D*> gameObjectList)
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-    std::array<VkClearValue, 2> clearValues{};
+    std::array<VkClearValue, 3> clearValues{};
     clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    clearValues[1].depthStencil = { 1.0f, 0 };
+    clearValues[1].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[2].depthStencil = { 1.0f, 0 };
 
     VkViewport viewport{};
     viewport.x = 0.0f;

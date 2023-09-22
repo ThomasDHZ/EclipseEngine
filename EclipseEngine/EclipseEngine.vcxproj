@@ -225,7 +225,9 @@
     <ClCompile Include="GLTFRenderPass.cpp" />
     <ClCompile Include="GridGameObject2D.cpp" />
     <ClCompile Include="GridMesh2D.cpp" />
+    <ClCompile Include="Level2D.cpp" />
     <ClCompile Include="LevelGameObject.cpp" />
+    <ClCompile Include="MegaMan.cpp" />
     <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
@@ -381,7 +383,9 @@
     <ClInclude Include="GLTFRenderPass.h" />
     <ClInclude Include="GridGameObject2D.h" />
     <ClInclude Include="GridMesh2D.h" />
+    <ClInclude Include="Level2D.h" />
     <ClInclude Include="LevelGameObject.h" />
+    <ClInclude Include="MegaMan.h" />
     <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />

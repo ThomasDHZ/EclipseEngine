@@ -108,7 +108,7 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 		GLTFSceneManager::AddMaterial(material);
 	}
 }
-void Model::LoadSpriteLayerMesh2D(const std::string& levelName, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+void Model::LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
 
@@ -119,10 +119,9 @@ void Model::LoadSpriteLayerMesh2D(const std::string& levelName, glm::ivec2 level
 	MaterialList = materialList;
 
 
-	std::shared_ptr<SpriteLayerMesh> mesh = std::make_shared<SpriteLayerMesh>(SpriteLayerMesh(levelName, levelBounds, materialList, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	std::shared_ptr<Level2D> mesh = std::make_shared<Level2D>(Level2D(levelName, tileSizeInPixels, levelBounds, materialList, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -143,7 +142,6 @@ void Model::LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Mate
 	std::shared_ptr<SpriteMesh2D> mesh = std::make_shared<SpriteMesh2D>(SpriteMesh2D(spriteName, material, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -164,7 +162,6 @@ void Model::LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Mate
 	std::shared_ptr<SpriteMesh3D> mesh = std::make_shared<SpriteMesh3D>(SpriteMesh3D(spriteName, material, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -183,7 +180,6 @@ void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm:
 	std::shared_ptr<SquareMesh2D> mesh = std::make_shared<SquareMesh2D>(SquareMesh2D(LineName, Size, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -202,7 +198,6 @@ void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm:
 	std::shared_ptr<SquareMesh2D> mesh = std::make_shared<SquareMesh2D>(SquareMesh2D(LineName, Size, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -221,7 +216,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, std::vector<LineVertex2D
 	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(LineName, vertices, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -239,7 +233,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(LineName, StartPoint, EndPoint, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -257,7 +250,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(LineName, StartPoint, EndPoint, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -275,7 +267,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(LineName, StartPoint, EndPoint, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -293,7 +284,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	std::shared_ptr<LineMesh2D> mesh = std::make_shared<LineMesh2D>(LineMesh2D(LineName, StartPoint, EndPoint, StartColor, EndColor, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -312,7 +302,6 @@ void Model::LoadGridMesh2D(const std::string& GridName, int GridSizeX, int GridS
 	std::shared_ptr<GridMesh2D> mesh = std::make_shared<GridMesh2D>(GridMesh2D(GridName, GridSizeX, GridSizeY, GridSpacingX, GridSpacingY, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -331,7 +320,6 @@ void Model::LoadLineMesh3D(const std::string& LineName, std::vector<LineVertex3D
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, vertices, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -349,7 +337,6 @@ void Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPo
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, StartPoint, EndPoint, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -367,7 +354,6 @@ void Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPo
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, StartPoint, EndPoint, Color,  GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -385,7 +371,6 @@ void Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPo
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, StartPoint, EndPoint, Color, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -403,7 +388,6 @@ void Model::LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPo
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(LineName, StartPoint, EndPoint, StartColor, EndColor, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -421,7 +405,6 @@ void Model::LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridS
 	std::shared_ptr<LineMesh3D> mesh = std::make_shared<LineMesh3D>(LineMesh3D(GridName, GridSizeX, GridSizeY, GridSizeZ, GridSpacingX, GridSpacingY, GridSpacingZ, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
-	Update(GameObjectMatrix);
 	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
@@ -447,7 +430,7 @@ void Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationS
 	}
 }
 
-void Model::Update(const glm::mat4& GameObjectTransformMatrix)
+void Model::Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix)
 {
 	ModelTransformMatrix = glm::mat4(1.0f);
 	ModelTransformMatrix = glm::translate(ModelTransformMatrix, ModelPosition);
@@ -458,7 +441,7 @@ void Model::Update(const glm::mat4& GameObjectTransformMatrix)
 
 	for (auto& mesh : MeshList)
 	{
-		mesh->Update(GameObjectTransformMatrix, ModelTransformMatrix);
+		mesh->Update(DeltaTime, GameObjectTransformMatrix, ModelTransformMatrix);
 	}
 }
 

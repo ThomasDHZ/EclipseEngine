@@ -7,6 +7,7 @@
 #include "GridMesh2D.h"
 #include "SquareMesh2D.h"
 #include "SpriteLayerMesh.h"
+#include "Level2D.h"
 
 class Model
 {
@@ -143,7 +144,6 @@ public:
 			MeshList.emplace_back(mesh);
 		}
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -191,7 +191,6 @@ public:
 			MeshList.emplace_back(mesh);
 		}
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -241,7 +240,6 @@ public:
 			MeshList.emplace_back(mesh);
 		}
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -289,7 +287,6 @@ public:
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -340,7 +337,6 @@ public:
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -391,7 +387,6 @@ public:
 		std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(Mesh(GltfMeshLoader));
 		MeshList.emplace_back(mesh);
 
-		Update(GameObjectMatrix);
 		UpdateMeshPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
@@ -399,7 +394,7 @@ public:
 		}
 	}
 
-	void LoadSpriteLayerMesh2D(const std::string& levelName, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
@@ -422,7 +417,7 @@ public:
 	void LoadLineMesh3D(const std::string& LineName, const glm::vec3& StartPoint, const glm::vec3& EndPoint, const glm::vec4& StartColor, const glm::vec4& EndColor, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridSizeY, int GridSizeZ, float GridSpacingX, float GridSpacingY, float GridSpacingZ, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
-	void Update(const glm::mat4& GameObjectTransformMatrix);
+	void Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix);
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
 

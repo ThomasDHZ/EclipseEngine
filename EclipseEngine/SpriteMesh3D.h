@@ -9,7 +9,7 @@ public:
 	~SpriteMesh3D();
 
 	virtual void DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperties) override;
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
+	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Destroy() override;
 
 	void SetSpritePosition(float x, float y, float z);

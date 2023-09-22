@@ -34,7 +34,7 @@ public:
 	LevelTile(glm::ivec2 TilePositionOffset, glm::ivec2 TileOffset, glm::vec2& TileUVSize, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
 	~LevelTile();
 
-	void Update(std::shared_ptr<Timer> timer);
+	void Update(float DeltaTime);
 	glm::vec2 GetTileUVs();
 
 	glm::vec2 GetCurrentTileUV() { return CurrentTileUV; }

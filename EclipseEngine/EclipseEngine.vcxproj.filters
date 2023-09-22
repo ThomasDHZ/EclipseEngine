@@ -585,6 +585,12 @@
     <ClCompile Include="AnimationPlayer2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Level2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MegaMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1071,6 +1077,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AnimationPlayer2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MegaMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

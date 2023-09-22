@@ -1,4 +1,5 @@
 #include "GridMesh2D.h"
+#include <glm/ext/matrix_transform.hpp>
 
 GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
@@ -48,6 +49,14 @@ GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec3& LineColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
@@ -98,6 +107,14 @@ GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY, float GridSpacingX, float GridSpacingY, const glm::vec4& LineColor, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
@@ -148,6 +165,14 @@ GridMesh2D::GridMesh2D(const std::string& GridName, int GridSizeX, int GridSizeY
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(LineIndexList.data(), LineIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 GridMesh2D::~GridMesh2D()
@@ -159,9 +184,9 @@ void GridMesh2D::DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descri
 	Mesh::DrawLine(commandBuffer, descriptorSet, shaderPipelineLayout);
 }
 
-void GridMesh2D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+void GridMesh2D::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	Mesh::Update(GameObjectMatrix, ModelMatrix);
+	Mesh::Update(DeltaTime, GameObjectMatrix, ModelMatrix);
 }
 
 void GridMesh2D::Destroy()

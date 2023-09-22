@@ -53,7 +53,7 @@ public:
 	static std::vector<std::shared_ptr<RenderedCubeMapTexture>> PrefilterMapList;
 	static std::shared_ptr<RenderedCubeMapTexture> CubeMap;
 	
-	static void AddLevelGameObject(const std::string Name, glm::ivec2 LevelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer);
+	static void AddLevelGameObject(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer);
 
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);

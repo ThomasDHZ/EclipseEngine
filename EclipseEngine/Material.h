@@ -11,6 +11,8 @@ struct GLTFMaterialBufferInfo
 	alignas(4) float AmbientOcclusion = 1.0f;
 	alignas(16) glm::vec3 Emission = glm::vec3(0.0f);
 	alignas(4) float Alpha = 1.0f;
+	alignas(16) glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
+	alignas(16) glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
 
 	alignas(4) uint32_t AlbedoMap = -1;
 	alignas(4) uint32_t MetallicRoughnessMap = -1;
@@ -21,6 +23,8 @@ struct GLTFMaterialBufferInfo
 	alignas(4) uint32_t DepthMap = -1;
 	alignas(4) uint32_t AlphaMap = -1;
 	alignas(4) uint32_t EmissionMap = -1;
+	alignas(4) uint32_t CheckPaletteSwapColorMap = -1;
+	alignas(4) uint32_t PaletteSwapPixelColorMap = -1;
 };
 
 class Material
@@ -45,6 +49,8 @@ public:
 	float AmbientOcclusion = 1.0f;
 	glm::vec3 Emission = glm::vec3(0.0f);
 	float Alpha = 1.0f;
+	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
+	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
 
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
@@ -55,6 +61,8 @@ public:
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
+	std::shared_ptr<Texture> CheckPaletteSwapColorMap = nullptr;
+	std::shared_ptr<Texture> PaletteSwapPixelColorMap = nullptr;
 
 	Material();
 	Material(const std::string& materialName);

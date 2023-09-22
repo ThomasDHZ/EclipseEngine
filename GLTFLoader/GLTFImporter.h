@@ -24,6 +24,7 @@ enum TextureTypeEnum
 	kDepthTextureMap,
 	kAlphaTextureMap,
 	kEmissionTextureMap,
+	kPaletteRotationMap,
 	kCubeMapTexture,
 	kCubeMapDepthTexture,
 	kEnvironmentTexture,

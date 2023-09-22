@@ -43,7 +43,7 @@ void Mesh::UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& 
 	}
 }
 
-void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
 	glm::mat4 MeshMatrix = glm::mat4(1.0f);
 	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
@@ -69,7 +69,7 @@ void Mesh::UpdateMeshBufferIndex(uint64_t bufferIndex)
 	MeshBufferIndex = bufferIndex;
 }
 
-void Mesh::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
+void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
 {
 	//GameObjectTransformMatrix = GameObjectMatrix;
 	//ModelTransformMatrix = ModelMatrix;
@@ -169,6 +169,15 @@ void Mesh::MeshStartUp(GLTFMeshLoader3D& meshLoader)
 	InstancingStartUp(meshLoader.InstanceData);
 	RTXMeshStartUp(meshLoader.VertexBuffer, meshLoader.IndexBuffer);
 	AnimationStartUp(meshLoader);
+
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 void Mesh::RTXMeshStartUp(std::shared_ptr<VulkanBuffer> VertexBuffer, std::shared_ptr<VulkanBuffer> IndexBuffer)

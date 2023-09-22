@@ -190,6 +190,7 @@ struct InstancedVertexData2D
     glm::vec2 UVOffset = glm::vec2(0.0f);
     uint32_t MaterialID = 0;
     glm::vec2 FlipSprite = glm::vec2(0.0f);
+    //uint32_t PixelOffset = 0;
 
     static std::vector<VkVertexInputBindingDescription> getBindingDescriptions()
     {
@@ -249,6 +250,12 @@ struct InstancedVertexData2D
         AttributeDescription.format = VK_FORMAT_R32G32_SFLOAT;
         AttributeDescription.offset = offsetof(InstancedVertexData2D, FlipSprite);
         AttributeDescriptions.emplace_back(AttributeDescription);
+
+        //AttributeDescription.binding = 0;
+        //AttributeDescription.location = 10;
+        //AttributeDescription.format = VK_FORMAT_R32_SINT;
+        //AttributeDescription.offset = offsetof(InstancedVertexData2D, PixelOffset);
+        //AttributeDescriptions.emplace_back(AttributeDescription);
 
         return AttributeDescriptions;
     }

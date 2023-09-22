@@ -75,6 +75,15 @@ SpriteMesh3D::SpriteMesh3D(const std::string& SpriteName, std::shared_ptr<Materi
 	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(SpriteVertexList.data(), SpriteVertexList.size() * sizeof(Vertex3D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(SpriteIndexList.data(), SpriteIndexList.size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	glm::mat4 MeshMatrix = glm::mat4(1.0f);
+	MeshMatrix = glm::translate(MeshMatrix, MeshPosition);
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
+
+	UpdateNodeTransform(nullptr, GameObjectTransform * ModelTransform * MeshMatrix);
 }
 
 SpriteMesh3D::~SpriteMesh3D()
@@ -86,9 +95,9 @@ void SpriteMesh3D::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet de
 	Mesh::DrawSprite<SceneProperties>(commandBuffer, descriptorSet, shaderPipelineLayout, sceneProperties);
 }
 
-void SpriteMesh3D::Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
+void SpriteMesh3D::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix)
 {
-	Mesh::Update(GameObjectMatrix, ModelMatrix);
+	Mesh::Update(DeltaTime, GameObjectMatrix, ModelMatrix);
 }
 
 void SpriteMesh3D::Destroy()

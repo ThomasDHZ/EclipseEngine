@@ -27,7 +27,7 @@ void GameObject::Update(float DeltaTime)
 
 	if (GameObjectRenderer != nullptr)
 	{
-		GameObjectRenderer->Update(GameObjectTransform);
+		GameObjectRenderer->Update(DeltaTime, GameObjectTransform);
 	}
 }
 

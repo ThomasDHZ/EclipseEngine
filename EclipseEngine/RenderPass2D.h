@@ -19,6 +19,7 @@ public:
 	~RenderPass2D();
 
 	std::shared_ptr<RenderedColorTexture> renderedTexture;
+	std::shared_ptr<RenderedColorTexture> bloomTexture;
 	std::shared_ptr<RenderedDepthTexture> depthTexture;
 
 	void BuildRenderPass();

@@ -26,7 +26,7 @@ public:
 	std::vector<LineVertex3D> LineVertexList;
 
 	virtual void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout) override;
-	virtual void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
+	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void Destroy() override;
 
 	void SetMeshPosition(float x, float y, float z);

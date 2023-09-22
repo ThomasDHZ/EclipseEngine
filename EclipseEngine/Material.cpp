@@ -37,6 +37,7 @@ void Material::UpdateBuffer()
 	MaterialInfo.AmbientOcclusion = AmbientOcclusion;
 	MaterialInfo.Emission = Emission;
 	MaterialInfo.Alpha = Alpha;
+	MaterialInfo.CheckPaletteSwapColor = CheckPaletteSwapColor;
 
 	if (AlbedoMap != nullptr)
 	{
@@ -73,6 +74,14 @@ void Material::UpdateBuffer()
 	if (EmissionMap != nullptr)
 	{
 		MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
+	}
+	if (CheckPaletteSwapColorMap != nullptr)
+	{
+		MaterialInfo.CheckPaletteSwapColorMap = CheckPaletteSwapColorMap->GetTextureBufferIndex();
+	}
+	if (PaletteSwapPixelColorMap != nullptr)
+	{
+		MaterialInfo.PaletteSwapPixelColorMap = PaletteSwapPixelColorMap->GetTextureBufferIndex();
 	}
 
 	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
