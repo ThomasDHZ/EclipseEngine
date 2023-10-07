@@ -34,6 +34,7 @@ PBRRenderer::PBRRenderer()
 	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	IronMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	IronMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GLTFSceneManager::UpdateBufferIndex();
 	IronMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(IronMaterial);
@@ -63,6 +64,7 @@ PBRRenderer::PBRRenderer()
 	PlasticMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	PlasticMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	PlasticMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/plastic/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	PlasticMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GLTFSceneManager::UpdateBufferIndex();
 	PlasticMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(PlasticMaterial);
@@ -73,6 +75,7 @@ PBRRenderer::PBRRenderer()
 	WallMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	WallMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	WallMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/wall/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	WallMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GLTFSceneManager::UpdateBufferIndex();
 	WallMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(WallMaterial);
@@ -83,6 +86,7 @@ PBRRenderer::PBRRenderer()
 	GoldMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GoldMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GoldMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/gold/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	GoldMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GLTFSceneManager::UpdateBufferIndex();
 	GoldMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(GoldMaterial);
@@ -93,32 +97,33 @@ PBRRenderer::PBRRenderer()
 	GrassMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/roughness.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GrassMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/ao.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
 	GrassMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/grass/normal.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	GrassMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 	GLTFSceneManager::UpdateBufferIndex();
 	GrassMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(GrassMaterial);
 
 
-	GLTFInstancingDataStruct instance = {};
-	std::vector<std::shared_ptr<Material>> instanceMaterialList;
-	instanceMaterialList.emplace_back(IronMaterial);
-	instanceMaterialList.emplace_back(PlasticMaterial);
-	instanceMaterialList.emplace_back(WallMaterial);
-	instanceMaterialList.emplace_back(GoldMaterial);
-	instanceMaterialList.emplace_back(GrassMaterial);
-	for (int x = 0; x < 5; x++)
-	{
-		for (int y = 0; y < 5; y++)
-		{
-			for (int z = 0; z < 5; z++)
-			{
-				GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
-				instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
-				instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
-				instance.MaterialList = instanceMaterialList;
-			}
-		}
-	}
-	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);
+	//GLTFInstancingDataStruct instance = {};
+	//std::vector<std::shared_ptr<Material>> instanceMaterialList;
+	//instanceMaterialList.emplace_back(IronMaterial);
+	//instanceMaterialList.emplace_back(PlasticMaterial);
+	//instanceMaterialList.emplace_back(WallMaterial);
+	//instanceMaterialList.emplace_back(GoldMaterial);
+	//instanceMaterialList.emplace_back(GrassMaterial);
+	//for (int x = 0; x < 5; x++)
+	//{
+	//	for (int y = 0; y < 5; y++)
+	//	{
+	//		for (int z = 0; z < 5; z++)
+	//		{
+	//			GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
+	//			instanceMeshDataStruct.InstancePosition = glm::vec3(float(x * 3.0f), float(y * 3.0f), float(z * 3.0f));
+	//			instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
+	//			instance.MaterialList = instanceMaterialList;
+	//		}
+	//	}
+	//}
+	//GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);
 
 
 	/// <summary>
@@ -279,9 +284,18 @@ void PBRRenderer::BuildRenderer()
 			std::string a = "PBRRenderPass.txt";
 			gLTFRenderPass.BuildRenderPass(a, submitList);
 		}
+
+		//Post Process Pass
+		{
+			std::vector<std::shared_ptr<RenderedColorTexture>> textureList;
+			textureList.emplace_back(gLTFRenderPass.RenderedBloomTexture);
+
+			BloomRenderPass.BuildRenderPass(textureList);
+			bloomCombineRenderPass.BuildRenderPass(BloomRenderPass.BlurredTextureList);
+			frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, bloomCombineRenderPass.BloomTexture);
+		}
 	}
 
-	frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, gLTFRenderPass.RenderedTexture);
 	GLTFSceneManager::Update();
 	lightManagerMenu.Update();
 
@@ -509,6 +523,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 
+	CommandBufferSubmitList.emplace_back(BloomRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(bloomCombineRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(frameBufferRenderPass.Draw());
 }
 
@@ -535,5 +551,7 @@ void PBRRenderer::Destroy()
 	prefilterRenderPass.Destroy();
 	gLTFRenderPass.Destroy();
 	
+	BloomRenderPass.Destroy();
+	bloomCombineRenderPass.Destroy();
 	frameBufferRenderPass.Destroy();
 }

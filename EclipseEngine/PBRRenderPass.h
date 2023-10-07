@@ -6,7 +6,7 @@ class PBRRenderPass : public RenderPass
 {
 private:
 	std::shared_ptr<RenderedColorTexture> ColorTexture;
-
+	std::shared_ptr<RenderedColorTexture> BloomTexture;
 
 	JsonGraphicsPipeline PBRPipeline;
 	JsonGraphicsPipeline PBRInstancePipeline;
@@ -23,6 +23,7 @@ public:
 	~PBRRenderPass();
 
 	std::shared_ptr<RenderedColorTexture> RenderedTexture;
+	std::shared_ptr<RenderedColorTexture> RenderedBloomTexture;
 	std::shared_ptr<RenderedDepthTexture> DepthTexture;
 
 	void RenderPassDesc();

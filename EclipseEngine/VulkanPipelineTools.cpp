@@ -1,7 +1,81 @@
 #include "VulkanPipelineTools.h"
 
+#include <Windows.h>
+#include <dxcapi.h>
+#include <wrl/client.h>
 
-VkShaderModule VulkanPipelineTools::ReadShaderFile(const std::string& filename)
+VkShaderModule VulkanPipelineTools::CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage)
+{
+    std::ifstream ifs(filename);
+    std::string str;
+    ifs.seekg(0, std::ios::end);
+    str.reserve(ifs.tellg());
+    ifs.seekg(0, std::ios::beg);
+    str.assign(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
+
+    Microsoft::WRL::ComPtr<IDxcUtils> dxc_utils{};
+    Microsoft::WRL::ComPtr<IDxcCompiler3> dxc_compiler{};
+
+    DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxc_utils.ReleaseAndGetAddressOf()));
+    DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxc_compiler));
+
+    DxcBuffer src_buffer = {
+        .Ptr = str.c_str(),
+        .Size = static_cast<uint32_t>(str.size()),
+        .Encoding = 0
+    };
+
+    std::vector<LPCWSTR> args;
+    args.emplace_back(L"Fragment Shader");
+    args.emplace_back(L"-Zpc");
+    args.emplace_back(L"-HV");
+    args.emplace_back(L"2021");
+    args.emplace_back(L"-T");
+    args.emplace_back(L"ps_6_0");
+    args.emplace_back(L"-E");
+    args.emplace_back(L"main");
+    args.emplace_back(L"-spirv");
+    args.emplace_back(L"-fspv-target-env=vulkan1.3");
+
+    Microsoft::WRL::ComPtr<IDxcResult> result;
+    dxc_compiler->Compile(&src_buffer, args.data(), static_cast<uint32_t>(args.size()), nullptr, IID_PPV_ARGS(&result));
+
+    Microsoft::WRL::ComPtr<IDxcBlob> shader_obj;
+    result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shader_obj), nullptr);
+
+    Microsoft::WRL::ComPtr<IDxcBlobUtf8> error_message;
+    result->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&error_message), nullptr);
+    if (error_message && error_message->GetStringLength() > 0)
+    {
+        auto string = std::string();
+        string.resize(error_message->GetBufferSize());
+        for (size_t x = 0; x < string.size(); x++)
+        {
+            string[x] = static_cast<const char*>(error_message->GetBufferPointer())[x];
+        }
+
+        MessageBoxA(nullptr, string.c_str(), "DXC Compile Error", MB_OK);
+    }
+
+    std::vector<uint32_t> spriv_buffer;
+    spriv_buffer.resize(shader_obj->GetBufferSize() / sizeof(uint32_t));
+
+    for (int x = 0; x < spriv_buffer.size(); x++)
+    {
+        uint32_t spv_uint = static_cast<std::uint32_t*>(shader_obj->GetBufferPointer())[x];
+        spriv_buffer[x] = spv_uint;
+    }
+
+    VkShaderModule shaderModule{};
+    VkShaderModuleCreateInfo ShaderModuleCreateInfo{};
+    ShaderModuleCreateInfo.codeSize = spriv_buffer.size() * sizeof(spriv_buffer[0]);
+    ShaderModuleCreateInfo.pCode = (uint32_t*)spriv_buffer.data();
+    vkCreateShaderModule(VulkanRenderer::GetDevice(), &ShaderModuleCreateInfo, nullptr, &shaderModule);
+
+    return shaderModule;  
+}
+
+VkShaderModule VulkanPipelineTools::ReadGLSLShaderFile(const std::string& filename)
 {
     std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
@@ -32,10 +106,19 @@ VkShaderModule VulkanPipelineTools::ReadShaderFile(const std::string& filename)
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
 {
+    auto extenstion = filename.substr(0, filename.find_last_of('.'));
+    
     VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
     vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     vertShaderStageInfo.stage = shaderStages;
-    vertShaderStageInfo.module = ReadShaderFile(filename);
+    if (extenstion == "spv")
+    {
+        vertShaderStageInfo.module = ReadGLSLShaderFile(filename);
+    }
+    else
+    {
+        vertShaderStageInfo.module = CompileHLSLShader(filename, shaderStages);
+    }
     vertShaderStageInfo.pName = "main";
 
     return vertShaderStageInfo;
@@ -448,10 +531,21 @@ void VulkanPipelineTools::LoadDepthTextureBuffer(std::shared_ptr<RenderedDepthTe
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)
 {
+    std::string fileName = json["shaderFile"];
+    std::string extenstion = fileName.substr(fileName.find_last_of('.') + 1, fileName.size());
+
     VkPipelineShaderStageCreateInfo PipelineShaderStageCreateInfo{};
     PipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     PipelineShaderStageCreateInfo.stage = json["stage"];
-    PipelineShaderStageCreateInfo.module = ReadShaderFile(json["shaderFile"]);
+    PipelineShaderStageCreateInfo.module = ReadGLSLShaderFile(json["shaderFile"]);
+    if (extenstion == "spv")
+    {
+        PipelineShaderStageCreateInfo.module = ReadGLSLShaderFile(fileName);
+    }
+    else
+    {
+        PipelineShaderStageCreateInfo.module = CompileHLSLShader(fileName, json["stage"]);
+    }
     PipelineShaderStageCreateInfo.pName = "main";
     PipelineShaderStageCreateInfo.pSpecializationInfo = nullptr;
     PipelineShaderStageCreateInfo.pNext = nullptr;

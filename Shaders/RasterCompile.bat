@@ -1,3 +1,6 @@
+C:/VulkanSDK/1.3.204.0/Bin/dxc.exe -spirv -T vs_6_0 -E main VertexShader.hlsl -Fo VertexShader.hlsl.spv
+C:/VulkanSDK/1.3.204.0/Bin/dxc.exe -spirv -T vs_6_0 -E main VertexShader.hlsl -Fo VertexShader.hlsl.spv
+
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 FrameBuffer.vert -o FrameBufferVert.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 FrameBuffer.frag -o FrameBufferFrag.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 FrameBuffer.vert -o ../x64/Shaders/FrameBufferVert.spv

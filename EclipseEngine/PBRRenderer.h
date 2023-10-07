@@ -53,6 +53,9 @@ private:
 	PrefilterRenderPass prefilterRenderPass;
 	PBRRenderPass gLTFRenderPass;
 
+	//PostProceess
+	GaussianBlurRenderPass BloomRenderPass;
+	BloomCombineRenderPass bloomCombineRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 
 	std::shared_ptr<GameObject> SelectedGameObject;

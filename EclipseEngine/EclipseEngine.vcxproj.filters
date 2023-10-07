@@ -1339,7 +1339,6 @@
     <None Include="..\Shaders\InstanceWireFrame.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="..\Shaders\VertexBuilder.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
@@ -1393,5 +1392,13 @@
     <ResourceCompile Include="EclipseEngine.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

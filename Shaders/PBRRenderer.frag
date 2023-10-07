@@ -12,7 +12,7 @@ layout(location = 4) in vec3 BiTangent;
 layout(location = 5) in vec3 Color;
 
 layout(location = 0) out vec4 outColor;
-
+layout(location = 1) out vec4 outBloom;
 
 #include "vertex.glsl"
 #include "MeshProperties.glsl"
@@ -92,7 +92,7 @@ void main()
     vec2 brdf  = texture(BRDFMap, vec2(max(dot(N, V), 0.0), material.Roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-    vec3 ambient = ((kD * diffuse + specular) * material.AmbientOcclusion);
+    vec3 ambient = material.Emission + ((kD * diffuse + specular) * material.AmbientOcclusion);
     
     vec3 color = ambient + Lo;
     color = color / (color + vec3(1.0f));
@@ -104,4 +104,20 @@ void main()
     }
 
      outColor = vec4(color, 1.0f);
+
+     vec3 bloomColor = material.Emission;
+     if(color.r >= 1.0f)
+     {
+        bloomColor.r = color.r;
+     }
+     if(color.g >= 1.0f)
+     {
+        bloomColor.g = color.g;
+     }
+     if(color.b >= 1.0f)
+     {
+        bloomColor.b = color.b;
+     }
+
+     outBloom = vec4(bloomColor, 1.0f);
 }

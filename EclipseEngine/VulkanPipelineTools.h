@@ -56,7 +56,8 @@ protected:
 	DescriptorBindingLock TextureBuffer;
 	DescriptorBindingLock DepthBuffer;
 
-	VkShaderModule ReadShaderFile(const std::string& filename);
+	VkShaderModule CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage);
+	VkShaderModule ReadGLSLShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);
 	

@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -81,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\dotha\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)GLTFLoader;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\include;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\include;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\lib;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.3.231.1\Lib;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\dotha\source\repos\EclipseEngine\External\dxCompiler\inc;C:\Users\dotha\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.3.231.1\Include;$(SolutionDir)GLTFLoader;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\include;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\include;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;C:\Users\dotha\source\repos\EclipseEngine\External\dxCompiler\lib;$(SolutionDir)VulkanRenderer;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\LibsndFile\lib;C:\Users\dotha\source\repos\EclipseEngine\EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\dotha\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.3.231.1\Lib;C:\Users\dotha\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -132,7 +131,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;OpenAL32.lib;sndfile.lib;GLTFLoader.lib;tinygltf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;OpenAL32.lib;sndfile.lib;GLTFLoader.lib;tinygltf.lib;dxcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -330,7 +329,6 @@
     <None Include="..\Shaders\Vertex.glsl" />
     <None Include="..\Shaders\VertexBuilder.glsl" />
     <None Include="imgui.ini" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccelerationStructureBuffer.h" />
@@ -576,15 +574,20 @@
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
