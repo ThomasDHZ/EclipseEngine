@@ -103,8 +103,8 @@ vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
         vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.LightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
         float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
+
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
-        Lo *= shadow;
     }
     return Lo;
 }

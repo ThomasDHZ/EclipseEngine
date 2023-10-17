@@ -29,12 +29,14 @@ PBRRenderer::PBRRenderer()
 	GLTFSceneManager::AddMaterial(GoldMaterial);*/
 
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
-	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/albedo.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-	IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	IronMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	IronMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	IronMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	IronMaterial->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("../texture/bricks2.jpg", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	IronMaterial->MetallicMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("../texture/pbr/rusted_iron/metallic.png", TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->RoughnessMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("../texture/pbr/rusted_iron/roughness.png", TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("../texture/pbr/rusted_iron/ao.png", TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	IronMaterial->NormalMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("../texture/pbr/rusted_iron/normal.png", TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	//IronMaterial->EmissionMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/matrix.jpg", TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	//IronMaterial->HeightMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+
 	GLTFSceneManager::UpdateBufferIndex();
 	IronMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(IronMaterial);
@@ -200,7 +202,7 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
-	GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	//GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 	/*GLTFSceneManager::AddPointLight(std::make_shared<GLTFPointLight>(GLTFPointLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f, 1.0f))); */
 }
 
@@ -214,8 +216,10 @@ void PBRRenderer::BuildRenderer()
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/alps_field_4k.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
-	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 
+	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
+	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
+	perlinNoise.BuildRenderPass(glm::ivec2(512));
 	{
 		//Depth Pass
 		{
@@ -229,7 +233,7 @@ void PBRRenderer::BuildRenderer()
 		submitList.PointLightShadowMaps = depthCubeMapRenderPass.DepthCubeMapTextureList;
 
 		//SkyBox Reflection Pass
-		{
+	/*	{
 			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
@@ -246,9 +250,9 @@ void PBRRenderer::BuildRenderer()
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
 			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
-		}
+		}*/
 		//Mesh Reflection Pass
-		{
+	/*	{
 			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
@@ -264,11 +268,11 @@ void PBRRenderer::BuildRenderer()
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
 			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
-		}
+		}*/
 		//Mesh Reflection Pass
 		{
-			irradianceRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			prefilterRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			irradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -309,6 +313,7 @@ void PBRRenderer::Update()
 	{
 		lightManagerMenu.Update();
 	}
+	
 }
 
 void PBRRenderer::ImGuiUpdate()
@@ -318,6 +323,11 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
+	perlinNoise.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
+	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
+	{
+		perlinNoise.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
+	}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
 	{
@@ -507,6 +517,9 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
+	CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
+
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
@@ -539,13 +552,13 @@ void PBRRenderer::Destroy()
 	depthCubeMapRenderPass.Destroy();
 	depthSpotLightRenderPass.Destroy();
 
-	skyBoxReflectionIrradianceRenderPass.Destroy();
-	skyBoxReflectionPrefilterRenderPass.Destroy();
-	skyBoxReflectionRenderPass.Destroy();
-	
-	meshReflectionIrradianceRenderPass.Destroy();
-	meshReflectionPrefilterRenderPass.Destroy();
-	meshReflectionRenderPass.Destroy();
+	//skyBoxReflectionIrradianceRenderPass.Destroy();
+	//skyBoxReflectionPrefilterRenderPass.Destroy();
+	//skyBoxReflectionRenderPass.Destroy();
+	//
+	//meshReflectionIrradianceRenderPass.Destroy();
+	//meshReflectionPrefilterRenderPass.Destroy();
+	//meshReflectionRenderPass.Destroy();
 	
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "HLSLShaderCompiler.h"
 
 Window* Window::window;
 GLFWwindow* Window::GLFWindow;
@@ -57,6 +58,7 @@ VkDevice VulkanRenderer::Device = VK_NULL_HANDLE;
 VkPhysicalDevice VulkanRenderer::PhysicalDevice = VK_NULL_HANDLE;
 VkSurfaceKHR VulkanRenderer::Surface = VK_NULL_HANDLE;
 VkCommandPool VulkanRenderer::CommandPool = VK_NULL_HANDLE;
+
 bool VulkanRenderer::UpdateRendererFlag = false;
 bool VulkanRenderer::ImGUILayerActive = false;
 uint32_t VulkanRenderer::Max2DLayerCount = 5;
@@ -74,6 +76,19 @@ PFN_vkCmdTraceRaysKHR VulkanRenderer::vkCmdTraceRaysKHR = VK_NULL_HANDLE;
 PFN_vkGetRayTracingShaderGroupHandlesKHR VulkanRenderer::vkGetRayTracingShaderGroupHandlesKHR = VK_NULL_HANDLE;
 PFN_vkCreateRayTracingPipelinesKHR VulkanRenderer::vkCreateRayTracingPipelinesKHR = VK_NULL_HANDLE;
 
+
+VkShaderModule VulkanRenderer::CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage)
+{
+	std::vector<uint32_t> spriv_buffer = HLSLShaderCompiler::BuildShader(filename, stage);
+
+	VkShaderModule shaderModule{};
+	VkShaderModuleCreateInfo ShaderModuleCreateInfo{};
+	ShaderModuleCreateInfo.codeSize = spriv_buffer.size() * sizeof(spriv_buffer[0]);
+	ShaderModuleCreateInfo.pCode = (uint32_t*)spriv_buffer.data();
+	vkCreateShaderModule(VulkanRenderer::GetDevice(), &ShaderModuleCreateInfo, nullptr, &shaderModule);
+
+	return shaderModule;
+}
 
 void VulkanRenderer::StartUp()
 {
@@ -305,6 +320,8 @@ void VulkanRenderer::StartUp()
 			throw std::runtime_error("Failed to create synchronization objects for a frame.");
 		}
 	}
+
+	HLSLShaderCompiler::SetUpCompiler();
 
 	vkGetBufferDeviceAddressKHR = reinterpret_cast<PFN_vkGetBufferDeviceAddressKHR>(vkGetDeviceProcAddr(Device, "vkGetBufferDeviceAddressKHR"));
 	vkCmdBuildAccelerationStructuresKHR = reinterpret_cast<PFN_vkCmdBuildAccelerationStructuresKHR>(vkGetDeviceProcAddr(Device, "vkCmdBuildAccelerationStructuresKHR"));

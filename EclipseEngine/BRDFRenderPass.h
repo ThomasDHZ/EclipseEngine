@@ -1,22 +1,13 @@
 #pragma once
-#include "RenderPass.h"
-#include "RenderedColorTexture.h"
-#include "JsonGraphicsPipeline.h"
+#include "GenerateImageRenderPass.h"
 
-class BRDFRenderPass : public RenderPass
+class BRDFRenderPass : public GenerateImageRenderPass
 {
 private:
-	void RenderPassDesc();
-	void BuildRenderPassPipelines();
-
-	JsonGraphicsPipeline BRDFPipeline;
-
 public:
 	BRDFRenderPass();
 	~BRDFRenderPass();
 
 	void BuildRenderPass(uint32_t textureSize);
 	void OneTimeDraw(uint32_t textureSize);
-	VkCommandBuffer Draw();
-	void Destroy();
 };

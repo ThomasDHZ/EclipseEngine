@@ -110,8 +110,9 @@ public:
 		gameObject->DrawLine(commandBuffer, DescriptorSet, ShaderPipelineLayout);
 	}
 
-	void DrawTexture(VkCommandBuffer& commandBuffer)
+	void DrawTexture(VkCommandBuffer& commandBuffer, TextureCreatorProperties& textureCreatorProperties)
 	{
+		vkCmdPushConstants(commandBuffer, ShaderPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(TextureCreatorProperties), &textureCreatorProperties);
 		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
 		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipelineLayout, 0, 1, &DescriptorSet, 0, nullptr);
 		vkCmdDraw(commandBuffer, 6, 1, 0, 0);

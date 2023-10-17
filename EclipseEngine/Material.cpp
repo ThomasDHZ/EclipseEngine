@@ -75,6 +75,10 @@ void Material::UpdateBuffer()
 	{
 		MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
 	}
+	if (HeightMap != nullptr)
+	{
+		MaterialInfo.HeightMap = HeightMap->GetTextureBufferIndex();
+	}
 	if (CheckPaletteSwapColorMap != nullptr)
 	{
 		MaterialInfo.CheckPaletteSwapColorMap = CheckPaletteSwapColorMap->GetTextureBufferIndex();

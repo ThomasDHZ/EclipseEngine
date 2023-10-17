@@ -23,6 +23,7 @@
 #include "VulkanPipelineEditor.h"
 #include "LightManagerMenu.h"
 #include "SpotLightDepthRenderPass.h"
+#include "PerlinNoiseRenderPass.h"
 
 class PBRRenderer
 {
@@ -32,6 +33,7 @@ private:
 	
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
+	PerlinNoiseRenderPass perlinNoise;
 
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
@@ -39,14 +41,14 @@ private:
 	SpotLightDepthRenderPass depthSpotLightRenderPass;
 
 	//SkyBox Reflection
-	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
-	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
-	PBRReflectionRenderPass skyBoxReflectionRenderPass;
+	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
+	//PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
+	//PBRReflectionRenderPass skyBoxReflectionRenderPass;
 
 	////Mesh Reflection
-	IrradianceRenderPass meshReflectionIrradianceRenderPass;
-	PrefilterRenderPass meshReflectionPrefilterRenderPass;
-	PBRReflectionRenderPass meshReflectionRenderPass;
+	//IrradianceRenderPass meshReflectionIrradianceRenderPass;
+	//PrefilterRenderPass meshReflectionPrefilterRenderPass;
+	//PBRReflectionRenderPass meshReflectionRenderPass;
 
 	//Main
 	IrradianceRenderPass irradianceRenderPass;

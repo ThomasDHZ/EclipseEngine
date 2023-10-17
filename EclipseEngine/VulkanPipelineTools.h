@@ -5,6 +5,7 @@
 #include "GLTFSceneManager.h"
 #include "GLTF_GraphicsPipeline.h"
 
+
 enum DescriptorBindingPropertiesEnum
 {
 	kModelTransformDescriptor,
@@ -38,7 +39,7 @@ struct DescriptorBindingLock
 
 class VulkanPipelineTools
 {
-
+private:
 protected:
 	VkPipeline ShaderPipeline = VK_NULL_HANDLE;
 	VkPipelineLayout ShaderPipelineLayout = VK_NULL_HANDLE;
@@ -56,7 +57,6 @@ protected:
 	DescriptorBindingLock TextureBuffer;
 	DescriptorBindingLock DepthBuffer;
 
-	VkShaderModule CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage);
 	VkShaderModule ReadGLSLShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
 	VkDescriptorSet CreateDescriptorSets(VkDescriptorPool descriptorPool, VkDescriptorSetLayout layout);

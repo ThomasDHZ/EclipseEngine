@@ -26,28 +26,10 @@ layout(binding = 1) buffer TransformBuffer { mat4 transform; } transformBuffer[]
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
-	uint MaterialIndex;
-    mat4 proj;
-    mat4 view;
-    vec3 CameraPos;
-    vec3 MeshColorID;
-    vec3 AmbientLight;
-    uint SunLightCount;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-    uint frame;
-    int MaxRefeflectCount;
 } sceneData;
 
 void main() {
 
-//    if(gl_VertexIndex == 0)
-//	{
-//		debugPrintfEXT(": %i \n",  meshBuffer[sceneData.MeshIndex].meshProperties.materialProperties.DiffuseMapID);
-//	}
   gl_Position = sceneData.proj * 
                   sceneData.view *                
                   transformBuffer[sceneData.MeshIndex].transform * 

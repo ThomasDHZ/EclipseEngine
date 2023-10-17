@@ -72,6 +72,11 @@ struct BakeSceneProperties
 	alignas(4)  float PBRMaxMipLevel = 0.0f;
 };
 
+struct TextureCreatorProperties
+{
+	alignas(4) float time = 0.0f;
+};
+
 struct SceneProperties
 {
 	alignas(4)  uint32_t MeshIndex = 0;

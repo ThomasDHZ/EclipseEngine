@@ -23,6 +23,7 @@ struct GLTFMaterialBufferInfo
 	alignas(4) uint32_t DepthMap = -1;
 	alignas(4) uint32_t AlphaMap = -1;
 	alignas(4) uint32_t EmissionMap = -1;
+	alignas(4) uint32_t HeightMap = -1;
 	alignas(4) uint32_t CheckPaletteSwapColorMap = -1;
 	alignas(4) uint32_t PaletteSwapPixelColorMap = -1;
 };
@@ -61,6 +62,7 @@ public:
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
+	std::shared_ptr<Texture> HeightMap = nullptr;
 	std::shared_ptr<Texture> CheckPaletteSwapColorMap = nullptr;
 	std::shared_ptr<Texture> PaletteSwapPixelColorMap = nullptr;
 

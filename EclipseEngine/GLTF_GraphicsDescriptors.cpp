@@ -293,7 +293,7 @@ VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteBufferDescriptorSet(VkDescri
 	writeTextureDescriptorSet.dstSet = descriptorSet;
 	writeTextureDescriptorSet.dstBinding = BindingNumber;
 	writeTextureDescriptorSet.dstArrayElement = 0;
-	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	writeTextureDescriptorSet.descriptorCount = static_cast<uint32_t>(BufferInfo.size());
 	writeTextureDescriptorSet.pBufferInfo = BufferInfo.data();
 	return writeTextureDescriptorSet;
@@ -306,7 +306,7 @@ VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteBufferDescriptorSet(VkDescri
 	writeTextureDescriptorSet.dstSet = descriptorSet;
 	writeTextureDescriptorSet.dstBinding = BindingNumber;
 	writeTextureDescriptorSet.dstArrayElement = 0;
-	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	writeTextureDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 	writeTextureDescriptorSet.descriptorCount = static_cast<uint32_t>(Buffer.size());
 	writeTextureDescriptorSet.pBufferInfo = Buffer.data();
 	return writeTextureDescriptorSet;

@@ -591,6 +591,15 @@
     <ClCompile Include="MegaMan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HLSLShaderCompiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoiseRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenerateImageRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1085,6 +1094,15 @@
     <ClInclude Include="MegaMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HLSLShaderCompiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoiseRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GenerateImageRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1100,12 +1118,6 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\BRDFShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\CubeMap.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\CubeMap.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\DepthCubeShader.frag">
@@ -1172,12 +1184,6 @@
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\PBRRenderer.vert">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\PrefilterShader.frag">
-      <Filter>Shader\RasterizationShaders</Filter>
-    </None>
-    <None Include="..\Shaders\PrefilterShader.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
     <None Include="..\Shaders\Renderer2D.frag">
@@ -1339,6 +1345,7 @@
     <None Include="..\Shaders\InstanceWireFrame.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="packages.config" />
     <None Include="..\Shaders\VertexBuilder.glsl">
       <Filter>Shader\Include\Raster</Filter>
     </None>
@@ -1387,6 +1394,36 @@
     <None Include="..\Shaders\LevelRenderer2D.vert">
       <Filter>Shader\RasterizationShaders</Filter>
     </None>
+    <None Include="ColorCorrectionFunctions.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="MeshProperties.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="MathConsts.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="MaterialProperties.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="MaterialBuilder.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="LightProperties.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="SceneProperties.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Vertex.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="VertexBuilder.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Random.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">
@@ -1394,10 +1431,58 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="BRDFPixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="BRDFVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalDepthPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalDepthVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentToCubeMapPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentToCubeMapVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="IrradiancePixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="IrradianceVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PrefilterPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PrefilterVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="WireFramePixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="WireFrameVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PerlinNoiseVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PerlinNoisePixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

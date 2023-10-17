@@ -12,6 +12,7 @@
 #include "VulkanSwapChain.h"
 #include "Timer.h"
 
+
 struct DescriptorSetBindingStruct
 {
 	uint32_t DescriptorSlotNumber;
@@ -71,6 +72,7 @@ public:
 	static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
 	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
 
+	static VkShaderModule CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage);
 	static void StartUp();
 	static void RebuildSwapChain();
 	static VkResult StartDraw();

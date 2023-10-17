@@ -18,6 +18,7 @@ struct MaterialProperties
 	uint DepthMap;
 	uint AlphaMap;
 	uint EmissionMap;
+	uint HeightMap;
 	uint CheckPixelForPaletteSwapColorMap;
 	uint PaletteSwapPixelColorMap;
 };
