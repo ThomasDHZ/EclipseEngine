@@ -128,10 +128,10 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
 
     //Main Renderers
     {
-        LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-        PBRPipeline = JsonGraphicsPipeline("PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
-        SkyBoxPipeline = JsonGraphicsPipeline("SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
+        LinePipeline = JsonGraphicsPipeline("/Pipelines/LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        WireframePipeline = JsonGraphicsPipeline("/Pipelines/WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRPipeline = JsonGraphicsPipeline("/Pipelines/PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
+        SkyBoxPipeline = JsonGraphicsPipeline("/Pipelines/SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
         //lightReflectionPipeline = JsonGraphicsPipeline("LightReflectionPosDebug.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     }
 
@@ -145,8 +145,8 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
         attributeDescriptions = Vertex3D::getAttributeDescriptions();
         attributeDescriptions = InstancedVertexData3D::AddInstnacingAttributeDescription(attributeDescriptions);
 
-        PBRInstancePipeline = JsonGraphicsPipeline("PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
-        WireframeInstancePipeline = JsonGraphicsPipeline("WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        PBRInstancePipeline = JsonGraphicsPipeline("/Pipelines/PBRInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
+        WireframeInstancePipeline = JsonGraphicsPipeline("/Pipelines/WireframeInstancePipeline.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     }
 }
 
