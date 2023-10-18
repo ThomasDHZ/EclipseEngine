@@ -86,6 +86,8 @@ public:
 	static uint32_t GetMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 	static uint64_t GetBufferDeviceAddress(VkBuffer buffer);
 
+	static std::string OpenFile(const std::string& reletivePath);
+
 	static VkInstance GetInstance() { return Instance; };
 	static VkDevice GetDevice() { return Device; };
 	static VkPhysicalDevice GetPhysicalDevice() { return PhysicalDevice; };

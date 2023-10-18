@@ -1103,6 +1103,9 @@
     <ClInclude Include="GenerateImageRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="WindowsIncludeStuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">

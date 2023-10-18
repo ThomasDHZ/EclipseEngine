@@ -531,3 +531,14 @@ uint64_t VulkanRenderer::GetBufferDeviceAddress(VkBuffer buffer)
 	BufferDevice.buffer = buffer;
 	return vkGetBufferDeviceAddressKHR(Device, &BufferDevice);
 }
+
+std::string VulkanRenderer::OpenFile(const std::string& reletivePath)
+{
+	char resul2t[MAX_PATH];
+	GetModuleFileName(NULL, resul2t, MAX_PATH);
+	std::string baseFilePath = resul2t;
+	baseFilePath += "/../../..";
+	std::replace(baseFilePath.begin(), baseFilePath.end(), '\\', '/');
+
+	return baseFilePath + reletivePath;
+}

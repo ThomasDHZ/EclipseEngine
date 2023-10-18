@@ -1,4 +1,5 @@
 #include "HLSLShaderCompiler.h"
+#include <algorithm>
 
 Microsoft::WRL::ComPtr<IDxcUtils> HLSLShaderCompiler::dxc_utils;
 Microsoft::WRL::ComPtr<IDxcCompiler3> HLSLShaderCompiler::dxc_compiler;

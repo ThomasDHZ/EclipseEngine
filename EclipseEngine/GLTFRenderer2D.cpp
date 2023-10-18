@@ -16,12 +16,12 @@ void GLTFRenderer2D::BuildRenderer()
 	GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", 8.49414635f, 5.79752779f, 4.80515528f));
 
 	std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("MetalManTiles"));
-	material3->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-	material3->CheckPaletteSwapColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan-Recovered.png", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	material3->PaletteSwapPixelColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMapPaletteRotation.bmp", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	
+	//material3->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	//material3->CheckPaletteSwapColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan-Recovered.png", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	//material3->PaletteSwapPixelColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMapPaletteRotation.bmp", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	//
 	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
-	material->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	//material->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 
 	//std::shared_ptr<Material> material2 = std::make_shared<Material>(Material("Layout0"));
 	//material2->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/LayerTestlayer0.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));

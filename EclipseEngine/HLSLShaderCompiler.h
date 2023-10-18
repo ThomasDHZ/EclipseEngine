@@ -1,7 +1,5 @@
 #pragma once
-#include <Windows.h>
-#include <dxcapi.h>
-#include <wrl/client.h>
+#include "WindowsIncludeStuff.h"
 #include <vector>
 #include <string>
 #include <iostream>

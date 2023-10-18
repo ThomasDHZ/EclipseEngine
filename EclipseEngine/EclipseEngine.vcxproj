@@ -514,6 +514,7 @@
     <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowsIncludeStuff.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\AdditionShader.frag" />
