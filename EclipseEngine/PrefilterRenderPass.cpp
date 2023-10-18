@@ -144,7 +144,7 @@ void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeM
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    PrefilterPipeline = JsonGraphicsPipeline("PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings), cubeMap);
+    PrefilterPipeline = JsonGraphicsPipeline("/Pipelines/PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings), cubeMap);
 }
 
 VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)

@@ -24,6 +24,7 @@
 #include "LightManagerMenu.h"
 #include "SpotLightDepthRenderPass.h"
 #include "PerlinNoiseRenderPass.h"
+#include "VoronoiNoiseRenderPass.h"
 
 class PBRRenderer
 {
@@ -39,6 +40,7 @@ private:
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
 	SpotLightDepthRenderPass depthSpotLightRenderPass;
+	VoronoiNoiseRenderPass voronoiNoiseRenderPass;
 
 	//SkyBox Reflection
 	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;

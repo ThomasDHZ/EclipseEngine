@@ -30,9 +30,9 @@ void HLSLShaderCompiler::SetUpCompiler()
     dxc_utils->CreateDefaultIncludeHandler(&DefaultIncludeHandler);
 }
 
-std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string& filename, VkShaderStageFlagBits stage)
+std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string filename, VkShaderStageFlagBits stage)
 {
-    std::ifstream ifs(filename);
+    std::ifstream ifs(File::OpenFile(filename));
     std::string str;
     ifs.seekg(0, std::ios::end);
     str.reserve(ifs.tellg());
@@ -54,13 +54,8 @@ std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string& filenam
     };
 
     std::vector<LPCWSTR> args;
-    args.emplace_back(L"-E main");
     args.emplace_back(L"-spirv");
     args.emplace_back(L"-fspv-target-env=vulkan1.3");
-    args.emplace_back(L"-fspv-extension=SPV_KHR_ray_tracing");
-    args.emplace_back(L"-fspv-extension=SPV_KHR_multiview");
-    args.emplace_back(L"-fspv-extension=SPV_KHR_shader_draw_parameters");
-    args.emplace_back(L"-fspv-extension=SPV_EXT_descriptor_indexing");
     switch (stage)
     {
     case VkShaderStageFlagBits::VK_SHADER_STAGE_VERTEX_BIT: args.emplace_back(L"-T vs_6_5"); break;

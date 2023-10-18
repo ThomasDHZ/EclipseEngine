@@ -212,6 +212,7 @@ void PBRRenderer::BuildRenderer()
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	perlinNoise.BuildRenderPass(glm::ivec2(512));
+	voronoiNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
 	{
 		//Depth Pass
 		{
@@ -315,10 +316,10 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
-	perlinNoise.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
+	voronoiNoiseRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
-		perlinNoise.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
+		voronoiNoiseRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
 	}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
@@ -509,7 +510,7 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
+	CommandBufferSubmitList.emplace_back(voronoiNoiseRenderPass.Draw((float)glfwGetTime()));
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());

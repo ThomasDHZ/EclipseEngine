@@ -1,46 +1,5 @@
-struct MeshProperties
-{
-    uint VertexBufferIndex;
-    uint IndexBufferIndex;
-    uint MaterialBufferIndex;
-    uint AlbedoMapIndex;
-    uint MetallicRoughnessMapIndex;
-    uint AmbientOcclusionMapIndex;
-    uint NormalMapIndex;
-    uint DepthMapIndex;
-    uint AlphaMapIndex;
-    uint EmissionMapIndex;
-    uint SkyBoxIndex;
-    float4x4 MeshTransform;
-    float2 UVOffset;
-    float2 UVScale;
-    float2 UVFlip;
-    int SelectedMesh;
-    float heightScale;
-    float minLayers;
-    float maxLayers;
-};
-
-struct SceneProperties
-{
-    uint MeshIndex;
-    uint PrimitiveIndex;
-    uint MaterialIndex;
-    uint ReflectionIndex;
-    float4x4 proj;
-    float4x4 view;
-    float3 CameraPos;
-    float3 MeshColorID;
-    float3 AmbientLight;
-    uint SunLightCount;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-    uint frame;
-    int MaxReflectCount;
-};
+#include "MeshProperties.hlsli"
+#include "SceneProperties.hlsli"
 
 struct VSInput
 {
@@ -69,8 +28,8 @@ struct ModelMatrix
 };
 
 [[vk::push_constant]] SceneProperties sceneProperties;
-[[vk::binding(0, 0)]] ConstantBuffer<MeshProperties> meshPropertiesBuffer[] : register(b0, space0);
-[[vk::binding(1, 0)]] ConstantBuffer<ModelMatrix> ModelTransformBuffer[] : register(b1, space1);
+[[vk::binding(0, 0)]] ConstantBuffer<MeshProperties> meshPropertiesBuffer[];
+[[vk::binding(1, 0)]] ConstantBuffer<ModelMatrix> ModelTransformBuffer[];
 
 VSOutput main(VSInput input)
 {

@@ -145,7 +145,7 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    IrradiancePipeline = JsonGraphicsPipeline("IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings), cubeMap);
+    IrradiancePipeline = JsonGraphicsPipeline("/Pipelines/IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings), cubeMap);
 }
 
 VkCommandBuffer IrradianceRenderPass::Draw()
