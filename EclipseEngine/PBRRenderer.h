@@ -25,6 +25,7 @@
 #include "SpotLightDepthRenderPass.h"
 #include "PerlinNoiseRenderPass.h"
 #include "VoronoiNoiseRenderPass.h"
+#include "MultiplyRenderPass.h"
 
 class PBRRenderer
 {
@@ -34,13 +35,16 @@ private:
 	
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	BRDFRenderPass brdfRenderPass;
+
 	PerlinNoiseRenderPass perlinNoise;
+	VoronoiNoiseRenderPass voronoiNoiseRenderPass;
+	MultiplyRenderPass multiplyRenderPass;
 
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
 	SpotLightDepthRenderPass depthSpotLightRenderPass;
-	VoronoiNoiseRenderPass voronoiNoiseRenderPass;
+
 
 	//SkyBox Reflection
 	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;

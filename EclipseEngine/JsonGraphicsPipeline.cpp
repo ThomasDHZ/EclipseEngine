@@ -49,6 +49,13 @@ JsonGraphicsPipeline::JsonGraphicsPipeline(const std::string filePath, std::vect
     LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
 }
 
+JsonGraphicsPipeline::JsonGraphicsPipeline(const std::string filePath, std::vector<VkVertexInputBindingDescription> VertexBindingDescriptions, std::vector<VkVertexInputAttributeDescription> VertexAttributeDescriptions, VkRenderPass renderPass, std::vector<VkPipelineColorBlendAttachmentState>& ColorAttachments, VkSampleCountFlagBits samplecount, uint32_t sizeofConstBuffer, std::shared_ptr<Texture> colorTexture1, std::shared_ptr<Texture> colorTexture2)
+{
+    LoadMathOpperationTexture1Buffer(colorTexture1);
+    LoadMathOpperationTexture2Buffer(colorTexture2);
+    LoadGraphicsPipeline(filePath, VertexBindingDescriptions, VertexAttributeDescriptions, renderPass, ColorAttachments, samplecount, sizeofConstBuffer);
+}
+
 JsonGraphicsPipeline::~JsonGraphicsPipeline()
 {
 }

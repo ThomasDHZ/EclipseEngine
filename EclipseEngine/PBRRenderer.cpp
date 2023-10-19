@@ -213,6 +213,8 @@ void PBRRenderer::BuildRenderer()
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	perlinNoise.BuildRenderPass(glm::ivec2(512));
 	voronoiNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
+	auto AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/grass/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, voronoiNoiseRenderPass.GetImageTexture());
 	{
 		//Depth Pass
 		{
@@ -316,7 +318,7 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
-	voronoiNoiseRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
+	multiplyRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
 		voronoiNoiseRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
@@ -510,7 +512,9 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
+	CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
 	CommandBufferSubmitList.emplace_back(voronoiNoiseRenderPass.Draw((float)glfwGetTime()));
+	CommandBufferSubmitList.emplace_back(multiplyRenderPass.Draw((float)glfwGetTime()));
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());

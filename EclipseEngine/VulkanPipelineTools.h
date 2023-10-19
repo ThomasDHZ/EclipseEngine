@@ -28,7 +28,9 @@ enum DescriptorBindingPropertiesEnum
 	kViewTextureDescriptor,
 	kViewDepthTextureDescriptor,
 	kCubeMapSamplerDescriptor,
-	kRotatingPaletteTextureDescriptor
+	kRotatingPaletteTextureDescriptor,
+	kMathOpperation1Descriptor,
+	kMathOpperation2Descriptor,
 };
 
 struct DescriptorBindingLock
@@ -56,6 +58,8 @@ protected:
 	DescriptorBindingLock CubeMapBuffer;
 	DescriptorBindingLock TextureBuffer;
 	DescriptorBindingLock DepthBuffer;
+	DescriptorBindingLock MathOpperationTexture1Buffer;
+	DescriptorBindingLock MathOpperationTexture2Buffer;
 
 	VkShaderModule ReadGLSLShaderFile(const std::string& filename);
 	VkPipelineShaderStageCreateInfo CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages);
@@ -102,7 +106,8 @@ protected:
 	void LoadCubeMapBuffer(std::shared_ptr<RenderedCubeMapTexture>	 cubeMap);
 	void LoadTextureBuffer(std::shared_ptr<RenderedColorTexture>	 colorTexture);
 	void LoadDepthTextureBuffer(std::shared_ptr<RenderedDepthTexture>	 depthTexture);
-
+	void LoadMathOpperationTexture1Buffer(std::shared_ptr<Texture>	texture);
+	void LoadMathOpperationTexture2Buffer(std::shared_ptr<Texture>	texture);
 public: 
 	VkPipelineShaderStageCreateInfo LoadPipelineShaderStageCreateInfo(nlohmann::json& json);
 

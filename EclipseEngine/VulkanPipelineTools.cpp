@@ -100,6 +100,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kViewTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kViewDepthTextureDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
             case kCubeMapSamplerDescriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], (uint32_t)GLTFSceneManager::GetCubeMapSamplerBuffer().size() }); break;
+            case kMathOpperation1Descriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
+            case kMathOpperation2Descriptor: descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ DescriptorList[x], 1 }); break;
         }
     }
 
@@ -130,6 +132,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kViewTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kViewDepthTextureDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
             case kCubeMapSamplerDescriptor:  descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], (uint32_t)GLTFSceneManager::GetCubeMapSamplerBuffer().size(), VK_SHADER_STAGE_ALL}); break;
+            case kMathOpperation1Descriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1, VK_SHADER_STAGE_ALL }); break;
+            case kMathOpperation2Descriptor: descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ (uint32_t)x,  DescriptorList[x], 1 , VK_SHADER_STAGE_ALL }); break;
         }
     }
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
@@ -159,6 +163,8 @@ void VulkanPipelineTools::LoadDescriptorSets(nlohmann::json& json)
             case kViewTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
             case kViewDepthTextureDescriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, DepthBuffer.ImageInfo); break;
             case kCubeMapSamplerDescriptor: AddUniformBufferDescriptorSetBinding(DescriptorBindingList, x, GLTFSceneManager::GetCubeMapSamplerBuffer()); break;
+            case kMathOpperation1Descriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, MathOpperationTexture1Buffer.ImageInfo); break;
+            case kMathOpperation2Descriptor: AddTextureDescriptorSetBinding(DescriptorBindingList, x, MathOpperationTexture2Buffer.ImageInfo); break;
         }
     }
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
@@ -452,6 +458,22 @@ void VulkanPipelineTools::LoadDepthTextureBuffer(std::shared_ptr<RenderedDepthTe
     DepthBuffer.ImageInfo.imageView = depthTexture->GetView();
     DepthBuffer.ImageInfo.sampler = depthTexture->GetSampler();
     DepthBuffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadMathOpperationTexture1Buffer(std::shared_ptr<Texture> texture)
+{
+    MathOpperationTexture1Buffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    MathOpperationTexture1Buffer.ImageInfo.imageView = texture->GetView();
+    MathOpperationTexture1Buffer.ImageInfo.sampler = texture->GetSampler();
+    MathOpperationTexture1Buffer.Used = true;
+}
+
+void VulkanPipelineTools::LoadMathOpperationTexture2Buffer(std::shared_ptr<Texture> texture)
+{
+    MathOpperationTexture2Buffer.ImageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    MathOpperationTexture2Buffer.ImageInfo.imageView = texture->GetView();
+    MathOpperationTexture2Buffer.ImageInfo.sampler = texture->GetSampler();
+    MathOpperationTexture2Buffer.Used = true;
 }
 
 VkPipelineShaderStageCreateInfo VulkanPipelineTools::LoadPipelineShaderStageCreateInfo(nlohmann::json& json)

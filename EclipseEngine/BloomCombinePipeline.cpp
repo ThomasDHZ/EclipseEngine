@@ -1,4 +1,5 @@
 #include "BloomCombinePipeline.h"
+#include "File.h"
 
 BloomCombinePipeline::BloomCombinePipeline()
 {
@@ -10,10 +11,25 @@ BloomCombinePipeline::~BloomCombinePipeline()
 
 void BloomCombinePipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoStruct, std::vector<std::shared_ptr<RenderedColorTexture>> textureList)
 {
+    //std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
+
+    //VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+    //vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    //vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    //vertShaderStageInfo.module = VulkanRenderer::CompileHLSLShader(File::OpenFile("EclipseEngine/AddP"), VK_SHADER_STAGE_VERTEX_BIT);
+    //vertShaderStageInfo.pName = "main";
+
+    //VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+    //fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    //fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    //fragShaderStageInfo.module = VulkanRenderer::CompileHLSLShader(File::OpenFile("EclipseEngine/AddV"), VK_SHADER_STAGE_FRAGMENT_BIT);
+    //fragShaderStageInfo.pName = "main";
+
+    //PipelineShaderStageList.emplace_back(vertShaderStageInfo);
+    //PipelineShaderStageList.emplace_back(fragShaderStageInfo);
     std::vector<VkPipelineShaderStageCreateInfo> PipelineShaderStageList;
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "AdditionShaderBlurVert.spv", VK_SHADER_STAGE_VERTEX_BIT));
     PipelineShaderStageList.emplace_back(CreateShader(BaseShaderFilePath + "AdditionShaderBlurFrag.spv", VK_SHADER_STAGE_FRAGMENT_BIT));
-
 
     std::vector<VkDescriptorImageInfo> blurTextureBufferList;
     for (auto& texture : textureList)

@@ -26,6 +26,7 @@ float2 quintic(float2 p)
 float4 main(float2 UV : TEXCOORD0) : SV_TARGET
 {  
     float2 uv = UV;
+    uv.y = 1 - UV.y;
     
     float3 black = float3(0.0, 0.0f, 0.0f);
     float3 white = float3(1.0, 1.0f, 1.0f);

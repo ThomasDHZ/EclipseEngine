@@ -148,6 +148,12 @@
     <Filter Include="Source Files\ImGuiMenus\PipelineEditorMenu">
       <UniqueIdentifier>{4e34eddc-353c-4fc7-9411-985aeb7af5ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\Opperations">
+      <UniqueIdentifier>{3d2bedef-3876-4c47-ad5f-3933e58dbd2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\TextureShaders">
+      <UniqueIdentifier>{eb7a0ed1-222f-4d65-9128-021a9704f1ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -604,6 +610,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VoronoiNoiseRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiplyRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1118,6 +1127,9 @@
     <ClInclude Include="VoronoiNoiseRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MultiplyRenderPass.h">
+      <Filter>Header Files\Renderer\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1446,12 +1458,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="BRDFPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="BRDFVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="DirectionalDepthPixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
@@ -1494,17 +1500,35 @@
     <FxCompile Include="WireFrameVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="PerlinNoiseVertexShader.hlsl">
-      <Filter>Shader</Filter>
+    <FxCompile Include="AddPixelShader.hlsl">
+      <Filter>Shader\Opperations</Filter>
     </FxCompile>
-    <FxCompile Include="PerlinNoisePixelShader.hlsl">
-      <Filter>Shader</Filter>
+    <FxCompile Include="AddVertexShader.hlsl">
+      <Filter>Shader\Opperations</Filter>
     </FxCompile>
-    <FxCompile Include="VoronoiNoisePixelShader.hlsl">
-      <Filter>Shader</Filter>
+    <FxCompile Include="BRDFPixelShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BRDFVertexShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
     <FxCompile Include="VoronoiNoiseVertexShader.hlsl">
-      <Filter>Shader</Filter>
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="VoronoiNoisePixelShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PerlinNoiseVertexShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PerlinNoisePixelShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiplyPixelShader.hlsl">
+      <Filter>Shader\Opperations</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiplyVertexShader.hlsl">
+      <Filter>Shader\Opperations</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
