@@ -158,6 +158,7 @@ public:
 
 	static std::vector<GameObject2D*> Get2DGameObjects();
 
+	static std::vector<std::shared_ptr<Material>> GetMaterialList() { return MaterialList; }
 	static std::vector<std::shared_ptr<LightBase>> GetAllLights();
 	static std::vector<std::shared_ptr<SunLight>> GetSunLights() { return SunLightList; }
 	static std::vector<std::shared_ptr<DirectionalLight>> GetDirectionalLights() { return DirectionalLightList; }

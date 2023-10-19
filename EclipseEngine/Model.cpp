@@ -70,37 +70,37 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 
 		if (loader.AlbedoMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->AlbedoMap = GLTFSceneManager::LoadTexture2D(loader.AlbedoMap);
+			material->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(loader.AlbedoMap));
 		}
 
 		if (loader.MetallicRoughnessMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->MetallicRoughnessMap = GLTFSceneManager::LoadTexture2D(loader.MetallicRoughnessMap);
+			material->SetMetallicRoughnessMap( GLTFSceneManager::LoadTexture2D(loader.MetallicRoughnessMap));
 		}
 
 		if (loader.AmbientOcclusionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->AmbientOcclusionMap = GLTFSceneManager::LoadTexture2D(loader.AmbientOcclusionMap);
+			material->SetAmbientOcclusionMap( GLTFSceneManager::LoadTexture2D(loader.AmbientOcclusionMap));
 		}
 
 		if (loader.NormalMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->NormalMap = GLTFSceneManager::LoadTexture2D(loader.NormalMap);
+			material->SetNormalMap(GLTFSceneManager::LoadTexture2D(loader.NormalMap));
 		}
 
 		if (loader.DepthMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->DepthMap = GLTFSceneManager::LoadTexture2D(loader.DepthMap);
+			material->SetDepthMap(GLTFSceneManager::LoadTexture2D(loader.DepthMap));
 		}
 
 		if (loader.AlphaMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->AlphaMap = GLTFSceneManager::LoadTexture2D(loader.AlphaMap);
+			material->SetAlphaMap(GLTFSceneManager::LoadTexture2D(loader.AlphaMap));
 		}
 
 		if (loader.EmissionMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
-			material->EmissionMap = GLTFSceneManager::LoadTexture2D(loader.EmissionMap);
+			material->SetEmissionMap(GLTFSceneManager::LoadTexture2D(loader.EmissionMap));
 		}
 
 		material->UpdateBuffer();

@@ -8,7 +8,7 @@ Level2D::Level2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm:
 {
 	LevelName = levelName;
 	LevelBounds = levelBounds;
-	LevelSizeInPixels = glm::ivec2(materialList[0]->AlbedoMap->GetWidth(), materialList[0]->AlbedoMap->GetHeight());
+	LevelSizeInPixels = glm::ivec2(materialList[0]->GetAlbedoMap()->GetWidth(), materialList[0]->GetAlbedoMap()->GetHeight());
 	TileSizeInPixels = tileSizeInPixels;
 	LevelTileCount = glm::ivec2(LevelSizeInPixels.x / TileSizeInPixels.x, LevelSizeInPixels.y / TileSizeInPixels.y);
 	TileUVSize = glm::vec2(1.0f / (float)LevelTileCount.x, 1.0f / (float)LevelTileCount.y);
