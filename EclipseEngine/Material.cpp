@@ -39,55 +39,6 @@ void Material::UpdateBuffer()
 	MaterialInfo.Alpha = Alpha;
 	MaterialInfo.CheckPaletteSwapColor = CheckPaletteSwapColor;
 
-	//if (AlbedoMap != nullptr)
-	//{
-	//	MaterialInfo.AlbedoMap = AlbedoMap->GetTextureBufferIndex();
-	//}
-	//if (MetallicRoughnessMap != nullptr)
-	//{
-	//	MaterialInfo.MetallicRoughnessMap = MetallicRoughnessMap->GetTextureBufferIndex();
-	//}
-	//if (MetallicMap != nullptr)
-	//{
-	//	MaterialInfo.MetallicMap = MetallicMap->GetTextureBufferIndex();
-	//}
-	//if (RoughnessMap != nullptr)
-	//{
-	//	MaterialInfo.RoughnessMap = RoughnessMap->GetTextureBufferIndex();
-	//}
-	//if (AmbientOcclusionMap != nullptr)
-	//{
-	//	MaterialInfo.AmbientOcclusionMap = AmbientOcclusionMap->GetTextureBufferIndex();
-	//}
-	//if (NormalMap != nullptr)
-	//{
-	//	MaterialInfo.NormalMap = NormalMap->GetTextureBufferIndex();
-	//}
-	//if (DepthMap != nullptr)
-	//{
-	//	MaterialInfo.DepthMap = DepthMap->GetTextureBufferIndex();
-	//}
-	//if (AlphaMap != nullptr)
-	//{
-	//	MaterialInfo.AlphaMap = AlphaMap->GetTextureBufferIndex();
-	//}
-	//if (EmissionMap != nullptr)
-	//{
-	//	MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
-	//}
-	//if (HeightMap != nullptr)
-	//{
-	//	MaterialInfo.HeightMap = HeightMap->GetTextureBufferIndex();
-	//}
-	//if (CheckPaletteSwapColorMap != nullptr)
-	//{
-	//	MaterialInfo.CheckPaletteSwapColorMap = CheckPaletteSwapColorMap->GetTextureBufferIndex();
-	//}
-	//if (PaletteSwapPixelColorMap != nullptr)
-	//{
-	//	MaterialInfo.PaletteSwapPixelColorMap = PaletteSwapPixelColorMap->GetTextureBufferIndex();
-	//}
-
 	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
@@ -103,6 +54,46 @@ void Material::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& 
 	MaterialBufferInfo.offset = 0;
 	MaterialBufferInfo.range = VK_WHOLE_SIZE;
 	MaterialBufferList.emplace_back(MaterialBufferInfo);
+}
+
+void Material::SetAlbedo(glm::vec3 color)
+{
+	Albedo = color;
+}
+
+void Material::SetMetallic(float value)
+{
+	Metallic = value;
+}
+
+void Material::SetRoughness(float value)
+{
+	Roughness = value;
+}
+
+void Material::SetAmbientOcclusion(float value)
+{
+	AmbientOcclusion = value;
+}
+
+void Material::SetEmission(glm::vec3 color)
+{
+	Emission = color;
+}
+
+void Material::SetAlpha(float value)
+{
+	Alpha = value;
+}
+
+void Material::SetCheckPaletteSwapColor(glm::vec3 color)
+{
+	CheckPaletteSwapColor = color;
+}
+
+void Material::SetPaletteSwapPixelColor(glm::vec3 color)
+{
+	PaletteSwapPixelColor = color;
 }
 
 void Material::SetAlbedoMap(std::shared_ptr<Texture> texture)

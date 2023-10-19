@@ -74,12 +74,6 @@ std::shared_ptr<Texture> GLTFSceneManager::IsTexture2DLoaded(std::string name)
 
 std::shared_ptr<Texture> GLTFSceneManager::LoadTexture2D(std::shared_ptr<Texture> texture)
 {
-	std::shared_ptr<Texture> isTextureLoaded = IsTexture2DLoaded(texture->GetFilePath());
-	if (isTextureLoaded != nullptr)
-	{
-		return isTextureLoaded;
-	}
-
 	TextureList.emplace_back(texture);
 
 	UpdateBufferIndex();

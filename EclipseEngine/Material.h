@@ -38,6 +38,15 @@ private:
 
 	VulkanBuffer MaterialBuffer;
 
+	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	float Metallic = 0.0f;
+	float Roughness = 0.0f;
+	float AmbientOcclusion = 1.0f;
+	glm::vec3 Emission = glm::vec3(0.0f);
+	float Alpha = 1.0f;
+	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
+	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
+
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
 	std::shared_ptr<Texture> MetallicMap = nullptr;
@@ -54,26 +63,26 @@ private:
 	void GenerateID();
 	void UpdateBuffer();
 public:
-	std::string MaterialName;
-	GLTFMaterialBufferInfo MaterialInfo;
-
-	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Metallic = 0.0f;
-	float Roughness = 0.0f;
-	float AmbientOcclusion = 1.0f;
-	glm::vec3 Emission = glm::vec3(0.0f);
-	float Alpha = 1.0f;
-	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
-	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
-
 	Material();
 	Material(const std::string& materialName);
 	~Material();
+
+	std::string MaterialName;
+	GLTFMaterialBufferInfo MaterialInfo;
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 	
 	void Destroy();
 	void GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList);
+
+	void SetAlbedo(glm::vec3 color);
+	void SetMetallic(float value);
+	void SetRoughness(float value);
+	void SetAmbientOcclusion(float value);
+	void SetEmission(glm::vec3 color);
+	void SetAlpha(float value);
+	void SetCheckPaletteSwapColor(glm::vec3 color);
+	void SetPaletteSwapPixelColor(glm::vec3 color);
 
 	void SetAlbedoMap(std::shared_ptr<Texture> texture);
 	void SetMetallicRoughnessMap(std::shared_ptr<Texture> texture);

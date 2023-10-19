@@ -9,13 +9,13 @@ GenerateImageRenderPass::~GenerateImageRenderPass()
 {
 }
 
-void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, glm::ivec2 textureSize)
+void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize)
 {
     RenderPassResolution = textureSize;
 
     if (renderPass == nullptr)
     {
-        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, textureFormat, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {
@@ -25,6 +25,8 @@ void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, glm:
 
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ImageTexture->View);
+
+    GLTFSceneManager::LoadTexture2D(ImageTexture);
 
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
@@ -49,19 +51,21 @@ void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, glm:
     std::vector<VkImageView> AttachmentList;
     AttachmentList.emplace_back(ImageTexture->View);
 
+    GLTFSceneManager::LoadTexture2D(ImageTexture);
+
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(pipelineFileName, texture1, texture2);
     SetUpCommandBuffers();
 }
 
-void GenerateImageRenderPass::OneTimeDraw(const char* pipelineFileName, glm::ivec2 textureSize)
+void GenerateImageRenderPass::OneTimeDraw(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize)
 {
     RenderPassResolution = textureSize;
 
     if (renderPass == nullptr)
     {
-        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, textureFormat, VK_SAMPLE_COUNT_1_BIT));
     }
     else
     {

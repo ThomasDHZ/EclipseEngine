@@ -17,9 +17,9 @@ public:
 	GenerateImageRenderPass();
 	~GenerateImageRenderPass();
 
-	void BuildRenderPass(const char* pipelineFileName, glm::ivec2 textureSize);
+	void BuildRenderPass(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize);
 	void BuildRenderPass(const char* pipelineFileName, glm::ivec2 textureSize, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2);
-	void OneTimeDraw(const char* pipelineFileName, glm::ivec2 textureSize);
+	void OneTimeDraw(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize);
 	void OneTimeDraw(const char* pipelineFileName, glm::ivec2 textureSize, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2);
 	VkCommandBuffer Draw(float time);
 	//void Save();

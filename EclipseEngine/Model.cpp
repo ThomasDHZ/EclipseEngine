@@ -61,12 +61,12 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 	for (auto& loader : materialLoader)
 	{
 		std::shared_ptr<Material> material = std::make_shared<Material>(Material(loader.MaterialName));
-		material->Albedo = loader.Albedo;
-		material->Metallic = loader.Metallic;
-		material->Roughness = loader.Roughness;
-		material->AmbientOcclusion = loader.AmbientOcclusion;
-		material->Emission = loader.Emission;
-		material->Alpha = loader.Alpha;
+		material->SetAlbedo(loader.Albedo);
+		material->SetMetallic(loader.Metallic);
+		material->SetRoughness(loader.Roughness);
+		material->SetAmbientOcclusion(loader.AmbientOcclusion);
+		material->SetEmission(loader.Emission);
+		material->SetAlpha(loader.Alpha);
 
 		if (loader.AlbedoMap.TextureType != TextureTypeEnum::kUndefinedTexture)
 		{
@@ -103,7 +103,6 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 			material->SetEmissionMap(GLTFSceneManager::LoadTexture2D(loader.EmissionMap));
 		}
 
-		material->UpdateBuffer();
 		MaterialList.emplace_back(material);
 		GLTFSceneManager::AddMaterial(material);
 	}

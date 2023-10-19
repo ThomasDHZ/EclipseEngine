@@ -29,11 +29,11 @@ void GLTFRenderer2D::BuildRenderer()
 
 	//material->AlphaMap = std::make_shared<Texture2D>(Texture2D(mario2, TextureTypeEnum::kAlphaTextureMap, VK_FORMAT_R8G8B8A8_UNORM));
 	
-	material->UpdateBuffer();
+	//material->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(material);
 	//material2->UpdateBuffer();
 	//GLTFSceneManager::AddMaterial(material2);
-	material3->UpdateBuffer();
+	//material3->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(material3);
 	GLTFSceneManager::UpdateBufferIndex();
 
