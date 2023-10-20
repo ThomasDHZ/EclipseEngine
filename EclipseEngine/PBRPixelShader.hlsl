@@ -166,21 +166,33 @@ float2 ParallaxMapping(MaterialProperties material, float2 texCoords, float3 vie
     return finalTexCoords;
 }
 
-float3x3 getTBNFromMap(VSOutput input, uint meshIndex)
+float3 getTBNFromMap(VSOutput input, uint meshIndex)
 {
-    float3 T = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-                                            float3(input.Tangent)));
-    float3 B = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-                                            float3(input.BiTangent)));
-    float3 N = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-                                            MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-                                            float3(input.Normal)));
-    return float3x3(T, B, N);
+    //float3 T = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
+    //                                        float3(input.Tangent)));
+    //float3 B = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
+    //                                        float3(input.BiTangent)));
+    //float3 N = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
+    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
+    //                                        float3(input.Normal)));
+    //return float3x3(T, B, N);
+    
+    
+    MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
+    
+    float3 tangentNormal = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], input.UV).rgb * 2.0 - 1.0;
+
+    float3 N = normalize(input.Normal);
+    float3 T = normalize(input.Tangent);
+    float3 B = normalize(cross(N, T));
+    float3x3 TBN = transpose(float3x3(T, B, N));
+    
+    return normalize(mul(TBN, tangentNormal));
 }
 
 PSOutput main(VSOutput input)
@@ -188,30 +200,29 @@ PSOutput main(VSOutput input)
     PSOutput output = (PSOutput) 0;
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
-    float3x3 TBN = getTBNFromMap(input, sceneDataProperties.MeshIndex);
     float2 UV = input.UV;
-    float3 N = input.Normal;
+    float3 N = getTBNFromMap(input, sceneDataProperties.MeshIndex);
     float3 V = normalize(sceneDataProperties.CameraPos - input.WorldPos);
     
-    float3 ViewPos = mul(TBN, sceneDataProperties.CameraPos);
-    float3 FragPos2 = mul(TBN, input.WorldPos);
-    float3 viewDir = normalize(ViewPos - FragPos2);
+    //float3 ViewPos = mul(TBN, sceneDataProperties.CameraPos);
+    //float3 FragPos2 = mul(TBN, input.WorldPos);
+    //float3 viewDir = normalize(sceneDataProperties.CameraPos - FragPos2);
     
     if (material.NormalMap != 0)
     {
-        ViewPos = mul(TBN, sceneDataProperties.CameraPos);
-        FragPos2 = mul(TBN, input.WorldPos);
-        float3 viewDir = normalize(ViewPos - FragPos2);
+        //ViewPos = mul(TBN, sceneDataProperties.CameraPos);
+        //FragPos2 = mul(TBN, input.WorldPos);
+        //float3 viewDir = normalize(ViewPos - FragPos2);
 
         if (material.DepthMap != 0)
         {
-            UV = ParallaxMapping(material, UV, viewDir);
+            UV = ParallaxMapping(material, UV, V);
            // if(UV.x > 1.0 || UV.y > 1.0 || UV.x < 0.0 || UV.y < 0.0)
        // discard;
         }
-        N = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], UV).rgb;
-        N = normalize(N * 2.0 - 1.0);
-        N = normalize(mul(TBN, N));
+        //N = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], UV).rgb;
+        //N = normalize(N * 2.0 - 1.0);
+        //N = normalize(mul(TBN, N));
     }
     
     float3 R = reflect(-V, N);
@@ -219,7 +230,8 @@ PSOutput main(VSOutput input)
     float4 Albedo = TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV);
     float Metallic = TextureMap[material.MetallicMap].Sample(TextureMapSampler[material.MetallicMap], UV).r;
     float Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], UV).r;
-    float AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;
+    //float AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;
+    float AmbientOcclusion = .04f;
     float3 Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], UV).rgb;
     if(Albedo.a == 0.0f)
     {
@@ -251,7 +263,10 @@ PSOutput main(VSOutput input)
 
         float NdotL = max(dot(N, L), 0.0);
         
-        //float4 LightSpaceMatrix = mul(LightBiasMatrix * DirectionalLightBuffer[x].LightSpaceMatrix * MeshPropertiesBuffer[sceneDataProperties.MeshIndex].MeshTransform, float4(input.WorldPos, 1.0));
+        //float4 LightSpaceMatrix = mul(MeshPropertiesBuffer[sceneDataProperties.MeshIndex].MeshTransform, float4(input.WorldPos, 1.0));
+        //       LightSpaceMatrix = mul(DirectionalLightBuffer[x].LightSpaceMatrix, LightSpaceMatrix);
+        //       LightSpaceMatrix = mul(LightBiasMatrix, LightSpaceMatrix);
+        
        // float shadow = filterPCF(LightSpaceMatrix / LightSpaceMatrix.w, x);
 
         Lo += (kD * Albedo.rgb / PI + specular) * radiance * NdotL;
@@ -280,15 +295,18 @@ PSOutput main(VSOutput input)
     output.Color = float4(color, 1.0f);
 
     float3 bloomColor = Emission;
-    if (color.r >= 1.0f)
+    if (color.r >= 1.0f &&
+        color.r >= bloomColor.r)
     {
         bloomColor.r = color.r;
     }
-    if (color.g >= 1.0f)
+    if (color.g >= 1.0f &&
+        color.g >= bloomColor.g)
     {
         bloomColor.g = color.g;
     }
-    if (color.b >= 1.0f)
+    if (color.b >= 1.0f &&
+        color.b >= bloomColor.b)
     {
         bloomColor.b = color.b;
     }

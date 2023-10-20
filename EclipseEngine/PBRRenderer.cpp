@@ -218,7 +218,7 @@ void PBRRenderer::BuildRenderer()
 	multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, valueNoiseRenderPass.GetImageTexture());
 
 	//GLTFSceneManager::UpdateBufferIndex();
-	GLTFSceneManager::GetMaterialList()[0]->SetNormalMap(multiplyRenderPass.GetImageTexture());
+	//GLTFSceneManager::GetMaterialList()[0]->SetNormalMap(multiplyRenderPass.GetImageTexture());
 	//GLTFSceneManager::UpdateBufferIndex();
 	auto asdf = GLTFSceneManager::GetMaterialList();
 	//GLTFSceneManager::UpdateBufferIndex();
