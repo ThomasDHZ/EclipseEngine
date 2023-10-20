@@ -168,21 +168,6 @@ float2 ParallaxMapping(MaterialProperties material, float2 texCoords, float3 vie
 
 float3 getTBNFromMap(VSOutput input, uint meshIndex)
 {
-    //float3 T = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-    //                                        float3(input.Tangent)));
-    //float3 B = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-    //                                        float3(input.BiTangent)));
-    //float3 N = normalize(mul(float3x3(MeshPropertiesBuffer[meshIndex].MeshTransform[0].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[1].xyz,
-    //                                        MeshPropertiesBuffer[meshIndex].MeshTransform[2].xyz),
-    //                                        float3(input.Normal)));
-    //return float3x3(T, B, N);
-    
-    
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
     float3 tangentNormal = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], input.UV).rgb * 2.0 - 1.0;
@@ -203,26 +188,13 @@ PSOutput main(VSOutput input)
     float2 UV = input.UV;
     float3 N = getTBNFromMap(input, sceneDataProperties.MeshIndex);
     float3 V = normalize(sceneDataProperties.CameraPos - input.WorldPos);
-    
-    //float3 ViewPos = mul(TBN, sceneDataProperties.CameraPos);
-    //float3 FragPos2 = mul(TBN, input.WorldPos);
-    //float3 viewDir = normalize(sceneDataProperties.CameraPos - FragPos2);
-    
+   
     if (material.NormalMap != 0)
     {
-        //ViewPos = mul(TBN, sceneDataProperties.CameraPos);
-        //FragPos2 = mul(TBN, input.WorldPos);
-        //float3 viewDir = normalize(ViewPos - FragPos2);
-
         if (material.DepthMap != 0)
         {
             UV = ParallaxMapping(material, UV, V);
-           // if(UV.x > 1.0 || UV.y > 1.0 || UV.x < 0.0 || UV.y < 0.0)
-       // discard;
         }
-        //N = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], UV).rgb;
-        //N = normalize(N * 2.0 - 1.0);
-        //N = normalize(mul(TBN, N));
     }
     
     float3 R = reflect(-V, N);
@@ -273,7 +245,47 @@ PSOutput main(VSOutput input)
        // Lo *= shadow;
 
     }
-    
+
+    for (int x = 0; x < sceneDataProperties.PointLightCount; x++)
+    {
+        float3 L = normalize(PointLightBuffer[x].position - input.WorldPos);
+        float3 H = normalize(V + L);
+
+        float distance = length(PointLightBuffer[x].position - input.WorldPos);
+        float Kc = 1.0f;
+        float Kl = 2 / PointLightBuffer[x].radius;
+        float Kq = 1 / (PointLightBuffer[x].radius * PointLightBuffer[x].radius);
+        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));
+
+        float watts = PointLightBuffer[x].intensity;
+        float3 radiance = PointLightBuffer[x].diffuse * watts * attenuation;
+
+        float NDF = DistributionGGX(N, H, material.Roughness);
+        float G = GeometrySmith(N, V, L, material.Roughness);
+        float3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
+
+        float3 numerator = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        float3 specular = numerator / denominator;
+
+        float3 kS = F;
+        float3 kD = float3(1.0.rrr) - kS;
+        kD *= 1.0 - material.Metallic;
+
+        float NdotL = max(dot(N, L), 0.0);
+
+        float EPSILON = 0.15;
+        float SHADOW_OPACITY = 0.005;
+
+        float3 lightVec = input.WorldPos - PointLightBuffer[x].position;
+        float dist = length(lightVec);
+
+        //float shadow = CubeShadowCalculation(vertex.Position, V, x);
+
+        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+        //Lo *= vec3(shadow);
+    }
+
     float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, Roughness);
     float3 kS = F;
     float3 kD = 1.0 - kS;
