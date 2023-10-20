@@ -48,6 +48,50 @@ struct ModelMatrix
 [[vk::binding(12)]] SamplerState PointShadowSampler[];
 
 static float PI = 3.14159265359f;
+static float4x4 LightBiasMatrix = float4x4(
+    0.5, 0.0, 0.0, 0.0,
+    0.0, 0.5, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.5, 0.5, 0.0, 1.0);
+
+float ShadowCalculation(float4 fragPosLightSpace, float2 offset, int index)
+{
+    float shadow = 1.0f;
+    if (fragPosLightSpace.z > -1.0 && fragPosLightSpace.z < 1.0)
+    {
+        float dist = ShadowMap[index].Sample(ShadowMapSampler[index], fragPosLightSpace.xy + offset).r;
+        if (fragPosLightSpace.w > 0.0 && dist < fragPosLightSpace.z)
+        {
+            shadow = 0.1f;
+        }
+    }
+    return shadow;
+}
+
+float filterPCF(float4 sc, int index)
+{
+    float2 texDim;
+    ShadowMap[index].GetDimensions(texDim.x, texDim.y);
+    
+    float scale = 1.5;
+    float dx = scale * 1.0 / float(texDim.x);
+    float dy = scale * 1.0 / float(texDim.y);
+
+    float shadowFactor = 0.0;
+    int count = 0;
+    int range = 1;
+
+    for (int x = -range; x <= range; x++)
+    {
+        for (int y = -range; y <= range; y++)
+        {
+            shadowFactor += ShadowCalculation(sc, float2(dx * x, dy * y), index);
+            count++;
+        }
+
+    }
+    return shadowFactor / count;
+}
 
 float DistributionGGX(float3 N, float3 H, float roughness)
 {
@@ -165,21 +209,25 @@ PSOutput main(VSOutput input)
            // if(UV.x > 1.0 || UV.y > 1.0 || UV.x < 0.0 || UV.y < 0.0)
        // discard;
         }
-        N = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], input.UV).rgb;
+        N = TextureMap[material.NormalMap].Sample(TextureMapSampler[material.NormalMap], UV).rgb;
         N = normalize(N * 2.0 - 1.0);
         N = normalize(mul(TBN, N));
     }
     
     float3 R = reflect(-V, N);
     
-    float3 Albedo = TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], input.UV).rgb;
-    float Metallic = TextureMap[material.MetallicMap].Sample(TextureMapSampler[material.MetallicMap], input.UV).r;
-    float Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], input.UV).r;
-    float AmbientOcclusion = 0.34f;
-    float3 Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], input.UV).rgb;
+    float4 Albedo = TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV);
+    float Metallic = TextureMap[material.MetallicMap].Sample(TextureMapSampler[material.MetallicMap], UV).r;
+    float Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], UV).r;
+    float AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;
+    float3 Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], UV).rgb;
+    if(Albedo.a == 0.0f)
+    {
+        discard;
+    }
    
     float3 F0 = float3(0.04f.rrr);
-    F0 = lerp(F0, Albedo, Metallic);
+    F0 = lerp(F0, Albedo.rgb, Metallic);
 
     float3 Lo = float3(0.0.rrr);
     for (int x = 0; x < sceneDataProperties.DirectionalLightCount; x++)
@@ -203,10 +251,12 @@ PSOutput main(VSOutput input)
 
         float NdotL = max(dot(N, L), 0.0);
         
-        //vec4 LightSpace = (LightBiasMatrix * DLight[x].directionalLight.LightSpaceMatrix * meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform) * vec4(FragPos, 1.0);
-        //float shadow = filterPCF(LightSpace / LightSpace.w, x);
+        //float4 LightSpaceMatrix = mul(LightBiasMatrix * DirectionalLightBuffer[x].LightSpaceMatrix * MeshPropertiesBuffer[sceneDataProperties.MeshIndex].MeshTransform, float4(input.WorldPos, 1.0));
+       // float shadow = filterPCF(LightSpaceMatrix / LightSpaceMatrix.w, x);
 
-        Lo += (kD * Albedo / PI + specular) * radiance * NdotL;
+        Lo += (kD * Albedo.rgb / PI + specular) * radiance * NdotL;
+       // Lo *= shadow;
+
     }
     
     float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, Roughness);
@@ -215,7 +265,7 @@ PSOutput main(VSOutput input)
     kD *= 1.0 - Metallic;
     
     float3 irradiance = IrradianceMap.Sample(IrradianceMapSampler, N).rgb;
-    float3 diffuse = irradiance * Albedo;
+    float3 diffuse = irradiance * Albedo.rgb;
 
     float3 prefilteredColor = PrefilterMap.SampleLevel(PrefilterMapSampler, R, material.Roughness * sceneDataProperties.PBRMaxMipLevel).rgb;
     float2 brdf = BRDFMap.Sample(BRDFMapSampler, float2(max(dot(N, V), 0.0), material.Roughness)).rg;

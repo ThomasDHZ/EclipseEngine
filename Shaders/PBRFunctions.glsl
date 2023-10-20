@@ -42,8 +42,17 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 
 mat3 getTBNFromMap(Vertex vertex)
 {
-    vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vec3(vertex.Tangant));
-    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vec3(vertex.BiTangant));
-    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * vertex.Normal);
+    vec3 T = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * 
+                            vec3(vertex.Tangant));
+    vec3 B = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * 
+                            vec3(vertex.BiTangant));
+    vec3 N = normalize(mat3(meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[0].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[1].xyz, 
+                            meshBuffer[sceneData.MeshIndex].meshProperties.MeshTransform[2].xyz) * 
+                            vertex.Normal);
     return mat3(vec3(T), vec3(B), vec3(N));
 }

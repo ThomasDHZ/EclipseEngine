@@ -102,6 +102,9 @@ struct VSOutput
 
 float4 main(VSOutput input) : SV_TARGET
 {
-    float2 integratedBRDF = IntegrateBRDF(input.UV.x, input.UV.y);
+    float2 UV = input.UV;
+    UV.y = 1 - input.UV.y;
+    
+    float2 integratedBRDF = IntegrateBRDF(UV.x, UV.y);
     return float4(integratedBRDF.x, integratedBRDF.y, 0.0f, 1.0f);
 }

@@ -25,6 +25,7 @@
 #include "SpotLightDepthRenderPass.h"
 #include "PerlinNoiseRenderPass.h"
 #include "VoronoiNoiseRenderPass.h"
+#include "ValueNoiseRenderPass.h"
 #include "MultiplyRenderPass.h"
 
 class PBRRenderer
@@ -38,6 +39,7 @@ private:
 
 	PerlinNoiseRenderPass perlinNoise;
 	VoronoiNoiseRenderPass voronoiNoiseRenderPass;
+	ValueNoiseRenderPass valueNoiseRenderPass;
 	MultiplyRenderPass multiplyRenderPass;
 
 	//Depth/Shadow Pass

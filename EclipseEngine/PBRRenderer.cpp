@@ -26,8 +26,8 @@ PBRRenderer::PBRRenderer()
 	IronMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/rusted_iron/roughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	IronMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/rusted_iron/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	IronMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/rusted_iron/normal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetEmissionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/matrix.jpg"), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	//IronMaterial->HeightMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM)));
+	//IronMaterial->SetEmissionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/matrix.jpg"), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	IronMaterial->SetHeightMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 
 	//GLTFSceneManager::UpdateBufferIndex();
 	//IronMaterial->UpdateBuffer();
@@ -213,12 +213,13 @@ void PBRRenderer::BuildRenderer()
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	perlinNoise.BuildRenderPass(glm::ivec2(512));
 	voronoiNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
+	valueNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
 	auto AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-	multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, voronoiNoiseRenderPass.GetImageTexture());
+	multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, valueNoiseRenderPass.GetImageTexture());
 
-	GLTFSceneManager::UpdateBufferIndex();
-	GLTFSceneManager::GetMaterialList()[0]->SetAlbedoMap(multiplyRenderPass.GetImageTexture());
-	GLTFSceneManager::UpdateBufferIndex();
+	//GLTFSceneManager::UpdateBufferIndex();
+	GLTFSceneManager::GetMaterialList()[0]->SetNormalMap(multiplyRenderPass.GetImageTexture());
+	//GLTFSceneManager::UpdateBufferIndex();
 	auto asdf = GLTFSceneManager::GetMaterialList();
 	//GLTFSceneManager::UpdateBufferIndex();
 	//GLTFSceneManager::GetMaterialList()[0]->UpdateBuffer();
@@ -522,6 +523,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
 	CommandBufferSubmitList.emplace_back(voronoiNoiseRenderPass.Draw((float)glfwGetTime()));
 	CommandBufferSubmitList.emplace_back(multiplyRenderPass.Draw((float)glfwGetTime()));
+	CommandBufferSubmitList.emplace_back(valueNoiseRenderPass.Draw((float)glfwGetTime()));
+
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());

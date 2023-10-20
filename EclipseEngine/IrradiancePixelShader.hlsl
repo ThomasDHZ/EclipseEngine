@@ -20,6 +20,7 @@ static float PI = 3.14159265359f;
 float4 main(VSOutput input) : SV_TARGET
 {
     float3 N = normalize(input.WorldPos);
+    
     float3 irradiance = float3(0.0f, 0.0f, 0.0f);
     
     float3 up = float3(0.0, 1.0, 0.0);

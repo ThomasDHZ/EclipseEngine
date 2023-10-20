@@ -615,6 +615,9 @@
     <ClCompile Include="MultiplyRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ValueNoiseRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1130,6 +1133,9 @@
     <ClInclude Include="MultiplyRenderPass.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="ValueNoiseRenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1529,6 +1535,12 @@
     </FxCompile>
     <FxCompile Include="MultiplyVertexShader.hlsl">
       <Filter>Shader\Opperations</Filter>
+    </FxCompile>
+    <FxCompile Include="ValueNoiseVertexShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ValueNoisePixelShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
