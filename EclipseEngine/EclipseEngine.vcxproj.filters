@@ -1457,6 +1457,12 @@
     <None Include="Random.hlsli">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="LightBuilder.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="PBRRenderer.hlsli">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EclipseEngine.rc">

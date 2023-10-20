@@ -78,7 +78,6 @@ float CubeShadowCalculation(vec3 fragPos, vec3 viewPos, int index)
 vec3 CalcDirectionalLight(vec3 F0, vec3 V, vec3 N, MaterialProperties material)
 {
     vec3 Lo = vec3(0.0);
-
     for (int x = 0; x < sceneData.DirectionalLightCount; x++)
     {
         vec3 L = normalize(-DLight[x].directionalLight.direction);

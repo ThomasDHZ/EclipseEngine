@@ -339,12 +339,14 @@
     <None Include="..\Shaders\VertexBuilder.glsl" />
     <None Include="ColorCorrectionFunctions.hlsli" />
     <None Include="imgui.ini" />
+    <None Include="LightBuilder.hlsli" />
     <None Include="LightProperties.hlsli" />
     <None Include="MaterialBuilder.hlsli" />
     <None Include="MaterialProperties.hlsli" />
     <None Include="MathConsts.hlsli" />
     <None Include="MeshProperties.hlsli" />
     <None Include="packages.config" />
+    <None Include="PBRRenderer.hlsli" />
     <None Include="Random.hlsli" />
     <None Include="SceneProperties.hlsli" />
     <None Include="Vertex.hlsli" />
