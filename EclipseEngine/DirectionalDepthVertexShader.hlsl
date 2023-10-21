@@ -22,6 +22,7 @@ struct VSOutput
 struct DepthSceneData
 {
     uint MeshIndex;
+    uint TransformIndex;
     uint MaterialIndex;
     uint LightIndex;
     float4x4 proj;
@@ -41,7 +42,7 @@ VSOutput main(VSOutput input) : SV_TARGET
 {
     VSOutput output = (VSOutput) 0;
     
-    output.WorldPos = mul(ModelTransformBuffer[depthSceneData.MeshIndex], float4(input.Position, 1.0)).xyz;
+    output.WorldPos = mul(ModelTransformBuffer[depthSceneData.TransformIndex], float4(input.Position, 1.0)).xyz;
     output.Pos = mul(DirectionalLightBuffer[depthSceneData.LightIndex].LightSpaceMatrix, float4(output.WorldPos, 1.0));
     output.Color = input.Color;
  

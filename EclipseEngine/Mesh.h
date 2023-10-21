@@ -66,12 +66,14 @@ protected:
 	uint64_t MeshID = 0;
 	uint64_t ParentModelID = 0;
 	uint64_t ParentGameObjectID = 0;
-	uint64_t MeshBufferIndex = -1;
 	uint32_t VertexCount = 0;
 	uint32_t IndexCount = 0;
 	uint32_t BoneCount = 0;
 	uint32_t TriangleCount = 0;
 	uint32_t InstanceCount = 0;
+
+	uint64_t MeshBufferIndex = -1;
+	uint32_t TransformIndex = 0;
 	uint32_t ReflectionIndex = 0;
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
@@ -124,7 +126,7 @@ public:
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 
-	void UpdateMeshBufferIndex(uint64_t bufferIndex);
+	void UpdateMeshBufferIndex(uint64_t meshBufferIndex, uint64_t transformBufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);

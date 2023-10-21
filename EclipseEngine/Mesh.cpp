@@ -64,9 +64,10 @@ void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm:
 	}*/
 }
 
-void Mesh::UpdateMeshBufferIndex(uint64_t bufferIndex)
+void Mesh::UpdateMeshBufferIndex(uint64_t meshBufferIndex, uint64_t transformBufferIndex)
 {
-	MeshBufferIndex = bufferIndex;
+	MeshBufferIndex = meshBufferIndex;
+	TransformIndex = transformBufferIndex;
 }
 
 void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList)
@@ -343,6 +344,7 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 	for (auto& primitve : PrimitiveList)
 	{
 		constBuffer.MeshIndex = MeshBufferIndex;
+		constBuffer.TransformIndex = TransformIndex;
 		constBuffer.ReflectionIndex = ReflectionIndex;
 		constBuffer.MaterialIndex = gltfMaterialList[primitve.material]->GetMaterialBufferIndex();
 
@@ -360,7 +362,6 @@ void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorse
 
 void Mesh::DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, LightViewSceneData& constBuffer)
 {
-
 	for (auto& primitve : PrimitiveList)
 	{
 		constBuffer.MeshIndex = MeshBufferIndex;
@@ -396,6 +397,7 @@ void Mesh::DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet des
 void Mesh::DrawSprite(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
 {
 	constBuffer.MeshIndex = MeshBufferIndex;
+	constBuffer.TransformIndex = TransformIndex;
 	constBuffer.MaterialIndex = gltfMaterialList[0]->GetMaterialBufferIndex();
 
 	VkDeviceSize offsets[] = { 0 };

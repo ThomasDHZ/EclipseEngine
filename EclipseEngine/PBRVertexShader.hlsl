@@ -35,11 +35,11 @@ VSOutput main(VSInput input)
 {
     VSOutput output = (VSOutput) 0;
     
-    output.WorldPos = mul(ModelTransformBuffer[sceneProperties.MeshIndex].model, float4(input.Position, 1.0)).xyz;
+    output.WorldPos = mul(ModelTransformBuffer[sceneProperties.TransformIndex].model, float4(input.Position, 1.0)).xyz;
     output.Pos = mul(sceneProperties.proj, mul(sceneProperties.view, float4(output.WorldPos, 1.0)));
     output.UV = input.UV;
-    output.Normal = mul(ModelTransformBuffer[sceneProperties.MeshIndex].model, float4(input.Normal, 1.0)).xyz;
-    output.Tangent = mul(ModelTransformBuffer[sceneProperties.MeshIndex].model, float4(input.Tangent, 1.0)).xyz;
+    output.Normal = mul(ModelTransformBuffer[sceneProperties.TransformIndex].model, float4(input.Normal, 1.0)).xyz;
+    output.Tangent = mul(ModelTransformBuffer[sceneProperties.TransformIndex].model, float4(input.Tangent, 1.0)).xyz;
     output.BiTangent = input.BiTangent;
     output.Color = input.Color;
  

@@ -1,24 +1,5 @@
 #include "MeshProperties.hlsli"
-struct SceneProperties
-{
-    uint MeshIndex;
-    uint PrimitiveIndex;
-    uint MaterialIndex;
-    uint ReflectionIndex;
-    float4x4 proj;
-    float4x4 view;
-    float3 CameraPos;
-    float3 MeshColorID;
-    float3 AmbientLight;
-    uint SunLightCount;
-    uint DirectionalLightCount;
-    uint PointLightCount;
-    uint SpotLightCount;
-    float Timer;
-    float PBRMaxMipLevel;
-    uint frame;
-    int MaxReflectCount;
-};
+#include "SceneProperties.hlsli"
 
 struct ModelMatrix
 {
@@ -53,7 +34,7 @@ VSOutput main(VSInput input)
 {
     VSOutput output = (VSOutput) 0;
     
-        output.WorldPos = mul(ModelTransformBuffer[1].ModelTransfromMatrix, float4(input.Position, 1.0)).xyz;
+    output.WorldPos = mul(ModelTransformBuffer[sceneProperties.TransformIndex].ModelTransfromMatrix, float4(input.Position, 1.0)).xyz;
     output.Pos = mul(sceneProperties.proj, mul(sceneProperties.view, float4(output.WorldPos, 1.0)));
     output.Color = input.Color;
  

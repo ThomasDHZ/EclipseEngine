@@ -506,7 +506,15 @@ public:
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return MaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
-	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return MeshList[0]->TransformMatrixBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() 
+	{ 
+		std::vector<VkDescriptorBufferInfo> descriptorBufferList;
+		for (int x = 0; x < MeshList.size(); x++)
+		{
+			descriptorBufferList.emplace_back(MeshList[x]->TransformMatrixBuffer[0]);
+		}
+		return descriptorBufferList;
+	}
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return TexturePropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return MaterialPropertiesBuffer; }
 };

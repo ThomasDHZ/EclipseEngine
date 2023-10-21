@@ -13,7 +13,7 @@ std::shared_ptr<RenderedCubeMapTexture>				 GLTFSceneManager::CubeMap = nullptr;
 std::vector<std::shared_ptr<GameObject>>			 GLTFSceneManager::GameObjectList;
 std::vector<std::shared_ptr<SunLight>>			     GLTFSceneManager::SunLightList;
 std::vector<std::shared_ptr<DirectionalLight>>	     GLTFSceneManager::DirectionalLightList;
-std::vector<std::shared_ptr<PointLight>>		 GLTFSceneManager::PointLightList;
+std::vector<std::shared_ptr<PointLight>>		     GLTFSceneManager::PointLightList;
 std::vector<std::shared_ptr<SpotLight>>				 GLTFSceneManager::SpotLightList;
 //std::shared_ptr<Camera>							 GLTFSceneManager::activeCamera;
 float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
@@ -27,11 +27,13 @@ VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
 void GLTFSceneManager::UpdateBufferIndex()
 {
 
+	uint32_t transformIndex = 0;
 	for (int x = 0; x < GameObjectList.size(); x++)
 	{
 		for (int y = 0; y < GameObjectList[x]->GetGameObjectRenderer()->GetMeshList().size(); y++)
 		{
-			GameObjectList[x]->GetGameObjectRenderer()->GetMeshList()[y]->UpdateMeshBufferIndex(x);
+			GameObjectList[x]->GetGameObjectRenderer()->GetMeshList()[y]->UpdateMeshBufferIndex(x, transformIndex);
+			transformIndex++;
 		}
 	}
 	for (int x = 0; x < TextureList.size(); x++)
@@ -833,11 +835,14 @@ std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetGameObjectTransformBuff
 	{
 		for (auto& gameObject : GameObjectList)
 		{
-			VkDescriptorBufferInfo TransformBufferInfo = {};
-			TransformBufferInfo.buffer = gameObject->GetGameObjectTransformMatrixBuffer()[0].buffer;
-			TransformBufferInfo.offset = 0;
-			TransformBufferInfo.range = VK_WHOLE_SIZE;
-			TransformPropertiesBuffer.emplace_back(TransformBufferInfo);
+			for (int x = 0; x < gameObject->GetGameObjectTransformMatrixBuffer().size(); x++)
+			{
+				VkDescriptorBufferInfo TransformBufferInfo = {};
+				TransformBufferInfo.buffer = gameObject->GetGameObjectTransformMatrixBuffer()[x].buffer;
+				TransformBufferInfo.offset = 0;
+				TransformBufferInfo.range = VK_WHOLE_SIZE;
+				TransformPropertiesBuffer.emplace_back(TransformBufferInfo);
+			}
 		}
 	}
 

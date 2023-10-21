@@ -1,7 +1,7 @@
 struct SceneProperties
 {
     uint MeshIndex;
-    uint PrimitiveIndex;
+    uint TransformIndex;
     uint MaterialIndex;
     uint ReflectionIndex;
     float4x4 proj;
