@@ -214,10 +214,6 @@ void GLTFImporter::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::s
 
 	std::shared_ptr<GLTFNode> gltfNode = std::make_shared<GLTFNode>();
 	gltfNode->NodeName = node.name;
-	if (data.MaterialList.size() > 1)
-	{
-		gltfNode->Material = data.MaterialList[index];
-	}
 	gltfNode->NodeID = index;
 	if (parentNode)
 	{
@@ -359,6 +355,14 @@ void GLTFImporter::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::s
 					std::cout << "Index component type " << accessor.componentType << " not supported!" << std::endl;
 					return;
 				}
+				}
+			}
+			{
+				if (data.MaterialList.size() > 1)
+				{
+					const tinygltf::Mesh mesh = model.meshes[node.mesh];
+					const tinygltf::Primitive& glTFPrimitive = mesh.primitives[x];
+					gltfNode->Material = data.MaterialList[glTFPrimitive.material];
 				}
 			}
 			{
