@@ -230,6 +230,7 @@ void GLTFImporter::LoadMesh(tinygltf::Model& model, tinygltf::Node& node, std::s
 			glm::quat quat = glm::make_quat(node.rotation.data());
 			gltfNode->NodeTransformMatrix *= glm::mat4(quat);
 			gltfNode->Rotation = glm::eulerAngles(quat);
+			gltfNode->Rotation = glm::degrees(gltfNode->Rotation);
 		}
 		if (node.scale.size() == 3)
 		{

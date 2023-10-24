@@ -174,9 +174,58 @@ float3 PBRRenderer(VSOutput input)
     float3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
     float3 ambient = material.Emission + ((kD * diffuse + specular) * material.AmbientOcclusion);
-    
+
     float3 color = ambient + Lo;
     return color;
+}
+
+float3 uncharted2_tonemap_partial(float3 x)
+{
+    float A = 0.15f;
+    float B = 0.50f;
+    float C = 0.10f;
+    float D = 0.20f;
+    float E = 0.02f;
+    float F = 0.30f;
+    return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
+}
+
+float3 uncharted2_filmic(float3 v)
+{
+    float exposure_bias = 2.0f;
+    float3 curr = uncharted2_tonemap_partial(v * exposure_bias);
+
+    float3 W = float3(11.2f.rrr);
+    float3 white_scale = float3(1.0f.rrr) / uncharted2_tonemap_partial(W);
+    return curr * white_scale;
+}
+
+static float3x3 aces_input_matrix =
+{
+    0.59719f, 0.35458f, 0.04823f,
+    0.07600f, 0.90834f, 0.01566f,
+    0.02840f, 0.13383f, 0.83777f
+};
+
+static float3x3 aces_output_matrix =
+{
+    1.60475f, -0.53108f, -0.07367f,
+   -0.10208f,  1.10813f, -0.00605f,
+   -0.00327f, -0.07276f,  1.07602f
+};
+
+float3 rtt_and_odt_fit(float3 v)
+{
+    float3 a = v * (v + 0.0245786f) - 0.000090537f;
+    float3 b = v * (0.983729f * v + 0.4329510f) + 0.238081f;
+    return a / b;
+}
+
+float3 aces_fitted(float3 v)
+{
+    v = mul(aces_input_matrix, v);
+    v = rtt_and_odt_fit(v);
+    return mul(aces_output_matrix, v);
 }
 
 PSOutput main(VSOutput input)
@@ -185,7 +234,8 @@ PSOutput main(VSOutput input)
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
     float3 color = PBRRenderer(input);
-    color = color / (color + float3(1.0f.rrr));
+    float3 numerator = color * (1.0f + (color / float3(1.0f.rrr * 1.0f.rrr)));
+    color = numerator / (1.0f + color);
     color = pow(color, float3(1.0f / 2.2f.rrr));
     
     output.Color = float4(color, 1.0f);
@@ -207,7 +257,7 @@ PSOutput main(VSOutput input)
         bloomColor.b = color.b;
     }
 
-    output.BloomColor = float4(bloomColor, 1.0f);
+    output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
     
     return output;
 }

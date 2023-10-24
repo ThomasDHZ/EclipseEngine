@@ -105,6 +105,8 @@ Texture::~Texture()
 
 void Texture::LoadTexture(const GLTFTextureLoader& textureLoader)
 {
+	MipMapLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(textureLoader.TextureLoader.width, textureLoader.TextureLoader.height)))) + 1;
+
 	void* image = (void*)&textureLoader.TextureLoader.image[0];
 	VulkanBuffer StagingBuffer(image, textureLoader.TextureLoader.image.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
@@ -114,7 +116,7 @@ void Texture::LoadTexture(const GLTFTextureLoader& textureLoader)
 	ImageCreateInfo.extent.width = textureLoader.TextureLoader.width;
 	ImageCreateInfo.extent.height = textureLoader.TextureLoader.height;
 	ImageCreateInfo.extent.depth = 1;
-	ImageCreateInfo.mipLevels = 1;
+	ImageCreateInfo.mipLevels = MipMapLevels;
 	ImageCreateInfo.arrayLayers = 1;
 	ImageCreateInfo.format = textureLoader.Format;
 	ImageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
@@ -126,7 +128,10 @@ void Texture::LoadTexture(const GLTFTextureLoader& textureLoader)
 	CreateTextureImage(ImageCreateInfo);
 	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	CopyBufferToImage(StagingBuffer.GetBuffer());
-
+	if (MipMapLevels > 1)
+	{
+		GenerateMipmaps();
+	}
 	StagingBuffer.DestroyBuffer();
 }
 
