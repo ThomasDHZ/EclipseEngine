@@ -208,7 +208,6 @@ void PBRRenderer::BuildRenderer()
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/alps_field_4k.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
-	cubeMapToEnvironmentRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, glm::ivec2(4096.0f / 2, 1024));
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	//perlinNoise.BuildRenderPass(glm::ivec2(512));
@@ -302,7 +301,7 @@ void PBRRenderer::BuildRenderer()
 			frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, bloomCombineRenderPass.BloomTexture);
 		}
 	}
-
+	cubeMapToEnvironmentRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, glm::ivec2(4096.0f / 2, 1024));
 	GLTFSceneManager::Update();
 	lightManagerMenu.Update();
 
@@ -326,11 +325,11 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
-	cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
-	//if(ImGui::Button("Save Texture", ImVec2(50, 25)))
-	//{
-	//	voronoiNoiseRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
-	//}
+	cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
+	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
+	{
+		cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
+	}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
 	{
@@ -535,11 +534,11 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.560709357f, 0.866367936f, -0.103952810f)));
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
 	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
+	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
 	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());

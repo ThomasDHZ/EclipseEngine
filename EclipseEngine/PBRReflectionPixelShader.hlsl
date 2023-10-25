@@ -234,5 +234,5 @@ float4 main(VSOutput input) : SV_TARGET
     
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
-    return float4(TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], input.UV).rgb, 1.0f);
+    return float4(color, 1.0f);
 }
