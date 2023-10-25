@@ -324,9 +324,6 @@
     <ClCompile Include="PBRRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PrefilterRenderPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -617,6 +614,12 @@
     </ClCompile>
     <ClCompile Include="ValueNoiseRenderPass.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Reflecter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
+      <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1136,6 +1139,9 @@
     <ClInclude Include="ValueNoiseRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Reflecter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\MeshProperties.glsl">
@@ -1553,6 +1559,12 @@
     </FxCompile>
     <FxCompile Include="PBRReflectionPixelShader.hlsl">
       <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeMapToEnvironmentPixelShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="CubeMapToEnvironmentVertexShader.hlsl">
+      <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

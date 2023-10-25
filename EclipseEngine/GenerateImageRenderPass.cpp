@@ -34,6 +34,31 @@ void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, VkFo
     SetUpCommandBuffers();
 }
 
+void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize)
+{
+    RenderPassResolution = textureSize;
+
+    if (renderPass == nullptr)
+    {
+        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        ImageTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ImageTexture->View);
+
+    GLTFSceneManager::LoadTexture2D(ImageTexture);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(pipelineFileName, cubeMap);
+    SetUpCommandBuffers();
+}
+
 void GenerateImageRenderPass::BuildRenderPass(const char* pipelineFileName, glm::ivec2 textureSize, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2)
 {
     RenderPassResolution = textureSize;
@@ -79,6 +104,32 @@ void GenerateImageRenderPass::OneTimeDraw(const char* pipelineFileName, VkFormat
     RenderPassDesc();
     CreateRendererFramebuffers(AttachmentList);
     BuildRenderPassPipelines(pipelineFileName);
+    SetUpCommandBuffers();
+    Draw(0.0f);
+    OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+}
+
+
+void GenerateImageRenderPass::OneTimeDraw(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize)
+{
+    RenderPassResolution = textureSize;
+
+    if (renderPass == nullptr)
+    {
+        ImageTexture = std::make_shared<RenderedColorTexture>(RenderedColorTexture(RenderPassResolution, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT));
+    }
+    else
+    {
+        ImageTexture->RecreateRendererTexture(RenderPassResolution);
+        RenderPass::Destroy();
+    }
+
+    std::vector<VkImageView> AttachmentList;
+    AttachmentList.emplace_back(ImageTexture->View);
+
+    RenderPassDesc();
+    CreateRendererFramebuffers(AttachmentList);
+    BuildRenderPassPipelines(pipelineFileName, cubeMap);
     SetUpCommandBuffers();
     Draw(0.0f);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
@@ -178,6 +229,25 @@ void GenerateImageRenderPass::BuildRenderPassPipelines(const char* pipelineFileN
     ColorAttachmentList.resize(1, ColorAttachment);
 
     ImagePipeline = JsonGraphicsPipeline(pipelineFileName, VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(TextureCreatorProperties));
+}
+
+void GenerateImageRenderPass::BuildRenderPassPipelines(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap)
+{
+
+    VkPipelineColorBlendAttachmentState ColorAttachment;
+    ColorAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    ColorAttachment.blendEnable = VK_FALSE;
+    ColorAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    ColorAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    ColorAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    ColorAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    ColorAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    ColorAttachment.alphaBlendOp = VK_BLEND_OP_SUBTRACT;
+
+    ColorAttachmentList.clear();
+    ColorAttachmentList.resize(1, ColorAttachment);
+
+    ImagePipeline = JsonGraphicsPipeline(pipelineFileName, VoidVertex::getBindingDescriptions(), VoidVertex::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(TextureCreatorProperties), cubeMap);
 }
 
 void GenerateImageRenderPass::BuildRenderPassPipelines(const char* pipelineFileName, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2)

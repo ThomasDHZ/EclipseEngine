@@ -8,6 +8,7 @@ class GenerateImageRenderPass : public RenderPass
 private:
 	virtual void RenderPassDesc();
 	virtual void BuildRenderPassPipelines(const char* pipelineFileName);
+	virtual void BuildRenderPassPipelines(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
 	virtual void BuildRenderPassPipelines(const char* pipelineFileName, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2);
 protected:
 	TextureCreatorProperties textureCreatorProperties;
@@ -18,9 +19,13 @@ public:
 	~GenerateImageRenderPass();
 
 	void BuildRenderPass(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize);
+	void BuildRenderPass(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize);
 	void BuildRenderPass(const char* pipelineFileName, glm::ivec2 textureSize, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2);
+
 	void OneTimeDraw(const char* pipelineFileName, VkFormat textureFormat, glm::ivec2 textureSize);
+	void OneTimeDraw(const char* pipelineFileName, std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize);
 	void OneTimeDraw(const char* pipelineFileName, glm::ivec2 textureSize, std::shared_ptr<Texture> texture1, std::shared_ptr<Texture> texture2);
+
 	VkCommandBuffer Draw(float time);
 	//void Save();
 	void Destroy();

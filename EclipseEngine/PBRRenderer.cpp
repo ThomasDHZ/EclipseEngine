@@ -21,13 +21,13 @@ PBRRenderer::PBRRenderer()
 	GLTFSceneManager::AddMaterial(GoldMaterial);*/
 	
 	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
-	IronMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/rusted_iron/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	IronMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/rusted_iron/metallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/rusted_iron/roughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/rusted_iron/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/rusted_iron/normal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	IronMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/gold/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	IronMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/gold/metallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	IronMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/pbr/gold/roughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	IronMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	IronMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/normal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	//IronMaterial->SetEmissionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/matrix.jpg"), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	IronMaterial->SetHeightMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	//IronMaterial->SetHeightMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 
 	//GLTFSceneManager::UpdateBufferIndex();
 	//IronMaterial->UpdateBuffer();
@@ -208,14 +208,14 @@ void PBRRenderer::BuildRenderer()
 	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/alps_field_4k.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
 
 	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
-
+	cubeMapToEnvironmentRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, glm::ivec2(4096.0f / 2, 1024));
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
-	perlinNoise.BuildRenderPass(glm::ivec2(512));
-	voronoiNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
-	valueNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
-	auto AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-	multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, valueNoiseRenderPass.GetImageTexture());
+	//perlinNoise.BuildRenderPass(glm::ivec2(512));
+	//voronoiNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
+	//valueNoiseRenderPass.BuildRenderPass(glm::ivec2(512));
+	//auto AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
+	//multiplyRenderPass.BuildRenderPass(glm::ivec2(512), AlbedoMap, valueNoiseRenderPass.GetImageTexture());
 
 	//GLTFSceneManager::UpdateBufferIndex();
 	//GLTFSceneManager::GetMaterialList()[0]->SetNormalMap(multiplyRenderPass.GetImageTexture());
@@ -236,9 +236,9 @@ void PBRRenderer::BuildRenderer()
 		submitList.PointLightShadowMaps = depthCubeMapRenderPass.DepthCubeMapTextureList;
 
 		//SkyBox Reflection Pass
-	/*	{
-			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+		{
+			skyBoxReflectionIrradianceRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionPrefilterRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 
 			PBRRenderPassTextureSubmitList submitList;
@@ -252,12 +252,12 @@ void PBRRenderer::BuildRenderer()
 			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
-			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
-		}*/
+			skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		}
 		//Mesh Reflection Pass
-	/*	{
-			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+		{
+			meshReflectionIrradianceRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionPrefilterRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -270,12 +270,12 @@ void PBRRenderer::BuildRenderer()
 			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
-			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.0f, 20.0f, 0.0f));
-		}*/
+			meshReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+		}
 		//Mesh Reflection Pass
 		{
-			irradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			prefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			irradianceRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -326,11 +326,11 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
-	multiplyRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
-	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
-	{
-		voronoiNoiseRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
-	}
+	cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(512, 512));
+	//if(ImGui::Button("Save Texture", ImVec2(50, 25)))
+	//{
+	//	voronoiNoiseRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
+	//}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
 	{
@@ -520,27 +520,29 @@ void PBRRenderer::ImGuiUpdate()
 
 void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 {
-	CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
-	CommandBufferSubmitList.emplace_back(voronoiNoiseRenderPass.Draw((float)glfwGetTime()));
-	CommandBufferSubmitList.emplace_back(multiplyRenderPass.Draw((float)glfwGetTime()));
-	CommandBufferSubmitList.emplace_back(valueNoiseRenderPass.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(perlinNoise.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(voronoiNoiseRenderPass.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(multiplyRenderPass.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(valueNoiseRenderPass.Draw((float)glfwGetTime()));
 
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
+
+	CommandBufferSubmitList.emplace_back(cubeMapToEnvironmentRenderPass.Draw((float)glfwGetTime()));
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.560709357f, 0.866367936f, -0.103952810f)));
 
-	//CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
+	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(GLTFSceneManager::ActiveCamera->GetPosition()));
 
-	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
+	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(BloomRenderPass.Draw());

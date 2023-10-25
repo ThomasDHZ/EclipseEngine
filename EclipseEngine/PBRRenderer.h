@@ -27,6 +27,7 @@
 #include "VoronoiNoiseRenderPass.h"
 #include "ValueNoiseRenderPass.h"
 #include "MultiplyRenderPass.h"
+#include "CubeToEnvironmentRenderPass.h"
 
 class PBRRenderer
 {
@@ -35,12 +36,13 @@ private:
 	LightManagerMenu lightManagerMenu;
 	
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	CubeToEnvironmentRenderPass cubeMapToEnvironmentRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
-	PerlinNoiseRenderPass perlinNoise;
-	VoronoiNoiseRenderPass voronoiNoiseRenderPass;
-	ValueNoiseRenderPass valueNoiseRenderPass;
-	MultiplyRenderPass multiplyRenderPass;
+	//PerlinNoiseRenderPass perlinNoise;
+	//VoronoiNoiseRenderPass voronoiNoiseRenderPass;
+	//ValueNoiseRenderPass valueNoiseRenderPass;
+	//MultiplyRenderPass multiplyRenderPass;
 
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
@@ -49,14 +51,14 @@ private:
 
 
 	//SkyBox Reflection
-	//IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
-	//PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
-	//PBRReflectionRenderPass skyBoxReflectionRenderPass;
+	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
+	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
+	PBRReflectionRenderPass skyBoxReflectionRenderPass;
 
 	////Mesh Reflection
-	//IrradianceRenderPass meshReflectionIrradianceRenderPass;
-	//PrefilterRenderPass meshReflectionPrefilterRenderPass;
-	//PBRReflectionRenderPass meshReflectionRenderPass;
+	IrradianceRenderPass meshReflectionIrradianceRenderPass;
+	PrefilterRenderPass meshReflectionPrefilterRenderPass;
+	PBRReflectionRenderPass meshReflectionRenderPass;
 
 	//Main
 	IrradianceRenderPass irradianceRenderPass;

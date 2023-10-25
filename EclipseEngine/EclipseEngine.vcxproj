@@ -234,6 +234,7 @@
     <ClCompile Include="MegaMan.cpp" />
     <ClCompile Include="MultiplyRenderPass.cpp" />
     <ClCompile Include="PerlinNoiseRenderPass.cpp" />
+    <ClCompile Include="Reflecter.cpp" />
     <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="MegaMan.h" />
     <ClInclude Include="MultiplyRenderPass.h" />
     <ClInclude Include="PerlinNoiseRenderPass.h" />
+    <ClInclude Include="Reflecter.h" />
     <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />
@@ -619,6 +621,20 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="BRDFVertexShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="CubeMapToEnvironmentPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="CubeMapToEnvironmentVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="DirectionalDepthPixelShader.hlsl">

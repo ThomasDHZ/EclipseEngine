@@ -1,23 +1,14 @@
 #pragma once
-#include "RenderPass.h"
-#include "RenderedCubeMapTexture.h"
-#include "CubeToEnvironmentPipeline.h"
+#include "GenerateImageRenderPass.h"
 
-class CubeToEnvironmentRenderPass : public RenderPass
+class CubeToEnvironmentRenderPass : public GenerateImageRenderPass
 {
 private:
-	void RenderPassDesc();
-	void BuildRenderPassPipelines(std::shared_ptr<RenderedCubeMapTexture> cubeMap);
-
 public:
 	CubeToEnvironmentRenderPass();
 	~CubeToEnvironmentRenderPass();
 
-	std::shared_ptr<RenderedColorTexture> environmentMap;
-	CubeToEnvironmentPipeline cubeToEnvironmentPipeline;
-
-	void BuildRenderPass(const glm::vec2& environmentMapSize, std::shared_ptr<RenderedCubeMapTexture> cubeMap);
-	void Draw();
-	void Destroy();
+	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize);
+	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, glm::ivec2 textureSize);
 };
 
