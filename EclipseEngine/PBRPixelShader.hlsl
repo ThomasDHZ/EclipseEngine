@@ -101,10 +101,14 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
 {
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
-    
     if (material.AlbedoMap != -1)
     {
         material.Albedo = TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV).rgb;
+    }
+    if (material.MetallicRoughnessMap != -1)
+    {
+        material.Roughness = TextureMap[material.MetallicRoughnessMap].Sample(TextureMapSampler[material.MetallicRoughnessMap], UV).g;
+        material.Metallic = TextureMap[material.MetallicRoughnessMap].Sample(TextureMapSampler[material.MetallicRoughnessMap], UV).b;
     }
     if (material.MetallicMap != -1)
     {
@@ -115,12 +119,12 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
         material.Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], UV).r;
     }
     
-    material.AmbientOcclusion = .04f;
+        
+    material.AmbientOcclusion = .34f;
     if (material.AmbientOcclusionMap != -1)
     {
         material.AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;
     }
-    
     if (material.EmissionMap != -1)
     {
         material.Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], UV).rgb;
@@ -234,8 +238,7 @@ PSOutput main(VSOutput input)
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
     
     float3 color = PBRRenderer(input);
-    float3 numerator = color * (1.0f + (color / float3(1.0f.rrr * 1.0f.rrr)));
-    color = numerator / (1.0f + color);
+    color = aces_fitted(color);
     color = pow(color, float3(1.0f / 2.2f.rrr));
     
     output.Color = float4(color, 1.0f);
@@ -257,7 +260,7 @@ PSOutput main(VSOutput input)
         bloomColor.b = color.b;
     }
 
-    output.BloomColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    output.BloomColor = float4(0.0f.rrr, 1.0f);
     
     return output;
 }

@@ -1548,5 +1548,11 @@
     <FxCompile Include="ValueNoisePixelShader.hlsl">
       <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
+    <FxCompile Include="PBRReflectionVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRReflectionPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
