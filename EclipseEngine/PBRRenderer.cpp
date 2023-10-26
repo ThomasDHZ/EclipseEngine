@@ -194,7 +194,7 @@ PBRRenderer::PBRRenderer()
 
 	//GLTFSceneManager::AddLineGameObject3D("Lines", LightView);
 
-	GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
+	//GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 	/*GLTFSceneManager::AddPointLight(std::make_shared<GLTFPointLight>(GLTFPointLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f, 1.0f))); */
 }
 
@@ -205,9 +205,9 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::BuildRenderer()
 {
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/alps_field_4k.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/adsfasdf2.HDR"), VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
+	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	//perlinNoise.BuildRenderPass(glm::ivec2(512));
@@ -328,7 +328,7 @@ void PBRRenderer::ImGuiUpdate()
 	cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
-		cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf2.BMP", BakeTextureFormat::Bake_BMP);
+		cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
 	}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
@@ -525,7 +525,8 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	//CommandBufferSubmitList.emplace_back(valueNoiseRenderPass.Draw((float)glfwGetTime()));
 
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
-
+	
+	CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(cubeMapToEnvironmentRenderPass.Draw((float)glfwGetTime()));
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());

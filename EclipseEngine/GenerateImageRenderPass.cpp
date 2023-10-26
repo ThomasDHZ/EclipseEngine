@@ -325,7 +325,7 @@ void GenerateImageRenderPass::Destroy()
 
 void GenerateImageRenderPass::SaveTexture(const char* filename, BakeTextureFormat textureFormat)
 {
-    std::shared_ptr<BakedTexture> BakeTexture = std::make_shared<BakedTexture>(BakedTexture(Pixel(0x00, 0x00, 0x00, 0xFF), glm::vec2(ImageTexture->GetWidth(), ImageTexture->GetHeight())));
+    std::shared_ptr<BakedTexture> BakeTexture = std::make_shared<BakedTexture>(BakedTexture(Pixel(0x00, 0x00, 0x00, 0xFF), glm::vec2(ImageTexture->GetWidth(), ImageTexture->GetHeight()), VK_FORMAT_R8G8B8A8_SRGB));
 
 	VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
 

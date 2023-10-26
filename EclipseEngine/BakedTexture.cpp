@@ -1,19 +1,24 @@
 #include "BakedTexture.h"
+#include "VulkanBuffer.h"
 
 BakedTexture::BakedTexture()
 {
 
 }
 
-BakedTexture::BakedTexture(const glm::ivec2& TextureResolution) : Texture(Pixel(0, 0, 0), TextureResolution, VkFormat::VK_FORMAT_R8G8B8A8_SNORM, kBakedTexture)
+BakedTexture::BakedTexture(const Pixel& ClearColor, const glm::ivec2& TextureResolution, VkFormat TextureFormat) : Texture(kBakedTexture)
 {
+	GenerateID();
+
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
-	TextureImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	TextureByteFormat = TextureFormat;
+
+	CreateTexture(ClearColor, TextureFormat);
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
@@ -21,16 +26,19 @@ BakedTexture::BakedTexture(const glm::ivec2& TextureResolution) : Texture(Pixel(
 	ImGuiDescriptorSet = ImGui_ImplVulkan_AddTexture(Sampler, View, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 }
 
-BakedTexture::BakedTexture(const Pixel& ClearColor, const glm::ivec2& TextureResolution) : Texture(ClearColor, TextureResolution, VkFormat::VK_FORMAT_R8G8B8A8_SNORM, kBakedTexture)
+BakedTexture::BakedTexture(const Pixel32& ClearColor, const glm::ivec2& TextureResolution, VkFormat TextureFormat) : Texture(kBakedTexture)
 {
+	GenerateID();
+
 	Width = TextureResolution.x;
 	Height = TextureResolution.y;
 	Depth = 1;
-	TextureByteFormat = VK_FORMAT_R8G8B8A8_UNORM;
-	TextureImageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+	TextureImageLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
+	TextureByteFormat = TextureFormat;
 
-
+	CreateTexture(ClearColor, TextureFormat);
 	CreateTextureImage();
 	CreateTextureView();
 	CreateTextureSampler();
@@ -40,6 +48,64 @@ BakedTexture::BakedTexture(const Pixel& ClearColor, const glm::ivec2& TextureRes
 
 BakedTexture::~BakedTexture()
 {
+}
+
+void BakedTexture::CreateTexture(Pixel ClearPixel, VkFormat textureFormat)
+{
+	VkDeviceSize imageSize = Width * Height * sizeof(Pixel);
+	std::vector<Pixel> pixels(Width * Height, ClearPixel);
+
+	VulkanBuffer StagingBuffer(&pixels[0], imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	VkImageCreateInfo ImageCreateInfo = {};
+	ImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	ImageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+	ImageCreateInfo.extent.width = Width;
+	ImageCreateInfo.extent.height = Height;
+	ImageCreateInfo.extent.depth = Depth;
+	ImageCreateInfo.mipLevels = 1;
+	ImageCreateInfo.arrayLayers = 1;
+	ImageCreateInfo.format = textureFormat;
+	ImageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	ImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	ImageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	ImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	ImageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+	CreateTextureImage();
+	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	CopyBufferToImage(StagingBuffer.GetBuffer());
+
+	StagingBuffer.DestroyBuffer();
+}
+
+void BakedTexture::CreateTexture(Pixel32 ClearPixel, VkFormat textureFormat)
+{
+	VkDeviceSize imageSize = Width * Height * 4 * sizeof(Pixel);
+	std::vector<Pixel32> pixels(Width * Height, ClearPixel);
+
+	VulkanBuffer StagingBuffer(&pixels[0], imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	VkImageCreateInfo ImageCreateInfo = {};
+	ImageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+	ImageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+	ImageCreateInfo.extent.width = Width;
+	ImageCreateInfo.extent.height = Height;
+	ImageCreateInfo.extent.depth = Depth;
+	ImageCreateInfo.mipLevels = 1;
+	ImageCreateInfo.arrayLayers = 1;
+	ImageCreateInfo.format = textureFormat;
+	ImageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+	ImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+	ImageCreateInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	ImageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+	ImageCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+	CreateTextureImage();
+	TransitionImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	CopyBufferToImage(StagingBuffer.GetBuffer());
+
+	StagingBuffer.DestroyBuffer();
 }
 
 void BakedTexture::CreateTextureImage()
@@ -81,7 +147,7 @@ void BakedTexture::CreateTextureView()
 	TextureImageViewInfo.subresourceRange.baseArrayLayer = 0;
 	TextureImageViewInfo.subresourceRange.layerCount = 1;
 	TextureImageViewInfo.image = Image;
-	TextureImageViewInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+	TextureImageViewInfo.format = TextureByteFormat;
 	TextureImageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
 
 	if (vkCreateImageView(VulkanRenderer::GetDevice(), &TextureImageViewInfo, nullptr, &View)) {
