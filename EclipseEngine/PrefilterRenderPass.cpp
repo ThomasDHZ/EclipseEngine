@@ -34,7 +34,7 @@ void PrefilterRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture
     SetUpCommandBuffers();
 }
 
-void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
+std::shared_ptr<RenderedCubeMapTexture> PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
     CubeMapMipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(RenderPassResolution.x, RenderPassResolution.y)))) + 1;
@@ -60,6 +60,8 @@ void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& c
     SetUpCommandBuffers();
     Draw(DrawPosition);
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
+
+    return PrefilterCubeMap;
 }
 
 void PrefilterRenderPass::RenderPassDesc()
@@ -145,6 +147,12 @@ void PrefilterRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCubeM
     pipelineInfo.SampleCount = SampleCount;
 
     PrefilterPipeline = JsonGraphicsPipeline("/Pipelines/PrefilterPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(PrefilterSkyboxSettings), cubeMap);
+}
+
+std::shared_ptr<RenderedCubeMapTexture> PrefilterRenderPass::DrawSubmit(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+{
+    Draw();
+    return PrefilterCubeMap;
 }
 
 VkCommandBuffer PrefilterRenderPass::Draw(glm::vec3 DrawPosition)

@@ -53,7 +53,7 @@ void EnvironmentTexture::LoadTexture(std::string TextureLocation, VkFormat textu
 	TextureInfo.format = textureFormat;
 	TextureInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
 	TextureInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-	TextureInfo.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+	TextureInfo.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 	TextureInfo.samples = VK_SAMPLE_COUNT_1_BIT;
 	TextureInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
@@ -64,10 +64,8 @@ void EnvironmentTexture::LoadTexture(std::string TextureLocation, VkFormat textu
 	TransitionImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 	StagingBuffer.DestroyBuffer();
-	for (auto texturedata : textureData)
-	{
-		stbi_image_free(texturedata);
-	}
+
+	stbi_image_free(data);
 }
 
 void EnvironmentTexture::CreateTextureView(VkFormat textureFormat)

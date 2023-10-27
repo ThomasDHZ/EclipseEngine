@@ -22,7 +22,8 @@ public:
 	std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap;
 
 	void BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize);
-	void OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
+	std::shared_ptr<RenderedCubeMapTexture> DrawSubmit(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize);
+	std::shared_ptr<RenderedCubeMapTexture> OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& cubeMap, uint32_t cubeMapSize, glm::vec3 DrawPosition = glm::vec3(0.0f));
 	VkCommandBuffer Draw(glm::vec3 DrawPosition = glm::vec3(0.0f));
 	void Destroy();
 };
