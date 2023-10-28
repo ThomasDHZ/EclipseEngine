@@ -37,7 +37,7 @@ PBRRenderer::PBRRenderer()
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
 	GLTFSceneManager::AddMeshGameObject3D("sponza", VulkanRenderer::OpenFile("/Models/sponza/sponza.gltf"));
-	//GLTFSceneManager::AddMeshGameObject3D("Sphere", VulkanRenderer::OpenFile("/Models/GLTFGold/Gold.gltf"), IronMaterial);
+	GLTFSceneManager::AddMeshGameObject3D("Sphere", VulkanRenderer::OpenFile("/Models/GLTFGold/Gold.gltf"), IronMaterial);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
 	//	/// <summary>

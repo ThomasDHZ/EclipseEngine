@@ -26,7 +26,7 @@ void GLTFImporter::LoadLights(tinygltf::Model& model, tinygltf::Node& node)
 					pointLight.position = glm::make_vec3(&node.translation[0]);
 					pointLight.diffuse = glm::vec3(glm::make_vec3(light.color.data()));
 					pointLight.intensity = light.intensity;
-					pointLight.radius = 1.0f;
+					pointLight.radius = 3.0f;
 					data.PointLightList.emplace_back(pointLight);
 				}
 				if (light.type == "directional")

@@ -118,9 +118,6 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
     {
         material.Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], UV).r;
     }
-    
-        
-    material.AmbientOcclusion = .34f;
     if (material.AmbientOcclusionMap != -1)
     {
         material.AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;

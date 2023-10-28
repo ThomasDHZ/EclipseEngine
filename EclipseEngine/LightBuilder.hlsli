@@ -1,9 +1,19 @@
 static float PI = 3.14159265359f;
+
 static float4x4 LightBiasMatrix = float4x4(
     0.5, 0.0, 0.0, 0.0,
     0.0, 0.5, 0.0, 0.0,
     0.0, 0.0, 1.0, 0.0,
     0.5, 0.5, 0.0, 1.0);
+
+static float3 gridSamplingDisk[20] =
+{
+    float3(1, 1, 1), float3(1, -1, 1), float3(-1, -1, 1), float3(-1, 1, 1),
+    float3(1, 1, -1), float3(1, -1, -1), float3(-1, -1, -1), float3(-1, 1, -1),
+    float3(1, 1, 0), float3(1, -1, 0), float3(-1, -1, 0), float3(-1, 1, 0),
+    float3(1, 0, 1), float3(-1, 0, 1), float3(1, 0, -1), float3(-1, 0, -1),
+    float3(0, 1, 1), float3(0, -1, 1), float3(0, -1, -1), float3(0, 1, -1)
+};
 
 float ShadowCalculation(float4 fragPosLightSpace, float2 offset, int index)
 {
@@ -42,6 +52,31 @@ float filterPCF(float4 sc, int index)
 
     }
     return shadowFactor / count;
+}
+
+float CubeShadowCalculation(float3 fragPos, float3 viewPos, int index)
+{
+    float near_plane = 0.1f;
+    float far_plane = PointLightBuffer[index].radius;
+
+    float3 fragToLight = fragPos - PointLightBuffer[index].position;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+    float viewDistance = length(viewPos - fragPos);
+    float diskRadius = (1.0 + (viewDistance / far_plane)) / 25.0;
+    for (int i = 0; i < samples; ++i)
+    {
+        float closestDepth = PointShadowMap[index].Sample(PointShadowSampler[index], fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= far_plane; // undo mapping [0;1]
+        if (currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
+
+    return shadow;
 }
 
 float DistributionGGX(float3 N, float3 H, float roughness)
@@ -153,10 +188,10 @@ float3 PointLightCalc(float3 V, float3 N, float3 F0, float3 Pos, MaterialPropert
         float3 lightVec = Pos - PointLightBuffer[x].position;
         float dist = length(lightVec);
 
-        //float shadow = CubeShadowCalculation(vertex.Position, V, x);
+        float shadow = CubeShadowCalculation(Pos, V, x);
 
         Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
-        //Lo *= vec3(shadow);
+        Lo *= 1.0f - float3(shadow.rrr);
     }
     return Lo;
 }
