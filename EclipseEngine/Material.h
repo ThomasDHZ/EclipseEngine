@@ -42,6 +42,17 @@ private:
 
 	VulkanBuffer MaterialBuffer;
 
+	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	float Metallic = 0.0f;
+	float Roughness = 0.0f;
+	float AmbientOcclusion = 1.0f;
+	glm::vec3 Emission = glm::vec3(0.0f);
+	float Transmission = 0.0f;
+	float IndexOfRefraction = 1.00f;
+	float Alpha = 1.0f;
+	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
+	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
+
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
 	std::shared_ptr<Texture> MetallicMap = nullptr;
@@ -66,17 +77,6 @@ public:
 
 	std::string MaterialName;
 	GLTFMaterialBufferInfo MaterialInfo;
-
-	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Metallic = 0.0f;
-	float Roughness = 0.0f;
-	float AmbientOcclusion = 1.0f;
-	glm::vec3 Emission = glm::vec3(0.0f);
-	float Transmission = 0.0f;
-	float IndexOfRefraction = 1.00f;
-	float Alpha = 1.0f;
-	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
-	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
 
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
 
