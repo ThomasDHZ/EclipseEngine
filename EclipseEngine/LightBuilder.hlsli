@@ -83,7 +83,7 @@ float3 fresnelSchlickRoughness(float cosTheta, float3 F0, float roughness)
     return F0 + ((max(float3(1.0 - roughness, 1.0 - roughness, 1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0));
 }
 
-float3 DirectionalLightCalc(float3 V, float3 N, float3 F0, MaterialProperties material)
+float3 DirectionalLightCalc(float3 V, float3 N, float3 F0, float3 Pos, MaterialProperties material)
 {
     float3 Lo = float3(0.0.rrr);
     for (int x = 0; x < sceneDataProperties.DirectionalLightCount; x++)
@@ -107,14 +107,11 @@ float3 DirectionalLightCalc(float3 V, float3 N, float3 F0, MaterialProperties ma
 
         float NdotL = max(dot(N, L), 0.0);
         
-        //float4 LightSpaceMatrix = mul(MeshPropertiesBuffer[sceneDataProperties.MeshIndex].MeshTransform, float4(input.WorldPos, 1.0));
-        //       LightSpaceMatrix = mul(DirectionalLightBuffer[x].LightSpaceMatrix, LightSpaceMatrix);
-        //       LightSpaceMatrix = mul(LightBiasMatrix, LightSpaceMatrix);
-        
-       // float shadow = filterPCF(LightSpaceMatrix / LightSpaceMatrix.w, x);
+        float4 LightSpace = mul(float4(Pos, 1.0), mul(MeshPropertiesBuffer[sceneDataProperties.MeshIndex].MeshTransform, mul(transpose(DirectionalLightBuffer[0].LightSpaceMatrix), LightBiasMatrix)));
+        float shadow = filterPCF(LightSpace / LightSpace.w, x);
 
         Lo += (kD * material.Albedo.rgb / PI + specular) * radiance * NdotL;
-       // Lo *= shadow;
+        Lo *= shadow;
     }
     return Lo;
 }

@@ -131,7 +131,6 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
     return material;
 }
 
-
 float3 PBRRenderer(VSOutput input)
 {
     MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
@@ -156,7 +155,7 @@ float3 PBRRenderer(VSOutput input)
     F0 = lerp(F0, material.Albedo.rgb, material.Metallic);
 
     float3 Lo = float3(0.0.rrr);
-    Lo += DirectionalLightCalc(V, N, F0, material);
+    Lo += DirectionalLightCalc(V, N, F0, input.WorldPos, material);
     Lo += PointLightCalc(V, N, F0, input.WorldPos, material);
 
     float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
