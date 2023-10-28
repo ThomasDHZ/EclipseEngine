@@ -49,7 +49,6 @@ private:
 	DepthCubeMapRenderer depthCubeMapRenderPass;
 	SpotLightDepthRenderPass depthSpotLightRenderPass;
 
-
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
