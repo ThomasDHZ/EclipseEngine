@@ -247,6 +247,10 @@ VkCommandBuffer SpotLightDepthRenderPass::Draw()
             GLTFSceneManager::GetSpotLights()[x]->LightViewTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
+        else
+        {
+            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
     }
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");

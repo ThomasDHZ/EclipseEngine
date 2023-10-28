@@ -38,13 +38,18 @@ struct DepthSceneData
 [[vk::binding(3)]] [[vk::combinedImageSampler]] SamplerState TextureMapSampler : register(s0);
 [[vk::binding(4)]] StructuredBuffer<DirectionalLight> DirectionalLightBuffer;
 
-VSOutput main(VSInput input) : SV_TARGET
+cbuffer viewMatrix
+{
+    float4x4 viewMatrix[6];
+};
+
+VSOutput main(VSInput input, uint ViewIndex : SV_ViewID) : SV_TARGET
 {
     VSOutput output = (VSOutput) 0;
     
     output.WorldPos = mul(ModelTransformBuffer[depthSceneData.TransformIndex], float4(input.Position, 1.0)).xyz;
-    output.Pos = mul(DirectionalLightBuffer[depthSceneData.LightIndex].LightSpaceMatrix, float4(output.WorldPos, 1.0));
+    output.Pos = mul(viewMatrix[ViewIndex], float4(output.WorldPos, 1.0));
     output.UV = input.UV;
- 
+    
     return output;
 }

@@ -1566,5 +1566,11 @@
     <FxCompile Include="CubeMapToEnvironmentVertexShader.hlsl">
       <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
+    <FxCompile Include="PointLightPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PointLightVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
