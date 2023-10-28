@@ -10,6 +10,8 @@ struct GLTFMaterialBufferInfo
 	alignas(4) float Roughness = 0.0f;
 	alignas(4) float AmbientOcclusion = 1.0f;
 	alignas(16) glm::vec3 Emission = glm::vec3(0.0f);
+	alignas(4) float Transmission = 0.0f;
+	alignas(4) float IndexOfRefraction = 1.00f;
 	alignas(4) float Alpha = 1.0f;
 	alignas(16) glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
 	alignas(16) glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
@@ -23,6 +25,8 @@ struct GLTFMaterialBufferInfo
 	alignas(4) uint32_t DepthMap = -1;
 	alignas(4) uint32_t AlphaMap = -1;
 	alignas(4) uint32_t EmissionMap = -1;
+	alignas(4) uint32_t TransmissionMap = -1;
+	alignas(4) uint32_t IndexOfRefractionMap = -1;
 	alignas(4) uint32_t HeightMap = -1;
 	alignas(4) uint32_t CheckPaletteSwapColorMap = -1;
 	alignas(4) uint32_t PaletteSwapPixelColorMap = -1;
@@ -38,15 +42,6 @@ private:
 
 	VulkanBuffer MaterialBuffer;
 
-	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
-	float Metallic = 0.0f;
-	float Roughness = 0.0f;
-	float AmbientOcclusion = 1.0f;
-	glm::vec3 Emission = glm::vec3(0.0f);
-	float Alpha = 1.0f;
-	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
-	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
-
 	std::shared_ptr<Texture> AlbedoMap = nullptr;
 	std::shared_ptr<Texture> MetallicRoughnessMap = nullptr;
 	std::shared_ptr<Texture> MetallicMap = nullptr;
@@ -56,6 +51,8 @@ private:
 	std::shared_ptr<Texture> DepthMap = nullptr;
 	std::shared_ptr<Texture> AlphaMap = nullptr;
 	std::shared_ptr<Texture> EmissionMap = nullptr;
+	std::shared_ptr<Texture> TransmissionMap = nullptr;
+	std::shared_ptr<Texture> IndexOfRefractionMap = nullptr;
 	std::shared_ptr<Texture> HeightMap = nullptr;
 	std::shared_ptr<Texture> CheckPaletteSwapColorMap = nullptr;
 	std::shared_ptr<Texture> PaletteSwapPixelColorMap = nullptr;
@@ -70,8 +67,19 @@ public:
 	std::string MaterialName;
 	GLTFMaterialBufferInfo MaterialInfo;
 
+	glm::vec3 Albedo = glm::vec3(0.0f, 0.35f, 0.45);
+	float Metallic = 0.0f;
+	float Roughness = 0.0f;
+	float AmbientOcclusion = 1.0f;
+	glm::vec3 Emission = glm::vec3(0.0f);
+	float Transmission = 0.0f;
+	float IndexOfRefraction = 1.00f;
+	float Alpha = 1.0f;
+	glm::vec3 CheckPaletteSwapColor = glm::vec3(0.0f);
+	glm::vec3 PaletteSwapPixelColor = glm::vec3(0.0f);
+
 	void UpdateMaterialBufferIndex(uint64_t bufferIndex);
-	
+
 	void Destroy();
 	void GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList);
 
@@ -80,6 +88,8 @@ public:
 	void SetRoughness(float value);
 	void SetAmbientOcclusion(float value);
 	void SetEmission(glm::vec3 color);
+	void SetTransmission(float value);
+	void SetIndexOfRefraction(float value);
 	void SetAlpha(float value);
 	void SetCheckPaletteSwapColor(glm::vec3 color);
 	void SetPaletteSwapPixelColor(glm::vec3 color);
@@ -93,6 +103,8 @@ public:
 	void SetDepthMap(std::shared_ptr<Texture> texture);
 	void SetAlphaMap(std::shared_ptr<Texture> texture);
 	void SetEmissionMap(std::shared_ptr<Texture> texture);
+	void SetTransmissionMap(std::shared_ptr<Texture> texture);
+	void SetIndexOfRefractionMap(std::shared_ptr<Texture> texture);
 	void SetHeightMap(std::shared_ptr<Texture> texture);
 	void SetCheckPaletteSwapColorMap(std::shared_ptr<Texture> texture);
 	void SetPaletteSwapPixelColorMap(std::shared_ptr<Texture> texture);
@@ -107,6 +119,8 @@ public:
 	std::shared_ptr<Texture> GetDepthMap() { return DepthMap; }
 	std::shared_ptr<Texture> GetAlphaMap() { return AlphaMap; }
 	std::shared_ptr<Texture> GetEmissionMap() { return EmissionMap; }
+	std::shared_ptr<Texture> GetTransmissionMap() {return TransmissionMap; }
+	std::shared_ptr<Texture> GetIndexOfRefractionMap() { return IndexOfRefractionMap; }
 	std::shared_ptr<Texture> GetHeightMap() { return HeightMap; }
 	std::shared_ptr<Texture> GetCheckPaletteSwapColorMap() { return CheckPaletteSwapColorMap; }
 	std::shared_ptr<Texture> GetPaletteSwapPixelColorMap() { return PaletteSwapPixelColorMap; }

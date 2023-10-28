@@ -29,13 +29,6 @@
 #include "MultiplyRenderPass.h"
 #include "CubeToEnvironmentRenderPass.h"
 
-struct ReflectionPassOutput
-{
-	std::shared_ptr<RenderedCubeMapTexture> IrradianceCubeMap = GLTFSceneManager::CubeMap;
-	std::shared_ptr<RenderedCubeMapTexture> PrefilterCubeMap = GLTFSceneManager::CubeMap;
-	std::shared_ptr<RenderedCubeMapTexture> ReflectionCubeMap = GLTFSceneManager::CubeMap;
-};
-
 class PBRRenderer
 {
 private:
@@ -80,8 +73,6 @@ private:
 	std::shared_ptr<GameObject> SelectedGameObject;
 	std::shared_ptr<Mesh> SelectedMesh;
 	std::shared_ptr<Material> SelectedMaterial;
-
-	ReflectionPassOutput ReflectionPass();
 public:
 	PBRRenderer();
 	~PBRRenderer();

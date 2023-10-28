@@ -59,41 +59,71 @@ void Material::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& 
 void Material::SetAlbedo(glm::vec3 color)
 {
 	Albedo = color;
+	MaterialInfo.Albedo = color;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetMetallic(float value)
 {
 	Metallic = value;
+	MaterialInfo.Metallic = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetRoughness(float value)
 {
 	Roughness = value;
+	MaterialInfo.Roughness = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetAmbientOcclusion(float value)
 {
 	AmbientOcclusion = value;
+	MaterialInfo.AmbientOcclusion = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetEmission(glm::vec3 color)
 {
 	Emission = color;
+	MaterialInfo.Emission = color;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+}
+
+void Material::SetTransmission(float value)
+{
+	Transmission = value;
+	MaterialInfo.Transmission = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+}
+
+void Material::SetIndexOfRefraction(float value)
+{
+	IndexOfRefraction = value;
+	MaterialInfo.IndexOfRefraction = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetAlpha(float value)
 {
 	Alpha = value;
+	MaterialInfo.Alpha = value;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetCheckPaletteSwapColor(glm::vec3 color)
 {
 	CheckPaletteSwapColor = color;
+	MaterialInfo.CheckPaletteSwapColor = color;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetPaletteSwapPixelColor(glm::vec3 color)
 {
 	PaletteSwapPixelColor = color;
+	MaterialInfo.PaletteSwapPixelColor = color;
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 
 void Material::SetAlbedoMap(std::shared_ptr<Texture> texture)
@@ -156,6 +186,20 @@ void Material::SetEmissionMap(std::shared_ptr<Texture> texture)
 {
 	EmissionMap = texture;
 	MaterialInfo.EmissionMap = EmissionMap->GetTextureBufferIndex();
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+}
+
+void Material::SetTransmissionMap(std::shared_ptr<Texture> texture)
+{
+	TransmissionMap = texture;
+	MaterialInfo.TransmissionMap = TransmissionMap->GetTextureBufferIndex();
+	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
+}
+
+void Material::SetIndexOfRefractionMap(std::shared_ptr<Texture> texture)
+{
+	IndexOfRefractionMap = texture;
+	MaterialInfo.IndexOfRefractionMap = IndexOfRefractionMap->GetTextureBufferIndex();
 	MaterialBuffer.UpdateBufferMemory(&MaterialInfo, sizeof(GLTFMaterialBufferInfo));
 }
 

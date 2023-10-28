@@ -129,6 +129,14 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
     {
         material.Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], UV).rgb;
     }
+    if (material.TransmissionMap != -1)
+    {
+        material.Transmission = TextureMap[material.TransmissionMap].Sample(TextureMapSampler[material.TransmissionMap], UV).r;
+    }
+    if (material.IndexOfRefractionMap != -1)
+    {
+        material.IndexofRefraction = TextureMap[material.IndexOfRefractionMap].Sample(TextureMapSampler[material.IndexOfRefractionMap], UV).r;
+    }
     if (TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV).a == 0.0f)
     {
         discard;
@@ -137,6 +145,22 @@ MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
     return material;
 }
 
+float3 SnailsLaw(float3 V, float3 N, MaterialProperties material)
+{
+    float3 transmittedColor = float3(0.0f.rrr);
+    if(material.Transmission != 0.0f)
+    {
+        float cosTheta1 = dot(N, V);
+        float sinTheta1 = sqrt(1.0 - cosTheta1 * cosTheta1);
+        float sinTheta2 = sinTheta1 / material.IndexofRefraction;
+        float cosTheta2 = sqrt(1.0 - sinTheta2 * sinTheta2);
+        float3 refractDir = normalize(V / material.IndexofRefraction - N * (cosTheta2 - cosTheta1 / material.IndexofRefraction));
+    
+        transmittedColor = PrefilterMap.SampleLevel(PrefilterMapSampler, refractDir, material.Roughness * sceneDataProperties.PBRMaxMipLevel).rgb;
+    }
+    
+    return transmittedColor;
+}
 
 float3 PBRRenderer(VSOutput input)
 {
@@ -146,9 +170,9 @@ float3 PBRRenderer(VSOutput input)
     float3 N = getNormalFromMap(input, sceneDataProperties.MeshIndex);
     float3 V = normalize(sceneDataProperties.CameraPos - input.WorldPos);
    
-    if (material.NormalMap != 0)
+    if (material.NormalMap != -1)
     {
-        if (material.DepthMap != 0)
+        if (material.DepthMap != -1)
         {
             UV = ParallaxMapping(material, UV, V);
         }
@@ -164,7 +188,8 @@ float3 PBRRenderer(VSOutput input)
     float3 Lo = float3(0.0.rrr);
     Lo += DirectionalLightCalc(V, N, F0, material);
     Lo += PointLightCalc(V, N, F0, input.WorldPos, material);
-
+    float3 transmittedColor = SnailsLaw(V, N, material);
+    
     float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
     float3 kS = F;
     float3 kD = 1.0 - kS;
@@ -177,7 +202,7 @@ float3 PBRRenderer(VSOutput input)
     float2 brdf = BRDFMap.Sample(BRDFMapSampler, float2(max(dot(N, V), 0.0), material.Roughness)).rg;
     float3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-    float3 ambient = material.Emission + ((kD * diffuse + specular) * material.AmbientOcclusion);
+    float3 ambient = material.Emission + ((kD * diffuse + specular) * (1.0 - material.Transmission) + transmittedColor) * material.AmbientOcclusion;
 
     float3 color = ambient + Lo;
     return color;

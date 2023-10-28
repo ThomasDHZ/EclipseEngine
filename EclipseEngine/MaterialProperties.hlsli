@@ -5,6 +5,8 @@ struct MaterialProperties
     float Roughness;
     float AmbientOcclusion;
     float3 Emission;
+    float Transmission;
+    float IndexofRefraction;
     float Alpha;
     float3 CheckPixelForPaletteSwapColor;
     float3 PaletteSwapPixelColor;
@@ -18,6 +20,8 @@ struct MaterialProperties
     uint DepthMap;
     uint AlphaMap;
     uint EmissionMap;
+    uint TransmissionMap;
+    uint IndexOfRefractionMap;
     uint HeightMap;
     uint CheckPixelForPaletteSwapColorMap;
     uint PaletteSwapPixelColorMap;

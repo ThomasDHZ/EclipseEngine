@@ -37,13 +37,8 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
 	BuildRenderPassPipelines(textures);
 	SetUpCommandBuffers();
 }
-//std::shared_ptr<RenderedCubeMapTexture> PBRReflectionRenderPass::DrawSubmit(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize, glm::vec3 reflectPoint)
-//{
-//	Draw();
-//	return RenderedReflectionCubeMap;
-//}
 
-std::shared_ptr<RenderedCubeMapTexture> PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 reflectPoint)
+void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& textures, uint32_t cubeMapSize, glm::vec3 reflectPoint)
 {
 	SampleCount = VK_SAMPLE_COUNT_1_BIT;
 	RenderPassResolution = glm::vec2(cubeMapSize);
@@ -73,8 +68,6 @@ std::shared_ptr<RenderedCubeMapTexture> PBRReflectionRenderPass::PreRenderPass(P
 	SetUpCommandBuffers();
 	Draw(reflectPoint);
 	OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-
-	return RenderedReflectionCubeMap;
 }
 
 void PBRReflectionRenderPass::RenderPassDesc()

@@ -187,7 +187,7 @@ void CubeToEnvironmentRenderPass::Destroy()
 
 void CubeToEnvironmentRenderPass::SaveTexture(const char* filename)
 {
-    std::shared_ptr<BakedTexture> BakeTexture = std::make_shared<BakedTexture>(BakedTexture(Pixel32(0.0f, 0.0f, 0.0f, 1.0f), glm::vec2(ImageTexture->GetWidth(), ImageTexture->GetHeight()), VK_FORMAT_R32G32B32A32_SFLOAT));
+    std::shared_ptr<BakedTexture> BakeTexture = std::make_shared<BakedTexture>(BakedTexture(Pixel(0.0f, 0.0f, 0.0f, 1.0f), glm::vec2(ImageTexture->GetWidth(), ImageTexture->GetHeight()), VK_FORMAT_R32G32B32A32_SFLOAT));
 
     VkCommandBuffer commandBuffer = VulkanRenderer::BeginSingleTimeCommands();
 
@@ -218,8 +218,7 @@ void CubeToEnvironmentRenderPass::SaveTexture(const char* filename)
     const float* data;
     vkMapMemory(VulkanRenderer::GetDevice(), BakeTexture->Memory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
 
-
-    stbi_write_hdr(filename, BakeTexture->GetWidth(), BakeTexture->GetHeight(), STBI_rgb_alpha, data);
+    stbi_write_hdr(filename, BakeTexture->GetWidth(), BakeTexture->GetHeight(), 32768, data);
 
     BakeTexture->Destroy();
 }

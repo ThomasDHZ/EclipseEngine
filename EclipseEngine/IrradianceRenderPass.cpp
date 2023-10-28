@@ -33,7 +33,7 @@ void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTextur
     SetUpCommandBuffers();
 }
 
-std::shared_ptr<RenderedCubeMapTexture> IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
+void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
 {
     RenderPassResolution = glm::ivec2(cubeMapSize, cubeMapSize);
 
@@ -58,8 +58,6 @@ std::shared_ptr<RenderedCubeMapTexture> IrradianceRenderPass::OneTimeDraw(std::s
     SetUpCommandBuffers();
     Draw();
     OneTimeRenderPassSubmit(&CommandBuffer[VulkanRenderer::GetCMDIndex()]);
-
-    return IrradianceCubeMap;
 }
 
 void IrradianceRenderPass::RenderPassDesc()
@@ -148,12 +146,6 @@ void IrradianceRenderPass::BuildRenderPassPipelines(std::shared_ptr<RenderedCube
     pipelineInfo.SampleCount = SampleCount;
 
     IrradiancePipeline = JsonGraphicsPipeline("/Pipelines/IrradiancePipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(IrradianceSkyboxSettings), cubeMap);
-}
-
-std::shared_ptr<RenderedCubeMapTexture> IrradianceRenderPass::DrawSubmit(std::shared_ptr<RenderedCubeMapTexture> cubeMap, uint32_t cubeMapSize)
-{
-    Draw();
-    return IrradianceCubeMap;
 }
 
 VkCommandBuffer IrradianceRenderPass::Draw()
