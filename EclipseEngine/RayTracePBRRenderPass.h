@@ -32,6 +32,8 @@ public:
 
     void StartUp();
     void Update();
+    void UpdateTopLevelAccelerationStructure();
+
     VkCommandBuffer Draw();
     void RebuildSwapChain();
     void Destroy();

@@ -24,7 +24,7 @@ void RayTracePBRRenderer::BuildRenderer()
     GLTFSceneManager::AddMeshGameObject3D("Sphere", b);
     GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 
-    GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>("../texture/hdr/newport_loft.hdr", VK_FORMAT_R32G32B32A32_SFLOAT);
+    GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/alps_field_4k.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
     environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 
     rayTraceRenderPass.StartUp();

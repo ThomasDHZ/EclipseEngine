@@ -284,6 +284,23 @@ VkDescriptorSet GLTF_GraphicsDescriptors::SubmitDescriptorSet(std::vector<Descri
 	return DescriptorSet;
 }
 
+VkWriteDescriptorSetAccelerationStructureKHR GLTF_GraphicsDescriptors::AddAcclerationStructureBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkAccelerationStructureKHR* handle)
+{
+	VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = {};
+	AccelerationDescriptorStructure.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR;
+	AccelerationDescriptorStructure.accelerationStructureCount = 1;
+	AccelerationDescriptorStructure.pAccelerationStructures = handle;
+	return AccelerationDescriptorStructure;
+}
+
+VkDescriptorImageInfo GLTF_GraphicsDescriptors::AddRayTraceStorageImageDescriptor(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, VkImageLayout ImageLayout, VkImageView& ImageView)
+{
+	VkDescriptorImageInfo RayTraceImageDescriptor{};
+	RayTraceImageDescriptor.imageView = ImageView;
+	RayTraceImageDescriptor.imageLayout = ImageLayout;
+	return RayTraceImageDescriptor;
+}
+
 VkWriteDescriptorSet GLTF_GraphicsDescriptors::WriteBufferDescriptorSet(VkDescriptorSet descriptorSet, uint32_t BindingNumber, VkDescriptorBufferInfo Buffer)
 {
 	std::vector<VkDescriptorBufferInfo> BufferInfo = std::vector<VkDescriptorBufferInfo>{ Buffer };
