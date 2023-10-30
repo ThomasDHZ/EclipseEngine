@@ -48,6 +48,61 @@ void RayTracePBRRenderPass::StartUp()
 
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
+    UpdateTopLevelAccelerationStructure();
+}
+
+void RayTracePBRRenderPass::UpdateTopLevelAccelerationStructure()
+{
+    if (GraphicsDevice::IsRayTracingFeatureActive())
+    {
+        std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
+
+
+          for (int x = 0; x < GLTFSceneManager::GameObjectList.size(); x++)
+          {
+              GLTFSceneManager::GameObjectList[x]->GetGameObjectRenderer()->UpdateModelTopLevelAccelerationStructure(AccelerationStructureInstanceList, 0);
+          }
+
+        VulkanBuffer InstanceBuffer = VulkanBuffer(AccelerationStructureInstanceList.data(), sizeof(VkAccelerationStructureInstanceKHR) * AccelerationStructureInstanceList.size(), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+        DeviceOrHostAddressConst.deviceAddress = VulkanRenderer::GetBufferDeviceAddress(InstanceBuffer.GetBuffer());
+
+        VkAccelerationStructureGeometryKHR AccelerationStructureGeometry{};
+        AccelerationStructureGeometry.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR;
+        AccelerationStructureGeometry.geometryType = VK_GEOMETRY_TYPE_INSTANCES_KHR;
+        AccelerationStructureGeometry.flags = VK_GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR;
+        AccelerationStructureGeometry.geometry.instances.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR;
+        AccelerationStructureGeometry.geometry.instances.arrayOfPointers = VK_FALSE;
+        AccelerationStructureGeometry.geometry.instances.data = DeviceOrHostAddressConst;
+
+        VkAccelerationStructureBuildGeometryInfoKHR AccelerationStructureBuildGeometryInfo2 = {};
+        AccelerationStructureBuildGeometryInfo2.sType = VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR;
+        AccelerationStructureBuildGeometryInfo2.type = VK_ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR;
+        AccelerationStructureBuildGeometryInfo2.flags = VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR | VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+        AccelerationStructureBuildGeometryInfo2.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
+        AccelerationStructureBuildGeometryInfo2.geometryCount = 1;
+        AccelerationStructureBuildGeometryInfo2.pGeometries = &AccelerationStructureGeometry;
+        AccelerationStructureBuildGeometryInfo2.scratchData.deviceAddress = scratchBuffer.GetBufferDeviceAddress();
+
+        if (TopLevelAccelerationStructure.GetAccelerationStructureHandle() == VK_NULL_HANDLE)
+        {
+            AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
+        }
+        else
+        {
+            AccelerationStructureBuildGeometryInfo2.srcAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
+            AccelerationStructureBuildGeometryInfo2.dstAccelerationStructure = TopLevelAccelerationStructure.GetAccelerationStructureHandle();
+        }
+
+        VkAccelerationStructureBuildRangeInfoKHR AccelerationStructureBuildRangeInfo = {};
+        AccelerationStructureBuildRangeInfo.primitiveCount = static_cast<uint32_t>(AccelerationStructureInstanceList.size());
+        AccelerationStructureBuildRangeInfo.primitiveOffset = 0;
+        AccelerationStructureBuildRangeInfo.firstVertex = 0;
+        AccelerationStructureBuildRangeInfo.transformOffset = 0;
+        std::vector<VkAccelerationStructureBuildRangeInfoKHR> AccelerationStructureBuildRangeInfoList = { AccelerationStructureBuildRangeInfo };
+
+        TopLevelAccelerationStructure.AccelerationCommandBuffer(AccelerationStructureBuildGeometryInfo2, AccelerationStructureBuildRangeInfoList);
+        InstanceBuffer.DestroyBuffer();
+    }
 }
 
 void RayTracePBRRenderPass::Update()
@@ -122,7 +177,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     std::vector<VkPipelineShaderStageCreateInfo> ShaderList;
     std::vector<VkRayTracingShaderGroupCreateInfoKHR> RayTraceShaderList;
     {
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRRaygen.rgen.spv", VK_SHADER_STAGE_RAYGEN_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRRaygen.rgen.spv", VK_SHADER_STAGE_RAYGEN_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR RayGeneratorShaderInfo = {};
         RayGeneratorShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         RayGeneratorShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -132,7 +187,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         RayGeneratorShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(RayGeneratorShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRMiss.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRMiss.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR MissShaderInfo = {};
         MissShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         MissShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -142,7 +197,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         MissShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(MissShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRShadow.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRShadow.rmiss.spv", VK_SHADER_STAGE_MISS_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ShadowShaderInfo = {};
         ShadowShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ShadowShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR;
@@ -152,19 +207,19 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         ShadowShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ShadowShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRClosesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRClosesthit.rchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ClosestHitShaderInfo = {};
         ClosestHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ClosestHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
         ClosestHitShaderInfo.generalShader = VK_SHADER_UNUSED_KHR;
         ClosestHitShaderInfo.closestHitShader = static_cast<uint32_t>(ShaderList.size()) - 1;
 
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRAnyhit.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRAnyhit.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
         ClosestHitShaderInfo.anyHitShader = static_cast<uint32_t>(ShaderList.size()) - 1;
         ClosestHitShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ClosestHitShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("../Shaders/PBRAnyhit1.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("C:/Users/dotha/source/repos/EclipseEngine/Shaders/PBRAnyhit1.rahit.spv", VK_SHADER_STAGE_ANY_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ShadwoHitShaderInfo = {};
         ShadwoHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ShadwoHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
@@ -213,11 +268,11 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
-    //VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructureManager::GetAccelerationStructureHandlePtr());
-    //VkDescriptorImageInfo RayTracedTextureMaskDescriptor = AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
+    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = GLTF_GraphicsDescriptors::AddAcclerationStructureBinding(DescriptorBindingList, TopLevelAccelerationStructure.GetAccelerationStructureHandlePtr());
+    VkDescriptorImageInfo RayTracedTextureMaskDescriptor = GLTF_GraphicsDescriptors::AddRayTraceStorageImageDescriptor(DescriptorBindingList, VK_IMAGE_LAYOUT_GENERAL, RayTracedTexture->View);
 
- /*   GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure);
-    GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor);*/
+    GLTF_GraphicsDescriptors::AddAccelerationDescriptorSetBinding(DescriptorBindingList, 0, AccelerationDescriptorStructure);
+    GLTF_GraphicsDescriptors::AddStorageTextureSetBinding(DescriptorBindingList, 1, RayTracedTextureMaskDescriptor);
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 2, GLTFSceneManager::GetVertexPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 3, GLTFSceneManager::GetIndexPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 4, GLTFSceneManager::GetGameObjectPropertiesBuffer());

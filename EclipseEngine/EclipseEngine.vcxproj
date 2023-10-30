@@ -313,7 +313,6 @@
     <ClCompile Include="TextureAtlus.cpp" />
     <ClCompile Include="TextureBaker.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
@@ -500,7 +499,6 @@
     <ClInclude Include="TextureAtlus.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />

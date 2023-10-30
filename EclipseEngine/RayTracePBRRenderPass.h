@@ -22,6 +22,7 @@ private:
     void SetUpCommandBuffers();
     void BuildRenderPassPipelines();
 
+
 public:
     std::shared_ptr<RayTracingPipeline> RayTracePipeline;
     std::shared_ptr<RenderedColorTexture> RayTracedTexture;
@@ -32,6 +33,8 @@ public:
 
     void StartUp();
     void Update();
+    void UpdateTopLevelAccelerationStructure();
+
     VkCommandBuffer Draw();
     void RebuildSwapChain();
     void Destroy();
