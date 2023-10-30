@@ -176,6 +176,9 @@
     <None Include="Shader\Material.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shader\animate.comp" />
+    <None Include="Shader\pathtrace.rgen" />
+    <None Include="Shader\shadow.rmiss" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanBuffer.h">

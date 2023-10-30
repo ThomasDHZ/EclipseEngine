@@ -30,6 +30,18 @@ layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directiona
 layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
 
+struct PBRMaterial
+{
+	vec3 Albedo;
+	float Metallic;
+	float Roughness;
+	float AmbientOcclusion;
+	vec3 Emission;
+	float Alpha;
+
+	uint NormalMapID;
+	uint DepthMapID;
+};
 
 Vertex BuildVertexInfo()
 {
@@ -44,24 +56,75 @@ Vertex BuildVertexInfo()
 
 	const vec3 barycentricCoords = vec3(1.0f - attribs.x - attribs.y, attribs.x, attribs.y);
 
-	vertex.pos = v0.pos * barycentricCoords.x + v1.pos * barycentricCoords.y + v2.pos * barycentricCoords.z;
-	vertex.pos = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.ModelTransform * meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.pos, 1.0));
+	vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
+	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
 
-	vertex.normal = v0.normal * barycentricCoords.x + v1.normal * barycentricCoords.y + v2.normal * barycentricCoords.z;
+	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
 
-	vertex.uv = v0.uv * barycentricCoords.x + v1.uv * barycentricCoords.y + v2.uv * barycentricCoords.z;
-	vertex.uv += meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVOffset;
+	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
+	vertex.UV += meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.UVOffset;
 
-	vertex.tangent = v0.tangent * barycentricCoords.x + v1.tangent * barycentricCoords.y + v2.tangent * barycentricCoords.z;
+	vertex.Tangant = v0.Tangant * barycentricCoords.x + v1.Tangant * barycentricCoords.y + v2.Tangant * barycentricCoords.z;
 	vertex.BiTangant = v0.BiTangant * barycentricCoords.x + v1.BiTangant * barycentricCoords.y + v2.BiTangant * barycentricCoords.z;
 
 	return vertex;
 }
 
+PBRMaterial BuildPBRMaterial(MaterialProperties properties, vec2 UV)
+{
+	PBRMaterial material;
+
+	material.Albedo = pow(properties.Albedo, vec3(2.2f));
+	if (properties.AlbedoMap != 0)
+	{
+		material.Albedo = pow(texture(TextureMap[properties.AlbedoMap], UV).rgb, vec3(2.2f));
+	}
+
+	material.Metallic = properties.Metallic;
+	if (properties.MetallicMap != 0)
+	{
+		material.Metallic = texture(TextureMap[properties.MetallicMap], UV).r;
+	}
+
+	material.Roughness = properties.Roughness;
+	if (properties.RoughnessMap != 0)
+	{
+		material.Roughness = texture(TextureMap[properties.RoughnessMap], UV).r;
+	}
+
+	material.AmbientOcclusion = properties.AmbientOcclusion;
+	if (properties.AmbientOcclusionMap != 0)
+	{
+		material.AmbientOcclusion = texture(TextureMap[properties.AmbientOcclusionMap], UV).r;
+	}
+
+	material.Emission = properties.Emission;
+	if (properties.EmissionMap != 0)
+	{
+		material.Emission = texture(TextureMap[properties.EmissionMap], UV).rgb;
+	}
+
+	if (texture(TextureMap[properties.AlphaMap], UV).r == 0.0f ||
+		texture(TextureMap[properties.AlbedoMap], UV).a == 0.0f)
+	{
+		//discard;
+	}
+
+	material.NormalMapID = properties.NormalMap;
+	material.DepthMapID = properties.DepthMap;
+
+	return material;
+}
+
 void main()
 {		
+
+    Vertex vertex = BuildVertexInfo();
     const uint materialID = meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MaterialBufferIndex;
     MaterialProperties material = materialBuffer[materialID].materialProperties;
+    PBRMaterial pbrMaterial = BuildPBRMaterial(material, vertex.UV);
 
-    rayHitInfo.color = vec3(1.0f, 1.0f, 0.0f);
+	const vec3 barycentricCoords = vec3(1.0f - attribs.x - attribs.y, attribs.x, attribs.y);
+
+    rayHitInfo.color = barycentricCoords;
 }

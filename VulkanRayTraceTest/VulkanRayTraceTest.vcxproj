@@ -188,14 +188,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="alpha.rahit" />
+    <None Include="Shader\animate.comp" />
     <None Include="Shader\closesthit.rchit" />
     <None Include="Shader\Material.glsl" />
     <None Include="Shader\Lighting.glsl" />
     <None Include="Shader\miss.rmiss" />
+    <None Include="Shader\pathtrace.rgen" />
     <None Include="Shader\RasterShadowClosestHit.rchit" />
     <None Include="Shader\raygen.rgen" />
     <None Include="Shader\shader.frag" />
     <None Include="Shader\shader.vert" />
+    <None Include="Shader\shadow.rmiss" />
     <None Include="Shader\shadow.rmiss.spv" />
   </ItemGroup>
   <ItemGroup>
