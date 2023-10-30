@@ -86,10 +86,19 @@ VkShaderModule RenderPass::ReadShaderFile(const std::string& filename)
 
 VkPipelineShaderStageCreateInfo RenderPass::CreateShader(const std::string& filename, VkShaderStageFlagBits shaderStages)
 {
+    auto extenstion = filename.substr(0, filename.ends_with('.'));
+
     VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
     vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     vertShaderStageInfo.stage = shaderStages;
-    vertShaderStageInfo.module = ReadShaderFile(filename);
+    if (filename.ends_with(".spv"))
+    {
+        vertShaderStageInfo.module = ReadShaderFile(filename);
+    }
+    else
+    {
+        vertShaderStageInfo.module = VulkanRenderer::CompileHLSLShader(filename, shaderStages);
+    }
     vertShaderStageInfo.pName = "main";
 
     return vertShaderStageInfo;

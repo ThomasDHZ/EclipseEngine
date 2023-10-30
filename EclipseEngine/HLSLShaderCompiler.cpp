@@ -58,9 +58,11 @@ std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string filename
     args.emplace_back(L"-fspv-target-env=vulkan1.3");
     switch (stage)
     {
+        
     case VkShaderStageFlagBits::VK_SHADER_STAGE_VERTEX_BIT: args.emplace_back(L"-T vs_6_5"); break;
     case VkShaderStageFlagBits::VK_SHADER_STAGE_FRAGMENT_BIT: args.emplace_back(L"-T ps_6_5"); break;
     case VkShaderStageFlagBits::VK_SHADER_STAGE_COMPUTE_BIT: args.emplace_back(L"-T cs_6_5"); break;
+    default: args.emplace_back(L"-T lib_6_5"); break;
     }
 
     for (int x = 0; x < args.size(); x++)

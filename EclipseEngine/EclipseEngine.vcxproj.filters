@@ -1572,5 +1572,23 @@
     <FxCompile Include="PointLightVertexShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="PBRClosestHitShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRMissShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRRayGenShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
+    <FxCompile Include="WireFrameShader.hlsl">
+      <Filter>Shader\RayTraceShaders\PBR</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
