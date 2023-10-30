@@ -193,7 +193,6 @@
     <ClCompile Include="BillBoardMeshRenderer.cpp" />
     <ClCompile Include="BillboardPipeline.cpp" />
     <ClCompile Include="BloomCombine.cpp" />
-    <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentRenderer.cpp" />
@@ -236,7 +235,6 @@
     <ClCompile Include="MultiplyRenderPass.cpp" />
     <ClCompile Include="PerlinNoiseRenderPass.cpp" />
     <ClCompile Include="Reflecter.cpp" />
-    <ClCompile Include="RTXVulkanBuffer.cpp" />
     <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
@@ -315,6 +313,7 @@
     <ClCompile Include="TextureAtlus.cpp" />
     <ClCompile Include="TextureBaker.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TopLevelAccelerationStructureManager.cpp" />
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="RenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
@@ -368,7 +367,6 @@
     <ClInclude Include="BillBoardMeshRenderer.h" />
     <ClInclude Include="BillboardPipeline.h" />
     <ClInclude Include="BloomCombine.h" />
-    <ClInclude Include="Buffer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentRenderer.h" />
@@ -415,7 +413,6 @@
     <ClInclude Include="MultiplyRenderPass.h" />
     <ClInclude Include="PerlinNoiseRenderPass.h" />
     <ClInclude Include="Reflecter.h" />
-    <ClInclude Include="RTXVulkanBuffer.h" />
     <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />
@@ -503,6 +500,7 @@
     <ClInclude Include="TextureAtlus.h" />
     <ClInclude Include="TextureBaker.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TopLevelAccelerationStructureManager.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="RenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />

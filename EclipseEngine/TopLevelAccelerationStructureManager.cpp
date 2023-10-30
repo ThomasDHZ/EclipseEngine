@@ -1,0 +1,6 @@
+#include "TopLevelAccelerationStructureManager.h"
+
+ AccelerationStructureBuffer TopLevelAccelerationStructureManager::TopLevelAccelerationStructure;
+ VkDeviceOrHostAddressConstKHR TopLevelAccelerationStructureManager::DeviceOrHostAddressConst;
+ VulkanBuffer TopLevelAccelerationStructureManager::scratchBuffer;
+ int TopLevelAccelerationStructureManager::AccelerationStructureInstanceCount = -1;

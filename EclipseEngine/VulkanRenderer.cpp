@@ -104,7 +104,7 @@ void VulkanRenderer::StartUp()
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SPIRV_1_4_EXTENSION_NAME);
 	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME);
-	//GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
+	GraphicsDevice::AddRequriedDeviceExtensions(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
 
 	VkApplicationInfo VulkanInfo = {};
 	VulkanInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -121,32 +121,30 @@ void VulkanRenderer::StartUp()
 	VulkanCreateInfo.enabledExtensionCount = static_cast<uint32_t>(ExtensionList.size());
 	VulkanCreateInfo.ppEnabledExtensionNames = ExtensionList.data();
 
-	VulkanCreateInfo.enabledLayerCount = 0;
-	VulkanCreateInfo.pNext = nullptr;
 #ifdef NDEBUG
 	VulkanCreateInfo.enabledLayerCount = 0;
 	VulkanCreateInfo.pNext = nullptr;
 #else
-	//VkDebugUtilsMessengerCreateInfoEXT DebugInfo;
-	//VulkanDebug.CreateDebugMessengerInfo(DebugInfo);
+	VkDebugUtilsMessengerCreateInfoEXT DebugInfo;
+	VulkanDebug.CreateDebugMessengerInfo(DebugInfo);
 
-	//std::vector<VkValidationFeatureEnableEXT> enabledList = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT, VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT };
-	//std::vector<VkValidationFeatureDisableEXT> disabledList = {
-	//VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT, VK_VALIDATION_FEATURE_DISABLE_API_PARAMETERS_EXT,
-	//	VK_VALIDATION_FEATURE_DISABLE_OBJECT_LIFETIMES_EXT, VK_VALIDATION_FEATURE_DISABLE_CORE_CHECKS_EXT };
+	std::vector<VkValidationFeatureEnableEXT> enabledList = { VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT, VK_VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT };
+	std::vector<VkValidationFeatureDisableEXT> disabledList = {
+	VK_VALIDATION_FEATURE_DISABLE_THREAD_SAFETY_EXT, VK_VALIDATION_FEATURE_DISABLE_API_PARAMETERS_EXT,
+		VK_VALIDATION_FEATURE_DISABLE_OBJECT_LIFETIMES_EXT, VK_VALIDATION_FEATURE_DISABLE_CORE_CHECKS_EXT };
 
-	//VkValidationFeaturesEXT ValidationFeatures{};
-	//ValidationFeatures.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
-	//ValidationFeatures.disabledValidationFeatureCount = static_cast<uint32_t>(enabledList.size());
-	//ValidationFeatures.enabledValidationFeatureCount = static_cast<uint32_t>(disabledList.size());
-	//ValidationFeatures.pEnabledValidationFeatures = enabledList.data();
-	//ValidationFeatures.pDisabledValidationFeatures = disabledList.data();
-	//ValidationFeatures.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
+	VkValidationFeaturesEXT ValidationFeatures{};
+	ValidationFeatures.sType = VK_STRUCTURE_TYPE_VALIDATION_FEATURES_EXT;
+	ValidationFeatures.disabledValidationFeatureCount = static_cast<uint32_t>(enabledList.size());
+	ValidationFeatures.enabledValidationFeatureCount = static_cast<uint32_t>(disabledList.size());
+	ValidationFeatures.pEnabledValidationFeatures = enabledList.data();
+	ValidationFeatures.pDisabledValidationFeatures = disabledList.data();
+	ValidationFeatures.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
 
-	//VulkanCreateInfo.enabledLayerCount = static_cast<unsigned int>(ValidationLayers.size());
-	//VulkanCreateInfo.ppEnabledLayerNames = ValidationLayers.data();
-	//VulkanCreateInfo.pNext = &ValidationFeatures;
-	////VulkanCreateInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
+	VulkanCreateInfo.enabledLayerCount = static_cast<unsigned int>(ValidationLayers.size());
+	VulkanCreateInfo.ppEnabledLayerNames = ValidationLayers.data();
+	VulkanCreateInfo.pNext = &ValidationFeatures;
+	//VulkanCreateInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&DebugInfo;
 
 #endif
 

@@ -177,6 +177,9 @@
     <ClCompile Include="Bone.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="TopLevelAccelerationStructureManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
     <ClCompile Include="MeshPickerRenderPass3D.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
@@ -618,12 +621,6 @@
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="Buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RTXVulkanBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -652,6 +649,9 @@
     </ClInclude>
     <ClInclude Include="Converters.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TopLevelAccelerationStructureManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="MeshPickerRenderPass3D.h">
       <Filter>Header Files\Renderer\RenderPasses</Filter>
@@ -1140,12 +1140,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Reflecter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RTXVulkanBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
