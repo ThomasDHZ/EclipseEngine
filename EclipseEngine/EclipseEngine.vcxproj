@@ -234,6 +234,7 @@
     <ClCompile Include="MegaMan.cpp" />
     <ClCompile Include="MultiplyRenderPass.cpp" />
     <ClCompile Include="PerlinNoiseRenderPass.cpp" />
+    <ClCompile Include="RayTraceModel.cpp" />
     <ClCompile Include="Reflecter.cpp" />
     <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
@@ -412,6 +413,7 @@
     <ClInclude Include="MegaMan.h" />
     <ClInclude Include="MultiplyRenderPass.h" />
     <ClInclude Include="PerlinNoiseRenderPass.h" />
+    <ClInclude Include="RayTraceModel.h" />
     <ClInclude Include="Reflecter.h" />
     <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />

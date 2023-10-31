@@ -4,11 +4,10 @@
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <string>
-#include "RTXPerspectiveCamera.h"
+#include "PerspectiveCamera.h"
 #include "VulkanBuffer.h"
-#include "TextureManager.h"
 
-struct Material
+struct RTXMaterial
 {
 	alignas(16) glm::vec3 Ambient = glm::vec3(0.2f);
 	alignas(16) glm::vec3 Diffuse = glm::vec3(0.6f);
@@ -48,12 +47,12 @@ struct MeshOffsets
 	uint32_t IndiceOffset;
 };
 
-struct Mesh
+struct RayTraceMesh
 {
 	std::vector<RTVertex> vertices;
 	std::vector<uint32_t> indices;
 	glm::mat4 Transform;
-	Material material;
+	RTXMaterial material;
 
 	VulkanBuffer IndexBuffer;
 	VulkanBuffer VertexBuffer;
@@ -74,10 +73,10 @@ class RayTraceModel
 private:
 	PFN_vkGetBufferDeviceAddressKHR vkGetBufferDeviceAddressKHR;
 
-	void LoadMesh(TextureManager& textureManager, VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath, aiNode* node, const aiScene* scene);
+	void LoadMesh(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath, aiNode* node, const aiScene* scene);
 	std::vector<RTVertex> LoadVertices(aiMesh* mesh);
 	std::vector<uint32_t> LoadIndices(aiMesh* mesh);
-	Material LoadMaterial(TextureManager& textureManager, VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
+	RTXMaterial LoadMaterial(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath, aiMesh* mesh, const aiScene* scene);
 	uint64_t getBufferDeviceAddress(VkDevice& device, VkBuffer buffer);
 
 public:
@@ -85,7 +84,7 @@ public:
 	glm::vec3 ModelRotation = glm::vec3(0.0f);
 	glm::vec3 ModelScale = glm::vec3(1.0f);
 
-	std::vector<Mesh> MeshList;
+	std::vector<RayTraceMesh> MeshList;
 	std::vector<MeshOffsets> MeshOffsetList;
 	std::vector<VulkanBuffer> MeshOffsetBufferList;
 
@@ -108,7 +107,7 @@ public:
 
 	RayTraceModel();
 	RayTraceModel(VkDevice& device, VkPhysicalDevice& physicalDevice, MeshDetails& meshDetails);
-	RayTraceModel(TextureManager& textureManager, VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath);
+	RayTraceModel(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string& FilePath);
 	~RayTraceModel();
 
 	void Update();

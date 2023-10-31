@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include <GLFW\glfw3.h>
-#include "PerspectiveCamera.h"
+#include "RTXPerspectiveCamera.h"
 #include <memory>
 
 class Mouse

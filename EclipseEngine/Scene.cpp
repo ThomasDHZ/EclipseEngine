@@ -221,6 +221,7 @@ void Scene::StartUp()
 
 //GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 	/*GLTFSceneManager::AddPointLight(std::make_shared<GLTFPointLight>(GLTFPointLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f, 1.0f))); */
+
 }
 
 void Scene::Update()
@@ -233,7 +234,7 @@ void Scene::Update()
     SceneManager::Update();
    //pbrRenderer.Update();
     //spriteRenderer.Update();
-    rayTraceRenderer.Update();
+	rayTraceRenderer.updateUniformBuffers(Window::GetWindowPtr());
 }
 
 void Scene::ImGuiUpdate()
@@ -250,7 +251,7 @@ void Scene::ImGuiUpdate()
 
     //pbrRenderer.ImGuiUpdate();
     //spriteRenderer.ImGuiUpdate();
-    rayTraceRenderer.ImGuiUpdate();
+    rayTraceRenderer.UpdateGUI();
 
     SceneManager::ImGuiSceneHierarchy();
    // MeshRendererManager::GUIUpdate();
@@ -262,7 +263,9 @@ void Scene::BuildRenderers()
     //MeshRendererManager::Update();
    // pbrRenderer.BuildRenderer();
     //spriteRenderer.BuildRenderer();
-    rayTraceRenderer.BuildRenderer();
+	VkDescriptorPool asdf = nullptr;  
+	std::vector<VkImage> images = VulkanRenderer::GetSwapChainImages();
+	rayTraceRenderer = RayTraceRenderer(VulkanRenderer::GetDevice(), VulkanRenderer::GetPhysicalDevice(), VulkanRenderer::GetCommandPool(), VulkanRenderer::GetGraphicsQueue(), asdf, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 3, images);
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
 }
@@ -280,7 +283,7 @@ void Scene::Draw()
 
     //pbrRenderer.Draw(CommandBufferSubmitList);
     //spriteRenderer.Draw(CommandBufferSubmitList);
-    rayTraceRenderer.Draw(CommandBufferSubmitList);
+   CommandBufferSubmitList.emplace_back(rayTraceRenderer.drawCmdBuffers[VulkanRenderer::GetCMDIndex()]);
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
@@ -295,7 +298,7 @@ void Scene::Draw()
 void Scene::Destroy()
 {
    // GameObjectManager::Destroy();
-    rayTraceRenderer.Destroy();
+   // rayTraceRenderer.Destroy();
    // pbrRenderer.Destroy();
    // spriteRenderer.Destroy();
 }

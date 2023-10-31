@@ -25,7 +25,7 @@ private:
 	static float PreRenderedMapSize;
 
 	static std::vector<std::shared_ptr<Material>> MaterialList;
-	static std::vector<std::shared_ptr<Texture>> TextureList;
+
 	static std::vector<std::shared_ptr<SunLight>> SunLightList;
 	static std::vector<std::shared_ptr<DirectionalLight>> DirectionalLightList;
 	static std::vector<std::shared_ptr<PointLight>> PointLightList;
@@ -43,6 +43,8 @@ private:
 public:
 	static bool WireframeModeFlag;
 	static SceneProperties sceneProperites;
+
+	static std::vector<std::shared_ptr<Texture>> TextureList;
 
 	static std::vector<std::shared_ptr<GameObject>> GameObjectList;
 	static std::shared_ptr<Camera> ActiveCamera;

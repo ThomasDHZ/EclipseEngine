@@ -43,7 +43,7 @@ RayTraceRenderer::RayTraceRenderer(VkDevice Device, VkPhysicalDevice PhysicalDev
     vkGetRayTracingShaderGroupHandlesKHR = reinterpret_cast<PFN_vkGetRayTracingShaderGroupHandlesKHR>(vkGetDeviceProcAddr(device, "vkGetRayTracingShaderGroupHandlesKHR"));
     vkCreateRayTracingPipelinesKHR = reinterpret_cast<PFN_vkCreateRayTracingPipelinesKHR>(vkGetDeviceProcAddr(device, "vkCreateRayTracingPipelinesKHR"));
 
-  camera = std::make_shared<PerspectiveCamera>(glm::vec2(WIDTH, HEIGHT), glm::vec3(0.0f, 0.0f, 5.0f));
+    camera = std::make_shared<PerspectiveCamera>(glm::vec2(WIDTH, HEIGHT), glm::vec3(0.0f, 0.0f, 5.0f));
 
   //ModelList.emplace_back(RayTraceModel(textureManager, device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/Sponza/Sponza.obj"));
 //  ModelList.emplace_back(RayTraceModel(textureManager, device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/viking_room.obj"));
@@ -484,9 +484,9 @@ void RayTraceRenderer::UpdateGUI()
 
 void RayTraceRenderer::updateUniformBuffers(GLFWwindow* window)
 {
-    keyboard.Update(window, camera);
-    mouse.Update(window, camera);
-    camera->Update(WIDTH, HEIGHT);
+ /*   keyboard.Update(window, camera);
+    mouse.Update(window, camera);*/
+    camera.Update(WIDTH, HEIGHT);
 
     static auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -497,10 +497,10 @@ void RayTraceRenderer::updateUniformBuffers(GLFWwindow* window)
     ModelList[0].ModelRotation = glm::vec3(0.0f, time * 5, 0.0f);
     ModelList[0].Update();
 
-    SceneData.projInverse = glm::inverse(camera->GetProjectionMatrix());
-    SceneData.viewInverse = glm::inverse(camera->GetViewMatrix());
+    SceneData.projInverse = glm::inverse(camera.GetProjectionMatrix());
+    SceneData.viewInverse = glm::inverse(camera.GetViewMatrix());
     SceneData.modelInverse = ModelList[0].ModelTransform;
-    SceneData.viewPos = glm::vec4(camera->GetPosition(), 0.0f);
+    SceneData.viewPos = glm::vec4(camera.GetPosition(), 0.0f);
     SceneData.vertexSize = sizeof(RTVertex);
     SceneDataBuffer.CopyBufferToMemory(device, &SceneData, sizeof(SceneData));
 

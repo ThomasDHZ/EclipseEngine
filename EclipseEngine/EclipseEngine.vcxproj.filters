@@ -621,6 +621,9 @@
     <ClCompile Include="EnvironmentToCubeRenderPass.cpp">
       <Filter>Source Files\Renderer\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="RayTraceModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InterfaceRenderPass.h">
@@ -1140,6 +1143,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Reflecter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RayTraceModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

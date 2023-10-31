@@ -1,7 +1,7 @@
 #pragma once
 #include <GLFW\glfw3.h>
 #include "Camera.h"
-#include "PerspectiveCamera.h"
+#include "RTXPerspectiveCamera.h"
 #include <memory>
 
 class Keyboard
