@@ -11,7 +11,7 @@
 class VulkanWindow
 {
 private:
-	static Window* window;
+	static VulkanWindow* window;
 	static GLFWwindow* GLFWindow;
 	static uint32_t Width;
 	static uint32_t Height;

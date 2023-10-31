@@ -204,7 +204,7 @@ void Renderer::UpdateSwapChain(VulkanEngine& engine, VulkanWindow& window)
     vkDestroySwapchainKHR(engine.Device, engine.SwapChain.GetSwapChain(), nullptr);
     vkDestroyDescriptorPool(engine.Device, descriptorPool, nullptr);
 
-    engine.SwapChain.UpdateSwapChain(window.GetWindowPtr(), engine.Device, engine.PhysicalDevice, engine.Surface);
+    engine.SwapChain.RebuildSwapChain(window.GetWindowPtr(), engine.Device, engine.PhysicalDevice, engine.Surface);
     RenderPass.UpdateSwapChain(engine, descriptorSetLayout);
     interfaceRenderPass.UpdateSwapChain(engine.Device, engine.SwapChain.SwapChainImageViews, engine.SwapChain.SwapChainResolution);
 

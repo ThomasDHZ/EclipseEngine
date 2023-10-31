@@ -178,9 +178,11 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Texuture2D.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanEngine.cpp" />
+    <ClCompile Include="VulkanRenderer.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +211,7 @@
     <ClInclude Include="FrameBufferRenderingPipeline.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GameController.h" />
+    <ClInclude Include="GraphicsDevice.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelRenderManager.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PathConsts.h" />
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="RayTraceRenderer.h" />
@@ -238,10 +242,12 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Texuture2D.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VulkanBuffer.h" />
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanEngine.h" />
+    <ClInclude Include="VulkanRenderer.h" />
     <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
