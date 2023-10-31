@@ -1,6 +1,6 @@
 #pragma once
 #include <vulkan/vulkan.h>
-#include "VulkanEngine.h"
+#include <iostream>
 
 enum TextureType
 {
@@ -14,24 +14,19 @@ class Texture
 private:
 
 protected:
+    VkDeviceMemory Memory = VK_NULL_HANDLE;
+    VkSampler Sampler = VK_NULL_HANDLE;
+
+    void TransitionImageLayout(VkDevice& device, VkCommandPool& commandPool, VkQueue& graphicsQueue, VkImageLayout oldLayout, VkImageLayout newLayout);
+    void CopyBufferToImage(VkDevice& device, VkCommandPool& commandPool, VkQueue& graphicsQueue, VkBuffer buffer);
 
 
-    void KTXTransitionImageLayout(VulkanEngine& engine, VkImageLayout oldLayout, VkImageLayout newLayout);
-    void KTXCopyBufferToImage(VulkanEngine& engine, VkBuffer buffer);
-    void TransitionImageLayout(VulkanEngine& engine, VkImageLayout oldLayout, VkImageLayout newLayout);
-    void CopyBufferToImage(VulkanEngine& engine, VkBuffer buffer);
+    virtual void LoadTexture(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, std::string TextureLocation, VkFormat format);
+    virtual void CreateTextureImage(VkDevice& device, VkPhysicalDevice& physcialDevice, VkImageCreateInfo TextureInfo);
 
-    virtual void LoadKTXTexture(VulkanEngine& engine, std::string TextureLocation, VkFormat format);
-    virtual void LoadTexture(VulkanEngine& engine, std::string TextureLocation, VkFormat format);
-    //virtual void CreateTexture(VulkanEngine& engine, std::vector<Pixel>& Pixels, VkFormat format);
-    virtual void CreateTextureImage(VulkanEngine& engine, VkImageCreateInfo TextureInfo);
-    void UpdateColorFormat(VulkanEngine& engine, VkCommandBuffer buffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
 public:
     VkImage Image = VK_NULL_HANDLE;
     VkImageView View = VK_NULL_HANDLE;
-    VkSampler Sampler = VK_NULL_HANDLE;
-    VkDeviceMemory Memory = VK_NULL_HANDLE;
-    VkFormat TextureFormat;
     VkDescriptorSet ImGuiDescriptorSet = VK_NULL_HANDLE;
 
     unsigned int TextureID = 0;
@@ -42,14 +37,12 @@ public:
     int Height;
 
     Texture();
-    Texture(VulkanEngine& engine, std::string TextureLocation, unsigned int textureID, VkFormat format, TextureType textureType);
-    Texture(VulkanEngine& engine, std::string TextureLocation, VkFormat format, TextureType textureType);
-    Texture(VulkanEngine& engine, unsigned int textureID, TextureType textureType);
-    //Texture(VulkanEngine& engine, unsigned int width, unsigned int height, std::vector<Pixel>& PixelList, TextureType textureType, VkFormat format);
-    Texture(VulkanEngine& engine, TextureType textureType);
+    Texture(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, const std::string TextureLocation, TextureType textureType, VkFormat format, unsigned int textureID);
+    Texture(VkDevice& device, VkPhysicalDevice& physcialDevice, VkCommandPool& commandPool, VkQueue& graphicsQueue, TextureType textureType, unsigned int textureID);
     ~Texture();
 
-    virtual void Delete(VulkanEngine& engine);
+    virtual void Delete(VkDevice& device);
+
     VkImageView GetTextureView() { return View; }
     VkSampler GetTextureSampler() { return Sampler; }
 };
