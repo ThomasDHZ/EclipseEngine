@@ -283,7 +283,8 @@ void Scene::Draw()
 
     //pbrRenderer.Draw(CommandBufferSubmitList);
     //spriteRenderer.Draw(CommandBufferSubmitList);
-   CommandBufferSubmitList.emplace_back(rayTraceRenderer.drawCmdBuffers[VulkanRenderer::GetCMDIndex()]);
+	auto images = VulkanRenderer::GetSwapChainImages();
+   CommandBufferSubmitList.emplace_back(rayTraceRenderer.Draw(images));
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 

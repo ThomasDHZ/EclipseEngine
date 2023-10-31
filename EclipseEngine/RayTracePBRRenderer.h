@@ -140,7 +140,7 @@ public:
     AccelerationStructure topLevelAS{};
 
     std::vector<VkShaderModule> shaderModules;
-    std::vector<VkCommandBuffer> drawCmdBuffers;
+    VkCommandBuffer drawCmdBuffers;
 
     RayTraceRenderer();
     RayTraceRenderer(VkDevice device, VkPhysicalDevice physicalDevice, VkCommandPool commandPool, VkQueue graphicsQueue, VkDescriptorPool descriptorPool, uint32_t WIDTH, uint32_t HEIGHT, int swapChainFramebuffersSize, std::vector<VkImage>& swapChainImages);
@@ -161,7 +161,7 @@ public:
     void createShaderBindingTable();
     void createSceneDataBuffer();
     void createDescriptorSets();
-    void buildCommandBuffers(int swapChainFramebuffersSize, std::vector<VkImage>& swapChainImages);
+    VkCommandBuffer Draw(std::vector<VkImage>& swapChainImages);
     void Resize(int swapChainFramebuffersSize, std::vector<VkImage>& swapChainImages, uint32_t width, uint32_t height);
 
     void AcclerationCommandBuffer(VkAccelerationStructureBuildGeometryInfoKHR& VkAccelerationStructureBuildGeometryInfoKHR, std::vector<VkAccelerationStructureBuildRangeInfoKHR>& accelerationStructureBuildRangeInfoKHR);
