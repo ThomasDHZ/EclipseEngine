@@ -59,7 +59,7 @@ RayTraceRenderer::RayTraceRenderer(VkDevice Device, VkPhysicalDevice PhysicalDev
     CubeMapFiles[4] = "C:/Users/dotha/source/repos/VulkanGraphics/texture/skybox/back.jpg";
     CubeMapFiles[5] = "C:/Users/dotha/source/repos/VulkanGraphics/texture/skybox/front.jpg";
 
-   // textureManager.LoadCubeMap(device, physicalDevice, commandPool, graphicsQueue, CubeMapFiles);
+   //.LoadCubeMap(device, physicalDevice, commandPool, graphicsQueue, CubeMapFiles);
 
 
     SceneData.dlight.direction = glm::vec4(28.572f, 1000.0f, 771.429f, 0.0f);
@@ -492,7 +492,7 @@ void RayTraceRenderer::updateUniformBuffers(GLFWwindow* window)
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
 
-    ModelList[0].ModelRotation = glm::vec3(0.0f, time * 5, 0.0f);
+   // ModelList[0].ModelRotation = glm::vec3(0.0f, time * 5, 0.0f);
     ModelList[0].Update();
 
     SceneData.projInverse = glm::inverse(camera->GetProjectionMatrix());
@@ -799,19 +799,19 @@ void RayTraceRenderer::createDescriptorSets()
     DiffuseMapDescriptor.descriptorCount = static_cast<uint32_t>(GLTFSceneManager::TextureList.size());
     DiffuseMapDescriptor.pImageInfo = DiffuseMapInfoList.data();
 
-    VkDescriptorImageInfo CubeMapImage = {};
+  /*  VkDescriptorImageInfo CubeMapImage = {};
     CubeMapImage.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-    //CubeMapImage.imageView = textureManager.GetCubeMapTexture().GetTextureView();
-    //CubeMapImage.sampler = textureManager.GetCubeMapTexture().GetTextureSampler();
+    CubeMapImage.imageView = GLTFSceneManager::CubeMap->View;
+    CubeMapImage.sampler = GLTFSceneManager::CubeMap->Sampler;*/
 
-    VkWriteDescriptorSet CubeMapDescriptor = {};
-    CubeMapDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    CubeMapDescriptor.dstSet = RTDescriptorSet;
-    CubeMapDescriptor.dstBinding = 10;
-    CubeMapDescriptor.dstArrayElement = 0;
-    CubeMapDescriptor.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-    CubeMapDescriptor.descriptorCount = 1;
-    CubeMapDescriptor.pImageInfo = &CubeMapImage;
+    //VkWriteDescriptorSet CubeMapDescriptor = {};
+    //CubeMapDescriptor.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    //CubeMapDescriptor.dstSet = RTDescriptorSet;
+    //CubeMapDescriptor.dstBinding = 10;
+    //CubeMapDescriptor.dstArrayElement = 0;
+    //CubeMapDescriptor.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    //CubeMapDescriptor.descriptorCount = 1;
+    //CubeMapDescriptor.pImageInfo = &CubeMapImage;
 
     std::vector<VkWriteDescriptorSet> writeDescriptorSets = {
         AccelerationDesciptorSet,
@@ -821,7 +821,7 @@ void RayTraceRenderer::createDescriptorSets()
         IndexDescriptorSet,
         MaterialDescriptorSet,
         DiffuseMapDescriptor,
-       // CubeMapDescriptor
+        //CubeMapDescriptor
     };
     vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeDescriptorSets.size()), writeDescriptorSets.data(), 0, VK_NULL_HANDLE);
 
