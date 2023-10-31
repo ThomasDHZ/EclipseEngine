@@ -1,4 +1,5 @@
 #include "Renderer.h"
+
 Renderer::Renderer()
 {
 }
@@ -227,8 +228,8 @@ void Renderer::Update(VulkanEngine& engine, VulkanWindow& window, uint32_t curre
         UpdateSwapChain(engine, window);
     }
 
-    keyboard.Update(window.GetWindowPtr(), camera);
-    mouse.Update(window.GetWindowPtr(), camera);
+    //keyboard.Update(window.GetWindowPtr(), camera);
+    //mouse.Update(window.GetWindowPtr(), camera);
     camera->Update(engine.SwapChain.SwapChainResolution.width, engine.SwapChain.SwapChainResolution.height);
 
     static auto startTime = std::chrono::high_resolution_clock::now();

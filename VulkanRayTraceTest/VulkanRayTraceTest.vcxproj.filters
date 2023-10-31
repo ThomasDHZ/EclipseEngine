@@ -33,12 +33,6 @@
     <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -82,9 +76,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VulkanSwapChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderedDepthTexture.cpp">
@@ -247,7 +238,7 @@
     <ClInclude Include="VulkanSwapChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VulkanWindow.h">
+    <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderedDepthTexture.h">
@@ -311,6 +302,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Animation3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

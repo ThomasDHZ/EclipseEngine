@@ -23,7 +23,7 @@
 #include <set>
 #include "InterfaceRenderPass.h"
 #include "RayTraceRenderer.h"
-#include "VulkanWindow.h"
+#include "Window.h"
 #include "VulkanEngine.h"
 #include "MainRenderPass.h"
 #include "Renderer.h"
@@ -48,7 +48,7 @@ private:
 
     void initVulkan() 
     {
-        window = VulkanWindow(WIDTH, HEIGHT, "VulkanEngine");
+        window.CreateGraphicsWindow(1280, 720, "VulkanEngine");
         engine = VulkanEngine(window.GetWindowPtr());
         renderer = Renderer(engine, window);
 

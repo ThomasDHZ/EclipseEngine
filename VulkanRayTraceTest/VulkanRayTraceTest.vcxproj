@@ -161,13 +161,11 @@
     <ClCompile Include="ImGui\imgui_impl_vulkan.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
-    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainRenderPass.cpp" />
     <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelRenderManager.cpp" />
-    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
@@ -184,7 +182,6 @@
     <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanEngine.cpp" />
     <ClCompile Include="VulkanSwapChain.cpp" />
-    <ClCompile Include="VulkanWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="alpha.rahit" />
@@ -211,6 +208,7 @@
     <ClInclude Include="ForwardRenderingPipeline.h" />
     <ClInclude Include="FrameBufferRenderingPipeline.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -245,7 +243,7 @@
     <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanEngine.h" />
     <ClInclude Include="VulkanSwapChain.h" />
-    <ClInclude Include="VulkanWindow.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

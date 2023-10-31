@@ -1,5 +1,3 @@
-#ifndef Window_H
-#define Window_H
 #pragma once
 
 #include <GLFW/glfw3.h>
@@ -10,7 +8,7 @@
 #include "Mouse.h"
 #include "GameController.h"
 
-class Window
+class VulkanWindow
 {
 private:
 	static Window* window;
@@ -42,7 +40,7 @@ public:
 
 	static void frameBufferResizeCallBack(GLFWwindow* window, int width, int height)
 	{
-		auto app = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+		auto app = reinterpret_cast<VulkanWindow*>(glfwGetWindowUserPointer(window));
 		app->FramebufferResized = true;
 
 		glfwGetFramebufferSize(window, &width, &height);
@@ -70,4 +68,3 @@ public:
 	static glm::ivec2 GetWindowResolution() { return glm::ivec2(Width, Height); }
 	static bool GetFrameBufferResizedFlag() { return FramebufferResized; }
 };
-#endif
