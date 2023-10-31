@@ -72,6 +72,7 @@ public:
 	static PFN_vkGetRayTracingShaderGroupHandlesKHR vkGetRayTracingShaderGroupHandlesKHR;
 	static PFN_vkCreateRayTracingPipelinesKHR vkCreateRayTracingPipelinesKHR;
 
+	static VkShaderModule ReadShaderFile(const std::string& filename);
 	static VkShaderModule CompileHLSLShader(const std::string& filename, VkShaderStageFlagBits stage);
 	static void StartUp();
 	static void RebuildSwapChain();

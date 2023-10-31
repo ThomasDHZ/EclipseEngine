@@ -11,3 +11,16 @@ std::string File::OpenFile(const std::string& reletivePath)
 
 	return baseFilePath + reletivePath;
 }
+
+std::string File::RemoveFileExtenstion(const std::string& filename)
+{
+	std::string FileName = filename.substr(0, filename.find_last_of("."));
+	return FileName;
+}
+
+std::string File::GetFileNameFromPath(const std::string& filename)
+{
+	std::string FileName = filename.substr(0, filename.find_last_of("."));
+	FileName = FileName.substr(FileName.find_first_of("/") + 1, FileName.size());
+	return FileName;
+}

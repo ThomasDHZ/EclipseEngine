@@ -232,9 +232,9 @@ void Scene::Update()
     }
 
     SceneManager::Update();
-   //pbrRenderer.Update();
+   pbrRenderer.Update();
     //spriteRenderer.Update();
-	rayTraceRenderer.updateUniformBuffers(Window::GetWindowPtr());
+	//rayTraceRenderer.updateUniformBuffers(Window::GetWindowPtr());
 }
 
 void Scene::ImGuiUpdate()
@@ -249,9 +249,9 @@ void Scene::ImGuiUpdate()
         ImGui::Checkbox("Hybrid Mode", &SceneManager::HybridRendererActive);
     }
 
-    //pbrRenderer.ImGuiUpdate();
+    pbrRenderer.ImGuiUpdate();
     //spriteRenderer.ImGuiUpdate();
-    rayTraceRenderer.UpdateGUI();
+   // rayTraceRenderer.UpdateGUI();
 
     SceneManager::ImGuiSceneHierarchy();
    // MeshRendererManager::GUIUpdate();
@@ -261,11 +261,11 @@ void Scene::ImGuiUpdate()
 void Scene::BuildRenderers()
 {
     //MeshRendererManager::Update();
-   // pbrRenderer.BuildRenderer();
+    pbrRenderer.BuildRenderer();
     //spriteRenderer.BuildRenderer();
 	VkDescriptorPool asdf = nullptr;  
 	std::vector<VkImage> images = VulkanRenderer::GetSwapChainImages();
-	rayTraceRenderer = RayTraceRenderer(VulkanRenderer::GetDevice(), VulkanRenderer::GetPhysicalDevice(), VulkanRenderer::GetCommandPool(), VulkanRenderer::GetGraphicsQueue(), asdf, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 3, images);
+//	rayTraceRenderer = RayTraceRenderer(VulkanRenderer::GetDevice(), VulkanRenderer::GetPhysicalDevice(), VulkanRenderer::GetCommandPool(), VulkanRenderer::GetGraphicsQueue(), asdf, VulkanRenderer::GetSwapChainResolution().width, VulkanRenderer::GetSwapChainResolution().height, 3, images);
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
 }
@@ -281,10 +281,10 @@ void Scene::Draw()
         return;
     }
 
-    //pbrRenderer.Draw(CommandBufferSubmitList);
+    pbrRenderer.Draw(CommandBufferSubmitList);
     //spriteRenderer.Draw(CommandBufferSubmitList);
 	auto images = VulkanRenderer::GetSwapChainImages();
-   CommandBufferSubmitList.emplace_back(rayTraceRenderer.Draw(images));
+   //CommandBufferSubmitList.emplace_back(rayTraceRenderer.Draw(images));
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 

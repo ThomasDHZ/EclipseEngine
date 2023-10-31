@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <vulkan/vulkan.h>
+#include <fstream>
 
 class HLSLShaderCompiler
 {
@@ -15,6 +16,6 @@ private:
 	static Microsoft::WRL::ComPtr<IDxcIncludeHandler> DefaultIncludeHandler;
 public:
 	static void SetUpCompiler();
-	static std::vector<uint32_t> BuildShader(const std::string filename, VkShaderStageFlagBits stage);
+	static Microsoft::WRL::ComPtr<IDxcBlob> BuildShader(const std::string filename, VkShaderStageFlagBits stage);
 };
 

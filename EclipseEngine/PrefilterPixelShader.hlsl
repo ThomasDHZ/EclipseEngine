@@ -29,7 +29,7 @@ float DistributionGGX(float3 N, float3 H, float roughness)
 
     return nom / denom;
 }
-
+ 
 float RadicalInverse_VdC(uint bits)
 {
     bits = (bits << 16u) | (bits >> 16u);

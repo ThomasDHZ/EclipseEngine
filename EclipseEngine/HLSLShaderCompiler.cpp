@@ -23,6 +23,14 @@ std::string ConvertLPCWSTRToString(LPCWSTR lpcwszStr)
     return str;
 }
 
+void uint32ToUnsignedCharString(uint32_t value, std::string& string)
+{
+    string += static_cast<unsigned char>((value >> 24) & 0xFF);
+    string += static_cast<unsigned char>((value >> 16) & 0xFF);
+    string += static_cast<unsigned char>((value >> 8) & 0xFF);
+    string += static_cast<unsigned char>(value & 0xFF);
+}
+
 void HLSLShaderCompiler::SetUpCompiler()
 {
     DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxc_utils.ReleaseAndGetAddressOf()));
@@ -30,7 +38,7 @@ void HLSLShaderCompiler::SetUpCompiler()
     dxc_utils->CreateDefaultIncludeHandler(&DefaultIncludeHandler);
 }
 
-std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string filename, VkShaderStageFlagBits stage)
+Microsoft::WRL::ComPtr<IDxcBlob> HLSLShaderCompiler::BuildShader(const std::string filename, VkShaderStageFlagBits stage)
 {
     std::ifstream ifs(File::OpenFile(filename));
     std::string str;
@@ -67,7 +75,6 @@ std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string filename
 
     for (int x = 0; x < args.size(); x++)
     {
-
         std::cout << ConvertLPCWSTRToString(args[x]) << std::endl;
     }
 
@@ -92,14 +99,14 @@ std::vector<uint32_t> HLSLShaderCompiler::BuildShader(const std::string filename
         throw std::runtime_error("Error found in: " + filename);
     }
 
-    std::vector<uint32_t> spriv_buffer;
-    spriv_buffer.resize(shader_obj->GetBufferSize() / sizeof(uint32_t));
-
-    for (int x = 0; x < spriv_buffer.size(); x++)
-    {
-        uint32_t spv_uint = static_cast<std::uint32_t*>(shader_obj->GetBufferPointer())[x];
-        spriv_buffer[x] = spv_uint;
+    std::string outPutFileName = File::GetFileNameFromPath(filename) + ".spv";
+    std::ofstream shaderfile;
+    shaderfile.open(outPutFileName, std::ios::trunc | std::ios::binary);
+    shaderfile.write((char*)shader_obj->GetBufferPointer(), shader_obj->GetBufferSize());
+    shaderfile.close();
+    if (!shaderfile) {
+        std::cerr << "Error: " << strerror(errno);
     }
 
-    return spriv_buffer;
+    return shader_obj;
 }
