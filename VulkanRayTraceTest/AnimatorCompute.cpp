@@ -1,6 +1,7 @@
 #include "AnimatorCompute.h"
 
 #include "Vertex.h"
+#include "GraphicsPipeline.h"
 
 AnimatorCompute::AnimatorCompute()
 {
@@ -33,9 +34,9 @@ AnimatorCompute::~AnimatorCompute()
 void AnimatorCompute::SetUpDescriptorPool(VulkanEngine& engine)
 {
 	std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
-	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
+	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1));
+	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1));
+	DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1));
 
 	descriptorPool = engine.CreateDescriptorPool(DescriptorPoolList);
 }

@@ -156,7 +156,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
-    <ClCompile Include="ForwardRenderingPipeline.cpp" />
+    <ClCompile Include="GBufferRenderPass.cpp" />
     <ClCompile Include="FrameBufferRenderPass.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -185,6 +185,9 @@
     <ClCompile Include="RayTraceRenderer.cpp" />
     <ClCompile Include="RenderedColorTexture.cpp" />
     <ClCompile Include="RenderedDepthTexture.cpp" />
+    <ClCompile Include="RenderedGBufferAlbedoTexture.cpp" />
+    <ClCompile Include="RenderedGBufferNormalTexture.cpp" />
+    <ClCompile Include="RenderedGBufferPositionTexture.cpp" />
     <ClCompile Include="RenderedRayTracedColorTexture.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneRenderingPipeline.cpp" />
@@ -206,8 +209,12 @@
     <None Include="Shader\anyhit.rahit" />
     <None Include="Shader\anyhit1.rahit" />
     <None Include="Shader\closesthit.rchit" />
+    <None Include="Shader\DeferedShader.frag" />
+    <None Include="Shader\DeferedShader.vert" />
     <None Include="Shader\FrameBuffer.frag" />
     <None Include="Shader\FrameBuffer.vert" />
+    <None Include="Shader\GBuffer.frag" />
+    <None Include="Shader\GBuffer.vert" />
     <None Include="Shader\Material.glsl" />
     <None Include="Shader\Lighting.glsl" />
     <None Include="Shader\miss.rmiss" />
@@ -228,7 +235,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeMapTexture.h" />
     <ClInclude Include="DDSTextureLoader.h" />
-    <ClInclude Include="ForwardRenderingPipeline.h" />
+    <ClInclude Include="GBufferRenderPass.h" />
     <ClInclude Include="FrameBufferRenderPass.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -259,6 +266,9 @@
     <ClInclude Include="RayTraceRenderer.h" />
     <ClInclude Include="RenderedColorTexture.h" />
     <ClInclude Include="RenderedDepthTexture.h" />
+    <ClInclude Include="RenderedGBufferAlbedoTexture.h" />
+    <ClInclude Include="RenderedGBufferNormalTexture.h" />
+    <ClInclude Include="RenderedGBufferPositionTexture.h" />
     <ClInclude Include="RenderedRayTracedColorTexture.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneData.h" />

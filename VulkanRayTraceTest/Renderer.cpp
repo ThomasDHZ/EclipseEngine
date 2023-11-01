@@ -11,6 +11,28 @@ Renderer::Renderer()
 Renderer::Renderer(VulkanEngine& engine, VulkanWindow& window)
 {
     assetManager = AssetManager(engine);
+    SceneData = std::make_shared<SceneDataUniformBuffer>(SceneDataUniformBuffer(engine));
+    assetManager.meshManager.MeshList.emplace_back(std::make_shared<MegaMan>(MegaMan(engine, assetManager, glm::vec3(1.0f, 0.0f, 0.0f))));
+
+    std::string CubeMapFiles[6];
+    CubeMapFiles[0] = "../texture/skybox/right.jpg";
+    CubeMapFiles[1] = "../texture/skybox/left.jpg";
+    CubeMapFiles[2] = "../texture/skybox/top.jpg";
+    CubeMapFiles[3] = "../texture/skybox/bottom.jpg";
+    CubeMapFiles[4] = "../texture/skybox/back.jpg";
+    CubeMapFiles[5] = "../texture/skybox/front.jpg";
+
+    assetManager.textureManager.LoadCubeMap(engine, CubeMapFiles);
+
+    RenderPass = ForwardRenderPass(engine, assetManager, SceneData);
+    interfaceRenderPass = InterfaceRenderPass(engine, window.GetWindowPtr());
+    frameBufferRenderPass = FrameBufferRenderPass(engine, assetManager, SceneData);
+  //  gBufferRenderPass = GBufferRenderPass(engine, assetManager, SceneData);
+
+    SetUpCommandBuffers(engine);
+  //  skybox = Skybox(engine, assetManager, RenderPass.RenderPass, SceneData);
+
+    camera = std::make_shared<PerspectiveCamera>(glm::vec2(engine.SwapChain.SwapChainResolution.width, engine.SwapChain.SwapChainResolution.height), glm::vec3(0.0f, 0.0f, 5.0f));
 
     std::shared_ptr<Material> material = std::make_shared<Material>(engine, assetManager.textureManager);
     material->materialTexture.DiffuseMap = assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_diffuse.png", VK_FORMAT_R8G8B8A8_UNORM);
@@ -18,8 +40,8 @@ Renderer::Renderer(VulkanEngine& engine, VulkanWindow& window)
     material->materialTexture.DepthMap = assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_disp.png", VK_FORMAT_R8G8B8A8_UNORM);
     uint32_t MaterialID = assetManager.materialManager.LoadMaterial(engine, "MarioMaterial", material);
 
-    assetManager.AddModel(engine, "../Models/Crate.dae");
-    assetManager.modelManager.ModelList[0]->MeshList[0]->MaterialID = MaterialID;
+    //assetManager.AddModel(engine, "../Models/Crate.dae");
+    //assetManager.modelManager.ModelList[0]->MeshList[0]->MaterialID = MaterialID;
 
     assetManager.meshManager.MeshList.emplace_back(std::make_shared<MegaMan>(MegaMan(engine, assetManager, glm::vec3(1.0f, 0.0f, 0.0f))));
     assetManager.meshManager.MeshList.emplace_back(std::make_shared<MegaMan>(MegaMan(engine, assetManager, glm::vec3(2.0f, 0.0f, 0.0f))));
@@ -32,40 +54,14 @@ Renderer::Renderer(VulkanEngine& engine, VulkanWindow& window)
     assetManager.modelManager.ModelList.back()->AddMesh(engine, assetManager.meshManager.MeshList[2]);
     assetManager.modelManager.ModelList.back()->AddMesh(engine, assetManager.meshManager.MeshList[3]);
 
-    assetManager.AddModel(engine, "../Models/vulkanscene_shadow.obj");
-    //assetManager.AddModel(engine, "../Models/TestAnimModel/model.dae");
-    //assetManager.AddModel(engine, "../Models/cyborg/cyborg.obj");
-    // modelRenderManager.AddModel(engine, "../Models/Sponza/Sponza.obj");
+      assetManager.AddModel(engine, "../Models/vulkanscene_shadow.obj");
+      //assetManager.AddModel(engine, "../Models/TestAnimModel/model.dae");
+      //assetManager.AddModel(engine, "../Models/cyborg/cyborg.obj");
+      // modelRenderManager.AddModel(engine, "../Models/Sponza/Sponza.obj");
 
-  //  assetManager.textureManager.Load3DTexture(engine, "C:/Users/dotha/Desktop/detailed_surfaces/media/sculptureSphere.dds", VK_FORMAT_R8_UNORM);
 
-    std::string CubeMapFiles[6];
-    CubeMapFiles[0] = "../texture/skybox/right.jpg";
-    CubeMapFiles[1] = "../texture/skybox/left.jpg";
-    CubeMapFiles[2] = "../texture/skybox/top.jpg";
-    CubeMapFiles[3] = "../texture/skybox/bottom.jpg";
-    CubeMapFiles[4] = "../texture/skybox/back.jpg";
-    CubeMapFiles[5] = "../texture/skybox/front.jpg";
-
-    assetManager.textureManager.LoadCubeMap(engine, CubeMapFiles);
-
-    SceneData = std::make_shared<SceneDataUniformBuffer>(SceneDataUniformBuffer(engine));
-
-    RenderPass = ForwardRenderPass(engine);
-    frameBufferRenderPass = FrameBufferRenderPass(engine, assetManager, SceneData);
-    interfaceRenderPass = InterfaceRenderPass(engine, window.GetWindowPtr());
-    
-    SetUpDescriptorPool(engine);
-    RayRenderer = RayTraceRenderer(engine, assetManager);
-    SetUpDescriptorLayout(engine);
-    RayRenderer.createRayTracingPipeline(engine, descriptorSetLayout);
-    RenderPass.StartPipeline(engine, descriptorSetLayout);
-    RayRenderer.createShaderBindingTable(engine);
-    SetUpDescriptorSets(engine);
-    //AnimationRenderer = AnimatorCompute(engine, assetManager.modelManager.ModelList[2]->MeshList[0]);
-    SetUpCommandBuffers(engine);
-
-    camera = std::make_shared<PerspectiveCamera>(glm::vec2(engine.SwapChain.SwapChainResolution.width, engine.SwapChain.SwapChainResolution.height), glm::vec3(0.0f, 0.0f, 5.0f));
+      RayRenderer = RayTraceRenderer(engine, assetManager, SceneData);
+      //AnimationRenderer = AnimatorCompute(engine, assetManager.modelManager.ModelList[2]->MeshList[0]);
 
     SceneData->UniformDataInfo.dlight.direction = glm::vec4(0.0f);
     SceneData->UniformDataInfo.dlight.ambient = glm::vec4(0.2f);
@@ -77,29 +73,31 @@ Renderer::Renderer(VulkanEngine& engine, VulkanWindow& window)
     SceneData->UniformDataInfo.plight[0].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
     SceneData->UniformDataInfo.plight[0].specular = glm::vec4(1.0f);
 
-    SceneData->UniformDataInfo.plight[1].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
-    SceneData->UniformDataInfo.plight[1].ambient = glm::vec4(0.2f);
-    SceneData->UniformDataInfo.plight[1].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
-    SceneData->UniformDataInfo.plight[1].specular = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.plight[1].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
+    //SceneData->UniformDataInfo.plight[1].ambient = glm::vec4(0.2f);
+    //SceneData->UniformDataInfo.plight[1].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
+    //SceneData->UniformDataInfo.plight[1].specular = glm::vec4(1.0f);
 
-    SceneData->UniformDataInfo.plight[2].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
-    SceneData->UniformDataInfo.plight[2].ambient = glm::vec4(0.2f);
-    SceneData->UniformDataInfo.plight[2].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
-    SceneData->UniformDataInfo.plight[2].specular = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.plight[2].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
+    //SceneData->UniformDataInfo.plight[2].ambient = glm::vec4(0.2f);
+    //SceneData->UniformDataInfo.plight[2].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
+    //SceneData->UniformDataInfo.plight[2].specular = glm::vec4(1.0f);
 
-    SceneData->UniformDataInfo.plight[3].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
-    SceneData->UniformDataInfo.plight[3].ambient = glm::vec4(0.2f);
-    SceneData->UniformDataInfo.plight[3].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
-    SceneData->UniformDataInfo.plight[3].specular = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.plight[3].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
+    //SceneData->UniformDataInfo.plight[3].ambient = glm::vec4(0.2f);
+    //SceneData->UniformDataInfo.plight[3].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
+    //SceneData->UniformDataInfo.plight[3].specular = glm::vec4(1.0f);
 
-    SceneData->UniformDataInfo.plight[4].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
-    SceneData->UniformDataInfo.plight[4].ambient = glm::vec4(0.2f);
-    SceneData->UniformDataInfo.plight[4].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
-    SceneData->UniformDataInfo.plight[4].specular = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.plight[4].position = glm::vec4(0.5f, 1.0f, 0.3f, 1.0f);
+    //SceneData->UniformDataInfo.plight[4].ambient = glm::vec4(0.2f);
+    //SceneData->UniformDataInfo.plight[4].diffuse = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
+    //SceneData->UniformDataInfo.plight[4].specular = glm::vec4(1.0f);
 
-    SceneData->UniformDataInfo.sLight.ambient = glm::vec4(0.0f);
-    SceneData->UniformDataInfo.sLight.diffuse = glm::vec4(1.0f);
-    SceneData->UniformDataInfo.sLight.specular = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.sLight.ambient = glm::vec4(0.0f);
+    //SceneData->UniformDataInfo.sLight.diffuse = glm::vec4(1.0f);
+    //SceneData->UniformDataInfo.sLight.specular = glm::vec4(1.0f);
+
+    RenderPass.UpdateSwapChain(engine, assetManager, SceneData);
 }
 
 Renderer::~Renderer()
@@ -136,22 +134,13 @@ void Renderer::UpdateSwapChain(VulkanEngine& engine, VulkanWindow& window)
     }
 
     vkDestroySwapchainKHR(engine.Device, engine.SwapChain.GetSwapChain(), nullptr);
-    vkDestroyDescriptorPool(engine.Device, descriptorPool, nullptr);
 
     engine.SwapChain.UpdateSwapChain(window.GetWindowPtr(), engine.Device, engine.PhysicalDevice, engine.Surface);
-    RenderPass.UpdateSwapChain(engine, descriptorSetLayout);
+    RenderPass.UpdateSwapChain(engine, assetManager, SceneData);
     frameBufferRenderPass.UpdateSwapChain(engine);
     interfaceRenderPass.UpdateSwapChain(engine);
 
-    vkDestroyImageView(engine.Device, RayRenderer.storageImage.view, nullptr);
-    vkDestroyImage(engine.Device, RayRenderer.storageImage.image, nullptr);
-    vkFreeMemory(engine.Device, RayRenderer.storageImage.memory, nullptr);
-
-    RayRenderer.createStorageImage(engine, RayRenderer.storageImage);
-    SetUpDescriptorPool(engine);
-    SetUpDescriptorSets(engine);
-
-    RayRenderer.Resize(engine, engine.SwapChain.SwapChainImages.size(), engine.SwapChain.SwapChainImages, engine.SwapChain.SwapChainResolution.width, engine.SwapChain.SwapChainResolution.height, descriptorSets, 0);
+   RayRenderer.Resize(engine, assetManager, SceneData, 0);
 
     SetUpCommandBuffers(engine);
 }
@@ -168,6 +157,7 @@ void Renderer::Update(VulkanEngine& engine, VulkanWindow& window, uint32_t curre
     camera->Update(engine);
 
     assetManager.Update(engine);
+   // skybox.Update(engine, assetManager.materialManager);
     RayRenderer.createTopLevelAccelerationStructure(engine, assetManager);
 
     SceneData->UniformDataInfo.sLight.direction = camera->GetFront();
@@ -185,105 +175,117 @@ void Renderer::Update(VulkanEngine& engine, VulkanWindow& window, uint32_t curre
 void Renderer::GUIUpdate(VulkanEngine& engine)
 {
 
-    for (int y = 0; y < assetManager.materialManager.MaterialList.size(); y++)
-    {
-        auto a = std::to_string(y);;
+    //for (int y = 0; y < assetManager.materialManager.MaterialList.size(); y++)
+    //{
+    //    auto a = std::to_string(y);;
 
-        ImGui::SliderFloat(("Reflection  " + std::to_string(y)).c_str(), &assetManager.materialManager.MaterialList[y]->materialTexture.Reflectivness, 0.0f, 1.0f);
-    }
+    //    ImGui::SliderFloat(("Reflection  " + std::to_string(y)).c_str(), &assetManager.materialManager.MaterialList[y]->materialTexture.Reflectivness, 0.0f, 1.0f);
+    //}
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::SliderInt("TextureIndex", &SceneData->UniformDataInfo.temp, 0, 10);
+    ImGui::SliderInt("TextureIndex", &SceneData->UniformDataInfo.temp, 0, 23);
     ImGui::Checkbox("RayTraceSwitch", &RayTraceSwitch);
     ImGui::SliderInt("Shadow", &SceneData->UniformDataInfo.Shadowed, 0, 1);
+    ImGui::Checkbox("AddTexture", &AddTextureFlag);
+    ImGui::Checkbox("DeleteTexture", &RemoveTextureFlag);
     ImGui::Checkbox("AddMaterial", &AddMaterialFlag);
     ImGui::Checkbox("DeleteMaterial", &RemoveMaterialFlag);
 
-    ImGui::SliderFloat3("Position2", &SceneData->UniformDataInfo.sLight.position.x, 0.0f, 10.0f);
-    ImGui::SliderFloat3("Direction2", &SceneData->UniformDataInfo.sLight.direction.x, -1.0f, 1.0f);
-    ImGui::SliderFloat3("Ambient245", &SceneData->UniformDataInfo.sLight.ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse245", &SceneData->UniformDataInfo.sLight.diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare245", &SceneData->UniformDataInfo.sLight.specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant45", &SceneData->UniformDataInfo.sLight.constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear45", &SceneData->UniformDataInfo.sLight.linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic45", &SceneData->UniformDataInfo.sLight.quadratic, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic452", &SceneData->UniformDataInfo.sLight.cutOff, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic453", &SceneData->UniformDataInfo.sLight.outerCutOff, 0.0f, 100.0f);
+    for (auto& material : assetManager.materialManager.MaterialList)
+    {
+        auto bufferIndex = std::to_string(material->MaterialBufferIndex);
+        ImGui::LabelText(bufferIndex.c_str(), "sd");
+    }
+      //ImGui::Image(assetManager.textureManager.TextureList[3]->ImGuiDescriptorSet, ImVec2(180.0f, 180.0f));
+    //ImGui::Image(assetManager.textureManager.TextureList[3]->ImGuiDescriptorSet, ImVec2(180.0f, 180.0f));
+    //ImGui::Image(assetManager.textureManager.TextureList[3]->ImGuiDescriptorSet, ImVec2(180.0f, 180.0f));
+    //ImGui::Image(assetManager.textureManager.TextureList[3]->ImGuiDescriptorSet, ImVec2(180.0f, 180.0f));
+
+    //ImGui::SliderFloat3("Position2", &SceneData->UniformDataInfo.sLight.position.x, 0.0f, 10.0f);
+    //ImGui::SliderFloat3("Direction2", &SceneData->UniformDataInfo.sLight.direction.x, -1.0f, 1.0f);
+    //ImGui::SliderFloat3("Ambient245", &SceneData->UniformDataInfo.sLight.ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse245", &SceneData->UniformDataInfo.sLight.diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare245", &SceneData->UniformDataInfo.sLight.specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant45", &SceneData->UniformDataInfo.sLight.constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear45", &SceneData->UniformDataInfo.sLight.linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic45", &SceneData->UniformDataInfo.sLight.quadratic, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic452", &SceneData->UniformDataInfo.sLight.cutOff, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic453", &SceneData->UniformDataInfo.sLight.outerCutOff, 0.0f, 100.0f);
 
     ImGui::SliderFloat3("Pos", &SceneData->UniformDataInfo.dlight.direction.x, -1.0f, 1.0f);
     ImGui::SliderFloat3("Ambient", &SceneData->UniformDataInfo.dlight.ambient.x, 0.0f, 1.0f);
     ImGui::SliderFloat3("Diffuse", &SceneData->UniformDataInfo.dlight.diffuse.x, 0.0f, 1.0f);
     ImGui::SliderFloat3("Speculare", &SceneData->UniformDataInfo.dlight.specular.x, 0.0f, 1.0f);
 
-    for (int y = 0; y < assetManager.meshManager.MeshList.size(); y++)
-    {
-        auto a = std::to_string(y);
-        ImGui::Checkbox(a.c_str(), &assetManager.meshManager.MeshList[y]->ShowMesh);
-
-        ImGui::SliderFloat(("Depth " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshProperties.UniformDataInfo.heightScale, 0.0f, 1.0f);
-        ImGui::SliderFloat2(("UV Offset " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshProperties.UniformDataInfo.UVOffset.x, 0.0f, 1.0f);
-        ImGui::SliderFloat3(("Transform " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshPosition.x, -10.0f, 10.0f);
-        ImGui::SliderFloat3(("Rotate " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshRotation.x, 0.0f, 360.0f);
-        ImGui::SliderFloat3(("Scale " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshScale.x, 0.0f, 1.0f);
-    }
-
-    //for (int x = 0; x < assetManager.modelManager.ModelList.size(); x++)
+    //for (int y = 0; y < assetManager.meshManager.MeshList.size(); y++)
     //{
-    //    ImGui::SliderFloat3(("Model Transformx" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelPosition.x, -10.0f, 10.0f);
-    //    ImGui::SliderFloat3(("Model Rotatex" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelRotation.x, 0.0f, 360.0f);
-    //    ImGui::SliderFloat3(("Model Scalex" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelScale.x, 0.0f, 1.0f);
+    //    auto a = std::to_string(y);
+    //    ImGui::Checkbox(a.c_str(), &assetManager.meshManager.MeshList[y]->ShowMesh);
 
-    //    for (int y = 0; y < assetManager.modelManager.ModelList[x]->MeshList.size(); y++)
-    //    {
-    //        auto a = std::to_string(x + y);
-    //        ImGui::Checkbox(a.c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->ShowMesh);
-
-    //        ImGui::SliderFloat2(("UV Offset " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshProperties.UniformDataInfo.UVOffset.x, 0.0f, 1.0f);
-    //        ImGui::SliderFloat3(("Transform " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshPosition.x, -10.0f, 10.0f);
-    //        ImGui::SliderFloat3(("Rotate " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshRotation.x, 0.0f, 360.0f);
-    //        ImGui::SliderFloat3(("Scale " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshScale.x, 0.0f, 1.0f);
-    //    }
+    //    ImGui::SliderFloat(("Depth " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshProperties.UniformDataInfo.heightScale, 0.0f, 1.0f);
+    //    ImGui::SliderFloat2(("UV Offset " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshProperties.UniformDataInfo.UVOffset.x, 0.0f, 1.0f);
+    //    ImGui::SliderFloat3(("Transform " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshPosition.x, -10.0f, 10.0f);
+    //    ImGui::SliderFloat3(("Rotate " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshRotation.x, 0.0f, 360.0f);
+    //    ImGui::SliderFloat3(("Scale " + std::to_string(y)).c_str(), &assetManager.meshManager.MeshList[y]->MeshScale.x, 0.0f, 1.0f);
     //}
 
-    ImGui::SliderFloat3("Pos20", &SceneData->UniformDataInfo.plight[0].position.x, -10.0f, 10.0f);
-    ImGui::SliderFloat3("Ambient20", &SceneData->UniformDataInfo.plight[0].ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse20", &SceneData->UniformDataInfo.plight[0].diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare20", &SceneData->UniformDataInfo.plight[0].specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant0", &SceneData->UniformDataInfo.plight[0].constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear0", &SceneData->UniformDataInfo.plight[0].linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic0", &SceneData->UniformDataInfo.plight[0].quadratic, 0.0f, 100.0f);
+    ////for (int x = 0; x < assetManager.modelManager.ModelList.size(); x++)
+    ////{
+    ////    ImGui::SliderFloat3(("Model Transformx" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelPosition.x, -10.0f, 10.0f);
+    ////    ImGui::SliderFloat3(("Model Rotatex" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelRotation.x, 0.0f, 360.0f);
+    ////    ImGui::SliderFloat3(("Model Scalex" + std::to_string(x)).c_str(), &assetManager.modelManager.ModelList[x]->ModelScale.x, 0.0f, 1.0f);
 
-    ImGui::SliderFloat3("Pos21", &SceneData->UniformDataInfo.plight[1].position.x, -10.0f, 10.0f);
-    ImGui::SliderFloat3("Ambient21", &SceneData->UniformDataInfo.plight[1].ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse21", &SceneData->UniformDataInfo.plight[1].diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare21", &SceneData->UniformDataInfo.plight[1].specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant1", &SceneData->UniformDataInfo.plight[1].constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear1", &SceneData->UniformDataInfo.plight[1].linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic1", &SceneData->UniformDataInfo.plight[1].quadratic, 0.0f, 100.0f);
+    ////    for (int y = 0; y < assetManager.modelManager.ModelList[x]->MeshList.size(); y++)
+    ////    {
+    ////        auto a = std::to_string(x + y);
+    ////        ImGui::Checkbox(a.c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->ShowMesh);
 
-    ImGui::SliderFloat3("Pos22", &SceneData->UniformDataInfo.plight[2].position.x, -10.0f, 10.0f);
-    ImGui::SliderFloat3("Ambient22", &SceneData->UniformDataInfo.plight[2].ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse22", &SceneData->UniformDataInfo.plight[2].diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare22", &SceneData->UniformDataInfo.plight[2].specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant2", &SceneData->UniformDataInfo.plight[2].constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear2", &SceneData->UniformDataInfo.plight[2].linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic2", &SceneData->UniformDataInfo.plight[2].quadratic, 0.0f, 100.0f);
+    ////        ImGui::SliderFloat2(("UV Offset " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshProperties.UniformDataInfo.UVOffset.x, 0.0f, 1.0f);
+    ////        ImGui::SliderFloat3(("Transform " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshPosition.x, -10.0f, 10.0f);
+    ////        ImGui::SliderFloat3(("Rotate " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshRotation.x, 0.0f, 360.0f);
+    ////        ImGui::SliderFloat3(("Scale " + std::to_string(x + y)).c_str(), &assetManager.modelManager.ModelList[x]->MeshList[y]->MeshScale.x, 0.0f, 1.0f);
+    ////    }
+    ////}
 
-    ImGui::SliderFloat3("Pos23", &SceneData->UniformDataInfo.plight[3].position.x, -10.0f, 10.0f);
-    ImGui::SliderFloat3("Ambient23", &SceneData->UniformDataInfo.plight[3].ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse23", &SceneData->UniformDataInfo.plight[3].diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare23", &SceneData->UniformDataInfo.plight[3].specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant3", &SceneData->UniformDataInfo.plight[3].constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear3", &SceneData->UniformDataInfo.plight[3].linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic3", &SceneData->UniformDataInfo.plight[3].quadratic, 0.0f, 100.0f);
+    //ImGui::SliderFloat3("Pos20", &SceneData->UniformDataInfo.plight[0].position.x, -10.0f, 10.0f);
+    //ImGui::SliderFloat3("Ambient20", &SceneData->UniformDataInfo.plight[0].ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse20", &SceneData->UniformDataInfo.plight[0].diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare20", &SceneData->UniformDataInfo.plight[0].specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant0", &SceneData->UniformDataInfo.plight[0].constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear0", &SceneData->UniformDataInfo.plight[0].linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic0", &SceneData->UniformDataInfo.plight[0].quadratic, 0.0f, 100.0f);
 
-    ImGui::SliderFloat3("Pos24", &SceneData->UniformDataInfo.plight[4].position.x, -10.0f, 10.0f);
-    ImGui::SliderFloat3("Ambient24", &SceneData->UniformDataInfo.plight[4].ambient.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Diffuse24", &SceneData->UniformDataInfo.plight[4].diffuse.x, 0.0f, 1.0f);
-    ImGui::SliderFloat3("Speculare24", &SceneData->UniformDataInfo.plight[4].specular.x, 0.0f, 1.0f);
-    ImGui::SliderFloat("constant4", &SceneData->UniformDataInfo.plight[4].constant, 0.0f, 100.0f);
-    ImGui::SliderFloat("linear4", &SceneData->UniformDataInfo.plight[4].linear, 0.0f, 100.0f);
-    ImGui::SliderFloat("quadratic4", &SceneData->UniformDataInfo.plight[4].quadratic, 0.0f, 100.0f);
+    //ImGui::SliderFloat3("Pos21", &SceneData->UniformDataInfo.plight[1].position.x, -10.0f, 10.0f);
+    //ImGui::SliderFloat3("Ambient21", &SceneData->UniformDataInfo.plight[1].ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse21", &SceneData->UniformDataInfo.plight[1].diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare21", &SceneData->UniformDataInfo.plight[1].specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant1", &SceneData->UniformDataInfo.plight[1].constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear1", &SceneData->UniformDataInfo.plight[1].linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic1", &SceneData->UniformDataInfo.plight[1].quadratic, 0.0f, 100.0f);
+
+    //ImGui::SliderFloat3("Pos22", &SceneData->UniformDataInfo.plight[2].position.x, -10.0f, 10.0f);
+    //ImGui::SliderFloat3("Ambient22", &SceneData->UniformDataInfo.plight[2].ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse22", &SceneData->UniformDataInfo.plight[2].diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare22", &SceneData->UniformDataInfo.plight[2].specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant2", &SceneData->UniformDataInfo.plight[2].constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear2", &SceneData->UniformDataInfo.plight[2].linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic2", &SceneData->UniformDataInfo.plight[2].quadratic, 0.0f, 100.0f);
+
+    //ImGui::SliderFloat3("Pos23", &SceneData->UniformDataInfo.plight[3].position.x, -10.0f, 10.0f);
+    //ImGui::SliderFloat3("Ambient23", &SceneData->UniformDataInfo.plight[3].ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse23", &SceneData->UniformDataInfo.plight[3].diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare23", &SceneData->UniformDataInfo.plight[3].specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant3", &SceneData->UniformDataInfo.plight[3].constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear3", &SceneData->UniformDataInfo.plight[3].linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic3", &SceneData->UniformDataInfo.plight[3].quadratic, 0.0f, 100.0f);
+
+    //ImGui::SliderFloat3("Pos24", &SceneData->UniformDataInfo.plight[4].position.x, -10.0f, 10.0f);
+    //ImGui::SliderFloat3("Ambient24", &SceneData->UniformDataInfo.plight[4].ambient.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Diffuse24", &SceneData->UniformDataInfo.plight[4].diffuse.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat3("Speculare24", &SceneData->UniformDataInfo.plight[4].specular.x, 0.0f, 1.0f);
+    //ImGui::SliderFloat("constant4", &SceneData->UniformDataInfo.plight[4].constant, 0.0f, 100.0f);
+    //ImGui::SliderFloat("linear4", &SceneData->UniformDataInfo.plight[4].linear, 0.0f, 100.0f);
+    //ImGui::SliderFloat("quadratic4", &SceneData->UniformDataInfo.plight[4].quadratic, 0.0f, 100.0f);
 }
 
 void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
@@ -301,7 +303,6 @@ void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-    interfaceRenderPass.Draw(engine, imageIndex);
     Update(engine, window, imageIndex);
 
     if (engine.imagesInFlight[imageIndex] != VK_NULL_HANDLE) {
@@ -314,43 +315,10 @@ void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
     /// <summary>
     /// Draw Area
     /// </summary>
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-
-    if (vkBeginCommandBuffer(RasterCommandBuffer, &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
-
-    VkRenderPassBeginInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = RenderPass.RenderPass;
-    renderPassInfo.framebuffer = RenderPass.SwapChainFramebuffers[imageIndex];
-    renderPassInfo.renderArea.offset = { 0, 0 };
-    renderPassInfo.renderArea.extent = engine.SwapChain.SwapChainResolution;
-
-    std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
-    clearValues[1].depthStencil = { 1.0f, 0 };
-
-    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-    renderPassInfo.pClearValues = clearValues.data();
-
-    vkCmdBeginRenderPass(RasterCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdBindPipeline(RasterCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, RenderPass.forwardRendereringPipeline->ShaderPipeline);
-    vkCmdBindDescriptorSets(RasterCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, RenderPass.forwardRendereringPipeline->ShaderPipelineLayout, 0, 1, &descriptorSets, 0, nullptr);
-    
-    assetManager.Draw(RasterCommandBuffer, RenderPass.forwardRendereringPipeline);
-
-    vkCmdEndRenderPass(RasterCommandBuffer);
-   // AnimationRenderer.Compute(engine, imageIndex);
-    //   frameBufferRenderPass.Draw(engine, RasterCommandBuffer, imageIndex);
-    if (vkEndCommandBuffer(RasterCommandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
-    }
-
-   RayRenderer.buildCommandBuffers(engine, engine.SwapChain.SwapChainImages.size(), engine.SwapChain.SwapChainImages, descriptorSets, imageIndex);
-
+   RenderPass.Draw(engine, assetManager, imageIndex, RasterCommandBuffer);
+  // frameBufferRenderPass.Draw(engine, RasterCommandBuffer, imageIndex);
+   RayRenderer.buildCommandBuffers(engine, assetManager, imageIndex);
+   interfaceRenderPass.Draw(engine, imageIndex);
     ///
     ///Draw area
     /// 
@@ -363,6 +331,7 @@ void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
     if (RayTraceSwitch)
     {
         //CommandBufferSubmitList.emplace_back(AnimationRenderer.commandBuffer);
+      //  CommandBufferSubmitList.emplace_back(RayRenderer.RayTraceCommandBuffer);
         CommandBufferSubmitList.emplace_back(RasterCommandBuffer);
         CommandBufferSubmitList.emplace_back(interfaceRenderPass.ImGuiCommandBuffers[imageIndex]);
     }
@@ -412,39 +381,49 @@ void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
     else if (result != VK_SUCCESS) {
         throw std::runtime_error("failed to present swap chain image!");
     }
-    
+
+    if (AddTextureFlag == true)
+    {
+        vkDeviceWaitIdle(engine.Device);
+        assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_diffuse.png", VK_FORMAT_R8G8B8A8_UNORM);
+
+        UpdateSwapChain(engine, window);
+        AddTextureFlag = false;
+    }
+
+    if (RemoveTextureFlag == true)
+    {
+        vkDeviceWaitIdle(engine.Device);
+
+        assetManager.textureManager.DeleteTexture(engine, SceneData->UniformDataInfo.temp);
+
+        UpdateSwapChain(engine, window);
+        RemoveTextureFlag = false;
+    }
+
     if (AddMaterialFlag == true)
     {
         vkDeviceWaitIdle(engine.Device);
-        vkDestroyDescriptorPool(engine.Device, descriptorPool, nullptr);
-        vkDestroyDescriptorSetLayout(engine.Device, descriptorSetLayout, nullptr);
 
         stbi_set_flip_vertically_on_load(true);
-        std::shared_ptr<Material> material2 = std::make_shared<Material>(engine, assetManager.textureManager);
-        //material2->materialTexture.DiffuseMap = modelRenderManager.textureManager.LoadTexture2D(engine, "../texture/Mario_diffuse.png", VK_FORMAT_R8G8B8A8_UNORM);
-        //material2->materialTexture.NormalMap = modelRenderManager.textureManager.LoadTexture2D(engine, "../texture/MegaMan_normal.png", VK_FORMAT_R8G8B8A8_UNORM);
-        //material2->materialTexture.DepthMap = modelRenderManager.textureManager.LoadTexture2D(engine, "../texture/MegaMan_Specular.png", VK_FORMAT_R8G8B8A8_UNORM);
-        //material2->materialTexture.AlphaMap = modelRenderManager.textureManager.LoadTexture2D(engine, "../texture/Mario_Alpha.png", VK_FORMAT_R8G8B8A8_UNORM);
-        assetManager.materialManager.LoadMaterial(engine, "zdsf", material2);
+        std::shared_ptr<Material> material = std::make_shared<Material>(engine, assetManager.textureManager);
+        material->materialTexture.DiffuseMap = assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_diffuse.png", VK_FORMAT_R8G8B8A8_UNORM);
+        material->materialTexture.NormalMap = assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_normal.png", VK_FORMAT_R8G8B8A8_UNORM);
+        material->materialTexture.DepthMap = assetManager.textureManager.LoadTexture2D(engine, "../texture/toy_box_disp.png", VK_FORMAT_R8G8B8A8_UNORM);
+        assetManager.materialManager.LoadMaterial(engine, "zdsf", material);
         stbi_set_flip_vertically_on_load(false);
- 
-        SetUpDescriptorPool(engine);
-        SetUpDescriptorLayout(engine);
-        SetUpDescriptorSets(engine);
+
+        UpdateSwapChain(engine, window);
         AddMaterialFlag = false;
     }
 
     if (RemoveMaterialFlag == true)
     {
         vkDeviceWaitIdle(engine.Device);
-        vkDestroyDescriptorPool(engine.Device, descriptorPool, nullptr);
-        vkDestroyDescriptorSetLayout(engine.Device, descriptorSetLayout, nullptr);
 
-        assetManager.materialManager.DeleteMaterial(engine, assetManager.materialManager.MaterialList[SceneData->UniformDataInfo.temp]);
+        assetManager.materialManager.DeleteMaterial(engine, SceneData->UniformDataInfo.temp);
 
-        SetUpDescriptorPool(engine);
-        SetUpDescriptorLayout(engine);
-        SetUpDescriptorSets(engine);
+        UpdateSwapChain(engine, window);
         RemoveMaterialFlag = false;
     }
 
@@ -456,148 +435,8 @@ void Renderer::Destroy(VulkanEngine& engine)
     assetManager.Delete(engine);
     interfaceRenderPass.Destroy(engine);
     frameBufferRenderPass.Destroy(engine);
-   // AnimationRenderer.Destroy(engine);
+    // AnimationRenderer.Destroy(engine);
     RenderPass.Destroy(engine);
     SceneData->Destroy(engine);
     RayRenderer.Destory(engine);
-
-    vkDestroyDescriptorPool(engine.Device, descriptorPool, nullptr);
-    vkDestroyDescriptorSetLayout(engine.Device, descriptorSetLayout, nullptr);
 }
-
-std::vector<Vertex> Renderer::CalcVertex()
-{
-    glm::vec3 pos1(-1.0f, 1.0f, 0.0f);
-    glm::vec3 pos2(-1.0f, -1.0f, 0.0f);
-    glm::vec3 pos3(1.0f, -1.0f, 0.0f);
-    glm::vec3 pos4(1.0f, 1.0f, 0.0f);
-    // texture coordinates
-    glm::vec2 uv1(0.0f, 1.0f);
-    glm::vec2 uv2(0.0f, 0.0f);
-    glm::vec2 uv3(1.0f, 0.0f);
-    glm::vec2 uv4(1.0f, 1.0f);
-    // normal vector
-    glm::vec3 nm(0.0f, 0.0f, 1.0f);
-
-    // calculate tangent/bitangent vectors of both triangles
-    glm::vec3 tangent1, bitangent1;
-    glm::vec3 tangent2, bitangent2;
-    // triangle 1
-    // ----------
-    glm::vec3 edge1 = pos2 - pos1;
-    glm::vec3 edge2 = pos3 - pos1;
-    glm::vec2 deltaUV1 = uv2 - uv1;
-    glm::vec2 deltaUV2 = uv3 - uv1;
-
-    float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-    tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-    tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-    tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-    tangent1 = glm::normalize(tangent1);
-
-    bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-    bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-    bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-    bitangent1 = glm::normalize(bitangent1);
-
-    // triangle 2
-    // ----------
-    edge1 = pos3 - pos1;
-    edge2 = pos4 - pos1;
-    deltaUV1 = uv3 - uv1;
-    deltaUV2 = uv4 - uv1;
-
-    f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-    tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-    tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-    tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-    tangent2 = glm::normalize(tangent2);
-
-
-    bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-    bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-    bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-    bitangent2 = glm::normalize(bitangent2);
-
-    return {
-        // positions            // normal         // texcoords  // tangent                          // bitangent
-        {{pos1.x, pos1.y, pos1.z}, {0.0f}, {nm.x, nm.y, nm.z}, {0.0f}, {uv1.x, uv1.y}, {0.0f, 0.0f}, {tangent1.x, tangent1.y, tangent1.z}, {0.0f}, {bitangent1.x, bitangent1.y, bitangent1.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        {{pos2.x, pos2.y, pos2.z}, {0.0f}, {nm.x, nm.y, nm.z}, {0.0f }, {uv2.x, uv2.y}, { 0.0f, 0.0f }, {tangent1.x, tangent1.y, tangent1.z}, {0.0f}, {bitangent1.x, bitangent1.y, bitangent1.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        {{pos3.x, pos3.y, pos3.z}, {0.0f }, {nm.x, nm.y, nm.z}, {0.0f}, {uv3.x, uv3.y}, { 0.0f, 0.0f }, {tangent1.x, tangent1.y, tangent1.z}, {0.0f}, {bitangent1.x, bitangent1.y, bitangent1.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-
-        {{pos1.x, pos1.y, pos1.z}, {0.0f }, {nm.x, nm.y, nm.z}, {0.0f}, {uv1.x, uv1.y}, { 0.0f, 0.0f }, {tangent2.x, tangent2.y, tangent2.z}, {0.0f}, {bitangent2.x, bitangent2.y, bitangent2.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        {{pos3.x, pos3.y, pos3.z}, {0.0f }, {nm.x, nm.y, nm.z}, {0.0f}, {uv3.x, uv3.y}, { 0.0f, 0.0f }, {tangent2.x, tangent2.y, tangent2.z}, {0.0f}, {bitangent2.x, bitangent2.y, bitangent2.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        {{pos4.x, pos4.y, pos4.z}, {0.0f }, {nm.x, nm.y, nm.z}, {0.0f}, {uv4.x, uv4.y}, { 0.0f, 0.0f }, {tangent2.x, tangent2.y, tangent2.z}, {0.0f}, {bitangent2.x, bitangent2.y, bitangent2.z}, {0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}}
-    };
-}
-
-void Renderer::SetUpDescriptorPool(VulkanEngine& engine)
-{
-    std::vector<VkDescriptorPoolSize>  DescriptorPoolList = {};
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_IMAGE));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER));
-    DescriptorPoolList.emplace_back(engine.AddDsecriptorPoolBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER));
-    descriptorPool = engine.CreateDescriptorPool(DescriptorPoolList);
-}
-
-void Renderer::SetUpDescriptorLayout(VulkanEngine& engine)
-{
-    std::vector<DescriptorSetLayoutBindingInfo> LayoutBindingInfo = {};
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 0, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 1 });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 1, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, VK_SHADER_STAGE_RAYGEN_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, 1 });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 2, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL, 1 });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_ALL, assetManager.GetMeshDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_ALL, assetManager.GetMeshDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_ALL, assetManager.GetMeshDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_ALL, assetManager.GetMeshDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_ALL, assetManager.GetMaterialDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 8, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR | VK_SHADER_STAGE_ANY_HIT_BIT_KHR, assetManager.GetTextureBufferDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 9, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,  VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR, assetManager.Get3DTextureBufferDescriptorCount() });
-    LayoutBindingInfo.emplace_back(DescriptorSetLayoutBindingInfo{ 10, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_MISS_BIT_KHR, 1 });
-    descriptorSetLayout = engine.CreateDescriptorSetLayout(LayoutBindingInfo);
-}
-
-void Renderer::SetUpDescriptorSets(VulkanEngine& engine)
-{
-    descriptorSets = engine.CreateDescriptorSets(descriptorPool, descriptorSetLayout);
-
-    VkWriteDescriptorSetAccelerationStructureKHR AccelerationDescriptorStructure = engine.AddAcclerationStructureBinding(RayRenderer.topLevelAS.handle);
-    VkDescriptorImageInfo RayTraceImageDescriptor = engine.AddRayTraceReturnImageDescriptor(VK_IMAGE_LAYOUT_GENERAL, RayRenderer.storageImage);
-    VkDescriptorBufferInfo SceneDataBufferInfo = engine.AddBufferDescriptor(SceneData->VulkanBufferData);
-    std::vector<VkDescriptorBufferInfo> MeshPropertyDataBufferInfo = assetManager.GetMeshPropertiesListDescriptors();
-    std::vector<VkDescriptorBufferInfo> VertexBufferInfoList = assetManager.GetVertexBufferListDescriptors();
-    std::vector<VkDescriptorBufferInfo> IndexBufferInfoList = assetManager.GetIndexBufferListDescriptors();
-    std::vector<VkDescriptorBufferInfo> TransformBufferList = assetManager.GetTransformBufferListDescriptors();
-    std::vector<VkDescriptorBufferInfo> MaterialBufferList = assetManager.GetMaterialBufferListDescriptor();
-    std::vector<VkDescriptorImageInfo> TextureBufferInfo = assetManager.GetTextureBufferListDescriptor();
-    std::vector<VkDescriptorImageInfo> Texture3DBufferInfo = assetManager.Get3DTextureBufferListDescriptor();
-    VkDescriptorImageInfo CubeMapImage = assetManager.GetSkyBoxTextureBufferListDescriptor();
-
-    std::vector<VkWriteDescriptorSet> DescriptorList;
-    DescriptorList.emplace_back(engine.AddAccelerationBuffer(0, descriptorSets, AccelerationDescriptorStructure));
-    DescriptorList.emplace_back(engine.AddStorageImageBuffer(1, descriptorSets, RayTraceImageDescriptor));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(2, descriptorSets, SceneDataBufferInfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(3, descriptorSets, MeshPropertyDataBufferInfo, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(4, descriptorSets, VertexBufferInfoList, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(5, descriptorSets, IndexBufferInfoList, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(6, descriptorSets, TransformBufferList, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorList.emplace_back(engine.AddBufferDescriptorSet(7, descriptorSets, MaterialBufferList, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER));
-    DescriptorList.emplace_back(engine.AddTextureDescriptorSet(8, descriptorSets, TextureBufferInfo));
-    DescriptorList.emplace_back(engine.AddTextureDescriptorSet(9, descriptorSets, Texture3DBufferInfo));
-    DescriptorList.emplace_back(engine.AddTextureDescriptorSet(10, descriptorSets, CubeMapImage));
-
-    vkUpdateDescriptorSets(engine.Device, static_cast<uint32_t>(DescriptorList.size()), DescriptorList.data(), 0, nullptr);
-}
-
-
-
