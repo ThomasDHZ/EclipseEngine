@@ -24,31 +24,32 @@
     <ProjectGuid>{8b0bd21b-371f-47c1-a5c6-dfa5d647df03}</ProjectGuid>
     <RootNamespace>VulkanRayTraceTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>VulkanRayTraceTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -83,6 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\dotha\Documents\Visual Studio 2019\Assimp\include;C:\Users\dotha\Documents\Visual Studio 2019\stb-master;C:\Users\dotha\Documents\Visual Studio 2019\glfw-3.3.2.bin.WIN64\include;C:\Users\dotha\Documents\Visual Studio 2019\glm;C:\VulkanSDK\1.2.170.0\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\dotha\Documents\Visual Studio 2019\Assimp\lib;C:\VulkanSDK\1.2.170.0\Lib;C:\Users\dotha\Documents\Visual Studio 2019\glfw-3.3.2.bin.WIN64\lib-vc2019;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,18 +137,28 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Buffer.cpp" />
+    <ClCompile Include="AccelerationStructure.cpp" />
+    <ClCompile Include="Animation3D.cpp" />
+    <ClCompile Include="AnimationPlayer3D.cpp" />
+    <ClCompile Include="AnimatorCompute.cpp" />
+    <ClCompile Include="Bone.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CubeMapTexture.cpp" />
+    <ClCompile Include="DDSTextureLoader.cpp" />
+    <ClCompile Include="ForwardRenderingPipeline.cpp" />
+    <ClCompile Include="FrameBufferRenderPass.cpp" />
+    <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -154,34 +167,70 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InterfaceRenderPass.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="LevelModel.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ForwardRenderPass.cpp" />
+    <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
+    <ClCompile Include="MegaMan.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="OrthographicCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
-    <ClCompile Include="RayTraceModel.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="RayTraceRenderer.cpp" />
+    <ClCompile Include="RenderedColorTexture.cpp" />
+    <ClCompile Include="RenderedDepthTexture.cpp" />
+    <ClCompile Include="RenderedRayTracedColorTexture.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SceneRenderingPipeline.cpp" />
+    <ClCompile Include="SceneRenderPass.cpp" />
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Texture3D.cpp" />
     <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Texuture2D.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="VulkanBuffer.cpp" />
-    <ClCompile Include="VulkanBufferManager.cpp" />
+    <ClCompile Include="VulkanDebugger.cpp" />
     <ClCompile Include="VulkanEngine.cpp" />
+    <ClCompile Include="VulkanSwapChain.cpp" />
     <ClCompile Include="VulkanWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\alpha.rahit" />
+    <None Include="Shader\animate.comp" />
+    <None Include="Shader\anyhit.rahit" />
+    <None Include="Shader\anyhit1.rahit" />
     <None Include="Shader\closesthit.rchit" />
+    <None Include="Shader\FrameBuffer.frag" />
+    <None Include="Shader\FrameBuffer.vert" />
+    <None Include="Shader\Material.glsl" />
+    <None Include="Shader\Lighting.glsl" />
     <None Include="Shader\miss.rmiss" />
-    <None Include="Shader\Random.glsl" />
     <None Include="Shader\raygen.rgen" />
     <None Include="Shader\shader.frag" />
     <None Include="Shader\shader.vert" />
     <None Include="Shader\shadow.rmiss" />
-    <None Include="Shader\Structs.glsl" />
+    <None Include="Shader\SkyBoxShader.frag" />
+    <None Include="Shader\SkyBoxShader.vert" />
+    <None Include="Shader\Vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="AccelerationStructure.h" />
+    <ClInclude Include="Animation3D.h" />
+    <ClInclude Include="AnimationPlayer3D.h" />
+    <ClInclude Include="AnimatorCompute.h" />
+    <ClInclude Include="bone.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeMapTexture.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
+    <ClInclude Include="ForwardRenderingPipeline.h" />
+    <ClInclude Include="FrameBufferRenderPass.h" />
+    <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_glfw.h" />
@@ -192,16 +241,40 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InterfaceRenderPass.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="LevelModel.h" />
+    <ClInclude Include="ForwardRenderPass.h" />
+    <ClInclude Include="Mario.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="MegaMan.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="OrthographicCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
-    <ClInclude Include="RayTraceModel.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Pixel.h" />
     <ClInclude Include="RayTraceRenderer.h" />
+    <ClInclude Include="RenderedColorTexture.h" />
+    <ClInclude Include="RenderedDepthTexture.h" />
+    <ClInclude Include="RenderedRayTracedColorTexture.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SceneData.h" />
+    <ClInclude Include="SceneRenderingPipeline.h" />
+    <ClInclude Include="SceneRenderPass.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Texture3D.h" />
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Texuture2D.h" />
+    <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VulkanBuffer.h" />
-    <ClInclude Include="VulkanBufferManager.h" />
+    <ClInclude Include="VulkanDebugger.h" />
     <ClInclude Include="VulkanEngine.h" />
+    <ClInclude Include="VulkanSwapChain.h" />
     <ClInclude Include="VulkanWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -44,9 +44,9 @@ RayTraceRenderer::RayTraceRenderer(VkDevice Device, VkPhysicalDevice PhysicalDev
     camera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
     //ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/Sponza/Sponza.obj"));
-  //  ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/viking_room.obj"));
+    ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/viking_room.obj"));
    // ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/Medieval_building.obj"));
-    ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/vulkanscene_shadow.obj"));
+  //  ModelList.emplace_back(RayTraceModel(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/vulkanscene_shadow.obj"));
 
   //  textureManager.LoadTexture(device, physicalDevice, commandPool, graphicsQueue, "C:/Users/dotha/source/repos/VulkanGraphics/Models/viking_room.png", VK_FORMAT_R8G8B8A8_UNORM);
 
@@ -499,7 +499,7 @@ void RayTraceRenderer::updateUniformBuffers(GLFWwindow* window)
     auto  currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-
+    ModelList[0].ModelRotation = glm::vec3(0.0f, 0.0f, 180.0f);
    // ModelList[0].ModelRotation = glm::vec3(0.0f, time * 5, 0.0f);
     ModelList[0].Update();
 

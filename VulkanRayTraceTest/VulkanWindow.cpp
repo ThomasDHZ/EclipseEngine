@@ -41,7 +41,7 @@ void VulkanWindow::Update()
 	}
 }
 
-void VulkanWindow::CleanUp()
+void VulkanWindow::Destroy()
 {
 	glfwDestroyWindow(GLFWindow);
 	glfwTerminate();
@@ -52,4 +52,3 @@ void VulkanWindow::frameBufferResizeCallBack(GLFWwindow* Window, int width, int 
 	auto app = reinterpret_cast<VulkanWindow*>(glfwGetWindowUserPointer(Window));
 	app->FramebufferResized = true;
 }
-

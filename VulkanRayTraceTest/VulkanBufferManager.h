@@ -78,7 +78,7 @@ public:
 		VkCommandBufferAllocateInfo allocInfo = {};
 		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-		allocInfo.commandPool = renderer.RenderCommandPool;
+		allocInfo.commandPool = renderer.GetRenderCommandPool();
 		allocInfo.commandBufferCount = 1;
 
 		VkCommandBuffer commandBuffer;
@@ -125,7 +125,7 @@ public:
 		vkQueueSubmit(renderer.GraphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
 		vkQueueWaitIdle(renderer.GraphicsQueue);
 
-		vkFreeCommandBuffers(renderer.Device, renderer.RenderCommandPool, 1, &commandBuffer);
+		vkFreeCommandBuffers(renderer.Device, renderer.GetRenderCommandPool(), 1, &commandBuffer);
 	}
 
 	static void endSingleTimeCommands(VkDevice device, VkCommandBuffer commandBuffer, VkQueue queue, VkCommandPool commandPool)
