@@ -33,7 +33,7 @@
     <ClCompile Include="RayTraceRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RTXPerspectiveCamera.cpp">
+    <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
@@ -84,39 +84,39 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VulkanWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="VulkanBufferManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanDebugger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VulkanSwapChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.vert">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="shader.frag">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="Shader\miss.rmiss">
       <Filter>Shader</Filter>
     </None>
     <None Include="Shader\raygen.rgen">
       <Filter>Shader</Filter>
     </None>
-    <None Include="Shader\shadow.rmiss.spv">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="Shader\closesthit.rchit">
       <Filter>Shader</Filter>
     </None>
-    <None Include="alpha.rahit">
+    <None Include="Shader\Random.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Structs.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\alpha.rahit">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\shadow.rmiss">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\shader.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\shader.vert">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
@@ -139,7 +139,7 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RTXPerspectiveCamera.h">
+    <ClInclude Include="PerspectiveCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RayTraceModel.h">
@@ -187,16 +187,10 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VulkanWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="VulkanBufferManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VulkanDebugger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VulkanSwapChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PerspectiveCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,19 +1,12 @@
 #include "PerspectiveCamera.h"
 
-PerspectiveCamera::PerspectiveCamera()
+PerspectiveCamera::PerspectiveCamera(glm::vec2 ScreenSize, glm::vec3 position) : Camera()
 {
-}
-
-PerspectiveCamera::PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position) : Camera(Name)
-{
-    Width = ScreenSize.x;
-    Height = ScreenSize.y;
     Position = position;
     Up = glm::vec3(0.0f, 1.0f, 0.0f);
     Front = glm::vec3(0.0f, 0.0f, -1.0f);
-    cameraType = CameraType::Perspective_Camera;
 
-    MovementSpeed = 0.005f;
+    MovementSpeed = 2.5f;
     MouseSensitivity = 0.1f;
 
     Position = position;
@@ -24,16 +17,13 @@ PerspectiveCamera::PerspectiveCamera(std::string Name, const glm::vec2& ScreenSi
     Pitch = 0.0f;
 }
 
-PerspectiveCamera::PerspectiveCamera(std::string Name, const glm::vec2& ScreenSize, const glm::vec3& position, float pitch, float yaw) : Camera(Name)
+PerspectiveCamera::PerspectiveCamera(glm::vec2 ScreenSize, glm::vec3 position, float pitch, float yaw)
 {
-    Width = ScreenSize.x;
-    Height = ScreenSize.y;
     Position = position;
     Up = glm::vec3(0.0f, 1.0f, 0.0f);
     Front = glm::vec3(0.0f, 0.0f, -1.0f);
-    cameraType = CameraType::Perspective_Camera;
 
-    MovementSpeed = 0.5f;
+    MovementSpeed = 2.5f;
     MouseSensitivity = 0.1f;
 
     Position = position;
@@ -48,67 +38,51 @@ PerspectiveCamera::~PerspectiveCamera()
 {
 }
 
-void PerspectiveCamera::UpdateKeyboard(float deltaTime)
+void PerspectiveCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
     float velocity = MovementSpeed * deltaTime;
-    if (Keyboard::IsKeyPressed(GLFW_KEY_W))
-    {
+    if (direction == FORWARD)
         Position += Front * velocity;
-    }
-    if (Keyboard::IsKeyPressed(GLFW_KEY_S))
-    {
+    if (direction == BACKWARD)
         Position -= Front * velocity;
-    }
-    if (Keyboard::IsKeyPressed(GLFW_KEY_A))
-    {
+    if (direction == UP)
+        Position += Up * velocity;
+    if (direction == DOWN)
+        Position -= Up * velocity;
+    if (direction == LEFT)
         Position -= Right * velocity;
-    }
-    if (Keyboard::IsKeyPressed(GLFW_KEY_D))
-    {
+    if (direction == RIGHT)
         Position += Right * velocity;
-    }
 }
 
-void PerspectiveCamera::UpdateMouse()
+void PerspectiveCamera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
 {
-    float xoffset = 0.0f;
-    float yoffset = 0.0f;
-
-    if (glfwGetMouseButton(Window::GetWindowPtr(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-    {
-        double XPos = Mouse::GetMouseCoords().x;
-        double YPos = Mouse::GetMouseCoords().y;
-
-        xoffset = XPos - Mouse::GetLastMouseCoords().x;
-        yoffset = Mouse::GetLastMouseCoords().y - YPos;
-
-        Mouse::SetLastMouseCoords(glm::vec2(XPos, YPos));
-    }
-
     xoffset *= MouseSensitivity;
     yoffset *= MouseSensitivity;
 
     Yaw += xoffset;
     Pitch += yoffset;
 
-
-    if (Pitch > 89.9999f)
+    if (constrainPitch)
     {
-        Pitch = 89.9999f;
+        if (Pitch > 89.0f)
+            Pitch = 89.0f;
+        if (Pitch < -89.0f)
+            Pitch = -89.0f;
     }
-    if (Pitch < -89.9999f)
-    {
-        Pitch = -89.9999f;
-    }
-
 }
 
-void PerspectiveCamera::Update(float deltaTime)
+void PerspectiveCamera::MouseScroll(float yoffset)
 {
-    UpdateKeyboard(deltaTime);
-    UpdateMouse();
-    UpdateMouseScroll();
+    Zoom -= (float)yoffset;
+    if (Zoom < 1.0f)
+        Zoom = 1.0f;
+    if (Zoom > 45.0f)
+        Zoom = 45.0f;
+}
 
+void PerspectiveCamera::Update(float Width, float Height)
+{
     glm::vec3 front;
     front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
     front.y = sin(glm::radians(Pitch));
@@ -119,8 +93,5 @@ void PerspectiveCamera::Update(float deltaTime)
     Up = glm::normalize(glm::cross(Right, Front));
 
     ViewMatrix = glm::lookAt(Position, Position + Front, Up);
-
-    const auto 	Aspect = Width / Height;
-    ProjectionMatrix = glm::perspective(glm::radians(Zoom), Aspect, ZNear, ZFar);
-    ProjectionMatrix[1][1] *= -1;
+    ProjectionMatrix = glm::perspective(glm::radians(Zoom), Width / Height, 0.1f, 10000.0f);
 }
