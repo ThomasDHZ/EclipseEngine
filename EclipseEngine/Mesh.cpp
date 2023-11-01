@@ -54,14 +54,17 @@ void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm:
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 
-	/*if(IndexCount != 0)
+	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
-		glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
-		VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
-		MeshTransformInverseBuffer.CopyBufferToMemory(&inverseMatrix, sizeof(inverseMatrix));
+		if (IndexCount != 0)
+		{
+			glm::mat4 inverseTransformMatrix = glm::transpose(meshProperties.MeshTransform);
+			VkTransformMatrixKHR inverseMatrix = EngineMath::GLMToVkTransformMatrix(inverseTransformMatrix);
+			MeshTransformInverseBuffer.UpdateBufferMemory(&inverseMatrix, sizeof(inverseMatrix));
 
-		UpdateMeshBottomLevelAccelerationStructure();
-	}*/
+			UpdateMeshBottomLevelAccelerationStructure();
+		}
+	}
 }
 
 void Mesh::UpdateMeshBufferIndex(uint64_t meshBufferIndex, uint64_t transformBufferIndex)

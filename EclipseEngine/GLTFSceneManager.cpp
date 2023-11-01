@@ -772,26 +772,53 @@ VkDescriptorImageInfo GLTFSceneManager::GetEnvironmentMapDescriptor()
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetVertexPropertiesBuffer()
 {
-	std::vector<VkDescriptorBufferInfo>	MeshPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo>	VertexPropertiesBuffer;
+	if (GameObjectList.size() == 0)
+	{
+		std::vector<VkDescriptorBufferInfo>	VertexPropertiesBuffer;
 		VkDescriptorBufferInfo nullBuffer;
 		nullBuffer.buffer = VK_NULL_HANDLE;
 		nullBuffer.offset = 0;
 		nullBuffer.range = VK_WHOLE_SIZE;
-		MeshPropertiesBuffer.emplace_back(nullBuffer);
-
-		return MeshPropertiesBuffer;
+		VertexPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& gameObject : GameObjectList)
+		{
+			VkDescriptorBufferInfo MeshProperitesBufferInfo = {};
+			MeshProperitesBufferInfo.buffer = gameObject->GetVertexPropertiesBuffer().buffer;
+			MeshProperitesBufferInfo.offset = 0;
+			MeshProperitesBufferInfo.range = VK_WHOLE_SIZE;
+			VertexPropertiesBuffer.emplace_back(MeshProperitesBufferInfo);
+		}
+	}
+	return VertexPropertiesBuffer;
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetIndexPropertiesBuffer()
 {
-	std::vector<VkDescriptorBufferInfo>	MeshPropertiesBuffer;
-	VkDescriptorBufferInfo nullBuffer;
-	nullBuffer.buffer = VK_NULL_HANDLE;
-	nullBuffer.offset = 0;
-	nullBuffer.range = VK_WHOLE_SIZE;
-	MeshPropertiesBuffer.emplace_back(nullBuffer);
-
-	return MeshPropertiesBuffer;
+	std::vector<VkDescriptorBufferInfo>	IndexPropertiesBuffer;
+	if (GameObjectList.size() == 0)
+	{
+		VkDescriptorBufferInfo nullBuffer;
+		nullBuffer.buffer = VK_NULL_HANDLE;
+		nullBuffer.offset = 0;
+		nullBuffer.range = VK_WHOLE_SIZE;
+		IndexPropertiesBuffer.emplace_back(nullBuffer);
+	}
+	else
+	{
+		for (auto& gameObject : GameObjectList)
+		{
+			VkDescriptorBufferInfo MeshProperitesBufferInfo = {};
+			MeshProperitesBufferInfo.buffer = gameObject->GetIndexPropertiesBuffer().buffer;
+			MeshProperitesBufferInfo.offset = 0;
+			MeshProperitesBufferInfo.range = VK_WHOLE_SIZE;
+			IndexPropertiesBuffer.emplace_back(MeshProperitesBufferInfo);
+		}
+	}
+	return IndexPropertiesBuffer;
 }
 
 std::vector<VkDescriptorBufferInfo> GLTFSceneManager::GetGameObjectPropertiesBuffer()

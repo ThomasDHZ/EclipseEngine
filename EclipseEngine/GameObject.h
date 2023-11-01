@@ -240,6 +240,8 @@ public:
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return GameObjectRenderer->GetMaterialList(); }
 
 	std::vector<VkDescriptorBufferInfo> GetGameObjectPropertiesBuffer() { return GameObjectRenderer->GetMeshPropertiesBuffer(); }
+	VkDescriptorBufferInfo GetVertexPropertiesBuffer() { return GameObjectRenderer->GetVertexPropertiesBuffer(); }
+	VkDescriptorBufferInfo GetIndexPropertiesBuffer() { return GameObjectRenderer->GetIndexPropertiesBuffer(); }
 	std::vector<VkDescriptorBufferInfo> GetGameObjectTransformMatrixBuffer() { return GameObjectRenderer->GetTransformMatrixBuffer(); }
 	std::vector<VkDescriptorImageInfo> GetTexturePropertiesBuffer() { return GameObjectRenderer->GetTexturePropertiesBuffer(); }
 	std::vector<VkDescriptorBufferInfo> GetMaterialPropertiesBuffer() { return GameObjectRenderer->GetMaterialPropertiesBuffer(); }

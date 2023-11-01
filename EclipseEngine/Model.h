@@ -27,8 +27,8 @@ private:
 
 	std::vector<VulkanBuffer> MeshPropertiesBufferList;
 
-	std::vector<VkDescriptorBufferInfo> VertexPropertiesBuffer;
-	std::vector<VkDescriptorBufferInfo> IndexPropertiesBuffer;
+	VkDescriptorBufferInfo VertexPropertiesBuffer;
+	VkDescriptorBufferInfo IndexPropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MeshPropertiesBuffer;
 	std::vector<VkDescriptorImageInfo> TexturePropertiesBuffer;
 	std::vector<VkDescriptorBufferInfo> MaterialPropertiesBuffer;
@@ -145,6 +145,8 @@ public:
 		}
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -192,6 +194,8 @@ public:
 		}
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -241,6 +245,8 @@ public:
 		}
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -288,6 +294,8 @@ public:
 		MeshList.emplace_back(mesh);
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -338,6 +346,8 @@ public:
 		MeshList.emplace_back(mesh);
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -388,6 +398,8 @@ public:
 		MeshList.emplace_back(mesh);
 
 		UpdateMeshPropertiesBuffer();
+		UpdateVertexPropertiesBuffer();
+		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)
 		{
 			mesh->UpdateMeshTransformBuffer();
@@ -420,6 +432,8 @@ public:
 	void Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix);
 	void UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex);
 	void UpdateMeshPropertiesBuffer();
+	void UpdateVertexPropertiesBuffer();
+	void UpdateIndexPropertiesBuffer();
 
 	template<class T>
 	void DrawMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
@@ -500,12 +514,11 @@ public:
 	void DrawLine(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout);
 	void Destroy();
 
-	VkDescriptorBufferInfo UpdateVertexBuffer();
-	VkDescriptorBufferInfo UpdateIndexBuffer();
-
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return MaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
+	VkDescriptorBufferInfo GetVertexPropertiesBuffer() { return VertexPropertiesBuffer; }
+	VkDescriptorBufferInfo GetIndexPropertiesBuffer() { return IndexPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() 
 	{ 
 		std::vector<VkDescriptorBufferInfo> descriptorBufferList;
