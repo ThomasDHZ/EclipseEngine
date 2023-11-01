@@ -52,12 +52,12 @@ public:
 	AssetManager assetManager;
 
 	Renderer();
-	Renderer(VulkanEngine& engine, VulkanWindow& window);
+	Renderer(VulkanEngine& engine, Window& window);
 	~Renderer();
 
-	void UpdateSwapChain(VulkanEngine& engine, VulkanWindow& window);
-	void Update(VulkanEngine& engine, VulkanWindow& window, uint32_t currentImage);
+	void UpdateSwapChain(VulkanEngine& engine, Window& window);
+	void Update(VulkanEngine& engine, Window& window, uint32_t currentImage);
 	void GUIUpdate(VulkanEngine& engine);
-	void Draw(VulkanEngine& engine, VulkanWindow& window);
+	void Draw(VulkanEngine& engine, Window& window);
 	void Destroy(VulkanEngine& engine);
 };

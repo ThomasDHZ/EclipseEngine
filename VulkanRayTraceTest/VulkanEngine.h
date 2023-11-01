@@ -5,7 +5,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <array>
-#include "VulkanWindow.h"
+#include "../EclipseEngine/Window.h"
 #include "VulkanSwapChain.h"
 #include "VulkanDebugger.h"
 #include <fstream>

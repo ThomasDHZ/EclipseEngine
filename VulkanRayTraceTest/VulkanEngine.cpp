@@ -2,6 +2,29 @@
 #include <stdexcept>
 #include <set>
 
+Window* Window::window;
+GLFWwindow* Window::GLFWindow;
+uint32_t Window::Width;
+uint32_t Window::Height;
+bool Window::FramebufferResized;
+
+std::unique_ptr<GameController> GameController::Controller = nullptr;
+GLFWgamepadstate GameController::ControllerState;
+
+std::unique_ptr<Mouse> Mouse::mouse = nullptr;
+double Mouse::ScrollX = 0;
+double Mouse::ScrollY = 0;
+double Mouse::XPos = 0;
+double Mouse::YPos = 0;
+double Mouse::LastX = 0;
+double Mouse::LastY = 0;
+float  Mouse::ZoomAmt = 0.0f;
+bool   Mouse::MouseButtonPressed[3];
+bool   Mouse::IsDragging = false;
+
+std::unique_ptr<Keyboard> Keyboard::keyboard = nullptr;
+bool Keyboard::KeyPressed[350];
+
 VulkanEngine::VulkanEngine()
 {
 }

@@ -8,7 +8,7 @@ Renderer::Renderer()
 {
 }
 
-Renderer::Renderer(VulkanEngine& engine, VulkanWindow& window)
+Renderer::Renderer(VulkanEngine& engine, Window& window)
 {
     assetManager = AssetManager(engine);
     SceneData = std::make_shared<SceneDataUniformBuffer>(SceneDataUniformBuffer(engine));
@@ -118,7 +118,7 @@ void Renderer::SetUpCommandBuffers(VulkanEngine& engine)
     }
 }
 
-void Renderer::UpdateSwapChain(VulkanEngine& engine, VulkanWindow& window)
+void Renderer::UpdateSwapChain(VulkanEngine& engine, Window& window)
 {
     int width = 0, height = 0;
     glfwGetFramebufferSize(window.GetWindowPtr(), &width, &height);
@@ -145,15 +145,15 @@ void Renderer::UpdateSwapChain(VulkanEngine& engine, VulkanWindow& window)
     SetUpCommandBuffers(engine);
 }
 
-void Renderer::Update(VulkanEngine& engine, VulkanWindow& window, uint32_t currentImage)
+void Renderer::Update(VulkanEngine& engine, Window& window, uint32_t currentImage)
 {
     if(UpdateRenderer)
     {
         UpdateSwapChain(engine, window);
     }
 
-    keyboard.Update(window.GetWindowPtr(), camera);
-    mouse.Update(window.GetWindowPtr(), camera);
+    //keyboard.Update(window.GetWindowPtr(), camera);
+    //mouse.Update(window.GetWindowPtr(), camera);
     camera->Update(engine);
 
     assetManager.Update(engine);
@@ -288,7 +288,7 @@ void Renderer::GUIUpdate(VulkanEngine& engine)
     //ImGui::SliderFloat("quadratic4", &SceneData->UniformDataInfo.plight[4].quadratic, 0.0f, 100.0f);
 }
 
-void Renderer::Draw(VulkanEngine& engine, VulkanWindow& window)
+void Renderer::Draw(VulkanEngine& engine, Window& window)
 {
     vkWaitForFences(engine.Device, 1, &engine.inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 

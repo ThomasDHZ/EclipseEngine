@@ -17,8 +17,8 @@
 #include <vector>
 #include "Model.h"
 #include "PerspectiveCamera.h"
-#include "Keyboard.h"
-#include "Mouse.h"
+#include "../EclipseEngine/Keyboard.h"
+#include "../EclipseEngine/Mouse.h"
 #include "InterfaceRenderPass.h"
 #include "Texture2D.h"
 #include "CubeMapTexture.h"

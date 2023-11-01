@@ -23,7 +23,7 @@
 #include <set>
 #include "InterfaceRenderPass.h"
 #include "RayTraceRenderer.h"
-#include "VulkanWindow.h"
+#include "../EclipseEngine/Window.h"
 #include "VulkanEngine.h"
 #include "ForwardRenderPass.h"
 #include "Renderer.h"
@@ -37,13 +37,13 @@ public:
     }
 
 private:
-    VulkanWindow window;
+    Window window;
     VulkanEngine engine;
     Renderer renderer;
 
     void initVulkan() 
     {
-        window = VulkanWindow(1280, 720, "VulkanEngine");
+        Window::CreateGraphicsWindow(1280, 720, "VulkanEngine");
         engine = VulkanEngine(window.GetWindowPtr());
         renderer = Renderer(engine, window);
     }
