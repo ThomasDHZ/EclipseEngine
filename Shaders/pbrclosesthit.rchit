@@ -126,5 +126,11 @@ void main()
 
 	const vec3 barycentricCoords = vec3(1.0f - attribs.x - attribs.y, attribs.x, attribs.y);
 
-    rayHitInfo.color = texture(TextureMap[4], vertex.UV).rgb;
+    rayHitInfo.color = pow(texture(TextureMap[material.AlbedoMap], vertex.UV).rgb, vec3(2.2f));
+
+
+	
+
+	debugPrintfEXT(": %i \n", meshBuffer[2].meshProperties.MaterialBufferIndex);
+
 }

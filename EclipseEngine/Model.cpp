@@ -459,7 +459,7 @@ void Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationS
 
 			VkAccelerationStructureInstanceKHR AccelerationStructureInstance{};
 			AccelerationStructureInstance.transform = transformMatrix;
-			AccelerationStructureInstance.instanceCustomIndex = customIndex; // I can see problems here later on.
+			AccelerationStructureInstance.instanceCustomIndex = mesh->GetMeshBufferIndex();
 			AccelerationStructureInstance.mask = 0xFF;
 			AccelerationStructureInstance.instanceShaderBindingTableRecordOffset = 0;
 			AccelerationStructureInstance.flags = VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;

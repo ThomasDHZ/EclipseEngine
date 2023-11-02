@@ -20,7 +20,7 @@ void RayTracePBRRenderer::BuildRenderer()
     auto c = "C:/Users/dotha/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf";
 
 
-    GLTFSceneManager::AddMeshGameObject3D("sponza", a);
+  //  GLTFSceneManager::AddMeshGameObject3D("sponza", a);
     GLTFSceneManager::AddMeshGameObject3D("Sphere", b);
     GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
 

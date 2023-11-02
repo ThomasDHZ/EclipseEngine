@@ -49,6 +49,8 @@ void Material::Destroy()
 
 void Material::GetMaterialPropertiesBuffer(std::vector<VkDescriptorBufferInfo>& MaterialBufferList)
 {
+	UpdateBuffer();
+
 	VkDescriptorBufferInfo MaterialBufferInfo = {};
 	MaterialBufferInfo.buffer = MaterialBuffer.Buffer;
 	MaterialBufferInfo.offset = 0;

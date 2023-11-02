@@ -200,5 +200,9 @@ public:
 
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return gltfMaterialList; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() { return TransformMatrixBuffer; }
+	uint32_t GetMeshBufferIndex() {
+		return MeshBufferIndex
+			;
+	}
 	uint64_t GetBLASBufferDeviceAddress() { return BottomLevelAccelerationBuffer.GetAccelerationBufferDeviceAddress(); }
 };

@@ -46,6 +46,8 @@ void RayTracePBRRenderPass::StartUp()
 
     InstanceBuffer.DestroyBuffer();
 
+    GLTFSceneManager::Update();
+
     BuildRenderPassPipelines();
     SetUpCommandBuffers();
     UpdateTopLevelAccelerationStructure();
@@ -53,6 +55,7 @@ void RayTracePBRRenderPass::StartUp()
 
 void RayTracePBRRenderPass::Update()
 {
+    GLTFSceneManager::Update();
     if (GraphicsDevice::IsRayTracingFeatureActive())
     {
         std::vector<VkAccelerationStructureInstanceKHR> AccelerationStructureInstanceList = {};
