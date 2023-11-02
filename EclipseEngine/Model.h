@@ -516,7 +516,10 @@ public:
 
 	std::vector<std::shared_ptr<Mesh>> GetMeshList() { return MeshList; }
 	std::vector<std::shared_ptr<Material>> GetMaterialList() { return MaterialList; }
-	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() { return MeshPropertiesBuffer; }
+	std::vector<VkDescriptorBufferInfo> GetMeshPropertiesBuffer() 
+	{ 
+		return MeshPropertiesBuffer; 
+	}
 	VkDescriptorBufferInfo GetVertexPropertiesBuffer() { return VertexPropertiesBuffer; }
 	VkDescriptorBufferInfo GetIndexPropertiesBuffer() { return IndexPropertiesBuffer; }
 	std::vector<VkDescriptorBufferInfo> GetTransformMatrixBuffer() 

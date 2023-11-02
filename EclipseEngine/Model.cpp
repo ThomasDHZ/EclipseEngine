@@ -480,6 +480,7 @@ void Model::Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix)
 
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
+		UpdateMeshPropertiesBuffer();
 		UpdateVertexPropertiesBuffer();
 		UpdateIndexPropertiesBuffer();
 		for (auto& mesh : MeshList)

@@ -54,6 +54,9 @@ void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm:
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 
+	meshProperties.MaterialBufferIndex = gltfMaterialList[0]->GetMaterialBufferIndex();
+	MeshPropertiesBuffer.UpdateBufferMemory(&meshProperties, sizeof(meshProperties));
+
 	if (GraphicsDevice::IsRayTracingFeatureActive())
 	{
 		if (IndexCount != 0)
