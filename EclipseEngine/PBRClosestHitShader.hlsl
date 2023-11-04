@@ -24,26 +24,11 @@ struct Attributes
     float2 bary;
 };
 
-struct VertexBuffer
-{
-    ConstantBuffer<Vertex> vertex[];
-};
-
-struct IndiceBuffer
-{
-    float Indice;
-};
-
-struct IndicesBuffer
-{
-    ConstantBuffer<IndiceBuffer> IndiceBuffer[];
-};
-
 [[vk::push_constant]] SceneProperties sceneDataProperties;
 [[vk::binding(0)]]  RaytracingAccelerationStructure topLevelAS;
 [[vk::binding(1)]]  RWTexture2D<float4> image;
-[[vk::binding(2)]]  ConstantBuffer<Vertex> Vertices[][];
-[[vk::binding(3)]]  ConstantBuffer<float> Indices[][];
+[[vk::binding(2)]] StructuredBuffer<Vertex> VertexBuffer[];
+[[vk::binding(3)]] StructuredBuffer<uint> IndexBuffer[];
 [[vk::binding(4)]]  ConstantBuffer<MeshProperties> MeshPropertiesBuffer[];
 [[vk::binding(5)]]  ConstantBuffer<ModelMatrix> ModelTransformBuffer[];
 [[vk::binding(6)]]  ConstantBuffer<MaterialProperties> MaterialPropertiesBuffer[];
@@ -63,22 +48,32 @@ struct IndicesBuffer
 Vertex BuildVertexInfo(Attributes attribs)
 {
     Vertex vertex;
-    float a = Indices[InstanceIndex()][3 * PrimitiveIndex()];
-    float b = Indices[InstanceIndex()][3 * PrimitiveIndex() + 1];
-    float c = Indices[InstanceIndex()][3 * PrimitiveIndex() + 2];
+    float a = IndexBuffer[InstanceIndex()][3 * PrimitiveIndex()];
+    float b = IndexBuffer[InstanceIndex()][3 * PrimitiveIndex() + 1];
+    float c = IndexBuffer[InstanceIndex()][3 * PrimitiveIndex() + 2];
     const int3 index = float3(a, b, c);
-
-    const Vertex v0 = Vertices[InstanceIndex()][index.x];
-    const Vertex v1 = Vertices[InstanceIndex()][index.y];
-    const Vertex v2 = Vertices[InstanceIndex()][index.z];
-
+    
+    const Vertex v0 = VertexBuffer[InstanceIndex()][index.x];
+    const Vertex v1 = VertexBuffer[InstanceIndex()][index.y];
+    const Vertex v2 = VertexBuffer[InstanceIndex()][index.z];
+    
     const float3 barycentricCoords = float3(1.0f - attribs.bary.x - attribs.bary.y, attribs.bary.x, attribs.bary.y);
 
+    float4x4 mat = float4x4(1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+    
     vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
-    vertex.Position = mul(MeshPropertiesBuffer[InstanceIndex()].MeshTransform, float4(vertex.Position, 1.0));
-
+    vertex.Position = mul(mat, float4(vertex.Position, 1.0)).xyz;
+    
     vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
-
+   // printf("Vertex position: (%.2f, %.2f, %.2f, %.2f)\n", ModelTransformBuffer[InstanceIndex()].model[0][0], ModelTransformBuffer[InstanceIndex()].model[0][1], ModelTransformBuffer[InstanceIndex()].model[0][2], ModelTransformBuffer[InstanceIndex()].model[0][3]);
+   // printf("Vertex position 2: (%.2f, %.2f, %.2f, %.2f)\n", ModelTransformBuffer[InstanceIndex()].model[1][0], ModelTransformBuffer[InstanceIndex()].model[1][1], ModelTransformBuffer[InstanceIndex()].model[1][2], ModelTransformBuffer[InstanceIndex()].model[1][3]);
+   // printf("Vertex position 3: (%.2f, %.2f, %.2f, %.2f)\n", mat[2][0], mat[2][1], mat[2][2], mat[2][3]);
+  //  printf("Vertex position 4: (%.2f, %.2f, %.2f, %.2f)\n", ModelTransformBuffer[InstanceIndex()].model[3][0], ModelTransformBuffer[InstanceIndex()].model[3][1], ModelTransformBuffer[InstanceIndex()].model[3][2], ModelTransformBuffer[InstanceIndex()].model[3][3]);
+        
+    
     vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;
     vertex.UV += MeshPropertiesBuffer[InstanceIndex()].UVOffset;
 
@@ -88,51 +83,50 @@ Vertex BuildVertexInfo(Attributes attribs)
     return vertex;
 }
 
-//PBRMaterial BuildPBRMaterial(MaterialProperties properties, vec2 UV)
-//{
-//    PBRMaterial material;
-
-//    material.Albedo = pow(properties.Albedo, vec3(2.2f));
-//    if (properties.AlbedoMap != 0)
-//    {
-//        material.Albedo = pow(texture(TextureMap[properties.AlbedoMap], UV).rgb, vec3(2.2f));
-//    }
-
-//    material.Metallic = properties.Metallic;
-//    if (properties.MetallicMap != 0)
-//    {
-//        material.Metallic = texture(TextureMap[properties.MetallicMap], UV).r;
-//    }
-
-//    material.Roughness = properties.Roughness;
-//    if (properties.RoughnessMap != 0)
-//    {
-//        material.Roughness = texture(TextureMap[properties.RoughnessMap], UV).r;
-//    }
-
-//    material.AmbientOcclusion = properties.AmbientOcclusion;
-//    if (properties.AmbientOcclusionMap != 0)
-//    {
-//        material.AmbientOcclusion = texture(TextureMap[properties.AmbientOcclusionMap], UV).r;
-//    }
-
-//    material.Emission = properties.Emission;
-//    if (properties.EmissionMap != 0)
-//    {
-//        material.Emission = texture(TextureMap[properties.EmissionMap], UV).rgb;
-//    }
-
-//    if (texture(TextureMap[properties.AlphaMap], UV).r == 0.0f ||
-//		texture(TextureMap[properties.AlbedoMap], UV).a == 0.0f)
-//    {
-//		//discard;
-//    }
-
-//    material.NormalMapID = properties.NormalMap;
-//    material.DepthMapID = properties.DepthMap;
-
-//    return material;
-//}
+MaterialProperties MaterialBuilder(float2 UV, uint MaterialIndex)
+{
+    MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
+    
+    if (material.AlbedoMap != -1)
+    {
+        material.Albedo = TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV).rgb;
+    }
+    if (material.MetallicRoughnessMap != -1)
+    {
+        material.Roughness = TextureMap[material.MetallicRoughnessMap].Sample(TextureMapSampler[material.MetallicRoughnessMap], UV).g;
+        material.Metallic = TextureMap[material.MetallicRoughnessMap].Sample(TextureMapSampler[material.MetallicRoughnessMap], UV).b;
+    }
+    if (material.MetallicMap != -1)
+    {
+        material.Metallic = TextureMap[material.MetallicMap].Sample(TextureMapSampler[material.MetallicMap], UV).r;
+    }
+    if (material.RoughnessMap != -1)
+    {
+        material.Roughness = TextureMap[material.RoughnessMap].Sample(TextureMapSampler[material.RoughnessMap], UV).r;
+    }
+    if (material.AmbientOcclusionMap != -1)
+    {
+        material.AmbientOcclusion = TextureMap[material.AmbientOcclusionMap].Sample(TextureMapSampler[material.AmbientOcclusionMap], UV).r;
+    }
+    if (material.EmissionMap != -1)
+    {
+        material.Emission = TextureMap[material.EmissionMap].Sample(TextureMapSampler[material.EmissionMap], UV).rgb;
+    }
+    if (material.TransmissionMap != -1)
+    {
+        material.Transmission = TextureMap[material.TransmissionMap].Sample(TextureMapSampler[material.TransmissionMap], UV).r;
+    }
+    if (material.IndexOfRefractionMap != -1)
+    {
+        material.IndexofRefraction = TextureMap[material.IndexOfRefractionMap].Sample(TextureMapSampler[material.IndexOfRefractionMap], UV).r;
+    }
+    if (TextureMap[material.AlbedoMap].Sample(TextureMapSampler[material.AlbedoMap], UV).a == 0.0f)
+    {
+        discard;
+    }
+    
+    return material;
+}
 
 [shader("closesthit")]
 void main(inout RayPayload rayPayload, in Attributes attribs)
@@ -142,8 +136,9 @@ void main(inout RayPayload rayPayload, in Attributes attribs)
     //MaterialProperties material = MaterialPropertiesBuffer[materialID];
     //PBRMaterial pbrMaterial = BuildPBRMaterial(material, vertex.UV);
 
+    MaterialProperties material = MaterialPropertiesBuffer[sceneDataProperties.MaterialIndex];
+    material.Albedo = TextureMap[material.AlbedoMap].SampleLevel(TextureMapSampler[material.AlbedoMap], vertex.UV, 0.0f).rgb;
+    
     const float3 barycentricCoords = float3(1.0f - attribs.bary.x - attribs.bary.y, attribs.bary.x, attribs.bary.y);
-
-    RayPayload rayHitInfo;
-    rayHitInfo.color = barycentricCoords;
+    rayPayload.color = barycentricCoords;
 }

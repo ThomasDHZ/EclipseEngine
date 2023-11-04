@@ -58,7 +58,7 @@ Vertex BuildVertexInfo()
 
 	vertex.Position = v0.Position * barycentricCoords.x + v1.Position * barycentricCoords.y + v2.Position * barycentricCoords.z;
 	vertex.Position = vec3(meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform * vec4(vertex.Position, 1.0));
-
+			debugPrintfEXT(": %f, %f, %f, %f \n", meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform[3][0], meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform[3][1], meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform[3][2], meshBuffer[gl_InstanceCustomIndexEXT].meshProperties.MeshTransform[3][3]);
 	vertex.Normal = v0.Normal * barycentricCoords.x + v1.Normal * barycentricCoords.y + v2.Normal * barycentricCoords.z;
 
 	vertex.UV = v0.UV * barycentricCoords.x + v1.UV * barycentricCoords.y + v2.UV * barycentricCoords.z;

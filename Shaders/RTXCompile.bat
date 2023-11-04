@@ -12,4 +12,6 @@ C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 PBRMiss.rmiss -o ../x64/Shaders/PBRMissrmiss.spv
 C:/VulkanSDK/1.3.204.0/Bin/glslc.exe --target-env=vulkan1.3 --target-spv=spv1.4 PBRShadow.rmiss -o ../x64/Shaders/PBRShadowrmiss.spv
 
+
+C:/VulkanSDK/1.3.204.0/Bin/dxc.exe -spirv PBRClosesthitrchit.spv -T ps_6_4 -E main -Fo raytrace.rchit2.hlsl
 pause
