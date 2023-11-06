@@ -24,7 +24,10 @@
 class Scene
 {
 private:
-	//PBRRenderer pbrRenderer;
+	bool ChangeRendererFlag;
+
+	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
+	PBRRenderer pbrRenderer;
 	//GLTFRenderer2D spriteRenderer;
 	RayTracePBRRenderer rayTraceRenderer;
 public:

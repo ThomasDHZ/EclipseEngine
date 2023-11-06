@@ -42,6 +42,8 @@ private:
 
 public:
 	static bool WireframeModeFlag;
+	static bool RaytraceModeFlag;
+
 	static SceneProperties sceneProperites;
 
 	static std::vector<std::shared_ptr<Texture>> TextureList;
