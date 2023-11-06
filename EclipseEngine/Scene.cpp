@@ -28,7 +28,9 @@ void Scene::StartUp()
 {
     GLTFSceneManager::StartUp();
     GLTFSceneManager::ActiveCamera = std::make_shared<PerspectiveCamera>(PerspectiveCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
+	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/Field-Path-Steinbacher-Street-Georgensgmünd-4K.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
 
+	environmentToCubeRenderPass.OneTimeDraw(4096.0f / 4);
 	//GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("DefaultCamera", VulkanRenderer::GetSwapChainResolutionVec2(), glm::vec3(0.0f, 0.0f, 5.0f)));
 
 
@@ -59,8 +61,8 @@ void Scene::StartUp()
 	GLTFSceneManager::AddMaterial(IronMaterial);
 
 	//GLTFSceneManager::AddMeshGameObject3D("sponza", VulkanRenderer::OpenFile("/Models/sponza/sponza.gltf"));
-//	GLTFSceneManager::AddMeshGameObject3D("Sphere", VulkanRenderer::OpenFile("/Models/GLTFGold/Gold.gltf"), IronMaterial);
-	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", c);
+	GLTFSceneManager::AddMeshGameObject3D("Sphere", "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf");
+	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", "C:/Users/DHZ/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf");
 
 	//	/// <summary>
 	///// 
@@ -231,9 +233,18 @@ void Scene::Update()
     }
 
     SceneManager::Update();
-   //pbrRenderer.Update();
+	GLTFSceneManager::Update();
+	if (GLTFSceneManager::RaytraceModeFlag)
+	{
+		rayTraceRenderer.Update();
+	}
+	else
+	{
+		pbrRenderer.Update();
+	}
+   
     //spriteRenderer.Update();
-    rayTraceRenderer.Update();
+
 }
 
 void Scene::ImGuiUpdate()
@@ -244,13 +255,27 @@ void Scene::ImGuiUpdate()
     ImGui::Checkbox("Wireframe Mode", &GLTFSceneManager::WireframeModeFlag);
     if (GraphicsDevice::IsRayTracingFeatureActive())
     {
-        ImGui::Checkbox("RayTrace Mode", &SceneManager::RayTracingActive);
+		ChangeRendererFlag = ImGui::Checkbox("RayTrace Mode", &SceneManager::RayTracingActive);
         ImGui::Checkbox("Hybrid Mode", &SceneManager::HybridRendererActive);
+
+		if (ChangeRendererFlag)
+		{
+			GLTFSceneManager::RaytraceModeFlag = !GLTFSceneManager::RaytraceModeFlag;
+			ChangeRendererFlag = false;
+			VulkanRenderer::UpdateRendererFlag = true;
+		}
     }
 
-    //pbrRenderer.ImGuiUpdate();
     //spriteRenderer.ImGuiUpdate();
-    rayTraceRenderer.ImGuiUpdate();
+	if (GLTFSceneManager::RaytraceModeFlag)
+	{
+		rayTraceRenderer.ImGuiUpdate();
+	}
+	else
+	{
+		pbrRenderer.ImGuiUpdate();
+	}
+
 
     SceneManager::ImGuiSceneHierarchy();
    // MeshRendererManager::GUIUpdate();
@@ -260,9 +285,16 @@ void Scene::ImGuiUpdate()
 void Scene::BuildRenderers()
 {
     //MeshRendererManager::Update();
-   // pbrRenderer.BuildRenderer();
     //spriteRenderer.BuildRenderer();
-    rayTraceRenderer.BuildRenderer();
+	if (GLTFSceneManager::RaytraceModeFlag)
+	{
+		rayTraceRenderer.BuildRenderer();
+	}
+	else
+	{
+		pbrRenderer.BuildRenderer();
+	}
+
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
 }
@@ -278,9 +310,16 @@ void Scene::Draw()
         return;
     }
 
-    //pbrRenderer.Draw(CommandBufferSubmitList);
+	if (GLTFSceneManager::RaytraceModeFlag)
+	{
+		rayTraceRenderer.Draw(CommandBufferSubmitList);
+	}
+	else
+	{
+		pbrRenderer.Draw(CommandBufferSubmitList);
+	}
     //spriteRenderer.Draw(CommandBufferSubmitList);
-    rayTraceRenderer.Draw(CommandBufferSubmitList);
+   
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
 
@@ -294,8 +333,10 @@ void Scene::Draw()
 
 void Scene::Destroy()
 {
+	GLTFSceneManager::Destroy();
+	environmentToCubeRenderPass.Destroy();
    // GameObjectManager::Destroy();
     rayTraceRenderer.Destroy();
-   // pbrRenderer.Destroy();
+    pbrRenderer.Destroy();
    // spriteRenderer.Destroy();
 }

@@ -13,9 +13,7 @@ PBRRenderer::~PBRRenderer()
 void PBRRenderer::BuildRenderer()
 {
 	GLTFSceneManager::sceneProperites.PBRMaxMipLevel = static_cast<uint32_t>(std::floor(std::log2(std::max(GLTFSceneManager::GetPreRenderedMapSize(), GLTFSceneManager::GetPreRenderedMapSize())))) + 1;
-	GLTFSceneManager::EnvironmentTexture = std::make_shared<EnvironmentTexture>(VulkanRenderer::OpenFile("/texture/hdr/alps_field_4k.hdr"), VK_FORMAT_R32G32B32A32_SFLOAT);
 
-	environmentToCubeRenderPass.BuildRenderPass(4096.0f / 4);
 	brdfRenderPass.OneTimeDraw(GLTFSceneManager::GetPreRenderedMapSize());
 	GLTFSceneManager::BRDFTexture = brdfRenderPass.GetImageTexture();
 	//perlinNoise.BuildRenderPass(glm::ivec2(512));
@@ -118,7 +116,7 @@ void PBRRenderer::BuildRenderer()
 
 void PBRRenderer::Update()
 {
-	GLTFSceneManager::Update();
+	
 	if (VulkanRenderer::UpdateRendererFlag == true)
 	{
 		lightManagerMenu.Update();
@@ -133,10 +131,10 @@ void PBRRenderer::ImGuiUpdate()
 	ImGui::ShowDemoWindow();
 
 	ImGui::Begin("Scene Hierarchy Manager");
-	cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
+	//cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
-		cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
+		//cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
 	}
 	int index = 0;
 	for (auto& obj : GLTFSceneManager::GameObjectList)
@@ -334,8 +332,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	//CommandBufferSubmitList.emplace_back(brdfRenderPass.Draw());
 	
-	CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(cubeMapToEnvironmentRenderPass.Draw((float)glfwGetTime()));
+	//CommandBufferSubmitList.emplace_back(environmentToCubeRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
@@ -360,9 +357,6 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 void PBRRenderer::Destroy()
 {
-	GLTFSceneManager::Destroy();
-
-	environmentToCubeRenderPass.Destroy();
 	brdfRenderPass.Destroy();
 
 	depthRenderPass.Destroy();

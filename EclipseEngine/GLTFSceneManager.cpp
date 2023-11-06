@@ -19,6 +19,7 @@ std::vector<std::shared_ptr<SpotLight>>				 GLTFSceneManager::SpotLightList;
 float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
+bool												 GLTFSceneManager::RaytraceModeFlag = true;
 
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
