@@ -23,7 +23,8 @@ void Model::GenerateID()
 
 void Model::RTXModelStartUp()
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		uint32_t PrimitiveCount = 1;
 		VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};
@@ -450,7 +451,8 @@ void Model::LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridS
 
 void Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex)
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		for (auto& mesh : MeshList)
 		{
@@ -478,7 +480,8 @@ void Model::Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix)
 	ModelTransformMatrix = glm::rotate(ModelTransformMatrix, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransformMatrix = glm::scale(ModelTransformMatrix, ModelScale);
 
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		UpdateMeshPropertiesBuffer();
 		UpdateVertexPropertiesBuffer();

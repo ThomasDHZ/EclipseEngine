@@ -210,7 +210,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
         ShadowShaderInfo.intersectionShader = VK_SHADER_UNUSED_KHR;
         RayTraceShaderList.emplace_back(ShadowShaderInfo);
 
-        ShaderList.emplace_back(CreateShader("EclipseEngine/PBRClosestHitShader.hlsl", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
+        ShaderList.emplace_back(CreateShader("../Shaders/PBRClosesthitrchit.spv", VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR));
         VkRayTracingShaderGroupCreateInfoKHR ClosestHitShaderInfo = {};
         ClosestHitShaderInfo.sType = VK_STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR;
         ClosestHitShaderInfo.type = VK_RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR;
@@ -250,6 +250,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size() });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size() });
     descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size() });
+    descriptorPoolSizeList.emplace_back(VkDescriptorPoolSize{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1 });
     DescriptorPool = GLTF_GraphicsDescriptors::CreateDescriptorPool(descriptorPoolSizeList);
 
     std::vector<VkDescriptorSetLayoutBinding> descriptorSetLayoutBinding;
@@ -268,6 +269,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 12, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetDirectionalLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 13, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetPointLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
     descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 14, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, (uint32_t)GLTFSceneManager::GetSpotLightPropertiesBuffer().size(), VK_SHADER_STAGE_ALL });
+    descriptorSetLayoutBinding.emplace_back(VkDescriptorSetLayoutBinding{ 15, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1, VK_SHADER_STAGE_ALL });
     DescriptorSetLayout = GLTF_GraphicsDescriptors::CreateDescriptorSetLayout(descriptorSetLayoutBinding);
 
     std::vector<DescriptorSetBindingStruct> DescriptorBindingList;
@@ -289,6 +291,7 @@ void RayTracePBRRenderPass::BuildRenderPassPipelines()
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 12, GLTFSceneManager::GetDirectionalLightPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 13, GLTFSceneManager::GetPointLightPropertiesBuffer());
     GLTF_GraphicsDescriptors::AddStorageBufferDescriptorSetBinding(DescriptorBindingList, 14, GLTFSceneManager::GetSpotLightPropertiesBuffer());
+    GLTF_GraphicsDescriptors::AddTextureDescriptorSetBinding(DescriptorBindingList, 15, GLTFSceneManager::GetCubeMapDescriptor());
     DescriptorSet = GLTF_GraphicsDescriptors::CreateDescriptorSets(DescriptorPool, DescriptorSetLayout);
 
     std::vector<VkWriteDescriptorSet> writeDescriptorSet;

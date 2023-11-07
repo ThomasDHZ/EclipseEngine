@@ -10,6 +10,7 @@ RayTracePBRRenderer::~RayTracePBRRenderer()
 
 void RayTracePBRRenderer::BuildRenderer()
 {
+
     GLTFSceneManager::AddDirectionalLight(std::make_shared<DirectionalLight>(DirectionalLight("sdf", glm::vec3(0.01f), glm::vec3(1.0f), 30.8f)));
 
     rayTraceRenderPass.StartUp();

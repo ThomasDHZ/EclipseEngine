@@ -9,7 +9,6 @@
 #include "RenderedColorTexture.h"
 #include "RenderedCubeMapTexture.h"
 
-#include "TopLevelAccelerationStructureManager.h"
 #include "ComponentRenderer.h"
 #include "MusicPlayer.h"
 

@@ -32,8 +32,9 @@ layout(binding = 11) buffer SunLightBuffer { SunLight sunLight; } SULight[];
 layout(binding = 12) buffer DirectionalLightBuffer { DirectionalLight directionalLight; } DLight[];
 layout(binding = 13) buffer PointLightBuffer { PointLight pointLight; } PLight[];
 layout(binding = 14) buffer SpotLightBuffer { SpotLight spotLight; } SLight[];
+layout(binding = 15) uniform samplerCube CubeMap;
 
 void main()
 {
-	rayPayload.color = texture(PrefilterMap, gl_WorldRayDirectionEXT).rgb;
+	rayPayload.color = texture(CubeMap, gl_WorldRayDirectionEXT).rgb;
 }

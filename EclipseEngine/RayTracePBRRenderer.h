@@ -8,7 +8,6 @@
 class RayTracePBRRenderer : public RenderPass
 {
 private:
-	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
 	RayTracePBRRenderPass rayTraceRenderPass;
 	FrameBufferRenderPass frameBufferRenderPass;
 	//ComputeAnimationPipeline AnimationRenderer;

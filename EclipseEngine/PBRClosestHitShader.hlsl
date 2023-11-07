@@ -140,5 +140,5 @@ void main(inout RayPayload rayPayload, in Attributes attribs)
     material.Albedo = TextureMap[material.AlbedoMap].SampleLevel(TextureMapSampler[material.AlbedoMap], vertex.UV, 0.0f).rgb;
     
     const float3 barycentricCoords = float3(1.0f - attribs.bary.x - attribs.bary.y, attribs.bary.x, attribs.bary.y);
-    rayPayload.color = barycentricCoords;
+    rayPayload.color = material.Albedo;
 }
