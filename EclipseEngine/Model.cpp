@@ -23,7 +23,8 @@ void Model::GenerateID()
 
 void Model::RTXModelStartUp()
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		uint32_t PrimitiveCount = 1;
 		VkDeviceOrHostAddressConstKHR DeviceOrHostAddressConst = {};
@@ -110,7 +111,8 @@ void Model::LoadMaterials(std::vector<GLTFMaterialLoader>& materialLoader)
 		GLTFSceneManager::AddMaterial(material);
 	}
 }
-void Model::LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+
+void Model::LoadLevel2D(const std::string& levelPath, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
 {
 	GenerateID();
 
@@ -118,15 +120,31 @@ void Model::LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixel
 	GameObjectTransformMatrix = GameObjectMatrix;
 	ModelTransformMatrix = glm::mat4(1.0f);
 
-	MaterialList = materialList;
+	//MaterialList = materialList;
 
-
-	std::shared_ptr<Level2D> mesh = std::make_shared<Level2D>(Level2D(levelName, tileSizeInPixels, levelBounds, materialList, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	std::shared_ptr<Level2D> mesh = std::make_shared<Level2D>(Level2D(levelPath, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
+	for (auto& mesh : MeshList)
+	{
+		mesh->UpdateMeshTransformBuffer();
+	}
+}
+
+void Model::LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::string tileSetPath, glm::mat4& GameObjectMatrix, uint32_t gameObjectID)
+{
+	GenerateID();
+
+	ParentGameObjectID = gameObjectID;
+	GameObjectTransformMatrix = GameObjectMatrix;
+	ModelTransformMatrix = glm::mat4(1.0f);
+
+
+	std::shared_ptr<Level2D> mesh = std::make_shared<Level2D>(Level2D(levelName, tileSizeInPixels, levelBounds, tileSetPath, GameObjectMatrix, ModelTransformMatrix, gameObjectID, ModelID));
+	MeshList.emplace_back(mesh);
+
+	UpdateMeshPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -147,8 +165,6 @@ void Model::LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Mate
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -189,8 +205,6 @@ void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm:
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -209,8 +223,6 @@ void Model::LoadSquareMesh2D(const std::string& LineName, float Size, const glm:
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -229,8 +241,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, std::vector<LineVertex2D
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -248,8 +258,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -267,8 +275,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -286,8 +292,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -305,8 +309,6 @@ void Model::LoadLineMesh2D(const std::string& LineName, const glm::vec2& StartPo
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -325,8 +327,6 @@ void Model::LoadGridMesh2D(const std::string& GridName, int GridSizeX, int GridS
 	MeshList.emplace_back(mesh);
 
 	UpdateMeshPropertiesBuffer();
-	UpdateVertexPropertiesBuffer();
-	UpdateIndexPropertiesBuffer();
 	for (auto& mesh : MeshList)
 	{
 		mesh->UpdateMeshTransformBuffer();
@@ -450,7 +450,8 @@ void Model::LoadLineMesh3D(const std::string& GridName, int GridSizeX, int GridS
 
 void Model::UpdateModelTopLevelAccelerationStructure(std::vector<VkAccelerationStructureInstanceKHR>& AccelerationStructureInstanceList, uint32_t customIndex)
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		for (auto& mesh : MeshList)
 		{
@@ -478,7 +479,8 @@ void Model::Update(float DeltaTime, const glm::mat4& GameObjectTransformMatrix)
 	ModelTransformMatrix = glm::rotate(ModelTransformMatrix, glm::radians(ModelRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	ModelTransformMatrix = glm::scale(ModelTransformMatrix, ModelScale);
 
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		UpdateMeshPropertiesBuffer();
 		UpdateVertexPropertiesBuffer();

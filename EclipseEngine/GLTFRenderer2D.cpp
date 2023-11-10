@@ -16,10 +16,10 @@ void GLTFRenderer2D::BuildRenderer()
 	GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", 8.49414635f, 5.79752779f, 4.80515528f));
 
 	std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("MetalManTiles"));
-	//material3->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan.png", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
-	//material3->CheckPaletteSwapColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMan-Recovered.png", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	//material3->PaletteSwapPixelColorMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/MetalMapPaletteRotation.bmp", TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM)));
-	//
+	material3->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMan.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	material3->SetCheckPaletteSwapColorMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMan-Recovered.png"), TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	material3->SetPaletteSwapPixelColorMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMapPaletteRotation.bmp"), TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	
 	std::shared_ptr<Material> material = std::make_shared<Material>(Material("TestMaterial"));
 	//material->AlbedoMap = GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/VulkanGraphics/texture/Brick_diffuseOriginal.bmp", TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB)));
 
@@ -39,7 +39,8 @@ void GLTFRenderer2D::BuildRenderer()
 
 	std::vector<std::shared_ptr<Material>> materialList;
 	materialList.emplace_back(material3);
-	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(16, 16), glm::ivec2(500,300), materialList, 0);
+	//GLTFSceneManager::AddLevelGameObject("Levels/Testobject.txt", 0);
+	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(16, 16), glm::ivec2(500,300), "/texture/MetalMan.png", 0);
 	
 	 //std::vector<std::shared_ptr<Material>> materialList2;
 	 //materialList2.emplace_back(material3);
@@ -53,13 +54,13 @@ void GLTFRenderer2D::BuildRenderer()
 	//	}
 	//}
 
-	GLTFSceneManager::AddSpriteGameObject2D("Testobject4", material, glm::vec2(2.5f, 0.0f), 1);
+	//GLTFSceneManager::AddSpriteGameObject2D("Testobject4", material, glm::vec2(2.5f, 0.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject5", material2, glm::vec2(0.0f, 1.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject6", material3, glm::vec2(1.0f, 1.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject7", material, glm::vec2(2.0f, 1.0f), 1);
 	//GLTFSceneManager::AddSpriteGameObject2D("Testobject8", material2, glm::vec2(3.0f, 1.0f), 1);
 	//GLTFSceneManager::AddLineGameObject2D("sponza", glm::vec2(0.0f), glm::vec2(25.0f), 0);
-	//GLTFSceneManager::AddGridGameObject2D("sponza", 50, 50, 1.0f, 1.0f, 0);
+	//GLTFSceneManager::AddGridGameObject2D("sponza", 50, 50, 1.0f, 1.0f, 1);
 	//GLTFSceneManager::AddSquareGameObject2D("sponza", 5, glm::vec4(1.0, 0.0f, 0.0f, 1.0f), 0);
 	//GLTFSceneManager::AddSquareGameObject2D("sponza", 4, glm::vec4(1.0, 0.0f, 0.0f, 1.0f), 0);
 

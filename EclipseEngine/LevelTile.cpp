@@ -5,12 +5,13 @@ LevelTile::LevelTile()
 {
 }
 
-LevelTile::LevelTile(glm::ivec2 tilePositionOffset, glm::ivec2 tileOffset, glm::vec2& tileUVSize)
+LevelTile::LevelTile(glm::ivec2 tilePositionOffset, glm::ivec2 tileOffset, glm::vec2& tileUVSize, bool drawTile)
 {
 	TilePositionOffset = tilePositionOffset;
 	TileOffset = tileOffset;
 	TileUVSize = tileUVSize;
 
+	DrawTile = drawTile;
 	Animated = false;
 	CurrentFrame = 0;
 	CurrentFrameTime = 0;
@@ -61,24 +62,47 @@ LevelTile::~LevelTile()
 
 void LevelTile::Update(float DeltaTime)
 {
-	if (Animated)
+	if (DrawTile)
 	{
-		CurrentFrameTime += DeltaTime;
-		if(CurrentFrameTime >= FrameHoldTime)
+		if (Animated)
 		{
-			CurrentFrame += 1;
-			if (CurrentFrame > AnimationFrameOffsets.size() - 1)
+			CurrentFrameTime += DeltaTime;
+			if (CurrentFrameTime >= FrameHoldTime)
 			{
-				CurrentFrame = 0;
+				CurrentFrame += 1;
+				if (CurrentFrame > AnimationFrameOffsets.size() - 1)
+				{
+					CurrentFrame = 0;
+				}
+				CurrentFrameTime = 0.0f;
 			}
-			CurrentFrameTime = 0.0f;
-		}
 
-		CurrentTileUV = glm::vec2(TileUVSize.x * AnimationFrameOffsets[CurrentFrame].x, TileUVSize.y * AnimationFrameOffsets[CurrentFrame].y);
+			CurrentTileUV = glm::vec2(TileUVSize.x * AnimationFrameOffsets[CurrentFrame].x, TileUVSize.y * AnimationFrameOffsets[CurrentFrame].y);
+		}
+		else
+		{
+			CurrentTileUV = glm::vec2(TileUVSize.x * TileOffset.x, TileUVSize.y * TileOffset.y);
+		}
 	}
-	else
+}
+
+void LevelTile::LoadTile(nlohmann::json& json)
+{
+	JsonConverter::from_json(json["TilePositionOffset"], TilePositionOffset);
+	JsonConverter::from_json(json["TileOffset"], TileOffset);
+	for (int x = 0; x < AnimationFrameOffsets.size(); x++)
 	{
-		CurrentTileUV = glm::vec2(TileUVSize.x * TileOffset.x, TileUVSize.y * TileOffset.y);
+		JsonConverter::from_json(json["AnimationFrameOffsets"][x], AnimationFrameOffsets[x]);
+	}
+}
+
+void LevelTile::SaveTile(nlohmann::json& json)
+{
+	JsonConverter::to_json(json["TilePositionOffset"], TilePositionOffset);
+	JsonConverter::to_json(json["TileOffset"], TileOffset);
+	for (int x = 0; x < AnimationFrameOffsets.size(); x++)
+	{
+		JsonConverter::to_json(json["AnimationFrameOffsets"][x], AnimationFrameOffsets[x]);
 	}
 }
 

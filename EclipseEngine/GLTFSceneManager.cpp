@@ -19,7 +19,7 @@ std::vector<std::shared_ptr<SpotLight>>				 GLTFSceneManager::SpotLightList;
 float												 GLTFSceneManager::PBRCubeMapSize = 256.0f;
 float												 GLTFSceneManager::PreRenderedMapSize = 256.0f;
 bool												 GLTFSceneManager::WireframeModeFlag = false;
-bool												 GLTFSceneManager::RaytraceModeFlag = true;
+bool												 GLTFSceneManager::RaytraceModeFlag = false;
 
 VkSampler GLTFSceneManager::NullSampler = VK_NULL_HANDLE;
 VkDescriptorImageInfo GLTFSceneManager::NullDescriptor;
@@ -127,10 +127,17 @@ void GLTFSceneManager::LoadReflectionPrefilterTexture(std::vector<std::shared_pt
 	}
 }
 
-void GLTFSceneManager::AddLevelGameObject(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, int drawLayer)
+void GLTFSceneManager::AddLevelGameObject(const std::string& levelPath, int drawLayer)
+{
+	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject("levelName", glm::ivec2(30,30), glm::vec2(0.0f), drawLayer));
+	sprite->LoadLevelGameObject2D(levelPath);
+	GameObjectList.emplace_back(sprite);
+}
+
+void GLTFSceneManager::AddLevelGameObject(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::string tileSetPath, int drawLayer)
 {
 	std::shared_ptr<LevelGameObject> sprite = std::make_shared<LevelGameObject>(LevelGameObject(levelName, levelBounds, glm::vec2(0.0f), drawLayer));
-	sprite->LoadLevelGameObject2D(levelName, tileSizeInPixels, levelBounds, materialList);
+	sprite->LoadLevelGameObject2D(levelName, tileSizeInPixels, levelBounds, tileSetPath);
 	GameObjectList.emplace_back(sprite);
 }
 

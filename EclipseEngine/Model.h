@@ -406,7 +406,8 @@ public:
 		}
 	}
 
-	void LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLevel2D(const std::string& levelPath, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
+	void LoadLevel2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::string tileSetPath, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 
 	void LoadSpriteMesh2D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);
 	void LoadSpriteMesh3D(const std::string& spriteName, std::shared_ptr<Material> material, glm::mat4& GameObjectMatrix, uint32_t gameObjectID);

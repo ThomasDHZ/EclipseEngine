@@ -21,5 +21,7 @@ public:
 	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix) override;
 	virtual void DrawLevelLayer(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorSet, VkPipelineLayout shaderPipelineLayout, SceneProperties& sceneProperites);
 
+	std::vector<LevelTile> GetLevelTile() { return TileList; }
+
 };
 

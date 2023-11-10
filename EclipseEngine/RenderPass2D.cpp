@@ -115,9 +115,9 @@ void RenderPass2D::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
-    Renderer2DPipeline = JsonGraphicsPipeline("Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    LinePipeline = JsonGraphicsPipeline("LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    WireframePipeline = JsonGraphicsPipeline("WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    Renderer2DPipeline = JsonGraphicsPipeline("/Pipelines/Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    LinePipeline = JsonGraphicsPipeline("/Pipelines/LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+    WireframePipeline = JsonGraphicsPipeline("/Pipelines/WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
 
     //Instanced Renderers
     {
@@ -129,7 +129,7 @@ void RenderPass2D::BuildRenderPassPipelines()
         attributeDescriptions = Vertex2D::getAttributeDescriptions();
         attributeDescriptions = InstancedVertexData2D::AddInstnacingAttributeDescription(attributeDescriptions);
 
-        LevelRenderer2DPipeline = JsonGraphicsPipeline("LevelRenderer2D.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
+        LevelRenderer2DPipeline = JsonGraphicsPipeline("/Pipelines/LevelRenderer2D.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     }
 }
 

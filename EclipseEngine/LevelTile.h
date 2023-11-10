@@ -22,6 +22,7 @@ private:
 	glm::vec2				TileUVSize;
 	glm::vec2				CurrentTileUV;
 	
+	bool					DrawTile = true;
 	bool					Animated;
 	uint32_t				CurrentFrame;
 	float					CurrentFrameTime;
@@ -30,13 +31,15 @@ private:
 
 public:
 	LevelTile();
-	LevelTile(glm::ivec2 TilePositionOffset, glm::ivec2 TileOffset, glm::vec2& TileUVSize);
+	LevelTile(glm::ivec2 TilePositionOffset, glm::ivec2 TileOffset, glm::vec2& TileUVSize, bool drawTile = true);
 	LevelTile(glm::ivec2 TilePositionOffset, glm::ivec2 TileOffset, glm::vec2& TileUVSize, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
 	~LevelTile();
 
 	void Update(float DeltaTime);
-	glm::vec2 GetTileUVs();
+	void LoadTile(nlohmann::json& json);
+	void SaveTile(nlohmann::json& json);
 
+	glm::vec2 GetTileUVs();
 	glm::vec2 GetCurrentTileUV() { return CurrentTileUV; }
 	glm::vec2 GetTilePositionOffset() { return TilePositionOffset; }
 	std::vector<Vertex2D> GetTileVertexList() { return TileVertexList; }

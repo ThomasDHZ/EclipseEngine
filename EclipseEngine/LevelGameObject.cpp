@@ -33,10 +33,17 @@ void LevelGameObject::Destroy()
 {
 }
 
-void LevelGameObject::LoadLevelGameObject2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList)
+void LevelGameObject::LoadLevelGameObject2D(const std::string& levelPath)
 {
 	GameObjectRenderer = std::make_shared<Model>(Model());
-	GameObjectRenderer->LoadLevel2D(levelName, tileSizeInPixels, levelBounds, materialList, GameObjectTransform, GameObjectID);
+	GameObjectRenderer->LoadLevel2D(levelPath, GameObjectTransform, GameObjectID);
+	VulkanRenderer::UpdateRendererFlag = true;
+}
+
+void LevelGameObject::LoadLevelGameObject2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::string tileSetPath)
+{
+	GameObjectRenderer = std::make_shared<Model>(Model());
+	GameObjectRenderer->LoadLevel2D(levelName, tileSizeInPixels, levelBounds, tileSetPath, GameObjectTransform, GameObjectID);
 	VulkanRenderer::UpdateRendererFlag = true;
 }
 

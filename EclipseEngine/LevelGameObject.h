@@ -15,6 +15,7 @@ public:
 	virtual void Update(float DeltaTime) override;
 	virtual void Destroy() override;
 
-	void LoadLevelGameObject2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::vector<std::shared_ptr<Material>> materialList);
+	void LoadLevelGameObject2D(const std::string& levelPath);
+	void LoadLevelGameObject2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm::ivec2 levelBounds, std::string tileSetPath);
 };
 

@@ -44,25 +44,25 @@ void Scene::StartUp()
 	GoldMaterial->UpdateBuffer();
 	GLTFSceneManager::AddMaterial(GoldMaterial);*/
 
-	std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
-	IronMaterial->SetIndexOfRefraction(1.31f);
-	IronMaterial->SetTransmission(1.0f);
-	IronMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceAlbedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	IronMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceMetallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceRoughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	//IronMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	IronMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/IceNormal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	//IronMaterial->SetEmissionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/matrix.jpg"), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	//IronMaterial->SetHeightMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	//std::shared_ptr<Material> IronMaterial = std::make_shared<Material>(Material("IronMaterial"));
+	//IronMaterial->SetIndexOfRefraction(1.31f);
+	//IronMaterial->SetTransmission(1.0f);
+	//IronMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceAlbedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	//IronMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceMetallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	//IronMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("//texture/IceRoughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	////IronMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	//IronMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/IceNormal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
+	////IronMaterial->SetEmissionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/matrix.jpg"), TextureTypeEnum::kEmissionTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	////IronMaterial->SetHeightMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D("C:/Users/dotha/source/repos/EclipseEngine/texture/bricks2_disp.jpg", TextureTypeEnum::kDepthTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 
 
-	//GLTFSceneManager::UpdateBufferIndex();
-	//IronMaterial->UpdateBuffer();
-	GLTFSceneManager::AddMaterial(IronMaterial);
+	////GLTFSceneManager::UpdateBufferIndex();
+	////IronMaterial->UpdateBuffer();
+	//GLTFSceneManager::AddMaterial(IronMaterial);
 
-	//GLTFSceneManager::AddMeshGameObject3D("sponza", VulkanRenderer::OpenFile("/Models/sponza/sponza.gltf"));
-	GLTFSceneManager::AddMeshGameObject3D("Sphere", "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf");
-	GLTFSceneManager::AddMeshGameObject3D("Sci-fi", "C:/Users/DHZ/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf");
+	////GLTFSceneManager::AddMeshGameObject3D("sponza", VulkanRenderer::OpenFile("/Models/sponza/sponza.gltf"));
+	//GLTFSceneManager::AddMeshGameObject3D("Sphere", "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf");
+	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", "C:/Users/DHZ/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf");
 
 	//	/// <summary>
 	///// 
@@ -234,16 +234,16 @@ void Scene::Update()
 
     SceneManager::Update();
 	GLTFSceneManager::Update();
-	if (GLTFSceneManager::RaytraceModeFlag)
-	{
-		rayTraceRenderer.Update();
-	}
-	else
-	{
-		pbrRenderer.Update();
-	}
+	//if (GLTFSceneManager::RaytraceModeFlag)
+	//{
+	//	rayTraceRenderer.Update();
+	//}
+	//else
+	//{
+	//	pbrRenderer.Update();
+	//}
    
-    //spriteRenderer.Update();
+    spriteRenderer.Update();
 
 }
 
@@ -266,15 +266,15 @@ void Scene::ImGuiUpdate()
 		}
     }
 
-    //spriteRenderer.ImGuiUpdate();
-	if (GLTFSceneManager::RaytraceModeFlag)
-	{
-		rayTraceRenderer.ImGuiUpdate();
-	}
-	else
-	{
-		pbrRenderer.ImGuiUpdate();
-	}
+    spriteRenderer.ImGuiUpdate();
+	//if (GLTFSceneManager::RaytraceModeFlag)
+	//{
+	//	rayTraceRenderer.ImGuiUpdate();
+	//}
+	//else
+	//{
+	//	pbrRenderer.ImGuiUpdate();
+	//}
 
 
     SceneManager::ImGuiSceneHierarchy();
@@ -285,15 +285,15 @@ void Scene::ImGuiUpdate()
 void Scene::BuildRenderers()
 {
     //MeshRendererManager::Update();
-    //spriteRenderer.BuildRenderer();
-	if (GLTFSceneManager::RaytraceModeFlag)
+    spriteRenderer.BuildRenderer();
+	/*if (GLTFSceneManager::RaytraceModeFlag)
 	{
 		rayTraceRenderer.BuildRenderer();
 	}
 	else
 	{
 		pbrRenderer.BuildRenderer();
-	}
+	}*/
 
     InterfaceRenderPass::RebuildSwapChain();
     VulkanRenderer::UpdateRendererFlag = false;
@@ -310,15 +310,15 @@ void Scene::Draw()
         return;
     }
 
-	if (GLTFSceneManager::RaytraceModeFlag)
-	{
-		rayTraceRenderer.Draw(CommandBufferSubmitList);
-	}
-	else
-	{
-		pbrRenderer.Draw(CommandBufferSubmitList);
-	}
-    //spriteRenderer.Draw(CommandBufferSubmitList);
+	//if (GLTFSceneManager::RaytraceModeFlag)
+	//{
+	//	rayTraceRenderer.Draw(CommandBufferSubmitList);
+	//}
+	//else
+	//{
+	//	pbrRenderer.Draw(CommandBufferSubmitList);
+	//}
+    spriteRenderer.Draw(CommandBufferSubmitList);
    
     InterfaceRenderPass::Draw();
     CommandBufferSubmitList.emplace_back(InterfaceRenderPass::ImGuiCommandBuffers[VulkanRenderer::GetCMDIndex()]);
@@ -336,7 +336,7 @@ void Scene::Destroy()
 	GLTFSceneManager::Destroy();
 	environmentToCubeRenderPass.Destroy();
    // GameObjectManager::Destroy();
-    rayTraceRenderer.Destroy();
-    pbrRenderer.Destroy();
-   // spriteRenderer.Destroy();
+    //rayTraceRenderer.Destroy();
+    //pbrRenderer.Destroy();
+    spriteRenderer.Destroy();
 }

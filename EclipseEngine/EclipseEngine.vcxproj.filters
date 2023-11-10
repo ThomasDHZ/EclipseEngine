@@ -1596,5 +1596,11 @@
     <FxCompile Include="WireFrameShader.hlsl">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
     </FxCompile>
+    <FxCompile Include="LevelRendererVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="LevelRendererPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

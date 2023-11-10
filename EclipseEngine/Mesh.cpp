@@ -54,10 +54,14 @@ void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm:
 
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 
-	meshProperties.MaterialBufferIndex = gltfMaterialList[0]->GetMaterialBufferIndex();
+	if (gltfMaterialList.size() > 0)
+	{
+		meshProperties.MaterialBufferIndex = gltfMaterialList[0]->GetMaterialBufferIndex();
+	}
 	MeshPropertiesBuffer.UpdateBufferMemory(&meshProperties, sizeof(meshProperties));
 
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		if (IndexCount != 0)
 		{
@@ -189,7 +193,8 @@ void Mesh::MeshStartUp(GLTFMeshLoader3D& meshLoader)
 
 void Mesh::RTXMeshStartUp(std::shared_ptr<VulkanBuffer> VertexBuffer, std::shared_ptr<VulkanBuffer> IndexBuffer)
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		MeshTransformInverseBuffer.CreateBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
@@ -290,7 +295,8 @@ std::vector<VkDescriptorBufferInfo> Mesh::UpdateMeshTransformBuffer()
 
 void Mesh::UpdateMeshBottomLevelAccelerationStructure()
 {
-	if (GraphicsDevice::IsRayTracingFeatureActive())
+	if (GraphicsDevice::IsRayTracingFeatureActive() &&
+		GLTFSceneManager::RaytraceModeFlag)
 	{
 		std::vector<uint32_t> PrimitiveCountList{ TriangleCount };
 		std::vector<VkAccelerationStructureGeometryKHR> AccelerationStructureGeometryList{ AccelerationStructureGeometry };

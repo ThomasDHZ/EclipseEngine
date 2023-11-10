@@ -131,12 +131,12 @@ void main() {
 	}*/
 
    vec3 result = material.Albedo;
-      if(material.PaletteSwapPixelColor.r != 0.0f &&
-   material.PaletteSwapPixelColor.g != 0.0f &&
-   material.PaletteSwapPixelColor.b != 0.0f)
-   {
-		result = material.PaletteSwapPixelColor;
-   }
+//      if(material.PaletteSwapPixelColor.r != 0.0f &&
+//   material.PaletteSwapPixelColor.g != 0.0f &&
+//   material.PaletteSwapPixelColor.b != 0.0f)
+//   {
+//		result = material.PaletteSwapPixelColor;
+//   }
 
    vec3 finalResult = vec3(1.0) - exp(-result * 1.0f);
 		finalResult = pow(finalResult, vec3(1.0 / 2.2f));
@@ -146,7 +146,7 @@ void main() {
    material.PaletteSwapPixelColor.g != 0.0f &&
    material.PaletteSwapPixelColor.b != 0.0f)
    {
-		outBloom = vec4(material.PaletteSwapPixelColor, 1.0f);
+	outBloom = vec4(0.0f, 0.0f, 0.0f, 1.0f);
    }
    else
    {
