@@ -236,6 +236,7 @@
     <ClCompile Include="PerlinNoiseRenderPass.cpp" />
     <ClCompile Include="RayTraceModel.cpp" />
     <ClCompile Include="Reflecter.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteLayerMesh.cpp" />
     <ClCompile Include="LevelTile.cpp" />
     <ClCompile Include="LightManagerMenu.cpp" />
@@ -415,6 +416,7 @@
     <ClInclude Include="PerlinNoiseRenderPass.h" />
     <ClInclude Include="RayTraceModel.h" />
     <ClInclude Include="Reflecter.h" />
+    <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteLayerMesh.h" />
     <ClInclude Include="LevelTile.h" />
     <ClInclude Include="LightManagerMenu.h" />

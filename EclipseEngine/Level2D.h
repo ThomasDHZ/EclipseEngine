@@ -9,12 +9,6 @@ private:
 	std::string LevelName;
 	std::string TileSetPath;
 
-	std::vector<Vertex2D> VertexList;
-	std::vector<uint32_t> IndexList;
-
-	std::shared_ptr<VulkanBuffer> VertexBuffer;
-	std::shared_ptr<VulkanBuffer> IndexBuffer;
-
 	glm::ivec2 LevelSizeInPixels;
 	glm::ivec2 TileSizeInPixels;
 	glm::vec2 TileSize = glm::vec2(1.0f);

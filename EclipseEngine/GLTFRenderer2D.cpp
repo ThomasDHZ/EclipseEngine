@@ -16,7 +16,7 @@ void GLTFRenderer2D::BuildRenderer()
 	GLTFSceneManager::ActiveCamera = std::make_shared<OrthographicCamera>(OrthographicCamera("camera", 8.49414635f, 5.79752779f, 4.80515528f));
 
 	std::shared_ptr<Material> material3 = std::make_shared<Material>(Material("MetalManTiles"));
-	material3->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMan.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	material3->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MegaMan_diffuse.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
 	material3->SetCheckPaletteSwapColorMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMan-Recovered.png"), TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	material3->SetPaletteSwapPixelColorMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMapPaletteRotation.bmp"), TextureTypeEnum::kPaletteRotationMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	
@@ -40,7 +40,7 @@ void GLTFRenderer2D::BuildRenderer()
 	std::vector<std::shared_ptr<Material>> materialList;
 	materialList.emplace_back(material3);
 	//GLTFSceneManager::AddLevelGameObject("Levels/Testobject.txt", 0);
-	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(16, 16), glm::ivec2(500,300), "/texture/MetalMan.png", 0);
+	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(32, 32), glm::ivec2(500,300), "/texture/MegaMan_diffuse.png", 0);
 	
 	 //std::vector<std::shared_ptr<Material>> materialList2;
 	 //materialList2.emplace_back(material3);

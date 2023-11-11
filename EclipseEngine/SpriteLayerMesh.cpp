@@ -6,23 +6,23 @@ SpriteLayerMesh::SpriteLayerMesh()
 {
 }
 
-SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<LevelTile>& levelTiles, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
+SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<Sprite>& levelTiles, std::vector<std::shared_ptr<Material>> materialList, glm::mat4& GameObjectMatrix, glm::mat4& ModelMatrix, uint32_t gameObjectID, uint32_t modelObjectID)
 {
 	GLTFInstancingDataStruct instance = {};
 	std::vector<std::shared_ptr<Material>> instanceMaterialList;
 
-	TileList = levelTiles;
-	for (auto& tile : TileList)
+	SpriteList = levelTiles;
+	for (auto& sprite : SpriteList)
 	{
 		GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
-		instanceMeshDataStruct.VertexData = tile.GetTileVertexList();
-		instanceMeshDataStruct.IndiceData = tile.GetTileIndexList();
-		instanceMeshDataStruct.InstancePosition = glm::vec3(float(tile.GetTilePositionOffset().x * 1.0f), float(tile.GetTilePositionOffset().y * 1.0f), 0.0f);
+		instanceMeshDataStruct.VertexData = sprite.GetSpriteVertexList();
+		instanceMeshDataStruct.IndiceData = sprite.GetSpriteIndexList();
+		instanceMeshDataStruct.InstancePosition = glm::vec3(float(sprite.GetSpritePositionOffset().x * 1.0f), float(sprite.GetSpritePositionOffset().y * 1.0f), 0.0f);
+		instanceMeshDataStruct.MaterialBufferIndex = sprite.GetMaterial()->GetMaterialBufferIndex();
 
 		instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);
 		instance.UVOffset.emplace_back(glm::vec2(0.0f, 0.0f));
 		instance.PaletteIndex = 0;
-		instance.MaterialList = materialList;
 	}
 
 	MeshID = 0;
@@ -32,8 +32,8 @@ SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<Level
 	MeshName = LevelName;
 	gltfMaterialList = materialList;
 
-	VertexCount = TileList[0].GetTileVertexList().size();
-	IndexCount = TileList[0].GetTileIndexList().size();
+	VertexCount = SpriteList[0].GetSpriteVertexList().size();
+	IndexCount = SpriteList[0].GetSpriteIndexList().size();
 	BoneCount = 0;
 	TriangleCount = 0;
 	InstanceCount = instance.InstanceMeshDataList.size();
@@ -48,8 +48,8 @@ SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<Level
 
 	MeshPropertiesBuffer = VulkanBuffer(&meshProperties, sizeof(MeshProperties), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
-	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(TileList[0].GetTileVertexList().data(), TileList[0].GetTileVertexList().size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
-	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(TileList[0].GetTileIndexList().data(), TileList[0].GetTileIndexList().size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+	VertexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(SpriteList[0].GetSpriteVertexList().data(), SpriteList[0].GetSpriteVertexList().size() * sizeof(Vertex2D), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
+	IndexBuffer = std::make_shared<VulkanBuffer>(VulkanBuffer(SpriteList[0].GetSpriteIndexList().data(), SpriteList[0].GetSpriteIndexList().size() * sizeof(uint32_t), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT));
 	MeshTransformBuffer = VulkanBuffer(&MeshTransform, sizeof(glm::mat4), VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	Instancing2DStartUp(instance);
@@ -68,14 +68,14 @@ SpriteLayerMesh::~SpriteLayerMesh()
 {
 }
 
-void SpriteLayerMesh::AddTile(LevelTile tile)
+void SpriteLayerMesh::AddSprite(Sprite sprite)
 {
-	TileList.emplace_back(tile);
+	SpriteList.emplace_back(sprite);
 }
 
-void SpriteLayerMesh::AddTiles(std::vector<LevelTile> tiles)
+void SpriteLayerMesh::AddSprite(std::vector<Sprite> sprite)
 {
-	TileList = tiles;
+	SpriteList = sprite;
 }
 
 void SpriteLayerMesh::Instancing2DStartUp(GLTFInstancingDataStruct& instanceData)
@@ -95,11 +95,9 @@ void SpriteLayerMesh::Instancing2DStartUp(GLTFInstancingDataStruct& instanceData
 			TransformMatrix = glm::rotate(TransformMatrix, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			TransformMatrix = glm::scale(TransformMatrix, glm::vec3(instanceData.InstanceMeshDataList[x].InstanceScale.x, instanceData.InstanceMeshDataList[x].InstanceScale.y, 0.0f));
 
-			const auto matID = rand() % instanceData.MaterialList.size();
-
 			instanceVertexData.InstanceModel = TransformMatrix;
 			instanceVertexData.UVOffset = instanceData.UVOffset[x];
-			instanceVertexData.MaterialID = instanceData.MaterialList[matID]->GetMaterialBufferIndex();
+			instanceVertexData.MaterialID = instanceData.InstanceMeshDataList[x].MaterialBufferIndex;
 			instanceVertexData.FlipSprite = glm::vec2(0.0f, 0.0f);
 			InstancedVertex2DDataList.emplace_back(instanceVertexData);
 		}
@@ -116,8 +114,8 @@ void SpriteLayerMesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix,
 	{
 		for (int x = 0; x < InstancedVertex2DDataList.size(); x++)
 		{
-			TileList[x].Update(DeltaTime);
-			InstancedVertex2DDataList[x].UVOffset = TileList[x].GetCurrentTileUV();
+			SpriteList[x].Update(DeltaTime);
+			InstancedVertex2DDataList[x].UVOffset = SpriteList[x].GetCurrentSpriteUV();
 
 			//if (InstancedVertex2DDataList[x].PixelOffset < 5)
 			//{
