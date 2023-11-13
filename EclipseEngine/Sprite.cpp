@@ -4,13 +4,15 @@ Sprite::Sprite()
 {
 }
 
-Sprite::Sprite(std::shared_ptr<Material> material, glm::ivec2 tilePositionOffset, glm::ivec2 tileOffset, glm::vec2& tileUVSize, bool drawTile)
+Sprite::Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 tilePositionOffset, glm::ivec2 spriteCellOffset, bool drawTile)
 {
 	SpriteMaterial = material;
 
+	SpriteSizeInPixels = tileSizeInPixels;
 	SpritePositionOffset = tilePositionOffset;
-	SpriteOffset = tileOffset;
-	SpriteUVSize = tileUVSize;
+	SpriteCellOffset = spriteCellOffset;
+	SpriteCellCount = glm::ivec2(SpriteMaterial->GetAlbedoMap()->GetWidth() / SpriteSizeInPixels.x, SpriteMaterial->GetAlbedoMap()->GetHeight() / SpriteSizeInPixels.y);
+	SpriteUVSize = glm::vec2(1.0f / (float)SpriteCellCount.x, 1.0f / (float)SpriteCellCount.y);
 
 	DrawSprite = drawTile;
 	Animated = false;
@@ -31,13 +33,15 @@ Sprite::Sprite(std::shared_ptr<Material> material, glm::ivec2 tilePositionOffset
 	};
 }
 
-Sprite::Sprite(std::shared_ptr<Material> material, glm::ivec2 tilePositionOffset, glm::ivec2 tileOffset, glm::vec2& tileUVSize, std::vector<glm::ivec2>& animationFrameOffsets, float FrameTime)
+Sprite::Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 tilePositionOffset, glm::ivec2 spriteCellOffset, std::vector<glm::ivec2>& animationFrameOffsets, float FrameTime)
 {
 	SpriteMaterial = material;
 
+	SpriteSizeInPixels = tileSizeInPixels;
 	SpritePositionOffset = tilePositionOffset;
-	SpriteOffset = tileOffset;
-	SpriteUVSize = tileUVSize;
+	SpriteCellOffset = spriteCellOffset;
+	SpriteCellCount = glm::ivec2(SpriteMaterial->GetAlbedoMap()->GetWidth() / SpriteSizeInPixels.x, SpriteMaterial->GetAlbedoMap()->GetHeight() / SpriteSizeInPixels.y);
+	SpriteUVSize = glm::vec2(1.0f / (float)SpriteCellCount.x, 1.0f / (float)SpriteCellCount.y);
 
 	Animated = true;
 	CurrentFrame = 0;
@@ -84,7 +88,7 @@ void Sprite::Update(float DeltaTime)
 		}
 		else
 		{
-			CurrentSpriteUV = glm::vec2(SpriteUVSize.x * SpriteOffset.x, SpriteUVSize.y * SpriteOffset.y);
+			CurrentSpriteUV = glm::vec2(SpriteUVSize.x * SpriteCellOffset.x, SpriteUVSize.y * SpriteCellOffset.y);
 		}
 	}
 }
@@ -92,7 +96,7 @@ void Sprite::Update(float DeltaTime)
 void Sprite::LoadSprite(nlohmann::json& json)
 {
 	JsonConverter::from_json(json["SpritePositionOffset"], SpritePositionOffset);
-	JsonConverter::from_json(json["SpriteOffset"], SpriteOffset);
+	JsonConverter::from_json(json["SpriteCellOffset"], SpriteCellOffset);
 	for (int x = 0; x < AnimationFrameOffsets.size(); x++)
 	{
 		JsonConverter::from_json(json["AnimationFrameOffsets"][x], AnimationFrameOffsets[x]);
@@ -102,7 +106,7 @@ void Sprite::LoadSprite(nlohmann::json& json)
 void Sprite::SaveSprite(nlohmann::json& json)
 {
 	JsonConverter::to_json(json["SpritePositionOffset"], SpritePositionOffset);
-	JsonConverter::to_json(json["SpriteOffset"], SpriteOffset);
+	JsonConverter::to_json(json["SpriteCellOffset"], SpriteCellOffset);
 	for (int x = 0; x < AnimationFrameOffsets.size(); x++)
 	{
 		JsonConverter::to_json(json["AnimationFrameOffsets"][x], AnimationFrameOffsets[x]);
@@ -111,5 +115,5 @@ void Sprite::SaveSprite(nlohmann::json& json)
 
 glm::vec2 Sprite::GetSpriteUVs()
 {
-	return glm::vec2(SpriteUVSize.x * SpriteOffset.x, SpriteUVSize.y * SpriteOffset.y);
+	return glm::vec2(SpriteUVSize.x * SpriteCellOffset.x, SpriteUVSize.y * SpriteCellOffset.y);
 }

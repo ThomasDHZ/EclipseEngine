@@ -40,7 +40,7 @@ void GLTFRenderer2D::BuildRenderer()
 	std::vector<std::shared_ptr<Material>> materialList;
 	materialList.emplace_back(material3);
 	//GLTFSceneManager::AddLevelGameObject("Levels/Testobject.txt", 0);
-	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(32, 32), glm::ivec2(500,300), "/texture/MegaMan_diffuse.png", 0);
+	 GLTFSceneManager::AddLevelGameObject("Testobject", glm::ivec2(16, 16), glm::ivec2(500,300), "/texture/MegaMan_diffuse.png", 0);
 	
 	 //std::vector<std::shared_ptr<Material>> materialList2;
 	 //materialList2.emplace_back(material3);

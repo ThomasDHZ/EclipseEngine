@@ -7,8 +7,10 @@ private:
 	std::vector<Vertex2D>	SpriteVertexList;
 	std::vector<uint32_t>	SpriteIndexList;
 
+	glm::ivec2				SpriteCellCount;
+	glm::ivec2				SpriteSizeInPixels;
 	glm::ivec2				SpritePositionOffset;
-	glm::ivec2				SpriteOffset;
+	glm::ivec2				SpriteCellOffset;
 	glm::vec2				SpriteUVSize;
 	glm::vec2				CurrentSpriteUV;
 
@@ -23,8 +25,8 @@ private:
 
 public:
 	Sprite();
-	Sprite(std::shared_ptr<Material> material, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteOffset, glm::vec2& SpriteUVSize, bool drawSprite = true);
-	Sprite(std::shared_ptr<Material> material, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteOffset, glm::vec2& SpriteUVSize, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
+	Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteCellOffset, bool drawSprite = true);
+	Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteCellOffset, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
 	~Sprite();
 
 	void Update(float DeltaTime);

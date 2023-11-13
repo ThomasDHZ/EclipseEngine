@@ -31,6 +31,11 @@ Level2D::Level2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm:
 	materialList.emplace_back(LevelMaterial2);
 	GLTFSceneManager::AddMaterial(LevelMaterial2);
 
+	auto LevelMaterial3 = std::make_shared<Material>(Material("MetalManTiles"));
+	LevelMaterial3->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/MetalMan.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
+	materialList.emplace_back(LevelMaterial3);
+	GLTFSceneManager::AddMaterial(LevelMaterial3);
+
 	LevelSizeInPixels = glm::ivec2(materialList[0]->GetAlbedoMap()->GetWidth(), materialList[0]->GetAlbedoMap()->GetHeight());
 	TileSizeInPixels = tileSizeInPixels;
 	LevelTileCount = glm::ivec2(LevelSizeInPixels.x / TileSizeInPixels.x, LevelSizeInPixels.y / TileSizeInPixels.y);
@@ -139,9 +144,9 @@ Level2D::Level2D(const std::string& levelName, glm::ivec2 tileSizeInPixels, glm:
 	//TileList.emplace_back(LevelTile(glm::ivec2(14, 1), glm::ivec2(5, 0), TileUVSize));
 	//TileList.emplace_back(LevelTile(glm::ivec2(15, 1), glm::ivec2(6, 0), TileUVSize));
 	//TileList.emplace_back(LevelTile(glm::ivec2(16, 1), glm::ivec2(5, 0), TileUVSize));
-	TileList.emplace_back(Sprite(LevelMaterial, glm::ivec2(3, 1), glm::ivec2(0, 0), TileUVSize, animation, 1000));
-	TileList.emplace_back(Sprite(LevelMaterial2, glm::ivec2(0, 1), glm::ivec2(0, 0), TileUVSize, animation2, 1000));
-
+	TileList.emplace_back(Sprite(LevelMaterial, glm::ivec2(24, 32), glm::ivec2(3, 1), glm::ivec2(0, 0), animation, 1000));
+	TileList.emplace_back(Sprite(LevelMaterial2, glm::ivec2(24, 32), glm::ivec2(0, 1), glm::ivec2(0, 0), animation2, 1000));
+	TileList.emplace_back(Sprite(LevelMaterial3, glm::ivec2(16, 16), glm::ivec2(2, 1), glm::ivec2(0, 0), animation2, 1000));
 	//for (unsigned int x = 0; x < LevelBounds.x - 1; x++)
 	//{
 	//	for (unsigned int y = 0; y < LevelBounds.y - 1; y++)
