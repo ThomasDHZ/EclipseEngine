@@ -17,7 +17,7 @@ SpriteLayerMesh::SpriteLayerMesh(const std::string& LevelName, std::vector<Sprit
 		GLTFInstanceMeshDataStruct instanceMeshDataStruct = {};
 		instanceMeshDataStruct.VertexData = sprite.GetSpriteVertexList();
 		instanceMeshDataStruct.IndiceData = sprite.GetSpriteIndexList();
-		instanceMeshDataStruct.InstancePosition = glm::vec3(float(sprite.GetSpritePositionOffset().x * 1.0f), float(sprite.GetSpritePositionOffset().y * 1.0f), 0.0f);
+		instanceMeshDataStruct.InstancePosition = glm::vec3(float(sprite.GetSpritePosition().x * 1.0f), float(sprite.GetSpritePosition().y * 1.0f), 0.0f);
 		instanceMeshDataStruct.MaterialBufferIndex = sprite.GetMaterial()->GetMaterialBufferIndex();
 
 		instance.InstanceMeshDataList.emplace_back(instanceMeshDataStruct);

@@ -42,6 +42,8 @@ public:
 	glm::vec2 GetTileUVs();
 	glm::vec2 GetCurrentTileUV() { return CurrentTileUV; }
 	glm::vec2 GetTilePositionOffset() { return TilePositionOffset; }
+	glm::vec2 GetTileUVSize() { return TileUVSize; }
+	glm::ivec2 GetTileOffset() { return TileOffset; }
 	std::vector<Vertex2D> GetTileVertexList() { return TileVertexList; }
 	std::vector<uint32_t> GetTileIndexList() { return TileIndexList; }
 };

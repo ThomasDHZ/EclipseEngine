@@ -230,6 +230,7 @@
     <ClCompile Include="GridMesh2D.cpp" />
     <ClCompile Include="HLSLShaderCompiler.cpp" />
     <ClCompile Include="Level2D.cpp" />
+    <ClCompile Include="Level2DLayerRenderer.cpp" />
     <ClCompile Include="LevelGameObject.cpp" />
     <ClCompile Include="MegaMan.cpp" />
     <ClCompile Include="MultiplyRenderPass.cpp" />
@@ -410,6 +411,7 @@
     <ClInclude Include="GridMesh2D.h" />
     <ClInclude Include="HLSLShaderCompiler.h" />
     <ClInclude Include="Level2D.h" />
+    <ClInclude Include="Level2DLayerRenderer.h" />
     <ClInclude Include="LevelGameObject.h" />
     <ClInclude Include="MegaMan.h" />
     <ClInclude Include="MultiplyRenderPass.h" />
@@ -749,6 +751,20 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="SkyBoxVertexShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="SpriteRendererPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="SpriteRendererVertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="ValueNoisePixelShader.hlsl">

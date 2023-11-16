@@ -1,8 +1,9 @@
 layout(push_constant) uniform SceneData
 {
     uint MeshIndex;
-    uint PrimitiveIndex;
+    uint TransformIndex;
     uint MaterialIndex;
+    uint ReflectionIndex;
     mat4 proj;
     mat4 view;
     vec3 CameraPos;
@@ -15,5 +16,5 @@ layout(push_constant) uniform SceneData
     float Timer;
     float PBRMaxMipLevel;
     uint frame;
-    int MaxRefeflectCount;
+    int MaxReflectCount;
 } sceneData;

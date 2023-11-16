@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "LevelTile.h"
 #include "SpriteLayerMesh.h"
+#include "Level2DLayerRenderer.h"
 
 class Level2D : public Mesh
 {
@@ -17,6 +18,8 @@ private:
 	glm::vec2 TileUVSize;
 
 	std::shared_ptr<Material> LevelMaterial;
+
+	std::vector<Level2DLayerRenderer> LevelLayerList;
 	std::vector<SpriteLayerMesh> DrawLevelLayerMeshList;
 	std::vector<SpriteLayerMesh> DrawAnimatedLayerMeshList;
 	std::vector<SpriteLayerMesh> DrawSpriteLayerMeshList;

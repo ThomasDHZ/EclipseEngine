@@ -7,10 +7,10 @@ private:
 	std::vector<Vertex2D>	SpriteVertexList;
 	std::vector<uint32_t>	SpriteIndexList;
 
+	glm::vec2				SpriteSize;
 	glm::ivec2				SpriteCellCount;
 	glm::ivec2				SpriteSizeInPixels;
-	glm::ivec2				SpritePositionOffset;
-	glm::ivec2				SpriteCellOffset;
+	glm::ivec2				SpritePosition;
 	glm::vec2				SpriteUVSize;
 	glm::vec2				CurrentSpriteUV;
 
@@ -25,17 +25,15 @@ private:
 
 public:
 	Sprite();
-	Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteCellOffset, bool drawSprite = true);
-	Sprite(std::shared_ptr<Material> material, glm::ivec2 tileSizeInPixels, glm::ivec2 SpritePositionOffset, glm::ivec2 SpriteCellOffset, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
+	Sprite(std::shared_ptr<Material> material, glm::vec2 spriteSize, glm::ivec2 tileSizeInPixels, glm::ivec2 SpritePosition, std::vector<glm::ivec2>& AnimationFrameOffsets, float FrameTime);
 	~Sprite();
 
 	void Update(float DeltaTime);
 	void LoadSprite(nlohmann::json& json);
 	void SaveSprite(nlohmann::json& json);
 
-	glm::vec2 GetSpriteUVs();
 	glm::vec2 GetCurrentSpriteUV() { return CurrentSpriteUV; }
-	glm::vec2 GetSpritePositionOffset() { return SpritePositionOffset; }
+	glm::vec2 GetSpritePosition() { return SpritePosition; }
 	std::vector<Vertex2D> GetSpriteVertexList() { return SpriteVertexList; }
 	std::vector<uint32_t> GetSpriteIndexList() { return SpriteIndexList; }
 	std::shared_ptr<Material> GetMaterial() { return SpriteMaterial; }

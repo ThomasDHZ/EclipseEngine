@@ -30,11 +30,10 @@ void main() {
 //		debugPrintfEXT(": %i \n", sceneData.MeshIndex);
 //	}
     mat4 MeshTransform = transformBuffer[sceneData.MeshIndex].transform;
-    FragPos = vec3(MeshTransform * vec4(inPosition.xy, 0.0f, 1.0));    
+    FragPos = vec3(inPosition.xy, 0.0f);    
     Color = aColor;
     UV = aUV;
     gl_Position = sceneData.proj * 
-                  sceneData.view *                
-                  MeshTransform * 
+                  sceneData.view *   
                   vec4(inPosition, 0.0f, 1.0f);
 }

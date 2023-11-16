@@ -115,22 +115,11 @@ void RenderPass2D::BuildRenderPassPipelines()
     pipelineInfo.ColorAttachments = ColorAttachmentList;
     pipelineInfo.SampleCount = SampleCount;
 
+    LevelRenderer2DPipeline = JsonGraphicsPipeline("/Pipelines/LevelRenderer2D.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     Renderer2DPipeline = JsonGraphicsPipeline("/Pipelines/Renderer2DPipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     LinePipeline = JsonGraphicsPipeline("/Pipelines/LinePipeline.txt", LineVertex2D::getBindingDescriptions(), LineVertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     WireframePipeline = JsonGraphicsPipeline("/Pipelines/WireframePipeline.txt", Vertex2D::getBindingDescriptions(), Vertex2D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
 
-    //Instanced Renderers
-    {
-        std::vector<VkVertexInputBindingDescription> bindingDescriptions;
-        bindingDescriptions = Vertex2D::getBindingDescriptions();
-        bindingDescriptions.emplace_back(InstancedVertexData2D::getBindingDescriptions()[0]);
-
-        std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
-        attributeDescriptions = Vertex2D::getAttributeDescriptions();
-        attributeDescriptions = InstancedVertexData2D::AddInstnacingAttributeDescription(attributeDescriptions);
-
-        LevelRenderer2DPipeline = JsonGraphicsPipeline("/Pipelines/LevelRenderer2D.txt", bindingDescriptions, attributeDescriptions, renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
-    }
 }
 
 VkCommandBuffer RenderPass2D::Draw(std::vector<GameObject2D*> gameObjectList)
