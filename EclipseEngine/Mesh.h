@@ -128,6 +128,7 @@ public:
 
 	void UpdateMeshBufferIndex(uint64_t meshBufferIndex, uint64_t transformBufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
+	virtual void Compute(VkCommandBuffer commandBuffer);
 	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
 	virtual void Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix, const std::vector<std::shared_ptr<Bone>>& BoneList);
 

@@ -70,6 +70,16 @@ public:
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
 	static void AddMeshGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation);
+	static void AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+
 	static void AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData);
 	static void AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position);
 	static void AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData, const glm::vec3& position, const glm::vec3& rotation);

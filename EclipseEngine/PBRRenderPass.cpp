@@ -131,6 +131,7 @@ void PBRRenderPass::BuildRenderPassPipelines(PBRRenderPassTextureSubmitList& tex
         LinePipeline = JsonGraphicsPipeline("/Pipelines/LinePipeline.txt", LineVertex3D::getBindingDescriptions(), LineVertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
         WireframePipeline = JsonGraphicsPipeline("/Pipelines/WireframePipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
         PBRPipeline = JsonGraphicsPipeline("/Pipelines/PBRRenderer.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
+        BillBoardPipeline = JsonGraphicsPipeline("/Pipelines/BillBoardPipeline.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties), textures);
         SkyBoxPipeline = JsonGraphicsPipeline("/Pipelines/SkyBoxPipeline.txt", SkyboxVertexLayout::getBindingDescriptions(), SkyboxVertexLayout::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SkyBoxView), textures.CubeMapTexture);
         //lightReflectionPipeline = JsonGraphicsPipeline("LightReflectionPosDebug.txt", Vertex3D::getBindingDescriptions(), Vertex3D::getAttributeDescriptions(), renderPass, ColorAttachmentList, SampleCount, sizeof(SceneProperties));
     }
@@ -208,6 +209,11 @@ VkCommandBuffer PBRRenderPass::Draw()
                 {
                     PBRPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 }
+                break;
+            }
+            case GameObjectRenderType::kBillBoardRenderer:
+            {
+                BillBoardPipeline.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
                 break;
             }
             case GameObjectRenderType::kInstanceRenderer:

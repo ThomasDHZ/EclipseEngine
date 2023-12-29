@@ -53,7 +53,7 @@ float2 ParallaxMapping(MaterialProperties material, float2 texCoords, float3 vie
 {
     const float heightScale = 0.6f;
     const float minLayers = 3;
-    const float maxLayers = 6;
+    const float maxLayers = 20;
     float numLayers = lerp(maxLayers, minLayers, abs(dot(float3(0.0, 0.0, 1.0), viewDir)));
     float layerDepth = 1.0 / numLayers;
     float currentLayerDepth = 0.0;

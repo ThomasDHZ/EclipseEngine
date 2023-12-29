@@ -13,6 +13,7 @@ private:
 	JsonGraphicsPipeline WireframePipeline;
 	JsonGraphicsPipeline WireframeInstancePipeline;
 	JsonGraphicsPipeline LinePipeline;
+	JsonGraphicsPipeline BillBoardPipeline;
 	JsonGraphicsPipeline SkyBoxPipeline;
 	//JsonGraphicsPipeline lightReflectionPipeline;
 

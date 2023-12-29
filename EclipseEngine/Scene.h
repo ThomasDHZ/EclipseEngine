@@ -27,9 +27,9 @@ private:
 	bool ChangeRendererFlag;
 
 	EnvironmentToCubeRenderPass environmentToCubeRenderPass;
-	//PBRRenderer pbrRenderer;
-	GLTFRenderer2D spriteRenderer;
-	//RayTracePBRRenderer rayTraceRenderer;
+	PBRRenderer pbrRenderer;
+	//GLTFRenderer2D spriteRenderer;
+	RayTracePBRRenderer rayTraceRenderer;
 public:
 	Scene();
 	~Scene();

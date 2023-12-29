@@ -189,6 +189,54 @@ void GLTFSceneManager::AddMeshGameObject3D(const std::string Name, const std::st
 	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
 }
 
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position, rotation)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position, rotation, scale)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position, rotation)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
+void GLTFSceneManager::AddBillBoardGameObject3D(const std::string Name, const std::string FilePath, std::shared_ptr<Material> material, const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
+{
+	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kBillBoardRenderer, position, rotation, scale)));
+	GameObjectList.back()->LoadRenderObject<Vertex3D>(FilePath, material);
+}
+
 void GLTFSceneManager::AddInstancedGameObject3D(const std::string Name, const std::string FilePath, GLTFInstancingDataStruct& instanceData)
 {
 	GameObjectList.emplace_back(std::make_shared<GameObject3D>(GameObject3D(Name, GameObjectRenderType::kInstanceRenderer)));
