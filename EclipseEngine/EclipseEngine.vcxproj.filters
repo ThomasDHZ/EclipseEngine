@@ -154,6 +154,9 @@
     <Filter Include="Shader\TextureShaders">
       <UniqueIdentifier>{eb7a0ed1-222f-4d65-9128-021a9704f1ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\RasterShaders">
+      <UniqueIdentifier>{ceac1420-6d48-4536-b8b6-b2f8bec3b503}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -1494,48 +1497,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="DirectionalDepthPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="DirectionalDepthVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentToCubeMapPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="EnvironmentToCubeMapVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="IrradiancePixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="IrradianceVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PBRPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PBRVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PrefilterPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PrefilterVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="SkyBoxPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="SkyBoxVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="WireFramePixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="WireFrameVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="AddPixelShader.hlsl">
       <Filter>Shader\Opperations</Filter>
     </FxCompile>
@@ -1572,23 +1533,11 @@
     <FxCompile Include="ValueNoisePixelShader.hlsl">
       <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
-    <FxCompile Include="PBRReflectionVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PBRReflectionPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="CubeMapToEnvironmentPixelShader.hlsl">
       <Filter>Shader\TextureShaders</Filter>
     </FxCompile>
     <FxCompile Include="CubeMapToEnvironmentVertexShader.hlsl">
       <Filter>Shader\TextureShaders</Filter>
-    </FxCompile>
-    <FxCompile Include="PointLightPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="PointLightVertexShader.hlsl">
-      <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="PBRClosestHitShader.hlsl">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
@@ -1608,20 +1557,80 @@
     <FxCompile Include="WireFrameShader.hlsl">
       <Filter>Shader\RayTraceShaders\PBR</Filter>
     </FxCompile>
-    <FxCompile Include="LevelRendererVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="LevelRendererPixelShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="SpriteRendererVertexShader.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="SpriteRendererPixelShader.hlsl">
-      <Filter>Shader</Filter>
+    <FxCompile Include="WireFrameVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
     </FxCompile>
     <FxCompile Include="BillBoardVertexShader.hlsl">
-      <Filter>Shader</Filter>
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalDepthPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="DirectionalDepthVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentToCubeMapPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="EnvironmentToCubeMapVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="IrradiancePixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="IrradianceVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LevelRendererPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LevelRendererVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRReflectionPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRReflectionVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PointLightPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PointLightVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PrefilterPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PrefilterVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyBoxVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SpriteRendererPixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SpriteRendererVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="WireFramePixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="InstanceWireFramePixelShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="InstanceWireFrameVertexShader.hlsl">
+      <Filter>Shader\RasterShaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

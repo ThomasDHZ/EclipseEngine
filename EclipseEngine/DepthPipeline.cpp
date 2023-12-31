@@ -76,5 +76,5 @@ void DepthPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObj
     directionalLightProjection.LightIndex = x;
 
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);
+    mesh->DrawMeshShadow(commandBuffer, DescriptorSet, ShaderPipelineLayout, directionalLightProjection);
 }

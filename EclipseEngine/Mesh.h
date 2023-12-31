@@ -126,6 +126,9 @@ public:
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();
 	std::vector<VkDescriptorBufferInfo> TransformMatrixBuffer;
 
+	bool CastShadow = true;
+	bool DynamicShadow = false;
+
 	void UpdateMeshBufferIndex(uint64_t meshBufferIndex, uint64_t transformBufferIndex);
 	void UpdateNodeTransform(std::shared_ptr<GLTFNode> node, const glm::mat4& ParentMatrix);
 	virtual void Compute(VkCommandBuffer commandBuffer);

@@ -462,6 +462,40 @@ public:
 	}
 
 	template<class T>
+	void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			if (mesh->CastShadow)
+			{
+				mesh->DrawMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+			}
+		}
+	}
+
+	void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			if (mesh->CastShadow)
+			{
+				mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+			}
+		}
+	}
+
+	void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, LightViewSceneData& constBuffer)
+	{
+		for (auto& mesh : MeshList)
+		{
+			if (mesh->CastShadow)
+			{
+				mesh->DrawMesh(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+			}
+		}
+	}
+
+	template<class T>
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
 	{
 		for (auto& mesh : MeshList)

@@ -187,6 +187,22 @@ public:
 	}
 
 	template<class T>
+	void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
+	{
+		GameObjectRenderer->DrawMeshShadow<T>(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+	}
+
+	virtual void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, SceneProperties& constBuffer)
+	{
+		GameObjectRenderer->DrawMeshShadow(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+	}
+
+	virtual void DrawMeshShadow(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, LightViewSceneData& constBuffer)
+	{
+		GameObjectRenderer->DrawMeshShadow(commandBuffer, descriptorset, shaderPipelineLayout, constBuffer);
+	}
+
+	template<class T>
 	void DrawInstancedMesh(VkCommandBuffer& commandBuffer, VkDescriptorSet descriptorset, VkPipelineLayout shaderPipelineLayout, T& constBuffer)
 	{
 		GameObjectRenderer->DrawInstancedMesh<T>(commandBuffer, descriptorset, shaderPipelineLayout);

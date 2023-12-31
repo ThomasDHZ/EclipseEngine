@@ -35,7 +35,7 @@ private:
 	VulkanPipelineEditor pipelineEditor;
 	LightManagerMenu lightManagerMenu;
 	
-	CubeToEnvironmentRenderPass cubeMapToEnvironmentRenderPass;
+	//CubeToEnvironmentRenderPass cubeMapToEnvironmentRenderPass;
 	BRDFRenderPass brdfRenderPass;
 
 	//PerlinNoiseRenderPass perlinNoise;

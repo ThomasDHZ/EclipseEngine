@@ -43,6 +43,5 @@ public:
 	~ParticleSystem();
 
 	void Update(const glm::mat4& GameObjectMatrix, const glm::mat4& ModelMatrix);
-	void Destroy();
 };
 

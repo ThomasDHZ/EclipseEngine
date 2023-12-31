@@ -76,7 +76,7 @@ void DepthCubeMapPipeline::InitializePipeline(PipelineInfoStruct& pipelineInfoSt
 void DepthCubeMapPipeline::Draw(VkCommandBuffer& commandBuffer, std::shared_ptr<GameObject> mesh, LightViewSceneData& depthSceneData)
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ShaderPipeline);
-    mesh->DrawMesh(commandBuffer, DescriptorSet, ShaderPipelineLayout, depthSceneData);
+    mesh->DrawMeshShadow(commandBuffer, DescriptorSet, ShaderPipelineLayout, depthSceneData);
 }
 void DepthCubeMapPipeline::Destroy()
 {

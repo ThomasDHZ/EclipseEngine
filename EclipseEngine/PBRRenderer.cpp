@@ -42,8 +42,8 @@ void PBRRenderer::BuildRenderer()
 
 		//SkyBox Reflection Pass
 		{
-			skyBoxReflectionIrradianceRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			skyBoxReflectionPrefilterRenderPass.BuildRenderPass(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionIrradianceRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionPrefilterRenderPass.OneTimeDraw(GLTFSceneManager::CubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 
 			PBRRenderPassTextureSubmitList submitList;
@@ -57,12 +57,12 @@ void PBRRenderer::BuildRenderer()
 			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
-			skyBoxReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f));
 		}
 		//Mesh Reflection Pass
 		{
-			meshReflectionIrradianceRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			meshReflectionPrefilterRenderPass.BuildRenderPass(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionIrradianceRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionPrefilterRenderPass.OneTimeDraw(skyBoxReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -75,12 +75,12 @@ void PBRRenderer::BuildRenderer()
 			}
 			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
-			meshReflectionRenderPass.BuildRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize());
+			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f));
 		}
 		//Mesh Reflection Pass
 		{
-			irradianceRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
-			prefilterRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			irradianceRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
+			prefilterRenderPass.OneTimeDraw(meshReflectionRenderPass.RenderedReflectionCubeMap, GLTFSceneManager::GetPreRenderedMapSize());
 
 			PBRRenderPassTextureSubmitList submitList;
 			submitList.CubeMapTexture = GLTFSceneManager::CubeMap;
@@ -107,7 +107,7 @@ void PBRRenderer::BuildRenderer()
 			frameBufferRenderPass.BuildRenderPass(gLTFRenderPass.RenderedTexture, bloomCombineRenderPass.BloomTexture);
 		}
 	}
-	cubeMapToEnvironmentRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, glm::ivec2(4096.0f / 2, 1024));
+	//cubeMapToEnvironmentRenderPass.BuildRenderPass(meshReflectionRenderPass.RenderedReflectionCubeMap, glm::ivec2(4096.0f / 2, 1024));
 	GLTFSceneManager::Update();
 	lightManagerMenu.Update();
 
@@ -134,6 +134,7 @@ void PBRRenderer::ImGuiUpdate()
 	//cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
+		BuildRenderer();
 		//cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
 	}
 	int index = 0;
@@ -188,113 +189,19 @@ void PBRRenderer::ImGuiUpdate()
 		ImGui::SliderFloat3("Position ", &SelectedGameObject->GameObjectPosition.x, 0.0f, 100.0f);
 		ImGui::SliderFloat3("Rotation ", &SelectedGameObject->GameObjectRotation.x, 0.0f, 360.0f);
 		ImGui::SliderFloat3("Scale ", &SelectedGameObject->GameObjectScale.x, 0.0f, 1.0f);
+
 		ImGui::End();
 	}
 
-	/*if (SelectedMesh)
+	if (SelectedMesh)
 	{
 		ImGui::Begin("Mesh Properties");
 		ImGui::SliderFloat3("Position ", &SelectedMesh->MeshPosition.x, 0.0f, 100.0f);
 		ImGui::SliderFloat3("Rotation ", &SelectedMesh->MeshRotation.x, 0.0f, 360.0f);
 		ImGui::SliderFloat3("Scale ", &SelectedMesh->MeshScale.x, 0.0f, 1.0f);
-		if (SelectedMaterial)
-		{
-			ImGui::Separator();
-			ImGui::LabelText(SelectedMaterial->MaterialName.c_str(), "");
-			ImGui::Separator();
-
-			if (SelectedMaterial->AlbedoMap)
-			{
-				ImGui::LabelText("Alebdo", "");
-				ImGui::SameLine();
-				SelectedMaterial->AlbedoMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
-				ImGui::ColorEdit3("Alebdo", (float*)&SelectedMaterial->Albedo.x, misc_flags);
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->MetallicRoughnessMap)
-			{
-				ImGui::LabelText("Metallic/Roughness", "");
-				ImGui::SameLine();
-				SelectedMaterial->MetallicRoughnessMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->MetallicMap)
-			{
-				ImGui::LabelText("Metallic", "");
-				ImGui::SameLine();
-				SelectedMaterial->MetallicMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGui::SliderFloat("Metallic ", &SelectedMaterial->Metallic, 0.0f, 1.0f);
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->RoughnessMap)
-			{
-				ImGui::LabelText("Roughness", "");
-				ImGui::SameLine();
-				SelectedMaterial->RoughnessMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGui::SliderFloat("Roughness ", &SelectedMaterial->Roughness, 0.0f, 1.0f);
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->EmissionMap)
-			{
-				ImGui::LabelText("Emission", "");
-				ImGui::SameLine();
-				SelectedMaterial->EmissionMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
-				ImGui::ColorEdit3("Emission", (float*)&SelectedMaterial->EmissionMap, misc_flags);
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->AmbientOcclusionMap)
-			{
-				ImGui::LabelText("Ambient Occlusion", "");
-				ImGui::SameLine();
-				SelectedMaterial->AmbientOcclusionMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGui::SliderFloat("Ambient Occlusion ", &SelectedMaterial->AmbientOcclusion, 0.0f, 1.0f);
-				ImGui::Separator();
-			}
-
-			if (SelectedMaterial->AlphaMap)
-			{
-				ImGui::LabelText("Alpha", "");
-				ImGui::SameLine();
-				SelectedMaterial->AlphaMap->ImGuiShowTexture(ImVec2(100.0f, 100.0f));
-				ImGui::Separator();
-			}
-			else
-			{
-				ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_DisplayRGB || ImGuiColorEditFlags_InputRGB || ImGuiColorEditFlags_NoAlpha;
-				ImGui::SliderFloat("Alpha ", &SelectedMaterial->Alpha, 0.0f, 1.0f);
-				ImGui::Separator();
-			}
-		}
-
+		ImGui::Checkbox("Cast Shadow", &SelectedMesh->CastShadow);
 		ImGui::End();
-	}*/
+	}
 	
 	//ImGui::SliderFloat3("Position ", &gameObjectList[0]->GameObjectPosition.x, 0.0f, 100.0f);
 	//ImGui::SliderFloat3("Rotation ", &gameObjectList[0]->GameObjectRotation.x, 0.0f, 360.0f);
@@ -338,16 +245,16 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
 
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
-	CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
+	//CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
-	CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(gLTFRenderPass.Draw());
 
 	CommandBufferSubmitList.emplace_back(BloomRenderPass.Draw());
