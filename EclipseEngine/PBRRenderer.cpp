@@ -33,7 +33,7 @@ void PBRRenderer::BuildRenderer()
 		{
 			depthRenderPass.BuildRenderPass(glm::vec2(512.0f));
 			depthCubeMapRenderPass.BuildRenderPass(glm::vec2(512.0f));
-			depthSpotLightRenderPass.BuildRenderPass(glm::vec2(512.0f));
+			//depthSpotLightRenderPass.BuildRenderPass(glm::vec2(512.0f));
 		}
 
 		PBRRenderPassTextureSubmitList submitList;
@@ -55,7 +55,7 @@ void PBRRenderer::BuildRenderer()
 			{
 				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
 			}
-			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
+			//submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
 			skyBoxReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f));
 		}
@@ -73,7 +73,7 @@ void PBRRenderer::BuildRenderer()
 			{
 				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
 			}
-			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
+			//submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
 			meshReflectionRenderPass.PreRenderPass(submitList, GLTFSceneManager::GetPreRenderedMapSize(), glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f));
 		}
@@ -91,7 +91,7 @@ void PBRRenderer::BuildRenderer()
 			{
 				submitList.PointLightShadowMaps.emplace_back(depthCubeMapRenderPass.DepthCubeMapTextureList[x]);
 			}
-			submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
+		//	submitList.SpotLightTextureShadowMaps.emplace_back(depthSpotLightRenderPass.RenderPassDepthTexture);
 
 			std::string a = "PBRRenderPass.txt";
 			gLTFRenderPass.BuildRenderPass(a, submitList);
@@ -243,7 +243,7 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
-	CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
+	//CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
 
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
@@ -268,7 +268,7 @@ void PBRRenderer::Destroy()
 
 	depthRenderPass.Destroy();
 	depthCubeMapRenderPass.Destroy();
-	depthSpotLightRenderPass.Destroy();
+	//depthSpotLightRenderPass.Destroy();
 
 	//skyBoxReflectionIrradianceRenderPass.Destroy();
 	//skyBoxReflectionPrefilterRenderPass.Destroy();

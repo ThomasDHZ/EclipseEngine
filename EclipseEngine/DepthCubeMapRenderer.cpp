@@ -232,60 +232,62 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
 
     for (int x = 0; x < GLTFSceneManager::GetPointLights().size(); x++)
     {
-        if (FirstDraw || 
-            !GLTFSceneManager::GetPointLights()[x]->GetStaticLightStatus())
+
+        LightViewSceneData depthSceneData = LightViewSceneData();
+        depthSceneData.LightIndex = x;
+
+        vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
+        for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
         {
-            LightViewSceneData depthSceneData = LightViewSceneData();
-            depthSceneData.LightIndex = x;
 
-            vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-            vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
-            vkCmdSetScissor(commandBuffer, 0, 1, &rect2D);
-            for (int y = 0; y < GLTFSceneManager::GameObjectList.size(); y++)
+            switch (GLTFSceneManager::GameObjectList[y]->RenderType)
             {
-
-                switch (GLTFSceneManager::GameObjectList[y]->RenderType)
-                {
-                case GameObjectRenderType::kModelRenderer:
-                {
-                    depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], depthSceneData);
-                    //depthCubeMapPipeline2.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[y], depthSceneData);
-                    break;
-                }
-                case GameObjectRenderType::kInstanceRenderer:
-                {
-                    //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
-                    break;
-                }
-                case GameObjectRenderType::kSpriteRenderer:
-                {
-                    //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
-                    break;
-                }
-                }
+            case GameObjectRenderType::kModelRenderer:
+            {
+                depthCubeMapPipeline.Draw(commandBuffer, GLTFSceneManager::GameObjectList[y], depthSceneData);
+                //depthCubeMapPipeline2.DrawMesh(commandBuffer, GLTFSceneManager::GameObjectList[y], depthSceneData);
+                break;
             }
-            vkCmdEndRenderPass(commandBuffer);
-
-            RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-            DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-            Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
-            DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-            if (FirstDraw ||
-                GLTFSceneManager::GetPointLights()[x]->GetSelectedLightStatus())
+            case GameObjectRenderType::kInstanceRenderer:
             {
-                for (unsigned int cubeMapSide = 0; cubeMapSide < 6; cubeMapSide++)
-                {
-                    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
-                    GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-                    Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthCubeMapTextureList[x], cubeMapSide, GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]);
-                    GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                    DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-                }
+                //DepthPipeline.DrawInstancedMesh(commandBuffer, GLTFSceneManager::GameObjectList[x], GLTFSceneManager::sceneProperites);
+                break;
+            }
+            case GameObjectRenderType::kSpriteRenderer:
+            {
+                //DepthPipeline.DrawSprite(commandBuffer, GLTFSceneManager::GameObjectList[x]);
+                break;
+            }
             }
         }
+        vkCmdEndRenderPass(commandBuffer);
+
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+        Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
+        DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+        if (FirstDraw ||
+            GLTFSceneManager::GetPointLights()[x]->GetSelectedLightStatus())
+        {
+            for (unsigned int cubeMapSide = 0; cubeMapSide < 6; cubeMapSide++)
+            {
+                DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+                GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+                Texture::CopyDepthCubeSideToTextureMap(commandBuffer, DepthCubeMapTextureList[x], cubeMapSide, GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]);
+                GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+                DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            }
+        }
+        else
+        {
+            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
     }
+    
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Failed to record command buffer.");
     }

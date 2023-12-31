@@ -249,27 +249,27 @@ void VulkanPipelineTools::AddUniformBufferDescriptorSetBinding(std::vector<Descr
     DescriptorBindingList.emplace_back(DescriptorSetBinding);
 }
 
-void VulkanPipelineTools::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
-    DescriptorSetBinding.Count = 1;
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
-
-void VulkanPipelineTools::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
-{
-    DescriptorSetBindingStruct DescriptorSetBinding{};
-    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
-    DescriptorSetBinding.StageFlags = StageFlags;
-    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    DescriptorSetBinding.BufferDescriptor = BufferInfo;
-    DescriptorSetBinding.Count = BufferInfo.size();
-    DescriptorBindingList.emplace_back(DescriptorSetBinding);
-}
+//void VulkanPipelineTools::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, VkDescriptorBufferInfo BufferInfo, VkShaderStageFlags StageFlags)
+//{
+//    DescriptorSetBindingStruct DescriptorSetBinding{};
+//    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+//    DescriptorSetBinding.StageFlags = StageFlags;
+//    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+//    DescriptorSetBinding.BufferDescriptor = std::vector<VkDescriptorBufferInfo>{ BufferInfo };
+//    DescriptorSetBinding.Count = 1;
+//    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+//}
+//
+//void VulkanPipelineTools::AddStorageBufferDescriptorSetBinding(std::vector<DescriptorSetBindingStruct>& DescriptorBindingList, uint32_t BindingNumber, std::vector<VkDescriptorBufferInfo> BufferInfo, VkShaderStageFlags StageFlags)
+//{
+//    DescriptorSetBindingStruct DescriptorSetBinding{};
+//    DescriptorSetBinding.DescriptorSlotNumber = BindingNumber;
+//    DescriptorSetBinding.StageFlags = StageFlags;
+//    DescriptorSetBinding.DescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+//    DescriptorSetBinding.BufferDescriptor = BufferInfo;
+//    DescriptorSetBinding.Count = BufferInfo.size();
+//    DescriptorBindingList.emplace_back(DescriptorSetBinding);
+//}
 
 VkWriteDescriptorSet VulkanPipelineTools::AddAccelerationBuffer(VkDescriptorSet& DescriptorSet, uint32_t BindingNumber, VkWriteDescriptorSetAccelerationStructureKHR& accelerationStructure)
 {
