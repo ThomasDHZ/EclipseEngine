@@ -78,9 +78,11 @@ public:
     void UpdateDepthImageLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
 
     void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout);
+    void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout oldImageLayout, VkImageLayout newImageLayout);
     void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout);
     void UpdateDepthCubeMapLayout(VkImageLayout newImageLayout, uint32_t MipLevel);
     void UpdateDepthCubeMapLayout(VkCommandBuffer& commandBuffer, VkImageLayout newImageLayout, uint32_t MipLevel);
+
 
     void Destroy();
 

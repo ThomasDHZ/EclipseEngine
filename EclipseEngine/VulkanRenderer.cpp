@@ -308,10 +308,14 @@ void VulkanRenderer::StartUp()
 	deviceFeatures.vertexPipelineStoresAndAtomics = VK_TRUE;
 	deviceFeatures.sampleRateShading = VK_TRUE;
 
+	VkPhysicalDeviceVulkan13Features physicalDeviceVulkan13Features{};
+	physicalDeviceVulkan13Features.shaderDemoteToHelperInvocation = VK_TRUE;
+	physicalDeviceVulkan13Features.pNext = &PhysicalDeviceRobustness2Features;
+
 	VkPhysicalDeviceFeatures2 deviceFeatures2{};
 	deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
 	deviceFeatures2.features = deviceFeatures;
-	deviceFeatures2.pNext = &PhysicalDeviceRobustness2Features;
+	deviceFeatures2.pNext = &physicalDeviceVulkan13Features;
 
 	VkPhysicalDeviceVulkan11Features PhysicalDeviceVulkan11Features{};
 	PhysicalDeviceVulkan11Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;

@@ -264,7 +264,7 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
         }
         vkCmdEndRenderPass(commandBuffer);
 
-        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         Texture::CopyDepthCubeMap(commandBuffer, RenderPassDepthTexture, DepthCubeMapTextureList[x]);
         DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -281,10 +281,6 @@ VkCommandBuffer DepthCubeMapRenderer::Draw()
                 GLTFSceneManager::GetPointLights()[x]->CubeMapSide[cubeMapSide]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
                 DepthCubeMapTextureList[x]->UpdateDepthCubeMapLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             }
-        }
-        else
-        {
-            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }
     

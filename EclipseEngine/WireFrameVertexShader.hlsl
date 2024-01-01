@@ -36,6 +36,10 @@ VSOutput main(VSInput input)
     
     output.WorldPos = mul(ModelTransformBuffer[sceneProperties.TransformIndex].ModelTransfromMatrix, float4(input.Position, 1.0)).xyz;
     output.Pos = mul(sceneProperties.proj, mul(sceneProperties.view, float4(output.WorldPos, 1.0)));
+    output.UV = input.UV;
+    output.Normal = input.Normal;
+    output.Tangent = input.Tangent;
+    output.BiTangent = input.BiTangent;
     output.Color = input.Color;
  
     return output;

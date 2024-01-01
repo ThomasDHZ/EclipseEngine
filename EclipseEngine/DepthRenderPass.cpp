@@ -233,7 +233,7 @@ VkCommandBuffer DepthRenderPass::Draw()
         }
         vkCmdEndRenderPass(commandBuffer);
 
-        RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+        RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
         DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
         Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, DepthTextureList[x]);
         DepthTextureList[x]->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -245,10 +245,6 @@ VkCommandBuffer DepthRenderPass::Draw()
             GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
             Texture::CopyDepthTexture(commandBuffer, RenderPassDepthTexture, GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture);
             GLTFSceneManager::GetDirectionalLights()[x]->LightViewTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-            RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        }
-        else
-        {
             RenderPassDepthTexture->UpdateDepthImageLayout(commandBuffer, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
     }

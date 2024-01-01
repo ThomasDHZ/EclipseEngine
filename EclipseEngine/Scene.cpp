@@ -73,7 +73,7 @@ void Scene::StartUp()
 
 
 
-	/*std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
+	std::shared_ptr<Material> PlasticMaterial = std::make_shared<Material>(Material("PlasticMaterial"));
 	PlasticMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/plastic/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
 	PlasticMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/plastic/metallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	PlasticMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/plastic/roughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
@@ -90,15 +90,6 @@ void Scene::StartUp()
 	WallMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/wall/normal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
 	GLTFSceneManager::UpdateBufferIndex();
 	GLTFSceneManager::AddMaterial(WallMaterial);
-
-	std::shared_ptr<Material> GoldMaterial = std::make_shared<Material>(Material("GoldMaterial"));
-	GoldMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
-	GoldMaterial->SetMetallicMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/metallic.png"), TextureTypeEnum::kMetallicTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	GoldMaterial->SetRoughnessMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/roughness.png"), TextureTypeEnum::kRoughnessTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	GoldMaterial->SetAmbientOcclusionMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/ao.png"), TextureTypeEnum::kAmbientOcclusionTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	GoldMaterial->SetNormalMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/gold/normal.png"), TextureTypeEnum::kNormalTextureMap, VK_FORMAT_R8G8B8A8_UNORM))));
-	GLTFSceneManager::UpdateBufferIndex();
-	GLTFSceneManager::AddMaterial(GoldMaterial);
 
 	std::shared_ptr<Material> GrassMaterial = std::make_shared<Material>(Material("GrassMaterial"));
 	GrassMaterial->SetAlbedoMap(GLTFSceneManager::LoadTexture2D(std::make_shared<Texture2D>(Texture2D(VulkanRenderer::OpenFile("/texture/pbr/grass/albedo.png"), TextureTypeEnum::kAlbedoTextureMap, VK_FORMAT_R8G8B8A8_SRGB))));
@@ -132,7 +123,7 @@ void Scene::StartUp()
 			}
 		}
 	}
-	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);*/
+	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);
 
 
 	/// <summary>
