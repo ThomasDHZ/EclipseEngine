@@ -151,47 +151,46 @@ float3 DirectionalLightCalc(float3 V, float3 N, float3 F0, float3 Pos, MaterialP
     return Lo;
 }
 
-float3 PointLightCalc(float3 V, float3 N, float3 F0, float3 Pos, MaterialProperties material)
+float3 PointLightCalc(float3 V, float3 N, float3 F0, float3 Pos, MaterialProperties material, int x)
 {
     float3 Lo = float3(0.0.rrr);
-    for (int x = 0; x < sceneDataProperties.PointLightCount; x++)
-    {
-        float3 L = normalize(PointLightBuffer[x].position - Pos);
-        float3 H = normalize(V + L);
+        
+    float3 L = normalize(PointLightBuffer[x].position - Pos);
+    float3 H = normalize(V + L);
 
-        float distance = length(PointLightBuffer[x].position - Pos);
-        float Kc = 1.0f;
-        float Kl = 2 / PointLightBuffer[x].radius;
-        float Kq = 1 / (PointLightBuffer[x].radius * PointLightBuffer[x].radius);
-        float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));
+    float distance = length(PointLightBuffer[x].position - Pos);
+    float Kc = 1.0f;
+    float Kl = 2 / PointLightBuffer[x].radius;
+    float Kq = 1 / (PointLightBuffer[x].radius * PointLightBuffer[x].radius);
+    float attenuation = 1.0f / (Kc + Kl * distance + Kq * (distance * distance));
 
-        float watts = PointLightBuffer[x].intensity;
-        float3 radiance = PointLightBuffer[x].diffuse * watts * attenuation;
+    float watts = PointLightBuffer[x].intensity;
+    float3 radiance = PointLightBuffer[x].diffuse * watts * attenuation;
 
-        float NDF = DistributionGGX(N, H, material.Roughness);
-        float G = GeometrySmith(N, V, L, material.Roughness);
-        float3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
+    float NDF = DistributionGGX(N, H, material.Roughness);
+    float G = GeometrySmith(N, V, L, material.Roughness);
+    float3 F = fresnelSchlickRoughness(max(dot(H, V), 0.0), F0, material.Roughness);
 
-        float3 numerator = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
-        float3 specular = numerator / denominator;
+    float3 numerator = NDF * G * F;
+    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+    float3 specular = numerator / denominator;
 
-        float3 kS = F;
-        float3 kD = float3(1.0.rrr) - kS;
-        kD *= 1.0 - material.Metallic;
+    float3 kS = F;
+    float3 kD = float3(1.0.rrr) - kS;
+    kD *= 1.0 - material.Metallic;
 
-        float NdotL = max(dot(N, L), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
 
-        float EPSILON = 0.15;
-        float SHADOW_OPACITY = 0.005;
+    float EPSILON = 0.15;
+    float SHADOW_OPACITY = 0.005;
 
-        float3 lightVec = Pos - PointLightBuffer[x].position;
-        float dist = length(lightVec);
+    float3 lightVec = Pos - PointLightBuffer[x].position;
+    float dist = length(lightVec);
 
-        float shadow = CubeShadowCalculation(Pos, V, x);
+    float shadow = CubeShadowCalculation(Pos, V, x);
 
-        Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
-        Lo *= 1.0f - float3(shadow.rrr);
-    }
+    Lo += (kD * material.Albedo / PI + specular) * radiance * NdotL;
+    Lo *= 1.0f - float3(shadow.rrr);
+    
     return Lo;
 }

@@ -156,7 +156,10 @@ float3 PBRRenderer(VSOutput input)
 
     float3 Lo = float3(0.0.rrr);
     Lo += DirectionalLightCalc(V, N, F0, input.WorldPos, material);
-    Lo += PointLightCalc(V, N, F0, input.WorldPos, material);
+    for (int x = 0; x < sceneDataProperties.PointLightCount; x++)
+    {
+        Lo += PointLightCalc(V, N, F0, input.WorldPos, material, x);
+    }
 
     float3 F = fresnelSchlickRoughness(max(dot(N, V), 0.0), F0, material.Roughness);
     float3 kS = F;

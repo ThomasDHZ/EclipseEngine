@@ -101,7 +101,7 @@ void Scene::StartUp()
 	GLTFSceneManager::AddMaterial(GrassMaterial);
 
 
-	auto b = "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
+	/*auto b = "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf";
 
 	GLTFInstancingDataStruct instance = {};
 	std::vector<std::shared_ptr<Material>> instanceMaterialList;
@@ -123,7 +123,7 @@ void Scene::StartUp()
 			}
 		}
 	}
-	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);
+	GLTFSceneManager::AddInstancedGameObject3D("InstanceTest", b, instance);*/
 
 
 	/// <summary>
