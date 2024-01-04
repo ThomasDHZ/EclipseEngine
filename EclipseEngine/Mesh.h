@@ -78,6 +78,7 @@ protected:
 
 	glm::mat4 GameObjectTransform = glm::mat4(1.0f);
 	glm::mat4 ModelTransform = glm::mat4(1.0f);
+	glm::vec3 MeshWorldReflectionPoint = glm::vec3(0.0f);
 
 	MeshProperties meshProperties;
 
@@ -121,6 +122,7 @@ public:
 	glm::vec3 MeshRotation = glm::vec3(0.0f);
 	glm::vec3 MeshScale = glm::vec3(1.0f);
 	glm::mat4 MeshTransform = glm::mat4(1.0f);
+	glm::vec3 MeshRelitiveReflectionPoint = glm::vec3(0.0f);
 
 	VkDescriptorBufferInfo UpdateMeshPropertiesBuffer();
 	std::vector<VkDescriptorBufferInfo> UpdateMeshTransformBuffer();

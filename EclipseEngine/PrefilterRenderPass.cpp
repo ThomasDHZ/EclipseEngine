@@ -21,7 +21,7 @@ void PrefilterRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTexture
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+        PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 
@@ -47,7 +47,7 @@ void PrefilterRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture>& c
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        PrefilterCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT, CubeMapMipLevels));
+        PrefilterCubeMap->RecreateRendererTexture(RenderPassResolution);
         RenderPass::Destroy();
     }
 

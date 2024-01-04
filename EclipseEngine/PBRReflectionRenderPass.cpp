@@ -24,7 +24,7 @@ void PBRReflectionRenderPass::BuildRenderPass(PBRRenderPassTextureSubmitList& te
 		ClearTextureList();
 		RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 		DepthTexture->RecreateRendererTexture(RenderPassResolution);
-		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
+		RenderedReflectionCubeMap->RecreateRendererTexture(RenderPassResolution);
 		RenderPass::Destroy();
 	}
 
@@ -54,7 +54,7 @@ void PBRReflectionRenderPass::PreRenderPass(PBRRenderPassTextureSubmitList& text
 		ClearTextureList();
 		RenderedTexture->RecreateRendererTexture(RenderPassResolution);
 		DepthTexture->RecreateRendererTexture(RenderPassResolution);
-		RenderedReflectionCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(RenderPassResolution, SampleCount));
+		RenderedReflectionCubeMap->RecreateRendererTexture(RenderPassResolution);
 		RenderPass::Destroy();
 	}
 

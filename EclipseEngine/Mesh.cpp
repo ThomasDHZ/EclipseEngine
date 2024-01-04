@@ -52,6 +52,8 @@ void Mesh::Update(float DeltaTime, const glm::mat4& GameObjectMatrix, const glm:
 	MeshMatrix = glm::rotate(MeshMatrix, glm::radians(MeshRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	MeshMatrix = glm::scale(MeshMatrix, MeshScale);
 
+	MeshWorldReflectionPoint = MeshPosition + MeshRelitiveReflectionPoint;
+
 	UpdateNodeTransform(nullptr, GameObjectMatrix * ModelMatrix * MeshMatrix);
 
 	if (gltfMaterialList.size() > 0)

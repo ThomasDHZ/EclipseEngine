@@ -29,7 +29,7 @@ void DepthRenderPass::BuildRenderPass(glm::vec2 TextureResolution)
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            light->LightViewTexture->RecreateRendererTexture(RenderPassResolution);
         }
         RenderPass::Destroy();
     }
@@ -65,7 +65,7 @@ void DepthRenderPass::OneTimeDraw(glm::vec2 TextureResolution)
         for (auto& light : GLTFSceneManager::GetDirectionalLights())
         {
             DepthTextureList.emplace_back(std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount)));
-            light->LightViewTexture = std::make_shared<RenderedDepthTexture>(RenderedDepthTexture(RenderPassResolution, SampleCount));
+            light->LightViewTexture->RecreateRendererTexture(RenderPassResolution);
         }
         RenderPass::Destroy();
     }

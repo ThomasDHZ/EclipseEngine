@@ -134,7 +134,6 @@ void PBRRenderer::ImGuiUpdate()
 	//cubeMapToEnvironmentRenderPass.GetImageTexture()->ImGuiShowTexture(ImVec2(256, 128));
 	if(ImGui::Button("Save Texture", ImVec2(50, 25)))
 	{
-		BuildRenderer();
 		//cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
 	}
 	int index = 0;
@@ -243,15 +242,15 @@ void PBRRenderer::Draw(std::vector<VkCommandBuffer>& CommandBufferSubmitList)
 
 	CommandBufferSubmitList.emplace_back(depthRenderPass.Draw());
 	CommandBufferSubmitList.emplace_back(depthCubeMapRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
+	////CommandBufferSubmitList.emplace_back(depthSpotLightRenderPass.Draw());
 
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
+	////CommandBufferSubmitList.emplace_back(skyBoxReflectionIrradianceRenderPass.Draw());
+	////CommandBufferSubmitList.emplace_back(skyBoxReflectionPrefilterRenderPass.Draw());
+	////CommandBufferSubmitList.emplace_back(skyBoxReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
-	//CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
-	//CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
+	////CommandBufferSubmitList.emplace_back(meshReflectionIrradianceRenderPass.Draw());
+	////CommandBufferSubmitList.emplace_back(meshReflectionPrefilterRenderPass.Draw());
+	////CommandBufferSubmitList.emplace_back(meshReflectionRenderPass.Draw(glm::vec3(0.245790839f, 3.02915239f, -0.0890803784f)));
 
 	//CommandBufferSubmitList.emplace_back(irradianceRenderPass.Draw());
 	//CommandBufferSubmitList.emplace_back(prefilterRenderPass.Draw());
@@ -268,21 +267,21 @@ void PBRRenderer::Destroy()
 
 	depthRenderPass.Destroy();
 	depthCubeMapRenderPass.Destroy();
-	//depthSpotLightRenderPass.Destroy();
+	////depthSpotLightRenderPass.Destroy();
 
-	//skyBoxReflectionIrradianceRenderPass.Destroy();
-	//skyBoxReflectionPrefilterRenderPass.Destroy();
-	//skyBoxReflectionRenderPass.Destroy();
-	//
-	//meshReflectionIrradianceRenderPass.Destroy();
-	//meshReflectionPrefilterRenderPass.Destroy();
-	//meshReflectionRenderPass.Destroy();
+	skyBoxReflectionIrradianceRenderPass.Destroy();
+	skyBoxReflectionPrefilterRenderPass.Destroy();
+	skyBoxReflectionRenderPass.Destroy();
+	
+	meshReflectionIrradianceRenderPass.Destroy();
+	meshReflectionPrefilterRenderPass.Destroy();
+	meshReflectionRenderPass.Destroy();
 	
 	irradianceRenderPass.Destroy();
 	prefilterRenderPass.Destroy();
 	gLTFRenderPass.Destroy();
 	
-	BloomRenderPass.Destroy();
-	bloomCombineRenderPass.Destroy();
-	frameBufferRenderPass.Destroy();
+	//BloomRenderPass.Destroy();
+	//bloomCombineRenderPass.Destroy();
+	//frameBufferRenderPass.Destroy();
 }

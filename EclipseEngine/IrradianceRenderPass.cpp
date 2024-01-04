@@ -20,7 +20,7 @@ void IrradianceRenderPass::BuildRenderPass(std::shared_ptr<RenderedCubeMapTextur
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        IrradianceCubeMap->RecreateRendererTexture(glm::ivec2(RenderPassResolution.x));
         RenderPass::Destroy();
     }
 
@@ -45,7 +45,7 @@ void IrradianceRenderPass::OneTimeDraw(std::shared_ptr<RenderedCubeMapTexture> c
     else
     {
         DrawToCubeMap->RecreateRendererTexture(RenderPassResolution);
-        IrradianceCubeMap = std::make_shared<RenderedCubeMapTexture>(RenderedCubeMapTexture(glm::ivec2(RenderPassResolution.x), VK_FORMAT_R32G32B32A32_SFLOAT, VK_SAMPLE_COUNT_1_BIT));
+        IrradianceCubeMap->RecreateRendererTexture(glm::ivec2(RenderPassResolution.x));
         RenderPass::Destroy();
     }
 

@@ -255,6 +255,11 @@ void Scene::ImGuiUpdate()
 		pbrRenderer.ImGuiUpdate();
 	}
 
+	if (ImGui::Button("Save Texture", ImVec2(50, 25)))
+	{
+		BuildRenderers();
+		//cubeMapToEnvironmentRenderPass.SaveTexture("../adsfasdf24535.HDR");
+	}
 
     SceneManager::ImGuiSceneHierarchy();
    // MeshRendererManager::GUIUpdate();
@@ -315,7 +320,7 @@ void Scene::Destroy()
 	GLTFSceneManager::Destroy();
 	environmentToCubeRenderPass.Destroy();
    // GameObjectManager::Destroy();
-    rayTraceRenderer.Destroy();
+   // rayTraceRenderer.Destroy();
     pbrRenderer.Destroy();
     //spriteRenderer.Destroy();
 }

@@ -46,14 +46,14 @@ private:
 	//Depth/Shadow Pass
 	DepthRenderPass depthRenderPass;
 	DepthCubeMapRenderer depthCubeMapRenderPass;
-	//SpotLightDepthRenderPass depthSpotLightRenderPass;
+	////SpotLightDepthRenderPass depthSpotLightRenderPass;
 
 	//SkyBox Reflection
 	IrradianceRenderPass skyBoxReflectionIrradianceRenderPass;
 	PrefilterRenderPass skyBoxReflectionPrefilterRenderPass;
 	PBRReflectionRenderPass skyBoxReflectionRenderPass;
 
-	////Mesh Reflection
+	//Mesh Reflection
 	IrradianceRenderPass meshReflectionIrradianceRenderPass;
 	PrefilterRenderPass meshReflectionPrefilterRenderPass;
 	PBRReflectionRenderPass meshReflectionRenderPass;
