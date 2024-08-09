@@ -61,7 +61,7 @@ public:
 	{
 		GenerateID();
 		ObjectName = objectName;
-		RenderType = renderType;
+		RenderType = renderType; 
 	}
 
 	GameObject(const std::string& objectName, GameObjectRenderType renderType, const glm::vec3& Position)
