@@ -48,6 +48,3 @@ To build and run the Eclipse Game Engine:
 ## Screenshots
 - *PBR lighting*  
 - *Bloom and reflection effects*  
-
-
-[MIT License](LICENSE) - feel free to use and modify the code for personal or commercial projects.
