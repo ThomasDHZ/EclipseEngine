@@ -8,3 +8,6 @@
 [submodule "External/stb"]
 	path = External/stb
 	url = https://github.com/nothings/stb.git
+[submodule "external/tinygltfloader"]
+	path = external/tinygltfloader
+	url = https://github.com/syoyo/tinygltfloader.git
