@@ -92,6 +92,11 @@ artifacts/
 # Chutzpah Test files
 _Chutzpah*
 
+#ignore directories
+dir_to_ignore/
+texture
+Models
+
 # Visual C++ cache files
 ipch/
 *.aps
