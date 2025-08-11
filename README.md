@@ -46,5 +46,18 @@ To build and run the Eclipse Game Engine:
    - Execute the built binary to test a sample 3D scene (e.g., ray-traced model with PBR lighting).
 
 ## Screenshots
-- *PBR lighting*  
-- *Bloom and reflection effects*  
+- *Scene Rendering*
+<img width="642" height="384" alt="Eclipse2" src="https://github.com/user-attachments/assets/dfe383a4-7e48-40a8-940e-a27a3aafb4aa" />
+<img width="640" height="384" alt="Eclipse" src="https://github.com/user-attachments/assets/aaca38c7-1bae-4605-9131-62800e013615" />
+
+- *Instancing Test*
+ ![490296796_10222917695685520_3843289632798826724_n](https://github.com/user-attachments/assets/7e66d48a-5afc-4a08-a69d-c254daab50a4)
+![489419744_10222917698965602_7496271288393276553_n](https://github.com/user-attachments/assets/8071d670-6ba2-4e37-befb-7812c72170b3)
+
+- *PBR lighting and reflection test*  
+![488926980_10222909203153212_5999367957420881329_n](https://github.com/user-attachments/assets/28145e1c-6b50-450d-887d-2315f2d01eac)
+
+- Line Rendering*
+![488745782_10222868154567023_1954215942717174832_n](https://github.com/user-attachments/assets/8ad545ac-8f42-4664-8618-ef73fd52473d)
+![488005838_10222868140286666_7386628907948823544_n](https://github.com/user-attachments/assets/54e1d1e7-e67e-483b-ac3c-52fc7257d345)
+
