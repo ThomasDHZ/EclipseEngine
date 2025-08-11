@@ -82,8 +82,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\DHZ\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.3.268.0\Include;$(SolutionDir)GLTFLoader;$(SolutionDir)EclipseEngine\LibsndFile\include;$(SolutionDir)EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\include;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;$(SolutionDir)EclipseEngine\LibsndFile\lib;$(SolutionDir)EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.3.268.0\Lib;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\DHZ\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.4.321.1\Include;$(SolutionDir)GLTFLoader;$(SolutionDir)EclipseEngine\LibsndFile\include;$(SolutionDir)EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\include;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;$(SolutionDir)EclipseEngine\LibsndFile\lib;$(SolutionDir)EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.4.321.1\Lib;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
