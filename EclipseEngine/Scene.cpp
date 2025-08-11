@@ -63,7 +63,7 @@ void Scene::StartUp()
 	GLTFSceneManager::AddMaterial(GoldMaterial);
 	
 	GLTFSceneManager::AddMeshGameObject3D("sponza", VulkanRenderer::OpenFile("/Models/sponza/sponza.gltf"));
-	GLTFSceneManager::AddMeshGameObject3D("Sphere", "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf", GoldMaterial);
+	//GLTFSceneManager::AddMeshGameObject3D("Sphere", "C:/Users/DHZ/source/repos/EclipseEngine/Models/GLTFIron/Iron.gltf", GoldMaterial);
 	//GLTFSceneManager::AddMeshGameObject3D("Sci-fi", "C:/Users/DHZ/source/repos/EclipseEngine/Models/glTF-Sample-Models-master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf");
 
 	//	/// <summary>
