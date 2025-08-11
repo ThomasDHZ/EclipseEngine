@@ -1,13 +1,9 @@
-[submodule "External/glm"]
-	path = External/glm
-	url = https://github.com/g-truc/glm.git
-	branch = master
-[submodule "External/json"]
-	path = External/json
-	url = https://github.com/nlohmann/json
-[submodule "External/stb"]
-	path = External/stb
-	url = https://github.com/nothings/stb.git
-[submodule "external/tinygltfloader"]
-	path = external/tinygltfloader
-	url = https://github.com/syoyo/tinygltfloader.git
+[submodule "External/glfw"]
+	path = External/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "External/nlohmann"]
+	path = External/nlohmann
+	url = https://github.com/nlohmann/json.git
+[submodule "External/tinygltf"]
+	path = External/tinygltf
+	url = https://github.com/syoyo/tinygltf
