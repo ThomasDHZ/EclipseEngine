@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 #include <string>
-#include <json.hpp>
+#include <json/include/nlohmann/json.hpp>
 
 #include "VulkanMenu.h"
 #include "VulkanPipelineTools.h"

@@ -82,8 +82,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\DHZ\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.4.321.1\Include;$(SolutionDir)GLTFLoader;$(SolutionDir)EclipseEngine\LibsndFile\include;$(SolutionDir)EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\glm;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\include;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;$(SolutionDir)EclipseEngine\LibsndFile\lib;$(SolutionDir)EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\lib-vc2022;C:\Users\DHZ\Documents\Visual Studio 2022\Assimp\lib;C:\VulkanSDK\1.4.321.1\Lib;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\DHZ\Documents\Visual Studio 2022\nlohmann;C:\VulkanSDK\1.4.321.1\Include;$(SolutionDir)GLTFLoader;$(SolutionDir)EclipseEngine\LibsndFile\include;$(SolutionDir)EclipseEngine\OpenAL\Include;$(SolutionDir)External\stb;$(SolutionDir)External\glfw\include;$(SolutionDir)External;$(SolutionDir)External\json\include;$(SolutionDir)External\glm;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)External\tinygltf\Debug;$(SolutionDir)GLTFLoader;$(SolutionDir)VulkanRenderer;$(SolutionDir)EclipseEngine\LibsndFile\lib;$(SolutionDir)EclipseEngine\OpenAL\lib;$(SolutionDir)External\glfw\src\Release;$(SolutionDir)External\freetype\objs\x64\Release;$(SolutionDir)packages;C:\VulkanSDK\1.4.321.1\Lib;C:\Users\DHZ\Documents\Visual Studio 2022\freetype-windows-binaries-master\release dll\win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -133,7 +133,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc142-mtd.lib;freetype.lib;OpenAL32.lib;sndfile.lib;GLTFLoader.lib;tinygltf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;assimp-vc143-mt.lib;freetype.lib;OpenAL32.lib;sndfile.lib;GLTFLoader.lib;tinygltf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -833,6 +833,8 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
     <Import Project="..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.targets" Condition="Exists('..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.targets')" />
+    <Import Project="..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets" Condition="Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" />
+    <Import Project="..\packages\Assimp.3.0.0\build\native\Assimp.targets" Condition="Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -842,5 +844,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Direct3D.DXC.1.7.2308.12\build\native\Microsoft.Direct3D.DXC.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.redist.3.0.0\build\native\Assimp.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\Assimp.3.0.0\build\native\Assimp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Assimp.3.0.0\build\native\Assimp.targets'))" />
   </Target>
 </Project>

@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Vertex.h"
-#include <assimp\scene.h>
+#include <assimp/scene.h>
 
 class Bone
 {

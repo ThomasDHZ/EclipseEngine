@@ -2,7 +2,7 @@
 #include "VulkanRenderer.h"
 #include "VulkanBuffer.h"
 #include "GLTF_GraphicsDescriptors.h"
-#include <json.hpp>
+#include <json/include/nlohmann/json.hpp>
 
 struct PipelineInfoStruct
 {

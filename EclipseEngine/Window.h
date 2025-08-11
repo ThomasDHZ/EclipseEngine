@@ -2,7 +2,7 @@
 #define Window_H
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include <GLFW/include/GLFW/glfw3.h>
 #include <memory>
 #include <iostream>
 #include <glm/glm.hpp>

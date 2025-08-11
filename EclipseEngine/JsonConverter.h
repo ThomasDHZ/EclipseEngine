@@ -1,5 +1,5 @@
 #pragma once
-#include <json.hpp>
+#include <json/include/nlohmann/json.hpp>
 #include <glm/glm.hpp>
 
 struct JsonConverter
