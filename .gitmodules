@@ -1,9 +1,0 @@
-[submodule "External/glfw"]
-	path = External/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "External/nlohmann"]
-	path = External/nlohmann
-	url = https://github.com/nlohmann/json.git
-[submodule "External/tinygltf"]
-	path = External/tinygltf
-	url = https://github.com/syoyo/tinygltf
