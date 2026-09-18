@@ -1,62 +1,82 @@
 # Eclipse Engine
 
-A 3D graphics engine written in **C++** using **Vulkan** (with earlier OpenGL support).
+Earlier **C++ / Vulkan** renderer (2020–2024). PBR, modular render passes, GLTF, instancing.
 
-Eclipse Engine focuses on performance, modular architecture, and modern rendering techniques including Physically Based Rendering (PBR), dynamic lighting, and efficient asset loading.
+This repo is the predecessor. The current system is a hybrid **.NET 8 + native C++** stack:
 
-## Key Features
+- [VulkanEngineCore](https://github.com/ThomasDHZ/VulkanEngineCore) — interop, pools, C# wrappers
+- [VulkanGameEngine](https://github.com/ThomasDHZ/VulkanGameEngine) — runtime on that core
+- [VulkanGameEngineLevelEditor](https://github.com/ThomasDHZ/VulkanGameEngineLevelEditor) — C# WinForms host
 
-- **Vulkan Rendering** with support for modern graphics pipelines
-- **Physically Based Rendering (PBR)** materials and lighting
-- **Modular Architecture** — render passes, pipelines, materials, and scenes are cleanly separated
-- **GLTF Loading** for efficient model and scene import
-- **Performance Focus** — designed with efficiency and scalability in mind
-- Debug views including wireframe mode (demonstrated at 700–860+ FPS in test scenes)
+Eclipse informed the native side of that split. It is not the active editor/runtime.
 
 ## Screenshots
 
-### Cathedral Scene
-<img width="400" alt="Cathedral Interior" src="https://github.com/user-attachments/assets/dfe383a4-7e48-40a8-940e-a27a3aafb4aa" />
-<img width="400" alt="Cathedral View" src="https://github.com/user-attachments/assets/aaca38c7-1bae-4605-9131-62800e013615" />
+**Cathedral**
 
-### Materials, Lighting, Instancing
-<img width="400" alt="Instancing Farview" src="https://github.com/user-attachments/assets/7e66d48a-5afc-4a08-a69d-c254daab50a4" />
-<img width="400" alt="Instancing Nearview" src="https://github.com/user-attachments/assets/8071d670-6ba2-4e37-befb-7812c72170b3" />
+<img width="400" alt="Cathedral interior" src="https://github.com/user-attachments/assets/dfe383a4-7e48-40a8-940e-a27a3aafb4aa" />
+<img width="400" alt="Cathedral view" src="https://github.com/user-attachments/assets/aaca38c7-1bae-4605-9131-62800e013615" />
 
-### PBR lighting and reflection test
-<img width="400" alt="Sphere Reflection" src="https://github.com/user-attachments/assets/28145e1c-6b50-450d-887d-2315f2d01eac" />
+**Materials, lighting, instancing**
 
-### Line Rendering
-<img width="400" alt="Line Rendering" src="https://github.com/user-attachments/assets/8ad545ac-8f42-4664-8618-ef73fd52473d" />
-<img width="400" alt="Line Rendering" src="https://github.com/user-attachments/assets/54e1d1e7-e67e-483b-ac3c-52fc7257d345" />
+<img width="400" alt="Instancing far" src="https://github.com/user-attachments/assets/7e66d48a-5afc-4a08-a69d-c254daab50a4" />
+<img width="400" alt="Instancing near" src="https://github.com/user-attachments/assets/8071d670-6ba2-4e37-befb-7812c72170b3" />
 
-## Tech Stack
+**PBR reflection test**
 
-- **Language**: C++
-- **Graphics API**: Vulkan (earlier OpenGL support)
-- **Shaders**: GLSL / HLSL
-- **Asset Loading**: GLTF
-- **Other**: GLFW, nlohmann/json, custom tools
+<img width="400" alt="Sphere reflection" src="https://github.com/user-attachments/assets/28145e1c-6b50-450d-887d-2315f2d01eac" />
 
-## Build Instructions
+**Line rendering**
 
-## Prerequisites
-- Vulkan SDK
-- Visual Studio 2022 (C++ Desktop workload)
+<img width="400" alt="Line rendering" src="https://github.com/user-attachments/assets/8ad545ac-8f42-4664-8618-ef73fd52473d" />
+<img width="400" alt="Line rendering debug" src="https://github.com/user-attachments/assets/54e1d1e7-e67e-483b-ac3c-52fc7257d345" />
+
+## What it includes
+
+- Vulkan renderer (older OpenGL path exists in history)
+- PBR materials and lighting
+- Modular render passes, pipelines, materials, scenes
+- GLTF load
+- Instancing and line/debug views
+- Wireframe / debug views (test scenes in the 700–860+ FPS range on the hardware used at the time)
+
+## Stack
+
+| | |
+|---|---|
+| Language | C++ |
+| API | Vulkan (earlier OpenGL) |
+| Shaders | GLSL / HLSL |
+| Assets | GLTF |
+| Other | GLFW, nlohmann/json |
 
 ## Build
-1. Clone the repository with submodules:
-   ```bash
-   git clone --recurse-submodules https://github.com/ThomasDHZ/EclipseEngine.git
-   ```
-2. Open EclipseEngine.sln in Visual Studio 2022
-```
-Build in Release | x64
+
+**Prerequisites:** Vulkan SDK, Visual Studio 2022 (Desktop C++).
+
+```bash
+git clone --recurse-submodules https://github.com/ThomasDHZ/EclipseEngine.git
 ```
 
-## Purpose
-Eclipse Engine was developed as a deep dive into modern graphics programming, performance optimization, and clean C++ systems design. It later informed the architecture of the hybrid .NET + native engine projects.
+Open `EclipseEngine.sln` → **Release | x64**.
 
-## Related Projects
-Vulkan Game Engine
-VulkanEngineCore
+## Layout (high level)
+
+```text
+EclipseEngine/     # engine
+Pipelines/
+RenderPasses/
+Shaders/
+GLTFLoader/
+Materials/
+Scenes/
+Levels/
+VulkanEnumCodeGenerator/
+```
+
+## Related (current work)
+
+- [VulkanEngineCore](https://github.com/ThomasDHZ/VulkanEngineCore)
+- [VulkanGameEngine](https://github.com/ThomasDHZ/VulkanGameEngine)
+- [VulkanGameEngineLevelEditor](https://github.com/ThomasDHZ/VulkanGameEngineLevelEditor)
+- [ListPtr](https://github.com/ThomasDHZ/ListPtr)
